@@ -26,7 +26,11 @@ module LicenseFinder
     end
 
     def license_files
-      Dir.glob(File.join(install_path, '**', LICENSE_FILE_NAMES))
+      Dir.glob(File.join(install_path, '**', LICENSE_FILE_NAMES)).map do |path|
+        file = LicenseFile.new(path)
+        file.include_license_text = include_license_text?
+        file
+      end
     end
 
     def install_path
@@ -44,7 +48,7 @@ module LicenseFinder
         'dependency_name' => dependency_name,
         'dependency_version' => dependency_version,
         'install_path' => install_path,
-        'license_files' => license_file_hashes
+        'license_files' => license_files.map { |file| file.to_hash }
       }
     end
 
@@ -54,22 +58,35 @@ module LicenseFinder
 
     private
 
-    def license_file_hashes
-      license_files.map do |file|
-        h = { 'file' => file }
-        h['text'] = license_text(file) if include_license_text?
-        h
-      end
-    end
-
     attr_writer :include_license_text
 
     def include_license_text?
       @include_license_text
     end
+  end
 
-    def license_text(license_file)
-      File.read(license_file)
+  class LicenseFile
+    def initialize(file_path)
+      @file_path = file_path
+    end
+
+    attr_reader :file_path
+    attr_writer :include_license_text
+
+    def to_hash
+      h = { 'file' => file_path }
+      h['text'] = text if include_license_text?
+      h
+    end
+
+    private
+
+    def include_license_text?
+      @include_license_text
+    end
+
+    def text
+      File.read(file_path)
     end
   end
 end
