@@ -1,0 +1,14 @@
+PATH
+  remote: .
+  specs:
+    license_finder (0.0.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  license_finder!
