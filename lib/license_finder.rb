@@ -13,8 +13,8 @@ module LicenseFinder
 
     attr_reader :spec
 
-    def install_path
-      spec.full_gem_path
+    def name
+      "#{dependency_name} #{dependency_version}"
     end
 
     def dependency_name
@@ -29,15 +29,23 @@ module LicenseFinder
       Dir.glob(File.join(install_path, '**', LICENSE_FILE_NAMES))
     end
 
+    def install_path
+      spec.full_gem_path
+    end
+
     def to_s(include_license_text = true)
-      result = ''
-      result << "#{dependency_name} #{dependency_version}\n"
-      result << "\t(installed at #{install_path})\n"
-      license_files.each do |license_file|
-        result << "\t#{license_file}\n"
-        result << "#{license_text(license_file)}\n\n" if include_license_text
-      end
-      result
+      self.include_license_text = include_license_text
+
+      { name => to_hash }.to_yaml
+    end
+
+    def to_hash
+      {
+        'dependency_name' => dependency_name,
+        'dependency_version' => dependency_version,
+        'install_path' => install_path,
+        'license_files' => license_file_hashes
+      }
     end
 
     def sort_order
@@ -45,6 +53,20 @@ module LicenseFinder
     end
 
     private
+
+    def license_file_hashes
+      license_files.map do |file|
+        h = { 'file' => file }
+        h['text'] = license_text(file) if include_license_text?
+        h
+      end
+    end
+
+    attr_writer :include_license_text
+
+    def include_license_text?
+      @include_license_text
+    end
 
     def license_text(license_file)
       File.read(license_file)
