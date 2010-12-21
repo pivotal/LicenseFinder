@@ -23,4 +23,4 @@ PLATFORMS
 DEPENDENCIES
   license_finder!
   rr
-  rspec (>= 2.0.0)
+  rspec (~> 2.3)
