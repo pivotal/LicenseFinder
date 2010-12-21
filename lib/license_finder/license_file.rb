@@ -1,7 +1,7 @@
-require 'pathname'
-
 module LicenseFinder
   class LicenseFile
+    MIT_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/MIT').read
+
     def initialize(install_path, file_path)
       @install_path = Pathname.new(install_path)
       @file_path = Pathname.new(file_path)
@@ -16,11 +16,19 @@ module LicenseFinder
     end
 
     def text
-      @file_path.read
+      @text ||= @file_path.read
+    end
+
+    def body_type
+      mit_license_body? ? 'mit' : 'other'
+    end
+
+    def mit_license_body?
+      !!text.gsub(/\W+/, ' ').index(MIT_LICENSE_TEXT.gsub(/\W+/, ' '))
     end
 
     def to_hash
-      h = { 'file_name' => file_path }
+      h = { 'file_name' => file_path, 'body_type' => body_type }
       h['text'] = text if include_license_text?
       h
     end
