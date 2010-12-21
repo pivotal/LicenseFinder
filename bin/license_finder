@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
-require "rubygems"
-require "bundler"
-Bundler.setup
 
+require 'pathname'
+$LOAD_PATH.unshift Pathname.new(__FILE__).dirname + ".." + "lib"
 require "license_finder"
 
 LicenseFinder.from_bundler.each { |lf| puts lf.to_s(ARGV.first == "--with-licenses") }
