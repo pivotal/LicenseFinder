@@ -1,3 +1,5 @@
+require 'pathname'
+
 module LicenseFinder
   def self.from_bundler
     require 'bundler'
@@ -27,7 +29,7 @@ module LicenseFinder
 
     def license_files
       Dir.glob(File.join(install_path, '**', LICENSE_FILE_NAMES)).map do |path|
-        file = LicenseFile.new(path)
+        file = LicenseFile.new(install_path, path)
         file.include_license_text = include_license_text?
         file
       end
@@ -66,27 +68,35 @@ module LicenseFinder
   end
 
   class LicenseFile
-    def initialize(file_path)
-      @file_path = file_path
+    def initialize(install_path, file_path)
+      @install_path = Pathname.new(install_path)
+      @file_path = Pathname.new(file_path)
     end
 
-    attr_reader :file_path
-    attr_writer :include_license_text
+    def file_path
+      @file_path.relative_path_from(@install_path).to_s
+    end
+
+    def file_name
+      @file_path.basename.to_s
+    end
+
+    def text
+      @file_path.read
+    end
 
     def to_hash
-      h = { 'file' => file_path }
+      h = { 'file_name' => file_path }
       h['text'] = text if include_license_text?
       h
     end
+
+    attr_writer :include_license_text
 
     private
 
     def include_license_text?
       @include_license_text
-    end
-
-    def text
-      File.read(file_path)
     end
   end
 end
