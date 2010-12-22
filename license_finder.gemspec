@@ -13,6 +13,8 @@ Gem::Specification.new do |s|
   s.description = %q{Find and display licenses of a project's gem dependencies.}
 
   s.rubyforge_project = "license_finder"
+  s.add_development_dependency 'rspec', '~>2.3'
+  s.add_development_dependency 'rr'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
