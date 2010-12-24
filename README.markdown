@@ -7,8 +7,7 @@ Usage
 =====
 
     cd ~
-    git clone http://github.com/mainej/license_finder.git
-    chmod a+x ~/license_finder/bin/license_finder
+    git clone http://github.com/mainej/LicenseFinder.git license_finder
     cd your/project
     ~/license_finder/bin/license_finder
 
