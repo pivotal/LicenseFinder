@@ -8,14 +8,15 @@ describe LicenseFinder::LicenseFile do
       stub(IO).read { "file text" }
     end
 
-    its(:file_path) { should == 'license/path' }
-    its(:file_name) { should == 'path' }
-    its(:text) { should == 'file text' }
-
     describe "#to_hash" do
+      it "includes file path" do
+        subject.to_hash['file_name'].should == 'license/path'
+      end
+      
       it "does not include file text by default" do
         subject.to_hash['text'].should be_nil
       end
+
       it "includes file text if requested" do
         subject.include_license_text = true
         subject.to_hash['text'].should == 'file text'

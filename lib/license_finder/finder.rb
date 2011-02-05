@@ -50,7 +50,8 @@ module LicenseFinder
         'dependency_name' => dependency_name,
         'dependency_version' => dependency_version,
         'install_path' => install_path,
-        'license_files' => license_files.map { |file| file.to_hash }
+        'license_files' => license_files.map { |file| file.to_hash },
+        'readme_files' => readme_files.map { |file| file.to_hash }
       }
     end
 

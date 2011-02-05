@@ -16,5 +16,11 @@ module LicenseFinder
     def text
       @text ||= @file_path.read
     end
+    
+    private
+    
+    def on_single_line(text)
+      text.gsub(/\W+/, ' ')
+    end
   end
 end

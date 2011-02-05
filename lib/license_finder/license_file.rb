@@ -1,13 +1,13 @@
 module LicenseFinder
   class LicenseFile < FileParser
     MIT_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/MIT').read
-
+    
     def body_type
       mit_license_body? ? 'mit' : 'other'
     end
 
     def mit_license_body?
-      !!text.gsub(/\W+/, ' ').index(MIT_LICENSE_TEXT.gsub(/\W+/, ' '))
+      !!on_single_line(text).index(on_single_line(MIT_LICENSE_TEXT))
     end
 
     def to_hash
