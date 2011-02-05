@@ -21,6 +21,11 @@ describe LicenseFinder::LicenseFile do
         subject.include_license_text = true
         subject.to_hash['text'].should == 'file text'
       end
+      
+      it "includes body_type and header_type" do
+        subject.to_hash.should have_key 'body_type'
+        subject.to_hash.should have_key 'header_type'
+      end
     end
   end
 
@@ -30,6 +35,7 @@ describe LicenseFinder::LicenseFile do
     end
 
     its(:body_type) { should == 'mit' }
+    its(:header_type) { should == 'mit' }
   end
 
   context "with another license" do
@@ -38,5 +44,6 @@ describe LicenseFinder::LicenseFile do
     end
 
     its(:body_type) { should == 'other' }
+    its(:header_type) { should == 'other' }
   end
 end
