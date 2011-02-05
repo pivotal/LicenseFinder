@@ -22,20 +22,22 @@ describe LicenseFinder::LicenseFile do
         subject.to_hash['text'].should == 'file text'
       end
       
-      it "includes body_type and header_type" do
+      it "includes data about license" do
         subject.to_hash.should have_key 'body_type'
         subject.to_hash.should have_key 'header_type'
+        subject.to_hash.should have_key 'disclaimer_of_liability'
       end
     end
   end
 
   context "with MIT like license" do
     before do
-      stub(IO).read { File.read('spec/fixtures/MIT-LICENSE')}
+      stub(IO).read { File.read('spec/fixtures/MIT-LICENSE') }
     end
 
     its(:body_type) { should == 'mit' }
     its(:header_type) { should == 'mit' }
+    its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS OR COPYRIGHT HOLDERS' }
   end
 
   context "with another license" do
@@ -45,5 +47,16 @@ describe LicenseFinder::LicenseFile do
 
     its(:body_type) { should == 'other' }
     its(:header_type) { should == 'other' }
+    its(:disclaimer_of_liability) { should == 'other' }
+  end
+  
+  context "with variation in disclaimer of liability" do
+    before do
+      stub(IO).read { File.read('spec/fixtures/MIT-LICENSE-with-varied-disclaimer') }
+    end
+
+    its(:body_type) { should == 'mit' }
+    its(:header_type) { should == 'mit' }
+    its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS' }
   end
 end
