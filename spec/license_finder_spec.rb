@@ -32,13 +32,31 @@ describe LicenseFinder::Finder do
     end
     it "includes files with names like LICENSE, License or COPYING" do
       gem_spec = LicenseFinder::MockGemSpec.new('spec/fixtures/license_names')
-      LicenseFinder::Finder.new(gem_spec).license_files.map(&:file_name).sort.should ==
+      LicenseFinder::Finder.new(gem_spec).license_files.map(&:file_name).should =~
         %w[COPYING.txt LICENSE Mit-License]
     end
     it "includes files deep in the hierarchy" do
       gem_spec = LicenseFinder::MockGemSpec.new('spec/fixtures/nested_gem')
-      LicenseFinder::Finder.new(gem_spec).license_files.map { |f| [f.file_name, f.file_path]}.should ==
+      LicenseFinder::Finder.new(gem_spec).license_files.map { |f| [f.file_name, f.file_path]}.should =~
         [['LICENSE', 'vendor/LICENSE']]
+    end
+  end
+  
+  describe "#readme_files" do
+    it "is empty if there aren't any readmes" do
+      LicenseFinder::Finder.new(LicenseFinder::MockGemSpec.new).readme_files.should == []
+    end
+    
+    it "includes files named README" do
+      gem_spec = LicenseFinder::MockGemSpec.new('spec/fixtures/readme')
+      LicenseFinder::Finder.new(gem_spec).readme_files.map(&:file_name).sort.should =~
+        ['README', 'Readme.markdown', 'Project ReadMe']
+    end
+    
+    it "includes files deep in the hierarchy" do
+      gem_spec = LicenseFinder::MockGemSpec.new('spec/fixtures/nested_readme')
+      LicenseFinder::Finder.new(gem_spec).readme_files.map { |f| [f.file_name, f.file_path]}.should =~
+        [['README', 'vendor/README']]
     end
   end
 end

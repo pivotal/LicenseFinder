@@ -9,4 +9,6 @@ module LicenseFinder
 end
 
 require 'license_finder/finder'
+require 'license_finder/file_parser'
 require 'license_finder/license_file'
+require 'license_finder/readme_file'

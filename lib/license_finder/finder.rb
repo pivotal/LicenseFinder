@@ -1,6 +1,7 @@
 module LicenseFinder
   class Finder
     LICENSE_FILE_NAMES = '*{LICENSE,License,COPYING}*' # follows Dir.glob format
+    README_FILE_NAMES = '*{README,Readme,ReadMe}*' # follows Dir.glob format
 
     def initialize(spec)
       @spec = spec
@@ -25,6 +26,12 @@ module LicenseFinder
         file = LicenseFile.new(install_path, path)
         file.include_license_text = include_license_text?
         file
+      end
+    end
+    
+    def readme_files
+      Dir.glob(File.join(install_path, '**', README_FILE_NAMES)).map do |path|
+        ReadmeFile.new(install_path, path)
       end
     end
 
