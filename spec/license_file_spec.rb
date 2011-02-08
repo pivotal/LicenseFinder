@@ -59,4 +59,24 @@ describe LicenseFinder::LicenseFile do
     its(:header_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS' }
   end
+  
+  context "with empty license file" do
+    before do
+      stub(IO).read { "" }
+    end
+    
+    describe "#to_hash" do
+      it "is safe" do
+        lambda { subject.to_hash }.should_not raise_error
+      end
+    end
+  end
+  
+  describe "with variations on MIT header" do
+    before do
+      stub(IO).read { '(The MIT License)' }
+    end
+
+    its(:header_type) { should == 'mit' }
+  end
 end

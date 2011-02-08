@@ -1,7 +1,7 @@
 module LicenseFinder
   class LicenseFile < FileParser
     MIT_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/MIT-body').read
-    MIT_HEADER_TEXT = 'The MIT License'
+    MIT_HEADER_REGEX = /The MIT License/
     MIT_DISCLAIMER_REGEX = /THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL ((\w+ ){2,8})BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE\./
     
     def body_type
@@ -21,7 +21,8 @@ module LicenseFinder
     end
     
     def mit_license_header?
-      text.split("\n").first.strip == MIT_HEADER_TEXT
+      header = text.split("\n").first
+      header && header.strip =~ MIT_HEADER_REGEX
     end
     
     def mit_disclaimer_of_liability?
