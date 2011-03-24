@@ -1,6 +1,8 @@
 require 'pathname'
 
 module LicenseFinder
+
+
   ROOT_PATH = Pathname.new(__FILE__).dirname
   def self.from_bundler
     require 'bundler'
@@ -8,6 +10,7 @@ module LicenseFinder
   end
 end
 
+require 'license_finder/railtie' if defined?(Rails)
 require 'license_finder/finder'
 require 'license_finder/file_parser'
 require 'license_finder/license_file'
