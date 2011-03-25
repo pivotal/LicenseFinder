@@ -12,6 +12,9 @@ For a Rails project add license_finder to your Gemfile:
 Run 'rake license:generate_dependencies'
 This will write out a dependencies.yml and dependencies.txt file in the root of your project.
 
+Run 'rake license:action_items'
+This will output a list of unapproved dependencies to the console
+
 As a standalone script:
     cd ~
     git clone http://github.com/pivotal/LicenseFinder.git license_finder
