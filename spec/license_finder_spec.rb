@@ -1,32 +1,30 @@
 require 'spec_helper'
 
 describe LicenseFinder do
-  before(:each) do
+  it "should generate a yml file and txt file" do
+    stub(File).exists?('./dependencies.yml') {false}
 
-  end
-
-  it "should generate a yml file" do
-    stub(File).exists?('./config/dependencies.yml') {false}
-
-    output = StringIO.new
-    stub(File).open.yields(output)
-    stub(File).exists?('./config') {true}
+    yml_output = StringIO.new
+    txt_output = StringIO.new
+    stub(File).open('./dependencies.yml', 'w+').yields(yml_output)
+    stub(File).open('./dependencies.txt', 'w+').yields(txt_output)
     stub(LicenseFinder::DependencyList).from_bundler.stub!.to_yaml {"output"}
-    LicenseFinder.to_yml
-    output.string.should == "output\n"
+    LicenseFinder.write_files
+    yml_output.string.should == "output\n"
   end
 
   it 'should update an existing yml file' do
-    stub(File).exists?('./config/dependencies.yml') {true}
+    stub(File).exists?('./dependencies.yml') {true}
 
-    output = StringIO.new
-    stub(File).open('./config/dependencies.yml').stub!.readlines {['existing yml']}
-    stub(File).open('./config/dependencies.yml', 'w+').yields(output)
-    
-    stub(File).exists?('./config') {true}
+    yml_output = StringIO.new
+    txt_output = StringIO.new
+    stub(File).open('./dependencies.yml').stub!.readlines {['existing yml']}
+    stub(File).open('./dependencies.yml', 'w+').yields(yml_output)
+    stub(File).open('./dependencies.txt', 'w+').yields(txt_output)
+
     stub(LicenseFinder::DependencyList).from_yaml.stub!.merge.stub!.to_yaml {"output"}
     stub(LicenseFinder::DependencyList).from_bundler
-    LicenseFinder.to_yml
-    output.string.should == "output\n"
+    LicenseFinder.write_files
+    yml_output.string.should == "output\n"
   end
 end

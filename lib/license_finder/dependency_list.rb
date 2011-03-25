@@ -26,17 +26,21 @@ module LicenseFinder
             Dependency.new(new_dep.name, new_dep.version, new_dep.license, old_dep.approved)
           end
         else
-        new_dep
+          new_dep
+        end
       end
+
+      self.class.new(deps)
     end
 
-    self.class.new(deps)
-  end
+    def to_yaml
+      result = "--- \n"
+      dependencies.sort_by(&:name).inject(result) { |r, d| r << d.to_yaml_entry; r }
+    end
 
-  def to_yaml
-    result = "--- \n"
-    dependencies.sort_by(&:name).inject(result) { |r, d| r << d.to_yaml_entry; r }
+    def to_s
+      dependencies.sort_by(&:name).map(&:to_s).join("\n")
+    end
   end
-end
 end
 

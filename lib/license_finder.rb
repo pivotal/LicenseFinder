@@ -7,24 +7,24 @@ module LicenseFinder
     Bundler.load.specs.map { |spec| GemSpecDetails.new(spec) }.sort_by &:sort_order
   end
 
-  def self.to_yml
+  def self.write_files
     bundler_list = DependencyList.from_bundler
 
-    if(File.exists?('./config/dependencies.yml'))
-      yml = File.open('./config/dependencies.yml').readlines.join
+    if(File.exists?('./dependencies.yml'))
+      yml = File.open('./dependencies.yml').readlines.join
       existing_list = DependencyList.from_yaml(yml)
       new_list = existing_list.merge(bundler_list)
     else
       new_list = bundler_list
     end
     
-    yml_string = new_list.to_yaml
-
-    if (File.exists?('./config'))
-      File.open('./config/dependencies.yml', 'w+') do |f|
-        f.puts yml_string
-      end
+    File.open('./dependencies.yml', 'w+') do |f|
+      f.puts new_list.to_yaml
     end
+    File.open('./dependencies.txt', 'w+') do |f|
+      f.puts new_list.to_s
+    end
+
   end
 end
 

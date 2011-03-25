@@ -1,6 +1,6 @@
 namespace :license do
   desc 'generate a list of dependency licenses'
   task :generate_dependencies do
-    LicenseFinder.to_yml
+    LicenseFinder.write_files
   end
 end

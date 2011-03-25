@@ -142,6 +142,17 @@ describe LicenseFinder::DependencyList do
       dep.should be_nil
     end
   end
+
+  describe "#to_s" do
+    it "should return a human readable list of dependencies" do
+      gem1 = LicenseFinder::Dependency.new('b_gem', '1.2.3', 'MIT', true)
+      gem2 = LicenseFinder::Dependency.new('a_gem', '0.9', 'other', false)
+
+      list = LicenseFinder::DependencyList.new([gem1, gem2])
+
+      list.to_s.should == "a_gem 0.9, other\nb_gem 1.2.3, MIT"
+    end
+  end
 end
 
 

@@ -23,6 +23,10 @@ module LicenseFinder
       "- name: \"#{name}\"\n  version: \"#{version}\"\n  license: \"#{license}\"\n  approved: #{approved}\n"
     end
 
+    def to_s
+      "#{name} #{version}, #{license}"
+    end
+
   end
 end
 
