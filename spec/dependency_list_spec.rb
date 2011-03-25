@@ -100,22 +100,31 @@ describe LicenseFinder::DependencyList do
       @yml_same = LicenseFinder::Dependency.new('same_gem', '1.2.3', 'MIT', true)
       @yml_updated = LicenseFinder::Dependency.new('updated_gem', '1.0.1', 'MIT', true)
       @yml_new_license = LicenseFinder::Dependency.new('new_license_gem', '1.0.1', 'MIT', true)
+      @yml_manual_license = LicenseFinder::Dependency.new('manual_license_gem', '1.0.1', 'Ruby', true)
       @yml_removed_gem = LicenseFinder::Dependency.new('removed_gem', '1.0.1', 'MIT', true)
       @yml_new_whitelist = LicenseFinder::Dependency.new('new_whitelist_gem', '1.0.1', 'MIT', false)
 
       @gemspec_same = LicenseFinder::Dependency.new('same_gem', '1.2.3', 'MIT', false)
       @gemspec_new = LicenseFinder::Dependency.new('brand_new_gem', '0.9', 'MIT', false)
       @gemspec_updated = LicenseFinder::Dependency.new('updated_gem', '1.1.2', 'MIT', false)
-      @gemspec_new_license = LicenseFinder::Dependency.new('new_license_gem', '2.0.1', 'other', false)
+      @gemspec_new_license = LicenseFinder::Dependency.new('new_license_gem', '2.0.1', 'Apache 2.0', false)
       @gemspec_new_whitelist = LicenseFinder::Dependency.new('new_whitelist_gem', '1.0.1', 'MIT', true)
+      @gemspec_manual_license = LicenseFinder::Dependency.new('manual_license_gem', '1.2.1', 'other', false)
 
-      @list_from_yml = LicenseFinder::DependencyList.new([@yml_same, @yml_updated, @yml_new_license, @yml_removed_gem, @yml_new_whitelist])
-      @list_from_gemspec = LicenseFinder::DependencyList.new([@gemspec_same, @gemspec_new, @gemspec_updated, @gemspec_new_license, @gemspec_new_whitelist])
+      @list_from_yml = LicenseFinder::DependencyList.new([@yml_same, @yml_updated, @yml_new_license, @yml_removed_gem, @yml_new_whitelist, @yml_manual_license])
+      @list_from_gemspec = LicenseFinder::DependencyList.new([@gemspec_same, @gemspec_new, @gemspec_updated, @gemspec_new_license, @gemspec_new_whitelist, @gemspec_manual_license])
     end
 
     it "should ignore existing gems with the same version" do
       dep = @list_from_yml.merge(@list_from_gemspec).dependencies.detect { |d| d.name == 'same_gem' }
       dep.approved.should == @yml_same.approved
+    end
+
+    it "should keep old license value if gemspec license is other" do
+      dep = @list_from_yml.merge(@list_from_gemspec).dependencies.detect { |d| d.name == 'manual_license_gem' }
+      dep.license.should == @yml_manual_license.license
+      dep.version.should == @gemspec_manual_license.version
+      dep.approved.should == @yml_manual_license.approved
     end
 
     it "should add new gem" do

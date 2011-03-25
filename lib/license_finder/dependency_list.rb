@@ -21,6 +21,8 @@ module LicenseFinder
         old_dep = self.dependencies.detect { |d| d.name == new_dep.name }
         if old_dep && old_dep.license == new_dep.license
           Dependency.new(new_dep.name, new_dep.version, new_dep.license, old_dep.approved || new_dep.approved)
+        elsif old_dep && new_dep.license == 'other'
+          Dependency.new(new_dep.name, new_dep.version, old_dep.license, old_dep.approved)
         else
           new_dep
         end
