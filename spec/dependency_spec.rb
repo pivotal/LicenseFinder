@@ -26,17 +26,7 @@ end
 #  license_url: http://foo.com/README
 
 describe LicenseFinder::Dependency do
-  describe 'from gemspec' do
-    subject { LicenseFinder::Dependency.from_gemspec(LicenseFinder::MockGemSpec3.new) }
 
-    its(:name) { should == 'spec_name' }
-    its(:version) { should == '2.1.3' }
-    its(:license) { should == 'MIT' }
-    its(:approved) { should == false }
-
-    its(:to_yaml_entry) {should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"MIT\"\n  approved: false\n" }
-
-  end
 
   describe 'from hash' do
     subject { LicenseFinder::Dependency.from_hash({'name' => "spec_name", 'version' => "2.1.3", 'license' => "MIT", 'approved' => false}) }

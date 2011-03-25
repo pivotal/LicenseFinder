@@ -3,10 +3,6 @@ module LicenseFinder
 
     attr_reader :name, :version, :license, :approved
 
-    def self.from_gemspec(gem_spec)
-      new(gem_spec.name, gem_spec.version, 'MIT', false)
-    end
-
     def self.from_yaml(yml)
       attrs = YAML.load(yml)
       new(attrs['name'], attrs['version'], attrs['license'], attrs['approved'])

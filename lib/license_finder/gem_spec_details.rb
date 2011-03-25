@@ -1,5 +1,5 @@
 module LicenseFinder
-  class Finder
+  class GemSpecDetails
     LICENSE_FILE_NAMES = '*{LICENSE,License,COPYING}*' # follows Dir.glob format
     README_FILE_NAMES = '*{README,Readme,ReadMe}*' # follows Dir.glob format
 
@@ -19,6 +19,14 @@ module LicenseFinder
 
     def dependency_version
       spec.version.to_s
+    end
+
+    def dependency
+      @dependency ||= Dependency.new(@spec.name, @spec.version, determine_license, false)
+    end
+
+    def determine_license
+      'MIT'
     end
 
     def license_files

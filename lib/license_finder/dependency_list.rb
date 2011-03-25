@@ -3,7 +3,7 @@ module LicenseFinder
 
     attr_reader :dependencies
     def self.from_bundler
-      new(Bundler.load.specs.map{|s| Dependency.from_gemspec(s)})
+      new(Bundler.load.specs.map { |spec| GemSpecDetails.new(spec).dependency })
     end
 
     def initialize(dependencies)
