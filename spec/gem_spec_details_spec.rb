@@ -16,7 +16,7 @@ describe LicenseFinder::GemSpecDetails do
       end
 
       def full_gem_path
-        @path || 'install/path'
+        @path ? (File.dirname(__FILE__) + '/../' + @path) : 'install/path'
       end
     end
   end
@@ -63,14 +63,29 @@ describe LicenseFinder::GemSpecDetails do
   end
 
   describe 'to dependency' do
-    subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new).dependency }
+    describe 'with MIT License' do
+      subject do
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem')).dependency
+      end
 
-    its(:name) { should == 'spec_name' }
-    its(:version) { should == '2.1.3' }
-    its(:license) { should == 'MIT' }
-    its(:approved) { should == false }
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'MIT' }
+      its(:approved) { should == false }
 
-    its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"MIT\"\n  approved: false\n" }
+      its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"MIT\"\n  approved: false\n" }
+    end
+
+    describe 'with unknown license' do
+      subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/other_licensed_gem')).dependency }
+
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'other' }
+      its(:approved) { should == false }
+
+      its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"other\"\n  approved: false\n" }
+    end
 
   end
 end

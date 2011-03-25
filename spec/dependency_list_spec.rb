@@ -38,7 +38,6 @@ describe LicenseFinder::DependencyList do
       let(:dep) { subject.dependencies.first }
       it { dep.name.should == 'gem1' }
       it { dep.version.should == '1.2.3' }
-      it { dep.to_yaml_entry.should == "- name: \"gem1\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n" }
     end
 
     describe "second" do

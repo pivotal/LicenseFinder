@@ -26,7 +26,8 @@ module LicenseFinder
     end
 
     def determine_license
-      'MIT'
+      return 'MIT' if license_files.any?(&:mit_license_body?)
+      'other'
     end
 
     def license_files
