@@ -3,8 +3,8 @@ module LicenseFinder
 
     attr_reader :dependencies
 
-    def self.from_bundler
-      new(Bundler.load.specs.map { |spec| GemSpecDetails.new(spec).dependency })
+    def self.from_bundler(whitelist = [])
+      new(Bundler.load.specs.map { |spec| GemSpecDetails.new(spec, whitelist).dependency })
     end
 
     def initialize(dependencies)
@@ -20,11 +20,7 @@ module LicenseFinder
       deps = new_list.dependencies.map do |new_dep|
         old_dep = self.dependencies.detect { |d| d.name == new_dep.name }
         if old_dep && old_dep.license == new_dep.license
-          if old_dep.version == new_dep.version
-            old_dep
-          else
-            Dependency.new(new_dep.name, new_dep.version, new_dep.license, old_dep.approved)
-          end
+          Dependency.new(new_dep.name, new_dep.version, new_dep.license, old_dep.approved || new_dep.approved)
         else
           new_dep
         end

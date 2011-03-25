@@ -3,8 +3,9 @@ module LicenseFinder
     LICENSE_FILE_NAMES = '*{LICENSE,License,COPYING}*' # follows Dir.glob format
     README_FILE_NAMES = '*{README,Readme,ReadMe}*' # follows Dir.glob format
 
-    def initialize(spec)
+    def initialize(spec, whitelist = [])
       @spec = spec
+      @whitelist = whitelist
     end
 
     attr_reader :spec
@@ -22,7 +23,8 @@ module LicenseFinder
     end
 
     def dependency
-      @dependency ||= Dependency.new(@spec.name, @spec.version, determine_license, false)
+      license = determine_license
+      @dependency ||= Dependency.new(@spec.name, @spec.version, license, @whitelist.include?(license))
     end
 
     def determine_license

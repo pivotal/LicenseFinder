@@ -101,14 +101,16 @@ describe LicenseFinder::DependencyList do
       @yml_updated = LicenseFinder::Dependency.new('updated_gem', '1.0.1', 'MIT', true)
       @yml_new_license = LicenseFinder::Dependency.new('new_license_gem', '1.0.1', 'MIT', true)
       @yml_removed_gem = LicenseFinder::Dependency.new('removed_gem', '1.0.1', 'MIT', true)
+      @yml_new_whitelist = LicenseFinder::Dependency.new('new_whitelist_gem', '1.0.1', 'MIT', false)
 
       @gemspec_same = LicenseFinder::Dependency.new('same_gem', '1.2.3', 'MIT', false)
       @gemspec_new = LicenseFinder::Dependency.new('brand_new_gem', '0.9', 'MIT', false)
       @gemspec_updated = LicenseFinder::Dependency.new('updated_gem', '1.1.2', 'MIT', false)
       @gemspec_new_license = LicenseFinder::Dependency.new('new_license_gem', '2.0.1', 'other', false)
+      @gemspec_new_whitelist = LicenseFinder::Dependency.new('new_whitelist_gem', '1.0.1', 'MIT', true)
 
-      @list_from_yml = LicenseFinder::DependencyList.new([@yml_same, @yml_updated, @yml_new_license, @yml_removed_gem])
-      @list_from_gemspec = LicenseFinder::DependencyList.new([@gemspec_same, @gemspec_new, @gemspec_updated, @gemspec_new_license])
+      @list_from_yml = LicenseFinder::DependencyList.new([@yml_same, @yml_updated, @yml_new_license, @yml_removed_gem, @yml_new_whitelist])
+      @list_from_gemspec = LicenseFinder::DependencyList.new([@gemspec_same, @gemspec_new, @gemspec_updated, @gemspec_new_license, @gemspec_new_whitelist])
     end
 
     it "should ignore existing gems with the same version" do
@@ -136,6 +138,14 @@ describe LicenseFinder::DependencyList do
       dep.version.should == @gemspec_new_license.version
       dep.approved.should == @gemspec_new_license.approved
     end
+
+    it "should update approved if gemspec gem is approved" do
+      dep = @list_from_yml.merge(@list_from_gemspec).dependencies.detect { |d| d.name == 'new_whitelist_gem' }
+      dep.name.should == @gemspec_new_whitelist.name
+      dep.version.should == @gemspec_new_whitelist.version
+      dep.approved.should == @gemspec_new_whitelist.approved
+    end
+
 
     it "should remove gem if new list doesn't contain it" do
       dep = @list_from_yml.merge(@list_from_gemspec).dependencies.detect { |d| d.name == 'removed_gem' }

@@ -1,0 +1,4 @@
+---
+- whitelist:
+#  - name: MIT
+#  - name: Apache 2.0

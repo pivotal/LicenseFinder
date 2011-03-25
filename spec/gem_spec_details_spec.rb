@@ -65,15 +65,15 @@ describe LicenseFinder::GemSpecDetails do
   describe 'to dependency' do
     describe 'with MIT License' do
       subject do
-        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem')).dependency
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem'), ['MIT']).dependency
       end
 
       its(:name) { should == 'spec_name' }
       its(:version) { should == '2.1.3' }
       its(:license) { should == 'MIT' }
-      its(:approved) { should == false }
+      its(:approved) { should == true }
 
-      its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"MIT\"\n  approved: false\n" }
+      its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"MIT\"\n  approved: true\n" }
     end
 
     describe 'with unknown license' do
