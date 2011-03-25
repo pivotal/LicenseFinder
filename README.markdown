@@ -6,8 +6,15 @@ With bundler it's easy for your project to depend on many gems.  This decomposit
 Usage
 =====
 
+For a Rails project add license_finder to your Gemfile:
+    gem 'license_finder'
+
+Run 'rake license:generate_dependencies'
+This will write out a dependencies.yml and dependencies.txt file in the root of your project.
+
+As a standalone script:
     cd ~
-    git clone http://github.com/mainej/LicenseFinder.git license_finder
+    git clone http://github.com/pivotal/LicenseFinder.git license_finder
     cd your/project
     ~/license_finder/bin/license_finder
 
@@ -16,20 +23,55 @@ Optionally add `--with-licenses` to include the full text of the licenses in the
 Sample Output
 =============
 
-    --- 
-    json_pure 1.4.6: 
+dependencies.yml:
+
+    ---
+    - name: "json_pure"
+      version: "1.5.1"
+      license: "other"
+      approved: false
+
+    - name: "rake"
+      version: "0.8.7"
+      license: "MIT"
+      approved: true
+
+dependencies.txt:
+
+    json_pure 1.5.1, other
+    rake 0.8.7, MIT
+
+bin/license_finder:
+
+    ---
+    json_pure 1.5.1:
       dependency_name: json_pure
-      dependency_version: 1.4.6
-      install_path: /some/path/.rvm/gems/ruby-1.9.2-p0/gems/json_pure-1.4.6
-      license_files: 
+      dependency_version: 1.5.1
+      install_path: /some/path/.rvm/gems/ruby-1.9.2-p180/gems/json_pure-1.5.1
+      license_files:
       - file_name: COPYING
+        header_type: other
         body_type: other
-    --- 
-    rake 0.8.7: 
+        disclaimer_of_liability: other
+      - file_name: COPYING-json-jruby
+        header_type: other
+        body_type: other
+        disclaimer_of_liability: other
+      readme_files:
+      - file_name: README
+        mentions_license: true
+      - file_name: README-json-jruby.markdown
+        mentions_license: false
+    ---
+    rake 0.8.7:
       dependency_name: rake
       dependency_version: 0.8.7
-      install_path: /some/path/.rvm/gems/ruby-1.9.2-p0/gems/rake-0.8.7
-      license_files: 
+      install_path: /some/path/.rvm/gems/ruby-1.9.2-p180/gems/rake-0.8.7
+      license_files:
       - file_name: MIT-LICENSE
+        header_type: other
         body_type: mit
-        
+        disclaimer_of_liability: "mit: THE AUTHORS OR COPYRIGHT HOLDERS"
+      readme_files:
+      - file_name: README
+        mentions_license: true
