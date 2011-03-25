@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe LicenseFinder do
   before(:each) do
 

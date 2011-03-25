@@ -8,7 +8,7 @@ module LicenseFinder
   end
 
   def self.to_yml
-    yml_string = self.from_bundler.map { |lf| lf.to_s(ARGV.first == "--with-licenses") }.join
+    yml_string = DependencyList.from_bundler.to_yaml
 
     if (File.exists?('./config'))
       File.open('./config/dependencies.yml', 'w+') do |f|

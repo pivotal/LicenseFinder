@@ -73,11 +73,11 @@ describe LicenseFinder::DependencyList do
   describe 'to_yaml' do
     it "should generate yaml" do
       list = LicenseFinder::DependencyList.new([
-                                                   LicenseFinder::Dependency.new('gem1', '1.2.3', 'MIT', false),
-                                                   LicenseFinder::Dependency.new('gem2', '0.4.2', 'MIT', false)
+                                                   LicenseFinder::Dependency.new('b_gem', '0.4.2', 'MIT', false),
+                                                   LicenseFinder::Dependency.new('a_gem', '1.2.3', 'MIT', false)
                                                ])
 
-      list.to_yaml.should == "--- \n- name: \"gem1\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n- name: \"gem2\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n"
+      list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n"
     end
   end
 

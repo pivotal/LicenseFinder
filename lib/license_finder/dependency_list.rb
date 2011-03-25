@@ -17,7 +17,7 @@ module LicenseFinder
 
     def to_yaml
       result = "--- \n"
-      dependencies.inject(result) {|r, d| r << d.to_yaml_entry; r}
+      dependencies.sort_by(&:name).inject(result) {|r, d| r << d.to_yaml_entry; r}
     end
   end
 end
