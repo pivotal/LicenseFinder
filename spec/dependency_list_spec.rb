@@ -153,6 +153,18 @@ describe LicenseFinder::DependencyList do
       list.to_s.should == "a_gem 0.9, other\nb_gem 1.2.3, MIT"
     end
   end
+
+  describe '#action_items' do
+    it "should return all unapproved dependencies" do
+      gem1 = LicenseFinder::Dependency.new('b_gem', '1.2.3', 'MIT', true)
+      gem2 = LicenseFinder::Dependency.new('a_gem', '0.9', 'other', false)
+      gem3 = LicenseFinder::Dependency.new('c_gem', '0.2', 'other', false)
+
+      list = LicenseFinder::DependencyList.new([gem1, gem2, gem3])
+
+      list.action_items.should == "a_gem 0.9, other\nc_gem 0.2, other"
+    end
+  end
 end
 
 

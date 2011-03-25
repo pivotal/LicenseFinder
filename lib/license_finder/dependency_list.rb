@@ -41,6 +41,10 @@ module LicenseFinder
     def to_s
       dependencies.sort_by(&:name).map(&:to_s).join("\n")
     end
+
+    def action_items
+      dependencies.sort_by(&:name).reject(&:approved).map(&:to_s).join("\n")
+    end
   end
 end
 
