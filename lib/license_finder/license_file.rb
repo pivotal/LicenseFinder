@@ -1,11 +1,18 @@
 module LicenseFinder
   class LicenseFile < FileParser
     MIT_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/MIT-body').read
+    APACHE_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/Apache-2.0-body').read
     MIT_HEADER_REGEX = /The MIT License/
     MIT_DISCLAIMER_REGEX = /THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL ((\w+ ){2,8})BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE\./
     
     def body_type
-      mit_license_body? ? 'mit' : 'other'
+      if mit_license_body?
+        'mit'
+      elsif apache_license_body?
+        'apache'
+      else
+        'other'
+      end
     end
     
     def header_type
@@ -19,7 +26,11 @@ module LicenseFinder
     def mit_license_body?
       !!on_single_line(text).index(on_single_line(MIT_LICENSE_TEXT))
     end
-    
+
+    def apache_license_body?
+      !!on_single_line(text).index(on_single_line(APACHE_LICENSE_TEXT))
+    end
+
     def mit_license_header?
       header = text.split("\n").first
       header && header.strip =~ MIT_HEADER_REGEX

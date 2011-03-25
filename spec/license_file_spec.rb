@@ -32,12 +32,20 @@ describe LicenseFinder::LicenseFile do
 
   context "with MIT like license" do
     before do
-      stub(IO).read { File.read('spec/fixtures/MIT-LICENSE') }
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/MIT-LICENSE')) }
     end
 
     its(:body_type) { should == 'mit' }
     its(:header_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS OR COPYRIGHT HOLDERS' }
+  end
+
+  context "with Apache like license" do
+    before do
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/APACHE-2-LICENSE')) }
+    end
+
+    its(:body_type) { should == 'apache' }
   end
 
   context "with another license" do

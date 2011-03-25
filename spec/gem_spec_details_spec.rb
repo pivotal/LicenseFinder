@@ -76,6 +76,20 @@ describe LicenseFinder::GemSpecDetails do
       its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"MIT\"\n  approved: true\n" }
     end
 
+    describe 'with Apache License' do
+      subject do
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/apache_licensed_gem'), ['Apache 2.0']).dependency
+      end
+
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'Apache 2.0' }
+      its(:approved) { should == true }
+
+      its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"Apache 2.0\"\n  approved: true\n" }
+    end
+
+
     describe 'with unknown license' do
       subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/other_licensed_gem')).dependency }
 
