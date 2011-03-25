@@ -72,8 +72,8 @@ describe LicenseFinder::GemSpecDetails do
       its(:version) { should == '2.1.3' }
       its(:license) { should == 'MIT' }
       its(:approved) { should == true }
-
-      its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"MIT\"\n  approved: true\n" }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
     end
 
     describe 'with Apache License' do
@@ -85,8 +85,8 @@ describe LicenseFinder::GemSpecDetails do
       its(:version) { should == '2.1.3' }
       its(:license) { should == 'Apache 2.0' }
       its(:approved) { should == true }
-
-      its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"Apache 2.0\"\n  approved: true\n" }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
     end
 
 
@@ -97,8 +97,8 @@ describe LicenseFinder::GemSpecDetails do
       its(:version) { should == '2.1.3' }
       its(:license) { should == 'other' }
       its(:approved) { should == false }
-
-      its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"other\"\n  approved: false\n" }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
     end
 
   end

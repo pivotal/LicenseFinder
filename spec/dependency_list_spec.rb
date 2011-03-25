@@ -59,7 +59,6 @@ describe LicenseFinder::DependencyList do
       let(:dep) { subject.dependencies.first }
       it { dep.name.should == 'gem1' }
       it { dep.version.should == '1.2.3' }
-      it { dep.to_yaml_entry.should == "- name: \"gem1\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n" }
     end
 
     describe "second" do
@@ -77,7 +76,7 @@ describe LicenseFinder::DependencyList do
                                                    LicenseFinder::Dependency.new('a_gem', '1.2.3', 'MIT', false)
                                                ])
 
-      list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n"
+      list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n"
     end
   end
 
@@ -165,11 +164,11 @@ describe LicenseFinder::DependencyList do
   describe "#to_s" do
     it "should return a human readable list of dependencies" do
       gem1 = LicenseFinder::Dependency.new('b_gem', '1.2.3', 'MIT', true)
-      gem2 = LicenseFinder::Dependency.new('a_gem', '0.9', 'other', false)
+      gem2 = LicenseFinder::Dependency.new('a_gem', '0.9', 'other', false, 'http://foo.com/LICENSE')
 
       list = LicenseFinder::DependencyList.new([gem1, gem2])
 
-      list.to_s.should == "a_gem 0.9, other\nb_gem 1.2.3, MIT"
+      list.to_s.should == "a_gem 0.9, other, http://foo.com/LICENSE\nb_gem 1.2.3, MIT"
     end
   end
 
