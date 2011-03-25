@@ -20,7 +20,9 @@ module LicenseFinder
     private
     
     def on_single_line(text)
-      text.gsub(/\s+/, ' ')
+      text.gsub(/\s+/, ' ').gsub("'", "\"")
+    rescue
+      ''
     end
   end
 end

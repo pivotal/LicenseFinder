@@ -1,7 +1,6 @@
 module LicenseFinder
   class GemSpecDetails
-    LICENSE_FILE_NAMES = '*{LICENSE,License,COPYING}*' # follows Dir.glob format
-    README_FILE_NAMES = '*{README,Readme,ReadMe}*' # follows Dir.glob format
+    LICENSE_FILE_NAMES = '*{LICENSE,License,COPYING,README,Readme,ReadMe}*' # follows Dir.glob format
 
     def initialize(spec, whitelist = [])
       @spec = spec
@@ -41,12 +40,6 @@ module LicenseFinder
       end
     end
     
-    def readme_files
-      Dir.glob(File.join(install_path, '**', README_FILE_NAMES)).map do |path|
-        ReadmeFile.new(install_path, path)
-      end
-    end
-
     def install_path
       spec.full_gem_path
     end
@@ -62,8 +55,7 @@ module LicenseFinder
         'dependency_name' => dependency_name,
         'dependency_version' => dependency_version,
         'install_path' => install_path,
-        'license_files' => license_files.map { |file| file.to_hash },
-        'readme_files' => readme_files.map { |file| file.to_hash }
+        'license_files' => license_files.map { |file| file.to_hash }
       }
     end
 

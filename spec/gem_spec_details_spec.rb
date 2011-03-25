@@ -44,24 +44,6 @@ describe LicenseFinder::GemSpecDetails do
     end
   end
 
-  describe "#readme_files" do
-    it "is empty if there aren't any readmes" do
-      LicenseFinder::GemSpecDetails.new(@mock_gemspec.new).readme_files.should == []
-    end
-
-    it "includes files named README" do
-      gem_spec = @mock_gemspec.new('spec/fixtures/readme')
-      LicenseFinder::GemSpecDetails.new(gem_spec).readme_files.map(&:file_name).sort.should =~
-          ['README', 'Readme.markdown', 'Project ReadMe']
-    end
-
-    it "includes files deep in the hierarchy" do
-      gem_spec = @mock_gemspec.new('spec/fixtures/nested_readme')
-      LicenseFinder::GemSpecDetails.new(gem_spec).readme_files.map { |f| [f.file_name, f.file_path] }.should =~
-          [['README', 'vendor/README']]
-    end
-  end
-
   describe 'to dependency' do
     describe 'with MIT License' do
       subject do
