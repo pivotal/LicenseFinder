@@ -1,4 +1,5 @@
 require 'pathname'
+require 'yaml'
 
 module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname

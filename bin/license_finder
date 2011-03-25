@@ -4,4 +4,4 @@ require 'pathname'
 $LOAD_PATH.unshift Pathname.new(__FILE__).dirname + ".." + "lib"
 require "license_finder"
 
-LicenseFinder.from_bundler.each { |lf| puts lf.to_s(ARGV.first == "--with-licenses") }
+LicenseFinder::Finder.new.from_bundler.each { |lf| puts lf.to_s(ARGV.first == "--with-licenses") }
