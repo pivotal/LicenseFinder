@@ -8,7 +8,17 @@ module LicenseFinder
   end
 
   def self.to_yml
-    yml_string = DependencyList.from_bundler.to_yaml
+    bundler_list = DependencyList.from_bundler
+
+    if(File.exists?('./config/dependencies.yml'))
+      yml = File.open('./config/dependencies.yml').readlines.join
+      existing_list = DependencyList.from_yaml(yml)
+      new_list = existing_list.merge(bundler_list)
+    else
+      new_list = bundler_list
+    end
+    
+    yml_string = new_list.to_yaml
 
     if (File.exists?('./config'))
       File.open('./config/dependencies.yml', 'w+') do |f|
