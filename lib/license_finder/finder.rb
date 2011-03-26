@@ -1,11 +1,12 @@
 module LicenseFinder
   class Finder
 
-    attr_reader :whitelist
+    attr_reader :whitelist, :ignore_groups
     def initialize
       if File.exists?('./config/license_finder.yml')
         config = YAML.load(File.open('./config/license_finder.yml').readlines.join)
-        @whitelist = config.first['whitelist'].map {|item| item['name']}
+        @whitelist = config['whitelist'] || []
+        @ignore_groups = config['ignore_groups'] ? config['ignore_groups'].map{|g| g.to_sym} : []
       end
     end
 

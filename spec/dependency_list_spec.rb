@@ -26,7 +26,10 @@ describe LicenseFinder::DependencyList do
 
   describe 'from Bundler' do
     subject do
-      stub(Bundler).load.stub!.specs { [@mock_gemspec.new('gem1', '1.2.3'), @mock_gemspec.new('gem2', '0.4.2')] }
+      mock_bundler = Object.new
+      stub(Bundler::Definition).build {mock_bundler}
+      stub(mock_bundler).groups {[]}
+      stub(mock_bundler).specs_for { [@mock_gemspec.new('gem1', '1.2.3'), @mock_gemspec.new('gem2', '0.4.2')] }
       LicenseFinder::DependencyList.from_bundler
     end
 

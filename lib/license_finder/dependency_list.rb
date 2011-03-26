@@ -3,8 +3,15 @@ module LicenseFinder
 
     attr_reader :dependencies
 
-    def self.from_bundler(whitelist = [])
-      new(Bundler.load.specs.map { |spec| GemSpecDetails.new(spec, whitelist).dependency })
+    def self.from_bundler(whitelist = [], ignore_groups = [])
+      gemfile = Pathname.new("Gemfile").expand_path
+      root = gemfile.dirname
+      lockfile = root.join('Gemfile.lock')
+      definition = Bundler::Definition.build(gemfile, lockfile, nil)
+
+      groups = definition.groups - ignore_groups
+
+      new(definition.specs_for(groups).map { |spec| GemSpecDetails.new(spec, whitelist).dependency })
     end
 
     def initialize(dependencies)
