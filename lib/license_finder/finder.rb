@@ -34,7 +34,7 @@ module LicenseFinder
 
     private
     def generate_list
-      bundler_list = DependencyList.from_bundler(whitelist)
+      bundler_list = DependencyList.from_bundler(whitelist, ignore_groups)
 
       if (File.exists?('./dependencies.yml'))
         yml = File.open('./dependencies.yml').readlines.join
