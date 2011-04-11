@@ -1,7 +1,7 @@
 --- 
 whitelist: 
 #- MIT
-#- Apache
+#- Apache 2.0
 ignore_groups:
 #- test
 #- development
