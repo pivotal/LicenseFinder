@@ -79,7 +79,7 @@ describe LicenseFinder::DependencyList do
                                                    LicenseFinder::Dependency.new('a_gem', '1.2.3', 'MIT', false)
                                                ])
 
-      list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n"
+      list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n"
     end
   end
 
@@ -182,7 +182,7 @@ describe LicenseFinder::DependencyList do
 
       list = LicenseFinder::DependencyList.new([gem1, gem2])
 
-      list.to_s.should == "a_gem 0.9, other, http://foo.com/LICENSE\nb_gem 1.2.3, MIT"
+      list.to_s.should == "a_gem 0.9, other, http://foo.com/LICENSE\n  license files:\n  readme files:\nb_gem 1.2.3, MIT\n  license files:\n  readme files:"
     end
   end
 
@@ -194,7 +194,7 @@ describe LicenseFinder::DependencyList do
 
       list = LicenseFinder::DependencyList.new([gem1, gem2, gem3])
 
-      list.action_items.should == "a_gem 0.9, other\nc_gem 0.2, other"
+      list.action_items.should == "a_gem 0.9, other\n  license files:\n  readme files:\nc_gem 0.2, other\n  license files:\n  readme files:"
     end
   end
 end

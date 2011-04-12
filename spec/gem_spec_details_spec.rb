@@ -32,15 +32,35 @@ describe LicenseFinder::GemSpecDetails do
     it "is empty if there aren't any license files" do
       LicenseFinder::GemSpecDetails.new(@mock_gemspec.new).license_files.should == []
     end
+
     it "includes files with names like LICENSE, License or COPYING" do
       gem_spec = @mock_gemspec.new('spec/fixtures/license_names')
       LicenseFinder::GemSpecDetails.new(gem_spec).license_files.map(&:file_name).should =~
           %w[COPYING.txt LICENSE Mit-License]
     end
+
     it "includes files deep in the hierarchy" do
       gem_spec = @mock_gemspec.new('spec/fixtures/nested_gem')
       LicenseFinder::GemSpecDetails.new(gem_spec).license_files.map { |f| [f.file_name, f.file_path] }.should =~
           [['LICENSE', 'vendor/LICENSE']]
+    end
+  end
+
+  describe "#readme_files" do
+    it "is empty if there aren't any readme files" do
+      LicenseFinder::GemSpecDetails.new(@mock_gemspec.new).readme_files.should == []
+    end
+
+    it "includes files with names like README, Readme or COPYING" do
+      gem_spec = @mock_gemspec.new('spec/fixtures/readme')
+      LicenseFinder::GemSpecDetails.new(gem_spec).readme_files.map(&:file_name).should =~
+          %w[Project\ ReadMe README Readme.markdown]
+    end
+
+    it "includes files deep in the hierarchy" do
+      gem_spec = @mock_gemspec.new('spec/fixtures/nested_readme')
+      LicenseFinder::GemSpecDetails.new(gem_spec).readme_files.map { |f| [f.file_name, f.file_path] }.should =~
+          [['README', 'vendor/README']]
     end
   end
 
@@ -70,7 +90,6 @@ describe LicenseFinder::GemSpecDetails do
       its(:license_url) { should == '' }
       its(:notes) { should == '' }
     end
-
 
     describe 'with unknown license' do
       subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/other_licensed_gem')).dependency }

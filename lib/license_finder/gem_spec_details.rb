@@ -1,6 +1,7 @@
 module LicenseFinder
   class GemSpecDetails
-    LICENSE_FILE_NAMES = '*{LICENSE,License,COPYING,README,Readme,ReadMe}*' # follows Dir.glob format
+    LICENSE_FILE_NAMES = '*{LICENSE,License,COPYING}*' # follows Dir.glob format
+    README_FILE_NAMES = '*{README,Readme,ReadMe}*' # follows Dir.glob format
 
     def initialize(spec, whitelist = [])
       @spec = spec
@@ -23,7 +24,7 @@ module LicenseFinder
 
     def dependency
       license = determine_license
-      @dependency ||= Dependency.new(@spec.name, @spec.version, license, @whitelist.include?(license))
+      @dependency ||= Dependency.new(@spec.name, @spec.version, license, @whitelist.include?(license), '', '', license_files.map(&:full_file_path), readme_files.map(&:full_file_path))
     end
 
     def determine_license
@@ -40,6 +41,14 @@ module LicenseFinder
       end
     end
     
+    def readme_files
+      Dir.glob(File.join(install_path, '**', README_FILE_NAMES)).map do |path|
+        file = LicenseFile.new(install_path, path)
+        file.include_license_text = include_license_text?
+        file
+      end
+    end
+
     def install_path
       spec.full_gem_path
     end

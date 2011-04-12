@@ -9,6 +9,10 @@ module LicenseFinder
       @file_path.relative_path_from(@install_path).to_s
     end
 
+    def full_file_path
+      @file_path.realpath.to_s
+    end
+
     def file_name
       @file_path.basename.to_s
     end
