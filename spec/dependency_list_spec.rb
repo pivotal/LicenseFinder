@@ -182,7 +182,7 @@ describe LicenseFinder::DependencyList do
 
       list = LicenseFinder::DependencyList.new([gem1, gem2])
 
-      list.to_s.should == "a_gem 0.9, other, http://foo.com/LICENSE\n  license files:\n  readme files:\nb_gem 1.2.3, MIT\n  license files:\n  readme files:"
+      list.to_s.should == "a_gem 0.9, other, http://foo.com/LICENSE\n  license files:\n  readme files:\nb_gem 1.2.3, MIT"
     end
   end
 

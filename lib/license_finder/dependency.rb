@@ -40,16 +40,18 @@ module LicenseFinder
     def to_s
       url = ", #{license_url}" if license_url != ''
       str = "#{name} #{version}, #{license}#{url}"
-      str << "\n  license files:"
-      unless self.license_files.empty?
-        self.license_files.each do |lf|
-          str << "\n    #{lf}"
+      if license == 'other'
+        str << "\n  license files:"
+        unless self.license_files.empty?
+          self.license_files.each do |lf|
+            str << "\n    #{lf}"
+          end
         end
-      end
-      str << "\n  readme files:"
-      unless self.readme_files.empty?
-        self.readme_files.each do |lf|
-          str << "\n    #{lf}"
+        str << "\n  readme files:"
+        unless self.readme_files.empty?
+          self.readme_files.each do |lf|
+            str << "\n    #{lf}"
+          end
         end
       end
 
