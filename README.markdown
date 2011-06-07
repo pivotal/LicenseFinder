@@ -9,6 +9,9 @@ Usage
 For a Rails project add license_finder to your Gemfile:
     gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
 
+Run 'rake license:init'
+This will create a config/license_finder.yml file that lets you configure license finder.
+
 Run 'rake license:generate_dependencies'
 This will write out a dependencies.yml and dependencies.txt file in the root of your project.
 
