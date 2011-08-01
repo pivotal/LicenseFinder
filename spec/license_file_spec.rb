@@ -45,8 +45,8 @@ describe LicenseFinder::LicenseFile do
       stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/README-with-MIT-LICENSE')) }
     end
 
-    its(:body_type) { should == 'mit' }
-    its(:header_type) { should == 'other' }
+    its(:body_type) { should == 'other' }
+    its(:header_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'other' }
   end
 

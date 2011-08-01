@@ -28,7 +28,7 @@ module LicenseFinder
     end
 
     def determine_license
-      return 'MIT' if license_files.any?(&:mit_license_body?)
+      return 'MIT' if license_files.any?{|f| f.mit_license_body? || f.mit_license_header?}
       return 'Apache 2.0' if license_files.any?(&:apache_license_body?)
       'other'
     end

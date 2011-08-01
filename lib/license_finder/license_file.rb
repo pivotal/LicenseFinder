@@ -25,7 +25,7 @@ module LicenseFinder
     end
 
     def mit_license_body?
-      !!on_single_line(text).index(on_single_line(MIT_LICENSE_TEXT)) || !!(on_single_line(text) =~ MIT_ONE_LINER_REGEX)
+      !!on_single_line(text).index(on_single_line(MIT_LICENSE_TEXT))
     end
 
     def apache_license_body?
@@ -34,7 +34,7 @@ module LicenseFinder
 
     def mit_license_header?
       header = text.split("\n").first
-      header && header.strip =~ MIT_HEADER_REGEX
+      header && ((header.strip =~ MIT_HEADER_REGEX) || !!(on_single_line(text) =~ MIT_ONE_LINER_REGEX))
     end
     
     def mit_disclaimer_of_liability?
