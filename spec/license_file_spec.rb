@@ -52,6 +52,18 @@ describe LicenseFinder::LicenseFile do
     its(:header_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'other' }
   end
+  
+  context "with MIT url in README" do
+    before do
+      stub(IO).read { 'MIT Licence (http://www.opensource.org/licenses/mit-license.html)' }
+      stub(IO).binread { 'MIT Licence (http://www.opensource.org/licenses/mit-license.html)' }
+    end
+
+    its(:body_type) { should == 'mit' }
+    its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS OR COPYRIGHT HOLDERS' }
+  end
+  
+  
 
   context "with Apache like license" do
     before do

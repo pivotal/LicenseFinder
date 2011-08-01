@@ -6,6 +6,7 @@ module LicenseFinder
     MIT_HEADER_REGEX = /The MIT License/
     MIT_DISCLAIMER_REGEX = /THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL ((\w+ ){2,8})BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE\./
     MIT_ONE_LINER_REGEX = /is released under the MIT license/
+    MIT_URL_REGEX = %r{MIT Licence.*http://www.opensource.org/licenses/mit-license}
     
     def body_type
       if mit_license_body?
@@ -28,7 +29,8 @@ module LicenseFinder
     end
 
     def mit_license_body?
-      !!on_single_line(text).index(on_single_line(MIT_LICENSE_TEXT))
+      !!on_single_line(text).index(on_single_line(MIT_LICENSE_TEXT)) || 
+      !!(on_single_line(text) =~ MIT_URL_REGEX)
     end
 
     def apache_license_body?
@@ -41,8 +43,11 @@ module LicenseFinder
     end
     
     def mit_disclaimer_of_liability?
-      result = !!(on_single_line(text) =~ MIT_DISCLAIMER_REGEX)
-      @mit_authors = ($1 || '').strip
+      if result = !!(on_single_line(text) =~ MIT_DISCLAIMER_REGEX)
+        @mit_authors = ($1 || '').strip
+      elsif result = !!(on_single_line(text) =~ MIT_URL_REGEX)
+        @mit_authors = 'THE AUTHORS OR COPYRIGHT HOLDERS'
+      end
       result
     end
     

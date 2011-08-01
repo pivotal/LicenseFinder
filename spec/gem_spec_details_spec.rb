@@ -97,6 +97,19 @@ describe LicenseFinder::GemSpecDetails do
       its(:notes) { should == '' }
     end
 
+    describe 'with MIT License in README' do
+      subject do
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem_via_url'), ['MIT']).dependency
+      end
+
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'MIT' }
+      its(:approved) { should == true }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
+    end
+
     describe 'with Apache License' do
       subject do
         LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/apache_licensed_gem'), ['Apache 2.0']).dependency
