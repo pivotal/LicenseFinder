@@ -110,6 +110,19 @@ describe LicenseFinder::GemSpecDetails do
       its(:notes) { should == '' }
     end
 
+    describe 'with GPLv2 License' do
+      subject do
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/gplv2_licensed_gem'), ['GPLv2']).dependency
+      end
+
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'GPLv2' }
+      its(:approved) { should == true }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
+    end
+
     describe 'with unknown license' do
       subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/other_licensed_gem')).dependency }
 

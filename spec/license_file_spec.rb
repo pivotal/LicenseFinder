@@ -58,6 +58,14 @@ describe LicenseFinder::LicenseFile do
     its(:body_type) { should == 'apache' }
   end
 
+  context "with GPLv2 like license" do
+    before do
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/GPLv2')) }
+    end
+
+    its(:body_type) { should == 'gplv2' }
+  end
+  
   context "with another license" do
     before do
       stub(IO).read { "a non-standard license" }

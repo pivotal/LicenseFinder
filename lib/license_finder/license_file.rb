@@ -2,6 +2,7 @@ module LicenseFinder
   class LicenseFile < FileParser
     MIT_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/MIT-body').read
     APACHE_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/Apache-2.0-body').read
+    GPLv2_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/GPL-2.0-body').read
     MIT_HEADER_REGEX = /The MIT License/
     MIT_DISCLAIMER_REGEX = /THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL ((\w+ ){2,8})BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE\./
     MIT_ONE_LINER_REGEX = /is released under the MIT license/
@@ -11,6 +12,8 @@ module LicenseFinder
         'mit'
       elsif apache_license_body?
         'apache'
+      elsif gplv2_license_body?
+        'gplv2'
       else
         'other'
       end
@@ -41,6 +44,10 @@ module LicenseFinder
       result = !!(on_single_line(text) =~ MIT_DISCLAIMER_REGEX)
       @mit_authors = ($1 || '').strip
       result
+    end
+    
+    def gplv2_license_body?
+      !!on_single_line(text).index(on_single_line(GPLv2_LICENSE_TEXT))
     end
 
     def to_hash
