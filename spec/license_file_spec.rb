@@ -39,6 +39,16 @@ describe LicenseFinder::LicenseFile do
     its(:header_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS OR COPYRIGHT HOLDERS' }
   end
+  
+  context "with MIT reference in README" do
+    before do
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/README-with-MIT-LICENSE')) }
+    end
+
+    its(:body_type) { should == 'mit' }
+    its(:header_type) { should == 'other' }
+    its(:disclaimer_of_liability) { should == 'other' }
+  end
 
   context "with Apache like license" do
     before do
