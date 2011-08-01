@@ -16,7 +16,13 @@ describe LicenseFinder::GemSpecDetails do
       end
 
       def full_gem_path
-        @path ? (File.dirname(__FILE__) + '/../' + @path) : 'install/path'
+        if @path
+          gem_install_path = File.join(File.dirname(__FILE__), '/../', @path)
+          raise Errno::ENOENT, @path unless File.exists?(gem_install_path)
+          gem_install_path
+        else
+          'install/path'
+        end
       end
     end
   end
