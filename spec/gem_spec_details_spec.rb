@@ -134,5 +134,12 @@ describe LicenseFinder::GemSpecDetails do
       its(:notes) { should == '' }
     end
 
+    describe 'with UTF8 file License' do
+      it "handles non UTF8 encodings" do
+        expect do
+          LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/utf8_gem')).dependency
+        end.not_to raise_error ArgumentError, "invalid byte sequence in UTF-8"
+      end
+    end
   end
 end

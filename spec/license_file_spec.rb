@@ -6,6 +6,7 @@ describe LicenseFinder::LicenseFile do
   context "ignoring text" do
     before do
       stub(IO).read { "file text" }
+      stub(IO).binread { "file text" }
     end
 
     describe "#to_hash" do
@@ -33,6 +34,7 @@ describe LicenseFinder::LicenseFile do
   context "with MIT like license" do
     before do
       stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/MIT-LICENSE')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '/fixtures/MIT-LICENSE')) }
     end
 
     its(:body_type) { should == 'mit' }
@@ -43,6 +45,7 @@ describe LicenseFinder::LicenseFile do
   context "with MIT reference in README" do
     before do
       stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/README-with-MIT-LICENSE')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '/fixtures/README-with-MIT-LICENSE')) }
     end
 
     its(:body_type) { should == 'other' }
@@ -53,6 +56,7 @@ describe LicenseFinder::LicenseFile do
   context "with Apache like license" do
     before do
       stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/APACHE-2-LICENSE')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '/fixtures/APACHE-2-LICENSE')) }
     end
 
     its(:body_type) { should == 'apache' }
@@ -61,6 +65,7 @@ describe LicenseFinder::LicenseFile do
   context "with GPLv2 like license" do
     before do
       stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/GPLv2')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '/fixtures/GPLv2')) }
     end
 
     its(:body_type) { should == 'gplv2' }
@@ -69,6 +74,7 @@ describe LicenseFinder::LicenseFile do
   context "with another license" do
     before do
       stub(IO).read { "a non-standard license" }
+      stub(IO).binread { "a non-standard license" }
     end
 
     its(:body_type) { should == 'other' }
@@ -79,6 +85,7 @@ describe LicenseFinder::LicenseFile do
   context "with variation in disclaimer of liability" do
     before do
       stub(IO).read { File.read('spec/fixtures/MIT-LICENSE-with-varied-disclaimer') }
+      stub(IO).binread { File.read('spec/fixtures/MIT-LICENSE-with-varied-disclaimer') }
     end
 
     its(:body_type) { should == 'mit' }
@@ -89,6 +96,7 @@ describe LicenseFinder::LicenseFile do
   context "with empty license file" do
     before do
       stub(IO).read { "" }
+      stub(IO).binread { "" }
     end
     
     describe "#to_hash" do
@@ -101,6 +109,7 @@ describe LicenseFinder::LicenseFile do
   describe "with variations on MIT header" do
     before do
       stub(IO).read { '(The MIT License)' }
+      stub(IO).binread { '(The MIT License)' }
     end
 
     its(:header_type) { should == 'mit' }
