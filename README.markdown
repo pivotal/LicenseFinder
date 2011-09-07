@@ -19,6 +19,7 @@ Run 'rake license:action_items'
 This will output a list of unapproved dependencies to the console
 
 As a standalone script:
+
     cd ~
     git clone http://github.com/pivotal/LicenseFinder.git license_finder
     cd your/project
