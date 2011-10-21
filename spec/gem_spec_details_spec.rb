@@ -51,13 +51,13 @@ describe LicenseFinder::GemSpecDetails do
           [['LICENSE', 'vendor/LICENSE']]
     end
 
-    it "includes any file inside of a directory called LICENSE" do
+    it "includes both files nested inside LICENSE directory and top level files" do
       gem_spec = @mock_gemspec.new('spec/fixtures/license_directory')
       found_license_files = LicenseFinder::GemSpecDetails.new(gem_spec).license_files
-      found_license_files.map(&:file_name).should ==
-            %w[BSD-2-Clause.txt GPL-2.0.txt MIT.txt RUBY.txt]
-      found_license_files.map(&:file_path).should ==
-            %w[LICENSE/BSD-2-Clause.txt LICENSE/GPL-2.0.txt LICENSE/MIT.txt  LICENSE/RUBY.txt]
+      found_license_files.map(&:file_name).should =~
+            %w[BSD-2-Clause.txt GPL-2.0.txt MIT.txt RUBY.txt COPYING LICENSE]
+      found_license_files.map(&:file_path).should =~
+            %w[LICENSE/BSD-2-Clause.txt LICENSE/GPL-2.0.txt LICENSE/MIT.txt  LICENSE/RUBY.txt COPYING LICENSE/LICENSE]
     end
   end
 
