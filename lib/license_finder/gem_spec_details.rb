@@ -34,18 +34,11 @@ module LicenseFinder
     end
 
     def license_files
-      paths_for_license_names = Dir.glob(File.join(install_path, '**', LICENSE_FILE_NAMES))
-      paths_for_license_names = paths_for_license_names.map do |path|
-        if File.directory?(path)
-          entries_in_directory = Dir::entries(path).reject {|p| p.match(/^(\.){1,2}$/) }
-          entries_in_directory.map { |entry_name| File.join(path, entry_name) }
-        else
-          path
-        end
+      paths_with_license_names = Dir.glob(File.join(install_path, '**', LICENSE_FILE_NAMES))
+      paths_for_license_files = paths_with_license_names.map do |path|
+        File.directory?(path) ? paths_for_files_in_license_directory(path) : path
       end.flatten.uniq
-      paths_for_license_names.map do |path|
-        get_file_for_path(path)
-      end
+      get_files_for_paths(paths_for_license_files)
     end
 
     def readme_files
@@ -91,6 +84,17 @@ module LicenseFinder
       file = LicenseFile.new(install_path, path)
       file.include_license_text = include_license_text?
       file
+    end
+
+    def paths_for_files_in_license_directory(path)
+      entries_in_directory = Dir::entries(path).reject { |p| p.match(/^(\.){1,2}$/) }
+      entries_in_directory.map { |entry_name| File.join(path, entry_name) }
+    end
+
+    def get_files_for_paths(paths_for_license_files)
+      paths_for_license_files.map do |path|
+        get_file_for_path(path)
+      end
     end
   end
 end
