@@ -44,6 +44,15 @@ describe LicenseFinder::GemSpecDetails do
       LicenseFinder::GemSpecDetails.new(gem_spec).license_files.map { |f| [f.file_name, f.file_path] }.should =~
           [['LICENSE', 'vendor/LICENSE']]
     end
+
+    it "includes any file inside of a directory called LICENSE" do
+      gem_spec = @mock_gemspec.new('spec/fixtures/license_directory')
+      found_license_files = LicenseFinder::GemSpecDetails.new(gem_spec).license_files
+      found_license_files.map(&:file_name).should ==
+            %w[BSD-2-Clause.txt GPL-2.0.txt MIT.txt RUBY.txt]
+      found_license_files.map(&:file_path).should ==
+            %w[LICENSE/BSD-2-Clause.txt LICENSE/GPL-2.0.txt LICENSE/MIT.txt  LICENSE/RUBY.txt]
+    end
   end
 
   describe "#readme_files" do
