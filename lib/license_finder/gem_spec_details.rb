@@ -35,11 +35,15 @@ module LicenseFinder
 
     def license_files
       paths_for_license_names = Dir.glob(File.join(install_path, '**', LICENSE_FILE_NAMES))
-      paths_for_license_names.map do |path|
+      paths_for_license_names = paths_for_license_names.map do |path|
         if File.directory?(path)
           entries_in_directory = Dir::entries(path).reject {|p| p.match(/^(\.){1,2}$/) }
-          return entries_in_directory.map { |entry_name| get_file_for_path(File.join(path, entry_name)) }
+          entries_in_directory.map { |entry_name| File.join(path, entry_name) }
+        else
+          path
         end
+      end.flatten.uniq
+      paths_for_license_names.map do |path|
         get_file_for_path(path)
       end
     end
