@@ -13,7 +13,8 @@ Run 'rake license:init'
 This will create a config/license_finder.yml file that lets you configure license finder.
 
 Run 'rake license:generate_dependencies'
-This will write out a dependencies.yml and dependencies.txt file in the root of your project.
+This will write out a dependencies.yml and dependencies.txt file in the root of your project. 
+It will also merge in an existing dependencies.yml file, if one exists.
 
 Run 'rake license:action_items'
 This will output a list of unapproved dependencies to the console

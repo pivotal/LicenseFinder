@@ -16,7 +16,13 @@ describe LicenseFinder::GemSpecDetails do
       end
 
       def full_gem_path
-        @path ? (File.dirname(__FILE__) + '/../' + @path) : 'install/path'
+        if @path
+          gem_install_path = File.join(File.dirname(__FILE__), '/../', @path)
+          raise Errno::ENOENT, @path unless File.exists?(gem_install_path)
+          gem_install_path
+        else
+          'install/path'
+        end
       end
     end
   end
@@ -36,7 +42,7 @@ describe LicenseFinder::GemSpecDetails do
     it "includes files with names like LICENSE, License or COPYING" do
       gem_spec = @mock_gemspec.new('spec/fixtures/license_names')
       LicenseFinder::GemSpecDetails.new(gem_spec).license_files.map(&:file_name).should =~
-          %w[COPYING.txt LICENSE Mit-License]
+          %w[COPYING.txt LICENSE Mit-License README.rdoc]
     end
 
     it "includes files deep in the hierarchy" do
@@ -87,6 +93,32 @@ describe LicenseFinder::GemSpecDetails do
       its(:notes) { should == '' }
     end
 
+    describe 'with MIT License in README' do
+      subject do
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem_in_README'), ['MIT']).dependency
+      end
+
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'MIT' }
+      its(:approved) { should == true }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
+    end
+
+    describe 'with MIT License in README' do
+      subject do
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem_via_url'), ['MIT']).dependency
+      end
+
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'MIT' }
+      its(:approved) { should == true }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
+    end
+
     describe 'with Apache License' do
       subject do
         LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/apache_licensed_gem'), ['Apache 2.0']).dependency
@@ -95,6 +127,19 @@ describe LicenseFinder::GemSpecDetails do
       its(:name) { should == 'spec_name' }
       its(:version) { should == '2.1.3' }
       its(:license) { should == 'Apache 2.0' }
+      its(:approved) { should == true }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
+    end
+
+    describe 'with GPLv2 License' do
+      subject do
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/gplv2_licensed_gem'), ['GPLv2']).dependency
+      end
+
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'GPLv2' }
       its(:approved) { should == true }
       its(:license_url) { should == '' }
       its(:notes) { should == '' }
@@ -111,5 +156,12 @@ describe LicenseFinder::GemSpecDetails do
       its(:notes) { should == '' }
     end
 
+    describe 'with UTF8 file License' do
+      it "handles non UTF8 encodings" do
+        expect do
+          LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/utf8_gem')).dependency
+        end.not_to raise_error ArgumentError, "invalid byte sequence in UTF-8"
+      end
+    end
   end
 end
