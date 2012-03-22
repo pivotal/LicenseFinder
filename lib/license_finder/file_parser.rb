@@ -18,7 +18,7 @@ module LicenseFinder
     end
 
     def text
-      @text ||= @file_path.read
+      @text ||= @file_path.send((@file_path.respond_to? :binread) ? :binread : :read)
     end
     
     private

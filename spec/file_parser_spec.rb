@@ -6,6 +6,7 @@ describe LicenseFinder::FileParser do
   context "ignoring text" do
     before do
       stub(IO).read { "file text" }
+      stub(IO).binread { "file text" }
     end
 
     its(:file_path) { should == 'nested/path' }
