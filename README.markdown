@@ -19,6 +19,9 @@ It will also merge in an existing dependencies.yml file, if one exists.
 Run 'rake license:action_items'
 This will output a list of unapproved dependencies to the console
 
+Run 'rake license:action_items:ok'
+This will return a non-zero exit status if there are unapproved dependencies. Great for CI.
+
 As a standalone script:
     cd ~
     git clone http://github.com/pivotal/LicenseFinder.git license_finder
