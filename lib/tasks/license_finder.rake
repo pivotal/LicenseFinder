@@ -14,4 +14,9 @@ namespace :license do
     puts "Dependencies that need approval:"
     puts LicenseFinder::Finder.new.action_items
   end
+  
+  desc 'All gems approved for use'
+  task 'action_items:ok' => :generate_dependencies do
+    exit 1 unless LicenseFinder::Finder.new.action_items.size == 0
+  end
 end
