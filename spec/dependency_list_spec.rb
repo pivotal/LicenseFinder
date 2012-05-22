@@ -20,6 +20,10 @@ describe LicenseFinder::DependencyList do
       def full_gem_path
         @path || 'install/path'
       end
+
+      def license
+        nil
+      end
     end
 
   end

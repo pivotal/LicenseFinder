@@ -63,7 +63,17 @@ describe LicenseFinder::LicenseFile do
     its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS OR COPYRIGHT HOLDERS' }
   end
   
-  
+  context "with ruby url in README" do
+    before do
+      stub(IO).read { "Same as Ruby's \n\nhttp://www.ruby-lang.org/en/LICENSE.txt" }
+      stub(IO).binread { "Same as Ruby's \n\nhttp://www.ruby-lang.org/en/LICENSE.txt" }
+    end
+
+    its(:body_type) { should == 'ruby' }
+    its(:disclaimer_of_liability) { should == 'other' }
+  end
+
+
 
   context "with Apache like license" do
     before do

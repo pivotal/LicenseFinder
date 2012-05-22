@@ -10,7 +10,7 @@ For a Rails project add license_finder to your Gemfile:
     gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
 
 Run 'rake license:init'
-This will create a config/license_finder.yml file that lets you configure license finder.
+This will create a config/license_finder.yml file that lets you configure license finder.  This is where you should add licenses which are allowed on the project, so they will be automatically approved.
 
 Run 'rake license:generate_dependencies'
 This will write out a dependencies.yml and dependencies.txt file in the root of your project. 
@@ -85,3 +85,13 @@ bin/license_finder:
       readme_files:
       - file_name: README
         mentions_license: true
+
+Gem Maintainers
+===============
+
+Please add a license to your gemspec!
+
+    Gem::Specification.new do |s|
+      s.name = "my_great_gem"
+      s.license = "MIT"
+    end

@@ -24,6 +24,10 @@ describe LicenseFinder::GemSpecDetails do
           'install/path'
         end
       end
+
+      def license
+        nil
+      end
     end
   end
 
@@ -33,6 +37,31 @@ describe LicenseFinder::GemSpecDetails do
   its(:dependency_name) { should == 'spec_name' }
   its(:dependency_version) { should == '2.1.3' }
   its(:install_path) { should == 'install/path' }
+
+  describe "#gemspec licenses" do
+    it "returns the license from the gemspec if provided" do
+      mock_gemspec = @mock_gemspec.new
+      stub(mock_gemspec).license { "MIT" }
+      LicenseFinder::GemSpecDetails.new(mock_gemspec).determine_license.should == "MIT"
+    end
+
+    it "returns 'ruby' if if is a ruby license" do
+      mock_gemspec = @mock_gemspec.new
+      mock_license_file = LicenseFinder::LicenseFile.new('gem', 'gem/license/path')
+      stub(mock_license_file).mit_license_body? { false }
+      stub(mock_license_file).mit_license_header? { false }
+      stub(mock_license_file).apache_license_body? { false }
+      stub(mock_license_file).gplv2_license_body? { false }
+
+      stub(mock_license_file).ruby_license_body? { true }
+
+
+      gemspec_details = LicenseFinder::GemSpecDetails.new(mock_gemspec)
+      stub(gemspec_details).license_files { [ mock_license_file ] }
+
+      gemspec_details.determine_license.should == "ruby"
+    end
+  end
 
   describe "#license_files" do
     it "is empty if there aren't any license files" do
@@ -60,6 +89,8 @@ describe LicenseFinder::GemSpecDetails do
             %w[LICENSE/BSD-2-Clause.txt LICENSE/GPL-2.0.txt LICENSE/MIT.txt  LICENSE/RUBY.txt COPYING LICENSE/LICENSE]
     end
   end
+
+
 
   describe "#readme_files" do
     it "is empty if there aren't any readme files" do
@@ -109,6 +140,20 @@ describe LicenseFinder::GemSpecDetails do
     describe 'with MIT License in README' do
       subject do
         LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem_via_url'), ['MIT']).dependency
+      end
+
+      its(:name) { should == 'spec_name' }
+      its(:version) { should == '2.1.3' }
+      its(:license) { should == 'MIT' }
+      its(:approved) { should == true }
+      its(:license_url) { should == '' }
+      its(:notes) { should == '' }
+    end
+
+
+    describe 'with MIT License with hashes' do
+      subject do
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_with_hashes'), ['MIT']).dependency
       end
 
       its(:name) { should == 'spec_name' }

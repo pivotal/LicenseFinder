@@ -28,5 +28,13 @@ module LicenseFinder
     rescue
       ''
     end
+    
+    def without_punctuation(text)
+      text.gsub('#', '').gsub(' ', '')
+    end
+    
+    def cleaned_up(text)
+      without_punctuation(on_single_line(text))
+    end
   end
 end

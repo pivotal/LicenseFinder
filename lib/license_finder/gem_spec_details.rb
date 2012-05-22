@@ -28,9 +28,11 @@ module LicenseFinder
     end
 
     def determine_license
+      return @spec.license if @spec.license
       return 'MIT' if license_files.any?{|f| f.mit_license_body? || f.mit_license_header?}
       return 'Apache 2.0' if license_files.any?(&:apache_license_body?)
       return 'GPLv2' if license_files.any?(&:gplv2_license_body?)
+      return 'ruby' if license_files.any?(&:ruby_license_body?)
       'other'
     end
 
