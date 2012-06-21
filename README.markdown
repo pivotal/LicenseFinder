@@ -23,6 +23,7 @@ Run 'rake license:action_items:ok'
 This will return a non-zero exit status if there are unapproved dependencies. Great for CI.
 
 As a standalone script:
+
     cd ~
     git clone http://github.com/pivotal/LicenseFinder.git license_finder
     cd your/project
