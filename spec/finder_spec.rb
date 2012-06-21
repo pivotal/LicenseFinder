@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe LicenseFinder::Finder do
+
+  it "should properly initialize whitelist and ignore_groups" do
+    stub(File).exists?('./config/license_finder.yml') {false}
+    finder = LicenseFinder::Finder.new
+    finder.whitelist.should_not be_nil
+    finder.ignore_groups.should_not be_nil
+  end
+
   it "should generate a yml file and txt file" do
     stub(File).exists?('./config/license_finder.yml') {false}
     stub(File).exists?('./dependencies.yml') {false}

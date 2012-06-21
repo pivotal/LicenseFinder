@@ -3,12 +3,16 @@ module LicenseFinder
 
     attr_reader :whitelist, :ignore_groups
     def initialize
-      if File.exists?('./config/license_finder.yml')
-        config = YAML.load(File.open('./config/license_finder.yml').readlines.join)
-        @whitelist = config['whitelist'] || []
-        @ignore_groups = config['ignore_groups'] ? config['ignore_groups'].map{|g| g.to_sym} : []
-        @dependencies_dir = config['dependencies_file_dir']
+      config = case
+        when File.exists?('./config/license_finder.yml')
+          YAML.load(File.open('./config/license_finder.yml').readlines.join)
+        else
+          {'whitelist' => [], 'ignore_groups' => []}
       end
+
+      @whitelist = config['whitelist']
+      @ignore_groups = config['ignore_groups'].map{|g| g.to_sym}
+      @dependencies_dir = config['dependencies_file_dir']
     end
 
     def dependencies_dir
