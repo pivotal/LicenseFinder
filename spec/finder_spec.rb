@@ -44,9 +44,21 @@ describe LicenseFinder::Finder do
     LicenseFinder::Finder.new.whitelist.should =~ ['MIT', 'Apache']
   end
 
+  it "should load an empty whitelist from license_finder.yml when there are no whitelist items" do
+    stub(File).exists?('./config/license_finder.yml') {true}
+    stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join {"--- \nwhitelist: \nignore_groups: \n- test\n- development\n"}
+    LicenseFinder::Finder.new.whitelist.should =~ []
+  end
+
   it "should load a ignore_groups list from license_finder.yml" do
     stub(File).exists?('./config/license_finder.yml') {true}
     stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join {"--- \nwhitelist: \n- MIT\n- Apache\nignore_groups: \n- test\n- development\n"}
     LicenseFinder::Finder.new.ignore_groups.should == [:test, :development]
+  end
+
+  it "should load an empty ignore_groups list from license_finder.yml when there are no ignore groups" do
+    stub(File).exists?('./config/license_finder.yml') {true}
+    stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join {"--- \nwhitelist: \n- MIT\n- Apache\nignore_groups:"}
+    LicenseFinder::Finder.new.ignore_groups.should == []
   end
 end
