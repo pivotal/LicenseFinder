@@ -12,6 +12,19 @@ module LicenseFinder
 
       @whitelist = config['whitelist'] || []
       @ignore_groups = (config['ignore_groups'] || []).map{|g| g.to_sym}
+      @dependencies_dir = config['dependencies_file_dir']
+    end
+
+    def dependencies_dir
+      @dependencies_dir || './'
+    end
+
+    def dependencies_yaml
+      File.join(dependencies_dir, 'dependencies.yml')
+    end
+
+    def dependencies_text
+      File.join(dependencies_dir, 'dependencies.txt')
     end
 
     def from_bundler
@@ -22,10 +35,10 @@ module LicenseFinder
     def write_files
       new_list = generate_list
 
-      File.open('./dependencies.yml', 'w+') do |f|
+      File.open(dependencies_yaml, 'w+') do |f|
         f.puts new_list.to_yaml
       end
-      File.open('./dependencies.txt', 'w+') do |f|
+      File.open(dependencies_text, 'w+') do |f|
         f.puts new_list.to_s
       end
 
@@ -40,8 +53,8 @@ module LicenseFinder
     def generate_list
       bundler_list = DependencyList.from_bundler(whitelist, ignore_groups)
 
-      if (File.exists?('./dependencies.yml'))
-        yml = File.open('./dependencies.yml').readlines.join
+      if (File.exists?(dependencies_yaml))
+        yml = File.open(dependencies_yaml).readlines.join
         existing_list = DependencyList.from_yaml(yml)
         existing_list.merge(bundler_list)
       else

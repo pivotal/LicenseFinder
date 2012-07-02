@@ -56,6 +56,15 @@ describe LicenseFinder::Finder do
     LicenseFinder::Finder.new.ignore_groups.should == [:test, :development]
   end
 
+  it 'should allow the dependencies file directory to be configured' do
+    stub(File).exists?('./config/license_finder.yml') {true}
+    stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join {"--- \nwhitelist: \n- MIT\n- Apache\nignore_groups: \n- test\n- development\ndependencies_file_dir: './elsewhere'\n"}
+    finder = LicenseFinder::Finder.new
+    finder.dependencies_dir.should == './elsewhere'
+    finder.dependencies_yaml.should == './elsewhere/dependencies.yml'
+    finder.dependencies_text.should == './elsewhere/dependencies.txt'
+  end
+
   it "should load an empty ignore_groups list from license_finder.yml when there are no ignore groups" do
     stub(File).exists?('./config/license_finder.yml') {true}
     stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join {"--- \nwhitelist: \n- MIT\n- Apache\nignore_groups:"}
