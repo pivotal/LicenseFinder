@@ -33,8 +33,8 @@ describe LicenseFinder::LicenseFile do
 
   context "with MIT like license" do
     before do
-      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/MIT-LICENSE')) }
-      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '/fixtures/MIT-LICENSE')) }
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '../../fixtures/MIT-LICENSE')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '../../fixtures/MIT-LICENSE')) }
     end
 
     its(:body_type) { should == 'mit' }
@@ -44,8 +44,8 @@ describe LicenseFinder::LicenseFile do
 
   context "with MIT reference in README" do
     before do
-      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/README-with-MIT-LICENSE')) }
-      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '/fixtures/README-with-MIT-LICENSE')) }
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '../../fixtures/README-with-MIT-LICENSE')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '../../fixtures/README-with-MIT-LICENSE')) }
     end
 
     its(:body_type) { should == 'other' }
@@ -75,8 +75,8 @@ describe LicenseFinder::LicenseFile do
 
   context "with Apache like license" do
     before do
-      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/APACHE-2-LICENSE')) }
-      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '/fixtures/APACHE-2-LICENSE')) }
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '../..//fixtures/APACHE-2-LICENSE')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '../..//fixtures/APACHE-2-LICENSE')) }
     end
 
     its(:body_type) { should == 'apache' }
@@ -84,8 +84,8 @@ describe LicenseFinder::LicenseFile do
 
   context "with GPLv2 like license" do
     before do
-      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/GPLv2')) }
-      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '/fixtures/GPLv2')) }
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '../..//fixtures/GPLv2')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '../..//fixtures/GPLv2')) }
     end
 
     its(:body_type) { should == 'gplv2' }
@@ -93,8 +93,8 @@ describe LicenseFinder::LicenseFile do
 
   context "with LGPL like license" do
     before do
-      stub(IO).read    { File.read(File.join(File.dirname(__FILE__), '..', 'lib', 'templates', 'LGPL-body')) }
-      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '..', 'lib', 'templates', 'LGPL-body')) }
+      stub(IO).read    { File.read(File.join(File.dirname(__FILE__), '..', '..', '..', 'lib', 'templates', 'LGPL-body')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '..', '..', '..', 'lib', 'templates', 'LGPL-body')) }
     end
 
     its(:body_type) { should == 'lgpl' }
@@ -102,8 +102,8 @@ describe LicenseFinder::LicenseFile do
 
   context "with an ISC license" do
     before do
-      stub(IO).read    { File.read(File.join(File.dirname(__FILE__), 'fixtures', 'ISC-LICENSE')) }
-      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), 'fixtures', 'ISC-LICENSE')) }
+      stub(IO).read    { File.read(File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'ISC-LICENSE')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'ISC-LICENSE')) }
     end
 
     its(:body_type) { should == 'isc' }
@@ -122,8 +122,8 @@ describe LicenseFinder::LicenseFile do
 
   context "with variation in disclaimer of liability" do
     before do
-      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '../fixtures/MIT-LICENSE-with-varied-disclaimer')) }
-      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '../spec/fixtures/MIT-LICENSE-with-varied-disclaimer')) }
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '../../../fixtures/MIT-LICENSE-with-varied-disclaimer')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '../../../spec/fixtures/MIT-LICENSE-with-varied-disclaimer')) }
     end
 
     its(:body_type) { should == 'mit' }

@@ -17,7 +17,7 @@ describe LicenseFinder::GemSpecDetails do
 
       def full_gem_path
         if @path
-          gem_install_path = File.join(File.dirname(__FILE__), '..', @path)
+          gem_install_path = File.join(File.dirname(__FILE__), '..', '..', '..', @path)
           raise Errno::ENOENT, @path unless File.exists?(gem_install_path)
           gem_install_path
         else
