@@ -21,11 +21,11 @@ module LicenseFinder
     end
 
     def dependencies_yaml
-      "#{dependencies_dir}/dependencies.yml"
+      File.join(dependencies_dir, "dependencies.yml")
     end
 
     def dependencies_text
-      "#{dependencies_dir}/dependencies.txt"
+      File.join(dependencies_dir, "dependencies.txt")
     end
   end
 
