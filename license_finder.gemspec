@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.description = "Find and display licenses of a project's gem dependencies, so that you know what your limitations are when distributing your application."
   s.license     = "MIT"
 
-  s.add_development_dependency 'rspec', '~>2.3'
-  s.add_development_dependency 'rr'
-  s.add_development_dependency 'rake'
+  %w(rspec rr rake cucumber).each do |gem|
+    s.add_development_dependency gem
+  end
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
