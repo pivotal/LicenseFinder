@@ -2,8 +2,8 @@ Gem::Specification.new do |s|
   s.name        = "license_finder"
   s.version     = File.read "VERSION"
   s.platform    = Gem::Platform::RUBY
-  s.email       = ["jacob.maine@gmail.com"]
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards"]
+  s.email       = ["brent@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
   s.summary     = %q{License finding heaven.}
   s.description = %q{Find and display licenses of a project's gem dependencies.}
