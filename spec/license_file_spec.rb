@@ -73,8 +73,6 @@ describe LicenseFinder::LicenseFile do
     its(:disclaimer_of_liability) { should == 'other' }
   end
 
-
-
   context "with Apache like license" do
     before do
       stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/APACHE-2-LICENSE')) }
@@ -102,6 +100,14 @@ describe LicenseFinder::LicenseFile do
     its(:body_type) { should == 'lgpl' }
   end
 
+  context "with an ISC license" do
+    before do
+      stub(IO).read    { File.read(File.join(File.dirname(__FILE__), 'fixtures', 'ISC-LICENSE')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), 'fixtures', 'ISC-LICENSE')) }
+    end
+
+    its(:body_type) { should == 'isc' }
+  end
 
   context "with another license" do
     before do

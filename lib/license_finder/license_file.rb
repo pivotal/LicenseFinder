@@ -4,6 +4,7 @@ module LicenseFinder
     APACHE_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/Apache-2.0-body').read
     GPLv2_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/GPL-2.0-body').read
     LGPL_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/LGPL-body').read
+    ISC_LICENSE_TEXT = (LicenseFinder::ROOT_PATH + 'templates/ISC-body').read
     MIT_HEADER_REGEX = /The MIT License/
     MIT_DISCLAIMER_REGEX = /THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL ((\w+ ){2,8})BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE\./
     MIT_ONE_LINER_REGEX = /is released under the MIT license/
@@ -21,6 +22,8 @@ module LicenseFinder
         'ruby'
       elsif lgpl_license_body?
         'lgpl'
+      elsif isc_license_body?
+        'isc'
       else
         'other'
       end
@@ -50,6 +53,11 @@ module LicenseFinder
     def lgpl_license_body?
       !!on_single_line(text).index(on_single_line(LGPL_LICENSE_TEXT))
     end
+
+    def isc_license_body?
+      !!on_single_line(text).index(on_single_line(ISC_LICENSE_TEXT))
+    end
+
     def mit_license_header?
       header = text.split("\n").first
       header && ((header.strip =~ MIT_HEADER_REGEX) || !!(on_single_line(text) =~ MIT_ONE_LINER_REGEX))
