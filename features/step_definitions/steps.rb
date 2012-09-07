@@ -11,6 +11,10 @@ Given /^I whitelist the "(.*?)" license$/ do |license|
   @user.configure_license_finder_whitelist [license]
 end
 
+Given /^I whitelist the following licenses: "([^"]*)"$/ do |licenses|
+  @user.configure_license_finder_whitelist licenses.split(", ")
+end
+
 When /^I run "(.*?)"$/ do |command|
   @output = @user.execute_command command
 end
@@ -35,6 +39,10 @@ Then /^license finder should generate a file "([^"]*)" that includes the followi
   @content = text
   file = File.read(File.join(@user.app_location, filename))
   file.should include @content
+end
+
+Then /^it should exit with status code (\d)$/ do |status|
+  $?.exitstatus.should == status.to_i
 end
 
 
@@ -101,7 +109,6 @@ YML
 
       @output
     end
-
 
     def app_location
       File.join(sandbox_location, app_name)

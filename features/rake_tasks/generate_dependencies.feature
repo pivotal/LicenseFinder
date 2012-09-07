@@ -29,5 +29,3 @@ Feature: rake license:generate_dependencies
     And I run "bundle exec rake license:action_items"
 
     Then I should not see "gpl_gem" in its output
-
-
