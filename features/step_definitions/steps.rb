@@ -15,6 +15,10 @@ When /^I run "(.*?)"$/ do |command|
   @output = @user.execute_command command
 end
 
+When /^I replace that content with the following content in "([^"]*)":$/ do |filename, text|
+  @user.edit_file(filename, replace_this: @content, with: text)
+end
+
 Then /^I should see "(.*?)" in its output$/ do |gem_name|
   @output.should include gem_name
 end
@@ -22,6 +26,18 @@ end
 Then /^I should not see "(.*?)" in its output$/ do |gem_name|
   @output.should_not include gem_name
 end
+
+Then /^license finder should generate a file "([^"]*)" with the following content:$/ do |filename, text|
+  File.read(File.join(@user.app_location, filename)).should == text.gsub(/^\s+/, "")
+end
+
+Then /^license finder should generate a file "([^"]*)" that includes the following content:$/ do |filename, text|
+  @content = text
+  file = File.read(File.join(@user.app_location, filename))
+  file.should include @content
+end
+
+
 
 module DSL
   class User
@@ -35,6 +51,18 @@ module DSL
       end
     end
 
+    def edit_file(filename, options={})
+      replace_this = options.fetch :replace_this
+      with = options.fetch :with
+
+      file_contents = File.read(File.join(app_location, filename))
+
+      file_contents[replace_this] = with
+
+      File.open(File.join(app_location, filename), "w") do |f|
+        f.puts file_contents
+      end
+    end
 
     def add_dependency_to_app(gem_name, license)
       `mkdir #{sandbox_location}/#{gem_name}`
@@ -93,8 +121,4 @@ YML
       `mkdir #{sandbox_location}`
     end
   end
-end
-
-Then /^license finder should generate a file "([^"]*)" with the following content:$/ do |filename, text|
-  File.read(File.join(@user.app_location, filename)).should == text.gsub(/^\s+/, "")
 end
