@@ -33,6 +33,7 @@ module LicenseFinder
       return 'Apache 2.0' if license_files.any?(&:apache_license_body?)
       return 'GPLv2' if license_files.any?(&:gplv2_license_body?)
       return 'ruby' if license_files.any?(&:ruby_license_body?)
+      return 'LGPL' if license_files.any?(&:lgpl_license_body?)
       'other'
     end
 

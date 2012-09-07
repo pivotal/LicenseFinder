@@ -17,7 +17,7 @@ describe LicenseFinder::GemSpecDetails do
 
       def full_gem_path
         if @path
-          gem_install_path = File.join(File.dirname(__FILE__), '/../', @path)
+          gem_install_path = File.join(File.dirname(__FILE__), '..', @path)
           raise Errno::ENOENT, @path unless File.exists?(gem_install_path)
           gem_install_path
         else
@@ -188,6 +188,13 @@ describe LicenseFinder::GemSpecDetails do
       its(:approved) { should == true }
       its(:license_url) { should == '' }
       its(:notes) { should == '' }
+    end
+
+    describe 'with LGPL License' do
+      it "should detect the license as LGPL" do
+        dependency = LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/lgpl_licensed_gem'), ['LGPL']).dependency
+        dependency.license.should == "LGPL"
+      end
     end
 
     describe 'with unknown license' do

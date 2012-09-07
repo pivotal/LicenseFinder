@@ -13,7 +13,7 @@ describe LicenseFinder::LicenseFile do
       it "includes file path" do
         subject.to_hash['file_name'].should == 'license/path'
       end
-      
+
       it "does not include file text by default" do
         subject.to_hash['text'].should be_nil
       end
@@ -22,7 +22,7 @@ describe LicenseFinder::LicenseFile do
         subject.include_license_text = true
         subject.to_hash['text'].should == 'file text'
       end
-      
+
       it "includes data about license" do
         subject.to_hash.should have_key 'body_type'
         subject.to_hash.should have_key 'header_type'
@@ -41,7 +41,7 @@ describe LicenseFinder::LicenseFile do
     its(:header_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS OR COPYRIGHT HOLDERS' }
   end
-  
+
   context "with MIT reference in README" do
     before do
       stub(IO).read { File.read(File.join(File.dirname(__FILE__), '/fixtures/README-with-MIT-LICENSE')) }
@@ -52,7 +52,7 @@ describe LicenseFinder::LicenseFile do
     its(:header_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'other' }
   end
-  
+
   context "with MIT url in README" do
     before do
       stub(IO).read { 'MIT Licence (http://www.opensource.org/licenses/mit-license.html)' }
@@ -62,7 +62,7 @@ describe LicenseFinder::LicenseFile do
     its(:body_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS OR COPYRIGHT HOLDERS' }
   end
-  
+
   context "with ruby url in README" do
     before do
       stub(IO).read { "Same as Ruby's \n\nhttp://www.ruby-lang.org/en/LICENSE.txt" }
@@ -92,7 +92,17 @@ describe LicenseFinder::LicenseFile do
 
     its(:body_type) { should == 'gplv2' }
   end
-  
+
+  context "with LGPL like license" do
+    before do
+      stub(IO).read    { File.read(File.join(File.dirname(__FILE__), '..', 'lib', 'templates', 'LGPL-body')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '..', 'lib', 'templates', 'LGPL-body')) }
+    end
+
+    its(:body_type) { should == 'lgpl' }
+  end
+
+
   context "with another license" do
     before do
       stub(IO).read { "a non-standard license" }
@@ -103,7 +113,7 @@ describe LicenseFinder::LicenseFile do
     its(:header_type) { should == 'other' }
     its(:disclaimer_of_liability) { should == 'other' }
   end
-  
+
   context "with variation in disclaimer of liability" do
     before do
       stub(IO).read { File.read('spec/fixtures/MIT-LICENSE-with-varied-disclaimer') }
@@ -114,20 +124,20 @@ describe LicenseFinder::LicenseFile do
     its(:header_type) { should == 'mit' }
     its(:disclaimer_of_liability) { should == 'mit: THE AUTHORS' }
   end
-  
+
   context "with empty license file" do
     before do
       stub(IO).read { "" }
       stub(IO).binread { "" }
     end
-    
+
     describe "#to_hash" do
       it "is safe" do
         lambda { subject.to_hash }.should_not raise_error
       end
     end
   end
-  
+
   describe "with variations on MIT header" do
     before do
       stub(IO).read { '(The MIT License)' }
