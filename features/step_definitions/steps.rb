@@ -74,13 +74,14 @@ YML
       @output
     end
 
-    private
-    def app_name
-      "my_app"
-    end
 
     def app_location
       File.join(sandbox_location, app_name)
+    end
+
+    private
+    def app_name
+      "my_app"
     end
 
     def sandbox_location
@@ -92,4 +93,8 @@ YML
       `mkdir #{sandbox_location}`
     end
   end
+end
+
+Then /^license finder should generate a file "([^"]*)" with the following content:$/ do |filename, text|
+  File.read(File.join(@user.app_location, filename)).should == text.gsub(/^\s+/, "")
 end
