@@ -1,23 +1,23 @@
 module LicenseFinder
   class Dependency
-
     attr_reader :name, :version, :license, :approved, :license_url, :notes, :license_files, :readme_files
 
     def self.from_hash(attrs)
-      lfs = attrs['license_files'] ? attrs['license_files'].map { |lf| lf['path'] } : []
-      rfs = attrs['readme_files'] ? attrs['readme_files'].map { |rf| rf['path'] } : []
-      new(attrs['name'], attrs['version'], attrs['license'], attrs['approved'], attrs['license_url'], attrs['notes'], lfs, rfs)
+      attrs['license_files'] = attrs['license_files'].map { |lf| lf['path'] } if attrs['license_files']
+      attrs['readme_files'] = attrs['readme_files'].map { |rf| rf['path'] } if attrs['readme_files']
+
+      new(attrs)
     end
 
-    def initialize(name, version, license, approved, license_url = '', notes = '', license_files = [], readme_files = [])
-      @name = name
-      @version = version
-      @license = license
-      @approved = approved
-      @license_url = license_url
-      @notes = notes
-      @license_files = license_files
-      @readme_files = readme_files
+    def initialize(attributes = {})
+      @name = attributes['name']
+      @version = attributes['version']
+      @license = attributes['license']
+      @approved = attributes['approved'] || LicenseFinder.config.whitelist.include?(attributes['license'])
+      @license_url = attributes['license_url'] || ''
+      @notes = attributes['notes'] || ''
+      @license_files = attributes['license_files'] || []
+      @readme_files = attributes['readme_files'] || []
     end
 
     def to_yaml_entry
@@ -57,7 +57,6 @@ module LicenseFinder
 
       str
     end
-
   end
 end
 

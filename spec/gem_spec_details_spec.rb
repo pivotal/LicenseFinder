@@ -111,9 +111,13 @@ describe LicenseFinder::GemSpecDetails do
   end
 
   describe 'to dependency' do
+    before do
+      stub(LicenseFinder).config.stub!.whitelist { ['MIT', 'Apache 2.0', 'LGPL', 'GPLv2'] }
+    end
+
     describe 'with MIT License' do
       subject do
-        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem'), ['MIT']).dependency
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem')).dependency
       end
 
       its(:name) { should == 'spec_name' }
@@ -126,7 +130,7 @@ describe LicenseFinder::GemSpecDetails do
 
     describe 'with MIT License in README' do
       subject do
-        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem_in_README'), ['MIT']).dependency
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem_in_README')).dependency
       end
 
       its(:name) { should == 'spec_name' }
@@ -139,7 +143,7 @@ describe LicenseFinder::GemSpecDetails do
 
     describe 'with MIT License in README' do
       subject do
-        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem_via_url'), ['MIT']).dependency
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem_via_url')).dependency
       end
 
       its(:name) { should == 'spec_name' }
@@ -149,11 +153,10 @@ describe LicenseFinder::GemSpecDetails do
       its(:license_url) { should == '' }
       its(:notes) { should == '' }
     end
-
 
     describe 'with MIT License with hashes' do
       subject do
-        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_with_hashes'), ['MIT']).dependency
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_with_hashes')).dependency
       end
 
       its(:name) { should == 'spec_name' }
@@ -166,7 +169,7 @@ describe LicenseFinder::GemSpecDetails do
 
     describe 'with Apache License' do
       subject do
-        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/apache_licensed_gem'), ['Apache 2.0']).dependency
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/apache_licensed_gem')).dependency
       end
 
       its(:name) { should == 'spec_name' }
@@ -179,7 +182,7 @@ describe LicenseFinder::GemSpecDetails do
 
     describe 'with GPLv2 License' do
       subject do
-        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/gplv2_licensed_gem'), ['GPLv2']).dependency
+        LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/gplv2_licensed_gem')).dependency
       end
 
       its(:name) { should == 'spec_name' }
@@ -192,7 +195,7 @@ describe LicenseFinder::GemSpecDetails do
 
     describe 'with LGPL License' do
       it "should detect the license as LGPL" do
-        dependency = LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/lgpl_licensed_gem'), ['LGPL']).dependency
+        dependency = LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/lgpl_licensed_gem')).dependency
         dependency.license.should == "LGPL"
       end
     end

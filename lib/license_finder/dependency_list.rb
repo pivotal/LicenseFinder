@@ -3,15 +3,15 @@ module LicenseFinder
 
     attr_reader :dependencies
 
-    def self.from_bundler(whitelist = [], ignore_groups = [])
+    def self.from_bundler
       gemfile = Pathname.new("Gemfile").expand_path
       root = gemfile.dirname
       lockfile = root.join('Gemfile.lock')
       definition = Bundler::Definition.build(gemfile, lockfile, nil)
 
-      groups = definition.groups - ignore_groups
+      groups = definition.groups - LicenseFinder.config.ignore_groups
 
-      new(definition.specs_for(groups).map { |spec| GemSpecDetails.new(spec, whitelist).dependency })
+      new(definition.specs_for(groups).map { |spec| GemSpecDetails.new(spec).dependency })
     end
 
     def initialize(dependencies)
@@ -27,9 +27,27 @@ module LicenseFinder
       deps = new_list.dependencies.map do |new_dep|
         old_dep = self.dependencies.detect { |d| d.name == new_dep.name }
         if old_dep && old_dep.license == new_dep.license
-          Dependency.new(new_dep.name, new_dep.version, new_dep.license, old_dep.approved || new_dep.approved, old_dep.license_url, old_dep.notes, new_dep.license_files, new_dep.readme_files)
+          Dependency.new(
+            'name' => new_dep.name,
+            'version' => new_dep.version,
+            'license' => new_dep.license,
+            'approved' => (old_dep.approved || new_dep.approved),
+            'license_url' => old_dep.license_url,
+            'notes' => old_dep.notes,
+            'license_files' => new_dep.license_files,
+            'readme_files' => new_dep.readme_files
+          )
         elsif old_dep && new_dep.license == 'other'
-          Dependency.new(new_dep.name, new_dep.version, old_dep.license, old_dep.approved, old_dep.license_url, old_dep.notes, new_dep.license_files, new_dep.readme_files)
+          Dependency.new(
+            'name' => new_dep.name,
+            'version' => new_dep.version,
+            'license' => old_dep.license,
+            'approved' => old_dep.approved,
+            'license_url' => old_dep.license_url,
+            'notes' => old_dep.notes,
+            'license_files' => new_dep.license_files,
+            'readme_files' => new_dep.readme_files
+          )
         else
           new_dep
         end

@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe LicenseFinder::DependencyList do
   before do
+    config = stub(LicenseFinder).config.stub!
+    config.whitelist { [] }
+    config.ignore_groups { [] }
+
     @mock_gemspec = Class.new do
       def initialize(name = nil, version = nil, path = nil)
         @name = name
@@ -25,7 +29,6 @@ describe LicenseFinder::DependencyList do
         nil
       end
     end
-
   end
 
   describe 'from Bundler' do
@@ -79,8 +82,8 @@ describe LicenseFinder::DependencyList do
   describe 'to_yaml' do
     it "should generate yaml" do
       list = LicenseFinder::DependencyList.new([
-                                                   LicenseFinder::Dependency.new('b_gem', '0.4.2', 'MIT', false),
-                                                   LicenseFinder::Dependency.new('a_gem', '1.2.3', 'MIT', false)
+                                                   LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false),
+                                                   LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false)
                                                ])
 
       list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n"
@@ -90,8 +93,8 @@ describe LicenseFinder::DependencyList do
   describe 'round trip' do
     it 'should recreate from to_yaml' do
       list = LicenseFinder::DependencyList.new([
-                                                   LicenseFinder::Dependency.new('gem1', '1.2.3', 'MIT', false),
-                                                   LicenseFinder::Dependency.new('gem2', '0.4.2', 'MIT', false)
+                                                   LicenseFinder::Dependency.new('name' => 'gem1', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false),
+                                                   LicenseFinder::Dependency.new('name' => 'gem2', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false)
                                                ])
 
       new_list = LicenseFinder::DependencyList.from_yaml(list.to_yaml)
@@ -103,19 +106,19 @@ describe LicenseFinder::DependencyList do
 
   describe 'updating dependency list' do
     before(:each) do
-      @yml_same = LicenseFinder::Dependency.new('same_gem', '1.2.3', 'MIT', true, 'a', 'b')
-      @yml_updated = LicenseFinder::Dependency.new('updated_gem', '1.0.1', 'MIT', true, 'a', 'b')
-      @yml_new_license = LicenseFinder::Dependency.new('new_license_gem', '1.0.1', 'MIT', true, 'a', 'b')
-      @yml_manual_license = LicenseFinder::Dependency.new('manual_license_gem', '1.0.1', 'Ruby', true, 'a', 'b')
-      @yml_removed_gem = LicenseFinder::Dependency.new('removed_gem', '1.0.1', 'MIT', true, 'a', 'b')
-      @yml_new_whitelist = LicenseFinder::Dependency.new('new_whitelist_gem', '1.0.1', 'MIT', false, 'a', 'b')
+      @yml_same = LicenseFinder::Dependency.new('name' => 'same_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
+      @yml_updated = LicenseFinder::Dependency.new('name' => 'updated_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
+      @yml_new_license = LicenseFinder::Dependency.new('name' => 'new_license_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
+      @yml_manual_license = LicenseFinder::Dependency.new('name' => 'manual_license_gem', 'version' => '1.0.1', 'license' => 'Ruby', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
+      @yml_removed_gem = LicenseFinder::Dependency.new('name' => 'removed_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
+      @yml_new_whitelist = LicenseFinder::Dependency.new('name' => 'new_whitelist_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => false, 'license_url' => 'a', 'notes' => 'b')
 
-      @gemspec_same = LicenseFinder::Dependency.new('same_gem', '1.2.3', 'MIT', false)
-      @gemspec_new = LicenseFinder::Dependency.new('brand_new_gem', '0.9', 'MIT', false)
-      @gemspec_updated = LicenseFinder::Dependency.new('updated_gem', '1.1.2', 'MIT', false)
-      @gemspec_new_license = LicenseFinder::Dependency.new('new_license_gem', '2.0.1', 'Apache 2.0', false)
-      @gemspec_new_whitelist = LicenseFinder::Dependency.new('new_whitelist_gem', '1.0.1', 'MIT', true)
-      @gemspec_manual_license = LicenseFinder::Dependency.new('manual_license_gem', '1.2.1', 'other', false)
+      @gemspec_same = LicenseFinder::Dependency.new('name' => 'same_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false)
+      @gemspec_new = LicenseFinder::Dependency.new('name' => 'brand_new_gem', 'version' => '0.9', 'license' => 'MIT', 'approved' => false)
+      @gemspec_updated = LicenseFinder::Dependency.new('name' => 'updated_gem', 'version' => '1.1.2', 'license' => 'MIT', 'approved' => false)
+      @gemspec_new_license = LicenseFinder::Dependency.new('name' => 'new_license_gem', 'version' => '2.0.1', 'license' => 'Apache 2.0', 'approved' => false)
+      @gemspec_new_whitelist = LicenseFinder::Dependency.new('name' => 'new_whitelist_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true)
+      @gemspec_manual_license = LicenseFinder::Dependency.new('name' => 'manual_license_gem', 'version' => '1.2.1', 'license' => 'other', 'approved' => false)
 
       @list_from_yml = LicenseFinder::DependencyList.new([@yml_same, @yml_updated, @yml_new_license, @yml_removed_gem, @yml_new_whitelist, @yml_manual_license])
       @list_from_gemspec = LicenseFinder::DependencyList.new([@gemspec_same, @gemspec_new, @gemspec_updated, @gemspec_new_license, @gemspec_new_whitelist, @gemspec_manual_license])
@@ -181,8 +184,8 @@ describe LicenseFinder::DependencyList do
 
   describe "#to_s" do
     it "should return a human readable list of dependencies" do
-      gem1 = LicenseFinder::Dependency.new('b_gem', '1.2.3', 'MIT', true)
-      gem2 = LicenseFinder::Dependency.new('a_gem', '0.9', 'other', false, 'http://foo.com/LICENSE')
+      gem1 = LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => true)
+      gem2 = LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '0.9', 'license' => 'other', 'approved' => false, 'license_url' => 'http://foo.com/LICENSE')
 
       list = LicenseFinder::DependencyList.new([gem1, gem2])
 
@@ -192,9 +195,9 @@ describe LicenseFinder::DependencyList do
 
   describe '#action_items' do
     it "should return all unapproved dependencies" do
-      gem1 = LicenseFinder::Dependency.new('b_gem', '1.2.3', 'MIT', true)
-      gem2 = LicenseFinder::Dependency.new('a_gem', '0.9', 'other', false)
-      gem3 = LicenseFinder::Dependency.new('c_gem', '0.2', 'other', false)
+      gem1 = LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => true)
+      gem2 = LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '0.9', 'license' => 'other', 'approved' => false)
+      gem3 = LicenseFinder::Dependency.new('name' => 'c_gem', 'version' => '0.2', 'license' => 'other', 'approved' => false)
 
       list = LicenseFinder::DependencyList.new([gem1, gem2, gem3])
 

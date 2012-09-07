@@ -116,8 +116,8 @@ describe LicenseFinder::LicenseFile do
 
   context "with variation in disclaimer of liability" do
     before do
-      stub(IO).read { File.read('spec/fixtures/MIT-LICENSE-with-varied-disclaimer') }
-      stub(IO).binread { File.read('spec/fixtures/MIT-LICENSE-with-varied-disclaimer') }
+      stub(IO).read { File.read(File.join(File.dirname(__FILE__), '../fixtures/MIT-LICENSE-with-varied-disclaimer')) }
+      stub(IO).binread { File.read(File.join(File.dirname(__FILE__), '../spec/fixtures/MIT-LICENSE-with-varied-disclaimer')) }
     end
 
     its(:body_type) { should == 'mit' }
