@@ -55,7 +55,7 @@ module DSL
       `bundle exec rails new #{app_location} --skip-bundle`
 
       Bundler.with_clean_env do
-        `pushd #{app_location} && echo \"gem 'license_finder', path: '../../'\" >> Gemfile`
+        `cd #{app_location} && echo \"gem 'license_finder', path: '../../'\" >> Gemfile`
       end
     end
 
@@ -88,7 +88,7 @@ module DSL
       end
 
       Bundler.with_clean_env do
-        `pushd #{app_location} && echo \"gem '#{gem_name}', path: '../#{gem_name}'\" >> Gemfile && bundle`
+        `cd #{app_location} && echo \"gem '#{gem_name}', path: '../#{gem_name}'\" >> Gemfile && bundle`
       end
     end
 
