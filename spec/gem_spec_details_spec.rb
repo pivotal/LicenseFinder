@@ -200,6 +200,13 @@ describe LicenseFinder::GemSpecDetails do
       end
     end
 
+    describe 'with ISC License' do
+      it "should detect the license as ISC" do
+        dependency = LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/isc_licensed_gem')).dependency
+        dependency.license.should == "ISC"
+      end
+    end
+
     describe 'with unknown license' do
       subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/other_licensed_gem')).dependency }
 
