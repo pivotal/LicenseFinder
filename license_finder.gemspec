@@ -1,10 +1,6 @@
-# -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require "license_finder/version"
-
 Gem::Specification.new do |s|
   s.name        = "license_finder"
-  s.version     = LicenseFinder::VERSION
+  s.version     = File.read "VERSION"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jacob Maine"]
   s.email       = ["jacob.maine@gmail.com"]
