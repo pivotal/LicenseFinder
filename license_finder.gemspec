@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards"]
   s.email       = ["brent@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
-  s.summary     = %q{License finding heaven.}
-  s.description = %q{Find and display licenses of a project's gem dependencies.}
+  s.summary     = "Know your dependencies - and the licenses they are binding your application to."
+  s.description = "Find and display licenses of a project's gem dependencies, so that you know what your limitations are when distributing your application."
   s.license     = "MIT"
 
   s.add_development_dependency 'rspec', '~>2.3'
