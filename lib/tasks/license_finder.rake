@@ -11,19 +11,25 @@ namespace :license do
 
   desc 'action items'
   task :action_items => :generate_dependencies do
-    puts "Dependencies that need approval:"
-    puts LicenseFinder::Finder.new.action_items
-  end
-
-  desc 'All gems approved for use'
-  task 'action_items:ok' => :generate_dependencies do
     found = LicenseFinder::Finder.new.action_items
-    if found.size > 0
+    if found.size == 0
+      puts "All gems are approved for use"
+    else
       puts "Dependencies that need approval:"
       puts found
-    else
-      puts "All gems are approved for use"
+      exit 1
     end
-    exit 1 unless found.size == 0
+  end
+
+  desc 'return a failure status code for unapproved dependencies'
+  task 'action_items:ok' => :generate_dependencies do
+    puts "rake license:action_items:ok is deprecated and will be removed in version 1.0.  Use rake license:action_items instead."
+
+    found = LicenseFinder::Finder.new.action_items
+    if found.size == 0
+      puts "All gems are approved for use"
+    else
+      exit 1
+    end
   end
 end

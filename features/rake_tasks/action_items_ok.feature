@@ -10,11 +10,14 @@ Feature: rake license:action_items:ok
     Given my rails app depends on a gem "gpl_licensed_gem" licensed with "GPL"
     And I whitelist the "MIT" license
     When I run "bundle exec rake license:action_items:ok"
-    Then I should see "Dependencies that need approval" in its output
-    And it should exit with status code 1
+    Then it should exit with status code 1
 
   Scenario: Application with no action items
     Given I whitelist the following licenses: "MIT, other"
     When I run "bundle exec rake license:action_items:ok"
     Then I should see "All gems are approved for use" in its output
     And it should exit with status code 0
+
+  Scenario: Deprecation for version 1.0
+    When I run "bundle exec rake license:action_items:ok"
+    Then I should see "rake license:action_items:ok is deprecated and will be removed in version 1.0.  Use rake license:action_items instead." in its output
