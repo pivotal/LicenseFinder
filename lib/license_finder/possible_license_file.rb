@@ -1,5 +1,5 @@
 module LicenseFinder
-  class FileParser
+  class PossibleLicenseFile
     def initialize(install_path, file_path)
       @install_path = Pathname.new(install_path)
       @file_path = Pathname.new(file_path)
@@ -18,23 +18,15 @@ module LicenseFinder
     end
 
     def text
-      @text ||= @file_path.send((@file_path.respond_to? :binread) ? :binread : :read)
+      @text ||= @file_path.send(@file_path.respond_to?(:binread) ? :binread : :read)
     end
-    
-    private
-    
-    def on_single_line(text)
-      text.gsub(/\s+/, ' ').gsub("'", "\"")
-    rescue
-      ''
-    end
-    
-    def without_punctuation(text)
-      text.gsub('#', '').gsub(' ', '')
-    end
-    
-    def cleaned_up(text)
-      without_punctuation(on_single_line(text))
+
+    def license
+      license = LicenseFinder::License.all.detect do |klass|
+        klass.new(text).matches?
+      end
+
+      license && license.pretty_name
     end
   end
 end

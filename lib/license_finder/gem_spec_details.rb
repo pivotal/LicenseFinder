@@ -22,12 +22,10 @@ module LicenseFinder
     end
 
     def dependency
-      license = determine_license
-
       @dependency ||= Dependency.new(
         'name' => @spec.name,
         'version' => @spec.version,
-        'license' => license,
+        'license' => determine_license,
         'license_files' => license_files.map(&:full_file_path),
         'readme_files' => readme_files.map(&:full_file_path)
       )
@@ -35,13 +33,8 @@ module LicenseFinder
 
     def determine_license
       return @spec.license if @spec.license
-      return 'MIT' if license_files.any?{|f| f.mit_license_body? || f.mit_license_header?}
-      return 'Apache 2.0' if license_files.any?(&:apache_license_body?)
-      return 'GPLv2' if license_files.any?(&:gplv2_license_body?)
-      return 'ruby' if license_files.any?(&:ruby_license_body?)
-      return 'LGPL' if license_files.any?(&:lgpl_license_body?)
-      return 'ISC' if license_files.any?(&:isc_license_body?)
-      'other'
+
+      license_files.map(&:license).compact.first || 'other'
     end
 
     def license_files
@@ -54,29 +47,12 @@ module LicenseFinder
 
     def readme_files
       Dir.glob(File.join(install_path, '**', README_FILE_NAMES)).map do |path|
-        file = LicenseFile.new(install_path, path)
-        file.include_license_text = include_license_text?
-        file
+        get_file_for_path path
       end
     end
 
     def install_path
       spec.full_gem_path
-    end
-
-    def to_s(include_license_text = true)
-      self.include_license_text = include_license_text
-
-      { name => to_hash }.to_yaml
-    end
-
-    def to_hash
-      {
-        'dependency_name' => dependency_name,
-        'dependency_version' => dependency_version,
-        'install_path' => install_path,
-        'license_files' => license_files.map { |file| file.to_hash }
-      }
     end
 
     def sort_order
@@ -85,16 +61,8 @@ module LicenseFinder
 
     private
 
-    attr_writer :include_license_text
-
-    def include_license_text?
-      @include_license_text
-    end
-
     def get_file_for_path(path)
-      file = LicenseFile.new(install_path, path)
-      file.include_license_text = include_license_text?
-      file
+      PossibleLicenseFile.new(install_path, path)
     end
 
     def paths_for_files_in_license_directory(path)
