@@ -61,6 +61,81 @@ describe LicenseFinder::Dependency do
       LicenseFinder::Dependency.new("source" => "foo").source.should == "foo"
     end
   end
+
+  describe '#merge' do
+    subject do
+      LicenseFinder::Dependency.new(
+        'name' => 'foo',
+        'license' => 'MIT',
+        'version' => '0.0.1',
+        'license_url' => 'http://www.example.com/license1.htm',
+        'license_files' => "old license files",
+        'readme_files' => "old readme files",
+      )
+    end
+
+    let(:new_dep) do
+      LicenseFinder::Dependency.new(
+        'name' => 'foo',
+        'license' => 'MIT',
+        'version' => '0.0.2',
+        'license_url' => 'http://www.example.com/license2.htm',
+        'license_files' => "new license files",
+        'readme_files' => "new readme files"
+      )
+    end
+
+    it 'should raise an error if the names do not match' do
+      new_dep.name = 'bar'
+
+      expect {
+        subject.merge(new_dep)
+      }.to raise_error
+    end
+
+    it 'should return the new version, license url, license files, readme files, and source' do
+      merged = subject.merge(new_dep)
+
+      merged.version.should == '0.0.2'
+      merged.license_url.should == 'http://www.example.com/license2.htm'
+      merged.license_files.should == new_dep.license_files
+      merged.readme_files.should == new_dep.readme_files
+      merged.source.should == new_dep.source
+    end
+
+    it 'should return the old notes' do
+      subject.notes = 'old notes'
+      new_dep.notes = 'new notes'
+
+      merged = subject.merge(new_dep)
+
+      merged.notes.should == 'old notes'
+    end
+
+    it 'should return the new license and approval if the license is different' do
+      subject.license = "MIT"
+      subject.approved = true
+
+      new_dep.license = "GPLv2"
+      new_dep.approved = false
+
+      merged = subject.merge(new_dep)
+
+      merged.license.should == "GPLv2"
+      merged.approved.should == false
+    end
+
+    it 'should return the old license and approval if the new license is the same or "other"' do
+      subject.approved = false
+      new_dep.approved = true
+
+      subject.merge(new_dep).approved.should == false
+
+      new_dep.license = 'other'
+
+      subject.merge(new_dep).approved.should == false
+    end
+  end
 end
 
 

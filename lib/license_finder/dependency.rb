@@ -21,6 +21,31 @@ module LicenseFinder
       @readme_files = attributes['readme_files'] || []
     end
 
+    def merge(other)
+      raise "Cannot merge dependencies with different names. Expected #{name}, was #{other.name}." unless other.name == name
+
+      merged = self.class.new(
+        'name' => name,
+        'version' => other.version,
+        'license_files' => other.license_files,
+        'readme_files' => other.readme_files,
+        'license_url' => other.license_url,
+        'notes' => notes,
+        'source' => other.source
+      )
+
+      case other.license
+      when license, 'other'
+        merged.license = license
+        merged.approved = approved
+      else
+        merged.license = other.license
+        merged.approved = other.approved
+      end
+
+      merged
+    end
+
     def to_yaml_entry
       attrs = "- name: \"#{name}\"\n  version: \"#{version}\"\n  license: \"#{license}\"\n  approved: #{approved}\n  source: \"#{source}\"\n  license_url: \"#{license_url}\"\n  notes: \"#{notes}\"\n"
       attrs << "  license_files:\n"
