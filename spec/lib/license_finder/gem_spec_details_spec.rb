@@ -125,6 +125,7 @@ describe LicenseFinder::GemSpecDetails do
       its(:name) { should == 'spec_name' }
       its(:version) { should == '2.1.3' }
       its(:license) { should == 'Detected License' }
+      its(:source) { should == 'bundle' }
     end
 
     describe 'with an unknown license' do
@@ -137,6 +138,7 @@ describe LicenseFinder::GemSpecDetails do
       its(:name) { should == 'spec_name' }
       its(:version) { should == '2.1.3' }
       its(:license) { should == 'other' }
+      its(:source) { should == 'bundle' }
     end
 
     describe 'with UTF8 file License' do

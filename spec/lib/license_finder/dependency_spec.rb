@@ -10,7 +10,8 @@ describe LicenseFinder::Dependency do
         'license_url' => 'http://www.apache.org/licenses/LICENSE-2.0.html',
         'notes' => 'some notes',
         'license_files' => [{'path' => '/Users/pivotal/foo/lic1'}, {'path' => '/Users/pivotal/bar/lic2'}],
-        'readme_files' => [{'path' => '/Users/pivotal/foo/Readme1'}, {'path' => '/Users/pivotal/bar/Readme2'}]
+        'readme_files' => [{'path' => '/Users/pivotal/foo/Readme1'}, {'path' => '/Users/pivotal/bar/Readme2'}],
+        'source' => "bundle"
     }
   end
 
@@ -35,6 +36,7 @@ describe LicenseFinder::Dependency do
     end
   end
 
+
   describe '.from_hash' do
     subject { LicenseFinder::Dependency.from_hash(attributes) }
 
@@ -46,7 +48,18 @@ describe LicenseFinder::Dependency do
     its(:notes) { should == "some notes" }
     its(:license_files) { should == ["/Users/pivotal/foo/lic1", "/Users/pivotal/bar/lic2"] }
     its(:readme_files) { should == ["/Users/pivotal/foo/Readme1", "/Users/pivotal/bar/Readme2"] }
-    its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"GPL\"\n  approved: false\n  license_url: \"http://www.apache.org/licenses/LICENSE-2.0.html\"\n  notes: \"some notes\"\n  license_files:\n  - path: \"/Users/pivotal/foo/lic1\"\n  - path: \"/Users/pivotal/bar/lic2\"\n  readme_files:\n  - path: \"/Users/pivotal/foo/Readme1\"\n  - path: \"/Users/pivotal/bar/Readme2\"\n" }
+    its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"GPL\"\n  approved: false\n  source: \"bundle\"\n  license_url: \"http://www.apache.org/licenses/LICENSE-2.0.html\"\n  notes: \"some notes\"\n  license_files:\n  - path: \"/Users/pivotal/foo/lic1\"\n  - path: \"/Users/pivotal/bar/lic2\"\n  readme_files:\n  - path: \"/Users/pivotal/foo/Readme1\"\n  - path: \"/Users/pivotal/bar/Readme2\"\n" }
+    its(:source) { should == "bundle" }
+  end
+
+  describe '#source' do
+    it "should default to nil" do
+      LicenseFinder::Dependency.new.source.should be_nil
+    end
+
+    it "should be overridable" do
+      LicenseFinder::Dependency.new("source" => "foo").source.should == "foo"
+    end
   end
 end
 

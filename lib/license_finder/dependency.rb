@@ -1,6 +1,6 @@
 module LicenseFinder
   class Dependency
-    attr_reader :name, :version, :license, :approved, :license_url, :notes, :license_files, :readme_files
+    attr_accessor :name, :version, :license, :approved, :license_url, :notes, :license_files, :readme_files, :source
 
     def self.from_hash(attrs)
       attrs['license_files'] = attrs['license_files'].map { |lf| lf['path'] } if attrs['license_files']
@@ -10,6 +10,7 @@ module LicenseFinder
     end
 
     def initialize(attributes = {})
+      @source = attributes['source']
       @name = attributes['name']
       @version = attributes['version']
       @license = attributes['license']
@@ -21,7 +22,7 @@ module LicenseFinder
     end
 
     def to_yaml_entry
-      attrs = "- name: \"#{name}\"\n  version: \"#{version}\"\n  license: \"#{license}\"\n  approved: #{approved}\n  license_url: \"#{license_url}\"\n  notes: \"#{notes}\"\n"
+      attrs = "- name: \"#{name}\"\n  version: \"#{version}\"\n  license: \"#{license}\"\n  approved: #{approved}\n  source: \"#{source}\"\n  license_url: \"#{license_url}\"\n  notes: \"#{notes}\"\n"
       attrs << "  license_files:\n"
       if !self.license_files.empty?
         self.license_files.each do |lf|

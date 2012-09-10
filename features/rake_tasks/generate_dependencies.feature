@@ -29,3 +29,27 @@ Feature: rake license:generate_dependencies
     And I run "bundle exec rake license:action_items"
 
     Then I should not see "gpl_gem" in its output
+
+  Scenario: Manually adding a javascript dependency to dependencies.yml
+    Given I have a rails application with license finder
+    When I run "bundle exec rake license:generate_dependencies"
+    And I add the following content to "dependencies.yml":
+      """
+      - name: "my_javascript_library"
+        version: "0.0.0"
+        license: "GPL"
+        approved: false
+      """
+    And I run "bundle exec rake license:action_items"
+    Then I should see "my_javascript_library" in its output
+
+    When I replace that content with the following content in "dependencies.yml":
+      """
+      - name: "my_javascript_library"
+        version: "0.0.0"
+        license: "GPL"
+        approved: true
+      """
+
+    And I run "bundle exec rake license:action_items"
+    Then I should not see "my_javascript_library" in its output

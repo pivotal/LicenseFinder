@@ -82,11 +82,11 @@ describe LicenseFinder::DependencyList do
   describe 'to_yaml' do
     it "should generate yaml" do
       list = LicenseFinder::DependencyList.new([
-                                                   LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false),
+                                                   LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false, 'source' => "bundle"),
                                                    LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false)
                                                ])
 
-      list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n"
+      list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n  source: \"\"\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n  source: \"bundle\"\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n"
     end
   end
 
@@ -104,14 +104,15 @@ describe LicenseFinder::DependencyList do
     end
   end
 
-  describe 'updating dependency list' do
+  describe '#merge' do
     before(:each) do
       @yml_same = LicenseFinder::Dependency.new('name' => 'same_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
       @yml_updated = LicenseFinder::Dependency.new('name' => 'updated_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
       @yml_new_license = LicenseFinder::Dependency.new('name' => 'new_license_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
       @yml_manual_license = LicenseFinder::Dependency.new('name' => 'manual_license_gem', 'version' => '1.0.1', 'license' => 'Ruby', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
-      @yml_removed_gem = LicenseFinder::Dependency.new('name' => 'removed_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b')
+      @yml_removed_gem = LicenseFinder::Dependency.new('name' => 'removed_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true, 'license_url' => 'a', 'notes' => 'b', 'source' => 'bundle')
       @yml_new_whitelist = LicenseFinder::Dependency.new('name' => 'new_whitelist_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => false, 'license_url' => 'a', 'notes' => 'b')
+      @yml_non_bundled_dependency = LicenseFinder::Dependency.new('name' => 'non_bundled_dependency', 'version' => '1.0.1', 'license' => 'GPL', 'approved' => false, 'license_url' => 'a', 'notes' => 'b')
 
       @gemspec_same = LicenseFinder::Dependency.new('name' => 'same_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false)
       @gemspec_new = LicenseFinder::Dependency.new('name' => 'brand_new_gem', 'version' => '0.9', 'license' => 'MIT', 'approved' => false)
@@ -120,7 +121,7 @@ describe LicenseFinder::DependencyList do
       @gemspec_new_whitelist = LicenseFinder::Dependency.new('name' => 'new_whitelist_gem', 'version' => '1.0.1', 'license' => 'MIT', 'approved' => true)
       @gemspec_manual_license = LicenseFinder::Dependency.new('name' => 'manual_license_gem', 'version' => '1.2.1', 'license' => 'other', 'approved' => false)
 
-      @list_from_yml = LicenseFinder::DependencyList.new([@yml_same, @yml_updated, @yml_new_license, @yml_removed_gem, @yml_new_whitelist, @yml_manual_license])
+      @list_from_yml = LicenseFinder::DependencyList.new([@yml_same, @yml_non_bundled_dependency, @yml_updated, @yml_new_license, @yml_removed_gem, @yml_new_whitelist, @yml_manual_license])
       @list_from_gemspec = LicenseFinder::DependencyList.new([@gemspec_same, @gemspec_new, @gemspec_updated, @gemspec_new_license, @gemspec_new_whitelist, @gemspec_manual_license])
     end
 
@@ -138,6 +139,15 @@ describe LicenseFinder::DependencyList do
       dep.approved.should == @yml_manual_license.approved
       dep.license_url.should == 'a'
       dep.notes.should == 'b'
+    end
+
+    it "should use the new source" do
+      old_deps = [LicenseFinder::Dependency.new('name' => 'foo', 'license' => 'MIT')]
+      new_deps = [LicenseFinder::Dependency.new('name' => 'foo', 'license' => 'other', 'source' => 'bundle')]
+
+      list = LicenseFinder::DependencyList.new(old_deps).merge(LicenseFinder::DependencyList.new(new_deps))
+      dep = list.dependencies.first
+      dep.source.should == 'bundle'
     end
 
     it "should add new gem" do
@@ -179,6 +189,12 @@ describe LicenseFinder::DependencyList do
     it "should remove gem if new list doesn't contain it" do
       dep = @list_from_yml.merge(@list_from_gemspec).dependencies.detect { |d| d.name == 'removed_gem' }
       dep.should be_nil
+    end
+
+    it "should keep any manually added dependencies that aren't part of the bundle" do
+      dependencies = @list_from_yml.merge(@list_from_gemspec).dependencies
+      dep = dependencies.detect { |d| d.name == 'non_bundled_dependency' }
+      dep.should_not be_nil
     end
   end
 

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.add_development_dependency "rails", ">=3"
-  %w(rspec rr rake cucumber rails).each do |gem|
+  %w(rspec rr rake cucumber rails pry).each do |gem|
     s.add_development_dependency gem
   end
 

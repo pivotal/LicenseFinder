@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'pry'
 
 require 'license_finder'
 

@@ -45,6 +45,10 @@ When /^I replace that content with the following content in "([^"]*)":$/ do |fil
   @user.edit_file(filename, replace_this: @content, with: text)
 end
 
+When /^I add the following content to "([^"]*)":$/ do |filename, text|
+  @user.append_to_file(filename, @content = text)
+end
+
 Then /^I should see "(.*?)" in its output$/ do |gem_name|
   @output.should include gem_name
 end
@@ -66,7 +70,6 @@ end
 Then /^it should exit with status code (\d)$/ do |status|
   $?.exitstatus.should == status.to_i
 end
-
 
 
 module DSL
@@ -105,6 +108,12 @@ module DSL
 
       File.open(File.join(app_location, filename), "w") do |f|
         f.puts file_contents
+      end
+    end
+
+    def append_to_file(filename, text)
+      File.open(File.join(app_location, filename), "a") do |f|
+        f.puts text
       end
     end
 
