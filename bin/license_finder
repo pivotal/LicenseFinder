@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'pathname'
-$LOAD_PATH.unshift Pathname.new(__FILE__).dirname + ".." + "lib"
-require "license_finder"
+require 'license_finder'
+LicenseFinder::CLI.new.check_for_action_items
 
-LicenseFinder::Finder.new.from_bundler.each { |lf| puts lf.to_s(ARGV.first == "--with-licenses") }

@@ -11,14 +11,7 @@ namespace :license do
 
   desc 'action items'
   task :action_items => :generate_dependencies do
-    found = LicenseFinder::Finder.new.action_items
-    if found.size == 0
-      puts "All gems are approved for use"
-    else
-      puts "Dependencies that need approval:"
-      puts found
-      exit 1
-    end
+    LicenseFinder::CLI.new.check_for_action_items
   end
 
   desc 'return a failure status code for unapproved dependencies'

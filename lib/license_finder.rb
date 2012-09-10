@@ -42,3 +42,4 @@ require 'license_finder/license_file'
 
 require 'license_finder/dependency'
 require 'license_finder/dependency_list'
+require 'license_finder/cli'
