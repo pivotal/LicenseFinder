@@ -17,3 +17,10 @@ Feature: rake license:init
         #- development
         dependencies_file_dir: './'
       """
+
+  Scenario: The project including LicenseFinder does not already have a config directory
+    Given I have an application with license finder
+    And my application's rake file requires license finder
+    And my application does not have a config directory
+    When I run "bundle exec rake license:init"
+    Then the config directory should exist

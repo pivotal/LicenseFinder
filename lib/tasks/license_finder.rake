@@ -1,6 +1,7 @@
 namespace :license do
   desc 'write out example config file'
   task :init do
+    `mkdir -p ./config`
     FileUtils.cp(File.join(File.dirname(__FILE__), '..', '..', 'files', 'license_finder.yml'), './config/license_finder.yml')
   end
 

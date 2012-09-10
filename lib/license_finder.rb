@@ -32,6 +32,10 @@ module LicenseFinder
   def self.config
     @config ||= Configuration.new
   end
+
+  def self.load_rake_tasks
+    load 'tasks/license_finder.rake'
+  end
 end
 
 require 'license_finder/railtie' if defined?(Rails)

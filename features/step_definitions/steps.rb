@@ -1,6 +1,28 @@
+require 'fileutils'
+
 Given /^I have a rails application with license finder$/ do
   @user = DSL::User.new
   @user.create_rails_app
+end
+
+Given /^I have an application with license finder$/ do
+  @user = DSL::User.new
+  @user.create_nonrails_app
+end
+
+Given /^my application does not have a config directory$/ do
+  FileUtils.rm_rf(@user.config_location)
+  File.exists?(@user.config_location).should be_false
+end
+
+Then /^the config directory should exist$/ do
+  File.exists?(@user.config_location).should be_true
+end
+
+Given /^my application's rake file requires license finder$/ do
+  @user.add_to_rakefile "require 'bundler/setup'"
+  @user.add_to_rakefile "require 'license_finder'"
+  @user.add_to_rakefile "LicenseFinder.load_rake_tasks"
 end
 
 Given /^my rails app depends on a gem "(.*?)" licensed with "(.*?)"$/ do |gem_name, license|
@@ -49,6 +71,20 @@ end
 
 module DSL
   class User
+    def create_nonrails_app
+      reset_sandbox!
+
+      `cd tmp && bundle gem #{app_name}`
+
+      Bundler.with_clean_env do
+        `cd #{app_location} && echo \"gem 'rake'\" >> Gemfile `
+      end
+
+      Bundler.with_clean_env do
+        `cd #{app_location} && echo \"gem 'license_finder', path: '../../'\" >> Gemfile`
+      end
+    end
+
     def create_rails_app
       reset_sandbox!
 
@@ -72,6 +108,10 @@ module DSL
       end
     end
 
+    def add_to_rakefile(line)
+      `echo \"#{line}\" >> #{app_location}/Rakefile`
+    end
+
     def add_dependency_to_app(gem_name, license)
       `mkdir #{sandbox_location}/#{gem_name}`
 
@@ -93,7 +133,7 @@ module DSL
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
-      File.open("tmp/my_app/config/license_finder.yml", "w") do |f|
+      File.open("#{app_location}/config/license_finder.yml", "w") do |f|
         f.write <<-YML
 ---
 whitelist:
@@ -112,6 +152,10 @@ YML
 
     def app_location
       File.join(sandbox_location, app_name)
+    end
+
+    def config_location
+      File.join(app_location, 'config')
     end
 
     private
