@@ -11,12 +11,12 @@ Given /^I have an application with license finder$/ do
 end
 
 Given /^my application does not have a config directory$/ do
-  FileUtils.rm_rf(@user.config_location)
-  File.exists?(@user.config_location).should be_false
+  FileUtils.rm_rf(@user.config_path)
+  File.exists?(@user.config_path).should be_false
 end
 
 Then /^the config directory should exist$/ do
-  File.exists?(@user.config_location).should be_true
+  File.exists?(@user.config_path).should be_true
 end
 
 Given /^my application's rake file requires license finder$/ do
@@ -58,12 +58,12 @@ Then /^I should not see "(.*?)" in its output$/ do |gem_name|
 end
 
 Then /^license finder should generate a file "([^"]*)" with the following content:$/ do |filename, text|
-  File.read(File.join(@user.app_location, filename)).should == text.gsub(/^\s+/, "")
+  File.read(File.join(@user.app_path, filename)).should == text.gsub(/^\s+/, "")
 end
 
 Then /^I should see the following settings for "([^"]*)":$/ do |name, yaml|
   expected_settings = YAML.load(yaml)
-  all_settings = YAML.load(File.read(@user.dependencies_location))
+  all_settings = YAML.load(File.read(@user.dependencies_file_path))
   actual_settings = all_settings.detect { |gem| gem['name'] == name }
 
   actual_settings.should include expected_settings
@@ -77,54 +77,56 @@ end
 module DSL
   class User
     def create_nonrails_app
-      reset_sandbox!
+      reset_projects!
 
-      `cd tmp && bundle gem #{app_name}`
+      `cd #{projects_path} && bundle gem #{app_name}`
 
       Bundler.with_clean_env do
-        `cd #{app_location} && echo \"gem 'rake'\" >> Gemfile `
+        `cd #{app_path} && echo \"gem 'rake'\" >> Gemfile`
       end
 
       Bundler.with_clean_env do
-        `cd #{app_location} && echo \"gem 'license_finder', path: '../../'\" >> Gemfile`
+        `cd #{app_path} && echo \"gem 'license_finder', path: '#{root_path}'\" >> Gemfile`
       end
     end
 
     def create_rails_app
-      reset_sandbox!
+      reset_projects!
 
-      `bundle exec rails new #{app_location} --skip-bundle`
+      `bundle exec rails new #{app_path} --skip-bundle`
 
       Bundler.with_clean_env do
-        `cd #{app_location} && echo \"gem 'license_finder', path: '../../'\" >> Gemfile`
+        `cd #{app_path} && echo \"gem 'license_finder', path: '#{root_path}'\" >> Gemfile`
       end
+
+      bundle_app
     end
 
     def update_gem(name, attrs)
-      file_contents = YAML.load(File.read(dependencies_location))
+      file_contents = YAML.load(File.read(dependencies_file_path))
 
       index = file_contents.index { |gem| gem['name'] == name }
       file_contents[index].merge!(attrs)
 
-      File.open(dependencies_location, "w") do |f|
+      File.open(dependencies_file_path, "w") do |f|
         f.puts file_contents.to_yaml
       end
     end
 
     def append_to_file(filename, text)
-      File.open(File.join(app_location, filename), "a") do |f|
+      File.open(File.join(app_path, filename), "a") do |f|
         f.puts text
       end
     end
 
     def add_to_rakefile(line)
-      `echo \"#{line}\" >> #{app_location}/Rakefile`
+      `echo \"#{line}\" >> #{app_path}/Rakefile`
     end
 
     def add_dependency_to_app(gem_name, license)
-      `mkdir #{sandbox_location}/#{gem_name}`
+      `mkdir #{projects_path}/#{gem_name}`
 
-      File.open("#{sandbox_location}/#{gem_name}/#{gem_name}.gemspec", 'w') do |file|
+      File.open("#{projects_path}/#{gem_name}/#{gem_name}.gemspec", 'w') do |file|
         file.write <<-GEMSPEC
           Gem::Specification.new do |s|
             s.name = "#{gem_name}"
@@ -136,13 +138,13 @@ module DSL
         GEMSPEC
       end
 
-      Bundler.with_clean_env do
-        `cd #{app_location} && echo \"gem '#{gem_name}', path: '../#{gem_name}'\" >> Gemfile && bundle`
-      end
+      system "cd #{app_path} && echo \"gem '#{gem_name}', path: '#{File.join(projects_path, gem_name)}'\" >> Gemfile"
+
+      bundle_app
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
-      File.open("#{app_location}/config/license_finder.yml", "w") do |f|
+      File.open("#{app_path}/config/license_finder.yml", "w") do |f|
         f.write({
           'whitelist' => whitelisted_licenses
         }.to_yaml)
@@ -151,36 +153,68 @@ module DSL
 
     def execute_command(command)
       Bundler.with_clean_env do
-        @output = `cd #{app_location} && bundle exec #{command}`
+        @output = `cd #{app_path} && bundle exec #{command}`
       end
 
       @output
     end
 
-    def app_location
-      File.join(sandbox_location, app_name)
+    def app_path
+      File.join(projects_path, app_name)
     end
 
-    def config_location
-      File.join(app_location, 'config')
+    def config_path
+      File.join(app_path, 'config')
     end
 
-    def dependencies_location
-      File.join(app_location, 'dependencies.yml')
+    def dependencies_file_path
+      File.join(app_path, 'dependencies.yml')
     end
 
     private
+
+    def bundle_app
+      Bundler.with_clean_env do
+        `bundle install --gemfile=#{app_path}/Gemfile --path=#{bundle_path} #{'--local' unless bundle_remote?}`
+        mark_as_bundled if $?.success?
+      end
+    end
+
     def app_name
       "my_app"
     end
 
-    def sandbox_location
-      "tmp"
+    def sandbox_path
+      File.join(root_path, "tmp")
     end
 
-    def reset_sandbox!
-      `rm -rf #{sandbox_location}`
-      `mkdir #{sandbox_location}`
+    def projects_path
+      File.join(sandbox_path, "projects")
+    end
+
+    def bundle_path
+      File.join(sandbox_path, "bundle")
+    end
+
+    def reset_projects!
+      `rm -rf #{projects_path}`
+      `mkdir -p #{projects_path}`
+    end
+
+    def bundle_remote?
+      ENV['LF_BUNDLE_REMOTE'] == 'true' || !File.exists?(bundled_flag)
+    end
+
+    def bundled_flag
+      File.join(sandbox_path, ".bundled")
+    end
+
+    def mark_as_bundled
+      `touch #{bundled_flag}`
+    end
+
+    def root_path
+      File.realpath(File.join(File.dirname(__FILE__), "..", ".."))
     end
   end
 end

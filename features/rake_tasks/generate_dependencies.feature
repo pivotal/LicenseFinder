@@ -8,7 +8,7 @@ Feature: rake license:generate_dependencies
     And my rails app depends on a gem "gpl_gem" licensed with "GPL"
     And I whitelist the "MIT" license
 
-    When I run "bundle exec rake license:generate_dependencies"
+    When I run "rake license:generate_dependencies"
 
     Then I should see the following settings for "gpl_gem":
       """
@@ -22,13 +22,13 @@ Feature: rake license:generate_dependencies
       approved: true
       """
 
-    And I run "bundle exec rake license:action_items"
+    And I run "rake license:action_items"
 
     Then I should not see "gpl_gem" in its output
 
   Scenario: Manually adding a javascript dependency to dependencies.yml
     Given I have a rails application with license finder
-    When I run "bundle exec rake license:generate_dependencies"
+    When I run "rake license:generate_dependencies"
     And I add the following content to "dependencies.yml":
       """
       - name: "my_javascript_library"
@@ -36,7 +36,7 @@ Feature: rake license:generate_dependencies
         license: "GPL"
         approved: false
       """
-    And I run "bundle exec rake license:action_items"
+    And I run "rake license:action_items"
     Then I should see "my_javascript_library" in its output
 
     When I update the settings for "my_javascript_library" with the following content:
@@ -44,5 +44,5 @@ Feature: rake license:generate_dependencies
       approved: true
       """
 
-    And I run "bundle exec rake license:action_items"
+    And I run "rake license:action_items"
     Then I should not see "my_javascript_library" in its output
