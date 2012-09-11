@@ -1,1 +1,1 @@
-script: "LF_BUNDLE_REMOTE=true rake"
+script: "LF_BUNDLE_REMOTE=true bundle exec rake"
