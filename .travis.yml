@@ -1,0 +1,1 @@
+script: "LF_BUNDLE_REMOTE=true rake"
