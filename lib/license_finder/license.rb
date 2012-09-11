@@ -17,7 +17,7 @@ module LicenseFinder::License
     private
 
     def normalized(text)
-      text.gsub(/\s+/, ' ').gsub("'", "\"")
+      text.gsub(/\s+/, ' ').gsub(/['`"]{1,2}/, "\"")
     end
   end
 
@@ -47,6 +47,10 @@ module LicenseFinder::License
         end
         @license_text
       end
+
+      def license_regex
+        /#{Regexp.escape(license_text).gsub(/<[^<>]+>/, '(.*)')}/ if license_text
+      end
     end
 
     def initialize(text)
@@ -60,7 +64,7 @@ module LicenseFinder::License
     end
 
     def matches?
-      !!(self.class.license_text && text.index(self.class.license_text))
+      !!(text =~ self.class.license_regex if self.class.license_regex)
     end
   end
 end
