@@ -24,7 +24,7 @@ module LicenseFinder
     def dependency
       @dependency ||= Dependency.new(
         'name' => @spec.name,
-        'version' => @spec.version,
+        'version' => @spec.version.to_s,
         'license' => determine_license,
         'license_files' => license_files.map(&:full_file_path),
         'readme_files' => readme_files.map(&:full_file_path),

@@ -41,8 +41,8 @@ When /^I run "(.*?)"$/ do |command|
   @output = @user.execute_command command
 end
 
-When /^I replace that content with the following content in "([^"]*)":$/ do |filename, text|
-  @user.edit_file(filename, replace_this: @content, with: text)
+When /^I update the settings for "([^"]*)" with the following content:$/ do |gem, text|
+  @user.update_gem(gem, YAML.load(text))
 end
 
 When /^I add the following content to "([^"]*)":$/ do |filename, text|
@@ -61,10 +61,12 @@ Then /^license finder should generate a file "([^"]*)" with the following conten
   File.read(File.join(@user.app_location, filename)).should == text.gsub(/^\s+/, "")
 end
 
-Then /^license finder should generate a file "([^"]*)" that includes the following content:$/ do |filename, text|
-  @content = text
-  file = File.read(File.join(@user.app_location, filename))
-  file.should include @content
+Then /^I should see the following settings for "([^"]*)":$/ do |name, yaml|
+  expected_settings = YAML.load(yaml)
+  all_settings = YAML.load(File.read(@user.dependencies_location))
+  actual_settings = all_settings.detect { |gem| gem['name'] == name }
+
+  actual_settings.should include expected_settings
 end
 
 Then /^it should exit with status code (\d)$/ do |status|
@@ -98,16 +100,14 @@ module DSL
       end
     end
 
-    def edit_file(filename, options={})
-      replace_this = options.fetch :replace_this
-      with = options.fetch :with
+    def update_gem(name, attrs)
+      file_contents = YAML.load(File.read(dependencies_location))
 
-      file_contents = File.read(File.join(app_location, filename))
+      index = file_contents.index { |gem| gem['name'] == name }
+      file_contents[index].merge!(attrs)
 
-      file_contents[replace_this] = with
-
-      File.open(File.join(app_location, filename), "w") do |f|
-        f.puts file_contents
+      File.open(dependencies_location, "w") do |f|
+        f.puts file_contents.to_yaml
       end
     end
 
@@ -143,11 +143,9 @@ module DSL
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
       File.open("#{app_location}/config/license_finder.yml", "w") do |f|
-        f.write <<-YML
----
-whitelist:
-#{whitelisted_licenses.map {|l| "- #{l}"}.join("\n")}
-YML
+        f.write({
+          'whitelist' => whitelisted_licenses
+        }.to_yaml)
       end
     end
 
@@ -165,6 +163,10 @@ YML
 
     def config_location
       File.join(app_location, 'config')
+    end
+
+    def dependencies_location
+      File.join(app_location, 'dependencies.yml')
     end
 
     private

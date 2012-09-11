@@ -39,9 +39,12 @@ module LicenseFinder
       self.class.new(deps)
     end
 
+    def as_yaml
+      dependencies.sort_by(&:name).map(&:as_yaml)
+    end
+
     def to_yaml
-      result = "--- \n"
-      dependencies.sort_by(&:name).inject(result) { |r, d| r << d.to_yaml_entry; r }
+      as_yaml.to_yaml
     end
 
     def to_s

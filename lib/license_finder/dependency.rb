@@ -46,21 +46,36 @@ module LicenseFinder
       merged
     end
 
-    def to_yaml_entry
-      attrs = "- name: \"#{name}\"\n  version: \"#{version}\"\n  license: \"#{license}\"\n  approved: #{approved}\n  source: \"#{source}\"\n  license_url: \"#{license_url}\"\n  notes: \"#{notes}\"\n"
-      attrs << "  license_files:\n"
-      if !self.license_files.empty?
-        self.license_files.each do |lf|
-          attrs << "  - path: \"#{lf}\"\n"
+    def as_yaml
+      attrs = {
+        'name' => name,
+        'version' => version,
+        'license' => license,
+        'approved' => approved,
+        'source' => source,
+        'license_url' => license_url,
+        'notes' => notes,
+        'license_files' => nil,
+        'readme_files' => nil
+      }
+
+      unless license_files.empty?
+        attrs['license_files'] = license_files.map do |file|
+          {'path' => file}
         end
       end
-      attrs << "  readme_files:\n"
-      if !self.readme_files.empty?
-        self.readme_files.each do |rf|
-          attrs << "  - path: \"#{rf}\"\n"
+
+      unless readme_files.empty?
+        attrs['readme_files'] = readme_files.map do |file|
+          {'path' => file}
         end
       end
+
       attrs
+    end
+
+    def to_yaml
+      as_yaml.to_yaml
     end
 
     def to_s

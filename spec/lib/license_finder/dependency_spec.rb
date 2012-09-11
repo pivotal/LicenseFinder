@@ -48,8 +48,31 @@ describe LicenseFinder::Dependency do
     its(:notes) { should == "some notes" }
     its(:license_files) { should == ["/Users/pivotal/foo/lic1", "/Users/pivotal/bar/lic2"] }
     its(:readme_files) { should == ["/Users/pivotal/foo/Readme1", "/Users/pivotal/bar/Readme2"] }
-    its(:to_yaml_entry) { should == "- name: \"spec_name\"\n  version: \"2.1.3\"\n  license: \"GPL\"\n  approved: false\n  source: \"bundle\"\n  license_url: \"http://www.apache.org/licenses/LICENSE-2.0.html\"\n  notes: \"some notes\"\n  license_files:\n  - path: \"/Users/pivotal/foo/lic1\"\n  - path: \"/Users/pivotal/bar/lic2\"\n  readme_files:\n  - path: \"/Users/pivotal/foo/Readme1\"\n  - path: \"/Users/pivotal/bar/Readme2\"\n" }
     its(:source) { should == "bundle" }
+    its(:as_yaml) do
+      should == {
+        'name' => 'spec_name',
+        'version' => '2.1.3',
+        'license' => 'GPL',
+        'approved' => false,
+        'source' => 'bundle',
+        'license_url' => 'http://www.apache.org/licenses/LICENSE-2.0.html',
+        'notes' => 'some notes',
+        'license_files' => [
+          {'path' => '/Users/pivotal/foo/lic1'},
+          {'path' => '/Users/pivotal/bar/lic2'}
+        ],
+        'readme_files' => [
+          {'path' => '/Users/pivotal/foo/Readme1'},
+          {'path' => '/Users/pivotal/bar/Readme2'}
+        ]
+      }
+    end
+
+    it 'should generate yaml' do
+      yaml = YAML.load(subject.to_yaml)
+      yaml.should == subject.as_yaml
+    end
   end
 
   describe '#source' do

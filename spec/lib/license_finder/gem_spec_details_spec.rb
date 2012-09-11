@@ -12,7 +12,7 @@ describe LicenseFinder::GemSpecDetails do
       end
 
       def version
-        '2.1.3'
+        Gem::Version.new('2.1.3')
       end
 
       def full_gem_path

@@ -10,20 +10,16 @@ Feature: rake license:generate_dependencies
 
     When I run "bundle exec rake license:generate_dependencies"
 
-    Then license finder should generate a file "dependencies.yml" that includes the following content:
+    Then I should see the following settings for "gpl_gem":
       """
-      - name: "gpl_gem"
-        version: "0.0.0"
-        license: "GPL"
-        approved: false
+      version: "0.0.0"
+      license: "GPL"
+      approved: false
       """
 
-    When I replace that content with the following content in "dependencies.yml":
+    When I update the settings for "gpl_gem" with the following content:
       """
-      - name: "gpl_gem"
-        version: "0.0.0"
-        license: "GPL"
-        approved: true
+      approved: true
       """
 
     And I run "bundle exec rake license:action_items"
@@ -43,12 +39,9 @@ Feature: rake license:generate_dependencies
     And I run "bundle exec rake license:action_items"
     Then I should see "my_javascript_library" in its output
 
-    When I replace that content with the following content in "dependencies.yml":
+    When I update the settings for "my_javascript_library" with the following content:
       """
-      - name: "my_javascript_library"
-        version: "0.0.0"
-        license: "GPL"
-        approved: true
+      approved: true
       """
 
     And I run "bundle exec rake license:action_items"

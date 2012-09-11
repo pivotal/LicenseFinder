@@ -58,8 +58,13 @@ describe LicenseFinder::DependencyList do
 
   end
 
-  describe 'from yaml' do
-    subject { LicenseFinder::DependencyList.from_yaml("--- \n- name: \"gem1\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n- name: \"gem2\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n") }
+  describe '#from_yaml' do
+    subject do
+      LicenseFinder::DependencyList.from_yaml([
+        {'name' => 'gem1', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false},
+        {'name' => 'gem2', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false}
+      ].to_yaml)
+    end
 
     it "should have 2 dependencies" do
       subject.dependencies.size.should == 2
@@ -76,26 +81,61 @@ describe LicenseFinder::DependencyList do
       it { dep.name.should == 'gem2' }
       it { dep.version.should == '0.4.2' }
     end
-
   end
 
-  describe 'to_yaml' do
+  describe '#as_yaml' do
     it "should generate yaml" do
       list = LicenseFinder::DependencyList.new([
-                                                   LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false, 'source' => "bundle"),
-                                                   LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false)
-                                               ])
+        LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false, 'source' => "bundle"),
+        LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false)
+      ])
 
-      list.to_yaml.should == "--- \n- name: \"a_gem\"\n  version: \"1.2.3\"\n  license: \"MIT\"\n  approved: false\n  source: \"\"\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n- name: \"b_gem\"\n  version: \"0.4.2\"\n  license: \"MIT\"\n  approved: false\n  source: \"bundle\"\n  license_url: \"\"\n  notes: \"\"\n  license_files:\n  readme_files:\n"
+      list.as_yaml.should == [
+        {
+          'name' => 'a_gem',
+          'version' => '1.2.3',
+          'license' => 'MIT',
+          'approved' => false,
+          'source' => nil,
+          'license_url' => '',
+          'notes' => '',
+          'license_files' => nil,
+          'readme_files' => nil
+        },
+        {
+          'name' => 'b_gem',
+          'version' => '0.4.2',
+          'license' => 'MIT',
+          'approved' => false,
+          'source' => 'bundle',
+          'license_url' => '',
+          'notes' => '',
+          'license_files' => nil,
+          'readme_files' => nil
+        }
+      ]
+    end
+  end
+
+
+  describe '#to_yaml' do
+    it "should generate yaml" do
+      list = LicenseFinder::DependencyList.new([
+        LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false, 'source' => "bundle"),
+        LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false)
+      ])
+
+      yaml = YAML.load(list.to_yaml)
+      yaml.should == list.as_yaml
     end
   end
 
   describe 'round trip' do
     it 'should recreate from to_yaml' do
       list = LicenseFinder::DependencyList.new([
-                                                   LicenseFinder::Dependency.new('name' => 'gem1', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false),
-                                                   LicenseFinder::Dependency.new('name' => 'gem2', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false)
-                                               ])
+        LicenseFinder::Dependency.new('name' => 'gem1', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false),
+        LicenseFinder::Dependency.new('name' => 'gem2', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false)
+      ])
 
       new_list = LicenseFinder::DependencyList.from_yaml(list.to_yaml)
       new_list.dependencies.size.should == 2
