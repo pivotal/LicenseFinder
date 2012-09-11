@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.description = "Find and display licenses of a project's gem dependencies, so that you know what your limitations are when distributing your application."
   s.license     = "MIT"
 
+  s.add_dependency "bundler"
   s.add_development_dependency "rails", ">=3"
   %w(rspec rr rake cucumber rails pry).each do |gem|
     s.add_development_dependency gem

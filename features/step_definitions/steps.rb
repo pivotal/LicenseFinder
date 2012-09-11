@@ -10,6 +10,14 @@ Given /^I have an application with license finder$/ do
   @user.create_nonrails_app
 end
 
+
+Given /^I have an application setup with rake and license finder$/ do
+  @user = DSL::User.new
+  @user.create_nonrails_app
+  @user.add_license_finder_to_rakefile
+  @user.execute_command "rake license:init"
+end
+
 Given /^my application does not have a config directory$/ do
   FileUtils.rm_rf(@user.config_path)
   File.exists?(@user.config_path).should be_false
@@ -20,12 +28,10 @@ Then /^the config directory should exist$/ do
 end
 
 Given /^my application's rake file requires license finder$/ do
-  @user.add_to_rakefile "require 'bundler/setup'"
-  @user.add_to_rakefile "require 'license_finder'"
-  @user.add_to_rakefile "LicenseFinder.load_rake_tasks"
+  @user.add_license_finder_to_rakefile
 end
 
-Given /^my rails app depends on a gem "(.*?)" licensed with "(.*?)"$/ do |gem_name, license|
+Given /^my (?:rails )?app depends on a gem "(.*?)" licensed with "(.*?)"$/ do |gem_name, license|
   @user.add_dependency_to_app gem_name, license
 end
 
@@ -88,6 +94,14 @@ module DSL
       Bundler.with_clean_env do
         `cd #{app_path} && echo \"gem 'license_finder', path: '#{root_path}'\" >> Gemfile`
       end
+    end
+
+    def add_license_finder_to_rakefile
+      add_to_rakefile <<-RUBY
+        require 'bundler/setup'
+        require 'license_finder'
+        LicenseFinder.load_rake_tasks
+      RUBY
     end
 
     def create_rails_app
