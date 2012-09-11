@@ -1,6 +1,6 @@
 module LicenseFinder
   class GemSpecDetails
-    LICENSE_FILE_NAMES = '*{LICENSE,License,COPYING,README,Readme,ReadMe}*' # follows Dir.glob format
+    LICENSE_FILE_NAMES = '*{LICENSE,License,Licence,COPYING,README,Readme,ReadMe}*' # follows Dir.glob format
     README_FILE_NAMES = '*{README,Readme,ReadMe}*' # follows Dir.glob format
 
     def initialize(spec)

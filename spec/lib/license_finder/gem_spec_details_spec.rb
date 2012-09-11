@@ -76,7 +76,7 @@ describe LicenseFinder::GemSpecDetails do
     it "includes files with names like LICENSE, License or COPYING" do
       gem_spec = @mock_gemspec.new('spec/fixtures/license_names')
       LicenseFinder::GemSpecDetails.new(gem_spec).license_files.map(&:file_name).should =~
-        %w[COPYING.txt LICENSE Mit-License README.rdoc]
+        %w[COPYING.txt LICENSE Mit-License README.rdoc Licence.rdoc]
     end
 
     it "includes files deep in the hierarchy" do
