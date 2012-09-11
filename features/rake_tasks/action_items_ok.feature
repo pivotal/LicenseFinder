@@ -13,7 +13,7 @@ Feature: rake license:action_items:ok
     Then it should exit with status code 1
 
   Scenario: Application with no action items
-    Given I whitelist the following licenses: "MIT, other"
+    Given I whitelist the following licenses: "MIT, ruby, other"
     When I run "rake license:action_items:ok"
     Then I should see "All gems are approved for use" in its output
     And it should exit with status code 0

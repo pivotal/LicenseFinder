@@ -13,7 +13,7 @@ Feature: License Finder command line executable
   Scenario: I want my build to pass when all dependencies are approved
     Given I have a rails application with license finder
     And my rails app depends on a gem "mit_licensed_gem" licensed with "MIT"
-    And I whitelist the following licenses: "MIT, other"
+    And I whitelist the following licenses: "MIT, ruby, other"
 
     When I run "license_finder"
     Then it should exit with status code 0

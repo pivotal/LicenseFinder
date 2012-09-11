@@ -6,6 +6,6 @@ class LicenseFinder::License::Ruby < LicenseFinder::License::Base
   end
 
   def matches?
-    !!(text =~ URL_REGEX)
+    super || !!(text =~ URL_REGEX)
   end
 end
