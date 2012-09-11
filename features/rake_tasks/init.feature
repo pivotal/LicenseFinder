@@ -5,7 +5,7 @@ Feature: rake license:init
 
   Scenario: No license finder configuration
     Given I have a rails application with license finder
-    When I run "bundle exec rake license:init"
+    When I run "rake license:init"
     Then license finder should generate a file "config/license_finder.yml" with the following content:
       """
         ---
@@ -22,5 +22,5 @@ Feature: rake license:init
     Given I have an application with license finder
     And my application's rake file requires license finder
     And my application does not have a config directory
-    When I run "bundle exec rake license:init"
+    When I run "rake license:init"
     Then the config directory should exist
