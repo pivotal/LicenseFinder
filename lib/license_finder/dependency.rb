@@ -1,6 +1,7 @@
 module LicenseFinder
   class Dependency
-    attr_accessor :name, :version, :license, :approved, :license_url, :notes, :license_files, :readme_files, :source
+    attr_accessor :name, :version, :license, :approved, :license_url, :notes, :license_files,
+      :readme_files, :source, :bundler_groups
 
     def self.from_hash(attrs)
       attrs['license_files'] = attrs['license_files'].map { |lf| lf['path'] } if attrs['license_files']
@@ -19,6 +20,7 @@ module LicenseFinder
       @notes = attributes['notes'] || ''
       @license_files = attributes['license_files'] || []
       @readme_files = attributes['readme_files'] || []
+      @bundler_groups = attributes['bundler_groups'] || []
     end
 
     def merge(other)
@@ -81,6 +83,11 @@ module LicenseFinder
     def to_s
       url = ", #{license_url}" if license_url != ''
       str = "#{name} #{version}, #{license}#{url}"
+
+      if bundler_groups.size > 0
+        str << ", #{bundler_groups.join(', ')}"
+      end
+
       if license == 'other'
         str << "\n  license files:"
         unless self.license_files.empty?

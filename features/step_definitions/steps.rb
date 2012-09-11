@@ -35,6 +35,10 @@ Given /^my (?:rails )?app depends on a gem "(.*?)" licensed with "(.*?)"$/ do |g
   @user.add_dependency_to_app gem_name, license
 end
 
+Given /^my rails app depends on a gem "(.*?)" licensed with "(.*?)" in the "(.*?)" bundler groups$/ do |gem_name, license, bundler_groups|
+  @user.add_dependency_to_app gem_name, license, bundler_groups
+end
+
 Given /^I whitelist the "(.*?)" license$/ do |license|
   @user.configure_license_finder_whitelist [license]
 end
@@ -65,6 +69,10 @@ end
 
 Then /^license finder should generate a file "([^"]*)" with the following content:$/ do |filename, text|
   File.read(File.join(@user.app_path, filename)).should == text.gsub(/^\s+/, "")
+end
+
+Then /^license finder should generate a file "([^"]*)" containing:$/ do |filename, text|
+  File.read(File.join(@user.app_path, filename)).should include(text.gsub(/^\s+/, ""))
 end
 
 Then /^I should see the following settings for "([^"]*)":$/ do |name, yaml|
@@ -137,7 +145,9 @@ module DSL
       `echo \"#{line}\" >> #{app_path}/Rakefile`
     end
 
-    def add_dependency_to_app(gem_name, license)
+    def add_dependency_to_app(gem_name, license, bundler_groups = "")
+      bundler_groups = bundler_groups.split(',').map(&:strip)
+
       `mkdir #{projects_path}/#{gem_name}`
 
       File.open("#{projects_path}/#{gem_name}/#{gem_name}.gemspec", 'w') do |file|
@@ -152,7 +162,13 @@ module DSL
         GEMSPEC
       end
 
-      system "cd #{app_path} && echo \"gem '#{gem_name}', path: '#{File.join(projects_path, gem_name)}'\" >> Gemfile"
+      gemfile_bits = []
+      gemfile_bits << "gem '#{gem_name}'"
+      gemfile_bits << "path: '#{File.join(projects_path, gem_name)}'"
+      gemfile_bits << "groups: #{bundler_groups.to_s.tr('\"', '\'')}" if bundler_groups.size > 1
+      gemfile_bits << "group: '#{bundler_groups.first}'" if bundler_groups.size == 1
+
+      system "cd #{app_path} && echo \"#{gemfile_bits.join(", ")} \" >> Gemfile"
 
       bundle_app
     end

@@ -11,7 +11,8 @@ describe LicenseFinder::Dependency do
         'notes' => 'some notes',
         'license_files' => [{'path' => '/Users/pivotal/foo/lic1'}, {'path' => '/Users/pivotal/bar/lic2'}],
         'readme_files' => [{'path' => '/Users/pivotal/foo/Readme1'}, {'path' => '/Users/pivotal/bar/Readme2'}],
-        'source' => "bundle"
+        'source' => "bundle",
+        'bundler_groups' => nil
     }
   end
 
@@ -49,6 +50,8 @@ describe LicenseFinder::Dependency do
     its(:license_files) { should == ["/Users/pivotal/foo/lic1", "/Users/pivotal/bar/lic2"] }
     its(:readme_files) { should == ["/Users/pivotal/foo/Readme1", "/Users/pivotal/bar/Readme2"] }
     its(:source) { should == "bundle" }
+    its(:bundler_groups) { should == [] }
+
     its(:as_yaml) do
       should == {
         'name' => 'spec_name',

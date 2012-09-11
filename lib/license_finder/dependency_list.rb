@@ -4,14 +4,7 @@ module LicenseFinder
     attr_reader :dependencies
 
     def self.from_bundler
-      gemfile = Pathname.new("Gemfile").expand_path
-      root = gemfile.dirname
-      lockfile = root.join('Gemfile.lock')
-      definition = Bundler::Definition.build(gemfile, lockfile, nil)
-
-      groups = definition.groups - LicenseFinder.config.ignore_groups
-
-      new(definition.specs_for(groups).map { |spec| GemSpecDetails.new(spec).dependency })
+      new(BundlerDependencyQuery.new.dependencies)
     end
 
     def initialize(dependencies)

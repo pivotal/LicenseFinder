@@ -46,3 +46,21 @@ Feature: rake license:generate_dependencies
 
     And I run "rake license:action_items"
     Then I should not see "my_javascript_library" in its output
+
+  Scenario: I want to see the group that my dependencies belong to in the dependencies.txt
+    Given I have a rails application with license finder
+    And my rails app depends on a gem "mit_gem" licensed with "MIT" in the "production" bundler groups
+    When I run "rake license:generate_dependencies"
+    Then license finder should generate a file "dependencies.txt" containing:
+      """
+      mit_gem 0.0.0, MIT, production
+      """
+
+  Scenario: I have specified multiple groups for my gem
+    Given I have a rails application with license finder
+    And my rails app depends on a gem "mit_gem" licensed with "MIT" in the "production, demo, staging" bundler groups
+    When I run "rake license:generate_dependencies"
+    Then license finder should generate a file "dependencies.txt" containing:
+      """
+      mit_gem 0.0.0, MIT, production, demo, staging
+      """

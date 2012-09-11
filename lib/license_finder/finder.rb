@@ -11,10 +11,10 @@ module LicenseFinder
       File.open(LicenseFinder.config.dependencies_yaml, 'w+') do |f|
         f.puts new_list.to_yaml
       end
+
       File.open(LicenseFinder.config.dependencies_text, 'w+') do |f|
         f.puts new_list.to_s
       end
-
     end
 
     def action_items

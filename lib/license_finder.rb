@@ -39,6 +39,7 @@ module LicenseFinder
 end
 
 require 'license_finder/railtie' if defined?(Rails)
+require 'license_finder/bundler_dependency_query'
 require 'license_finder/finder'
 require 'license_finder/gem_spec_details'
 require 'license_finder/license'

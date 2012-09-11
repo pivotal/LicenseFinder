@@ -34,6 +34,7 @@ describe LicenseFinder::DependencyList do
   describe 'from Bundler' do
     subject do
       mock_bundler = Object.new
+      stub(mock_bundler).dependencies { [] }
       stub(Bundler::Definition).build {mock_bundler}
       stub(mock_bundler).groups {[]}
       stub(mock_bundler).specs_for { [@mock_gemspec.new('gem1', '1.2.3'), @mock_gemspec.new('gem2', '0.4.2')] }
@@ -55,7 +56,6 @@ describe LicenseFinder::DependencyList do
       it { dep.name.should == 'gem2' }
       it { dep.version.should == '0.4.2' }
     end
-
   end
 
   describe '#from_yaml' do
