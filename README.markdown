@@ -5,12 +5,11 @@
 With bundler it's easy for your project to depend on many gems.  This decomposition is nice, but managing licenses becomes difficult.  This tool gathers info about the licenses of the gems in your project.
 
 ## Installation
-=====
 
 Add license_finder to your Rails project's Gemfile and `bundle`:
 
 ```ruby
-gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
+gem 'license_finder'
 ```
 
 Now, initialize license finder:
@@ -19,8 +18,19 @@ Now, initialize license finder:
 $ bundle exec rake license:init
 ```
 
-This will create a `config/license_finder.yml` file that lets you configure license finder.
-This is where you should add licenses which are allowed on the project, so they will be automatically approved.
+This will create a `config/license_finder.yml` file that lets you configure license finder. It will default to:
+
+```yaml
+---
+whitelist:
+#- MIT
+#- Apache 2.0
+ignore_groups:
+#- test
+#- development
+```
+
+Update the whitelist with the licenses your business has already approved.
 
 ## Usage
 
@@ -31,8 +41,29 @@ dependencies that have non-whitelisted licenses:
 $ bundle exec rake license:action_items
 ```
 
-This will write out a dependencies.yml and dependencies.txt file in the root of your project, as well as
-output a list of unapproved dependencies to the console. It will also return a non-zero exit status if there
+On a brand new Rails project, you could expect output like:
+
+```
+Dependencies that need approval:
+
+highline 1.6.14, ruby
+json 1.7.5, ruby
+mime-types 1.19, ruby
+rails 3.2.8, other
+rdoc 3.12, other
+  license files:
+    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/LICENSE.rdoc
+    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/README.rdoc
+    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/test/README
+  readme files:
+    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/README.rdoc
+    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/test/README
+rubyzip 0.9.9, ruby
+xml-simple 1.1.1, other
+```
+
+The rake task will also write out a dependencies.yml and dependencies.txt file in the root of your project. It
+returns a non-zero exit status if there are
 unapproved dependencies. You could use this in a CI build, for example, to alert you whenever someone adds an
 unapproved dependency to the project.
 
@@ -84,87 +115,21 @@ remember any manually added licenses between successive runs.
 
 ## Usage outside Rails
 
-As a standalone script:
+First, add license finder to your project's Gemfile:
 
-```sh
-$ git clone http://github.com/pivotal/LicenseFinder.git license_finder
-$ cd /path/to/your/project
-$ /path/to/license_finder/bin/license_finder
+```ruby
+gem "license_finder"
 ```
 
-Optionally add `--with-licenses` to include the full text of the licenses in the output.
+Next, update your project's Rakefile with the license finder tasks:
 
-
-## Sample Output
-
-File: `config/license_finder.yml`:
-
-```yaml
----
-whitelist:
-- MIT
-- Apache 2.0
-ignore_groups:
-- test
-- development
+```ruby
+require 'bundler/setup'
+require 'license_finder'
+LicenseFinder.load_rake_tasks
 ```
 
-File: `dependencies.yml`:
-
-```yaml
----
-- name: "json_pure"
-  version: "1.5.1"
-  license: "other"
-  approved: false
-
-- name: "rake"
-  version: "0.8.7"
-  license: "MIT"
-  approved: true
-```
-
-File: `dependencies.txt`:
-
-    json_pure 1.5.1, other
-    rake 0.8.7, MIT
-
-File: `bin/license_finder`:
-
-```yaml
----
-json_pure 1.5.1:
-  dependency_name: json_pure
-  dependency_version: 1.5.1
-  install_path: /some/path/.rvm/gems/ruby-1.9.2-p180/gems/json_pure-1.5.1
-  license_files:
-  - file_name: COPYING
-    header_type: other
-    body_type: other
-    disclaimer_of_liability: other
-  - file_name: COPYING-json-jruby
-    header_type: other
-    body_type: other
-    disclaimer_of_liability: other
-  readme_files:
-  - file_name: README
-    mentions_license: true
-  - file_name: README-json-jruby.markdown
-    mentions_license: false
----
-rake 0.8.7:
-  dependency_name: rake
-  dependency_version: 0.8.7
-  install_path: /some/path/.rvm/gems/ruby-1.9.2-p180/gems/rake-0.8.7
-  license_files:
-  - file_name: MIT-LICENSE
-    header_type: other
-    body_type: mit
-    disclaimer_of_liability: "mit: THE AUTHORS OR COPYRIGHT HOLDERS"
-  readme_files:
-  - file_name: README
-    mentions_license: true
-```
+You can now use the `rake license:init` and `rake license:action_items` rake tasks.
 
 ## A note to gem authors / maintainers
 
@@ -178,3 +143,7 @@ end
 ```
 
 And add a `LICENSE` file to your gem that contains your license text.
+
+## License
+
+LicenseFinder is released under the terms of the MIT License. http://www.opensource.org/licenses/mit-license
