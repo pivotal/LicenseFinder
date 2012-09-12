@@ -30,7 +30,7 @@ module LicenseFinder
         'readme_files' => readme_files.map(&:full_file_path),
         'source' => 'bundle',
         'summary' => @spec.summary,
-        'description' => @spec.description,
+        'description' => @spec.description
       )
     end
 
