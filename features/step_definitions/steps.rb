@@ -35,7 +35,7 @@ Given /^my (?:rails )?app depends on a gem "(.*?)" licensed with "(.*?)"$/ do |g
   @user.add_dependency_to_app gem_name, license
 end
 
-Given /^my rails app depends on a gem "(.*?)" licensed with "(.*?)" in the "(.*?)" bundler groups$/ do |gem_name, license, bundler_groups|
+Given /^my (?:rails )?app depends on a gem "(.*?)" licensed with "(.*?)" in the "(.*?)" bundler groups$/ do |gem_name, license, bundler_groups|
   @user.add_dependency_to_app gem_name, license, bundler_groups
 end
 
@@ -57,6 +57,11 @@ end
 
 When /^I add the following content to "([^"]*)":$/ do |filename, text|
   @user.append_to_file(filename, @content = text)
+end
+
+When /^my application depends on a gem "([^"]*)" with:$/ do |gem_name, gem_info|
+  info = gem_info.hashes.first
+  @user.add_dependency_to_app(gem_name, info["license"], "", info["summary"], info["description"])
 end
 
 Then /^I should see "(.*?)" in its output$/ do |gem_name|
@@ -134,8 +139,8 @@ module DSL
       end
     end
 
-    def add_dependency_to_app(gem_name, license, bundler_groups = "")
-      bundler_groups = bundler_groups.split(',').map(&:strip)
+    def add_dependency_to_app(gem_name, license, bundler_groups = "", summary="", description="")
+      bundler_groups = bundler_groups.split(',').map(&:strip) 
 
       gem_dir = File.join(projects_path, gem_name)
 
@@ -146,8 +151,9 @@ module DSL
             s.name = "#{gem_name}"
             s.version = "0.0.0"
             s.author = "Cucumber"
-            s.summary = "Gem for testing License Finder"
+            s.summary = "#{summary}"
             s.license = "#{license}"
+            s.description = "#{description}"
           end
         GEMSPEC
       end

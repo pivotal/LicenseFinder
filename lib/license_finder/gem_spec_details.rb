@@ -28,7 +28,9 @@ module LicenseFinder
         'license' => determine_license,
         'license_files' => license_files.map(&:full_file_path),
         'readme_files' => readme_files.map(&:full_file_path),
-        'source' => 'bundle'
+        'source' => 'bundle',
+        'summary' => @spec.summary,
+        'description' => @spec.description,
       )
     end
 

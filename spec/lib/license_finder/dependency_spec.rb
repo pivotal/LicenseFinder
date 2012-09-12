@@ -78,6 +78,64 @@ describe LicenseFinder::Dependency do
     end
   end
 
+  describe '#to_s' do
+    let(:gem) { LicenseFinder::Dependency.new(
+      'name' => 'test_gem',
+      'version' => '1.0',
+      'summary' => 'summary foo',
+      'description' => 'description bar',
+      'license' => license,
+      'license_url' => license_url,
+      'license_files' => license_files,
+      'readme_files' => readme_files,
+      'bundler_groups' => bundler_groups
+    )}
+    let(:bundler_groups) { [] }
+    let(:license_files) { [] }
+    let(:readme_files) { [] }
+    let(:license_url) { "" }
+    let(:license) { "MIT" }
+
+    it 'should generate text with all the gem attributes' do
+      gem.to_s.should == "test_gem 1.0, MIT, summary foo, description bar"
+    end
+
+    context "when license is 'other'" do
+      context "when the gem includes license files and readme files" do
+        let(:license_files) { ['somefile'] }
+        let(:readme_files) { ['somereadme'] }
+        let(:license) { 'other' }
+
+        it "should generate text with the gem attributes, license files, and readme files" do
+          gem.to_s.should == (<<-STRING
+test_gem 1.0, other, summary foo, description bar
+  license files:
+    somefile
+  readme files:
+    somereadme
+          STRING
+        ).strip
+        end
+      end
+    end
+
+    context "when the gem has a license url" do
+      let(:license_url) { "www.foobar.com"}
+
+      it "should include the license_url" do
+        gem.to_s.should == "test_gem 1.0, MIT, www.foobar.com, summary foo, description bar"
+      end
+    end
+
+    context "when the gem has any bundler groups" do
+      let(:bundler_groups) { ["staging", "production"] }
+
+      it "should include the bundler groups" do
+        gem.to_s.should == "test_gem 1.0, MIT, summary foo, description bar, staging, production"
+      end
+    end
+  end
+
   describe '#source' do
     it "should default to nil" do
       LicenseFinder::Dependency.new.source.should be_nil

@@ -28,6 +28,14 @@ describe LicenseFinder::DependencyList do
       def license
         nil
       end
+
+      def summary
+        "summary"
+      end
+
+      def description
+        "description"
+      end
     end
   end
 
@@ -203,7 +211,7 @@ describe LicenseFinder::DependencyList do
 
       list = LicenseFinder::DependencyList.new([gem1, gem2])
 
-      list.to_s.should == "a_gem 0.9, other, http://foo.com/LICENSE\n  license files:\n  readme files:\nb_gem 1.2.3, MIT"
+      list.to_s.should == "a_gem 0.9, other, http://foo.com/LICENSE, , \n  license files:\n  readme files:\nb_gem 1.2.3, MIT, , "
     end
   end
 
@@ -215,7 +223,7 @@ describe LicenseFinder::DependencyList do
 
       list = LicenseFinder::DependencyList.new([gem1, gem2, gem3])
 
-      list.action_items.should == "a_gem 0.9, other\n  license files:\n  readme files:\nc_gem 0.2, other\n  license files:\n  readme files:"
+      list.action_items.should == "a_gem 0.9, other, , \n  license files:\n  readme files:\nc_gem 0.2, other, , \n  license files:\n  readme files:"
     end
   end
 end

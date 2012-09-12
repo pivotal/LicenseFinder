@@ -21,6 +21,8 @@ module LicenseFinder
       @license_files = attributes['license_files'] || []
       @readme_files = attributes['readme_files'] || []
       @bundler_groups = attributes['bundler_groups'] || []
+      @summary = attributes['summary']
+      @description = attributes['description']
     end
 
     def merge(other)
@@ -82,7 +84,7 @@ module LicenseFinder
 
     def to_s
       url = ", #{license_url}" if license_url != ''
-      str = "#{name} #{version}, #{license}#{url}"
+      str = "#{name} #{version}, #{license}#{url}, #{summary}, #{description}"
 
       if bundler_groups.size > 0
         str << ", #{bundler_groups.join(', ')}"
@@ -105,6 +107,10 @@ module LicenseFinder
 
       str
     end
+
+    private
+    attr_reader :summary, :description
+
   end
 end
 

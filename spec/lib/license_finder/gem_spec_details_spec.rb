@@ -28,6 +28,14 @@ describe LicenseFinder::GemSpecDetails do
       def license
         nil
       end
+
+      def summary
+        "summary"
+      end
+
+      def description
+        "description"
+      end
     end
   end
 
@@ -115,37 +123,38 @@ describe LicenseFinder::GemSpecDetails do
   end
 
   describe '#dependency' do
-    describe 'with a known license' do
-      subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/mit_licensed_gem')).dependency }
+    let(:fixture) { 'spec/fixtures/mit_licensed_gem' }
+    subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new(fixture)).dependency }
 
+    its(:name) { should == 'spec_name' }
+    its(:version) { should == '2.1.3' }
+    its(:summary) { should == 'summary' }
+    its(:source) { should == 'bundle' }
+    its(:description) { should == 'description' }
+
+    describe 'with a known license' do
       before do
         any_instance_of(LicenseFinder::PossibleLicenseFile, :license => 'Detected License')
       end
 
-      its(:name) { should == 'spec_name' }
-      its(:version) { should == '2.1.3' }
       its(:license) { should == 'Detected License' }
-      its(:source) { should == 'bundle' }
     end
 
     describe 'with an unknown license' do
-      subject { LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/other_licensed_gem')).dependency }
+      let(:fixture) { 'spec/fixtures/other_licensed_gem' }
 
       before do
         any_instance_of(LicenseFinder::PossibleLicenseFile, :license => nil)
       end
 
-      its(:name) { should == 'spec_name' }
-      its(:version) { should == '2.1.3' }
       its(:license) { should == 'other' }
-      its(:source) { should == 'bundle' }
     end
 
     describe 'with UTF8 file License' do
+      let(:fixture) { 'spec/fixtures/utf8_gem' }
+
       it "handles non UTF8 encodings" do
-        expect do
-          LicenseFinder::GemSpecDetails.new(@mock_gemspec.new('spec/fixtures/utf8_gem')).dependency
-        end.not_to raise_error ArgumentError, "invalid byte sequence in UTF-8"
+        expect { subject }.not_to raise_error ArgumentError, "invalid byte sequence in UTF-8"
       end
     end
   end
