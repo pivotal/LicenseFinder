@@ -50,6 +50,23 @@ Similarly, `bundle exec rake license:action_items:ok` will return a non-zero exi
 You could use this in a CI build, for example, to alert you whenever someone adds an unapproved dependency to the project.
 
 
+## Manually managing Javascript Dependencies
+
+License Finder currently has no method for automatically detecting third-party javascript libraries in your application
+and alerting you to license violations. However, you can manually add javascript dependencies to your `dependencies.yml`
+file:
+
+```yaml
+- name: "my_javascript_library"
+  version: "0.0.0"
+  license: "GPL"
+  approved: false
+```
+
+You could then update the "approved" attribute to true once you have signoff from your business. License Finder will
+remember any manually added licenses between successive runs. 
+
+
 ## Usage outside Rails
 
 As a standalone script:
