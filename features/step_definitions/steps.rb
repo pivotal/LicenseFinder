@@ -32,11 +32,11 @@ Given /^my application's rake file requires license finder$/ do
 end
 
 Given /^my (?:rails )?app depends on a gem "(.*?)" licensed with "(.*?)"$/ do |gem_name, license|
-  @user.add_dependency_to_app gem_name, license
+  @user.add_dependency_to_app gem_name, :license => license
 end
 
 Given /^my (?:rails )?app depends on a gem "(.*?)" licensed with "(.*?)" in the "(.*?)" bundler groups$/ do |gem_name, license, bundler_groups|
-  @user.add_dependency_to_app gem_name, license, bundler_groups
+  @user.add_dependency_to_app gem_name, :license => license, :bundler_groups => bundler_groups
 end
 
 Given /^I whitelist the "(.*?)" license$/ do |license|
@@ -61,7 +61,11 @@ end
 
 When /^my application depends on a gem "([^"]*)" with:$/ do |gem_name, gem_info|
   info = gem_info.hashes.first
-  @user.add_dependency_to_app(gem_name, info["license"], "", info["summary"], info["description"])
+  @user.add_dependency_to_app(gem_name,
+    :license      => info["license"],
+    :summary      => info["summary"],
+    :description  => info["description"]
+  )
 end
 
 Then /^I should see "(.*?)" in its output$/ do |gem_name|
@@ -139,8 +143,11 @@ module DSL
       end
     end
 
-    def add_dependency_to_app(gem_name, license, bundler_groups = "", summary="", description="")
-      bundler_groups = bundler_groups.split(',').map(&:strip) 
+    def add_dependency_to_app(gem_name, options={})
+      license = options.fetch(:license)
+      summary = options.fetch(:summary, "")
+      description = options.fetch(:description, "")
+      bundler_groups = options.fetch(:bundler_groups, "").split(',').map(&:strip)
 
       gem_dir = File.join(projects_path, gem_name)
 
