@@ -22,74 +22,89 @@ describe LicenseFinder::GemSpecDetails do
   its(:install_path) { should == gemspec.full_gem_path }
 
   describe "#determine_license" do
+    subject do
+      details = LicenseFinder::GemSpecDetails.new(gemspec)
+      stub(details).license_files { [license_file] }
+      details
+    end
+
+    let(:license_file) { LicenseFinder::PossibleLicenseFile.new('gem', 'gem/license/path') }
+
     it "returns the license from the gemspec if provided" do
       stub(gemspec).license { "Some License" }
-      LicenseFinder::GemSpecDetails.new(gemspec).determine_license.should == "Some License"
+
+      subject.determine_license.should == "Some License"
     end
 
     it "returns the matched license if detected" do
-      mock_license_file = LicenseFinder::PossibleLicenseFile.new('gem', 'gem/license/path')
-      stub(mock_license_file).license { LicenseFinder::License::Ruby.pretty_name }
+      stub(license_file).license { "Detected License" }
 
-      gemspec_details = LicenseFinder::GemSpecDetails.new(gemspec)
-      stub(gemspec_details).license_files { [mock_license_file] }
-
-      gemspec_details.determine_license.should == LicenseFinder::License::Ruby.pretty_name
+      subject.determine_license.should == "Detected License"
     end
 
     it "returns 'other' otherwise" do
-      mock_license_file = LicenseFinder::PossibleLicenseFile.new('gem', 'gem/license/path')
-      stub(mock_license_file).license { nil }
+      stub(license_file).license { nil }
 
-      gemspec_details = LicenseFinder::GemSpecDetails.new(gemspec)
-      stub(gemspec_details).license_files { [mock_license_file] }
-
-      gemspec_details.determine_license.should == "other"
+      subject.determine_license.should == "other"
     end
   end
 
   describe "#license_files" do
     it "is empty if there aren't any license files" do
-      LicenseFinder::GemSpecDetails.new(gemspec).license_files.should == []
+      subject.license_files.should == []
     end
 
     it "includes files with names like LICENSE, License or COPYING" do
       stub(gemspec).full_gem_path { fixture_path('license_names') }
-      LicenseFinder::GemSpecDetails.new(gemspec).license_files.map(&:file_name).should =~
+
+      subject.license_files.map(&:file_name).should =~
         %w[COPYING.txt LICENSE Mit-License README.rdoc Licence.rdoc]
     end
 
     it "includes files deep in the hierarchy" do
       stub(gemspec).full_gem_path { fixture_path('nested_gem') }
-      LicenseFinder::GemSpecDetails.new(gemspec).license_files.map { |f| [f.file_name, f.file_path] }.should =~
-        [['LICENSE', 'vendor/LICENSE']]
+
+      subject.license_files.map { |f| [f.file_name, f.file_path] }.should =~ [
+        %w[LICENSE vendor/LICENSE]
+      ]
     end
 
     it "includes both files nested inside LICENSE directory and top level files" do
       stub(gemspec).full_gem_path { fixture_path('license_directory') }
-      found_license_files = LicenseFinder::GemSpecDetails.new(gemspec).license_files
-      found_license_files.map(&:file_name).should =~
-        %w[BSD-2-Clause.txt GPL-2.0.txt MIT.txt RUBY.txt COPYING LICENSE]
-      found_license_files.map(&:file_path).should =~
-        %w[LICENSE/BSD-2-Clause.txt LICENSE/GPL-2.0.txt LICENSE/MIT.txt  LICENSE/RUBY.txt COPYING LICENSE/LICENSE]
+      found_license_files = subject.license_files
+
+      found_license_files.map { |f| [f.file_name, f.file_path] }.should =~ [
+        %w[BSD-2-Clause.txt LICENSE/BSD-2-Clause.txt],
+        %w[GPL-2.0.txt LICENSE/GPL-2.0.txt],
+        %w[MIT.txt LICENSE/MIT.txt],
+        %w[RUBY.txt LICENSE/RUBY.txt],
+        %w[COPYING COPYING],
+        %w[LICENSE LICENSE/LICENSE]
+      ]
     end
   end
 
   describe "#readme_files" do
     it "is empty if there aren't any readme files" do
-      LicenseFinder::GemSpecDetails.new(gemspec).readme_files.should == []
+      subject.readme_files.should == []
     end
 
     it "includes files with names like README, Readme or COPYING" do
       stub(gemspec).full_gem_path { fixture_path('readme') }
-      LicenseFinder::GemSpecDetails.new(gemspec).readme_files.map(&:file_name).should =~
-        %w[Project\ ReadMe README Readme.markdown]
+
+      subject.readme_files.map(&:file_name).should =~ [
+        "Project ReadMe",
+        "README",
+        "Readme.markdown"
+      ]
     end
 
     it "includes files deep in the hierarchy" do
       stub(gemspec).full_gem_path { fixture_path('nested_readme') }
-      LicenseFinder::GemSpecDetails.new(gemspec).readme_files.map { |f| [f.file_name, f.file_path] }.should =~
-        [['README', 'vendor/README']]
+
+      subject.readme_files.map { |f| [f.file_name, f.file_path] }.should =~ [
+        %w[README vendor/README]
+      ]
     end
   end
 
@@ -105,9 +120,6 @@ describe LicenseFinder::GemSpecDetails do
     describe 'with a known license' do
       before do
         stub(gemspec).full_gem_path { fixture_path('mit_licensed_gem') }
-      end
-
-      before do
         any_instance_of(LicenseFinder::PossibleLicenseFile, :license => 'Detected License')
       end
 
@@ -117,9 +129,6 @@ describe LicenseFinder::GemSpecDetails do
     describe 'with an unknown license' do
       before do
         stub(gemspec).full_gem_path { fixture_path('other_licensed_gem') }
-      end
-
-      before do
         any_instance_of(LicenseFinder::PossibleLicenseFile, :license => nil)
       end
 

@@ -30,18 +30,12 @@ describe LicenseFinder::DependencyList do
       subject.dependencies.size.should == 2
     end
 
-    describe "first" do
-      let(:dep) { subject.dependencies.first }
+    it 'should maintain the incoming order' do
+      subject.dependencies[0].name.should == 'gem1'
+      subject.dependencies[0].version.should == '1.2.3'
 
-      it { dep.name.should == 'gem1' }
-      it { dep.version.should == '1.2.3' }
-    end
-
-    describe "second" do
-      let(:dep) { subject.dependencies[1] }
-
-      it { dep.name.should == 'gem2' }
-      it { dep.version.should == '0.4.2' }
+      subject.dependencies[1].name.should == 'gem2'
+      subject.dependencies[1].version.should == '0.4.2'
     end
   end
 
@@ -53,22 +47,16 @@ describe LicenseFinder::DependencyList do
       ].to_yaml)
     end
 
-    it "should have 2 dependencies" do
+    it 'should have 2 dependencies' do
       subject.dependencies.size.should == 2
     end
 
-    describe "first" do
-      let(:dep) { subject.dependencies.first }
+    it 'should maintain the incoming order' do
+      subject.dependencies[0].name.should == 'gem1'
+      subject.dependencies[0].version.should == '1.2.3'
 
-      it { dep.name.should == 'gem1' }
-      it { dep.version.should == '1.2.3' }
-    end
-
-    describe "second" do
-      let(:dep) { subject.dependencies[1] }
-
-      it { dep.name.should == 'gem2' }
-      it { dep.version.should == '0.4.2' }
+      subject.dependencies[1].name.should == 'gem2'
+      subject.dependencies[1].version.should == '0.4.2'
     end
   end
 
@@ -105,7 +93,6 @@ describe LicenseFinder::DependencyList do
       ]
     end
   end
-
 
   describe '#to_yaml' do
     it "should generate yaml" do
@@ -208,5 +195,3 @@ describe LicenseFinder::DependencyList do
     end
   end
 end
-
-
