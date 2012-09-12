@@ -24,30 +24,45 @@ This is where you should add licenses which are allowed on the project, so they 
 
 ## Usage
 
-Once you've whitelisted licenses, you can then tell license finder to analyze your Gemfile:
-
-```sh
-$ bundle exec rake license:generate_dependencies
-```
-
-This will write out a dependencies.yml and dependencies.txt file in the root of your project.
-
-It will also merge in an existing dependencies.yml file, if one exists (i.e., you've previously run this command
-and then edited the resulting file).
-
-### Action Items
-
-Once you've generated a `dependencies.yml` file via the `rake license:generate_dependencies` file, you can tell
-License Finder to output a list of dependencies that have non-whitelisted licenses:
+Once you've whitelisted licenses, you can then tell license finder to analyze your Gemfile and generate a list of
+dependencies that have non-whitelisted licenses:
 
 ```sh
 $ bundle exec rake license:action_items
 ```
 
-This will output a list of unapproved dependencies to the console.
+This will write out a dependencies.yml and dependencies.txt file in the root of your project, as well as
+output a list of unapproved dependencies to the console. It will also return a non-zero exit status if there
+unapproved dependencies. You could use this in a CI build, for example, to alert you whenever someone adds an
+unapproved dependency to the project.
 
-Similarly, `bundle exec rake license:action_items:ok` will return a non-zero exit status if there unapproved dependencies.
-You could use this in a CI build, for example, to alert you whenever someone adds an unapproved dependency to the project.
+It will also merge in an existing dependencies.yml file, if one exists (i.e., you've previously run this command
+and then edited the resulting file).
+
+### Manually approving dependencies
+
+Whenever you have a dependency that falls outside of your whitelist, `rake license:action_items` will tell you.
+If your business decides that this is an acceptable risk, you can manually approve the dependency by finding its
+section in the `dependencies.yml` file and setting its `approved` attribute to true. For example, lets assume you've only
+whitelisted the "MIT" license in your `config/license_finder.yml`. You then add the 'awesome_gpl_gem' to your Gemfile,
+which we'll assume is licensed with the `GPL` license. You then run `rake license_finder:action_items` and see
+the gem listed in the output:
+
+```txt
+awesome_gpl_gem 1.0.0, GPL
+```
+
+Your business tells you that in this case, it's acceptable to use this gem. You should now update your `dependencies.yml`
+file, setting the `approved` attribute to `true` for the `awesome_gpl_gem` section:
+
+```yaml
+- name: awesome_gpl_gem
+  version: 1.0.0
+  license: GPL
+  approved: true
+```
+
+If you rerun `rake license:action_items`, you should no longer see `awesome_gpl_gem` in the output.
 
 
 ## Manually managing Javascript Dependencies
@@ -64,7 +79,7 @@ file:
 ```
 
 You could then update the "approved" attribute to true once you have signoff from your business. License Finder will
-remember any manually added licenses between successive runs. 
+remember any manually added licenses between successive runs.
 
 
 ## Usage outside Rails
