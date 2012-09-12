@@ -3,16 +3,16 @@ require 'spec_helper'
 describe LicenseFinder::Dependency do
   let(:attributes) do
     {
-        'name' => "spec_name",
-        'version' => "2.1.3",
-        'license' => "GPL",
-        'approved' => false,
-        'license_url' => 'http://www.apache.org/licenses/LICENSE-2.0.html',
-        'notes' => 'some notes',
-        'license_files' => [{'path' => '/Users/pivotal/foo/lic1'}, {'path' => '/Users/pivotal/bar/lic2'}],
-        'readme_files' => [{'path' => '/Users/pivotal/foo/Readme1'}, {'path' => '/Users/pivotal/bar/Readme2'}],
-        'source' => "bundle",
-        'bundler_groups' => nil
+      'name' => "spec_name",
+      'version' => "2.1.3",
+      'license' => "GPL",
+      'approved' => false,
+      'license_url' => 'http://www.apache.org/licenses/LICENSE-2.0.html',
+      'notes' => 'some notes',
+      'license_files' => [{'path' => '/Users/pivotal/foo/lic1'}, {'path' => '/Users/pivotal/bar/lic2'}],
+      'readme_files' => [{'path' => '/Users/pivotal/foo/Readme1'}, {'path' => '/Users/pivotal/bar/Readme2'}],
+      'source' => "bundle",
+      'bundler_groups' => nil
     }
   end
 
@@ -36,7 +36,6 @@ describe LicenseFinder::Dependency do
       dependency.approved.should == true
     end
   end
-
 
   describe '.from_hash' do
     subject { LicenseFinder::Dependency.from_hash(attributes) }

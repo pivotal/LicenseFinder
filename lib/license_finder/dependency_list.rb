@@ -1,19 +1,18 @@
 module LicenseFinder
   class DependencyList
-
     attr_reader :dependencies
 
     def self.from_bundler
-      new(BundlerDependencyQuery.new.dependencies)
+      new(Bundle.new.gems.map(&:to_dependency))
+    end
+
+    def self.from_yaml(yaml)
+      deps = YAML.load(yaml)
+      new(deps.map { |attrs| Dependency.from_hash(attrs) })
     end
 
     def initialize(dependencies)
       @dependencies = dependencies
-    end
-
-    def self.from_yaml(yml)
-      deps = YAML.load(yml)
-      new(deps.map { |dhash| Dependency.from_hash(dhash) })
     end
 
     def merge(new_list)
@@ -55,4 +54,3 @@ module LicenseFinder
     end
   end
 end
-

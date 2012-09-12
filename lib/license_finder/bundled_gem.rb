@@ -1,34 +1,34 @@
 module LicenseFinder
   class BundledGem
-    LICENSE_FILE_NAMES = '*{LICENSE,License,Licence,COPYING,README,Readme,ReadMe}*' # follows Dir.glob format
-    README_FILE_NAMES = '*{README,Readme,ReadMe}*' # follows Dir.glob format
+    LICENSE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
+    README_FILE_NAMES = %w(README Readme ReadMe)
 
-    def initialize(spec)
+    def initialize(spec, bundler_dependency = nil)
       @spec = spec
+      @bundler_dependency = bundler_dependency
     end
-
-    attr_reader :spec
 
     def name
       "#{dependency_name} #{dependency_version}"
     end
 
     def dependency_name
-      spec.name
+      @spec.name
     end
 
     def dependency_version
-      spec.version.to_s
+      @spec.version.to_s
     end
 
-    def dependency
-      @dependency ||= Dependency.new(
+    def to_dependency
+      @dependency ||= LicenseFinder::Dependency.new(
         'name' => @spec.name,
         'version' => @spec.version.to_s,
         'license' => determine_license,
         'license_files' => license_files.map(&:full_file_path),
         'readme_files' => readme_files.map(&:full_file_path),
         'source' => 'bundle',
+        'bundler_groups' => (@bundler_dependency.groups if @bundler_dependency),
         'summary' => @spec.summary,
         'description' => @spec.description
       )
@@ -41,7 +41,7 @@ module LicenseFinder
     end
 
     def license_files
-      paths_with_license_names = Dir.glob(File.join(install_path, '**', LICENSE_FILE_NAMES))
+      paths_with_license_names = find_matching_files(LICENSE_FILE_NAMES)
       paths_for_license_files = paths_with_license_names.map do |path|
         File.directory?(path) ? paths_for_files_in_license_directory(path) : path
       end.flatten.uniq
@@ -49,13 +49,13 @@ module LicenseFinder
     end
 
     def readme_files
-      Dir.glob(File.join(install_path, '**', README_FILE_NAMES)).map do |path|
-        get_file_for_path path
+      find_matching_files(README_FILE_NAMES).map do |path|
+        get_file_for_path(path)
       end
     end
 
     def install_path
-      spec.full_gem_path
+      @spec.full_gem_path
     end
 
     def sort_order
@@ -63,6 +63,10 @@ module LicenseFinder
     end
 
     private
+
+    def find_matching_files(names)
+      Dir.glob(File.join(install_path, '**', "*{#{names.join(',')}}*"))
+    end
 
     def get_file_for_path(path)
       PossibleLicenseFile.new(install_path, path)

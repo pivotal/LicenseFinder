@@ -108,8 +108,8 @@ describe LicenseFinder::BundledGem do
     end
   end
 
-  describe '#dependency' do
-    subject { LicenseFinder::BundledGem.new(gemspec).dependency }
+  describe '#to_dependency' do
+    subject { LicenseFinder::BundledGem.new(gemspec).to_dependency }
 
     its(:name) { should == 'spec_name' }
     its(:version) { should == '2.1.3' }
