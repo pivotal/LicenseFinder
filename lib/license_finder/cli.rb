@@ -1,4 +1,3 @@
-
 module LicenseFinder
   class CLI
     def check_for_action_items

@@ -9,7 +9,6 @@ Feature: rake license:generate_dependencies
     And I whitelist the "MIT" license
 
     When I run "rake license:generate_dependencies"
-
     Then I should see the following settings for "gpl_gem":
       """
       version: "0.0.0"
@@ -21,9 +20,7 @@ Feature: rake license:generate_dependencies
       """
       approved: true
       """
-
     And I run "rake license:action_items"
-
     Then I should not see "gpl_gem" in its output
 
   Scenario: Manually adding a javascript dependency to dependencies.yml
@@ -43,7 +40,6 @@ Feature: rake license:generate_dependencies
       """
       approved: true
       """
-
     And I run "rake license:action_items"
     Then I should not see "my_javascript_library" in its output
 

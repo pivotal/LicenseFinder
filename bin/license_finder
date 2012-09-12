@@ -2,4 +2,3 @@
 
 require 'license_finder'
 LicenseFinder::CLI.new.check_for_action_items
-
