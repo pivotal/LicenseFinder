@@ -205,8 +205,7 @@ module DSL
 
     def bundle_app
       Bundler.with_clean_env do
-        `bundle install --gemfile=#{app_path}/Gemfile --path=#{bundle_path} #{'--local' unless bundle_remote?}`
-        mark_as_bundled if $?.success?
+        `bundle install --gemfile=#{app_path}/Gemfile --path=#{bundle_path}`
       end
     end
 
@@ -229,18 +228,6 @@ module DSL
     def reset_projects!
       `rm -rf #{projects_path}`
       `mkdir -p #{projects_path}`
-    end
-
-    def bundle_remote?
-      ENV['LF_BUNDLE_REMOTE'] == 'true' || !File.exists?(bundled_flag)
-    end
-
-    def bundled_flag
-      File.join(sandbox_path, ".bundled")
-    end
-
-    def mark_as_bundled
-      `touch #{bundled_flag}`
     end
 
     def root_path
