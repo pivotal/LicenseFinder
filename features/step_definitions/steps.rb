@@ -96,11 +96,11 @@ module DSL
       `cd #{projects_path} && bundle gem #{app_name}`
 
       Bundler.with_clean_env do
-        `cd #{app_path} && echo \"gem 'rake'\" >> Gemfile`
+        `cd #{app_path} && echo "gem 'rake'" >> Gemfile`
       end
 
       Bundler.with_clean_env do
-        `cd #{app_path} && echo \"gem 'license_finder', path: '#{root_path}'\" >> Gemfile`
+        `cd #{app_path} && echo "gem 'license_finder', path: '#{root_path}'" >> Gemfile`
       end
     end
 
@@ -118,7 +118,7 @@ module DSL
       `bundle exec rails new #{app_path} --skip-bundle`
 
       Bundler.with_clean_env do
-        `cd #{app_path} && echo \"gem 'license_finder', path: '#{root_path}'\" >> Gemfile`
+        `cd #{app_path} && echo "gem 'license_finder', path: '#{root_path}'" >> Gemfile`
       end
 
       bundle_app
@@ -142,7 +142,7 @@ module DSL
     end
 
     def add_to_rakefile(line)
-      `echo \"#{line}\" >> #{app_path}/Rakefile`
+      `echo "#{line}" >> #{app_path}/Rakefile`
     end
 
     def add_dependency_to_app(gem_name, license, bundler_groups = "")
