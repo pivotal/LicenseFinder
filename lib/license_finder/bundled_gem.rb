@@ -1,5 +1,5 @@
 module LicenseFinder
-  class GemSpecDetails
+  class BundledGem
     LICENSE_FILE_NAMES = '*{LICENSE,License,Licence,COPYING,README,Readme,ReadMe}*' # follows Dir.glob format
     README_FILE_NAMES = '*{README,Readme,ReadMe}*' # follows Dir.glob format
 

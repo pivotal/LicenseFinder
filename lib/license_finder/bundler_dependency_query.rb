@@ -20,7 +20,7 @@ module LicenseFinder
     end
 
     def define_a_new_dependency_from_a_gemspec(gemspec)
-      GemSpecDetails.new(gemspec).dependency
+      BundledGem.new(gemspec).dependency
     end
 
     def find_bundlers_representation_of_a_dependency_by_name(name)

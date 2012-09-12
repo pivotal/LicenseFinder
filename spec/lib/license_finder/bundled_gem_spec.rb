@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe LicenseFinder::GemSpecDetails do
-  subject { LicenseFinder::GemSpecDetails.new(gemspec) }
+describe LicenseFinder::BundledGem do
+  subject { LicenseFinder::BundledGem.new(gemspec) }
 
   let(:gemspec) do
     Gem::Specification.new do |s|
@@ -23,7 +23,7 @@ describe LicenseFinder::GemSpecDetails do
 
   describe "#determine_license" do
     subject do
-      details = LicenseFinder::GemSpecDetails.new(gemspec)
+      details = LicenseFinder::BundledGem.new(gemspec)
       stub(details).license_files { [license_file] }
       details
     end
@@ -109,7 +109,7 @@ describe LicenseFinder::GemSpecDetails do
   end
 
   describe '#dependency' do
-    subject { LicenseFinder::GemSpecDetails.new(gemspec).dependency }
+    subject { LicenseFinder::BundledGem.new(gemspec).dependency }
 
     its(:name) { should == 'spec_name' }
     its(:version) { should == '2.1.3' }

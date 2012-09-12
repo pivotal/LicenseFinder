@@ -2,7 +2,7 @@ module LicenseFinder
   class Finder
     def from_bundler
       require 'bundler'
-      Bundler.load.specs.map { |spec| GemSpecDetails.new(spec) }.sort_by &:sort_order
+      Bundler.load.specs.map { |spec| BundledGem.new(spec) }.sort_by &:sort_order
     end
 
     def write_files
