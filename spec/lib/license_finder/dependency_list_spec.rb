@@ -1,51 +1,28 @@
 require 'spec_helper'
 
 describe LicenseFinder::DependencyList do
+  def build_gemspec(name, version)
+    Gem::Specification.new do |s|
+      s.name = name
+      s.version = version
+      s.summary = 'summary'
+      s.description = 'description'
+    end
+  end
+
   before do
     config = stub(LicenseFinder).config.stub!
     config.whitelist { [] }
     config.ignore_groups { [] }
-
-    @mock_gemspec = Class.new do
-      def initialize(name = nil, version = nil, path = nil)
-        @name = name
-        @version = version
-        @path = path
-      end
-
-      def name
-        @name || 'spec_name'
-      end
-
-      def version
-        @version || '2.1.3'
-      end
-
-      def full_gem_path
-        @path || 'install/path'
-      end
-
-      def license
-        nil
-      end
-
-      def summary
-        "summary"
-      end
-
-      def description
-        "description"
-      end
-    end
   end
 
-  describe 'from Bundler' do
+  describe '.from_bundler' do
     subject do
-      mock_bundler = Object.new
-      stub(mock_bundler).dependencies { [] }
-      stub(Bundler::Definition).build {mock_bundler}
-      stub(mock_bundler).groups {[]}
-      stub(mock_bundler).specs_for { [@mock_gemspec.new('gem1', '1.2.3'), @mock_gemspec.new('gem2', '0.4.2')] }
+      bundle = stub(Bundler::Definition).build.stub!
+      bundle.dependencies { [] }
+      bundle.groups { [] }
+      bundle.specs_for { [build_gemspec('gem1', '1.2.3'), build_gemspec('gem2', '0.4.2')] }
+
       LicenseFinder::DependencyList.from_bundler
     end
 
@@ -55,12 +32,14 @@ describe LicenseFinder::DependencyList do
 
     describe "first" do
       let(:dep) { subject.dependencies.first }
+
       it { dep.name.should == 'gem1' }
       it { dep.version.should == '1.2.3' }
     end
 
     describe "second" do
       let(:dep) { subject.dependencies[1] }
+
       it { dep.name.should == 'gem2' }
       it { dep.version.should == '0.4.2' }
     end
@@ -80,12 +59,14 @@ describe LicenseFinder::DependencyList do
 
     describe "first" do
       let(:dep) { subject.dependencies.first }
+
       it { dep.name.should == 'gem1' }
       it { dep.version.should == '1.2.3' }
     end
 
     describe "second" do
       let(:dep) { subject.dependencies[1] }
+
       it { dep.name.should == 'gem2' }
       it { dep.version.should == '0.4.2' }
     end
