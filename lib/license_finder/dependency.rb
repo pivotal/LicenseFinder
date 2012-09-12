@@ -1,7 +1,12 @@
+# encoding: UTF-8
+require "erb"
+
 module LicenseFinder
   class Dependency
     attr_accessor :name, :version, :license, :approved, :license_url, :notes, :license_files,
       :readme_files, :source, :bundler_groups
+
+    attr_reader :summary, :description
 
     def self.from_hash(attrs)
       attrs['license_files'] = attrs['license_files'].map { |lf| lf['path'] } if attrs['license_files']
@@ -35,7 +40,10 @@ module LicenseFinder
         'readme_files' => other.readme_files,
         'license_url' => other.license_url,
         'notes' => notes,
-        'source' => other.source
+        'source' => other.source,
+        'summary' => other.summary,
+        'description' => other.description,
+        'bundler_groups' => other.bundler_groups,
       )
 
       case other.license
@@ -83,34 +91,24 @@ module LicenseFinder
     end
 
     def to_s
-      url = ", #{license_url}" if license_url != ''
-      str = "#{name} #{version}, #{license}#{url}, #{summary}, #{description}"
+      template = ERB.new <<-TEMPLATE
+<%= attributes.join(", ") %>
+<% if license == 'other' %>
+  <% unless license_files.empty? %>
+  license files:
+    <%= license_files.join("\n    ") %>
+  <% end %>
+  <% unless readme_files.empty? %>
+  readme files:
+    <%= readme_files.join("\n    ") %>
+  <% end %>
+<% end%>
+TEMPLATE
 
-      if bundler_groups.size > 0
-        str << ", #{bundler_groups.join(', ')}"
-      end
+      attributes = ["#{name} #{version}".strip, license, license_url, summary, description, bundler_groups].flatten.compact.reject {|a| a == ""}
 
-      if license == 'other'
-        str << "\n  license files:"
-        unless self.license_files.empty?
-          self.license_files.each do |lf|
-            str << "\n    #{lf}"
-          end
-        end
-        str << "\n  readme files:"
-        unless self.readme_files.empty?
-          self.readme_files.each do |lf|
-            str << "\n    #{lf}"
-          end
-        end
-      end
-
-      str
+      template.result(binding).gsub(/(^|\n)\s*(\n|$)/, '\1')
     end
-
-    private
-    attr_reader :summary, :description
-
   end
 end
 

@@ -33,7 +33,7 @@ module LicenseFinder
     end
 
     def as_yaml
-      dependencies.sort_by(&:name).map(&:as_yaml)
+      sorted_dependencies.map(&:as_yaml)
     end
 
     def to_yaml
@@ -41,11 +41,17 @@ module LicenseFinder
     end
 
     def to_s
-      dependencies.sort_by(&:name).map(&:to_s).join("\n")
+      sorted_dependencies.map(&:to_s).join
     end
 
     def action_items
-      dependencies.sort_by(&:name).reject(&:approved).map(&:to_s).join("\n")
+      sorted_dependencies.reject(&:approved).map(&:to_s).join
+    end
+
+    private
+
+    def sorted_dependencies
+      dependencies.sort_by(&:name)
     end
   end
 end

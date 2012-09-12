@@ -174,24 +174,25 @@ describe LicenseFinder::DependencyList do
 
   describe "#to_s" do
     it "should return a human readable list of dependencies" do
-      gem1 = LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => true)
-      gem2 = LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '0.9', 'license' => 'other', 'approved' => false, 'license_url' => 'http://foo.com/LICENSE')
 
-      list = LicenseFinder::DependencyList.new([gem1, gem2])
+      gem1 = Struct.new(:name, :to_s).new("a", "a string ")
+      gem2 = Struct.new(:name, :to_s).new("b", "b string")
 
-      list.to_s.should == "a_gem 0.9, other, http://foo.com/LICENSE, , \n  license files:\n  readme files:\nb_gem 1.2.3, MIT, , "
+      list = LicenseFinder::DependencyList.new([gem2, gem1])
+
+      list.to_s.should == "a string b string"
     end
   end
 
   describe '#action_items' do
     it "should return all unapproved dependencies" do
-      gem1 = LicenseFinder::Dependency.new('name' => 'b_gem', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => true)
-      gem2 = LicenseFinder::Dependency.new('name' => 'a_gem', 'version' => '0.9', 'license' => 'other', 'approved' => false)
-      gem3 = LicenseFinder::Dependency.new('name' => 'c_gem', 'version' => '0.2', 'license' => 'other', 'approved' => false)
+      gem1 = Struct.new(:name, :to_s, :approved).new("a", "a string ", true)
+      gem2 = Struct.new(:name, :to_s, :approved).new("b", "b string ", false)
+      gem3 = Struct.new(:name, :to_s, :approved).new("c", "c string", false)
 
       list = LicenseFinder::DependencyList.new([gem1, gem2, gem3])
 
-      list.action_items.should == "a_gem 0.9, other, , \n  license files:\n  readme files:\nc_gem 0.2, other, , \n  license files:\n  readme files:"
+      list.action_items.should == "b string c string"
     end
   end
 end

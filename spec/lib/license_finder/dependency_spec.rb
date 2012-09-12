@@ -98,8 +98,10 @@ describe LicenseFinder::Dependency do
     let(:license_url) { "" }
     let(:license) { "MIT" }
 
+    subject { gem.to_s.strip }
+
     it 'should generate text with all the gem attributes' do
-      gem.to_s.should == "test_gem 1.0, MIT, summary foo, description bar"
+      should == "test_gem 1.0, MIT, summary foo, description bar"
     end
 
     context "when license is 'other'" do
@@ -109,7 +111,7 @@ describe LicenseFinder::Dependency do
         let(:license) { 'other' }
 
         it "should generate text with the gem attributes, license files, and readme files" do
-          gem.to_s.should == <<-STRING.strip
+          should == <<-STRING.strip
 test_gem 1.0, other, summary foo, description bar
   license files:
     somefile
@@ -124,7 +126,7 @@ test_gem 1.0, other, summary foo, description bar
       let(:license_url) { "www.foobar.com"}
 
       it "should include the license_url" do
-        gem.to_s.should == "test_gem 1.0, MIT, www.foobar.com, summary foo, description bar"
+        should == "test_gem 1.0, MIT, www.foobar.com, summary foo, description bar"
       end
     end
 
@@ -132,7 +134,7 @@ test_gem 1.0, other, summary foo, description bar
       let(:bundler_groups) { %w(staging production) }
 
       it "should include the bundler groups" do
-        gem.to_s.should == "test_gem 1.0, MIT, summary foo, description bar, staging, production"
+        should == "test_gem 1.0, MIT, summary foo, description bar, staging, production"
       end
     end
   end
@@ -166,7 +168,10 @@ test_gem 1.0, other, summary foo, description bar
         'version' => '0.0.2',
         'license_url' => 'http://www.example.com/license2.htm',
         'license_files' => "new license files",
-        'readme_files' => "new readme files"
+        'readme_files' => "new readme files",
+        'summary' => 'foo summary',
+        'description' => 'awesome foo description!',
+        'bundler_groups' => [1,2,3]
       )
     end
 
@@ -186,6 +191,14 @@ test_gem 1.0, other, summary foo, description bar
       merged.license_files.should == new_dep.license_files
       merged.readme_files.should == new_dep.readme_files
       merged.source.should == new_dep.source
+    end
+    
+    it 'should return the new summary and description and bundle groups' do
+      merged = subject.merge new_dep
+      
+      merged.summary.should     == new_dep.summary
+      merged.description.should == new_dep.description
+      merged.bundler_groups.should == new_dep.bundler_groups
     end
 
     it 'should return the old notes' do
