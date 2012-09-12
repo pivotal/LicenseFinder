@@ -95,13 +95,18 @@ module DSL
 
       `cd #{projects_path} && bundle gem #{app_name}`
 
-      Bundler.with_clean_env do
-        `cd #{app_path} && echo "gem 'rake'" >> Gemfile`
-      end
+      add_gem_dependency('rake')
+      add_gem_dependency('license_finder', :path => root_path)
+    end
 
-      Bundler.with_clean_env do
-        `cd #{app_path} && echo "gem 'license_finder', path: '#{root_path}'" >> Gemfile`
-      end
+    def create_rails_app
+      reset_projects!
+
+      `bundle exec rails new #{app_path} --skip-bundle`
+
+      add_gem_dependency('license_finder', :path => root_path)
+
+      bundle_app
     end
 
     def add_license_finder_to_rakefile
@@ -110,18 +115,6 @@ module DSL
         require 'license_finder'
         LicenseFinder.load_rake_tasks
       RUBY
-    end
-
-    def create_rails_app
-      reset_projects!
-
-      `bundle exec rails new #{app_path} --skip-bundle`
-
-      Bundler.with_clean_env do
-        `cd #{app_path} && echo "gem 'license_finder', path: '#{root_path}'" >> Gemfile`
-      end
-
-      bundle_app
     end
 
     def update_gem(name, attrs)
@@ -141,16 +134,13 @@ module DSL
       end
     end
 
-    def add_to_rakefile(line)
-      `echo "#{line}" >> #{app_path}/Rakefile`
-    end
-
     def add_dependency_to_app(gem_name, license, bundler_groups = "")
       bundler_groups = bundler_groups.split(',').map(&:strip)
 
-      `mkdir #{projects_path}/#{gem_name}`
+      gem_dir = File.join(projects_path, gem_name)
 
-      File.open("#{projects_path}/#{gem_name}/#{gem_name}.gemspec", 'w') do |file|
+      FileUtils.mkdir(gem_dir)
+      File.open(File.join(gem_dir, "#{gem_name}.gemspec"), 'w') do |file|
         file.write <<-GEMSPEC
           Gem::Specification.new do |s|
             s.name = "#{gem_name}"
@@ -162,22 +152,18 @@ module DSL
         GEMSPEC
       end
 
-      gemfile_bits = []
-      gemfile_bits << "gem '#{gem_name}'"
-      gemfile_bits << "path: '#{File.join(projects_path, gem_name)}'"
-      gemfile_bits << "groups: #{bundler_groups.to_s.tr('\"', '\'')}" if bundler_groups.size > 1
-      gemfile_bits << "group: '#{bundler_groups.first}'" if bundler_groups.size == 1
+      gem_options = {}
+      gem_options[:path] = File.join(projects_path, gem_name)
+      gem_options[:groups] = bundler_groups unless bundler_groups.empty?
 
-      system "cd #{app_path} && echo \"#{gemfile_bits.join(", ")} \" >> Gemfile"
+      add_gem_dependency(gem_name, gem_options)
 
       bundle_app
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
-      File.open("#{app_path}/config/license_finder.yml", "w") do |f|
-        f.write({
-          'whitelist' => whitelisted_licenses
-        }.to_yaml)
+      File.open(File.join(config_path, "license_finder.yml"), "w") do |f|
+        f.write({'whitelist' => whitelisted_licenses}.to_yaml)
       end
     end
 
@@ -205,8 +191,23 @@ module DSL
 
     def bundle_app
       Bundler.with_clean_env do
-        `bundle install --gemfile=#{app_path}/Gemfile --path=#{bundle_path}`
+        `bundle install --gemfile=#{File.join(app_path, "Gemfile")} --path=#{bundle_path}`
       end
+    end
+
+    def add_gem_dependency(name, options = {})
+      line = "gem #{name.inspect}"
+      line << ", " + options.inspect unless options.empty?
+
+      add_to_gemfile(line)
+    end
+
+    def add_to_gemfile(line)
+      `echo #{line.inspect} >> #{File.join(app_path, "Gemfile")}`
+    end
+
+    def add_to_rakefile(line)
+      `echo #{line.inspect} >> #{File.join(app_path, "Rakefile")}`
     end
 
     def app_name
