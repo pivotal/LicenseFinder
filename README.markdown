@@ -42,7 +42,7 @@ dependencies that have non-whitelisted licenses:
 $ bundle exec rake license:action_items
 ```
 
-On a brand new Rails project, you could expect output like:
+On a brand new Rails project, you could expect output like (assuming you whitelisted the MIT license):
 
 ```
 Dependencies that need approval:
