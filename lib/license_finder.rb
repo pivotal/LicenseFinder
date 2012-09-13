@@ -10,14 +10,18 @@ module LicenseFinder
     def initialize
       config = {}
 
-      if File.exists?('./config/license_finder.yml')
-        yaml = File.open('./config/license_finder.yml').readlines.join
+      if File.exists?(config_file_path)
+        yaml = File.open(config_file_path).readlines.join
         config = YAML.load(yaml)
       end
 
       @whitelist = config['whitelist'] || []
       @ignore_groups = (config["ignore_groups"] || []).map(&:to_sym)
       @dependencies_dir = config['dependencies_file_dir'] || '.'
+    end
+
+    def config_file_path
+      File.join('.', 'config', 'license_finder.yml')
     end
 
     def dependencies_yaml
@@ -43,7 +47,7 @@ module LicenseFinder
 end
 
 require 'license_finder/railtie' if defined?(Rails)
-require 'license_finder/finder'
+require 'license_finder/reporter'
 require 'license_finder/bundle'
 require 'license_finder/bundled_gem'
 require 'license_finder/license'
