@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
 require 'license_finder'
-LicenseFinder::CLI.new.check_for_action_items
+LicenseFinder::CLI.check_for_action_items

@@ -1,5 +1,7 @@
 module LicenseFinder
-  class CLI
+  module CLI
+    extend self
+
     def create_default_configuration
       unless File.exists?(LicenseFinder.config.config_file_path)
         `mkdir -p ./config`
