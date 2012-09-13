@@ -90,6 +90,35 @@ module LicenseFinder
       as_yaml.to_yaml
     end
 
+    def to_html
+      css_class = approved ? "approved" : "unapproved"
+
+      template = ERB.new <<-HTML
+        <div id="<%=name%>" class="<%=css_class%>">
+          <h2><%=name%> v<%=version%></h2>
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>Summary</th>
+                <th>Description</th>
+                <th>License</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><%= summary %></td>
+                <td><%= description %></td>
+                <td><%= license %></td>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      HTML
+
+      template.result binding
+    end
+
     def to_s
       template = ERB.new <<-TEMPLATE
 <%= attributes.join(", ") %>

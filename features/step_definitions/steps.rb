@@ -1,24 +1,25 @@
 require 'fileutils'
+require 'capybara'
 
-Given /^I have a rails application with license finder$/ do
+Given /^I have a rails app(?:lication)? with license finder$/ do
   @user = DSL::User.new
   @user.create_rails_app
 end
 
-Given /^I have an application with license finder$/ do
+Given /^I have an app(?:lication)? with license finder$/ do
   @user = DSL::User.new
   @user.create_nonrails_app
 end
 
 
-Given /^I have an application setup with rake and license finder$/ do
+Given /^I have an app(?:lication)? setup with rake and license finder$/ do
   @user = DSL::User.new
   @user.create_nonrails_app
   @user.add_license_finder_to_rakefile
   @user.execute_command "rake license:init"
 end
 
-Given /^my application does not have a config directory$/ do
+Given /^my app(?:lication)? does not have a config directory$/ do
   FileUtils.rm_rf(@user.config_path)
   File.exists?(@user.config_path).should be_false
 end
@@ -31,11 +32,11 @@ Given /^my application's rake file requires license finder$/ do
   @user.add_license_finder_to_rakefile
 end
 
-Given /^my (?:rails )?app depends on a gem "(.*?)" licensed with "(.*?)"$/ do |gem_name, license|
+Given /^my (?:rails )?app(?:lication)? depends on a gem "(.*?)" licensed with "(.*?)"$/ do |gem_name, license|
   @user.add_dependency_to_app gem_name, :license => license
 end
 
-Given /^my (?:rails )?app depends on a gem "(.*?)" licensed with "(.*?)" in the "(.*?)" bundler groups$/ do |gem_name, license, bundler_groups|
+Given /^my (?:rails )?app(?:lication)? depends on a gem "(.*?)" licensed with "(.*?)" in the "(.*?)" bundler groups$/ do |gem_name, license, bundler_groups|
   @user.add_dependency_to_app gem_name, :license => license, :bundler_groups => bundler_groups
 end
 
@@ -59,12 +60,13 @@ When /^I add the following content to "([^"]*)":$/ do |filename, text|
   @user.append_to_file(filename, @content = text)
 end
 
-When /^my application depends on a gem "([^"]*)" with:$/ do |gem_name, gem_info|
+When /^my app(?:lication)? depends on a gem "([^"]*)" with:$/ do |gem_name, gem_info|
   info = gem_info.hashes.first
   @user.add_dependency_to_app(gem_name,
     :license      => info["license"],
     :summary      => info["summary"],
-    :description  => info["description"]
+    :description  => info["description"],
+    :version      => info["version"]
   )
 end
 
@@ -94,6 +96,23 @@ end
 
 Then /^it should exit with status code (\d)$/ do |status|
   $?.exitstatus.should == status.to_i
+end
+
+Then /^I should see the "([^"]*)" in the html flagged as "([^"]*)"$/ do |gem_name, css_class|
+  html = File.read(@user.dependencies_html_path)
+  page = Capybara.string(html)
+  gpl_gem = page.find("##{gem_name}")
+  gpl_gem[:class].should == css_class
+end
+
+Then /^I should see the "([^"]*)" in the html with the following details:$/ do |gem_name, table|
+  html = File.read(@user.dependencies_html_path)
+  page = Capybara.string(html)
+  section = page.find("##{gem_name}")
+
+  table.hashes.first.each do |property_name, property_value|
+    section.should have_content property_value
+  end
 end
 
 
@@ -148,6 +167,7 @@ module DSL
       summary = options.fetch(:summary, "")
       description = options.fetch(:description, "")
       bundler_groups = options.fetch(:bundler_groups, "").split(',').map(&:strip)
+      version = options[:version] || "0.0.0"
 
       gem_dir = File.join(projects_path, gem_name)
 
@@ -156,7 +176,7 @@ module DSL
         file.write <<-GEMSPEC
           Gem::Specification.new do |s|
             s.name = "#{gem_name}"
-            s.version = "0.0.0"
+            s.version = "#{version}"
             s.author = "Cucumber"
             s.summary = "#{summary}"
             s.license = "#{license}"
@@ -198,6 +218,10 @@ module DSL
 
     def dependencies_file_path
       File.join(app_path, 'dependencies.yml')
+    end
+
+    def dependencies_html_path
+      File.join(app_path, 'dependencies.html')
     end
 
     private

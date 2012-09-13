@@ -27,6 +27,10 @@ module LicenseFinder
     def dependencies_text
       File.join(dependencies_dir, "dependencies.txt")
     end
+
+    def dependencies_html
+      File.join(dependencies_dir, "dependencies.html")
+    end
   end
 
   def self.config

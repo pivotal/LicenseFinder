@@ -47,6 +47,28 @@ module LicenseFinder
       sorted_dependencies.reject(&:approved).map(&:to_s).join
     end
 
+    def to_html
+      template = ERB.new <<-HTML
+        <html>
+          <head>
+            <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.min.css" rel="stylesheet">
+            <style type="text/css">
+            .unapproved h2 {
+              color: red;
+            }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <%= sorted_dependencies.map(&:to_html).join("\n") %>
+            </div>
+          </body>
+        </html>
+      HTML
+
+      template.result binding
+    end
+
     private
 
     def sorted_dependencies

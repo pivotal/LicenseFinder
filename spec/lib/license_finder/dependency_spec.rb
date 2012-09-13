@@ -138,6 +138,25 @@ test_gem 1.0, other, summary foo, description bar
     end
   end
 
+  describe '#to_html' do
+    let(:dependency) { LicenseFinder::Dependency.new 'approved' => true }
+    subject { dependency.to_html }
+
+    context "when the dependency is approved" do
+      it "should add an approved class to dependency's container" do
+        should include %{class="approved"}
+      end
+    end
+
+    context "when the dependency is not approved" do
+      before { dependency.approved = false }
+
+      it "should not add an approved class to he dependency's container" do
+        should include %{class="unapproved"}
+      end
+    end
+  end
+
   describe '#source' do
     it "should default to nil" do
       LicenseFinder::Dependency.new.source.should be_nil

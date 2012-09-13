@@ -195,4 +195,17 @@ describe LicenseFinder::DependencyList do
       list.action_items.should == "b string c string"
     end
   end
+
+  describe '#to_html' do
+    it "should concatenate the results of the each dependency's #to_html and plop it into a proper HTML document" do
+      gem1 = Struct.new(:name, :to_html).new("a", "A")
+      gem2 = Struct.new(:name, :to_html).new("b", "B")
+
+      list = LicenseFinder::DependencyList.new([gem1, gem2])
+
+      html = list.to_html
+      html.should include "A"
+      html.should include "B"
+    end
+  end
 end

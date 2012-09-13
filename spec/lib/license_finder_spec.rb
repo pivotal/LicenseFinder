@@ -69,6 +69,7 @@ describe LicenseFinder do
         config.dependencies_dir.should == './elsewhere'
         config.dependencies_yaml.should == './elsewhere/dependencies.yml'
         config.dependencies_text.should == './elsewhere/dependencies.txt'
+        config.dependencies_html.should == './elsewhere/dependencies.html'
       end
 
       it 'should default the dependency files when the directory is not provided' do
@@ -76,6 +77,7 @@ describe LicenseFinder do
         config.dependencies_dir.should == '.'
         config.dependencies_yaml.should == './dependencies.yml'
         config.dependencies_text.should == './dependencies.txt'
+        config.dependencies_html.should == './dependencies.html'
       end
     end
   end

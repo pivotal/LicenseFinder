@@ -25,3 +25,21 @@ Feature: rake license:action_items
     When I run "rake license:action_items"
     Then I should see "All gems are approved for use" in its output
     And it should exit with status code 0
+
+  Scenario: Generates HTML report
+    Given my application depends on a gem "mit_licensed_gem" with:
+      | license | summary     | description | version |
+      | MIT     | mit is cool | seriously   | 0.0.1   |
+    And my application depends on a gem "gpl_licensed_gem" with:
+      | license | summary     | description | version |
+      | GPL     | gpl :-(     | seriously   | 0.0.2   |
+    And I whitelist the "MIT" license
+    When I run "rake license:action_items"
+    Then I should see the "gpl_licensed_gem" in the html flagged as "unapproved"
+    And I should see the "mit_licensed_gem" in the html flagged as "approved"
+    And I should see the "mit_licensed_gem" in the html with the following details:
+      | license | summary     | description | name                    |
+      | MIT     | mit is cool | seriously   | mit_licensed_gem v0.0.1 |
+    And I should see the "gpl_licensed_gem" in the html with the following details:
+      | license | summary     | description | name                    |
+      | GPL     | gpl :-(     | seriously   | gpl_licensed_gem v0.0.2 |

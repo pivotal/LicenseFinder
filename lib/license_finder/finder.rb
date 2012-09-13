@@ -1,10 +1,5 @@
 module LicenseFinder
   class Finder
-    def from_bundler
-      require 'bundler'
-      Bundler.load.specs.map { |spec| BundledGem.new(spec) }.sort_by &:sort_order
-    end
-
     def write_files
       new_list = generate_list
 
@@ -14,6 +9,10 @@ module LicenseFinder
 
       File.open(LicenseFinder.config.dependencies_text, 'w+') do |f|
         f.puts new_list.to_s
+      end
+
+      File.open(LicenseFinder.config.dependencies_html, 'w+') do |f|
+        f.puts new_list.to_html
       end
     end
 
