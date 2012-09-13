@@ -13,13 +13,16 @@ Add license_finder to your Rails project's Gemfile and `bundle`:
 gem 'license_finder'
 ```
 
-Now, initialize license finder:
+## Usage
+
+License finder will generate reports of action items - i.e., dependencies that do not fall within your license "whitelist".
 
 ```sh
-$ bundle exec rake license:init
+$ bundle exec rake license:action_items
 ```
 
-This will create a `config/license_finder.yml` file that lets you configure license finder. It will default to:
+The first time you run this, `license_finder` will create a default configuration file `./config/license_finder.yml`:
+
 
 ```yaml
 ---
@@ -31,18 +34,10 @@ ignore_groups:
 #- development
 ```
 
-Update the whitelist with the licenses your business has already approved.
+This allows you to configure bundler groups and add licenses to the whitelist.
 
-## Usage
-
-Once you've whitelisted licenses, you can then tell license finder to analyze your Gemfile and generate a list of
-dependencies that have non-whitelisted licenses:
-
-```sh
-$ bundle exec rake license:action_items
-```
-
-On a brand new Rails project, you could expect output like (assuming you whitelisted the MIT license):
+On a brand new Rails project, you could expect `rake license:action_items` to output something like the following
+(assuming you whitelisted the MIT license in your `config/license_finder.yml`):
 
 ```
 Dependencies that need approval:
@@ -63,8 +58,11 @@ rubyzip 0.9.9, ruby
 xml-simple 1.1.1, other
 ```
 
-The rake task will also write out a dependencies.yml and dependencies.txt file in the root of your project. It
-returns a non-zero exit status if there are
+The rake task will also write out a dependencies.yml, dependencies.txt, and dependencies.html file in the root of your project.
+
+The latter two files are human readable reports that you could send to your non-technical business partners, lawyers, etc.
+
+`rake license:action_items` will also return a non-zero exit status if there are
 unapproved dependencies. You could use this in a CI build, for example, to alert you whenever someone adds an
 unapproved dependency to the project.
 
