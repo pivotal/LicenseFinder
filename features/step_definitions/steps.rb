@@ -195,6 +195,7 @@ module DSL
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
+      FileUtils.mkdir_p(config_path)
       File.open(File.join(config_path, "license_finder.yml"), "w") do |f|
         f.write({'whitelist' => whitelisted_licenses}.to_yaml)
       end
