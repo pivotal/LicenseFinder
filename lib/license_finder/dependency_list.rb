@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module LicenseFinder
   class DependencyList
     attr_reader :dependencies
