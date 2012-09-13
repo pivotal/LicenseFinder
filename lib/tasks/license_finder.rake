@@ -7,7 +7,7 @@ namespace :license do
 
   desc 'generate a list of dependency licenses'
   task :generate_dependencies do
-    LicenseFinder::Finder.new.write_files
+    LicenseFinder::Finder.new.generate_reports
   end
 
   desc 'action items'

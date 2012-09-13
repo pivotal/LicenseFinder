@@ -1,19 +1,11 @@
 module LicenseFinder
   class Finder
-    def write_files
+    def generate_reports
       new_list = generate_list
 
-      File.open(LicenseFinder.config.dependencies_yaml, 'w+') do |f|
-        f.puts new_list.to_yaml
-      end
-
-      File.open(LicenseFinder.config.dependencies_text, 'w+') do |f|
-        f.puts new_list.to_s
-      end
-
-      File.open(LicenseFinder.config.dependencies_html, 'w+') do |f|
-        f.puts new_list.to_html
-      end
+      write_file LicenseFinder.config.dependencies_yaml, new_list.to_yaml
+      write_file LicenseFinder.config.dependencies_text, new_list.to_s
+      write_file LicenseFinder.config.dependencies_html, new_list.to_html
     end
 
     def action_items
@@ -22,6 +14,12 @@ module LicenseFinder
     end
 
     private
+
+    def write_file(file_path, content)
+      File.open(file_path, 'w+') do |f|
+        f.puts content
+      end
+    end
 
     def generate_list
       bundler_list = DependencyList.from_bundler
