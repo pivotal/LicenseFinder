@@ -4,8 +4,16 @@ Gem::Specification.new do |s|
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers"]
   s.email       = ["brent@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
-  s.summary     = "Know your dependencies - and the licenses they are binding your application to."
-  s.description = "Find and display licenses of a project's gem dependencies, so that you know what your limitations are when distributing your application."
+  s.summary     = "Audit the OSS licenses of your application's dependencies."
+
+  s.description = <<-DESCRIPTION
+  Do you know the licenses of all your application's dependencies? What open source software licenses will your business accept?
+
+  LicenseFinder culls your Gemfile, detects the licenses of the gems in it, and gives you a report that you can act on. If you already know 
+  what licenses your business is comfortable with, you can whitelist them, leaving you with an action report of only those dependencies that have 
+  licenses that fall outside of the whitelist.
+  DESCRIPTION
+
   s.license     = "MIT"
 
   s.add_dependency "bundler"
