@@ -26,7 +26,7 @@ module LicenseFinder
         klass.new(text).matches?
       end
 
-      license && license.pretty_name
+      license.pretty_name if license
     end
   end
 end
