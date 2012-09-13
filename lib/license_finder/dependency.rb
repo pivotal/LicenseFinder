@@ -21,13 +21,16 @@ module LicenseFinder
       @version = attributes['version']
       @license = attributes['license']
       @approved = attributes['approved'] || LicenseFinder.config.whitelist.include?(attributes['license'])
-      @license_url = attributes['license_url'] || ''
       @notes = attributes['notes'] || ''
       @license_files = attributes['license_files'] || []
       @readme_files = attributes['readme_files'] || []
       @bundler_groups = attributes['bundler_groups'] || []
       @summary = attributes['summary']
       @description = attributes['description']
+    end
+
+    def license_url
+      LicenseFinder::LicenseUrl.find_by_name license
     end
 
     def merge(other)
@@ -93,7 +96,7 @@ module LicenseFinder
     def to_html
       css_class = approved ? "approved" : "unapproved"
 
-      template = ERB.new <<-HTML
+      template = ERB.new <<-ERB
         <div id="<%=name%>" class="<%=css_class%>">
           <h2><%=name%> v<%=version%></h2>
           <table class="table table-striped table-bordered">
@@ -108,13 +111,19 @@ module LicenseFinder
               <tr>
                 <td><%= summary %></td>
                 <td><%= description %></td>
-                <td><%= license %></td>
+                <td>
+                  <% if license_url && !license_url.empty? %>
+                    <a href="<%= license_url %>"><%= license %></a>
+                  <% else %>
+                    <%= license %>
+                  <% end %>
+                </td>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      HTML
+      ERB
 
       template.result binding
     end
@@ -132,11 +141,24 @@ module LicenseFinder
     <%= readme_files.join("\n    ") %>
   <% end %>
 <% end%>
-TEMPLATE
+      TEMPLATE
 
-      attributes = ["#{name} #{version}".strip, license, license_url, summary, description, bundler_groups].flatten.compact.reject {|a| a == ""}
+      attributes = ["#{name} #{version}".strip, license, license_url, summary, description, bundler_groups].flatten.compact.reject { |a| a == "" }
 
       template.result(binding).gsub(/(^|\n)\s*(\n|$)/, '\1')
+    end
+
+    private
+
+    def constantize(string)
+      names = string.split('::')
+      names.shift if names.empty? || names.first.empty?
+
+      constant = Object
+      names.each do |name|
+        constant = constant.const_defined?(name, false) ? constant.const_get(name) : constant.const_missing(name)
+      end
+      constant
     end
   end
 end

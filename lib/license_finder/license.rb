@@ -23,8 +23,18 @@ module LicenseFinder::License
 
   class Base
     class << self
+      attr_accessor :license_url, :alternative_names
+
       def inherited(descendant)
         LicenseFinder::License.all << descendant
+      end
+
+      def names
+        [demodulized_name] + self.alternative_names
+      end
+
+      def alternative_names
+        @alternative_names ||= []
       end
 
       def demodulized_name

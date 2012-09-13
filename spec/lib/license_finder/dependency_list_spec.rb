@@ -74,7 +74,7 @@ describe LicenseFinder::DependencyList do
           'license' => 'MIT',
           'approved' => false,
           'source' => nil,
-          'license_url' => '',
+          'license_url' => LicenseFinder::License::MIT.license_url,
           'notes' => '',
           'license_files' => nil,
           'readme_files' => nil
@@ -85,7 +85,7 @@ describe LicenseFinder::DependencyList do
           'license' => 'MIT',
           'approved' => false,
           'source' => 'bundle',
-          'license_url' => '',
+          'license_url' => LicenseFinder::License::MIT.license_url,
           'notes' => '',
           'license_files' => nil,
           'readme_files' => nil

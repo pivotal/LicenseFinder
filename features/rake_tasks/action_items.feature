@@ -40,6 +40,7 @@ Feature: rake license:action_items
     And I should see the "mit_licensed_gem" in the html with the following details:
       | license | summary     | description | name                    |
       | MIT     | mit is cool | seriously   | mit_licensed_gem v0.0.1 |
+    And the text "MIT" should link to "http://opensource.org/licenses/mit-license"
     And I should see the "gpl_licensed_gem" in the html with the following details:
       | license | summary     | description | name                    |
       | GPL     | gpl :-(     | seriously   | gpl_licensed_gem v0.0.2 |

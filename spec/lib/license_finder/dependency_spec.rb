@@ -5,9 +5,8 @@ describe LicenseFinder::Dependency do
     {
       'name' => "spec_name",
       'version' => "2.1.3",
-      'license' => "GPL",
+      'license' => "GPLv2",
       'approved' => false,
-      'license_url' => 'http://www.apache.org/licenses/LICENSE-2.0.html',
       'notes' => 'some notes',
       'license_files' => [{'path' => '/Users/pivotal/foo/lic1'}, {'path' => '/Users/pivotal/bar/lic2'}],
       'readme_files' => [{'path' => '/Users/pivotal/foo/Readme1'}, {'path' => '/Users/pivotal/bar/Readme2'}],
@@ -42,9 +41,8 @@ describe LicenseFinder::Dependency do
 
     its(:name) { should == 'spec_name' }
     its(:version) { should == '2.1.3' }
-    its(:license) { should == 'GPL' }
+    its(:license) { should == 'GPLv2' }
     its(:approved) { should == false }
-    its(:license_url) { should == "http://www.apache.org/licenses/LICENSE-2.0.html" }
     its(:notes) { should == "some notes" }
     its(:license_files) { should == %w(/Users/pivotal/foo/lic1 /Users/pivotal/bar/lic2) }
     its(:readme_files) { should == %w(/Users/pivotal/foo/Readme1 /Users/pivotal/bar/Readme2) }
@@ -55,10 +53,10 @@ describe LicenseFinder::Dependency do
       should == {
         'name' => 'spec_name',
         'version' => '2.1.3',
-        'license' => 'GPL',
+        'license' => 'GPLv2',
         'approved' => false,
         'source' => 'bundle',
-        'license_url' => 'http://www.apache.org/licenses/LICENSE-2.0.html',
+        'license_url' => LicenseFinder::License::GPLv2.license_url,
         'notes' => 'some notes',
         'license_files' => [
           {'path' => '/Users/pivotal/foo/lic1'},
@@ -74,6 +72,24 @@ describe LicenseFinder::Dependency do
     it 'should generate yaml' do
       yaml = YAML.load(subject.to_yaml)
       yaml.should == subject.as_yaml
+    end
+  end
+
+  describe '#license_url' do
+    context "class exists for license type" do
+      it "should return the license url configured in the class" do
+        LicenseFinder::Dependency.new('license' => "GPLv2").license_url.should == LicenseFinder::License::GPLv2.license_url
+      end
+
+      it "should handle differences in case" do
+        LicenseFinder::Dependency.new('license' => "gplv2").license_url.should == LicenseFinder::License::GPLv2.license_url
+      end
+    end
+
+    context "class does not exist for license type" do
+      it "should return nil" do
+        LicenseFinder::Dependency.new('license' => "FakeLicense").license_url.should be_nil
+      end
     end
   end
 
@@ -100,7 +116,7 @@ describe LicenseFinder::Dependency do
     subject { gem.to_s.strip }
 
     it 'should generate text with all the gem attributes' do
-      should == "test_gem 1.0, MIT, summary foo, description bar"
+      should == "test_gem 1.0, MIT, http://opensource.org/licenses/mit-license, summary foo, description bar"
     end
 
     context "when license is 'other'" do
@@ -121,19 +137,11 @@ test_gem 1.0, other, summary foo, description bar
       end
     end
 
-    context "when the gem has a license url" do
-      let(:license_url) { "www.foobar.com"}
-
-      it "should include the license_url" do
-        should == "test_gem 1.0, MIT, www.foobar.com, summary foo, description bar"
-      end
-    end
-
     context "when the gem has any bundler groups" do
       let(:bundler_groups) { %w(staging production) }
 
       it "should include the bundler groups" do
-        should == "test_gem 1.0, MIT, summary foo, description bar, staging, production"
+        should == "test_gem 1.0, MIT, http://opensource.org/licenses/mit-license, summary foo, description bar, staging, production"
       end
     end
   end
@@ -173,7 +181,6 @@ test_gem 1.0, other, summary foo, description bar
         'name' => 'foo',
         'license' => 'MIT',
         'version' => '0.0.1',
-        'license_url' => 'http://www.example.com/license1.htm',
         'license_files' => "old license files",
         'readme_files' => "old readme files",
       )
@@ -184,7 +191,6 @@ test_gem 1.0, other, summary foo, description bar
         'name' => 'foo',
         'license' => 'MIT',
         'version' => '0.0.2',
-        'license_url' => 'http://www.example.com/license2.htm',
         'license_files' => "new license files",
         'readme_files' => "new readme files",
         'summary' => 'foo summary',
@@ -201,11 +207,10 @@ test_gem 1.0, other, summary foo, description bar
       }.to raise_error
     end
 
-    it 'should return the new version, license url, license files, readme files, and source' do
+    it 'should return the new version, license files, readme files, and source' do
       merged = subject.merge(new_dep)
 
       merged.version.should == '0.0.2'
-      merged.license_url.should == 'http://www.example.com/license2.htm'
       merged.license_files.should == new_dep.license_files
       merged.readme_files.should == new_dep.readme_files
       merged.source.should == new_dep.source

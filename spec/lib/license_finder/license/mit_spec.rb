@@ -7,7 +7,7 @@ describe LicenseFinder::License::MIT do
 
   describe "#matches?" do
     it "should return true if the text contains the MIT url" do
-      subject.text = "MIT License is awesome http://www.opensource.org/licenses/mit-license"
+      subject.text = "MIT License is awesome http://opensource.org/licenses/mit-license"
       should be_matches
 
       subject.text = "MIT Licence is awesome http://www.opensource.org/licenses/mit-license"

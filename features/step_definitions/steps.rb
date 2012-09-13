@@ -274,3 +274,8 @@ module DSL
     end
   end
 end
+
+When /^the text "([^"]*)" should link to "([^"]*)"$/ do |text, link|
+  html = Capybara.string File.read(@user.dependencies_html_path)
+  html.find(:xpath, "//a[@href='#{link}']").text.should == text
+end

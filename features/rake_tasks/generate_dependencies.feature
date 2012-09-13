@@ -49,7 +49,7 @@ Feature: rake license:generate_dependencies
     When I run "rake license:generate_dependencies"
     Then license finder should generate a file "dependencies.txt" containing:
       """
-      mit_gem 0.0.0, MIT, production
+      mit_gem 0.0.0, MIT, http://opensource.org/licenses/mit-license, production
       """
 
   Scenario: I have specified multiple groups for my gem
@@ -58,5 +58,5 @@ Feature: rake license:generate_dependencies
     When I run "rake license:generate_dependencies"
     Then license finder should generate a file "dependencies.txt" containing:
       """
-      mit_gem 0.0.0, MIT, production, demo, staging
+      mit_gem 0.0.0, MIT, http://opensource.org/licenses/mit-license, production, demo, staging
       """
