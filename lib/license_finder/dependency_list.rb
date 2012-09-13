@@ -46,7 +46,7 @@ module LicenseFinder
     end
 
     def action_items
-      sorted_dependencies.reject(&:approved).map(&:to_s).join
+      sorted_dependencies.reject(&:approved).map(&:to_s).join "\n"
     end
 
     def to_html

@@ -188,13 +188,13 @@ describe LicenseFinder::DependencyList do
 
   describe '#action_items' do
     it "should return all unapproved dependencies" do
-      gem1 = Struct.new(:name, :to_s, :approved).new("a", "a string ", true)
-      gem2 = Struct.new(:name, :to_s, :approved).new("b", "b string ", false)
+      gem1 = Struct.new(:name, :to_s, :approved).new("a", "a string", true)
+      gem2 = Struct.new(:name, :to_s, :approved).new("b", "b string", false)
       gem3 = Struct.new(:name, :to_s, :approved).new("c", "c string", false)
 
       list = LicenseFinder::DependencyList.new([gem1, gem2, gem3])
 
-      list.action_items.should == "b string c string"
+      list.action_items.should == "b string\nc string"
     end
   end
 
