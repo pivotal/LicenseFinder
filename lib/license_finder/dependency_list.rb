@@ -42,7 +42,7 @@ module LicenseFinder
     end
 
     def to_s
-      sorted_dependencies.map(&:to_s).join
+      sorted_dependencies.map(&:to_s).join("\n")
     end
 
     def action_items

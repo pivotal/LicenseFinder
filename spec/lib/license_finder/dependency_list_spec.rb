@@ -177,12 +177,12 @@ describe LicenseFinder::DependencyList do
   describe "#to_s" do
     it "should return a human readable list of dependencies" do
 
-      gem1 = Struct.new(:name, :to_s).new("a", "a string ")
+      gem1 = Struct.new(:name, :to_s).new("a", "a string")
       gem2 = Struct.new(:name, :to_s).new("b", "b string")
 
       list = LicenseFinder::DependencyList.new([gem2, gem1])
 
-      list.to_s.should == "a string b string"
+      list.to_s.should == "a string\nb string"
     end
   end
 

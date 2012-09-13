@@ -9,7 +9,7 @@ Feature: Catch Regressions!
     And I run "<command>"
     Then license finder should generate a file "dependencies.txt" containing:
       """
-      descriptive_gem 0.0.0, MIT, http://opensource.org/licenses/mit-license, summary, description, default
+      descriptive_gem, 0.0.0, MIT
       """
 
     Examples:

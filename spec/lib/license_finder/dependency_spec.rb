@@ -102,49 +102,14 @@ describe LicenseFinder::Dependency do
         'version' => '1.0',
         'summary' => 'summary foo',
         'description' => 'description bar',
-        'license' => license,
-        'license_url' => license_url,
-        'license_files' => license_files,
-        'readme_files' => readme_files,
-        'bundler_groups' => bundler_groups
+        'license' => "MIT"
       )
     end
-    let(:bundler_groups) { [] }
-    let(:license_files) { [] }
-    let(:readme_files) { [] }
-    let(:license_url) { "" }
-    let(:license) { "MIT" }
 
     subject { gem.to_s.strip }
 
-    it 'should generate text with all the gem attributes' do
-      should == "test_gem 1.0, MIT, http://opensource.org/licenses/mit-license, summary foo, description bar"
-    end
-
-    context "when license is 'other'" do
-      context "when the gem includes license files and readme files" do
-        let(:license_files) { %w(somefile) }
-        let(:readme_files) { %w(somereadme) }
-        let(:license) { 'other' }
-
-        it "should generate text with the gem attributes, license files, and readme files" do
-          should == <<-STRING.strip
-test_gem 1.0, other, summary foo, description bar
-  license files:
-    somefile
-  readme files:
-    somereadme
-          STRING
-        end
-      end
-    end
-
-    context "when the gem has any bundler groups" do
-      let(:bundler_groups) { %w(staging production) }
-
-      it "should include the bundler groups" do
-        should == "test_gem 1.0, MIT, http://opensource.org/licenses/mit-license, summary foo, description bar, staging, production"
-      end
+    it 'should generate text with the gem name, version, and license' do
+      should == "test_gem, 1.0, MIT"
     end
   end
 

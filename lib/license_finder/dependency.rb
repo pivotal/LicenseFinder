@@ -138,23 +138,7 @@ module LicenseFinder
     end
 
     def to_s
-      template = ERB.new <<-TEMPLATE
-<%= attributes.join(", ") %>
-<% if license == 'other' %>
-  <% unless license_files.empty? %>
-  license files:
-    <%= license_files.join("\n    ") %>
-  <% end %>
-  <% unless readme_files.empty? %>
-  readme files:
-    <%= readme_files.join("\n    ") %>
-  <% end %>
-<% end%>
-      TEMPLATE
-
-      attributes = ["#{name} #{version}".strip, license, license_url, summary, description, bundler_groups].flatten.compact.reject { |a| a == "" }
-
-      template.result(binding).gsub(/(^|\n)\s*(\n|$)/, '\1')
+      [name, version, license].join ", "
     end
 
     private

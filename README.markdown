@@ -42,20 +42,13 @@ On a brand new Rails project, you could expect `rake license:action_items` to ou
 ```
 Dependencies that need approval:
 
-highline 1.6.14, ruby
-json 1.7.5, ruby
-mime-types 1.19, ruby
-rails 3.2.8, other
-rdoc 3.12, other
-  license files:
-    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/LICENSE.rdoc
-    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/README.rdoc
-    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/test/README
-  readme files:
-    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/README.rdoc
-    /Users/pivotal/.rvm/gems/ruby-1.9.3-p0@rubygems.org/gems/rdoc-3.12/test/README
-rubyzip 0.9.9, ruby
-xml-simple 1.1.1, other
+highline, 1.6.14, ruby
+json, 1.7.5, ruby
+mime-types, 1.19, ruby
+rails, 3.2.8, other
+rdoc, 3.12, other
+rubyzip, 0.9.9, ruby
+xml-simple, 1.1.1, other
 ```
 
 The rake task will also write out a dependencies.yml, dependencies.txt, and dependencies.html file in the root of your project.
@@ -79,7 +72,7 @@ which we'll assume is licensed with the `GPL` license. You then run `rake licens
 the gem listed in the output:
 
 ```txt
-awesome_gpl_gem 1.0.0, GPL
+awesome_gpl_gem, 1.0.0, GPL
 ```
 
 Your business tells you that in this case, it's acceptable to use this gem. You should now update your `dependencies.yml`
