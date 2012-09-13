@@ -66,7 +66,8 @@ When /^my app(?:lication)? depends on a gem "([^"]*)" with:$/ do |gem_name, gem_
     :license      => info["license"],
     :summary      => info["summary"],
     :description  => info["description"],
-    :version      => info["version"]
+    :version      => info["version"],
+    :homepage     => info["homepage"]
   )
 end
 
@@ -168,6 +169,7 @@ module DSL
       description = options.fetch(:description, "")
       bundler_groups = options.fetch(:bundler_groups, "").split(',').map(&:strip)
       version = options[:version] || "0.0.0"
+      homepage = options[:homepage]
 
       gem_dir = File.join(projects_path, gem_name)
 
@@ -181,6 +183,7 @@ module DSL
             s.summary = "#{summary}"
             s.license = "#{license}"
             s.description = "#{description}"
+            s.homepage = "#{homepage}"
           end
         GEMSPEC
       end

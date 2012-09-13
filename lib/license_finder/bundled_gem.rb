@@ -30,7 +30,8 @@ module LicenseFinder
         'source' => 'bundle',
         'bundler_groups' => (@bundler_dependency.groups if @bundler_dependency),
         'summary' => @spec.summary,
-        'description' => @spec.description
+        'description' => @spec.description,
+        'homepage' => @spec.homepage
       )
     end
 

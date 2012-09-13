@@ -9,6 +9,7 @@ describe LicenseFinder::BundledGem do
       s.version = '2.1.3'
       s.summary = 'summary'
       s.description = 'description'
+      s.homepage = 'homepage'
     end
   end
 
@@ -116,6 +117,7 @@ describe LicenseFinder::BundledGem do
     its(:summary) { should == 'summary' }
     its(:source) { should == 'bundle' }
     its(:description) { should == 'description' }
+    its(:homepage) { should == 'homepage' }
 
     describe 'with a known license' do
       before do

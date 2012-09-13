@@ -4,7 +4,7 @@ require "erb"
 module LicenseFinder
   class Dependency
     attr_accessor :name, :version, :license, :approved, :license_url, :notes, :license_files,
-      :readme_files, :source, :bundler_groups
+      :readme_files, :source, :bundler_groups, :homepage
 
     attr_reader :summary, :description
 
@@ -27,6 +27,7 @@ module LicenseFinder
       @bundler_groups = attributes['bundler_groups'] || []
       @summary = attributes['summary']
       @description = attributes['description']
+      @homepage = attributes['homepage']
     end
 
     def license_url
@@ -47,6 +48,7 @@ module LicenseFinder
         'summary' => other.summary,
         'description' => other.description,
         'bundler_groups' => other.bundler_groups,
+        'homepage' => other.homepage
       )
 
       case other.license
@@ -69,6 +71,7 @@ module LicenseFinder
         'approved' => approved,
         'source' => source,
         'license_url' => license_url,
+        'homepage' => homepage,
         'notes' => notes,
         'license_files' => nil,
         'readme_files' => nil
@@ -98,7 +101,13 @@ module LicenseFinder
 
       template = ERB.new <<-ERB
         <div id="<%=name%>" class="<%=css_class%>">
-          <h2><%=name%> v<%=version%></h2>
+          <h2>
+            <% if homepage && !homepage.empty? %>
+              <a href="<%=homepage%>"><%=name%></a>
+            <% else %>
+              <%= name %>
+            <% end %>
+            v<%=version%></h2>
           <table class="table table-striped table-bordered">
             <thead>
               <tr>

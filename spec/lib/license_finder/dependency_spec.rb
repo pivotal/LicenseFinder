@@ -8,6 +8,7 @@ describe LicenseFinder::Dependency do
       'license' => "GPLv2",
       'approved' => false,
       'notes' => 'some notes',
+      'homepage' => 'homepage',
       'license_files' => [{'path' => '/Users/pivotal/foo/lic1'}, {'path' => '/Users/pivotal/bar/lic2'}],
       'readme_files' => [{'path' => '/Users/pivotal/foo/Readme1'}, {'path' => '/Users/pivotal/bar/Readme2'}],
       'source' => "bundle",
@@ -56,6 +57,7 @@ describe LicenseFinder::Dependency do
         'license' => 'GPLv2',
         'approved' => false,
         'source' => 'bundle',
+        'homepage' => 'homepage',
         'license_url' => LicenseFinder::License::GPLv2.license_url,
         'notes' => 'some notes',
         'license_files' => [
@@ -183,6 +185,7 @@ test_gem 1.0, other, summary foo, description bar
         'version' => '0.0.1',
         'license_files' => "old license files",
         'readme_files' => "old readme files",
+        'old_homepage' => "http://old.homepage"
       )
     end
 
@@ -195,7 +198,8 @@ test_gem 1.0, other, summary foo, description bar
         'readme_files' => "new readme files",
         'summary' => 'foo summary',
         'description' => 'awesome foo description!',
-        'bundler_groups' => [1,2,3]
+        'bundler_groups' => [1,2,3],
+        'homepage' => "http://new.homepage"
       )
     end
 
@@ -207,13 +211,14 @@ test_gem 1.0, other, summary foo, description bar
       }.to raise_error
     end
 
-    it 'should return the new version, license files, readme files, and source' do
+    it 'should return the new version, license files, readme files, source, and homepage' do
       merged = subject.merge(new_dep)
 
       merged.version.should == '0.0.2'
       merged.license_files.should == new_dep.license_files
       merged.readme_files.should == new_dep.readme_files
       merged.source.should == new_dep.source
+      merged.homepage.should == new_dep.homepage
     end
     
     it 'should return the new summary and description and bundle groups' do
