@@ -19,13 +19,15 @@ Given /^I have an app(?:lication)? setup with rake and license finder$/ do
   @user.execute_command "rake license:init"
 end
 
-Given /^my app(?:lication)? does not have a config directory$/ do
-  FileUtils.rm_rf(@user.config_path)
-  File.exists?(@user.config_path).should be_false
+Given /^my app(?:lication)? does not have a "([^"]+)" directory$/ do |name|
+  path = @user.app_path(name)
+
+  FileUtils.rm_rf(path)
+  File.should_not be_exists(path)
 end
 
-Then /^the config directory should exist$/ do
-  File.exists?(@user.config_path).should be_true
+Then /^I should see a "([^"]+)" directory$/ do |name|
+  File.should be_exists(@user.app_path(name))
 end
 
 Given /^my application's rake file requires license finder$/ do
@@ -80,12 +82,12 @@ Then /^I should not see "(.*?)" in its output$/ do |gem_name|
   @output.should_not include gem_name
 end
 
-Then /^license finder should generate a file "([^"]*)" with the following content:$/ do |filename, text|
-  File.read(File.join(@user.app_path, filename)).should == text.gsub(/^\s+/, "")
+Then /^I should see the file "([^"]*)" with the following content:$/ do |filename, text|
+  File.read(@user.app_path(filename)).should == text.gsub(/^\s+/, "")
 end
 
-Then /^license finder should generate a file "([^"]*)" containing:$/ do |filename, text|
-  File.read(File.join(@user.app_path, filename)).should include(text.gsub(/^\s+/, ""))
+Then /^I should see the file "([^"]*)" containing:$/ do |filename, text|
+  File.read(@user.app_path(filename)).should include(text.gsub(/^\s+/, ""))
 end
 
 Then /^I should see the following settings for "([^"]*)":$/ do |name, yaml|
@@ -213,8 +215,16 @@ module DSL
       @output
     end
 
-    def app_path
-      File.join(projects_path, app_name)
+    def app_path(sub_directory = nil)
+      path = app_path = Pathname.new(File.join(projects_path, app_name)).cleanpath.to_s
+
+      if sub_directory
+        path = Pathname.new(File.join(app_path, sub_directory)).cleanpath.to_s
+
+        raise "#{name} is outside of the app" unless path =~ %r{^#{app_path}/}
+      end
+
+      path
     end
 
     def config_path

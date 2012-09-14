@@ -1,6 +1,17 @@
 module LicenseFinder
   class Reporter
+    def self.create_default_configuration
+      unless File.exists?(LicenseFinder.config.config_file_path)
+        FileUtils.mkdir_p(File.join('.', 'config'))
+        FileUtils.cp(
+          File.join(File.dirname(__FILE__), '..', '..', 'files', 'license_finder.yml'),
+          LicenseFinder.config.config_file_path
+        )
+      end
+    end
+
     def initialize
+      self.class.create_default_configuration
       @dependency_list = generate_list
       save_reports
     end
@@ -12,6 +23,7 @@ module LicenseFinder
     private
 
     attr_reader :dependency_list
+
     def save_reports
       write_file LicenseFinder.config.dependencies_yaml, dependency_list.to_yaml
       write_file LicenseFinder.config.dependencies_text, dependency_list.to_s

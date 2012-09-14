@@ -7,7 +7,7 @@ Feature: Catch Regressions!
     | MIT     | summary | description |
     When I run "<command>"
     And I run "<command>"
-    Then license finder should generate a file "dependencies.txt" containing:
+    Then I should see the file "dependencies.txt" containing:
       """
       descriptive_gem, 0.0.0, MIT
       """

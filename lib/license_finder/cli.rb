@@ -2,16 +2,6 @@ module LicenseFinder
   module CLI
     extend self
 
-    def create_default_configuration
-      unless File.exists?(LicenseFinder.config.config_file_path)
-        `mkdir -p ./config`
-        FileUtils.cp(
-          File.join(File.dirname(__FILE__), '..', '..', 'files', 'license_finder.yml'),
-          LicenseFinder.config.config_file_path
-        )
-      end
-    end
-
     def check_for_action_items
       found = LicenseFinder::Reporter.new.action_items
 

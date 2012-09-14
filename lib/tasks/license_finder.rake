@@ -1,7 +1,7 @@
 namespace :license do
   desc 'write out example config file'
   task :init do
-    LicenseFinder::CLI.create_default_configuration
+    LicenseFinder::Reporter.create_default_configuration
   end
 
   desc 'generate a list of dependency licenses'

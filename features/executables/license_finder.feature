@@ -1,5 +1,22 @@
 Feature: License Finder command line executable
 
+  Scenario: Running without a configuration file
+    Given I have an app with license finder
+    And my app does not have a "config" directory
+    When I run "license_finder"
+    Then I should see a "config" directory
+    And I should see the file "config/license_finder.yml" with the following content:
+      """
+        ---
+        whitelist:
+        #- MIT
+        #- Apache 2.0
+        ignore_groups:
+        #- test
+        #- development
+        dependencies_file_dir: './'
+      """
+
   Scenario: Auditing an application with non-whitelisted licenses
     Given I have an app with license finder
     And my app depends on a gem "mit_licensed_gem" licensed with "MIT"
