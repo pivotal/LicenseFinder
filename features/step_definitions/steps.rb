@@ -63,11 +63,12 @@ end
 When /^my app(?:lication)? depends on a gem "([^"]*)" with:$/ do |gem_name, gem_info|
   info = gem_info.hashes.first
   @user.add_dependency_to_app(gem_name,
-    :license      => info["license"],
-    :summary      => info["summary"],
-    :description  => info["description"],
-    :version      => info["version"],
-    :homepage     => info["homepage"]
+    :license        => info["license"],
+    :summary        => info["summary"],
+    :description    => info["description"],
+    :version        => info["version"],
+    :homepage       => info["homepage"],
+    :bundler_groups => info["bundler_groups"]
   )
 end
 
@@ -167,7 +168,7 @@ module DSL
       license = options.fetch(:license)
       summary = options.fetch(:summary, "")
       description = options.fetch(:description, "")
-      bundler_groups = options.fetch(:bundler_groups, "").split(',').map(&:strip)
+      bundler_groups = options.fetch(:bundler_groups, "").to_s.split(',').map(&:strip)
       version = options[:version] || "0.0.0"
       homepage = options[:homepage]
 

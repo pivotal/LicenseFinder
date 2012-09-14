@@ -130,6 +130,22 @@ describe LicenseFinder::Dependency do
         should include %{class="unapproved"}
       end
     end
+
+    context "when the gem has at least one bundler group" do
+      before { dependency.bundler_groups = ["group"] }
+      it "should show the bundler group(s) in parens" do
+        should include "(group)"
+      end
+    end
+
+    context "when the gem has no bundler groups" do
+      before { dependency.bundler_groups = [] }
+
+      it "should not show any parens or bundler group info" do
+        should_not include "()"
+      end
+
+    end
   end
 
   describe '#source' do

@@ -107,7 +107,11 @@ module LicenseFinder
             <% else %>
               <%= name %>
             <% end %>
-            v<%=version%></h2>
+            v<%=version%>
+            <% if bundler_groups.any? %>
+              (<%= bundler_groups.join(", ") %>)
+            <% end%>
+          </h2>
           <table class="table table-striped table-bordered">
             <thead>
               <tr>
