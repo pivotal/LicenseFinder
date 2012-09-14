@@ -55,7 +55,7 @@ module LicenseFinder
           <head>
             <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.min.css" rel="stylesheet">
             <style type="text/css">
-            .unapproved h2 {
+            .unapproved h2, .unapproved h2 a {
               color: red;
             }
             </style>
