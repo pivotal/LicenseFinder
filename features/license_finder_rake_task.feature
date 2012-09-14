@@ -10,14 +10,14 @@ Feature: License Finder command line executable
     Then I should see a "config" directory
     And I should see the file "config/license_finder.yml" with the following content:
       """
-        ---
-        whitelist:
-        #- MIT
-        #- Apache 2.0
-        ignore_groups:
-        #- test
-        #- development
-        dependencies_file_dir: './'
+      ---
+      whitelist:
+      #- MIT
+      #- Apache 2.0
+      ignore_groups:
+      #- test
+      #- development
+      dependencies_file_dir: './'
       """
 
   Scenario: Auditing an application with non-whitelisted licenses

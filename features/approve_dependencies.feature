@@ -11,14 +11,14 @@ Feature: Approving non-whitelisted Dependencies
     When I run "license_finder"
     Then I should see the following settings for "gpl_gem":
       """
-        version: "0.0.0"
-        license: "GPL"
-        approved: false
+      version: "0.0.0"
+      license: "GPL"
+      approved: false
       """
 
     When I update the settings for "gpl_gem" with the following content:
       """
-        approved: true
+      approved: true
       """
     When I run "license_finder"
     Then I should not see "gpl_gem" in its output
@@ -35,15 +35,15 @@ Feature: Approving non-whitelisted Dependencies
       """
     Then I should see the following settings for "my_javascript_library":
       """
-        version: "0.0.0"
-        license: "GPL"
-        approved: false
+      version: "0.0.0"
+      license: "GPL"
+      approved: false
       """
     When I run "license_finder"
     Then I should see "my_javascript_library" in its output
     When I update the settings for "my_javascript_library" with the following content:
       """
-        approved: true
+      approved: true
       """
     When I run "license_finder"
     Then I should not see "my_javascript_library" in its output
