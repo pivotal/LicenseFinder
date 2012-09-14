@@ -12,7 +12,7 @@ Given /^I have an app(?:lication)? with license finder$/ do
 end
 
 
-Given /^I have an app(?:lication)? setup with rake and license finder$/ do
+Given /^I have an app(?:lication)? with rake and license finder$/ do
   @user = ::DSL::User.new
   @user.create_nonrails_app
   @user.add_license_finder_to_rakefile

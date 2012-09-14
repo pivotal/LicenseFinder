@@ -1,5 +1,5 @@
 Feature: License Finder command line executable
-  So that I can report and manange my application's dependencies and licenses to my business
+  So that I can report and manage my application's dependencies and licenses to my business
   As an application developer
   I want a command-line interface
 
