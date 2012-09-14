@@ -1,5 +1,3 @@
-require 'license_finder'
-require 'rails'
 module LicenseFinder
   class Railtie < Rails::Railtie
     rake_tasks do
