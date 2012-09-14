@@ -104,7 +104,7 @@ Then /^I should see the "([^"]*)" in the html flagged as "([^"]*)"$/ do |gem_nam
   gpl_gem[:class].should == css_class
 end
 
-Then /^I should see the "([^"]*)" in the html with the following details:$/ do |gem_name, table|
+Then /^I should see (?:the )?"([^"]*)" in the html with the following details:$/ do |gem_name, table|
   html = File.read(@user.dependencies_html_path)
   page = Capybara.string(html)
   section = page.find("##{gem_name}")

@@ -5,7 +5,15 @@ module LicenseFinder
     attr_reader :dependencies
 
     def self.from_bundler
-      new(Bundle.new.gems.map(&:to_dependency))
+      dep_list = new(Bundle.new.gems.map(&:to_dependency))
+      dep_list.dependencies.each do |dep|
+        dep.children.each do |child_dep|
+          dep_list.dependencies.select { |d| d.name == child_dep.name }.each do |found_child|
+            found_child.parents << dep
+          end
+        end
+      end
+      dep_list
     end
 
     def self.from_yaml(yaml)

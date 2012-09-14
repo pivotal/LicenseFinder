@@ -146,6 +146,33 @@ describe LicenseFinder::Dependency do
       end
 
     end
+
+    context "when the gem has at least one parent" do
+      before { dependency.parents = [ OpenStruct.new(:name => "foo parent") ]}
+      it "should include a parents section" do
+        should include "Parents"
+      end
+    end
+
+    context "when the gem has no parents" do
+      it "should not include any parents section in the output" do
+        should_not include "Parents"
+      end
+    end
+
+    context "when the gem has at least one child" do
+      before { dependency.children = [ OpenStruct.new(:name => "foo child") ]}
+
+      it "should include a Children section" do
+        should include "Children"
+      end
+    end
+
+    context "when the gem has no children" do
+      it "should not include any Children section in the output" do
+        should_not include "Children"
+      end
+    end
   end
 
   describe '#source' do

@@ -4,7 +4,7 @@ require "erb"
 module LicenseFinder
   class Dependency
     attr_accessor :name, :version, :license, :approved, :license_url, :notes, :license_files,
-      :readme_files, :source, :bundler_groups, :homepage
+      :readme_files, :source, :bundler_groups, :homepage, :children, :parents
 
     attr_reader :summary, :description
 
@@ -28,6 +28,8 @@ module LicenseFinder
       @summary = attributes['summary']
       @description = attributes['description']
       @homepage = attributes['homepage']
+      @children = attributes.fetch('children', [])
+      @parents = attributes.fetch('parents', [])
     end
 
     def license_url
@@ -48,7 +50,9 @@ module LicenseFinder
         'summary' => other.summary,
         'description' => other.description,
         'bundler_groups' => other.bundler_groups,
-        'homepage' => other.homepage
+        'homepage' => other.homepage,
+        'children' => other.children,
+        'parents' => other.parents
       )
 
       case other.license
@@ -135,6 +139,24 @@ module LicenseFinder
               </tr>
             </tbody>
           </table>
+
+          <% if parents.any? %>
+            <dl>
+              <dt>Parents</dt>
+              <% parents.each do |parent| %>
+                <dd><%= parent.name %></dd>
+              <% end %>
+            </dl>
+          <% end %>
+
+          <% if children.any? %>
+            <dl>
+              <dt>Children</dt>
+              <% children.each do |child| %>
+                <dd><%= child.name %></dd>
+              <% end %>
+            </dl>
+          <% end %>
         </div>
       ERB
 

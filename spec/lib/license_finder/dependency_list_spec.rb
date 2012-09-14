@@ -1,12 +1,16 @@
 require 'spec_helper'
 
 describe LicenseFinder::DependencyList do
-  def build_gemspec(name, version)
+  def build_gemspec(name, version, dependency=nil)
     Gem::Specification.new do |s|
       s.name = name
       s.version = version
       s.summary = 'summary'
       s.description = 'description'
+
+      if dependency
+        s.add_dependency dependency
+      end
     end
   end
 
@@ -36,6 +40,24 @@ describe LicenseFinder::DependencyList do
 
       subject.dependencies[1].name.should == 'gem2'
       subject.dependencies[1].version.should == '0.4.2'
+    end
+
+    context "when initialized with a parent and child gem" do
+      subject do
+        bundle = stub(Bundler::Definition).build.stub!
+        bundle.dependencies { [] }
+        bundle.groups { [] }
+        bundle.specs_for { [build_gemspec('gem1', '1.2.3', 'gem2'), build_gemspec('gem2', '0.4.2')] }
+
+        LicenseFinder::DependencyList.from_bundler
+      end
+
+      it "should update the child dependency with its parent data" do
+        gem1 = subject.dependencies.first
+        gem2 = subject.dependencies.last
+
+        gem2.parents.should == [gem1]
+      end
     end
   end
 
