@@ -24,3 +24,15 @@ Feature: HTML Report
     When I run "license_finder"
     Then I should see the "gpl_licensed_gem" in the html flagged as "unapproved"
     And I should see the "mit_licensed_gem" in the html flagged as "approved"
+
+  Scenario: Dependency summary
+    Given my app depends on a gem "gpl_licensed_gem" licensed with "GPL"
+    And my app depends on a gem "mit_licensed_gem" licensed with "MIT"
+    And I whitelist the following licenses: "MIT, other"
+    When I run "license_finder"
+    # rake, bundler, license_finder, my_app, gpl_licensed_gem, mit_licensed_gem
+    Then I should see "6 total" in the html
+    # gpl_licensed_gem
+    And I should see "1 unapproved" in the html
+    # gpl_licensed_gem
+    And I should see "1 GPL" in the html

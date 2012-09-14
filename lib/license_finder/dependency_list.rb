@@ -55,14 +55,37 @@ module LicenseFinder
           <head>
             <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.min.css" rel="stylesheet">
             <style type="text/css">
-            .unapproved h2, .unapproved h2 a {
-              color: red;
-            }
+              body {
+                margin: 50px;
+              }
+
+              .unapproved h2, .unapproved h2 a {
+                color: red;
+              }
             </style>
           </head>
           <body>
             <div class="container">
-              <%= sorted_dependencies.map(&:to_html).join("\n") %>
+              <div class="summary hero-unit">
+                <h1>Dependencies</h1>
+
+                <h4>
+                  <%= dependencies.size %> total
+
+                  <% if unapproved_dependencies.any? %>
+                    <span class="badge badge-important"><%= unapproved_dependencies.size %> unapproved</span>
+                  <% end %>
+                </h4>
+
+                <ul>
+                  <% grouped_dependencies.each do |license, group| %>
+                    <li><%= group.size %> <%= license %></li>
+                  <% end %>
+                </ul>
+              </div>
+              <div class="dependencies">
+                <%= sorted_dependencies.map(&:to_html).join("\n") %>
+              </div>
             </div>
           </body>
         </html>
@@ -73,8 +96,16 @@ module LicenseFinder
 
     private
 
+    def unapproved_dependencies
+      dependencies.reject(&:approved)
+    end
+
     def sorted_dependencies
       dependencies.sort_by(&:name)
+    end
+
+    def grouped_dependencies
+      dependencies.group_by(&:license).sort_by { |_, group| group.size }.reverse
     end
   end
 end

@@ -114,6 +114,12 @@ Then /^I should see the "([^"]*)" in the html with the following details:$/ do |
   end
 end
 
+Then /^I should see "([^"]*)" in the html$/ do |text|
+  html = File.read(@user.dependencies_html_path)
+  page = Capybara.string(html)
+
+  page.should have_content text
+end
 
 module DSL
   class User

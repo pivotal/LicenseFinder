@@ -188,9 +188,14 @@ describe LicenseFinder::DependencyList do
 
   describe '#action_items' do
     it "should return all unapproved dependencies" do
-      gem1 = Struct.new(:name, :to_s, :approved).new("a", "a string", true)
-      gem2 = Struct.new(:name, :to_s, :approved).new("b", "b string", false)
-      gem3 = Struct.new(:name, :to_s, :approved).new("c", "c string", false)
+      gem1 = LicenseFinder::Dependency.new('name' => 'a', 'approved' => true)
+      stub(gem1).to_s { 'a string' }
+
+      gem2 = LicenseFinder::Dependency.new('name' => 'b', 'approved' => false)
+      stub(gem2).to_s { 'b string' }
+
+      gem3 = LicenseFinder::Dependency.new('name' => 'c', 'approved' => false)
+      stub(gem3).to_s { 'c string' }
 
       list = LicenseFinder::DependencyList.new([gem1, gem2, gem3])
 
@@ -200,8 +205,11 @@ describe LicenseFinder::DependencyList do
 
   describe '#to_html' do
     it "should concatenate the results of the each dependency's #to_html and plop it into a proper HTML document" do
-      gem1 = Struct.new(:name, :to_html).new("a", "A")
-      gem2 = Struct.new(:name, :to_html).new("b", "B")
+      gem1 = LicenseFinder::Dependency.new('name' => 'a')
+      stub(gem1).to_html { 'A' }
+
+      gem2 = LicenseFinder::Dependency.new('name' => 'b')
+      stub(gem2).to_html { 'B' }
 
       list = LicenseFinder::DependencyList.new([gem1, gem2])
 
