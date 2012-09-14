@@ -2,18 +2,18 @@ require 'fileutils'
 require 'capybara'
 
 Given /^I have a rails app(?:lication)? with license finder$/ do
-  @user = DSL::User.new
+  @user = ::DSL::User.new
   @user.create_rails_app
 end
 
 Given /^I have an app(?:lication)? with license finder$/ do
-  @user = DSL::User.new
+  @user = ::DSL::User.new
   @user.create_nonrails_app
 end
 
 
 Given /^I have an app(?:lication)? setup with rake and license finder$/ do
-  @user = DSL::User.new
+  @user = ::DSL::User.new
   @user.create_nonrails_app
   @user.add_license_finder_to_rakefile
 end
@@ -285,6 +285,7 @@ module DSL
     end
   end
 end
+
 
 When /^the text "([^"]*)" should link to "([^"]*)"$/ do |text, link|
   html = Capybara.string File.read(@user.dependencies_html_path)
