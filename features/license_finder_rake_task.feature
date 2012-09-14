@@ -9,7 +9,7 @@ Feature: License Finder command line executable
     When I run "rake license_finder"
     Then I should see a "config" directory
     And I should see the file "config/license_finder.yml" with the following content:
-    """
+      """
         ---
         whitelist:
         #- MIT

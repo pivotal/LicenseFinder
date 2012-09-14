@@ -11,5 +11,5 @@ Feature: Text Report
     When I run "license_finder"
     Then I should see the file "dependencies.txt" containing:
       """
-      descriptive_gem, 1.1.1, MIT
+        descriptive_gem, 1.1.1, MIT
       """
