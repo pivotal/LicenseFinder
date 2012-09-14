@@ -1,0 +1,22 @@
+rvm:
+  - 1.9.3
+  - 1.9.2
+  - jruby-18mode
+  - jruby-19mode
+  - rbx-18mode
+  - rbx-19mode
+  - ruby-head
+  - jruby-head
+  - 1.8.7
+  - ree
+
+matrix:
+  allow_failures:
+    - rvm: jruby-18mode
+    - rvm: jruby-19mode
+    - rvm: rbx-18mode
+    - rvm: rbx-19mode
+    - rvm: ruby-head
+    - rvm: jruby-head
+    - rvm: 1.8.7
+    - rvm: ree
