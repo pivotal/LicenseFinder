@@ -3,6 +3,8 @@ require "erb"
 
 module LicenseFinder
   class Dependency
+    include Viewable
+
     attr_accessor :name, :version, :license, :approved, :license_url, :notes, :license_files,
       :readme_files, :source, :bundler_groups, :homepage, :children, :parents
 
@@ -94,73 +96,6 @@ module LicenseFinder
       end
 
       attrs
-    end
-
-    def to_yaml
-      as_yaml.to_yaml
-    end
-
-    def to_html
-      css_class = approved ? "approved" : "unapproved"
-
-      template = ERB.new <<-ERB
-        <div id="<%=name%>" class="<%=css_class%>">
-          <h2>
-            <% if homepage && !homepage.empty? %>
-              <a href="<%=homepage%>"><%=name%></a>
-            <% else %>
-              <%= name %>
-            <% end %>
-            v<%=version%>
-            <% if bundler_groups.any? %>
-              (<%= bundler_groups.join(", ") %>)
-            <% end%>
-          </h2>
-          <table class="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>Summary</th>
-                <th>Description</th>
-                <th>License</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><%= summary %></td>
-                <td><%= description %></td>
-                <td>
-                  <% if license_url && !license_url.empty? %>
-                    <a href="<%= license_url %>"><%= license %></a>
-                  <% else %>
-                    <%= license %>
-                  <% end %>
-                </td>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <% if parents.any? %>
-            <dl>
-              <dt>Parents</dt>
-              <% parents.each do |parent| %>
-                <dd><%= parent.name %></dd>
-              <% end %>
-            </dl>
-          <% end %>
-
-          <% if children.any? %>
-            <dl>
-              <dt>Children</dt>
-              <% children.each do |child| %>
-                <dd><%= child.name %></dd>
-              <% end %>
-            </dl>
-          <% end %>
-        </div>
-      ERB
-
-      template.result binding
     end
 
     def to_s

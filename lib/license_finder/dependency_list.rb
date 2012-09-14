@@ -2,6 +2,8 @@
 
 module LicenseFinder
   class DependencyList
+    include Viewable
+
     attr_reader :dependencies
 
     def self.from_bundler
@@ -45,61 +47,12 @@ module LicenseFinder
       sorted_dependencies.map(&:as_yaml)
     end
 
-    def to_yaml
-      as_yaml.to_yaml
-    end
-
     def to_s
       sorted_dependencies.map(&:to_s).join("\n")
     end
 
     def action_items
       sorted_dependencies.reject(&:approved).map(&:to_s).join "\n"
-    end
-
-    def to_html
-      template = ERB.new <<-HTML
-        <html>
-          <head>
-            <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.min.css" rel="stylesheet">
-            <style type="text/css">
-              body {
-                margin: 50px;
-              }
-
-              .unapproved h2, .unapproved h2 a {
-                color: red;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="summary hero-unit">
-                <h1>Dependencies</h1>
-
-                <h4>
-                  <%= dependencies.size %> total
-
-                  <% if unapproved_dependencies.any? %>
-                    <span class="badge badge-important"><%= unapproved_dependencies.size %> unapproved</span>
-                  <% end %>
-                </h4>
-
-                <ul>
-                  <% grouped_dependencies.each do |license, group| %>
-                    <li><%= group.size %> <%= license %></li>
-                  <% end %>
-                </ul>
-              </div>
-              <div class="dependencies">
-                <%= sorted_dependencies.map(&:to_html).join("\n") %>
-              </div>
-            </div>
-          </body>
-        </html>
-      HTML
-
-      template.result binding
     end
 
     private

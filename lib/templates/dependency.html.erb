@@ -1,0 +1,54 @@
+<div id="<%= name %>" class="<%= approved ? "approved" : "unapproved" %>">
+  <h2>
+    <% if homepage && !homepage.empty? %>
+      <a href="<%= homepage %>"><%= name %></a>
+    <% else %>
+      <%= name %>
+    <% end %>
+    v<%= version %>
+    <% if bundler_groups.any? %>
+      (<%= bundler_groups.join(", ") %>)
+    <% end %>
+  </h2>
+  <table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+      <th>Summary</th>
+      <th>Description</th>
+      <th>License</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><%= summary %></td>
+      <td><%= description %></td>
+      <td>
+        <% if license_url && !license_url.empty? %>
+          <a href="<%= license_url %>"><%= license %></a>
+        <% else %>
+          <%= license %>
+        <% end %>
+      </td>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <% if parents.any? %>
+    <dl>
+      <dt>Parents</dt>
+      <% parents.each do |parent| %>
+        <dd><%= parent.name %></dd>
+      <% end %>
+    </dl>
+  <% end %>
+
+  <% if children.any? %>
+    <dl>
+      <dt>Children</dt>
+      <% children.each do |child| %>
+        <dd><%= child.name %></dd>
+      <% end %>
+    </dl>
+  <% end %>
+</div>
