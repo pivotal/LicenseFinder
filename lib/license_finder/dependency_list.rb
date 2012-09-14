@@ -8,14 +8,22 @@ module LicenseFinder
 
     def self.from_bundler
       dep_list = new(Bundle.new.gems.map(&:to_dependency))
+      setup_parents_of_dependencies(dep_list)
+      dep_list
+    end
+
+    def self.setup_parents_of_dependencies(dep_list)
+      dependency_index = {}
+      dep_list.dependencies.each do |dep|
+        dependency_index[dep.name] = dep
+      end
+
       dep_list.dependencies.each do |dep|
         dep.children.each do |child_dep|
-          dep_list.dependencies.select { |d| d.name == child_dep.name }.each do |found_child|
-            found_child.parents << dep
-          end
+          license_finder_dependency = dependency_index[child_dep.name]
+          license_finder_dependency.parents << dep if license_finder_dependency
         end
       end
-      dep_list
     end
 
     def self.from_yaml(yaml)
