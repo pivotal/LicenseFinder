@@ -28,14 +28,19 @@ Feature: Approving non-whitelisted Dependencies
     When I run "license_finder"
     And I add the following content to "dependencies.yml":
       """
-        - name: "my_javascript_library"
-          version: "0.0.0"
-          license: "GPL"
-          approved: false
+      - name: "my_javascript_library"
+        version: "0.0.0"
+        license: "GPL"
+        approved: false
+      """
+    Then I should see the following settings for "my_javascript_library":
+      """
+        version: "0.0.0"
+        license: "GPL"
+        approved: false
       """
     When I run "license_finder"
     Then I should see "my_javascript_library" in its output
-
     When I update the settings for "my_javascript_library" with the following content:
       """
         approved: true

@@ -89,7 +89,6 @@ Then /^I should see the following settings for "([^"]*)":$/ do |name, yaml|
   expected_settings = YAML.load(yaml)
   all_settings = YAML.load(File.read(@user.dependencies_file_path))
   actual_settings = all_settings.detect { |gem| gem['name'] == name }
-
   actual_settings.should include expected_settings
 end
 
