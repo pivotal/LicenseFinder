@@ -21,4 +21,10 @@ shared_examples_for "a license matcher" do
       end
     end
   end
+
+  describe "#license_text" do
+    it "should always produce a license text" do
+      subject.class.license_text.should_not be_nil, "No license text found for #{subject.class}! Add a license template to lib/templates named '#{subject.class.demodulized_name}.txt'"
+    end
+  end
 end
