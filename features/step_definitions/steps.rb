@@ -281,7 +281,7 @@ module DSL
     end
 
     def root_path
-      File.realpath(File.join(File.dirname(__FILE__), "..", ".."))
+      Pathname.new(File.join(File.dirname(__FILE__), "..", "..")).realpath.to_s
     end
   end
 end

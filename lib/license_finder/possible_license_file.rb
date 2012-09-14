@@ -10,7 +10,7 @@ module LicenseFinder
     end
 
     def full_file_path
-      @file_path.realpath.to_s
+      Pathname.new(@file_path).realpath.to_s
     end
 
     def file_name

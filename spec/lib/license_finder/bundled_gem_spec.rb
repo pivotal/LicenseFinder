@@ -14,7 +14,7 @@ describe LicenseFinder::BundledGem do
   end
 
   def fixture_path(fixture)
-    File.realpath(File.join(File.dirname(__FILE__), '..', '..', '..', 'spec', 'fixtures', fixture))
+    Pathname.new(File.join(File.dirname(__FILE__), '..', '..', '..', 'spec', 'fixtures', fixture)).realpath.to_s
   end
 
   its(:name) { should == 'spec_name 2.1.3' }
