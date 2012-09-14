@@ -51,7 +51,7 @@ module LicenseFinder::License
 
       def license_text
         unless defined?(@license_text)
-          template = File.join(LicenseFinder::ROOT_PATH, "templates", "#{demodulized_name}.txt").to_s
+          template = File.join(LicenseFinder::ROOT_PATH, "data", "licenses", "#{demodulized_name}.txt").to_s
 
           @license_text = Text.new(File.read(template)).to_s if File.exists?(template)
         end
