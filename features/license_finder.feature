@@ -34,4 +34,3 @@ Feature: License Finder command line executable
     When I run "license_finder"
     Then it should exit with status code 0
     And I should see "All gems are approved for use" in its output
-
