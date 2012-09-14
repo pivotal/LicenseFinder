@@ -18,7 +18,7 @@ gem 'license_finder'
 License finder will generate reports of action items - i.e., dependencies that do not fall within your license "whitelist".
 
 ```sh
-$ bundle exec rake license:action_items
+$ bundle exec license_finder
 ```
 
 The first time you run this, `license_finder` will create a default configuration file `./config/license_finder.yml`:
@@ -36,7 +36,7 @@ ignore_groups:
 
 This allows you to configure bundler groups and add licenses to the whitelist.
 
-On a brand new Rails project, you could expect `rake license:action_items` to output something like the following
+On a brand new Rails project, you could expect `license_finder` to output something like the following
 (assuming you whitelisted the MIT license in your `config/license_finder.yml`):
 
 ```
@@ -51,11 +51,11 @@ rubyzip, 0.9.9, ruby
 xml-simple, 1.1.1, other
 ```
 
-The rake task will also write out a dependencies.yml, dependencies.txt, and dependencies.html file in the root of your project.
+The executable task will also write out a dependencies.yml, dependencies.txt, and dependencies.html file in the root of your project.
 
 The latter two files are human readable reports that you could send to your non-technical business partners, lawyers, etc.
 
-`rake license:action_items` will also return a non-zero exit status if there are
+`license_finder` will also return a non-zero exit status if there are
 unapproved dependencies. You could use this in a CI build, for example, to alert you whenever someone adds an
 unapproved dependency to the project.
 
@@ -64,11 +64,11 @@ and then edited the resulting file).
 
 ### Manually approving dependencies
 
-Whenever you have a dependency that falls outside of your whitelist, `rake license:action_items` will tell you.
+Whenever you have a dependency that falls outside of your whitelist, `license_finder` will tell you.
 If your business decides that this is an acceptable risk, you can manually approve the dependency by finding its
 section in the `dependencies.yml` file and setting its `approved` attribute to true. For example, lets assume you've only
 whitelisted the "MIT" license in your `config/license_finder.yml`. You then add the 'awesome_gpl_gem' to your Gemfile,
-which we'll assume is licensed with the `GPL` license. You then run `rake license_finder:action_items` and see
+which we'll assume is licensed with the `GPL` license. You then run `license_finder` and see
 the gem listed in the output:
 
 ```txt
@@ -85,7 +85,7 @@ file, setting the `approved` attribute to `true` for the `awesome_gpl_gem` secti
   approved: true
 ```
 
-If you rerun `rake license:action_items`, you should no longer see `awesome_gpl_gem` in the output.
+If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
 
 ## Manually managing Javascript Dependencies
@@ -105,7 +105,7 @@ You could then update the "approved" attribute to true once you have signoff fro
 remember any manually added licenses between successive runs.
 
 
-## Usage outside Rails
+## Usage with Rake
 
 First, add license finder to your project's Gemfile:
 
@@ -113,7 +113,7 @@ First, add license finder to your project's Gemfile:
 gem "license_finder"
 ```
 
-Next, update your project's Rakefile with the license finder tasks:
+Next, update your project's Rakefile with the license finder rake task:
 
 ```ruby
 require 'bundler/setup'
@@ -121,7 +121,10 @@ require 'license_finder'
 LicenseFinder.load_rake_tasks
 ```
 
-You can now use the `rake license:init` and `rake license:action_items` rake tasks.
+You can now run `bundle exec rake license_finder`. This is the equivalent of running `bundle exec license_finder`.
+
+This could be handy if you have a build for CI that you want to break when you have unapproved dependencies. The
+rake task will `exit 1` immediately if there are unapproved dependencies, stopping your build dead in its tracks!
 
 ## A note to gem authors / maintainers
 

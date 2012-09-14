@@ -7,7 +7,6 @@ module LicenseFinder
 
       if found.size == 0
         puts "All gems are approved for use"
-        exit 0
       else
         puts "Dependencies that need approval:"
         puts found

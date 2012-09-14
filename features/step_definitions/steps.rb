@@ -16,7 +16,6 @@ Given /^I have an app(?:lication)? setup with rake and license finder$/ do
   @user = DSL::User.new
   @user.create_nonrails_app
   @user.add_license_finder_to_rakefile
-  @user.execute_command "rake license:init"
 end
 
 Given /^my app(?:lication)? does not have a "([^"]+)" directory$/ do |name|
@@ -28,10 +27,6 @@ end
 
 Then /^I should see a "([^"]+)" directory$/ do |name|
   File.should be_exists(@user.app_path(name))
-end
-
-Given /^my application's rake file requires license finder$/ do
-  @user.add_license_finder_to_rakefile
 end
 
 Given /^my (?:rails )?app(?:lication)? depends on a gem "(.*?)" licensed with "(.*?)"$/ do |gem_name, license|
@@ -129,6 +124,8 @@ module DSL
 
       add_gem_dependency('rake')
       add_gem_dependency('license_finder', :path => root_path)
+
+      bundle_app
     end
 
     def create_rails_app
