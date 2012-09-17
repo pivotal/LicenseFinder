@@ -21,7 +21,9 @@ module LicenseFinder
       end
 
       def persist!
-        File.write(LicenseFinder.config.dependencies_yaml, dependency_attributes.to_yaml)
+        File.open(LicenseFinder.config.dependencies_yaml, 'w+') do |f|
+          f.write dependency_attributes.to_yaml
+        end
       end
 
       private
