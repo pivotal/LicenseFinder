@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module LicenseFinder
   module Viewable
     def self.included(base)

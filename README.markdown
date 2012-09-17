@@ -65,8 +65,10 @@ and then edited the resulting file).
 ### Manually approving dependencies
 
 Whenever you have a dependency that falls outside of your whitelist, `license_finder` will tell you.
-If your business decides that this is an acceptable risk, you can manually approve the dependency by finding its
-section in the `dependencies.yml` file and setting its `approved` attribute to true. For example, lets assume you've only
+If your business decides that this is an acceptable risk, you can manually approve the dependency by using the `-a` or
+`--approve` option of the `license_finder` command.
+
+For example, lets assume you've only
 whitelisted the "MIT" license in your `config/license_finder.yml`. You then add the 'awesome_gpl_gem' to your Gemfile,
 which we'll assume is licensed with the `GPL` license. You then run `license_finder` and see
 the gem listed in the output:
@@ -75,14 +77,10 @@ the gem listed in the output:
 awesome_gpl_gem, 1.0.0, GPL
 ```
 
-Your business tells you that in this case, it's acceptable to use this gem. You should now update your `dependencies.yml`
-file, setting the `approved` attribute to `true` for the `awesome_gpl_gem` section:
+Your business tells you that in this case, it's acceptable to use this gem. You now run:
 
-```yaml
-- name: awesome_gpl_gem
-  version: 1.0.0
-  license: GPL
-  approved: true
+```sh
+$ bundle exec license_finder -a awesome_gpl_gem
 ```
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.

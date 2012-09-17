@@ -25,4 +25,5 @@ module LicenseFinder
   end
 end
 
+require 'erb'
 require 'license_finder/railtie' if defined?(Rails)

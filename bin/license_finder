@@ -1,4 +1,16 @@
 #!/usr/bin/env ruby
 
 require 'license_finder'
-LicenseFinder::CLI.check_for_action_items
+require 'optparse'
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: license_finder [options]"
+
+  opts.on("-a", "--approve [GEM_NAME]", "Approve a gem by name.") do |gem_name|
+    options[:approve] = gem_name
+  end
+end.parse!
+
+LicenseFinder::CLI.execute! options

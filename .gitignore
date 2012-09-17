@@ -5,3 +5,6 @@ Gemfile.lock
 .rvmrc
 .idea/*
 tmp/
+dependencies.yml
+dependencies.txt
+config/

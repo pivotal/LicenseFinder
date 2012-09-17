@@ -3,6 +3,13 @@ Feature: Approving non-whitelisted Dependencies
   As an application developer using license finder
   I want to be able to manually approve dependencies that have licenses which fall outside of my whitelist
 
+  Scenario: Approving a non-whitelisted dependency via the `license_finder` command
+    Given I have an app with license finder
+    And my app depends on a gem "gpl_gem" licensed with "GPL"
+    When I run "license_finder"
+    When I run "license_finder -a gpl_gem"
+    Then I should see the "gpl_gem" in the html flagged as "approved"
+
   Scenario: Manually approving a non-whitelisted dependency
     Given I have an app with license finder
     And my app depends on a gem "gpl_gem" licensed with "GPL"

@@ -10,6 +10,8 @@ describe LicenseFinder::BundledGem do
       s.summary = 'summary'
       s.description = 'description'
       s.homepage = 'homepage'
+
+      s.add_dependency 'foo'
     end
   end
 
@@ -118,6 +120,7 @@ describe LicenseFinder::BundledGem do
     its(:source) { should == 'bundle' }
     its(:description) { should == 'description' }
     its(:homepage) { should == 'homepage' }
+    its(:children) { should == ['foo']}
 
     describe 'with a known license' do
       before do

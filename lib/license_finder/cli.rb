@@ -13,5 +13,16 @@ module LicenseFinder
         exit 1
       end
     end
+
+    def execute! options={}
+      if options.has_key?(:approve)
+        dependency = Dependency.find_by_name(options[:approve])
+        dependency.approve!
+        puts "The #{dependency.name} has been approved!\n\n"
+        check_for_action_items
+      else
+        check_for_action_items
+      end
+    end
   end
 end

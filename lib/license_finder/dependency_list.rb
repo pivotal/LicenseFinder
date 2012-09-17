@@ -20,19 +20,23 @@ module LicenseFinder
 
       dep_list.dependencies.each do |dep|
         dep.children.each do |child_dep|
-          license_finder_dependency = dependency_index[child_dep.name]
-          license_finder_dependency.parents << dep if license_finder_dependency
+          license_finder_dependency = dependency_index[child_dep]
+          license_finder_dependency.parents << dep.name if license_finder_dependency
         end
       end
     end
 
     def self.from_yaml(yaml)
       deps = YAML.load(yaml)
-      new(deps.map { |attrs| Dependency.from_hash(attrs) })
+      new(deps.map { |attrs| Dependency.new(attrs) })
     end
 
     def initialize(dependencies)
       @dependencies = dependencies
+    end
+
+    def save!
+      dependencies.map(&:save!)
     end
 
     def merge(new_list)

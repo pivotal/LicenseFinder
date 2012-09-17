@@ -32,7 +32,7 @@ module LicenseFinder
         'summary' => @spec.summary,
         'description' => @spec.description,
         'homepage' => @spec.homepage,
-        'children' => @spec.dependencies
+        'children' => @spec.dependencies.collect(&:name)
       )
     end
 

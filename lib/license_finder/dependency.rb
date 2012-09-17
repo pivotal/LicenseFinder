@@ -1,37 +1,115 @@
-# encoding: UTF-8
-require "erb"
-
 module LicenseFinder
   class Dependency
+    class Database
+      def initialize
+        @dependency_attributes = YAML.load File.read(LicenseFinder.config.dependencies_yaml) if File.exists?(LicenseFinder.config.dependencies_yaml)
+      end
+
+      def find(&block)
+        dependency_attributes.detect &block
+      end
+
+      def update(dependency_hash)
+        dependency_attributes.reject! { |a| a['name'] == dependency_hash['name'] }
+        dependency_attributes << dependency_hash
+        persist!
+      end
+
+      def delete_all
+        File.delete(LicenseFinder.config.dependencies_yaml) if File.exists?(LicenseFinder.config.dependencies_yaml)
+        @dependency_attributes = nil
+      end
+
+      def persist!
+        File.write(LicenseFinder.config.dependencies_yaml, dependency_attributes.to_yaml)
+      end
+
+      private
+      def dependency_attributes
+        @dependency_attributes ||= []
+      end
+    end
+
     include Viewable
 
-    attr_accessor :name, :version, :license, :approved, :license_url, :notes, :license_files,
-      :readme_files, :source, :bundler_groups, :homepage, :children, :parents
+    ATTRIBUTE_NAMES = [
+      "name", "source", "version", "license", "license_url", "approved", "notes",
+      "license_files", "readme_files", "bundler_groups", "summary",
+      "description", "homepage", "children", "parents"
+    ]
+
+
+    attr_accessor *ATTRIBUTE_NAMES
 
     attr_reader :summary, :description
 
     def self.from_hash(attrs)
-      attrs['license_files'] = attrs['license_files'].map { |lf| lf['path'] } if attrs['license_files']
-      attrs['readme_files'] = attrs['readme_files'].map { |rf| rf['path'] } if attrs['readme_files']
-
       new(attrs)
     end
 
+    def self.find_by_name(name)
+      attributes = database.find { |a| a['name'] == name }
+      new(attributes) if attributes
+    end
+
+    def self.database
+      @database ||= Database.new
+    end
+
     def initialize(attributes = {})
-      @source = attributes['source']
-      @name = attributes['name']
-      @version = attributes['version']
-      @license = attributes['license']
-      @approved = attributes['approved'] || LicenseFinder.config.whitelist.include?(attributes['license'])
-      @notes = attributes['notes'] || ''
-      @license_files = attributes['license_files'] || []
-      @readme_files = attributes['readme_files'] || []
-      @bundler_groups = attributes['bundler_groups'] || []
-      @summary = attributes['summary']
-      @description = attributes['description']
-      @homepage = attributes['homepage']
-      @children = attributes.fetch('children', [])
-      @parents = attributes.fetch('parents', [])
+      attributes.each do |key, value|
+        send("#{key}=", value)
+      end
+    end
+
+    def approved
+      return @approved if defined?(@approved)
+
+      @approved = LicenseFinder.config.whitelist.include?(license)
+    end
+
+    def notes
+      @notes ||= ''
+    end
+
+    def license_files
+      @license_files ||= []
+    end
+
+    def readme_files
+      @readme_files ||= []
+    end
+
+    def bundler_groups
+      @bundler_groups ||= []
+    end
+
+    def children
+      @children ||= []
+    end
+
+    def parents
+      @parents ||= []
+    end
+
+    def approve!
+      @approved = true
+      save!
+    end
+
+
+    def save!
+      self.class.database.update(attributes)
+    end
+
+    def attributes
+      attributes = {}
+
+      ATTRIBUTE_NAMES.each do |attrib|
+        attributes[attrib] = send attrib
+      end
+
+      attributes
     end
 
     def license_url
@@ -41,21 +119,7 @@ module LicenseFinder
     def merge(other)
       raise "Cannot merge dependencies with different names. Expected #{name}, was #{other.name}." unless other.name == name
 
-      merged = self.class.new(
-        'name' => name,
-        'version' => other.version,
-        'license_files' => other.license_files,
-        'readme_files' => other.readme_files,
-        'license_url' => other.license_url,
-        'notes' => notes,
-        'source' => other.source,
-        'summary' => other.summary,
-        'description' => other.description,
-        'bundler_groups' => other.bundler_groups,
-        'homepage' => other.homepage,
-        'children' => other.children,
-        'parents' => other.parents
-      )
+      merged = self.class.new(other.attributes.merge('notes' => notes))
 
       case other.license
       when license, 'other'
@@ -70,32 +134,7 @@ module LicenseFinder
     end
 
     def as_yaml
-      attrs = {
-        'name' => name,
-        'version' => version,
-        'license' => license,
-        'approved' => approved,
-        'source' => source,
-        'license_url' => license_url,
-        'homepage' => homepage,
-        'notes' => notes,
-        'license_files' => nil,
-        'readme_files' => nil
-      }
-
-      unless license_files.empty?
-        attrs['license_files'] = license_files.map do |file|
-          {'path' => file}
-        end
-      end
-
-      unless readme_files.empty?
-        attrs['readme_files'] = readme_files.map do |file|
-          {'path' => file}
-        end
-      end
-
-      attrs
+      attributes
     end
 
     def to_s
