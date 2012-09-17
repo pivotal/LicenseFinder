@@ -62,6 +62,19 @@ unapproved dependency to the project.
 It will also merge in an existing dependencies.yml file, if one exists (i.e., you've previously run this command
 and then edited the resulting file).
 
+### Manually recording licenses
+
+When you have dependencies marked as having an 'other' license, `license_finder` will output
+the license and readme file locations for the dependency, allowing you to manually research what the actual
+license is. Once this has been established, you can record this information with the `-l` option
+as such:
+
+```sh
+$ license_finder -l MIT my_unknown_dependency
+```
+
+This command would assign the MIT license to the dependency `my_unknown_dependency`.
+
 ### Manually approving dependencies
 
 Whenever you have a dependency that falls outside of your whitelist, `license_finder` will tell you.

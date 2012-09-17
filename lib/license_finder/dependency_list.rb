@@ -35,8 +35,8 @@ module LicenseFinder
       @dependencies = dependencies
     end
 
-    def save!
-      dependencies.map(&:save!)
+    def save
+      dependencies.map(&:save)
     end
 
     def merge(new_list)

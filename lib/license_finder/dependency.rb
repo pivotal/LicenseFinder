@@ -57,10 +57,15 @@ module LicenseFinder
     end
 
     def initialize(attributes = {})
-      attributes.each do |key, value|
-        send("#{key}=", value)
-      end
+      update_attributes_without_saving attributes
     end
+
+    def update_attributes new_values
+      update_attributes_without_saving(new_values)
+      save
+    end
+
+
 
     def approved
       return @approved if defined?(@approved)
@@ -94,11 +99,10 @@ module LicenseFinder
 
     def approve!
       @approved = true
-      save!
+      save
     end
 
-
-    def save!
+    def save
       self.class.database.update(attributes)
     end
 
@@ -142,6 +146,12 @@ module LicenseFinder
     end
 
     private
+
+    def update_attributes_without_saving(new_values)
+      new_values.each do |key, value|
+        send("#{key}=", value)
+      end
+    end
 
     def constantize(string)
       names = string.split('::')

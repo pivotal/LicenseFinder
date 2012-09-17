@@ -12,7 +12,18 @@ module LicenseFinder
 
           Dependency.stub(:find_by_name).with('foo').and_return(dependency)
 
-          CLI.execute! approve: "foo"
+          CLI.execute! approve: true, dependency: 'foo'
+        end
+      end
+
+      context "when the -l (--license) switch is provided" do
+        it "should update the license on the requested gem" do
+          dependency = double :dependency, :name => nil
+          dependency.should_receive(:update_attributes).with(:license => "foo")
+
+          Dependency.stub(:find_by_name).with("foo_gem").and_return dependency
+
+          CLI.execute! license: "foo", dependency: 'foo_gem'
         end
       end
 

@@ -15,14 +15,20 @@ module LicenseFinder
     end
 
     def execute! options={}
-      if options.has_key?(:approve)
-        dependency = Dependency.find_by_name(options[:approve])
-        dependency.approve!
-        puts "The #{dependency.name} has been approved!\n\n"
-        check_for_action_items
-      else
-        check_for_action_items
+      unless options.empty?
+        dependency = Dependency.find_by_name(options[:dependency])
+
+        if options[:approve]
+          dependency.approve!
+          puts "The #{dependency.name} has been approved!\n\n"
+        elsif options[:license]
+          dependency.update_attributes :license => options[:license]
+          puts "The #{dependency.name} has been marked as using #{options[:license]} license!\n\n"
+        end
       end
+
+
+      check_for_action_items
     end
   end
 end

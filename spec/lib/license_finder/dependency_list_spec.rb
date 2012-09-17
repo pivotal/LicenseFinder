@@ -69,15 +69,15 @@ module LicenseFinder
       end
     end
 
-    describe '#save!' do
+    describe '#save' do
       it "should save all the dependencies in the list" do
         dep1 = double('dependency 1')
-        dep1.should_receive(:save!)
+        dep1.should_receive(:save)
         dep2 = double('dependency 2')
-        dep2.should_receive(:save!)
+        dep2.should_receive(:save)
 
         dep_list = DependencyList.new([dep1, dep2])
-        dep_list.save!
+        dep_list.save
       end
     end
 

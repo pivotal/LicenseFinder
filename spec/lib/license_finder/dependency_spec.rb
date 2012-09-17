@@ -63,7 +63,7 @@ module LicenseFinder
       end
     end
 
-    describe '.new' do
+    describe 'yaml serialization' do
       subject { Dependency.from_hash(attributes) }
 
       its(:name) { should == 'spec_name' }
@@ -104,68 +104,68 @@ module LicenseFinder
         end
       end
 
-      it 'should generate yaml' do
-        yaml = YAML.load(subject.to_yaml)
-        yaml.should == subject.as_yaml
+      describe "#to_yaml" do
+        it 'should generate yaml' do
+          yaml = YAML.load(subject.to_yaml)
+          yaml.should == subject.as_yaml
+        end
       end
     end
 
-    describe '.find_by_name' do
-      subject { Dependency.find_by_name gem_name }
-      let(:gem_name) { "foo" }
-
+    describe "persistence" do
       before do
         Dependency.database.delete_all
       end
 
-      context "when a gem with the provided name exists" do
-        before do
-          Dependency.new(
-            'name' => gem_name,
-            'version' => '0.0.1'
-          ).save!
+      describe '.find_by_name' do
+        subject { Dependency.find_by_name gem_name }
+        let(:gem_name) { "foo" }
+
+        context "when a gem with the provided name exists" do
+          before do
+            Dependency.new(
+              'name' => gem_name,
+              'version' => '0.0.1'
+            ).save
+          end
+
+          its(:name) { should == gem_name }
+          its(:version) { should == '0.0.1' }
         end
 
-        its(:name) { should == gem_name }
-        its(:version) { should == '0.0.1' }
+        context "when no gem with the provided name exists" do
+          it { should == nil }
+        end
       end
 
-      context "when no gem with the provided name exists" do
-        it { should == nil }
+      describe '#save' do
+        it "should persist all of the dependency's attributes" do
+          dep = Dependency.new(attributes)
+          dep.save
+
+          saved_dep = Dependency.find_by_name(dep.name)
+
+          saved_dep.attributes.should == dep.attributes
+
+          dep.version = "new version"
+          dep.save
+
+          saved_dep = Dependency.find_by_name(dep.name)
+          saved_dep.version.should == "new version"
+        end
       end
-    end
 
-    describe '#save!' do
-      before do
-        File.delete(LicenseFinder.config.dependencies_yaml) if File.exists?(LicenseFinder.config.dependencies_yaml)
+      describe "#update_attributes" do
+        it "should update the provided attributes with the provided values" do
+          gem = Dependency.new(attributes)
+          updated_attributes = {"version" => "new_version", "license" => "updated_license"}
+          gem.update_attributes(updated_attributes)
+
+          saved_gem = Dependency.find_by_name(gem.name)
+          saved_gem.attributes.should == gem.attributes.merge(updated_attributes)
+        end
       end
 
-      it "should serialize its YAML representation out to the dependencies.yaml file" do
-        dep = Dependency.new(attributes)
-        dep.save!
-
-        saved_dep = Dependency.find_by_name(dep.name)
-
-        saved_dep.name.should == dep.name
-        saved_dep.version.should == dep.version
-        saved_dep.license.should == dep.license
-        saved_dep.approved.should == dep.approved
-        saved_dep.license_url.should == dep.license_url
-        saved_dep.notes.should == dep.notes
-        saved_dep.license_files.should == dep.license_files
-        saved_dep.readme_files.should == dep.readme_files
-        saved_dep.source.should == dep.source
-        saved_dep.bundler_groups.should == dep.bundler_groups
-        saved_dep.homepage.should == dep.homepage
-        saved_dep.children.should == dep.children
-        saved_dep.parents.should == dep.parents
-
-        dep.version = "new version"
-        dep.save!
-
-        saved_dep = Dependency.find_by_name(dep.name)
-        saved_dep.version.should == "new version"
-      end
     end
 
     describe '#license_url' do
@@ -203,6 +203,7 @@ module LicenseFinder
         should == "test_gem, 1.0, MIT"
       end
     end
+
 
     describe '#to_html' do
       let(:dependency) { Dependency.new 'approved' => true }
@@ -368,6 +369,16 @@ module LicenseFinder
         gem.approve!
         reloaded_gem = Dependency.find_by_name(gem.name)
         reloaded_gem.approved.should be_true
+      end
+    end
+
+    describe '#attributes' do
+      it "should return a hash containing the values of all the accessible properties" do
+        dep = Dependency.new(attributes)
+        attributes = dep.attributes
+        Dependency::ATTRIBUTE_NAMES.each do |name|
+          attributes[name].should == dep.send(name)
+        end
       end
     end
   end

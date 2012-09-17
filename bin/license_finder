@@ -6,11 +6,19 @@ require 'optparse'
 options = {}
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: license_finder [options]"
+  opts.banner = "Usage: license_finder [options] [dependency]"
 
-  opts.on("-a", "--approve [GEM_NAME]", "Approve a gem by name.") do |gem_name|
-    options[:approve] = gem_name
+  opts.on("-a", "--approve", "Approve a gem by name.") do |gem_name|
+    options[:approve] = true
+  end
+
+  opts.on("-l", "--license [LICENSE]", "Update a gem's license.") do |license|
+    options[:license] = license
   end
 end.parse!
+
+unless options.empty?
+  options[:dependency] = ARGV.last
+end
 
 LicenseFinder::CLI.execute! options

@@ -25,7 +25,7 @@ module LicenseFinder
     attr_reader :dependency_list
 
     def save_reports
-      dependency_list.save!
+      dependency_list.save
       write_file LicenseFinder.config.dependencies_text, dependency_list.to_s
       write_file LicenseFinder.config.dependencies_html, dependency_list.to_html
     end
