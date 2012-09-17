@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "bundler"
   s.add_development_dependency "rails", ">=3"
-  %w(rspec rr rake cucumber rails pry capybara).each do |gem|
+  %w(rspec rake cucumber rails pry capybara).each do |gem|
     s.add_development_dependency gem
   end
 

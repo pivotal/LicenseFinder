@@ -18,8 +18,10 @@ module LicenseFinder
     end
 
     before do
-      stub(LicenseFinder).config.stub!.whitelist { %w(MIT) }
-      stub(LicenseFinder.config).dependencies_yaml { "dependencies.yml" }
+      LicenseFinder.stub(:config).and_return(double('config', {
+        :whitelist => %w(MIT),
+        :dependencies_yaml => 'dependencies.yml'
+      }))
     end
 
     describe '.new' do

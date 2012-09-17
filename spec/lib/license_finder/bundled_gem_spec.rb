@@ -27,26 +27,26 @@ describe LicenseFinder::BundledGem do
   describe "#determine_license" do
     subject do
       details = LicenseFinder::BundledGem.new(gemspec)
-      stub(details).license_files { [license_file] }
+      details.stub(:license_files).and_return([license_file])
       details
     end
 
     let(:license_file) { LicenseFinder::PossibleLicenseFile.new('gem', 'gem/license/path') }
 
     it "returns the license from the gemspec if provided" do
-      stub(gemspec).license { "Some License" }
+      gemspec.stub(:license).and_return('Some License')
 
       subject.determine_license.should == "Some License"
     end
 
     it "returns the matched license if detected" do
-      stub(license_file).license { "Detected License" }
+      license_file.stub(:license).and_return('Detected License')
 
       subject.determine_license.should == "Detected License"
     end
 
     it "returns 'other' otherwise" do
-      stub(license_file).license { nil }
+      license_file.stub(:license).and_return(nil)
 
       subject.determine_license.should == "other"
     end
@@ -58,14 +58,14 @@ describe LicenseFinder::BundledGem do
     end
 
     it "includes files with names like LICENSE, License or COPYING" do
-      stub(gemspec).full_gem_path { fixture_path('license_names') }
+      gemspec.stub(:full_gem_path).and_return(fixture_path('license_names'))
 
       subject.license_files.map(&:file_name).should =~
         %w[COPYING.txt LICENSE Mit-License README.rdoc Licence.rdoc]
     end
 
     it "includes files deep in the hierarchy" do
-      stub(gemspec).full_gem_path { fixture_path('nested_gem') }
+      gemspec.stub(:full_gem_path).and_return(fixture_path('nested_gem'))
 
       subject.license_files.map { |f| [f.file_name, f.file_path] }.should =~ [
         %w[LICENSE vendor/LICENSE]
@@ -73,7 +73,7 @@ describe LicenseFinder::BundledGem do
     end
 
     it "includes both files nested inside LICENSE directory and top level files" do
-      stub(gemspec).full_gem_path { fixture_path('license_directory') }
+      gemspec.stub(:full_gem_path).and_return(fixture_path('license_directory'))
       found_license_files = subject.license_files
 
       found_license_files.map { |f| [f.file_name, f.file_path] }.should =~ [
@@ -93,7 +93,7 @@ describe LicenseFinder::BundledGem do
     end
 
     it "includes files with names like README, Readme or COPYING" do
-      stub(gemspec).full_gem_path { fixture_path('readme') }
+      gemspec.stub(:full_gem_path).and_return(fixture_path('readme'))
 
       subject.readme_files.map(&:file_name).should =~ [
         "Project ReadMe",
@@ -103,7 +103,7 @@ describe LicenseFinder::BundledGem do
     end
 
     it "includes files deep in the hierarchy" do
-      stub(gemspec).full_gem_path { fixture_path('nested_readme') }
+      gemspec.stub(:full_gem_path).and_return(fixture_path('nested_readme'))
 
       subject.readme_files.map { |f| [f.file_name, f.file_path] }.should =~ [
         %w[README vendor/README]
@@ -124,8 +124,8 @@ describe LicenseFinder::BundledGem do
 
     describe 'with a known license' do
       before do
-        stub(gemspec).full_gem_path { fixture_path('mit_licensed_gem') }
-        any_instance_of(LicenseFinder::PossibleLicenseFile, :license => 'Detected License')
+        gemspec.stub(:full_gem_path).and_return(fixture_path('mit_licensed_gem'))
+        LicenseFinder::PossibleLicenseFile.any_instance.stub(:license).and_return('Detected License')
       end
 
       its(:license) { should == 'Detected License' }
@@ -133,8 +133,8 @@ describe LicenseFinder::BundledGem do
 
     describe 'with an unknown license' do
       before do
-        stub(gemspec).full_gem_path { fixture_path('other_licensed_gem') }
-        any_instance_of(LicenseFinder::PossibleLicenseFile, :license => nil)
+        gemspec.stub(:full_gem_path).and_return(fixture_path('other_licensed_gem'))
+        LicenseFinder::PossibleLicenseFile.any_instance.stub(:license).and_return(nil)
       end
 
       its(:license) { should == 'other' }
@@ -142,7 +142,7 @@ describe LicenseFinder::BundledGem do
 
     describe 'with UTF8 file License' do
       before do
-        stub(gemspec).full_gem_path { fixture_path('utf8_gem') }
+        gemspec.stub(:full_gem_path).and_return(fixture_path('utf8_gem'))
       end
 
       it "handles non UTF8 encodings" do

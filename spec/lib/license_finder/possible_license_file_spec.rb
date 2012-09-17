@@ -6,8 +6,7 @@ describe LicenseFinder::PossibleLicenseFile do
 
     context "ignoring text" do
       before do
-        stub(IO).read { "file text" }
-        stub(IO).binread { "file text" }
+        subject.stub(:text).and_return('file text')
       end
 
       its(:file_path) { should == 'nested/path' }
@@ -20,10 +19,9 @@ describe LicenseFinder::PossibleLicenseFile do
 
   context "with a known license" do
     before do
-      stub(IO).read { "a known license" }
-      stub(IO).binread { "a known license" }
+      subject.stub(:text).and_return('a known license')
 
-      stub(LicenseFinder::License::MIT).new("a known license").stub!.matches? { true }
+      LicenseFinder::License::MIT.stub(:new).with('a known license').and_return(double('MIT license', :matches? => true))
     end
 
     its(:license) { should == "MIT" }
@@ -31,10 +29,7 @@ describe LicenseFinder::PossibleLicenseFile do
 
   context "with an unknown license" do
     before do
-      stub(IO).read { "" }
-      stub(IO).binread { "" }
-
-      any_instance_of(LicenseFinder::License::Base, :matches? => false)
+      subject.stub(:text).and_return('')
     end
 
     its(:license) { should be_nil }

@@ -3,16 +3,14 @@ require "spec_helper"
 module LicenseFinder
   describe CLI do
     describe "#execute!(options)" do
-      before { stub(CLI).check_for_action_items }
+      before { CLI.stub(:check_for_action_items) }
 
       context "when the approve option is provided" do
         it "should approve the requested gem" do
-          dependency = Object.new
+          dependency = double('dependency', :name => nil)
+          dependency.should_receive(:approve!)
 
-          mock(dependency).approve!
-          stub(dependency).name
-
-          mock(Dependency).find_by_name("foo") { dependency }
+          Dependency.stub(:find_by_name).with('foo').and_return(dependency)
 
           CLI.execute! approve: "foo"
         end
@@ -20,7 +18,7 @@ module LicenseFinder
 
       context "when no options are provided" do
         it "should check for action items" do
-          mock(CLI).check_for_action_items
+          CLI.should_receive(:check_for_action_items)
           CLI.execute!
         end
       end

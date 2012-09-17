@@ -16,19 +16,27 @@ module LicenseFinder
     end
 
     before do
-      config = stub(LicenseFinder).config.stub!
-      config.whitelist { [] }
-      config.ignore_groups { [] }
+      LicenseFinder.stub(:config).and_return(double('config', {
+        :whitelist => [],
+        :ignore_groups => []
+      }))
     end
 
     describe '.from_bundler' do
       subject do
-        bundle = stub(Bundler::Definition).build.stub!
-        bundle.dependencies { [] }
-        bundle.groups { [] }
-        bundle.specs_for { [build_gemspec('gem1', '1.2.3'), build_gemspec('gem2', '0.4.2')] }
-
+        Bundler::Definition.stub(:build).and_return(definition)
         DependencyList.from_bundler
+      end
+
+      let(:definition) do
+        double('definition', {
+          :dependencies => [],
+          :groups => [],
+          :specs_for => [
+            build_gemspec('gem1', '1.2.3'),
+            build_gemspec('gem2', '0.4.2')
+          ]
+        })
       end
 
       it "should have 2 dependencies" do
@@ -44,13 +52,11 @@ module LicenseFinder
       end
 
       context "when initialized with a parent and child gem" do
-        subject do
-          bundle = stub(Bundler::Definition).build.stub!
-          bundle.dependencies { [] }
-          bundle.groups { [] }
-          bundle.specs_for { [build_gemspec('gem1', '1.2.3', 'gem2'), build_gemspec('gem2', '0.4.2')] }
-
-          DependencyList.from_bundler
+        before do
+          definition.stub(:specs_for).and_return([
+            build_gemspec('gem1', '1.2.3', 'gem2'),
+            build_gemspec('gem2', '0.4.2')
+          ])
         end
 
         it "should update the child dependency with its parent data" do
@@ -65,11 +71,10 @@ module LicenseFinder
 
     describe '#save!' do
       it "should save all the dependencies in the list" do
-        dep1 = Object.new
-        dep2 = Object.new
-
-        mock(dep1).save!
-        mock(dep2).save!
+        dep1 = double('dependency 1')
+        dep1.should_receive(:save!)
+        dep2 = double('dependency 2')
+        dep2.should_receive(:save!)
 
         dep_list = DependencyList.new([dep1, dep2])
         dep_list.save!
@@ -99,22 +104,14 @@ module LicenseFinder
 
     describe '#as_yaml' do
       it "should return an array of sorted dependencies converted to as_yaml hashes" do
-        dep1 = Object.new
-        dep2 = Object.new
-
-        mock(dep1).name    { "foo" }
-        mock(dep2).name    { "bar" }
-        mock(dep1).as_yaml { "foo" }
-        mock(dep2).as_yaml { "bar" }
+        dep1 = double('dependency 1', :name => 'foo', :as_yaml => 'foo')
+        dep2 = double('dependency 2', :name => 'bar', :as_yaml => 'bar')
 
         list = DependencyList.new([
           dep1, dep2
         ])
 
-        list.as_yaml.should == [
-          "bar",
-          "foo"
-        ]
+        list.as_yaml.should == %w(bar foo)
       end
     end
 
@@ -211,13 +208,13 @@ module LicenseFinder
     describe '#action_items' do
       it "should return all unapproved dependencies" do
         gem1 = LicenseFinder::Dependency.new('name' => 'a', 'approved' => true)
-        stub(gem1).to_s { 'a string' }
+        gem1.stub(:to_s).and_return('a string')
 
         gem2 = LicenseFinder::Dependency.new('name' => 'b', 'approved' => false)
-        stub(gem2).to_s { 'b string' }
+        gem2.stub(:to_s).and_return('b string')
 
         gem3 = LicenseFinder::Dependency.new('name' => 'c', 'approved' => false)
-        stub(gem3).to_s { 'c string' }
+        gem3.stub(:to_s).and_return('c string')
 
         list = DependencyList.new([gem1, gem2, gem3])
 
@@ -228,10 +225,10 @@ module LicenseFinder
     describe '#to_html' do
       it "should concatenate the results of the each dependency's #to_html and plop it into a proper HTML document" do
         gem1 = LicenseFinder::Dependency.new('name' => 'a')
-        stub(gem1).to_html { 'A' }
+        gem1.stub(:to_html).and_return('A')
 
         gem2 = LicenseFinder::Dependency.new('name' => 'b')
-        stub(gem2).to_html { 'B' }
+        gem2.stub(:to_html).and_return('B')
 
         list = DependencyList.new([gem1, gem2])
 

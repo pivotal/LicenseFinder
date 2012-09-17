@@ -11,5 +11,5 @@ Dir[File.join(File.dirname(__FILE__), 'support', '**', '*.rb')].each do |file|
 end
 
 RSpec.configure do |config|
-  config.mock_with :rr
+  config.mock_with :rspec
 end

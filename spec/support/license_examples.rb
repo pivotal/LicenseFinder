@@ -2,7 +2,7 @@ shared_examples_for "a license matcher" do
   describe "#matches?" do
     context "when a license text template exists" do
       before do
-        stub(subject.class).license_text { 'AWESOME "FOO" LICENSE' }
+        subject.class.stub(:license_text).and_return('AWESOME "FOO" LICENSE')
       end
 
       it "should return true if the body matches exactly" do

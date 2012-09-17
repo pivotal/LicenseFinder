@@ -10,8 +10,11 @@ describe LicenseFinder do
     end
 
     before do
-      stub(File).exists?('./config/license_finder.yml') { true }
-      stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join { config.to_yaml }
+      @config_file = double('configuration file')
+      @config_file.stub_chain(:readlines, :join).and_return(config.to_yaml)
+
+      File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
+      File.stub(:open).with('./config/license_finder.yml').and_return(@config_file)
     end
 
     after do
@@ -19,8 +22,8 @@ describe LicenseFinder do
     end
 
     it "should handle a missing configuration file" do
-      stub(File).exists?('./config/license_finder.yml') { false }
-      dont_allow(File).open('./config/license_finder.yml')
+      File.stub(:exists?).with('./config/license_finder.yml').and_return(false)
+      File.should_not_receive(:open).with('./config/license_finder.yml')
 
       LicenseFinder.config.whitelist.should == []
       LicenseFinder.config.ignore_groups.should == []
@@ -28,12 +31,9 @@ describe LicenseFinder do
     end
 
     it "should load the configuration exactly once" do
-      mock(File).open('./config/license_finder.yml').stub!.readlines.stub!.join { config.to_yaml }
+      File.should_receive(:open).with('./config/license_finder.yml').once.and_return(@config_file)
 
       LicenseFinder.config.whitelist
-
-      dont_allow(File).open('./config/license_finder.yml')
-
       LicenseFinder.config.whitelist
     end
 
@@ -43,7 +43,7 @@ describe LicenseFinder do
       end
 
       it "should load an empty whitelist from license_finder.yml when there are no whitelist items" do
-        stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join { config.merge('whitelist' => nil).to_yaml }
+        @config_file.readlines.stub(:join).and_return(config.merge('whitelist' => nil).to_yaml)
 
         LicenseFinder.config.whitelist.should =~ []
       end
@@ -55,7 +55,7 @@ describe LicenseFinder do
       end
 
       it "should load an empty ignore_groups list from license_finder.yml when there are no ignore groups" do
-        stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join { config.merge('ignore_groups' => nil).to_yaml }
+        @config_file.readlines.stub(:join).and_return(config.merge('ignore_groups' => nil).to_yaml)
 
         LicenseFinder.config.ignore_groups.should == []
       end
@@ -63,7 +63,7 @@ describe LicenseFinder do
 
     describe "#dependencies_dir" do
       it 'should allow the dependencies file directory to be configured' do
-        stub(File).open('./config/license_finder.yml').stub!.readlines.stub!.join { config.merge('dependencies_file_dir' => './elsewhere').to_yaml }
+        @config_file.readlines.stub(:join).and_return(config.merge('dependencies_file_dir' => './elsewhere').to_yaml)
 
         config = LicenseFinder.config
         config.dependencies_dir.should == './elsewhere'
