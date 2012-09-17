@@ -1,7 +1,7 @@
-Feature: License Finder command line executable
-  So that I can report and manage my application's dependencies and licenses to my business
+Feature: License Finder rake task
+  So that I can break my build suite if someone adds a dependency to the application with a non-whitelisted license
   As an application developer
-  I want a command-line interface
+  I want a rake task that exit's with a non-zero exit status if there are any action items
 
   Scenario: Running without a configuration file
     Given I have an app with rake and license finder
