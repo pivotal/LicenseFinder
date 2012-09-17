@@ -10,11 +10,8 @@ describe LicenseFinder do
     end
 
     before do
-      @config_file = double('configuration file')
-      @config_file.stub_chain(:readlines, :join).and_return(config.to_yaml)
-
       File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
-      File.stub(:open).with('./config/license_finder.yml').and_return(@config_file)
+      File.stub(:read).with('./config/license_finder.yml').and_return(config.to_yaml)
     end
 
     after do
@@ -31,7 +28,7 @@ describe LicenseFinder do
     end
 
     it "should load the configuration exactly once" do
-      File.should_receive(:open).with('./config/license_finder.yml').once.and_return(@config_file)
+      File.should_receive(:read).with('./config/license_finder.yml').once.and_return(config.to_yaml)
 
       LicenseFinder.config.whitelist
       LicenseFinder.config.whitelist
@@ -43,7 +40,7 @@ describe LicenseFinder do
       end
 
       it "should load an empty whitelist from license_finder.yml when there are no whitelist items" do
-        @config_file.readlines.stub(:join).and_return(config.merge('whitelist' => nil).to_yaml)
+        File.stub(:read).with('./config/license_finder.yml').and_return(config.merge('whitelist' => nil).to_yaml)
 
         LicenseFinder.config.whitelist.should =~ []
       end
@@ -55,7 +52,7 @@ describe LicenseFinder do
       end
 
       it "should load an empty ignore_groups list from license_finder.yml when there are no ignore groups" do
-        @config_file.readlines.stub(:join).and_return(config.merge('ignore_groups' => nil).to_yaml)
+        File.stub(:read).with('./config/license_finder.yml').and_return(config.merge('ignore_groups' => nil).to_yaml)
 
         LicenseFinder.config.ignore_groups.should == []
       end
@@ -63,7 +60,7 @@ describe LicenseFinder do
 
     describe "#dependencies_dir" do
       it 'should allow the dependencies file directory to be configured' do
-        @config_file.readlines.stub(:join).and_return(config.merge('dependencies_file_dir' => './elsewhere').to_yaml)
+        File.stub(:read).with('./config/license_finder.yml').and_return(config.merge('dependencies_file_dir' => './elsewhere').to_yaml)
 
         config = LicenseFinder.config
         config.dependencies_dir.should == './elsewhere'

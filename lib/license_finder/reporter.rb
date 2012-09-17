@@ -40,7 +40,7 @@ module LicenseFinder
       bundler_list = DependencyList.from_bundler
 
       if File.exists?(LicenseFinder.config.dependencies_yaml)
-        yml = File.open(LicenseFinder.config.dependencies_yaml).readlines.join
+        yml = File.read(LicenseFinder.config.dependencies_yaml)
         existing_list = DependencyList.from_yaml(yml)
         existing_list.merge(bundler_list)
       else

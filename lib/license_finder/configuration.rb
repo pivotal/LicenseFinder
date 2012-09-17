@@ -6,7 +6,7 @@ module LicenseFinder
       config = {}
 
       if File.exists?(config_file_path)
-        yaml = File.open(config_file_path).readlines.join
+        yaml = File.read(config_file_path)
         config = YAML.load(yaml)
       end
 
