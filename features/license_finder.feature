@@ -20,6 +20,14 @@ Feature: License Finder command line executable
       dependencies_file_dir: './'
       """
 
+  Scenario: Running with an empty dependencies.yml
+    Given I have an app with license finder
+    And my app depends on a gem "mit_licensed_gem" licensed with "MIT"
+    And I have a truncated dependencies.yml file
+    When I run "license_finder"
+    Then it should exit with status code 1
+    And I should see "mit_licensed_gem" in its output
+
   Scenario: Auditing an application with non-whitelisted licenses
     Given I have an app with license finder
     And my app depends on a gem "mit_licensed_gem" licensed with "MIT"

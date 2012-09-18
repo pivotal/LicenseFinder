@@ -82,11 +82,14 @@ module LicenseFinder
     end
 
     describe '#from_yaml' do
-      subject do
-        DependencyList.from_yaml([
+      let(:yaml) do
+        [
           {'name' => 'gem1', 'version' => '1.2.3', 'license' => 'MIT', 'approved' => false},
           {'name' => 'gem2', 'version' => '0.4.2', 'license' => 'MIT', 'approved' => false}
-        ].to_yaml)
+        ].to_yaml
+      end
+      subject do
+        DependencyList.from_yaml(yaml)
       end
 
       it 'should have 2 dependencies' do
@@ -99,6 +102,14 @@ module LicenseFinder
 
         subject.dependencies[1].name.should == 'gem2'
         subject.dependencies[1].version.should == '0.4.2'
+      end
+
+      context "given an empty string for the 'yaml'" do
+        let(:yaml) { "" }
+
+        it 'should return an empty dependency list if given an empty string' do
+          subject.dependencies.should be_empty
+        end
       end
     end
 

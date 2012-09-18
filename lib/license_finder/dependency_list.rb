@@ -27,7 +27,7 @@ module LicenseFinder
     end
 
     def self.from_yaml(yaml)
-      deps = YAML.load(yaml)
+      deps = YAML.load(yaml) || []
       new(deps.map { |attrs| Dependency.new(attrs) })
     end
 
