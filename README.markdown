@@ -152,4 +152,4 @@ And add a `LICENSE` file to your gem that contains your license text.
 
 ## License
 
-LicenseFinder is released under the terms of the MIT License. http://www.opensource.org/licenses/mit-license
+LicenseFinder is released under the MIT License. http://www.opensource.org/licenses/mit-license
