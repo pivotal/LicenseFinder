@@ -6,8 +6,8 @@ module LicenseFinder
 
     attr_reader :dependencies
 
-    def self.from_bundler
-      dep_list = new(Bundle.new.gems.map(&:to_dependency))
+    def self.from_bundler(bundle)
+      dep_list = new(bundle.gems.map(&:to_dependency))
       setup_parents_of_dependencies(dep_list)
       dep_list
     end

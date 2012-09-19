@@ -22,12 +22,7 @@ module LicenseFinder
       }))
     end
 
-    describe '.from_bundler' do
-      subject do
-        Bundler::Definition.stub(:build).and_return(definition)
-        DependencyList.from_bundler
-      end
-
+    describe '.from_bundler(bundle)' do
       let(:definition) do
         double('definition', {
           :dependencies => [],
@@ -37,6 +32,10 @@ module LicenseFinder
             build_gemspec('gem2', '0.4.2')
           ]
         })
+      end
+
+      subject do
+        DependencyList.from_bundler(Bundle.new(definition))
       end
 
       it "should have 2 dependencies" do

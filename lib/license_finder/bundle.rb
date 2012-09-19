@@ -1,5 +1,9 @@
 module LicenseFinder
   class Bundle
+    def initialize(bundler_definition=nil)
+      @definition = bundler_definition || Bundler::Definition.build(gemfile_path, lockfile_path, nil)
+    end
+
     def gems
       definition.specs_for(included_groups).map do |spec|
         dependency = dependencies.detect { |dep| dep.name == spec.name }
@@ -9,10 +13,7 @@ module LicenseFinder
     end
 
     private
-
-    def definition
-      @definition ||= Bundler::Definition.build(gemfile_path, lockfile_path, nil)
-    end
+    attr_reader :definition
 
     def dependencies
       @dependencies ||= definition.dependencies

@@ -37,7 +37,7 @@ module LicenseFinder
     end
 
     def generate_list
-      bundler_list = DependencyList.from_bundler
+      bundler_list = DependencyList.from_bundler(Bundle.new)
 
       if File.exists?(LicenseFinder.config.dependencies_yaml)
         yml = File.read(LicenseFinder.config.dependencies_yaml)
