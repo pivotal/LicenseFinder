@@ -14,7 +14,10 @@ module LicenseFinder
   autoload :LicenseUrl, 'license_finder/license_url'
   autoload :PossibleLicenseFile, 'license_finder/possible_license_file'
   autoload :Reporter, 'license_finder/reporter'
-  autoload :Viewable, 'license_finder/viewable'
+  autoload :HtmlReport, 'license_finder/html_report'
+  autoload :TextReport, 'license_finder/text_report'
+  autoload :DependencyReport, 'license_finder/dependency_report'
+  autoload :BundleSyncer, 'license_finder/bundle_syncer'
 
   def self.config
     @config ||= Configuration.new

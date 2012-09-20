@@ -3,19 +3,27 @@ module LicenseFinder
     extend self
 
     def check_for_action_items
-      found = LicenseFinder::Reporter.new.action_items
+      create_default_configuration
+      BundleSyncer.sync!
+      generate_reports
 
-      if found.size == 0
+      unapproved = Dependency.unapproved
+
+      if unapproved.count == 0
         puts "All gems are approved for use"
       else
         puts "Dependencies that need approval:"
-        puts found
+        puts TextReport.new(unapproved)
         exit 1
       end
     end
 
-    def execute! options={}
-      unless options.empty?
+    def execute!(options={})
+      create_default_configuration
+
+      if options.empty?
+        check_for_action_items
+      else
         dependency = Dependency.find_by_name(options[:dependency])
 
         if options[:approve]
@@ -25,10 +33,24 @@ module LicenseFinder
           dependency.update_attributes :license => options[:license]
           puts "The #{dependency.name} has been marked as using #{options[:license]} license!\n\n"
         end
+
+        generate_reports
       end
+    end
 
+    private
+    def generate_reports
+      LicenseFinder::Reporter.write_reports
+    end
 
-      check_for_action_items
+    def create_default_configuration
+      unless File.exists?(LicenseFinder.config.config_file_path)
+        FileUtils.mkdir_p(File.join('.', 'config'))
+        FileUtils.cp(
+          File.join(File.dirname(__FILE__), '..', '..', 'files', 'license_finder.yml'),
+          LicenseFinder.config.config_file_path
+        )
+      end
     end
   end
 end

@@ -10,6 +10,7 @@ describe LicenseFinder do
     end
 
     before do
+      LicenseFinder.instance_variable_set(:@config, nil)
       File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
       File.stub(:read).with('./config/license_finder.yml').and_return(config.to_yaml)
     end

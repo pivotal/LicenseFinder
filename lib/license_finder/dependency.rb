@@ -26,13 +26,15 @@ module LicenseFinder
         end
       end
 
+      def all
+        dependency_attributes
+      end
+
       private
       def dependency_attributes
         @dependency_attributes ||= []
       end
     end
-
-    include Viewable
 
     ATTRIBUTE_NAMES = [
       "name", "source", "version", "license", "license_url", "approved", "notes",
@@ -58,6 +60,18 @@ module LicenseFinder
       @database ||= Database.new
     end
 
+    def self.delete_all
+      database.delete_all
+    end
+
+    def self.all
+      database.all.map { |attributes| new(attributes) }
+    end
+
+    def self.unapproved
+      all.select {|d| d.approved == false }
+    end
+
     def initialize(attributes = {})
       update_attributes_without_saving attributes
     end
@@ -67,16 +81,10 @@ module LicenseFinder
       save
     end
 
-
-
     def approved
       return @approved if defined?(@approved)
 
       @approved = LicenseFinder.config.whitelist.include?(license)
-    end
-
-    def notes
-      @notes ||= ''
     end
 
     def license_files
@@ -100,7 +108,7 @@ module LicenseFinder
     end
 
     def approve!
-      @approved = true
+      self.approved = true
       save
     end
 
@@ -139,31 +147,11 @@ module LicenseFinder
       merged
     end
 
-    def as_yaml
-      attributes
-    end
-
-    def to_s
-      [name, version, license].join ", "
-    end
-
     private
-
     def update_attributes_without_saving(new_values)
       new_values.each do |key, value|
         send("#{key}=", value)
       end
-    end
-
-    def constantize(string)
-      names = string.split('::')
-      names.shift if names.empty? || names.first.empty?
-
-      constant = Object
-      names.each do |name|
-        constant = constant.const_defined?(name, false) ? constant.const_get(name) : constant.const_missing(name)
-      end
-      constant
     end
   end
 end

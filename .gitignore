@@ -7,4 +7,5 @@ Gemfile.lock
 tmp/
 dependencies.yml
 dependencies.txt
+dependencies.html
 config/
