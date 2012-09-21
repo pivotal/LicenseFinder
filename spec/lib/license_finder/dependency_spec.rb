@@ -24,256 +24,28 @@ module LicenseFinder
       }))
     end
 
-    describe '.new' do
-      subject { Dependency.new(attributes) }
-
-      context "with known attributes" do
-        it "should set the all of the attributes on the instance" do
-          attributes.each do |key, value|
-            subject.send("#{key}").should equal(value), "expected #{value.inspect} for #{key}, got #{subject.send("#{key}").inspect}"
-          end
-        end
-      end
-
-      context "with unknown attributes" do
-        before do
-          attributes['foo'] = 'bar'
-        end
-        it "should raise an exception" do
-          expect { subject }.to raise_exception(NoMethodError)
-        end
-      end
-    end
-
     describe "#approved" do
-      it "should mark it as approved when the license is whitelisted" do
+      it "should return true when the license is whitelisted" do
         dependency = Dependency.new('license' => 'MIT')
         dependency.approved.should == true
       end
 
-      it "should not mark it as approved when the license is not whitelisted" do
+      it "should return false when the license is not whitelisted" do
         dependency = Dependency.new('license' => 'GPL')
         dependency.approved.should == false
       end
 
-      it "should be settable" do
+      it "should be overridable" do
         dependency = Dependency.new
         dependency.approved = true
         dependency.approved.should == true
       end
     end
 
-    describe 'yaml serialization' do
-      subject { Dependency.from_hash(attributes) }
-
-      its(:name) { should == 'spec_name' }
-      its(:version) { should == '2.1.3' }
-      its(:license) { should == 'GPLv2' }
-      its(:approved) { should == false }
-      its(:notes) { should == "some notes" }
-      its(:license_files) { should == %w(/Users/pivotal/foo/lic1 /Users/pivotal/bar/lic2) }
-      its(:readme_files) { should == %w(/Users/pivotal/foo/Readme1 /Users/pivotal/bar/Readme2) }
-      its(:source) { should == "bundle" }
-      its(:bundler_groups) { should == ["test"] }
-
-      describe "#as_yaml" do
-        specify do
-          subject.as_yaml.should == {
-            'name' => 'spec_name',
-            'version' => '2.1.3',
-            'license' => 'GPLv2',
-            'approved' => false,
-            'source' => 'bundle',
-            'homepage' => 'homepage',
-            'license_url' => LicenseFinder::License::GPLv2.license_url,
-            'notes' => 'some notes',
-            'summary' => subject.summary,
-            'description' => subject.description,
-            'parents' => subject.parents,
-            'children' => subject.children,
-            'bundler_groups' => subject.bundler_groups,
-            'license_files' => [
-              '/Users/pivotal/foo/lic1',
-              '/Users/pivotal/bar/lic2'
-            ],
-            'readme_files' => [
-              '/Users/pivotal/foo/Readme1',
-              '/Users/pivotal/bar/Readme2'
-            ]
-          }
-        end
-      end
-
-      describe "#to_yaml" do
-        it 'should generate yaml' do
-          yaml = YAML.load(subject.to_yaml)
-          yaml.should == subject.as_yaml
-        end
-      end
-    end
-
-    describe "persistence" do
-      before do
-        Dependency.database.delete_all
-      end
-
-      describe '.find_by_name' do
-        subject { Dependency.find_by_name gem_name }
-        let(:gem_name) { "foo" }
-
-        context "when a gem with the provided name exists" do
-          before do
-            Dependency.new(
-              'name' => gem_name,
-              'version' => '0.0.1'
-            ).save
-          end
-
-          its(:name) { should == gem_name }
-          its(:version) { should == '0.0.1' }
-        end
-
-        context "when no gem with the provided name exists" do
-          it { should == nil }
-        end
-      end
-
-      describe '#save' do
-        it "should persist all of the dependency's attributes" do
-          dep = Dependency.new(attributes)
-          dep.save
-
-          saved_dep = Dependency.find_by_name(dep.name)
-
-          saved_dep.attributes.should == dep.attributes
-
-          dep.version = "new version"
-          dep.save
-
-          saved_dep = Dependency.find_by_name(dep.name)
-          saved_dep.version.should == "new version"
-        end
-      end
-
-      describe "#update_attributes" do
-        it "should update the provided attributes with the provided values" do
-          gem = Dependency.new(attributes)
-          updated_attributes = {"version" => "new_version", "license" => "updated_license"}
-          gem.update_attributes(updated_attributes)
-
-          saved_gem = Dependency.find_by_name(gem.name)
-          saved_gem.attributes.should == gem.attributes.merge(updated_attributes)
-        end
-      end
-
-    end
-
     describe '#license_url' do
-      context "class exists for license type" do
-        it "should return the license url configured in the class" do
-          Dependency.new('license' => "GPLv2").license_url.should == LicenseFinder::License::GPLv2.license_url
-        end
-
-        it "should handle differences in case" do
-          Dependency.new('license' => "gplv2").license_url.should == LicenseFinder::License::GPLv2.license_url
-        end
-      end
-
-      context "class does not exist for license type" do
-        it "should return nil" do
-          Dependency.new('license' => "FakeLicense").license_url.should be_nil
-        end
-      end
-    end
-
-    describe '#to_s' do
-      let(:gem) do
-        Dependency.new(
-          'name' => 'test_gem',
-          'version' => '1.0',
-          'summary' => 'summary foo',
-          'description' => 'description bar',
-          'license' => "MIT"
-        )
-      end
-
-      subject { gem.to_s.strip }
-
-      it 'should generate text with the gem name, version, and license' do
-        should == "test_gem, 1.0, MIT"
-      end
-    end
-
-
-    describe '#to_html' do
-      let(:dependency) { Dependency.new 'approved' => true }
-      subject { dependency.to_html }
-
-      context "when the dependency is approved" do
-        it "should add an approved class to dependency's container" do
-          should include %{class="approved"}
-        end
-      end
-
-      context "when the dependency is not approved" do
-        before { dependency.approved = false }
-
-        it "should not add an approved class to he dependency's container" do
-          should include %{class="unapproved"}
-        end
-      end
-
-      context "when the gem has at least one bundler group" do
-        before { dependency.bundler_groups = ["group"] }
-        it "should show the bundler group(s) in parens" do
-          should include "(group)"
-        end
-      end
-
-      context "when the gem has no bundler groups" do
-        before { dependency.bundler_groups = [] }
-
-        it "should not show any parens or bundler group info" do
-          should_not include "()"
-        end
-
-      end
-
-      context "when the gem has at least one parent" do
-        before { dependency.parents = [OpenStruct.new(:name => "foo parent")] }
-        it "should include a parents section" do
-          should include "Parents"
-        end
-      end
-
-      context "when the gem has no parents" do
-        it "should not include any parents section in the output" do
-          should_not include "Parents"
-        end
-      end
-
-      context "when the gem has at least one child" do
-        before { dependency.children = [OpenStruct.new(:name => "foo child")] }
-
-        it "should include a Children section" do
-          should include "Children"
-        end
-      end
-
-      context "when the gem has no children" do
-        it "should not include any Children section in the output" do
-          should_not include "Children"
-        end
-      end
-    end
-
-    describe '#source' do
-      it "should default to nil" do
-        Dependency.new.source.should be_nil
-      end
-
-      it "should be overridable" do
-        Dependency.new("source" => "foo").source.should == "foo"
+      it "should delegate to LicenseUrl.find_by_name" do
+        LicenseFinder::LicenseUrl.stub(:find_by_name).with("MIT").and_return "http://license-url.com"
+        Dependency.new(:license => "MIT").license_url.should == "http://license-url.com"
       end
     end
 
@@ -365,23 +137,22 @@ module LicenseFinder
 
     describe '#approve!' do
       it "should update the yaml file to show the gem is approved" do
-        gem = Dependency.new({name: "foo"})
+        gem = Dependency.new(name: "foo")
         gem.approve!
         reloaded_gem = Dependency.find_by_name(gem.name)
         reloaded_gem.approved.should be_true
       end
     end
 
-    describe '#attributes' do
-      it "should return a hash containing the values of all the accessible properties" do
-        dep = Dependency.new(attributes)
-        attributes = dep.attributes
-        Dependency::ATTRIBUTE_NAMES.each do |name|
-          attributes[name].should == dep.send(name)
+    describe "defaults" do
+      %w(license_files readme_files bundler_groups children parents).each do |attribute|
+        describe "##{attribute}" do
+          it "should default to an empty array" do
+            Dependency.new.send(attribute).should == []
+          end
         end
       end
     end
   end
 end
-
 

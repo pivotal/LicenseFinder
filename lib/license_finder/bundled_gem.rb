@@ -3,6 +3,8 @@ module LicenseFinder
     LICENSE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
     README_FILE_NAMES = %w(README Readme ReadMe)
 
+    attr_reader :parents
+
     def initialize(spec, bundler_dependency = nil)
       @spec = spec
       @bundler_dependency = bundler_dependency
@@ -12,12 +14,20 @@ module LicenseFinder
       "#{dependency_name} #{dependency_version}"
     end
 
+    def parents
+      @parents ||= []
+    end
+
     def dependency_name
       @spec.name
     end
 
     def dependency_version
       @spec.version.to_s
+    end
+
+    def children
+      @children ||= @spec.dependencies.collect(&:name)
     end
 
     def to_dependency
@@ -32,7 +42,8 @@ module LicenseFinder
         'summary' => @spec.summary,
         'description' => @spec.description,
         'homepage' => @spec.homepage,
-        'children' => @spec.dependencies.collect(&:name)
+        'children' => children,
+        'parents'  => parents
       )
     end
 
