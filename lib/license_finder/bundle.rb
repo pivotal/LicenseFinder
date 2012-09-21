@@ -5,15 +5,36 @@ module LicenseFinder
     end
 
     def gems
-      definition.specs_for(included_groups).map do |spec|
+      return @gems if @gems
+
+      @gems ||= definition.specs_for(included_groups).map do |spec|
         dependency = dependencies.detect { |dep| dep.name == spec.name }
 
         BundledGem.new(spec, dependency)
       end
+
+      setup_parent_child_relationships
+
+      @gems
     end
 
     private
     attr_reader :definition
+
+    def setup_parent_child_relationships
+      dependency_index = {}
+
+      gems.each do |dep|
+        dependency_index[dep.dependency_name] = dep
+      end
+
+      gems.each do |dep|
+        dep.children.each do |child_dep|
+          license_finder_dependency = dependency_index[child_dep]
+          license_finder_dependency.parents << dep.dependency_name if license_finder_dependency
+        end
+      end
+    end
 
     def dependencies
       @dependencies ||= definition.dependencies
