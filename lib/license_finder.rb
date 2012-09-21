@@ -1,8 +1,15 @@
 require 'pathname'
 require 'yaml'
+require 'erb'
 
 module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname
+
+  DEPENDENCY_ATTRIBUTES = [
+    "name", "source", "version", "license", "license_url", "approved", "notes",
+    "license_files", "readme_files", "bundler_groups", "summary",
+    "description", "homepage", "children", "parents"
+  ]
 
   autoload :Bundle, 'license_finder/bundle'
   autoload :BundledGem, 'license_finder/bundled_gem'
@@ -18,6 +25,7 @@ module LicenseFinder
   autoload :TextReport, 'license_finder/text_report'
   autoload :DependencyReport, 'license_finder/dependency_report'
   autoload :BundleSyncer, 'license_finder/bundle_syncer'
+  autoload :Persistence, 'license_finder/persistence/yaml'
 
   def self.config
     @config ||= Configuration.new
@@ -28,5 +36,4 @@ module LicenseFinder
   end
 end
 
-require 'erb'
 require 'license_finder/railtie' if defined?(Rails)

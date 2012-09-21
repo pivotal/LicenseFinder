@@ -25,17 +25,17 @@ module LicenseFinder
     end
 
     describe "#approved" do
-      it "should mark it as approved when the license is whitelisted" do
+      it "should return true when the license is whitelisted" do
         dependency = Dependency.new('license' => 'MIT')
         dependency.approved.should == true
       end
 
-      it "should not mark it as approved when the license is not whitelisted" do
+      it "should return false when the license is not whitelisted" do
         dependency = Dependency.new('license' => 'GPL')
         dependency.approved.should == false
       end
 
-      it "should be settable" do
+      it "should be overridable" do
         dependency = Dependency.new
         dependency.approved = true
         dependency.approved.should == true
@@ -137,7 +137,7 @@ module LicenseFinder
 
     describe '#approve!' do
       it "should update the yaml file to show the gem is approved" do
-        gem = Dependency.new({name: "foo"})
+        gem = Dependency.new(name: "foo")
         gem.approve!
         reloaded_gem = Dependency.find_by_name(gem.name)
         reloaded_gem.approved.should be_true
@@ -150,103 +150,6 @@ module LicenseFinder
           it "should default to an empty array" do
             Dependency.new.send(attribute).should == []
           end
-        end
-      end
-    end
-
-    describe "persistence" do
-      before do
-        Dependency.delete_all
-      end
-
-      describe '.new' do
-        subject { Dependency.new(attributes) }
-
-        context "with known attributes" do
-          it "should set the all of the attributes on the instance" do
-            attributes.each do |key, value|
-              subject.send("#{key}").should equal(value), "expected #{value.inspect} for #{key}, got #{subject.send("#{key}").inspect}"
-            end
-          end
-        end
-
-        context "with unknown attributes" do
-          before do
-            attributes['foo'] = 'bar'
-          end
-          it "should raise an exception" do
-            expect { subject }.to raise_exception(NoMethodError)
-          end
-        end
-      end
-
-      describe '.unapproved' do
-        it "should return all unapproved dependencies" do
-          Dependency.new(name: "unapproved dependency", approved: false).save
-          Dependency.new(name: "approved dependency", approved: true).save
-
-          unapproved = Dependency.unapproved
-          unapproved.count.should == 1
-          unapproved.collect(&:approved).any?.should be_false
-        end
-      end
-
-      describe '.find_by_name' do
-        subject { Dependency.find_by_name gem_name }
-        let(:gem_name) { "foo" }
-
-        context "when a gem with the provided name exists" do
-          before do
-            Dependency.new(
-              'name' => gem_name,
-              'version' => '0.0.1'
-            ).save
-          end
-
-          its(:name) { should == gem_name }
-          its(:version) { should == '0.0.1' }
-        end
-
-        context "when no gem with the provided name exists" do
-          it { should == nil }
-        end
-      end
-
-      describe '#attributes' do
-        it "should return a hash containing the values of all the accessible properties" do
-          dep = Dependency.new(attributes)
-          attributes = dep.attributes
-          Dependency::ATTRIBUTE_NAMES.each do |name|
-            attributes[name].should == dep.send(name)
-          end
-        end
-      end
-
-      describe '#save' do
-        it "should persist all of the dependency's attributes" do
-          dep = Dependency.new(attributes)
-          dep.save
-
-          saved_dep = Dependency.find_by_name(dep.name)
-
-          saved_dep.attributes.should == dep.attributes
-
-          dep.version = "new version"
-          dep.save
-
-          saved_dep = Dependency.find_by_name(dep.name)
-          saved_dep.version.should == "new version"
-        end
-      end
-
-      describe "#update_attributes" do
-        it "should update the provided attributes with the provided values" do
-          gem = Dependency.new(attributes)
-          updated_attributes = {"version" => "new_version", "license" => "updated_license"}
-          gem.update_attributes(updated_attributes)
-
-          saved_gem = Dependency.find_by_name(gem.name)
-          saved_gem.attributes.should == gem.attributes.merge(updated_attributes)
         end
       end
     end

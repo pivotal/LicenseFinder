@@ -1,129 +1,34 @@
 module LicenseFinder
-  class Dependency
-    class Database
-      def initialize
-        @dependency_attributes = YAML.load File.read(LicenseFinder.config.dependencies_yaml) if File.exists?(LicenseFinder.config.dependencies_yaml)
-      end
-
-      def find(&block)
-        dependency_attributes.detect &block
-      end
-
-      def update(dependency_hash)
-        dependency_attributes.reject! { |a| a['name'] == dependency_hash['name'] }
-        dependency_attributes << dependency_hash
-        persist!
-      end
-
-      def delete_all
-        File.delete(LicenseFinder.config.dependencies_yaml) if File.exists?(LicenseFinder.config.dependencies_yaml)
-        @dependency_attributes = nil
-      end
-
-      def persist!
-        File.open(LicenseFinder.config.dependencies_yaml, 'w+') do |f|
-          f.write dependency_attributes.to_yaml
-        end
-      end
-
-      def all
-        dependency_attributes
-      end
-
-      private
-      def dependency_attributes
-        @dependency_attributes ||= []
-      end
-    end
-
-    ATTRIBUTE_NAMES = [
-      "name", "source", "version", "license", "license_url", "approved", "notes",
-      "license_files", "readme_files", "bundler_groups", "summary",
-      "description", "homepage", "children", "parents"
-    ]
-
-
-    attr_accessor *ATTRIBUTE_NAMES
-
-    attr_reader :summary, :description
-
-    def self.from_hash(attrs)
-      new(attrs)
-    end
-
-    def self.find_by_name(name)
-      attributes = database.find { |a| a['name'] == name }
-      new(attributes) if attributes
-    end
-
-    def self.database
-      @database ||= Database.new
-    end
-
-    def self.delete_all
-      database.delete_all
-    end
-
-    def self.all
-      database.all.map { |attributes| new(attributes) }
-    end
-
-    def self.unapproved
-      all.select {|d| d.approved == false }
-    end
-
-    def initialize(attributes = {})
-      update_attributes_without_saving attributes
-    end
-
-    def update_attributes new_values
-      update_attributes_without_saving(new_values)
-      save
-    end
-
+  class Dependency < LicenseFinder::Persistence::Dependency
     def approved
-      return @approved if defined?(@approved)
+      return super unless super.nil?
 
-      @approved = LicenseFinder.config.whitelist.include?(license)
+      self.approved = LicenseFinder.config.whitelist.include?(license)
     end
 
     def license_files
-      @license_files ||= []
+      super || (self.license_files = [])
     end
 
     def readme_files
-      @readme_files ||= []
+      super || (self.readme_files = [])
     end
 
     def bundler_groups
-      @bundler_groups ||= []
+      super || (self.bundler_groups = [])
     end
 
     def children
-      @children ||= []
+      super || (self.children = [])
     end
 
     def parents
-      @parents ||= []
+      super || (self.parents = [])
     end
 
     def approve!
       self.approved = true
       save
-    end
-
-    def save
-      self.class.database.update(attributes)
-    end
-
-    def attributes
-      attributes = {}
-
-      ATTRIBUTE_NAMES.each do |attrib|
-        attributes[attrib] = send attrib
-      end
-
-      attributes
     end
 
     def license_url
@@ -145,13 +50,6 @@ module LicenseFinder
       end
 
       merged
-    end
-
-    private
-    def update_attributes_without_saving(new_values)
-      new_values.each do |key, value|
-        send("#{key}=", value)
-      end
     end
   end
 end
