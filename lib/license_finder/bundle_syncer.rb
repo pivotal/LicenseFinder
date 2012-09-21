@@ -3,15 +3,9 @@ module LicenseFinder
     extend self
 
     def sync!
-      dependency_list = DependencyList.from_bundler(Bundle.new)
-
-      if File.exists?(LicenseFinder.config.dependencies_yaml)
-        yml = File.read(LicenseFinder.config.dependencies_yaml)
-        existing_list = DependencyList.new Dependency.all
-        dependency_list = existing_list.merge(dependency_list)
-      end
-
-      dependency_list.dependencies.map(&:save)
+      source_dependencies = Bundle.new.gems.map(&:to_dependency)
+      target_dependencies = Dependency.all.select {|d| d.source == "bundle" }
+      SourceSyncer.new(source_dependencies, target_dependencies).sync!
     end
   end
 end

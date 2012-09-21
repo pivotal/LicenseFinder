@@ -38,18 +38,17 @@ module LicenseFinder
     def merge(other)
       raise "Cannot merge dependencies with different names. Expected #{name}, was #{other.name}." unless other.name == name
 
-      merged = self.class.new(other.attributes.merge('notes' => notes))
+      new_attributes = other.attributes.merge(:notes => notes)
 
-      case other.license
-      when license, 'other'
-        merged.license = license
-        merged.approved = approved
+      if other.license == license || other.license == 'other'
+        new_attributes[:approved] = approved
       else
-        merged.license = other.license
-        merged.approved = other.approved
+        new_attributes[:approved] = nil
       end
 
-      merged
+      update_attributes new_attributes
+
+      self
     end
   end
 end

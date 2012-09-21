@@ -11,7 +11,7 @@ module LicenseFinder
         end
 
         def update(dependency_hash)
-          dependency_attributes.reject! { |a| a['name'] == dependency_hash['name'] }
+          destroy_by_name_without_saving dependency_hash['name']
           dependency_attributes << dependency_hash
           persist!
         end
@@ -19,6 +19,11 @@ module LicenseFinder
         def delete_all
           File.delete(LicenseFinder.config.dependencies_yaml) if File.exists?(LicenseFinder.config.dependencies_yaml)
           @dependency_attributes = nil
+        end
+
+        def destroy_by_name(name)
+          destroy_by_name_without_saving name
+          persist!
         end
 
         def persist!
@@ -32,6 +37,10 @@ module LicenseFinder
         end
 
         private
+        def destroy_by_name_without_saving(name)
+          dependency_attributes.reject! { |a| a['name'] == name }
+        end
+
         def dependency_attributes
           @dependency_attributes ||= []
         end
@@ -61,6 +70,10 @@ module LicenseFinder
           database.update attributes
         end
 
+        def destroy_by_name(name)
+          database.destroy_by_name name
+        end
+
         private
         def database
           @database ||= Database.new
@@ -78,6 +91,10 @@ module LicenseFinder
 
       def save
         self.class.update(attributes)
+      end
+
+      def destroy
+        self.class.destroy_by_name(name)
       end
 
       def attributes

@@ -111,4 +111,18 @@ shared_examples_for "a persistable dependency" do
       saved_gem.attributes.should == gem.attributes.merge(updated_attributes)
     end
   end
+
+  describe "#destroy" do
+    it "should remove itself from the database" do
+      foo_dep = klass.new(name: "foo")
+      bar_dep = klass.new(name: "bar")
+      foo_dep.save
+      bar_dep.save
+
+      expect { foo_dep.destroy }.to change { klass.all.count }.by -1
+
+      klass.all.count.should == 1
+      klass.all.first.name.should == "bar"
+    end
+  end
 end
