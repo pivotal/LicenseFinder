@@ -2,13 +2,14 @@ module LicenseFinder
   class SourceSyncer
     def initialize(source_dependencies, dependencies)
       @source_dependencies = Array source_dependencies
-      @dependencies = Array dependencies
+      @dependencies = dependencies
     end
 
     def sync!
       destroy_obsolete_dependencies
       update_existing_dependencies
       create_new_dependencies
+      dependencies
     end
 
     protected
@@ -30,8 +31,9 @@ module LicenseFinder
     end
 
     def create_new_dependencies
-      source_dependencies.each do |s|
-        Dependency.new(s.attributes).save
+      source_dependencies.each do |d|
+        dependencies << d
+        d.save
       end
     end
   end

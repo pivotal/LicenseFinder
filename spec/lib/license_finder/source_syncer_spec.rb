@@ -21,12 +21,17 @@ module LicenseFinder
 
     it "creates any new source dependencies" do
       source_dep = double :source_dep, name: "foo", attributes: double(:attributes)
-      new_dep = double :new_dep
-      Dependency.should_receive(:new).with(source_dep.attributes).and_return new_dep
-      new_dep.should_receive(:save)
+
+      source_dep.should_receive :save
 
       SourceSyncer.new([source_dep], []).sync!
     end
+
+    it "returns the synced dependency set" do
+      source_dep = double(:source_dep, name: "source_dep", attributes: double(:attributes)).as_null_object
+      existing_dep = double :existing_dep, name: "existing", merge: nil
+
+      SourceSyncer.new([source_dep, existing_dep], [existing_dep]).sync!.should =~ [source_dep, existing_dep]
+    end
   end
 end
-

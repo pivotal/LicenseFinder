@@ -89,6 +89,10 @@ module LicenseFinder
         save
       end
 
+      def approved?
+        !!approved
+      end
+
       def save
         self.class.update(attributes)
       end

@@ -26,7 +26,11 @@ shared_examples_for "a persistable dependency" do
     context "with known attributes" do
       it "should set the all of the attributes on the instance" do
         attributes.each do |key, value|
-          subject.send("#{key}").should equal(value), "expected #{value.inspect} for #{key}, got #{subject.send("#{key}").inspect}"
+          if key != "approved"
+            subject.send("#{key}").should equal(value), "expected #{value.inspect} for #{key}, got #{subject.send("#{key}").inspect}"
+          else
+            subject.approved?.should == value
+          end
         end
       end
     end
@@ -49,7 +53,7 @@ shared_examples_for "a persistable dependency" do
 
       unapproved = klass.unapproved
       unapproved.count.should == 1
-      unapproved.collect(&:approved).any?.should be_false
+      unapproved.collect(&:approved?).any?.should be_false
     end
   end
 
@@ -91,13 +95,13 @@ shared_examples_for "a persistable dependency" do
 
       saved_dep = klass.find_by_name(dep.name)
 
-      saved_dep.attributes.should == dep.attributes
-
-      dep.version = "new version"
-      dep.save
-
-      saved_dep = klass.find_by_name(dep.name)
-      saved_dep.version.should == "new version"
+      attributes.each do |key, value|
+        if key != "approved"
+          saved_dep.send("#{key}").should eql(value), "expected #{value.inspect} for #{key}, got #{saved_dep.send("#{key}").inspect}"
+        else
+          saved_dep.approved?.should == value
+        end
+      end
     end
   end
 
@@ -108,7 +112,8 @@ shared_examples_for "a persistable dependency" do
       gem.update_attributes(updated_attributes)
 
       saved_gem = klass.find_by_name(gem.name)
-      saved_gem.attributes.should == gem.attributes.merge(updated_attributes)
+      saved_gem.version.should == "new_version"
+      saved_gem.license.should == "updated_license"
     end
   end
 
