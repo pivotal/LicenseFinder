@@ -19,4 +19,16 @@ shared_examples_for "a persistable configuration" do
       end
     end
   end
+
+  describe "#whitelist" do
+    it "should default to an empty array" do
+      klass.new.whitelist.should == []
+    end
+  end
+
+  describe "#ignore_groups" do
+    it "should default to an empty array" do
+      klass.new.ignore_groups.should == []
+    end
+  end
 end
