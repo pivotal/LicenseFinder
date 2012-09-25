@@ -10,7 +10,7 @@ With bundler it's easy for your project to depend on many gems.  This decomposit
 Add license_finder to your Rails project's Gemfile and `bundle`:
 
 ```ruby
-gem 'license_finder'
+gem 'license_finder', git: "https://github.com/pivotal/LicenseFinder.git"
 ```
 
 ## Usage
