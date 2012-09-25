@@ -38,7 +38,9 @@ Feature: License Finder command line executable
   Scenario: Auditing an application with whitelisted licenses
     Given I have an app with license finder
     And my app depends on a gem "mit_licensed_gem" licensed with "MIT"
-    And I whitelist the following licenses: "MIT, other"
     When I run "license_finder"
-    Then it should exit with status code 0
-    And I should see "All gems are approved for use" in its output
+    Then I should see "mit_licensed_gem" in its output
+    When I whitelist the following licenses: "MIT, other"
+    And I run "license_finder"
+    Then I should see "All gems are approved for use" in its output
+    And it should exit with status code 0

@@ -109,29 +109,51 @@ module LicenseFinder
         merged.notes.should == 'old notes'
       end
 
-      it 'should return the new license and approval if the license is different' do
-        subject.license = "MIT"
-        subject.approved = true
+      context "license changes to something other than 'other'" do
+        before { new_dep.license = 'new license' }
 
-        new_dep.license = "GPLv2"
-        new_dep.approved = false
+        context "new license is whitelisted" do
+          before { LicenseFinder.config.stub(:whitelist).and_return [new_dep.license] }
 
-        merged = subject.merge(new_dep)
+          it "should set the approval to true" do
+            merged = subject.merge new_dep
+            merged.should be_approved
+          end
+        end
 
-        merged.license.should == "GPLv2"
-        merged.approved.should == false
+        context "new license is not whitelisted" do
+          it "should set the approval to false" do
+            merged = subject.merge new_dep
+            merged.should_not be_approved
+          end
+        end
       end
 
-      it 'should return the old license and approval if the new license is the same or "other"' do
-        subject.approved = false
-        subject.approved.should be_false
-        new_dep.approved = true
+      context "license changes to unknown (i.e., 'other')" do
+        before { new_dep.license = 'other' }
 
-        subject.merge(new_dep).approved.should == false
+        it "should not change the license" do
+          merged = subject.merge new_dep
+          merged.license.should == 'MIT'
+        end
 
-        new_dep.license = 'other'
+        it "should not change the approval" do
+          approved = subject.approved?
+          merged = subject.merge new_dep
+          merged.approved?.should == approved
+        end
+      end
 
-        subject.merge(new_dep).approved.should == false
+      context "license does not change" do
+        before { new_dep.license.should == subject.license }
+
+        it "should not change the license or approval" do
+          existing_license = subject.license
+          existing_approval = subject.approved?
+          merged = subject.merge new_dep
+          merged.approved?.should == existing_approval
+          merged.license.should == existing_license
+        end
       end
     end
 

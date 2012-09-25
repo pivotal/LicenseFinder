@@ -1,8 +1,7 @@
 module LicenseFinder
   class Dependency < LicenseFinder::Persistence::Dependency
     def approved
-      return super unless super.nil?
-
+      return super if super
       self.approved = LicenseFinder.config.whitelist.include?(license)
     end
 
@@ -38,12 +37,13 @@ module LicenseFinder
     def merge(other)
       raise "Cannot merge dependencies with different names. Expected #{name}, was #{other.name}." unless other.name == name
 
-      new_attributes = other.attributes.merge(:notes => notes)
+      new_attributes = other.attributes.merge("notes" => notes)
 
       if other.license == license || other.license == 'other'
-        new_attributes[:approved] = approved
+        new_attributes["approved"] = approved
+        new_attributes["license"]  = license
       else
-        new_attributes[:approved] = nil
+        new_attributes["approved"] = nil
       end
 
       update_attributes new_attributes
