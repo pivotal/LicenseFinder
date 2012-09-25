@@ -78,6 +78,12 @@ shared_examples_for "a persistable dependency" do
     end
   end
 
+  describe "#config" do
+    it 'should respond to it' do
+      klass.new.should respond_to(:config)
+    end
+  end
+
   describe '#attributes' do
     it "should return a hash containing the values of all the accessible properties" do
       dep = klass.new(attributes)

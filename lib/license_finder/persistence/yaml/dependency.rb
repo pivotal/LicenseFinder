@@ -84,6 +84,10 @@ module LicenseFinder
         update_attributes_without_saving attributes
       end
 
+      def config
+        LicenseFinder.config
+      end
+
       def update_attributes new_values
         update_attributes_without_saving(new_values)
         save
