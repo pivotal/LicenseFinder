@@ -1,8 +1,7 @@
 module LicenseFinder
   class Dependency < LicenseFinder::Persistence::Dependency
     def approved
-      return super if super
-      self.approved = config.whitelist.include?(license)
+      self.approved = !!(config.whitelist.include?(license) || super)
     end
 
     def license_files
