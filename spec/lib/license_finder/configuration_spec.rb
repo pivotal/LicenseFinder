@@ -3,9 +3,9 @@ require "spec_helper"
 describe LicenseFinder::Configuration do
   it_behaves_like "a persistable configuration"
 
-  describe "whitelisted?" do
-    let(:config) { LicenseFinder::Configuration.new }
+  let(:config) { LicenseFinder::Configuration.new }
 
+  describe "whitelisted?" do
     context "canonical name whitelisted" do
       before { config.whitelist = [LicenseFinder::License::Apache2.names[rand(0...LicenseFinder::License::Apache2.names.count)]]}
 
@@ -22,6 +22,17 @@ describe LicenseFinder::Configuration do
           config.whitelisted?(name).should be_true, "expected #{name} to be whitelisted, but wasn't"
         end
       end
+    end
+  end
+
+  describe "#ignore_groups" do
+    it "should default to an empty array" do
+      config.ignore_groups.should == []
+    end
+
+    it "should always return symbolized versions of the ignore groups" do
+      config.ignore_groups = %w[test development]
+      config.ignore_groups.should == [:test, :development]
     end
   end
 end
