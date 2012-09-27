@@ -1,7 +1,7 @@
 module LicenseFinder
   module Persistence
     class Configuration
-      attr_reader :whitelist, :ignore_groups, :dependencies_dir
+      attr_accessor :whitelist, :ignore_groups, :dependencies_dir
 
       def initialize(config={})
         if File.exists?(config_file_path)

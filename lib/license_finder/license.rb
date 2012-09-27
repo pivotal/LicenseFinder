@@ -3,6 +3,10 @@ module LicenseFinder::License
     def all
       @all ||= []
     end
+
+    def find_by_name(license_name)
+      all.detect { |l| l.names.map(&:downcase).include? license_name.to_s.downcase }
+    end
   end
 
   class Text
@@ -30,7 +34,7 @@ module LicenseFinder::License
       end
 
       def names
-        [demodulized_name] + self.alternative_names
+        ([demodulized_name, pretty_name] + self.alternative_names).uniq
       end
 
       def alternative_names

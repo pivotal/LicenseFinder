@@ -69,6 +69,21 @@ When /^my app(?:lication)? depends on a gem "([^"]*)" with:$/ do |gem_name, gem_
   )
 end
 
+When /^the text "([^"]*)" should link to "([^"]*)"$/ do |text, link|
+  html = Capybara.string File.read(@user.dependencies_html_path)
+  html.find(:xpath, "//a[@href='#{link}']").text.should == text
+end
+
+When /^I have a truncated dependencies.yml file$/ do
+  File.open(@user.dependencies_file_path, 'w+') do |f|
+    f.puts ""
+  end
+end
+
+When /^"([^"]*)" is an alternative name for the "MIT" license$/ do |alternative_name|
+  # this step is simply for readability
+end
+
 Then /^I should see "(.*?)" in its output$/ do |gem_name|
   @output.should include gem_name
 end
@@ -291,13 +306,3 @@ module DSL
   end
 end
 
-
-When /^the text "([^"]*)" should link to "([^"]*)"$/ do |text, link|
-  html = Capybara.string File.read(@user.dependencies_html_path)
-  html.find(:xpath, "//a[@href='#{link}']").text.should == text
-end
-When /^I have a truncated dependencies.yml file$/ do
-  File.open(@user.dependencies_file_path, 'w+') do |f|
-    f.puts ""
-  end
-end

@@ -17,23 +17,35 @@ module LicenseFinder
       }
     end
 
+    let(:config) { LicenseFinder::Configuration.new }
+
     before do
-      LicenseFinder.stub(:config).and_return(double('config', {
-        :whitelist => %w(MIT),
-        :dependencies_yaml => 'dependencies.yml'
-      }))
+      LicenseFinder.stub(:config).and_return config
+      config.whitelist = ["MIT", "other"]
     end
 
     describe "#approved" do
       it "should return true when the license is whitelisted" do
         dependency = Dependency.new('license' => 'MIT')
-        dependency.approved.should == true
+        dependency.should be_approved
+      end
+
+      it "should return true when the license is an alternative name of a whitelisted license" do
+        dependency = Dependency.new('license' => 'Expat')
+        dependency.should be_approved
+      end
+
+      it "should return true when the license has no matching license class, but is whitelisted anyways" do
+        dependency = Dependency.new('license' => 'other')
+        dependency.should be_approved
       end
 
       it "should return false when the license is not whitelisted" do
         dependency = Dependency.new('license' => 'GPL')
         dependency.approved.should == false
       end
+
+
 
       it "should be overridable" do
         dependency = Dependency.new
