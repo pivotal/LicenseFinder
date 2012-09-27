@@ -1,5 +1,7 @@
 module LicenseFinder
   class Bundle
+    attr_writer :ignore_groups
+
     def initialize(bundler_definition=nil)
       @definition = bundler_definition || Bundler::Definition.build(gemfile_path, lockfile_path, nil)
     end
@@ -21,6 +23,10 @@ module LicenseFinder
     private
     attr_reader :definition
 
+    def ignore_groups
+      @ignore_groups ||= LicenseFinder.config.ignore_groups
+    end
+
     def setup_parent_child_relationships
       dependency_index = {}
 
@@ -41,7 +47,7 @@ module LicenseFinder
     end
 
     def included_groups
-      definition.groups - LicenseFinder.config.ignore_groups
+      definition.groups - ignore_groups
     end
 
     def gemfile_path

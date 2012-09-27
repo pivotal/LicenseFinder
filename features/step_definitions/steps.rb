@@ -224,6 +224,14 @@ module DSL
       end
     end
 
+    def configure_license_finder_bundler_whitelist(whitelisted_groups=[])
+      whitelisted_groups = Array whitelisted_groups
+      FileUtils.mkdir_p(config_path)
+      File.open(File.join(config_path, "license_finder.yml"), "w") do |f|
+        f.write({'ignore_groups' => whitelisted_groups}.to_yaml)
+      end
+    end
+
     def execute_command(command)
       Bundler.with_clean_env do
         @output = `cd #{app_path} && bundle exec #{command}`
@@ -306,3 +314,6 @@ module DSL
   end
 end
 
+When /^I whitelist the "([^"]*)" bundler group$/ do |group|
+  @user.configure_license_finder_bundler_whitelist(group)
+end
