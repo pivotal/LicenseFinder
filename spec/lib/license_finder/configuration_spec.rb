@@ -7,7 +7,7 @@ describe LicenseFinder::Configuration do
 
   describe "whitelisted?" do
     context "canonical name whitelisted" do
-      before { config.whitelist = [LicenseFinder::License::Apache2.names[rand(0...LicenseFinder::License::Apache2.names.count)]]}
+      before { config.whitelist = [LicenseFinder::License::Apache2.names[rand(LicenseFinder::License::Apache2.names.count)]]}
 
       let(:possible_license_names) { LicenseFinder::License::Apache2.names }
 
