@@ -14,7 +14,6 @@ Given /^I have an app(?:lication)? with license finder$/ do
   @user.create_nonrails_app
 end
 
-
 Given /^I have an app(?:lication)? with rake and license finder$/ do
   @user = ::DSL::User.new
   @user.create_nonrails_app
@@ -26,10 +25,6 @@ Given /^my app(?:lication)? does not have a "([^"]+)" directory$/ do |name|
 
   FileUtils.rm_rf(path)
   File.should_not be_exists(path)
-end
-
-Then /^I should see a "([^"]+)" directory$/ do |name|
-  File.should be_exists(@user.app_path(name))
 end
 
 Given /^my (?:rails )?app(?:lication)? depends on a gem "(.*?)" licensed with "(.*?)"$/ do |gem_name, license|
@@ -85,6 +80,14 @@ end
 
 When /^"([^"]*)" is an alternative name for the "MIT" license$/ do |alternative_name|
   # this step is simply for readability
+end
+
+When /^I whitelist the "([^"]*)" bundler group$/ do |group|
+  @user.configure_license_finder_bundler_whitelist(group)
+end
+
+Then /^I should see a "([^"]+)" directory$/ do |name|
+  File.should be_exists(@user.app_path(name))
 end
 
 Then /^I should see "(.*?)" in its output$/ do |gem_name|
@@ -315,8 +318,4 @@ module DSL
       Pathname.new(File.join(File.dirname(__FILE__), "..", "..")).realpath.to_s
     end
   end
-end
-
-When /^I whitelist the "([^"]*)" bundler group$/ do |group|
-  @user.configure_license_finder_bundler_whitelist(group)
 end
