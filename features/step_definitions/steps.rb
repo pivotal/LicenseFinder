@@ -1,5 +1,8 @@
 require 'fileutils'
+require 'pathname'
+require 'bundler'
 require 'capybara'
+require 'pry'
 
 Given /^I have a rails app(?:lication)? with license finder$/ do
   @user = ::DSL::User.new
