@@ -69,7 +69,7 @@ end
 
 When /^the text "([^"]*)" should link to "([^"]*)"$/ do |text, link|
   html = Capybara.string File.read(@user.dependencies_html_path)
-  html.find(:xpath, "//a[@href='#{link}']").text.should == text
+  html.all(:xpath, "//a[@href='#{link}']").first.text.should == text
 end
 
 When /^I have a truncated dependencies.yml file$/ do
