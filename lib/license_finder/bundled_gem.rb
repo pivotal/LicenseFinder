@@ -34,7 +34,7 @@ module LicenseFinder
         'name' => @spec.name,
         'version' => @spec.version.to_s,
         'license' => determine_license,
-        'license_files' => license_files.map(&:full_file_path),
+        'license_files' => license_files.map(&:file_path),
         'source' => 'bundle',
         'bundler_groups' => (@bundler_dependency.groups if @bundler_dependency),
         'summary' => @spec.summary,

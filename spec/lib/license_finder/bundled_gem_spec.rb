@@ -105,6 +105,7 @@ describe LicenseFinder::BundledGem do
       end
 
       its(:license) { should == 'Detected License' }
+      its(:license_files) { should == ["LICENSE"] }
     end
 
     describe 'with an unknown license' do
