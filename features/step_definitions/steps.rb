@@ -43,6 +43,36 @@ Given /^I whitelist the following licenses: "([^"]*)"$/ do |licenses|
   @user.configure_license_finder_whitelist licenses.split(", ")
 end
 
+Given /^I have a legacy dependencies\.yml file with "(.*?)" approved with its "(.*?)" license$/ do |gem_name, license_name|
+  File.open(@user.dependencies_file_path, 'w+') do |f|
+    <<-YAML
+    - name: #{gem_name}
+      version: 1.5.0
+      license: #{license_name}
+      approved: true
+      notes: ''
+      license_files:
+      - path: /some/path/to/files/that/are/rad
+    YAML
+  end
+end
+
+And /^I have a legacy dependencies\.yml file with readme_files entry for gem "(.*?)"$/  do |gem_name|
+  File.open(@user.dependencies_file_path, 'w+') do |f|
+    <<-YAML
+    - name: #{gem_name}
+      version: 1.5.0
+      license: some_license
+      approved: true
+      notes: ''
+      license_files:
+      - path: /some/path/to/files/that/are/rad
+      readme_files:
+      - path: /some/path/to/files/that/are/rad/readme
+    YAML
+  end
+end
+
 When /^I run "(.*?)"$/ do |command|
   @output = @user.execute_command command
 end
@@ -106,11 +136,22 @@ Then /^I should see the file "([^"]*)" containing:$/ do |filename, text|
   File.read(@user.app_path(filename)).should include(text.gsub(/^\s+/, ""))
 end
 
+Then /^I should see exactly one entry for "(.*?)" in "(.*?)"$/ do |gem_name, filename|
+  file_contents = File.read(@user.app_path(filename))
+  file_contents.scan(/#{gem_name}/).size.should == 1
+end
+
 Then /^I should see the following settings for "([^"]*)":$/ do |name, yaml|
   expected_settings = YAML.load(yaml)
   all_settings = YAML.load(File.read(@user.dependencies_file_path))
   actual_settings = all_settings.detect { |gem| gem['name'] == name }
   actual_settings.should include expected_settings
+end
+
+Then /^I should not see an entry "(.*?)" for gem "(.*?)" in my dependencies\.yml$/ do |entry_key, gem_name|
+  settings = YAML.load(File.read(@user.dependencies_file_path))
+  gem_settings = settings.detect { |gem| gem['name'] == gem_name }
+  gem_settings.should_not have_key entry_key
 end
 
 Then /^it should exit with status code (\d)$/ do |status|

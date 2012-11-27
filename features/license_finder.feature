@@ -44,3 +44,18 @@ Feature: License Finder command line executable
     And I run "license_finder"
     Then I should see "All gems are approved for use" in its output
     And it should exit with status code 0
+
+  Scenario: Merging a legacy dependencies.yml file
+    Given I have an app with license finder
+    And my app depends on a gem "random_licensed_gem" licensed with "random_license"
+    And I have a legacy dependencies.yml file with "random_licensed_gem" approved with its "random_license" license
+    And I whitelist the following licenses: "MIT, other"
+    When I run "license_finder"
+    Then I should see exactly one entry for "random_licensed_gem" in "dependencies.yml"
+
+  Scenario: Remove readme file paths from legacy dependencies.yml
+    Given I have an app with license finder
+    And my app depends on a gem "random_licensed_gem" licensed with "random_license"
+    And I have a legacy dependencies.yml file with readme_files entry for gem "random_licensed_gem"
+    When I run "license_finder"
+    Then I should not see an entry "readme_files" for gem "random_licensed_gem" in my dependencies.yml

@@ -10,7 +10,6 @@ shared_examples_for "a persistable dependency" do
       'notes' => 'some notes',
       'homepage' => 'homepage',
       'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
-      'readme_files' => ['/Users/pivotal/foo/Readme1', '/Users/pivotal/bar/Readme2'],
       'source' => "bundle",
       'bundler_groups' => ["test"]
     }

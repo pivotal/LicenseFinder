@@ -1,7 +1,6 @@
 module LicenseFinder
   class BundledGem
     LICENSE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
-    README_FILE_NAMES = %w(README Readme ReadMe)
 
     attr_reader :parents
 
@@ -36,7 +35,6 @@ module LicenseFinder
         'version' => @spec.version.to_s,
         'license' => determine_license,
         'license_files' => license_files.map(&:full_file_path),
-        'readme_files' => readme_files.map(&:full_file_path),
         'source' => 'bundle',
         'bundler_groups' => (@bundler_dependency.groups if @bundler_dependency),
         'summary' => @spec.summary,
@@ -59,12 +57,6 @@ module LicenseFinder
         File.directory?(path) ? paths_for_files_in_license_directory(path) : path
       end.flatten.uniq
       get_files_for_paths(paths_for_license_files)
-    end
-
-    def readme_files
-      find_matching_files(README_FILE_NAMES).map do |path|
-        get_file_for_path(path)
-      end
     end
 
     def install_path

@@ -11,7 +11,6 @@ module LicenseFinder
         'notes' => 'some notes',
         'homepage' => 'homepage',
         'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
-        'readme_files' => ['/Users/pivotal/foo/Readme1', '/Users/pivotal/bar/Readme2'],
         'source' => "bundle",
         'bundler_groups' => ["test"]
       }
@@ -67,8 +66,7 @@ module LicenseFinder
           'name' => 'foo',
           'license' => 'MIT',
           'version' => '0.0.1',
-          'license_files' => "old license files",
-          'readme_files' => "old readme files"
+          'license_files' => "old license files"
         )
       end
 
@@ -78,7 +76,6 @@ module LicenseFinder
           'license' => 'MIT',
           'version' => '0.0.2',
           'license_files' => "new license files",
-          'readme_files' => "new readme files",
           'summary' => 'foo summary',
           'description' => 'awesome foo description!',
           'bundler_groups' => [1, 2, 3],
@@ -94,12 +91,11 @@ module LicenseFinder
         }.to raise_error
       end
 
-      it 'should return the new version, license files, readme files, source, and homepage' do
+      it 'should return the new version, license files, source, and homepage' do
         merged = subject.merge(new_dep)
 
         merged.version.should == '0.0.2'
         merged.license_files.should == new_dep.license_files
-        merged.readme_files.should == new_dep.readme_files
         merged.source.should == new_dep.source
         merged.homepage.should == new_dep.homepage
       end
@@ -179,7 +175,7 @@ module LicenseFinder
     end
 
     describe "defaults" do
-      %w(license_files readme_files bundler_groups children parents).each do |attribute|
+      %w(license_files bundler_groups children parents).each do |attribute|
         describe "##{attribute}" do
           it "should default to an empty array" do
             Dependency.new.send(attribute).should == []

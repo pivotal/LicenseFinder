@@ -7,7 +7,7 @@ module LicenseFinder
 
   DEPENDENCY_ATTRIBUTES = [
     "name", "source", "version", "license", "license_url", "approved", "notes",
-    "license_files", "readme_files", "bundler_groups", "summary",
+    "license_files", "bundler_groups", "summary",
     "description", "homepage", "children", "parents"
   ]
 

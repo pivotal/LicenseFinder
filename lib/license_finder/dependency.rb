@@ -8,10 +8,6 @@ module LicenseFinder
       super || (self.license_files = [])
     end
 
-    def readme_files
-      super || (self.readme_files = [])
-    end
-
     def bundler_groups
       super || (self.bundler_groups = [])
     end

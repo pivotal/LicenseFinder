@@ -87,30 +87,6 @@ describe LicenseFinder::BundledGem do
     end
   end
 
-  describe "#readme_files" do
-    it "is empty if there aren't any readme files" do
-      subject.readme_files.should == []
-    end
-
-    it "includes files with names like README, Readme or COPYING" do
-      gemspec.stub(:full_gem_path).and_return(fixture_path('readme'))
-
-      subject.readme_files.map(&:file_name).should =~ [
-        "Project ReadMe",
-        "README",
-        "Readme.markdown"
-      ]
-    end
-
-    it "includes files deep in the hierarchy" do
-      gemspec.stub(:full_gem_path).and_return(fixture_path('nested_readme'))
-
-      subject.readme_files.map { |f| [f.file_name, f.file_path] }.should =~ [
-        %w[README vendor/README]
-      ]
-    end
-  end
-
   describe '#to_dependency' do
     subject { LicenseFinder::BundledGem.new(gemspec).to_dependency }
 
