@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "license_finder"
-  s.version     = "0.7.0"
+  s.version     = "0.7.1"
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers"]
   s.email       = ["licensefinder@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
