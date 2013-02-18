@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "license_finder"
-  s.version     = "0.7.1"
+  s.version     = "0.7.2"
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers"]
   s.email       = ["licensefinder@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
@@ -17,8 +17,7 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.add_dependency "bundler"
-  s.add_development_dependency "rails", ">=3"
-  %w(rspec rake cucumber rails pry nokogiri xpath capybara).each do |gem|
+  %w(rails rspec rake pry xpath).each do |gem|
     s.add_development_dependency gem
   end
 
