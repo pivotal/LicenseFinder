@@ -17,11 +17,12 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.add_dependency "bundler"
-  %w(rake cucumber rails pry xpath capybara).each do |gem|
+  s.add_development_dependency "rails", ">=3"
+  s.add_development_dependency "rspec", ">= 2.12.0"
+
+  %w(rake cucumber pry nokogiri xpath capybara).each do |gem|
     s.add_development_dependency gem
   end
-
-  s.add_development_dependency "rspec", ">= 2.12.0"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
