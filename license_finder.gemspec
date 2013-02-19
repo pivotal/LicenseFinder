@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rails", ">=3"
   s.add_development_dependency "rspec", ">= 2.12.0"
 
-  %w(rake cucumber pry nokogiri xpath capybara).each do |gem|
+  %w(rake cucumber pry xpath capybara).each do |gem|
     s.add_development_dependency gem
   end
 
