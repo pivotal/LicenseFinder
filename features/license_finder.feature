@@ -59,3 +59,9 @@ Feature: License Finder command line executable
     And I have a legacy dependencies.yml file with readme_files entry for gem "random_licensed_gem"
     When I run "license_finder"
     Then I should not see an entry "readme_files" for gem "random_licensed_gem" in my dependencies.yml
+
+  Scenario: Keep manually set license dependencies
+    Given I have a project that depends on mime-types
+    And I manually set the license type to Ruby
+    When I run license_finder again
+    Then the mime-types license type should still be Ruby

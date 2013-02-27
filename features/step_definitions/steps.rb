@@ -311,7 +311,12 @@ module DSL
       File.join(app_path, 'dependencies.html')
     end
 
-    private
+    def add_gem_dependency(name, options = {})
+      line = "gem #{name.inspect}"
+      line << ", " + options.inspect unless options.empty?
+
+      add_to_gemfile(line)
+    end
 
     def bundle_app
       Bundler.with_clean_env do
@@ -319,12 +324,7 @@ module DSL
       end
     end
 
-    def add_gem_dependency(name, options = {})
-      line = "gem #{name.inspect}"
-      line << ", " + options.inspect unless options.empty?
-
-      add_to_gemfile(line)
-    end
+    private
 
     def add_to_gemfile(line)
       `echo #{line.inspect} >> #{File.join(app_path, "Gemfile")}`
