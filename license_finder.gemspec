@@ -17,10 +17,8 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.add_dependency "bundler"
-  s.add_development_dependency "rails", ">=3"
-  s.add_development_dependency "rspec", ">= 2.12.0"
 
-  %w(rake cucumber pry xpath capybara).each do |gem|
+  %w(rails rspec rake pry xpath cucumber capybara).each do |gem|
     s.add_development_dependency gem
   end
 
