@@ -18,9 +18,11 @@ Gem::Specification.new do |s|
 
   s.add_dependency "bundler"
 
-  %w(rails rspec rake pry xpath cucumber capybara).each do |gem|
+  %w(rspec rake pry xpath capybara cucumber).each do |gem|
     s.add_development_dependency gem
   end
+
+  s.add_development_dependency "rails", "~> 3.2.0"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
