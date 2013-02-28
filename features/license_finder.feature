@@ -63,5 +63,6 @@ Feature: License Finder command line executable
   Scenario: Keep manually set license dependencies
     Given I have a project that depends on mime-types
     And I manually set the license type to Ruby
+    Then the mime-types license is set to Ruby
     When I run license_finder again
-    Then the mime-types license type should still be Ruby
+    Then the mime-types license is set to Ruby

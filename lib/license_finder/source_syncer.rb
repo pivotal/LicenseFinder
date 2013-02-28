@@ -18,14 +18,14 @@ module LicenseFinder
     def destroy_obsolete_dependencies
       obsolete_dependencies = dependencies.select {|d| !source_dependencies.detect {|s| s.name == d.name }}
       obsolete_dependencies.map &:destroy
-      
+
       self.dependencies -= obsolete_dependencies
     end
 
     def update_existing_dependencies
       dependencies.each do |d|
         source_dep = source_dependencies.detect { |s| s.name == d.name }
-        d.merge(source_dep)
+        d.merge(source_dep) unless d.instance_variable_get("@manual")
         self.source_dependencies -= [source_dep]
       end
     end

@@ -8,7 +8,7 @@ module LicenseFinder
   DEPENDENCY_ATTRIBUTES = [
     "name", "source", "version", "license", "license_url", "approved", "notes",
     "license_files", "bundler_groups", "summary",
-    "description", "homepage", "children", "parents"
+    "description", "homepage", "children", "parents", "manual"
   ]
 
   autoload :Bundle, 'license_finder/bundle'

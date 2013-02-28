@@ -19,6 +19,16 @@ module LicenseFinder
       SourceSyncer.new([source_foo], [foo]).sync!
     end
 
+    it "does not merge any dependencies that are set to manual" do
+      source_foo  = double :source_foo, name: "foo"
+      foo = double :foo, name: "foo", manual: true
+      foo.stub(:instance_variable_get) { |ivar| true if ivar == '@manual' }
+
+      foo.should_not_receive(:merge).with source_foo
+
+      SourceSyncer.new([source_foo], [foo]).sync!
+    end
+
     it "creates any new source dependencies" do
       source_dep = double :source_dep, name: "foo", attributes: double(:attributes)
 
