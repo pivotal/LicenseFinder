@@ -21,4 +21,14 @@ unless options.empty?
   options[:dependency] = ARGV.last
 end
 
-LicenseFinder::CLI.execute! options
+thread = Thread.new() {
+  wheel = '\|/-'
+  i = 0
+  while not LicenseFinder::CLI.class_variable_get("@@run_complete") do
+    print "\r ---------- #{wheel[i]} ----------"
+    i = (i + 1) % 4
+  end
+}
+
+message = LicenseFinder::CLI.execute! options
+thread.join
