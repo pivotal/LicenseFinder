@@ -73,6 +73,21 @@ And /^I have a legacy dependencies\.yml file with readme_files entry for gem "(.
   end
 end
 
+Given /^I have a legacy dependencies\.yml file with a blank readme_files entry for gem "(.*?)"$/ do |gem_name|
+  File.open(@user.dependencies_file_path, 'w+') do |f|
+    f.write(<<-YAML)
+    - name: #{gem_name}
+      version: 1.5.0
+      license: some_license
+      approved: true
+      notes: ''
+      license_files:
+      - path: /some/path/to/files/that/are/rad
+      readme_files:
+    YAML
+  end
+end
+
 When /^I run "(.*?)"$/ do |command|
   @output = @user.execute_command command
 end

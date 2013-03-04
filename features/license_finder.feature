@@ -66,3 +66,10 @@ Feature: License Finder command line executable
     Then the mime-types license is set to Ruby
     When I run license_finder again
     Then the mime-types license is set to Ruby
+
+  Scenario: blank attributes do not blow up rake task
+    Given I have an app with license finder
+    And my app depends on a gem "random_licensed_gem" licensed with "random_license"
+    And I have a legacy dependencies.yml file with a blank readme_files entry for gem "random_licensed_gem"
+    When I run "license_finder"
+    Then I should not see an entry "readme_files" for gem "random_licensed_gem" in my dependencies.yml
