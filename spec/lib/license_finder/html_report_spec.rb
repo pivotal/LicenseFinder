@@ -1,14 +1,19 @@
 require "spec_helper"
+require "capybara"
 
 module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
-      let(:dependency) { Dependency.new 'approved' => true }
+      let(:dependency) { Dependency.new 'approved' => true, 'name' => "the-name", 'license' => 'MIT' }
       subject { HtmlReport.new([dependency]).to_s }
 
       context "when the dependency is approved" do
         it "should add an approved class to dependency's container" do
           should include %{class="approved"}
+        end
+
+        it "does not list the dependency in the action items" do
+          Capybara.string(subject).should_not have_selector ".action-items"
         end
       end
 
@@ -17,6 +22,10 @@ module LicenseFinder
 
         it "should not add an approved class to he dependency's container" do
           should include %{class="unapproved"}
+        end
+
+        it "lists the dependency in the action items" do
+          Capybara.string(subject).should have_selector ".action-items li"
         end
       end
 

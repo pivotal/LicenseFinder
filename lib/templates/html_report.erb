@@ -30,6 +30,22 @@
       <% end -%>
     </ul>
   </div>
+  <% if unapproved_dependencies.any? -%>
+    <div class="action-items hero-unit">
+      <h1>Action Items</h1>
+      <h4><%= unapproved_dependencies.size %> unapproved dependencies</h4>
+      <ul>
+        <% unapproved_dependencies.each do |dependency| -%>
+          <li>
+          <a href='#<%= dependency.name %>'>
+            <%= dependency.name %>
+          </a>
+          (<%= dependency.license %>)
+          </li>
+        <% end -%>
+      </ul>
+    </div>
+  <% end -%>
   <div class="dependencies">
     <% sorted_dependencies.each do |dependency| -%>
       <div id="<%= dependency.name %>" class="<%= dependency.approved ? "approved" : "unapproved" %>">
