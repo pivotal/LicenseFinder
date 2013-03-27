@@ -19,30 +19,30 @@
     <h4>
       <%= dependencies.size %> total
 
-      <% if unapproved_dependencies.any? %>
+      <% if unapproved_dependencies.any? -%>
         <span class="badge badge-important"><%= unapproved_dependencies.size %> unapproved</span>
-      <% end %>
+      <% end -%>
     </h4>
 
     <ul>
-      <% grouped_dependencies.each do |license, group| %>
+      <% grouped_dependencies.each do |license, group| -%>
         <li><%= group.size %> <%= license %></li>
-      <% end %>
+      <% end -%>
     </ul>
   </div>
   <div class="dependencies">
-    <% sorted_dependencies.each do |dependency| %>
+    <% sorted_dependencies.each do |dependency| -%>
       <div id="<%= dependency.name %>" class="<%= dependency.approved ? "approved" : "unapproved" %>">
         <h2>
-          <% if dependency.homepage && !dependency.homepage.empty? %>
+          <% if dependency.homepage && !dependency.homepage.empty? -%>
             <a href="<%= dependency.homepage %>"><%= dependency.name %></a>
-          <% else %>
+          <% else -%>
             <%= dependency.name %>
-          <% end %>
+          <% end -%>
           v<%= dependency.version %>
-          <% if dependency.bundler_groups.any? %>
+          <% if dependency.bundler_groups.any? -%>
             (<%= dependency.bundler_groups.join(", ") %>)
-          <% end %>
+          <% end -%>
         </h2>
         <table class="table table-striped table-bordered">
           <thead>
@@ -57,36 +57,34 @@
             <td><%= dependency.summary %></td>
             <td><%= dependency.description %></td>
             <td>
-              <% if dependency.license_url && !dependency.license_url.empty? %>
+              <% if dependency.license_url && !dependency.license_url.empty? -%>
                 <a href="<%= dependency.license_url %>"><%= dependency.license %></a>
-              <% else %>
+              <% else -%>
                 <%= dependency.license %>
-              <% end %>
+              <% end -%>
             </td>
             </td>
           </tr>
           </tbody>
         </table>
-
-        <% if dependency.parents.any? %>
+        <% if dependency.parents.any? -%>
           <dl>
             <dt>Parents</dt>
-            <% dependency.parents.each do |parent| %>
+            <% dependency.parents.each do |parent| -%>
               <dd><%= parent %></dd>
-            <% end %>
+            <% end -%>
           </dl>
-        <% end %>
-
-        <% if dependency.children.any? %>
+        <% end -%>
+        <% if dependency.children.any? -%>
           <dl>
             <dt>Children</dt>
-            <% dependency.children.each do |child| %>
+            <% dependency.children.each do |child| -%>
               <dd><%= child %></dd>
-            <% end %>
+            <% end -%>
           </dl>
-        <% end %>
+        <% end -%>
       </div>
-    <% end %>
+    <% end -%>
   </div>
 </div>
 </body>

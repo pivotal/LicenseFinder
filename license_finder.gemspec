@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.description = <<-DESCRIPTION
   Do you know the licenses of all your application's dependencies? What open source software licenses will your business accept?
 
-  LicenseFinder culls your Gemfile, detects the licenses of the gems in it, and gives you a report that you can act on. If you already know 
-  what licenses your business is comfortable with, you can whitelist them, leaving you with an action report of only those dependencies that have 
+  LicenseFinder culls your Gemfile, detects the licenses of the gems in it, and gives you a report that you can act on. If you already know
+  what licenses your business is comfortable with, you can whitelist them, leaving you with an action report of only those dependencies that have
   licenses that fall outside of the whitelist.
   DESCRIPTION
 
