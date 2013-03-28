@@ -6,7 +6,7 @@ module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname
 
   DEPENDENCY_ATTRIBUTES = [
-    "name", "source", "version", "license", "license_url", "approved", "notes",
+    "name", "version", "license", "license_url", "approved", "notes",
     "license_files", "bundler_groups", "summary",
     "description", "homepage", "children", "parents", "manual", "readme_files"
   ]

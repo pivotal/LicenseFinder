@@ -93,7 +93,6 @@ describe LicenseFinder::BundledGem do
     its(:name) { should == 'spec_name' }
     its(:version) { should == '2.1.3' }
     its(:summary) { should == 'summary' }
-    its(:source) { should == 'bundle' }
     its(:description) { should == 'description' }
     its(:homepage) { should == 'homepage' }
     its(:children) { should == ['foo']}

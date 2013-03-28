@@ -33,7 +33,7 @@ module LicenseFinder
           dependency.approve!
           puts "The #{dependency.name} has been approved!\n\n"
         elsif options[:license]
-          dependency.update_attributes :license => options[:license], :manual => true
+          dependency.update_attributes 'license' => options[:license], 'manual' => true
           puts "The #{dependency.name} has been marked as using #{options[:license]} license!\n\n"
         end
 

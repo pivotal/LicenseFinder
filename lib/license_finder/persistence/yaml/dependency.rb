@@ -117,8 +117,8 @@ module LicenseFinder
 
       private
       def update_attributes_without_saving(new_values)
-        new_values.each do |key, value|
-          send("#{key}=", value)
+        (LicenseFinder::DEPENDENCY_ATTRIBUTES & new_values.keys.map(&:to_s)).each do |key|
+          send("#{key}=", new_values[key])
         end
       end
     end

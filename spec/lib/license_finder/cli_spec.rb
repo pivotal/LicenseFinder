@@ -19,7 +19,7 @@ module LicenseFinder
       context "when the -l (--license) switch is provided" do
         it "should update the license on the requested gem" do
           dependency = double :dependency, :name => nil
-          dependency.should_receive(:update_attributes).with(:license => "foo", :manual => true)
+          dependency.should_receive(:update_attributes).with('license' => "foo", 'manual' => true)
 
           Dependency.stub(:find_by_name).with("foo_gem").and_return dependency
 

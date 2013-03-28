@@ -11,7 +11,6 @@ module LicenseFinder
         'notes' => 'some notes',
         'homepage' => 'homepage',
         'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
-        'source' => "bundle",
         'bundler_groups' => ["test"]
       }
     end
@@ -56,7 +55,7 @@ module LicenseFinder
     describe '#license_url' do
       it "should delegate to LicenseUrl.find_by_name" do
         LicenseFinder::LicenseUrl.stub(:find_by_name).with("MIT").and_return "http://license-url.com"
-        Dependency.new(:license => "MIT").license_url.should == "http://license-url.com"
+        Dependency.new('license' => "MIT").license_url.should == "http://license-url.com"
       end
     end
 
@@ -96,7 +95,6 @@ module LicenseFinder
 
         merged.version.should == '0.0.2'
         merged.license_files.should == new_dep.license_files
-        merged.source.should == new_dep.source
         merged.homepage.should == new_dep.homepage
       end
 

@@ -10,7 +10,6 @@ shared_examples_for "a persistable dependency" do
       'notes' => 'some notes',
       'homepage' => 'homepage',
       'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
-      'source' => "bundle",
       'bundler_groups' => ["test"]
     }
   end
@@ -39,16 +38,16 @@ shared_examples_for "a persistable dependency" do
         attributes['foo'] = 'bar'
       end
 
-      it "should raise an exception" do
-        expect { subject }.to raise_exception(NoMethodError)
+      it "should not raise an exception" do
+        expect { subject }.to_not raise_exception(NoMethodError)
       end
     end
   end
 
   describe '.unapproved' do
     it "should return all unapproved dependencies" do
-      klass.new(name: "unapproved dependency", approved: false).save
-      klass.new(name: "approved dependency", approved: true).save
+      klass.new('name' => "unapproved dependency", 'approved' => false).save
+      klass.new('name' => "approved dependency", 'approved' => true).save
 
       unapproved = klass.unapproved
       unapproved.count.should == 1
@@ -124,8 +123,8 @@ shared_examples_for "a persistable dependency" do
 
   describe "#destroy" do
     it "should remove itself from the database" do
-      foo_dep = klass.new(name: "foo")
-      bar_dep = klass.new(name: "bar")
+      foo_dep = klass.new('name' => "foo")
+      bar_dep = klass.new('name' => "bar")
       foo_dep.save
       bar_dep.save
 

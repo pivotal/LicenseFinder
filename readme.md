@@ -99,23 +99,6 @@ $ bundle exec license_finder -a awesome_gpl_gem
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
 
-## Manually managing Javascript Dependencies
-
-License Finder currently has no method for automatically detecting third-party javascript libraries in your application
-and alerting you to license violations. However, you can manually add javascript dependencies to your `dependencies.yml`
-file:
-
-```yaml
-- name: "my_javascript_library"
-  version: "0.0.0"
-  license: "GPL"
-  approved: false
-```
-
-You could then update the "approved" attribute to true once you have signoff from your business. License Finder will
-remember any manually added licenses between successive runs.
-
-
 ## Usage with Rake
 
 First, add license finder to your project's Gemfile:
