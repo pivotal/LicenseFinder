@@ -28,7 +28,7 @@ module LicenseFinder
   autoload :SourceSyncer, 'license_finder/source_syncer'
 
   def self.config
-    @config ||= Configuration.new
+    @config ||= Configuration.ensure_default
   end
 
   def self.load_rake_tasks

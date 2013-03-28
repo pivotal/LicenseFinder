@@ -9,7 +9,7 @@ Feature: Text Report
       | license | version |
       | MIT     | 1.1.1   |
     When I run "license_finder"
-    Then I should see the file "dependencies.txt" containing:
+    Then I should see the file "doc/dependencies.txt" containing:
       """
       descriptive_gem, 1.1.1, MIT
       """
@@ -21,7 +21,7 @@ Feature: Text Report
       | MIT     | 1.1.1   |
     When I run "license_finder"
     And I run "license_finder"
-    Then I should see the file "dependencies.txt" containing:
+    Then I should see the file "doc/dependencies.txt" containing:
       """
       descriptive_gem, 1.1.1, MIT
       """

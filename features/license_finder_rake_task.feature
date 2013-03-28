@@ -17,7 +17,8 @@ Feature: License Finder rake task
       ignore_groups:
       #- test
       #- development
-      dependencies_file_dir: './'
+      dependencies_file_dir: './doc/'
+
       """
 
   Scenario: Auditing an application with non-whitelisted licenses

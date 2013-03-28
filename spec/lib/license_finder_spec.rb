@@ -25,7 +25,7 @@ describe LicenseFinder do
 
       LicenseFinder.config.whitelist.should == []
       LicenseFinder.config.ignore_groups.should == []
-      LicenseFinder.config.dependencies_dir.should == '.'
+      LicenseFinder.config.dependencies_dir.should == './doc/'
     end
 
     it "should load the configuration exactly once" do
@@ -72,10 +72,10 @@ describe LicenseFinder do
 
       it 'should default the dependency files when the directory is not provided' do
         config = LicenseFinder.config
-        config.dependencies_dir.should == '.'
-        config.dependencies_yaml.should == './dependencies.yml'
-        config.dependencies_text.should == './dependencies.txt'
-        config.dependencies_html.should == './dependencies.html'
+        config.dependencies_dir.should == './doc/'
+        config.dependencies_yaml.should == './doc/dependencies.yml'
+        config.dependencies_text.should == './doc/dependencies.txt'
+        config.dependencies_html.should == './doc/dependencies.html'
       end
     end
   end

@@ -5,4 +5,4 @@ whitelist:
 ignore_groups:
 #- test
 #- development
-dependencies_file_dir: './'
+dependencies_file_dir: './doc/'

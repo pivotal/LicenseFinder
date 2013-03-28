@@ -44,8 +44,8 @@ Given /^I whitelist the following licenses: "([^"]*)"$/ do |licenses|
 end
 
 Given /^I have a legacy dependencies\.yml file with "(.*?)" approved with its "(.*?)" license$/ do |gem_name, license_name|
-  File.open(@user.dependencies_file_path, 'w+') do |f|
-    <<-YAML
+  @user.modifying_dependencies_file do |f|
+    f.write <<-YAML
     - name: #{gem_name}
       version: 1.5.0
       license: #{license_name}
@@ -58,8 +58,8 @@ Given /^I have a legacy dependencies\.yml file with "(.*?)" approved with its "(
 end
 
 And /^I have a legacy dependencies\.yml file with readme_files entry for gem "(.*?)"$/  do |gem_name|
-  File.open(@user.dependencies_file_path, 'w+') do |f|
-    <<-YAML
+  @user.modifying_dependencies_file do |f|
+    f.write <<-YAML
     - name: #{gem_name}
       version: 1.5.0
       license: some_license
@@ -74,7 +74,7 @@ And /^I have a legacy dependencies\.yml file with readme_files entry for gem "(.
 end
 
 Given /^I have a legacy dependencies\.yml file with a blank readme_files entry for gem "(.*?)"$/ do |gem_name|
-  File.open(@user.dependencies_file_path, 'w+') do |f|
+  @user.modifying_dependencies_file do |f|
     f.write(<<-YAML)
     - name: #{gem_name}
       version: 1.5.0
@@ -118,7 +118,7 @@ When /^the text "([^"]*)" should link to "([^"]*)"$/ do |text, link|
 end
 
 When /^I have a truncated dependencies.yml file$/ do
-  File.open(@user.dependencies_file_path, 'w+') do |f|
+  @user.modifying_dependencies_file do |f|
     f.puts ""
   end
 end
@@ -318,12 +318,16 @@ module DSL
       File.join(app_path, 'config')
     end
 
+    def doc_path
+      File.join(app_path, 'doc')
+    end
+
     def dependencies_file_path
-      File.join(app_path, 'dependencies.yml')
+      File.join(doc_path, 'dependencies.yml')
     end
 
     def dependencies_html_path
-      File.join(app_path, 'dependencies.html')
+      File.join(doc_path, 'dependencies.html')
     end
 
     def add_gem_dependency(name, options = {})
@@ -337,6 +341,11 @@ module DSL
       Bundler.with_clean_env do
         `bundle install --gemfile=#{File.join(app_path, "Gemfile")} --path=#{bundle_path}`
       end
+    end
+
+    def modifying_dependencies_file
+      FileUtils.mkdir_p(File.dirname(dependencies_file_path))
+      File.open(dependencies_file_path, 'w+') { |f| yield f }
     end
 
     private

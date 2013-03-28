@@ -17,7 +17,8 @@ Feature: License Finder command line executable
       ignore_groups:
       #- test
       #- development
-      dependencies_file_dir: './'
+      dependencies_file_dir: './doc/'
+
       """
 
   Scenario: Running with an empty dependencies.yml
@@ -51,7 +52,7 @@ Feature: License Finder command line executable
     And I have a legacy dependencies.yml file with "random_licensed_gem" approved with its "random_license" license
     And I whitelist the following licenses: "MIT, other"
     When I run "license_finder"
-    Then I should see exactly one entry for "random_licensed_gem" in "dependencies.yml"
+    Then I should see exactly one entry for "random_licensed_gem" in "doc/dependencies.yml"
 
   Scenario: Remove readme file paths from legacy dependencies.yml
     Given I have an app with license finder

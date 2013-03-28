@@ -5,7 +5,6 @@ module LicenseFinder
     @@run_complete = false
 
     def check_for_action_items
-      create_default_configuration
       BundleSyncer.sync!
       @@run_complete = true
       generate_reports
@@ -23,8 +22,6 @@ module LicenseFinder
     end
 
     def execute!(options={})
-      create_default_configuration
-
       if options.empty?
         check_for_action_items
       else
@@ -47,16 +44,6 @@ module LicenseFinder
     private
     def generate_reports
       LicenseFinder::Reporter.write_reports
-    end
-
-    def create_default_configuration
-      unless File.exists?(LicenseFinder.config.config_file_path)
-        FileUtils.mkdir_p(File.join('.', 'config'))
-        FileUtils.cp(
-          File.join(File.dirname(__FILE__), '..', '..', 'files', 'license_finder.yml'),
-          LicenseFinder.config.config_file_path
-        )
-      end
     end
   end
 end

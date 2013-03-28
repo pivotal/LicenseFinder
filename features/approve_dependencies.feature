@@ -36,7 +36,7 @@ Feature: Approving non-whitelisted Dependencies
   Scenario: Manually adding a non-bundled dependency
     Given I have an app with license finder
     When I run "license_finder"
-    And I add the following content to "dependencies.yml":
+    And I add the following content to "doc/dependencies.yml":
       """
       - name: "my_javascript_library"
         version: "0.0.0"
