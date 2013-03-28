@@ -28,7 +28,7 @@ module LicenseFinder
 
         def persist!
           File.open(LicenseFinder.config.dependencies_yaml, 'w+') do |f|
-            f.write dependency_attributes.map! { |e| e.reject { |key,value| value.nil? } }.to_yaml
+            f.write dependency_attributes.to_yaml
           end
         end
 
