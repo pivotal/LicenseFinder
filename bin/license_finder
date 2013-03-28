@@ -3,7 +3,31 @@
 require 'license_finder'
 require 'optparse'
 
+module SpinnerStrategy
+  module Spin
+    def self.run
+      thread = Thread.new() {
+        wheel = '\|/-'
+        i = 0
+        while not LicenseFinder::CLI.class_variable_get("@@run_complete") do
+          print "\r ---------- #{wheel[i]} ----------"
+          i = (i + 1) % 4
+        end
+      }
+      yield
+      thread.join
+    end
+  end
+
+  module Noop
+    def self.run
+      yield
+    end
+  end
+end
+
 options = {}
+spinner = SpinnerStrategy::Spin
 
 OptionParser.new do |opts|
   opts.banner = "Usage: license_finder [options] [dependency]"
@@ -15,20 +39,16 @@ OptionParser.new do |opts|
   opts.on("-l", "--license [LICENSE]", "Update a gem's license.") do |license|
     options[:license] = license
   end
+
+  opts.on("-q", "--quiet") do
+    spinner = SpinnerStrategy::Noop
+  end
 end.parse!
 
 unless options.empty?
   options[:dependency] = ARGV.last
 end
 
-thread = Thread.new() {
-  wheel = '\|/-'
-  i = 0
-  while not LicenseFinder::CLI.class_variable_get("@@run_complete") do
-    print "\r ---------- #{wheel[i]} ----------"
-    i = (i + 1) % 4
-  end
+spinner.run {
+  LicenseFinder::CLI.execute! options
 }
-
-message = LicenseFinder::CLI.execute! options
-thread.join
