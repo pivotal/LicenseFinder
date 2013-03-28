@@ -115,6 +115,10 @@ module LicenseFinder
         attributes
       end
 
+      def set_license_manually(license)
+        update_attributes('license' => license, 'manual' => true)
+      end
+
       private
       def update_attributes_without_saving(new_values)
         (LicenseFinder::DEPENDENCY_ATTRIBUTES & new_values.keys.map(&:to_s)).each do |key|

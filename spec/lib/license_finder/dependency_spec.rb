@@ -40,15 +40,13 @@ module LicenseFinder
 
       it "should return false when the license is not whitelisted" do
         dependency = Dependency.new('license' => 'GPL')
-        dependency.approved.should == false
+        dependency.should_not be_approved
       end
-
-
 
       it "should be overridable" do
         dependency = Dependency.new
         dependency.approved = true
-        dependency.approved.should == true
+        dependency.should be_approved
       end
     end
 
@@ -165,7 +163,7 @@ module LicenseFinder
 
     describe '#approve!' do
       it "should update the yaml file to show the gem is approved" do
-        gem = Dependency.new(name: "foo")
+        gem = Dependency.new('name' => "foo")
         gem.approve!
         reloaded_gem = Dependency.find_by_name(gem.name)
         reloaded_gem.approved.should be_true
@@ -179,6 +177,23 @@ module LicenseFinder
             Dependency.new.send(attribute).should == []
           end
         end
+      end
+    end
+
+    describe "#set_license_manually" do
+      let(:gem) { Dependency.new('name' => "foo", 'license' => 'Original') }
+
+      it "modifies the license" do
+        gem.license.should == 'Original'
+        gem.set_license_manually('Updated')
+        reloaded_gem = Dependency.find_by_name(gem.name)
+        reloaded_gem.license.should == 'Updated'
+      end
+
+      it "marks the approval as manual" do
+        gem.set_license_manually('Updated')
+        reloaded_gem = Dependency.find_by_name(gem.name)
+        reloaded_gem.manual.should be_true
       end
     end
   end
