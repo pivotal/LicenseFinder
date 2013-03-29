@@ -5,8 +5,7 @@ Gemfile.lock
 .rvmrc
 .idea/*
 tmp/
-dependencies.yml
-dependencies.txt
-dependencies.html
+dependencies.*
+doc/dependencies.*
 config/
 .pairs

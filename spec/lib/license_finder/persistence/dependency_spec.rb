@@ -1,4 +1,6 @@
-shared_examples_for "a persistable dependency" do
+require "spec_helper"
+
+describe LicenseFinder::Persistence::Dependency do
   let(:klass) { described_class }
 
   let(:attributes) do

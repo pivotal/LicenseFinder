@@ -15,7 +15,7 @@ module LicenseFinder
       def self.make_config_file
         FileUtils.mkdir_p(File.join('.', 'config'))
         FileUtils.cp(
-          File.join(File.dirname(__FILE__), '..', '..', '..', '..', 'files', 'license_finder.yml'),
+          File.join(File.dirname(__FILE__), '..', '..', '..', 'files', 'license_finder.yml'),
           config_file_path
         )
       end
@@ -34,6 +34,10 @@ module LicenseFinder
 
       def config_file_path
         self.class.config_file_path
+      end
+
+      def database_path
+        File.join(dependencies_dir, "dependencies.db")
       end
 
       def dependencies_yaml

@@ -15,7 +15,7 @@ module LicenseFinder
   autoload :BundledGem, 'license_finder/bundled_gem'
   autoload :CLI, 'license_finder/cli'
   autoload :Configuration, 'license_finder/configuration'
-  autoload :Persistence, 'license_finder/persistence/yaml'
+  autoload :Persistence, 'license_finder/persistence'
   autoload :Dependency, 'license_finder/dependency'
   autoload :License, 'license_finder/license'
   autoload :LicenseUrl, 'license_finder/license_url'
