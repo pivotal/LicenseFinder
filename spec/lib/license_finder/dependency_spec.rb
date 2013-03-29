@@ -22,34 +22,6 @@ module LicenseFinder
       config.whitelist = ["MIT", "other"]
     end
 
-    describe "#approved" do
-      it "should return true when the license is whitelisted" do
-        dependency = Dependency.new('license' => 'MIT')
-        dependency.should be_approved
-      end
-
-      it "should return true when the license is an alternative name of a whitelisted license" do
-        dependency = Dependency.new('license' => 'Expat')
-        dependency.should be_approved
-      end
-
-      it "should return true when the license has no matching license class, but is whitelisted anyways" do
-        dependency = Dependency.new('license' => 'other')
-        dependency.should be_approved
-      end
-
-      it "should return false when the license is not whitelisted" do
-        dependency = Dependency.new('license' => 'GPL')
-        dependency.should_not be_approved
-      end
-
-      it "should be overridable" do
-        dependency = Dependency.new
-        dependency.approved = true
-        dependency.should be_approved
-      end
-    end
-
     describe '#license_url' do
       it "should delegate to LicenseUrl.find_by_name" do
         LicenseFinder::LicenseUrl.stub(:find_by_name).with("MIT").and_return "http://license-url.com"
@@ -161,12 +133,52 @@ module LicenseFinder
       end
     end
 
+    describe '.unapproved' do
+      it "should return all unapproved dependencies" do
+        Dependency.delete_all
+        Dependency.new('name' => "unapproved dependency", 'approved' => false).save
+        Dependency.new('name' => "approved dependency", 'approved' => true).save
+
+        unapproved = Dependency.unapproved
+        unapproved.count.should == 1
+        unapproved.should_not be_any(&:approved?)
+      end
+    end
+
     describe '#approve!' do
       it "should update the yaml file to show the gem is approved" do
         gem = Dependency.new('name' => "foo")
         gem.approve!
         reloaded_gem = Dependency.find_by_name(gem.name)
         reloaded_gem.approved.should be_true
+      end
+    end
+
+    describe "#approved" do
+      it "should return true when the license is whitelisted" do
+        dependency = Dependency.new('license' => 'MIT')
+        dependency.should be_approved
+      end
+
+      it "should return true when the license is an alternative name of a whitelisted license" do
+        dependency = Dependency.new('license' => 'Expat')
+        dependency.should be_approved
+      end
+
+      it "should return true when the license has no matching license class, but is whitelisted anyways" do
+        dependency = Dependency.new('license' => 'other')
+        dependency.should be_approved
+      end
+
+      it "should return false when the license is not whitelisted" do
+        dependency = Dependency.new('license' => 'GPL')
+        dependency.should_not be_approved
+      end
+
+      it "should be overridable" do
+        dependency = Dependency.new
+        dependency.approved = true
+        dependency.should be_approved
       end
     end
 

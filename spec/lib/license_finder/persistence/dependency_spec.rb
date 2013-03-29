@@ -26,11 +26,7 @@ describe LicenseFinder::Persistence::Dependency do
     context "with known attributes" do
       it "should set the all of the attributes on the instance" do
         attributes.each do |key, value|
-          if key != "approved"
-            subject.send("#{key}").should equal(value), "expected #{value.inspect} for #{key}, got #{subject.send("#{key}").inspect}"
-          else
-            subject.approved?.should == value
-          end
+          subject.send("#{key}").should equal(value), "expected #{value.inspect} for #{key}, got #{subject.send("#{key}").inspect}"
         end
       end
     end
@@ -43,17 +39,6 @@ describe LicenseFinder::Persistence::Dependency do
       it "should not raise an exception" do
         expect { subject }.to_not raise_exception(NoMethodError)
       end
-    end
-  end
-
-  describe '.unapproved' do
-    it "should return all unapproved dependencies" do
-      klass.new('name' => "unapproved dependency", 'approved' => false).save
-      klass.new('name' => "approved dependency", 'approved' => true).save
-
-      unapproved = klass.unapproved
-      unapproved.count.should == 1
-      unapproved.collect(&:approved?).any?.should be_false
     end
   end
 
@@ -78,12 +63,6 @@ describe LicenseFinder::Persistence::Dependency do
     end
   end
 
-  describe "#config" do
-    it 'should respond to it' do
-      klass.new.should respond_to(:config)
-    end
-  end
-
   describe '#attributes' do
     it "should return a hash containing the values of all the accessible properties" do
       dep = klass.new(attributes)
@@ -102,11 +81,7 @@ describe LicenseFinder::Persistence::Dependency do
       saved_dep = klass.find_by_name(dep.name)
 
       attributes.each do |key, value|
-        if key != "approved"
-          saved_dep.send("#{key}").should eql(value), "expected #{value.inspect} for #{key}, got #{saved_dep.send("#{key}").inspect}"
-        else
-          saved_dep.approved?.should == value
-        end
+        saved_dep.send("#{key}").should eql(value), "expected #{value.inspect} for #{key}, got #{saved_dep.send("#{key}").inspect}"
       end
     end
   end

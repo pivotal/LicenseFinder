@@ -25,6 +25,10 @@ module LicenseFinder
       save
     end
 
+    def approved?
+      !!approved
+    end
+
     def license_url
       LicenseFinder::LicenseUrl.find_by_name license
     end
@@ -44,6 +48,16 @@ module LicenseFinder
       update_attributes new_attributes
 
       self
+    end
+
+    def set_license_manually(license)
+      update_attributes('license' => license, 'manual' => true)
+    end
+
+    private
+
+    def config
+      LicenseFinder.config
     end
   end
 end
