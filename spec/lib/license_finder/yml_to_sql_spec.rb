@@ -53,8 +53,6 @@ describe LicenseFinder::YmlToSql do
       (DB.tables - [:schema_migrations]).each { |table| DB[table].truncate }
     end
 
-    it "handles un-seeded licenses (maybe?)"
-
     it "persists all of the dependency's attributes" do
       described_class.convert_all([legacy_attributes])
 
@@ -73,30 +71,7 @@ describe LicenseFinder::YmlToSql do
       saved_dep = described_class::Sql::Dependency.first
       saved_dep.license.name.should == "GPLv2"
       saved_dep.license.url.should == "www.license_url.org"
-    end
-
-    it "sets approval type to 'manual' for a manually approved dependency" do
-      described_class.convert_all([legacy_attributes])
-
-      saved_dep = described_class::Sql::Dependency.first
-      saved_dep.approval.state.should == true
-      saved_dep.approval.approval_type.should == 'manual'
-    end
-
-    it "does not set approval type if dependency is unapproved" do
-      described_class.convert_all([legacy_attributes.merge('approved' => false)])
-
-      saved_dep = described_class::Sql::Dependency.first
-      saved_dep.approval.state.should == false
-      saved_dep.approval.approval_type.should == nil
-    end
-
-    it "defaults approval type to 'whitelist'" do
-      described_class.convert_all([legacy_attributes.merge('manual' => nil)])
-
-      saved_dep = described_class::Sql::Dependency.first
-      saved_dep.approval.state.should == true
-      saved_dep.approval.approval_type.should == 'whitelist'
+      saved_dep.license.manual.should == true
     end
 
     it "associates bundler groups" do

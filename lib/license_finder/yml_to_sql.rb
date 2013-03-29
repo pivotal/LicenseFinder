@@ -30,7 +30,7 @@ module LicenseFinder
 
     def convert
       @dep = create_dependency
-      @dep.license = find_or_create_license
+      @dep.license = create_license
       @dep.approval = create_approval
       associate_bundler_groups
       @dep.save
@@ -52,8 +52,7 @@ module LicenseFinder
       Sql::Dependency.convert(legacy_attrs)
     end
 
-    def find_or_create_license
-      # TODO: find seeded
+    def create_license
       Sql::License.convert(legacy_attrs)
     end
 
@@ -102,7 +101,8 @@ module LicenseFinder
 
         VALID_ATTRIBUTES = {
           'license' => 'name',
-          'license_url' => 'url'
+          'license_url' => 'url',
+          'manual' => 'manual'
         }
       end
 
@@ -112,15 +112,6 @@ module LicenseFinder
         VALID_ATTRIBUTES = {
           'approved' => 'state'
         }
-
-        def self.remap_attrs(legacy_attrs)
-          new_attrs = super
-
-          if new_attrs['state']
-            new_attrs['approval_type'] = legacy_attrs['manual'] ? 'manual' : 'whitelist'
-          end
-          new_attrs
-        end
       end
     end
   end
