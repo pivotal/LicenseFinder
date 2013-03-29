@@ -1,23 +1,5 @@
-require 'sequel'
-
-DB = Sequel.connect("sqlite://#{LicenseFinder.config.database_path}")
-Sequel.extension :migration, :core_extensions
-Sequel::Migrator.run(DB, LicenseFinder::ROOT_PATH.join('../db/migrate'))
-
 module LicenseFinder
   module Persistence
-    module Sqlite
-      # TODO: un-nest modules... maybe just LicenseFinder::Dependency
-      class Dependency < Sequel::Model
-        # TODO: remove
-        VALID_ATTRIBUTES = %w[name version summary description homepage]
-
-        def self.create_from_legacy_attrs(attrs)
-          create attrs.select {|k, v| VALID_ATTRIBUTES.include?(k) }
-        end
-      end
-    end
-
     class Dependency
       class Database
         def initialize
@@ -36,7 +18,6 @@ module LicenseFinder
 
         def delete_all
           File.delete(LicenseFinder.config.dependencies_yaml) if File.exists?(LicenseFinder.config.dependencies_yaml)
-          Sqlite::Dependency.truncate
           @dependency_attributes = nil
         end
 
@@ -48,9 +29,6 @@ module LicenseFinder
         def persist!
           File.open(LicenseFinder.config.dependencies_yaml, 'w+') do |f|
             f.write dependency_attributes.to_yaml
-          end
-          dependency_attributes.each do |attrs|
-            Sqlite::Dependency.create_from_legacy_attrs(attrs)
           end
         end
 

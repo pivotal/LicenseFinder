@@ -26,6 +26,7 @@ module LicenseFinder
   autoload :Reporter, 'license_finder/reporter'
   autoload :BundleSyncer, 'license_finder/bundle_syncer'
   autoload :SourceSyncer, 'license_finder/source_syncer'
+  autoload :YmlToSql, 'license_finder/yml_to_sql'
 
   def self.config
     @config ||= Configuration.ensure_default
