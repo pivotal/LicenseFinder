@@ -14,20 +14,38 @@ describe LicenseFinder::YmlToSql do
       'homepage' => 'www.homepage.com',
       'children' => ["child1_name"],
       'parents' => ["parent1_name"],
+      'bundler_groups' => ["test"],
 
       'notes' => 'some notes',
       'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
-
-      'bundler_groups' => ["test"],
     }
+  end
+  let(:config) { LicenseFinder::Configuration.new }
+
+  before do
+    LicenseFinder.stub(:config) { config }
   end
 
   describe ".needs_conversion?" do
-    it "is true if the yml still exists"
-    it "is false otherwise"
+    it "is true if the yml still exists" do
+      config.stub(dependencies_dir: 'path/to')
+      File.should_receive(:exists?).with('path/to/dependencies.yml') { true }
+      described_class.needs_conversion?.should be_true
+    end
+
+    it "is false otherwise" do
+      config.stub(dependencies_dir: 'path/to')
+      File.should_receive(:exists?).with('path/to/dependencies.yml') { false }
+      described_class.needs_conversion?.should be_false
+    end
   end
+
   describe ".remove_yml" do
-    it "removes the yml file"
+    it "removes the yml file" do
+      config.stub(dependencies_dir: 'path/to')
+      File.should_receive(:delete).with('path/to/dependencies.yml')
+      described_class.remove_yml
+    end
   end
 
   describe '.convert_all' do

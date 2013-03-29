@@ -14,6 +14,14 @@ module LicenseFinder
       converters.each(&:associate_children)
     end
 
+    def self.needs_conversion?
+      File.exists?(LicenseFinder.config.dependencies_yaml)
+    end
+
+    def self.remove_yml
+      File.delete(LicenseFinder.config.dependencies_yaml)
+    end
+
     def initialize(attrs)
       @legacy_attrs = attrs
     end
