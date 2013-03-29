@@ -136,8 +136,8 @@ module LicenseFinder
     describe '.unapproved' do
       it "should return all unapproved dependencies" do
         Dependency.delete_all
-        Dependency.new('name' => "unapproved dependency", 'approved' => false).save
-        Dependency.new('name' => "approved dependency", 'approved' => true).save
+        Dependency.new('name' => "unapproved dependency", 'version' => '0.0.1', 'approved' => false).save
+        Dependency.new('name' => "approved dependency", 'version' => '0.0.1', 'approved' => true).save
 
         unapproved = Dependency.unapproved
         unapproved.count.should == 1
@@ -147,7 +147,7 @@ module LicenseFinder
 
     describe '#approve!' do
       it "should update the yaml file to show the gem is approved" do
-        gem = Dependency.new('name' => "foo")
+        gem = Dependency.new('name' => "foo", 'version' => '0.0.1')
         gem.approve!
         reloaded_gem = Dependency.find_by_name(gem.name)
         reloaded_gem.approved.should be_true
@@ -193,7 +193,7 @@ module LicenseFinder
     end
 
     describe "#set_license_manually" do
-      let(:gem) { Dependency.new('name' => "foo", 'license' => 'Original') }
+      let(:gem) { Dependency.new('name' => "foo", 'version' => '0.0.1', 'license' => 'Original') }
 
       it "modifies the license" do
         gem.license.should == 'Original'

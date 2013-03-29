@@ -17,6 +17,8 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.add_dependency "bundler"
+  s.add_dependency "sequel"
+  s.add_dependency "sqlite3"
 
   %w(rspec rake pry xpath capybara cucumber pry-debugger).each do |gem|
     s.add_development_dependency gem

@@ -100,8 +100,8 @@ describe LicenseFinder::Persistence::Dependency do
 
   describe "#destroy" do
     it "should remove itself from the database" do
-      foo_dep = klass.new('name' => "foo")
-      bar_dep = klass.new('name' => "bar")
+      foo_dep = klass.new('name' => "foo", 'version' => '0.0.1')
+      bar_dep = klass.new('name' => "bar", 'version' => '0.0.1')
       foo_dep.save
       bar_dep.save
 
