@@ -3,9 +3,8 @@ module LicenseFinder
     extend self
 
     def sync!
-      current_dependencies = Bundle.new.gems.map(&:to_dependency)
-      prior_dependencies = Dependency.all
-      SourceSyncer.new(current_dependencies, prior_dependencies).sync!
+      current_dependencies = Bundle.current_gem_dependencies
+      Dependency.destroy_obsolete(current_dependencies)
     end
   end
 end

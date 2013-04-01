@@ -4,19 +4,21 @@ module LicenseFinder
   describe TextReport do
     describe '#to_s' do
       let(:dep1) do
-        Dependency.new(
+        dependency = Dependency.new(
           'name' => 'gem_a',
           'version' => '1.0',
-          'license' => "MIT"
         )
+        dependency.license = LicenseFinder::Dependency::License.create(name: 'MIT')
+        dependency
       end
 
       let(:dep2) do
-        Dependency.new(
+        dependency = Dependency.new(
           'name' => 'gem_b',
           'version' => '1.0',
-          'license' => "MIT"
         )
+        dependency.license = LicenseFinder::Dependency::License.create(name: 'MIT')
+        dependency
       end
 
       subject { TextReport.new([dep2, dep1]).to_s }

@@ -19,11 +19,9 @@ Given /^I manually set the license type to Ruby$/ do
 end
 
 When /^I run license_finder again$/ do
-  @output = @user.execute_command "license_finder"
+  @output = @user.execute_command "license_finder -q"
 end
 
 Then /^the mime\-types license is set to Ruby$/ do
-  all_settings = YAML.load(File.read(@user.dependencies_file_path))
-  actual_settings = all_settings.detect { |gem| gem['name'] == 'mime-types' }
-  actual_settings['license'].should == "Ruby"
+  @output.should =~ /mime-types.*Ruby/
 end

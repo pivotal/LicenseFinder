@@ -36,13 +36,3 @@ Feature: HTML Report
     And I should see "1 unapproved" in the html
     # gpl_licensed_gem
     And I should see "1 GPL" in the html
-
-  Scenario: Implicit dependencies list their parent dependencies
-    Given I have a rails app with license finder
-    When I run "license_finder"
-    Then I should see the "activerecord" in the html with the following details:
-      | parent |
-      | rails  |
-    And I should see "rails" in the html with the following details:
-      | children     |
-      | activerecord |

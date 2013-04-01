@@ -1,63 +1,54 @@
 module LicenseFinder
-  class Dependency < LicenseFinder::Persistence::Dependency
-    def approved
-      self.approved = !!(config.whitelisted?(license) || super)
+  class Dependency < Sequel::Model
+
+    class BundlerGroup < Sequel::Model
     end
 
-    def license_files
-      super || (self.license_files = [])
+    class Approval < Sequel::Model
     end
 
-    def bundler_groups
-      super || (self.bundler_groups = [])
+    class License < Sequel::Model
+      def initialize(*args)
+        super
+        self.url = LicenseFinder::LicenseUrl.find_by_name name
+      end
+
+      def whitelisted?
+        !!(config.whitelisted?(name))
+      end
+
+      private
+
+      def config
+        LicenseFinder.config
+      end
     end
 
-    def children
-      super || (self.children = [])
+    many_to_one :license, class: License
+    many_to_one :approval, class: Approval
+    many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
+    many_to_many :parents, join_table: :ancestries, left_key: :child_dependency_id, right_key: :parent_dependency_id, class: self
+    many_to_many :bundler_groups, class: BundlerGroup
+
+    def self.destroy_obsolete(current_dependencies)
+      exclude(id: current_dependencies.map(&:id)).each(&:destroy)
     end
 
-    def parents
-      super || (self.parents = [])
+    def self.unapproved
+      all.reject(&:approved?)
     end
 
     def approve!
-      self.approved = true
-      save
+      approval.state = true
+      approval.save
     end
 
     def approved?
-      !!approved
-    end
-
-    def license_url
-      LicenseFinder::LicenseUrl.find_by_name license
-    end
-
-    def merge(other)
-      raise "Cannot merge dependencies with different names. Expected #{name}, was #{other.name}." unless other.name == name
-
-      new_attributes = other.attributes.merge("notes" => notes)
-
-      if other.license == license || other.license == 'other'
-        new_attributes["approved"] = approved
-        new_attributes["license"]  = license
-      else
-        new_attributes["approved"] = nil
-      end
-
-      update_attributes new_attributes
-
-      self
+      (license && license.whitelisted?) || (approval && approval.state)
     end
 
     def set_license_manually(license)
-      update_attributes('license' => license, 'manual' => true)
-    end
-
-    private
-
-    def config
-      LicenseFinder.config
+      self.license.update('name' => license, 'manual' => true)
     end
   end
 end

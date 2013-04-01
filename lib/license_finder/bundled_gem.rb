@@ -29,21 +29,6 @@ module LicenseFinder
       @children ||= @spec.dependencies.collect(&:name)
     end
 
-    def to_dependency
-      @dependency ||= LicenseFinder::Dependency.new(
-        'name' => @spec.name,
-        'version' => @spec.version.to_s,
-        'license' => determine_license,
-        'license_files' => license_files.map(&:file_path),
-        'bundler_groups' => (@bundler_dependency.groups if @bundler_dependency),
-        'summary' => @spec.summary,
-        'description' => @spec.description,
-        'homepage' => @spec.homepage,
-        'children' => children,
-        'parents'  => parents
-      )
-    end
-
     def determine_license
       return @spec.license if @spec.license
 
@@ -66,7 +51,60 @@ module LicenseFinder
       dependency_name.downcase
     end
 
+    def save_or_merge
+      dep = if exists?
+              existing_dep
+            else
+              new_dep
+            end
+      dep.version = @spec.version.to_s
+      dep.summary = @spec.summary
+      dep.description = @spec.description
+      dep.homepage = @spec.homepage
+
+      if dep.license
+        unless dep.license.manual
+          unless determine_license == 'other'
+            dep.license.name = determine_license
+          end
+        end
+      else
+        dep.license = LicenseFinder::Dependency::License.create(name: determine_license)
+      end
+      dep.save
+
+      dep.remove_all_bundler_groups
+
+      if @bundler_dependency
+        @bundler_dependency.groups.each { |group|
+          dep.add_bundler_group LicenseFinder::Dependency::BundlerGroup.find_or_create(name: group.to_s)
+        }
+      end
+
+      dep.remove_all_children
+
+      children.each do |child|
+        dep.add_child(LicenseFinder::Dependency.find_or_create(name: child.to_s))
+      end
+
+      dep
+    end
+
     private
+
+    def exists?
+      ! LicenseFinder::Dependency.where(name: @spec.name).empty?
+    end
+
+    def new_dep
+      dep = LicenseFinder::Dependency.new(name: @spec.name)
+      dep.approval = LicenseFinder::Dependency::Approval.create
+      dep
+    end
+
+    def existing_dep
+      LicenseFinder::Dependency.first(name: @spec.name)
+    end
 
     def find_matching_files(names)
       Dir.glob(File.join(install_path, '**', "*{#{names.join(',')}}*"))

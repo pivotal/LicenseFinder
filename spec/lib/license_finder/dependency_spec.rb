@@ -22,122 +22,26 @@ module LicenseFinder
       config.whitelist = ["MIT", "other"]
     end
 
-    describe '#license_url' do
-      it "should delegate to LicenseUrl.find_by_name" do
-        LicenseFinder::LicenseUrl.stub(:find_by_name).with("MIT").and_return "http://license-url.com"
-        Dependency.new('license' => "MIT").license_url.should == "http://license-url.com"
-      end
-    end
+    describe ".destroy_obsolete" do
+      it "destroys every dependency except for the ones provided as 'current'" do
+        cur1 = Dependency.create(name: "current dependency 1")
+        cur2 = Dependency.create(name: "current dependency 2")
+        Dependency.create(name: "old dependency 1")
+        Dependency.create(name: "old dependency 2")
 
-    describe '#merge' do
-      subject do
-        Dependency.new(
-          'name' => 'foo',
-          'license' => 'MIT',
-          'version' => '0.0.1',
-          'license_files' => "old license files"
-        )
-      end
-
-      let(:new_dep) do
-        Dependency.new(
-          'name' => 'foo',
-          'license' => 'MIT',
-          'version' => '0.0.2',
-          'license_files' => "new license files",
-          'summary' => 'foo summary',
-          'description' => 'awesome foo description!',
-          'bundler_groups' => [1, 2, 3],
-          'homepage' => "http://new.homepage"
-        )
-      end
-
-      it 'should raise an error if the names do not match' do
-        new_dep.name = 'bar'
-
-        expect {
-          subject.merge(new_dep)
-        }.to raise_error
-      end
-
-      it 'should return the new version, license files, source, and homepage' do
-        merged = subject.merge(new_dep)
-
-        merged.version.should == '0.0.2'
-        merged.license_files.should == new_dep.license_files
-        merged.homepage.should == new_dep.homepage
-      end
-
-      it 'should return the new summary and description and bundle groups' do
-        merged = subject.merge new_dep
-
-        merged.summary.should == new_dep.summary
-        merged.description.should == new_dep.description
-        merged.bundler_groups.should == new_dep.bundler_groups
-      end
-
-      it 'should return the old notes' do
-        subject.notes = 'old notes'
-        new_dep.notes = 'new notes'
-
-        merged = subject.merge(new_dep)
-
-        merged.notes.should == 'old notes'
-      end
-
-      context "license changes to something other than 'other'" do
-        before { new_dep.license = 'new license' }
-
-        context "new license is whitelisted" do
-          before { LicenseFinder.config.stub(:whitelist).and_return [new_dep.license] }
-
-          it "should set the approval to true" do
-            merged = subject.merge new_dep
-            merged.should be_approved
-          end
-        end
-
-        context "new license is not whitelisted" do
-          it "should set the approval to false" do
-            merged = subject.merge new_dep
-            merged.should_not be_approved
-          end
-        end
-      end
-
-      context "license changes to unknown (i.e., 'other')" do
-        before { new_dep.license = 'other' }
-
-        it "should not change the license" do
-          merged = subject.merge new_dep
-          merged.license.should == 'MIT'
-        end
-
-        it "should not change the approval" do
-          approved = subject.approved?
-          merged = subject.merge new_dep
-          merged.approved?.should == approved
-        end
-      end
-
-      context "license does not change" do
-        before { new_dep.license.should == subject.license }
-
-        it "should not change the license or approval" do
-          existing_license = subject.license
-          existing_approval = subject.approved?
-          merged = subject.merge new_dep
-          merged.approved?.should == existing_approval
-          merged.license.should == existing_license
-        end
+        Dependency.destroy_obsolete([cur1, cur2])
+        Dependency.all.should =~ [cur1, cur2]
       end
     end
 
     describe '.unapproved' do
       it "should return all unapproved dependencies" do
-        Dependency.delete_all
-        Dependency.new('name' => "unapproved dependency", 'version' => '0.0.1', 'approved' => false).save
-        Dependency.new('name' => "approved dependency", 'version' => '0.0.1', 'approved' => true).save
+        dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
+        dependency.approval = LicenseFinder::Dependency::Approval.create(state: false)
+        dependency.save
+        dependency2 = Dependency.create(name: "approved dependency", version: '0.0.1')
+        dependency2.approval = LicenseFinder::Dependency::Approval.create(state: true)
+        dependency2.save
 
         unapproved = Dependency.unapproved
         unapproved.count.should == 1
@@ -146,66 +50,68 @@ module LicenseFinder
     end
 
     describe '#approve!' do
-      it "should update the yaml file to show the gem is approved" do
-        gem = Dependency.new('name' => "foo", 'version' => '0.0.1')
-        gem.approve!
-        reloaded_gem = Dependency.find_by_name(gem.name)
-        reloaded_gem.approved.should be_true
+      it "should update the database to show the dependency is approved" do
+        dependency = Dependency.create(name: "foo", version: '0.0.1')
+        dependency.approval = LicenseFinder::Dependency::Approval.create(state: false)
+        dependency.save
+        dependency.approve!
+        dependency.reload.should be_approved
       end
     end
 
     describe "#approved" do
+      let(:dependency) { Dependency.create(name: 'some gem') }
+
       it "should return true when the license is whitelisted" do
-        dependency = Dependency.new('license' => 'MIT')
+        dependency.license = LicenseFinder::Dependency::License.create(name: 'MIT')
+        dependency.save
         dependency.should be_approved
       end
 
       it "should return true when the license is an alternative name of a whitelisted license" do
-        dependency = Dependency.new('license' => 'Expat')
+        dependency.license = LicenseFinder::Dependency::License.create(name: 'Expat')
+        dependency.save
         dependency.should be_approved
       end
 
       it "should return true when the license has no matching license class, but is whitelisted anyways" do
-        dependency = Dependency.new('license' => 'other')
+        dependency.license = LicenseFinder::Dependency::License.create(name: 'other')
+        dependency.save
         dependency.should be_approved
       end
 
       it "should return false when the license is not whitelisted" do
-        dependency = Dependency.new('license' => 'GPL')
+        dependency.license = LicenseFinder::Dependency::License.create(name: 'GPL')
+        dependency.save
         dependency.should_not be_approved
-      end
-
-      it "should be overridable" do
-        dependency = Dependency.new
-        dependency.approved = true
-        dependency.should be_approved
-      end
-    end
-
-    describe "defaults" do
-      %w(license_files bundler_groups children parents).each do |attribute|
-        describe "##{attribute}" do
-          it "should default to an empty array" do
-            Dependency.new.send(attribute).should == []
-          end
-        end
       end
     end
 
     describe "#set_license_manually" do
-      let(:gem) { Dependency.new('name' => "foo", 'version' => '0.0.1', 'license' => 'Original') }
+      let(:gem) do
+        dependency = Dependency.new(name: "bob", version: '0.0.1')
+        dependency.license = LicenseFinder::Dependency::License.create(name: 'Original')
+        dependency.save
+        dependency
+      end
 
       it "modifies the license" do
-        gem.license.should == 'Original'
+        gem.license.name.should == 'Original'
         gem.set_license_manually('Updated')
-        reloaded_gem = Dependency.find_by_name(gem.name)
-        reloaded_gem.license.should == 'Updated'
+        gem.reload.license.name.should == 'Updated'
       end
 
       it "marks the approval as manual" do
         gem.set_license_manually('Updated')
-        reloaded_gem = Dependency.find_by_name(gem.name)
-        reloaded_gem.manual.should be_true
+        gem.reload.license.manual.should be_true
+      end
+    end
+
+    describe '#license_url' do
+      it "should delegate to LicenseUrl.find_by_name" do
+        LicenseFinder::LicenseUrl.stub(:find_by_name).with("MIT").and_return "http://license-url.com"
+        license = LicenseFinder::Dependency::License.new(name: 'MIT')
+        license.url.should == "http://license-url.com"
       end
     end
   end

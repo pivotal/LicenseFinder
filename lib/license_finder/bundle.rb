@@ -2,6 +2,10 @@ module LicenseFinder
   class Bundle
     attr_writer :ignore_groups
 
+    def self.current_gem_dependencies(bundler_definition=nil)
+      new(bundler_definition).gems.map(&:save_or_merge)
+    end
+
     def initialize(bundler_definition=nil)
       @definition = bundler_definition || Bundler::Definition.build(gemfile_path, lockfile_path, nil)
     end

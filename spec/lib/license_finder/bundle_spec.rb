@@ -2,6 +2,17 @@ require "spec_helper"
 
 module LicenseFinder
   describe Bundle do
+    let(:definition) do
+      double('definition', {
+        :dependencies => [],
+        :groups => [],
+        :specs_for => [
+          build_gemspec('gem1', '1.2.3'),
+          build_gemspec('gem2', '0.4.2')
+        ]
+      })
+    end
+
     def build_gemspec(name, version, dependency=nil)
       Gem::Specification.new do |s|
         s.name = name
@@ -15,26 +26,18 @@ module LicenseFinder
       end
     end
 
-    describe '.from_bundler(bundle)' do
-      let(:definition) do
-        double('definition', {
-          :dependencies => [],
-          :groups => [],
-          :specs_for => [
-            build_gemspec('gem1', '1.2.3'),
-            build_gemspec('gem2', '0.4.2')
-          ]
-        })
-      end
-
+    describe '.current_gem_dependencies' do
       subject do
-        Bundle.new(definition).gems.map(&:to_dependency)
+        Bundle.current_gem_dependencies(definition)
       end
-
-      its(:count) { should == 2 }
 
       it "should have 2 dependencies" do
         subject.size.should == 2
+      end
+
+      it "returns persisted dependencies" do
+        subject.first.id.should be
+        subject.last.id.should be
       end
 
       context "when initialized with a parent and child gem" do
@@ -46,11 +49,11 @@ module LicenseFinder
         end
 
         it "should update the child dependency with its parent data" do
-          gem1 = subject.first
-          gem2 = subject.last
+          gem1 = subject.first.reload
+          gem2 = subject.last.reload
 
-          gem2.parents.should == [gem1.name]
-          gem1.children.should == [gem2.name]
+          gem2.parents.should == [gem1]
+          gem1.children.should == [gem2]
         end
       end
     end

@@ -10,7 +10,7 @@ module LicenseFinder
           dependency = double('dependency', :name => nil)
           dependency.should_receive(:approve!)
 
-          Dependency.stub(:find_by_name).with('foo').and_return(dependency)
+          Dependency.stub(:first).with(name: 'foo').and_return(dependency)
 
           CLI.execute! approve: true, dependency: 'foo'
         end
@@ -21,7 +21,7 @@ module LicenseFinder
           dependency = double :dependency, :name => nil
           dependency.should_receive(:set_license_manually).with("foo")
 
-          Dependency.stub(:find_by_name).with("foo_gem").and_return dependency
+          Dependency.stub(:first).with(name: "foo_gem").and_return dependency
 
           CLI.execute! license: "foo", dependency: 'foo_gem'
         end
