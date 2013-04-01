@@ -6,6 +6,17 @@ Sequel::Migrator.run(DB, LicenseFinder::ROOT_PATH.join('../db/migrate'))
 
 module LicenseFinder
   class YmlToSql
+    def self.convert_if_required
+      if needs_conversion?
+        convert_all(load_yml)
+        remove_yml
+      end
+    end
+
+    def self.load_yml
+      YAML.load File.read(yml_path)
+    end
+
     def self.convert_all(all_legacy_attrs)
       converters = all_legacy_attrs.map do |attrs|
         new(attrs)
@@ -15,11 +26,15 @@ module LicenseFinder
     end
 
     def self.needs_conversion?
-      File.exists?(LicenseFinder.config.dependencies_yaml)
+      File.exists?(yml_path)
     end
 
     def self.remove_yml
-      File.delete(LicenseFinder.config.dependencies_yaml)
+      File.delete(yml_path)
+    end
+
+    def self.yml_path
+      LicenseFinder.config.dependencies_yaml
     end
 
     def initialize(attrs)
@@ -66,7 +81,7 @@ module LicenseFinder
 
     def find_bundler_groups
       (legacy_attrs['bundler_groups'] || []).map do |name|
-        Sql::BundlerGroup.find_or_create(name: name)
+        Sql::BundlerGroup.find_or_create(name: name.to_s)
       end
     end
 

@@ -14,7 +14,7 @@ describe LicenseFinder::YmlToSql do
       'homepage' => 'www.homepage.com',
       'children' => ["child1_name"],
       'parents' => ["parent1_name"],
-      'bundler_groups' => ["test"],
+      'bundler_groups' => [:test],
 
       'notes' => 'some notes',
       'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
