@@ -37,10 +37,10 @@ module LicenseFinder
     describe '.unapproved' do
       it "should return all unapproved dependencies" do
         dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
-        dependency.approval = LicenseFinder::Dependency::Approval.create(state: false)
+        dependency.approval = LicenseFinder::Approval.create(state: false)
         dependency.save
         dependency2 = Dependency.create(name: "approved dependency", version: '0.0.1')
-        dependency2.approval = LicenseFinder::Dependency::Approval.create(state: true)
+        dependency2.approval = LicenseFinder::Approval.create(state: true)
         dependency2.save
 
         unapproved = Dependency.unapproved
@@ -52,7 +52,7 @@ module LicenseFinder
     describe '#approve!' do
       it "should update the database to show the dependency is approved" do
         dependency = Dependency.create(name: "foo", version: '0.0.1')
-        dependency.approval = LicenseFinder::Dependency::Approval.create(state: false)
+        dependency.approval = LicenseFinder::Approval.create(state: false)
         dependency.save
         dependency.approve!
         dependency.reload.should be_approved
@@ -63,25 +63,25 @@ module LicenseFinder
       let(:dependency) { Dependency.create(name: 'some gem') }
 
       it "should return true when the license is whitelisted" do
-        dependency.license = LicenseFinder::Dependency::License.create(name: 'MIT')
+        dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
         dependency.save
         dependency.should be_approved
       end
 
       it "should return true when the license is an alternative name of a whitelisted license" do
-        dependency.license = LicenseFinder::Dependency::License.create(name: 'Expat')
+        dependency.license = LicenseFinder::LicenseAlias.create(name: 'Expat')
         dependency.save
         dependency.should be_approved
       end
 
       it "should return true when the license has no matching license class, but is whitelisted anyways" do
-        dependency.license = LicenseFinder::Dependency::License.create(name: 'other')
+        dependency.license = LicenseFinder::LicenseAlias.create(name: 'other')
         dependency.save
         dependency.should be_approved
       end
 
       it "should return false when the license is not whitelisted" do
-        dependency.license = LicenseFinder::Dependency::License.create(name: 'GPL')
+        dependency.license = LicenseFinder::LicenseAlias.create(name: 'GPL')
         dependency.save
         dependency.should_not be_approved
       end
@@ -90,7 +90,7 @@ module LicenseFinder
     describe "#set_license_manually" do
       let(:gem) do
         dependency = Dependency.new(name: "bob", version: '0.0.1')
-        dependency.license = LicenseFinder::Dependency::License.create(name: 'Original')
+        dependency.license = LicenseFinder::LicenseAlias.create(name: 'Original')
         dependency.save
         dependency
       end
@@ -110,7 +110,7 @@ module LicenseFinder
     describe '#license_url' do
       it "should delegate to LicenseUrl.find_by_name" do
         LicenseFinder::LicenseUrl.stub(:find_by_name).with("MIT").and_return "http://license-url.com"
-        license = LicenseFinder::Dependency::License.new(name: 'MIT')
+        license = LicenseFinder::LicenseAlias.new(name: 'MIT')
         license.url.should == "http://license-url.com"
       end
     end

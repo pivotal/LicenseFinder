@@ -144,13 +144,13 @@ describe LicenseFinder::BundledGem do
       end
 
       it "keeps a manually assigned license" do
-        old_copy.license = LicenseFinder::Dependency::License.create(name: 'foo', manual: true)
+        old_copy.license = LicenseFinder::LicenseAlias.create(name: 'foo', manual: true)
         old_copy.save
         subject.license.name.should == 'foo'
       end
 
       it "keeps approval" do
-        old_copy.approval = LicenseFinder::Dependency::Approval.create(state: true)
+        old_copy.approval = LicenseFinder::Approval.create(state: true)
         old_copy.save
         subject.approval.state.should == true
       end
@@ -166,8 +166,8 @@ describe LicenseFinder::BundledGem do
         let(:bundled_gem) { LicenseFinder::BundledGem.new(gemspec, stub(:bundler_dependency, groups: %w[1 2 3]))}
 
         before do
-          old_copy.add_bundler_group LicenseFinder::Dependency::BundlerGroup.find_or_create(name: 'a')
-          old_copy.add_bundler_group LicenseFinder::Dependency::BundlerGroup.find_or_create(name: 'b')
+          old_copy.add_bundler_group LicenseFinder::BundlerGroup.find_or_create(name: 'a')
+          old_copy.add_bundler_group LicenseFinder::BundlerGroup.find_or_create(name: 'b')
         end
 
         it "ensures the correct bundler groups are associated" do
@@ -177,7 +177,7 @@ describe LicenseFinder::BundledGem do
 
       context "license changes to something other than 'other'" do
         before do
-          old_copy.license = LicenseFinder::Dependency::License.create(name: 'other')
+          old_copy.license = LicenseFinder::LicenseAlias.create(name: 'other')
           old_copy.save
           gemspec.license = "new license"
         end
@@ -199,8 +199,8 @@ describe LicenseFinder::BundledGem do
 
       context "license changes to unknown (i.e., 'other')" do
         before do
-          old_copy.license = LicenseFinder::Dependency::License.create(name: 'MIT')
-          old_copy.approval = LicenseFinder::Dependency::Approval.create(state: false)
+          old_copy.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
+          old_copy.approval = LicenseFinder::Approval.create(state: false)
           old_copy.save
           gemspec.license = "other"
         end
@@ -216,8 +216,8 @@ describe LicenseFinder::BundledGem do
 
       context "license does not change" do
         before do
-          old_copy.license = LicenseFinder::Dependency::License.create(name: 'MIT')
-          old_copy.approval = LicenseFinder::Dependency::Approval.create(state: false)
+          old_copy.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
+          old_copy.approval = LicenseFinder::Approval.create(state: false)
           old_copy.save
           gemspec.license = "MIT"
         end

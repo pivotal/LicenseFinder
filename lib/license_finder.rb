@@ -15,8 +15,6 @@ module LicenseFinder
   autoload :BundledGem, 'license_finder/bundled_gem'
   autoload :CLI, 'license_finder/cli'
   autoload :Configuration, 'license_finder/configuration'
-  autoload :Persistence, 'license_finder/persistence'
-  autoload :Dependency, 'license_finder/dependency'
   autoload :License, 'license_finder/license'
   autoload :LicenseUrl, 'license_finder/license_url'
   autoload :PossibleLicenseFile, 'license_finder/possible_license_file'
@@ -26,6 +24,10 @@ module LicenseFinder
   autoload :Reporter, 'license_finder/reporter'
   autoload :BundleSyncer, 'license_finder/bundle_syncer'
   autoload :YmlToSql, 'license_finder/yml_to_sql'
+  autoload :Dependency, 'license_finder/tables/dependency'
+  autoload :Approval, 'license_finder/tables/approval'
+  autoload :LicenseAlias, 'license_finder/tables/license_alias'
+  autoload :BundlerGroup, 'license_finder/tables/bundler_group'
 
   def self.config
     @config ||= Configuration.ensure_default

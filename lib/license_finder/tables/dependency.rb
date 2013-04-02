@@ -1,34 +1,10 @@
 module LicenseFinder
   class Dependency < Sequel::Model
-
-    class BundlerGroup < Sequel::Model
-    end
-
-    class Approval < Sequel::Model
-    end
-
-    class License < Sequel::Model
-      def initialize(*args)
-        super
-        self.url = LicenseFinder::LicenseUrl.find_by_name name
-      end
-
-      def whitelisted?
-        !!(config.whitelisted?(name))
-      end
-
-      private
-
-      def config
-        LicenseFinder.config
-      end
-    end
-
-    many_to_one :license, class: License
-    many_to_one :approval, class: Approval
+    many_to_one :license, class: LicenseAlias
+    many_to_one :approval
     many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
     many_to_many :parents, join_table: :ancestries, left_key: :child_dependency_id, right_key: :parent_dependency_id, class: self
-    many_to_many :bundler_groups, class: BundlerGroup
+    many_to_many :bundler_groups
 
     def self.destroy_obsolete(current_dependencies)
       exclude(id: current_dependencies.map(&:id)).each(&:destroy)

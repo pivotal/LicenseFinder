@@ -68,7 +68,7 @@ module LicenseFinder
     end
 
     def create_license
-      Sql::License.convert(legacy_attrs)
+      Sql::LicenseAlias.convert(legacy_attrs)
     end
 
     def create_approval
@@ -102,7 +102,7 @@ module LicenseFinder
         extend Convertable
         VALID_ATTRIBUTES = Hash[*%w[name version summary description homepage].map { |k| [k, k] }.flatten]
 
-        many_to_one :license
+        many_to_one :license, class: LicenseAlias
         many_to_one :approval
         many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
         many_to_many :bundler_groups
@@ -111,7 +111,7 @@ module LicenseFinder
       class BundlerGroup < Sequel::Model
       end
 
-      class License < Sequel::Model
+      class LicenseAlias < Sequel::Model
         extend Convertable
 
         VALID_ATTRIBUTES = {

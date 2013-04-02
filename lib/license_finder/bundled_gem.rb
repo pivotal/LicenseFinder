@@ -69,7 +69,7 @@ module LicenseFinder
           end
         end
       else
-        dep.license = LicenseFinder::Dependency::License.create(name: determine_license)
+        dep.license = LicenseFinder::LicenseAlias.create(name: determine_license)
       end
       dep.save
 
@@ -77,7 +77,7 @@ module LicenseFinder
 
       if @bundler_dependency
         @bundler_dependency.groups.each { |group|
-          dep.add_bundler_group LicenseFinder::Dependency::BundlerGroup.find_or_create(name: group.to_s)
+          dep.add_bundler_group LicenseFinder::BundlerGroup.find_or_create(name: group.to_s)
         }
       end
 
@@ -98,7 +98,7 @@ module LicenseFinder
 
     def new_dep
       dep = LicenseFinder::Dependency.new(name: @spec.name)
-      dep.approval = LicenseFinder::Dependency::Approval.create
+      dep.approval = LicenseFinder::Approval.create
       dep
     end
 
