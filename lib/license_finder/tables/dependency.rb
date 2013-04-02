@@ -23,8 +23,8 @@ module LicenseFinder
       (license && license.whitelisted?) || (approval && approval.state)
     end
 
-    def set_license_manually(license)
-      self.license.update('name' => license, 'manual' => true)
+    def set_license_manually(name)
+      license.set_manually(name)
     end
   end
 end

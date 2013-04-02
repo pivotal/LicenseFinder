@@ -28,6 +28,7 @@ module LicenseFinder
   autoload :Approval, 'license_finder/tables/approval'
   autoload :LicenseAlias, 'license_finder/tables/license_alias'
   autoload :BundlerGroup, 'license_finder/tables/bundler_group'
+  autoload :GemSaver, 'license_finder/gem_saver'
 
   def self.config
     @config ||= Configuration.ensure_default

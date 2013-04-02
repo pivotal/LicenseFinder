@@ -2,7 +2,7 @@ module LicenseFinder
   class BundledGem
     LICENSE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
 
-    attr_reader :parents
+    attr_reader :parents, :spec, :bundler_dependency
 
     def initialize(spec, bundler_dependency = nil)
       @spec = spec
@@ -52,59 +52,10 @@ module LicenseFinder
     end
 
     def save_or_merge
-      dep = if exists?
-              existing_dep
-            else
-              new_dep
-            end
-      dep.version = @spec.version.to_s
-      dep.summary = @spec.summary
-      dep.description = @spec.description
-      dep.homepage = @spec.homepage
-
-      if dep.license
-        unless dep.license.manual
-          unless determine_license == 'other'
-            dep.license.name = determine_license
-          end
-        end
-      else
-        dep.license = LicenseFinder::LicenseAlias.create(name: determine_license)
-      end
-      dep.save
-
-      dep.remove_all_bundler_groups
-
-      if @bundler_dependency
-        @bundler_dependency.groups.each { |group|
-          dep.add_bundler_group LicenseFinder::BundlerGroup.find_or_create(name: group.to_s)
-        }
-      end
-
-      dep.remove_all_children
-
-      children.each do |child|
-        dep.add_child(LicenseFinder::Dependency.find_or_create(name: child.to_s))
-      end
-
-      dep
+      GemSaver.find_or_initialize_by_name(@spec.name, self).save
     end
 
     private
-
-    def exists?
-      ! LicenseFinder::Dependency.where(name: @spec.name).empty?
-    end
-
-    def new_dep
-      dep = LicenseFinder::Dependency.new(name: @spec.name)
-      dep.approval = LicenseFinder::Approval.create
-      dep
-    end
-
-    def existing_dep
-      LicenseFinder::Dependency.first(name: @spec.name)
-    end
 
     def find_matching_files(names)
       Dir.glob(File.join(install_path, '**', "*{#{names.join(',')}}*"))

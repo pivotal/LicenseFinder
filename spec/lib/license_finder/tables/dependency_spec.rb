@@ -15,7 +15,7 @@ module LicenseFinder
       }
     end
 
-    let(:config) { LicenseFinder::Configuration.new }
+    let(:config) { Configuration.new }
 
     before do
       LicenseFinder.stub(:config).and_return config
@@ -37,11 +37,15 @@ module LicenseFinder
     describe '.unapproved' do
       it "should return all unapproved dependencies" do
         dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
-        dependency.approval = LicenseFinder::Approval.create(state: false)
+        dependency.approval = Approval.create(state: false)
         dependency.save
-        dependency2 = Dependency.create(name: "approved dependency", version: '0.0.1')
-        dependency2.approval = LicenseFinder::Approval.create(state: true)
-        dependency2.save
+        approved = Dependency.create(name: "approved dependency", version: '0.0.1')
+        approved.approval = Approval.create(state: true)
+        approved.save
+        whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
+        whitelisted.license = LicenseAlias.create(name: 'MIT')
+        whitelisted.approval = Approval.create(state: false)
+        whitelisted.save
 
         unapproved = Dependency.unapproved
         unapproved.count.should == 1
@@ -52,37 +56,30 @@ module LicenseFinder
     describe '#approve!' do
       it "should update the database to show the dependency is approved" do
         dependency = Dependency.create(name: "foo", version: '0.0.1')
-        dependency.approval = LicenseFinder::Approval.create(state: false)
+        dependency.approval = Approval.create(state: false)
         dependency.save
         dependency.approve!
         dependency.reload.should be_approved
       end
     end
 
-    describe "#approved" do
+    describe "#approved?" do
       let(:dependency) { Dependency.create(name: 'some gem') }
 
-      it "should return true when the license is whitelisted" do
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
-        dependency.save
+      it "is true if its license is whitelisted" do
+        dependency.stub_chain(:license, whitelisted?: true)
         dependency.should be_approved
       end
 
-      it "should return true when the license is an alternative name of a whitelisted license" do
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'Expat')
-        dependency.save
+      it "is true if it has been approved" do
+        dependency.stub_chain(:license, whitelisted?: false)
+        dependency.stub_chain(:approval, state: true)
         dependency.should be_approved
       end
 
-      it "should return true when the license has no matching license class, but is whitelisted anyways" do
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'other')
-        dependency.save
-        dependency.should be_approved
-      end
-
-      it "should return false when the license is not whitelisted" do
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'GPL')
-        dependency.save
+      it "is false otherwise" do
+        dependency.stub_chain(:license, whitelisted?: false)
+        dependency.stub_chain(:approval, state: false)
         dependency.should_not be_approved
       end
     end
@@ -90,28 +87,14 @@ module LicenseFinder
     describe "#set_license_manually" do
       let(:gem) do
         dependency = Dependency.new(name: "bob", version: '0.0.1')
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'Original')
+        dependency.license = LicenseAlias.create(name: 'Original')
         dependency.save
         dependency
       end
 
-      it "modifies the license" do
-        gem.license.name.should == 'Original'
+      it "delegates to the license" do
+        gem.license.should_receive(:set_manually).with('Updated')
         gem.set_license_manually('Updated')
-        gem.reload.license.name.should == 'Updated'
-      end
-
-      it "marks the approval as manual" do
-        gem.set_license_manually('Updated')
-        gem.reload.license.manual.should be_true
-      end
-    end
-
-    describe '#license_url' do
-      it "should delegate to LicenseUrl.find_by_name" do
-        LicenseFinder::LicenseUrl.stub(:find_by_name).with("MIT").and_return "http://license-url.com"
-        license = LicenseFinder::LicenseAlias.new(name: 'MIT')
-        license.url.should == "http://license-url.com"
       end
     end
   end

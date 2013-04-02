@@ -2,11 +2,15 @@ module LicenseFinder
   class LicenseAlias < Sequel::Model
     def initialize(*args)
       super
-      self.url = LicenseFinder::LicenseUrl.find_by_name name
+      self.url = LicenseUrl.find_by_name name
     end
 
     def whitelisted?
       !!(config.whitelisted?(name))
+    end
+
+    def set_manually(name)
+      update('name' => name, 'manual' => true)
     end
 
     private
