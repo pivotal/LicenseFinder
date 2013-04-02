@@ -43,7 +43,7 @@ module LicenseFinder
 
     private
     def generate_reports
-      LicenseFinder::Reporter.write_reports
+      Reporter.write_reports
     end
   end
 end

@@ -19,8 +19,6 @@ module LicenseFinder
         BundledGem.new(spec, dependency)
       end
 
-      setup_parent_child_relationships
-
       @gems
     end
 
@@ -29,21 +27,6 @@ module LicenseFinder
 
     def ignore_groups
       @ignore_groups ||= LicenseFinder.config.ignore_groups
-    end
-
-    def setup_parent_child_relationships
-      dependency_index = {}
-
-      gems.each do |dep|
-        dependency_index[dep.dependency_name] = dep
-      end
-
-      gems.each do |dep|
-        dep.children.each do |child_dep|
-          license_finder_dependency = dependency_index[child_dep]
-          license_finder_dependency.parents << dep.dependency_name if license_finder_dependency
-        end
-      end
     end
 
     def dependencies

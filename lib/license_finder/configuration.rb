@@ -64,7 +64,7 @@ module LicenseFinder
 
     def whitelisted_licenses
       whitelist.map do |license_name|
-        LicenseFinder::License.find_by_name(license_name) || license_name
+        License.find_by_name(license_name) || license_name
       end.compact
     end
   end

@@ -6,8 +6,8 @@ module LicenseFinder
     describe "#to_s" do
       let(:dependency) do
         dep = Dependency.new name: "the-name"
-        dep.license = LicenseFinder::LicenseAlias.create name: 'MIT'
-        dep.approval = LicenseFinder::Approval.create state: true
+        dep.license = LicenseAlias.create name: 'MIT'
+        dep.approval = Approval.create state: true
         dep
       end
 
