@@ -99,27 +99,6 @@ $ bundle exec license_finder -a awesome_gpl_gem
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
 
-## Usage with Rake
-
-First, add license finder to your project's Gemfile:
-
-```ruby
-gem "license_finder"
-```
-
-Next, update your project's Rakefile with the license finder rake task:
-
-```ruby
-require 'bundler/setup'
-require 'license_finder'
-LicenseFinder.load_rake_tasks
-```
-
-You can now run `bundle exec rake license_finder`. This is the equivalent of running `bundle exec license_finder`.
-
-This could be handy if you have a build for CI that you want to break when you have unapproved dependencies. The
-rake task will `exit 1` immediately if there are unapproved dependencies, stopping your build dead in its tracks!
-
 ## A note to gem authors / maintainers
 
 For the good of humanity, please add a license to your gemspec!
