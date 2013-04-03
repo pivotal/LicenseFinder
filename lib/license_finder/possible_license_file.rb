@@ -22,7 +22,7 @@ module LicenseFinder
     end
 
     def license
-      license = LicenseFinder::License.all.detect do |klass|
+      license = License.all.detect do |klass|
         klass.new(text).matches?
       end
 

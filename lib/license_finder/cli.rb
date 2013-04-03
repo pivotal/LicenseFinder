@@ -25,7 +25,7 @@ module LicenseFinder
       if options.empty?
         check_for_action_items
       else
-        dependency = Dependency.find_by_name(options[:dependency])
+        dependency = Dependency.first(name: options[:dependency])
 
         @@run_complete = true
         puts "\r" + " "*24
@@ -43,7 +43,7 @@ module LicenseFinder
 
     private
     def generate_reports
-      LicenseFinder::Reporter.write_reports
+      Reporter.write_reports
     end
   end
 end

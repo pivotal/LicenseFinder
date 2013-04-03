@@ -117,18 +117,16 @@ When /^the text "([^"]*)" should link to "([^"]*)"$/ do |text, link|
   html.all(:xpath, "//a[@href='#{link}']").first.text.should == text
 end
 
-When /^I have a truncated dependencies.yml file$/ do
-  @user.modifying_dependencies_file do |f|
-    f.puts ""
-  end
-end
-
 When /^"([^"]*)" is an alternative name for the "MIT" license$/ do |alternative_name|
   # this step is simply for readability
 end
 
 When /^I whitelist the "([^"]*)" bundler group$/ do |group|
   @user.configure_license_finder_bundler_whitelist(group)
+end
+
+Then(/^I should see other_license_gem set to MIT license$/) do
+  @output.should =~ /other_license_gem.*MIT/
 end
 
 Then /^I should see a "([^"]+)" directory$/ do |name|
@@ -154,13 +152,6 @@ end
 Then /^I should see exactly one entry for "(.*?)" in "(.*?)"$/ do |gem_name, filename|
   file_contents = File.read(@user.app_path(filename))
   file_contents.scan(/#{gem_name}/).size.should == 1
-end
-
-Then /^I should see the following settings for "([^"]*)":$/ do |name, yaml|
-  expected_settings = YAML.load(yaml)
-  all_settings = YAML.load(File.read(@user.dependencies_file_path))
-  actual_settings = all_settings.detect { |gem| gem['name'] == name }
-  actual_settings.should include expected_settings
 end
 
 Then /^I should not see an entry "(.*?)" for gem "(.*?)" in my dependencies\.yml$/ do |entry_key, gem_name|

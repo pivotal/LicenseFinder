@@ -8,7 +8,5 @@ Feature: Set a dependency's license through a command line interface
     And my app depends on a gem "other_license_gem" licensed with "other"
     When I run "license_finder"
     When I run "license_finder -l MIT other_license_gem"
-    Then I should see the following settings for "other_license_gem":
-      """
-        license: "MIT"
-      """
+    And I run license_finder again
+    Then I should see other_license_gem set to MIT license

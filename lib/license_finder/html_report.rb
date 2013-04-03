@@ -4,11 +4,11 @@ module LicenseFinder
   class HtmlReport < DependencyReport
     private
     def unapproved_dependencies
-      dependencies.reject(&:approved)
+      dependencies.reject(&:approved?)
     end
 
     def grouped_dependencies
-      dependencies.group_by(&:license).sort_by { |_, group| group.size }.reverse
+      dependencies.group_by {|dep| dep.license.name }.sort_by { |_, group| group.size }.reverse
     end
   end
 end

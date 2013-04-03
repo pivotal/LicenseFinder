@@ -4,7 +4,13 @@ require "capybara"
 module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
-      let(:dependency) { Dependency.new 'approved' => true, 'name' => "the-name", 'license' => 'MIT' }
+      let(:dependency) do
+        dep = Dependency.new name: "the-name"
+        dep.license = LicenseAlias.create name: 'MIT'
+        dep.approval = Approval.create state: true
+        dep
+      end
+
       subject { Capybara.string(HtmlReport.new([dependency]).to_s) }
 
       context "when the dependency is approved" do
@@ -18,7 +24,7 @@ module LicenseFinder
       end
 
       context "when the dependency is not approved" do
-        before { dependency.approved = false }
+        before { dependency.approval.state = false }
 
         it "should not add an approved class to he dependency's container" do
           should have_selector ".unapproved"
@@ -30,14 +36,14 @@ module LicenseFinder
       end
 
       context "when the gem has at least one bundler group" do
-        before { dependency.bundler_groups = ["group"] }
+        before { dependency.stub(bundler_groups: [stub(name: "group")]) }
         it "should show the bundler group(s) in parens" do
           should have_text "(group)"
         end
       end
 
       context "when the gem has no bundler groups" do
-        before { dependency.bundler_groups = [] }
+        before { dependency.stub(bundler_groups: []) }
 
         it "should not show any parens or bundler group info" do
           should_not have_text "()"
@@ -46,9 +52,10 @@ module LicenseFinder
       end
 
       context "when the gem has at least one parent" do
-        before { dependency.parents = [OpenStruct.new(:name => "foo parent")] }
+        before { dependency.stub(parents: [OpenStruct.new(:name => "foo parent")]) }
         it "should include a parents section" do
           should have_text "Parents"
+          should have_text "foo parent"
         end
       end
 
@@ -59,10 +66,11 @@ module LicenseFinder
       end
 
       context "when the gem has at least one child" do
-        before { dependency.children = [OpenStruct.new(:name => "foo child")] }
+        before { dependency.stub(children: [OpenStruct.new(:name => "foo child")]) }
 
         it "should include a Children section" do
           should have_text "Children"
+          should have_text "foo child"
         end
       end
 

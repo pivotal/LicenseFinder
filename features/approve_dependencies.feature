@@ -12,23 +12,3 @@ Feature: Approving non-whitelisted Dependencies
     When I run "license_finder"
     Then I should not see "gpl_gem" in its output
     Then I should see the "gpl_gem" in the html flagged as "approved"
-
-  Scenario: Manually approving a non-whitelisted dependency
-    Given I have an app with license finder
-    And my app depends on a gem "gpl_gem" licensed with "GPL"
-    And I whitelist the "MIT" license
-
-    When I run "license_finder"
-    Then I should see the following settings for "gpl_gem":
-      """
-      version: "0.0.0"
-      license: "GPL"
-      approved: false
-      """
-
-    When I update the settings for "gpl_gem" with the following content:
-      """
-      approved: true
-      """
-    When I run "license_finder"
-    Then I should not see "gpl_gem" in its output

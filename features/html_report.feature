@@ -31,18 +31,8 @@ Feature: HTML Report
     And I whitelist the following licenses: "MIT, other"
     When I run "license_finder"
     # rake, bundler, license_finder, my_app, gpl_licensed_gem, mit_licensed_gem
-    Then I should see "6 total" in the html
+    Then I should see "8 total" in the html
     # gpl_licensed_gem
     And I should see "1 unapproved" in the html
     # gpl_licensed_gem
     And I should see "1 GPL" in the html
-
-  Scenario: Implicit dependencies list their parent dependencies
-    Given I have a rails app with license finder
-    When I run "license_finder"
-    Then I should see the "activerecord" in the html with the following details:
-      | parent |
-      | rails  |
-    And I should see "rails" in the html with the following details:
-      | children     |
-      | activerecord |
