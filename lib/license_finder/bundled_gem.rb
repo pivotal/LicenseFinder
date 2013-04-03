@@ -1,7 +1,5 @@
 module LicenseFinder
   class BundledGem
-    LICENSE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
-
     attr_reader :parents, :spec, :bundler_dependency
 
     def initialize(spec, bundler_dependency = nil)
@@ -36,15 +34,7 @@ module LicenseFinder
     end
 
     def license_files
-      paths_with_license_names = find_matching_files(LICENSE_FILE_NAMES)
-      paths_for_license_files = paths_with_license_names.map do |path|
-        File.directory?(path) ? paths_for_files_in_license_directory(path) : path
-      end.flatten.uniq
-      get_files_for_paths(paths_for_license_files)
-    end
-
-    def install_path
-      @spec.full_gem_path
+      LicenseFiles.new(@spec.full_gem_path).files
     end
 
     def sort_order
@@ -53,27 +43,6 @@ module LicenseFinder
 
     def save_or_merge
       GemSaver.find_or_initialize_by_name(@spec.name, self).save
-    end
-
-    private
-
-    def find_matching_files(names)
-      Dir.glob(File.join(install_path, '**', "*{#{names.join(',')}}*"))
-    end
-
-    def get_file_for_path(path)
-      PossibleLicenseFile.new(install_path, path)
-    end
-
-    def paths_for_files_in_license_directory(path)
-      entries_in_directory = Dir::entries(path).reject { |p| p.match(/^(\.){1,2}$/) }
-      entries_in_directory.map { |entry_name| File.join(path, entry_name) }
-    end
-
-    def get_files_for_paths(paths_for_license_files)
-      paths_for_license_files.map do |path|
-        get_file_for_path(path)
-      end
     end
   end
 end
