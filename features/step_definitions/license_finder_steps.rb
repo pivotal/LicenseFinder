@@ -3,8 +3,6 @@ require 'fileutils'
 require 'pathname'
 require 'bundler'
 require 'capybara'
-require 'pry'
-require 'pry-debugger'
 
 Given /^I have a project that depends on mime\-types$/ do
   @user = ::DSL::User.new
