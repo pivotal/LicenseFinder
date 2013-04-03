@@ -98,6 +98,9 @@ $ bundle exec license_finder -a awesome_gpl_gem
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
+## Compatibility
+
+license_finder is compatible with ruby 1.9, and ruby 2.0. We're also working on jruby support.
 
 ## A note to gem authors / maintainers
 
