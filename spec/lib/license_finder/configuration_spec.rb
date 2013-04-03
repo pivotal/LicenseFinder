@@ -6,22 +6,27 @@ module LicenseFinder
 
     let(:klass) { described_class }
 
-    let(:attributes) do
-      {
-        "whitelist" => ["FooLicense", "BarLicense"],
-        "ignore_groups" => [:test, :development]
-      }
-    end
-
     describe '.new' do
+      let(:attributes) do
+        {
+          "whitelist" => ["FooLicense", "BarLicense"],
+          "ignore_groups" => [:test, :development],
+          "dependencies_file_dir" => "."
+        }
+      end
+
       subject { klass.new(attributes) }
 
       context "with known attributes" do
         it "should set the all of the attributes on the instance" do
-          attributes.each do |key, value|
-            subject.send("#{key}").should == value
-          end
+          subject.whitelist.should == attributes['whitelist']
+          subject.ignore_groups.should == attributes['ignore_groups']
+          subject.dependencies_dir.should == attributes['dependencies_file_dir']
         end
+      end
+
+      it "uses absolute path in database_path" do
+        subject.database_path.should_not start_with(".")
       end
     end
 

@@ -36,7 +36,7 @@ module LicenseFinder
     end
 
     def database_path
-      File.join(dependencies_dir, "dependencies.db")
+      File.expand_path(File.join(dependencies_dir, "dependencies.db"))
     end
 
     def dependencies_yaml
