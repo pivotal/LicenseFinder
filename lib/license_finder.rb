@@ -30,6 +30,7 @@ module LicenseFinder
   autoload :BundlerGroup, 'license_finder/tables/bundler_group'
   autoload :GemSaver, 'license_finder/gem_saver'
   autoload :LicenseFiles, 'license_finder/license_files'
+  autoload :Platform, 'license_finder/platform'
 
   def self.config
     @config ||= Configuration.ensure_default
@@ -41,5 +42,6 @@ module LicenseFinder
 end
 
 require 'license_finder/railtie' if defined?(Rails)
+require 'license_finder/tables'
 
 LicenseFinder::YmlToSql.convert_if_required

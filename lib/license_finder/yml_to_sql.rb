@@ -1,9 +1,3 @@
-require 'sequel'
-
-DB = Sequel.connect("sqlite://#{LicenseFinder.config.database_path}")
-Sequel.extension :migration, :core_extensions
-Sequel::Migrator.run(DB, LicenseFinder::ROOT_PATH.join('../db/migrate'))
-
 module LicenseFinder
   class YmlToSql
     def self.convert_if_required

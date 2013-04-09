@@ -1,3 +1,5 @@
+require './lib/license_finder/platform'
+
 Gem::Specification.new do |s|
   s.name        = "license_finder"
   s.version     = "0.8.0"
@@ -18,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "bundler"
   s.add_dependency "sequel"
-  s.add_dependency "sqlite3"
+  s.add_dependency LicenseFinder::Platform.sqlite_gem
 
   %w(rspec rake xpath capybara cucumber database_cleaner).each do |gem|
     s.add_development_dependency gem
