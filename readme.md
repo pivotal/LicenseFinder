@@ -7,10 +7,10 @@ With bundler it's easy for your project to depend on many gems.  This decomposit
 
 ## Installation
 
-Add license_finder to your Rails project's Gemfile and `bundle`:
+Add license_finder to your project's Gemfile and `bundle`:
 
 ```ruby
-gem 'license_finder', git: "https://github.com/pivotal/LicenseFinder.git"
+gem 'license_finder'
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ gem 'license_finder', git: "https://github.com/pivotal/LicenseFinder.git"
 License finder will generate reports of action items - i.e., dependencies that do not fall within your license "whitelist".
 
 ```sh
-$ bundle exec license_finder
+$ license_finder
 ```
 
 The first time you run this, `license_finder` will create a default configuration file `./config/license_finder.yml`:
@@ -32,6 +32,7 @@ whitelist:
 ignore_groups:
 #- test
 #- development
+dependencies_file_dir: './doc/'
 ```
 
 This allows you to configure bundler groups and add licenses to the whitelist.
@@ -51,7 +52,7 @@ rubyzip, 0.9.9, ruby
 xml-simple, 1.1.1, other
 ```
 
-The executable task will also write out a dependencies.yml, dependencies.txt, and dependencies.html file in the root of your project.
+The executable task will also write out a dependencies.db, dependencies.txt, and dependencies.html file in the doc/ directory (by default).
 
 The latter two files are human readable reports that you could send to your non-technical business partners, lawyers, etc.
 
@@ -59,15 +60,9 @@ The latter two files are human readable reports that you could send to your non-
 unapproved dependencies. You could use this in a CI build, for example, to alert you whenever someone adds an
 unapproved dependency to the project.
 
-It will also merge in an existing dependencies.yml file, if one exists (i.e., you've previously run this command
-and then edited the resulting file).
-
 ### Manually recording licenses
 
-When you have dependencies marked as having an 'other' license, `license_finder` will output
-the license and readme file locations for the dependency, allowing you to manually research what the actual
-license is. Once this has been established, you can record this information with the `-l` option
-as such:
+When you have dependencies marked as having an 'other' license, `license_finder` you should manually research what the actual license is. Once this has been established, you can record this information with the `-l` or `--license` option as such:
 
 ```sh
 $ license_finder -l MIT my_unknown_dependency
@@ -82,7 +77,7 @@ If your business decides that this is an acceptable risk, you can manually appro
 `--approve` option of the `license_finder` command.
 
 For example, lets assume you've only
-whitelisted the "MIT" license in your `config/license_finder.yml`. You then add the 'awesome_gpl_gem' to your Gemfile,
+whitelisted the "MIT" license in your `config/license_finder.yml`. You then add the `awesome_gpl_gem` to your Gemfile,
 which we'll assume is licensed with the `GPL` license. You then run `license_finder` and see
 the gem listed in the output:
 
@@ -93,14 +88,14 @@ awesome_gpl_gem, 1.0.0, GPL
 Your business tells you that in this case, it's acceptable to use this gem. You now run:
 
 ```sh
-$ bundle exec license_finder -a awesome_gpl_gem
+$ license_finder -a awesome_gpl_gem
 ```
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
 ## Compatibility
 
-license_finder is compatible with ruby 1.9, and ruby 2.0. We're also working on jruby support.
+license_finder is compatible with ruby 1.9, and ruby 2.0. There is also experimental support for jruby.
 
 ## A note to gem authors / maintainers
 
