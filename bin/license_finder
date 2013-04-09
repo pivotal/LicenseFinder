@@ -28,6 +28,7 @@ end
 
 options = {}
 spinner = SpinnerStrategy::Spin
+skip = false
 
 OptionParser.new do |opts|
   opts.banner = "Usage: license_finder [options] [dependency]"
@@ -43,6 +44,16 @@ OptionParser.new do |opts|
   opts.on("-q", "--quiet") do
     spinner = SpinnerStrategy::Noop
   end
+
+  opts.on("-m", "--move") do
+    skip = true
+    `sed '$d' < config/license_finder.yml > tmp34567.txt`
+    `mv tmp34567.txt config/license_finder.yml`
+    `echo "dependencies_file_dir: './doc/'" >> config/license_finder.yml`
+    `mkdir doc`
+    `mv dependencies.* doc/`
+    puts "Congradulations you have cleaned up you're root dirrectory!'"
+  end
 end.parse!
 
 unless options.empty?
@@ -50,5 +61,5 @@ unless options.empty?
 end
 
 spinner.run {
-  LicenseFinder::CLI.execute! options
-}
+  LicenseFinder::CLI.execute!(options)
+} unless skip

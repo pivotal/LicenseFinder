@@ -93,6 +93,16 @@ $ license_finder -a awesome_gpl_gem
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
+## Upgrade for pre 0.8.0 users
+
+If you wish to cleanup you're root dirrectory run you can run:
+
+```sh
+$ license_finder -m
+```
+
+This will move you're dependencies.* files to the doc dirrectory and update the config.''
+
 ## Compatibility
 
 license_finder is compatible with ruby 1.9, and ruby 2.0. There is also experimental support for jruby.
