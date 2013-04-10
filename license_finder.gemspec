@@ -22,10 +22,11 @@ Gem::Specification.new do |s|
   s.add_dependency "sequel"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
-  %w(rspec rake xpath capybara cucumber database_cleaner).each do |gem|
+  %w(rspec rake xpath cucumber database_cleaner).each do |gem|
     s.add_development_dependency gem
   end
 
+  s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "rails", "~> 3.2.0"
 
   s.files         = `git ls-files`.split("\n")
