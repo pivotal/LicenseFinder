@@ -52,7 +52,7 @@ OptionParser.new do |opts|
     `echo "dependencies_file_dir: './doc/'" >> config/license_finder.yml`
     `mkdir doc`
     `mv dependencies.* doc/`
-    puts "Congradulations you have cleaned up you're root dirrectory!'"
+    puts "Congratulations, you have cleaned up your root directory!'"
   end
 end.parse!
 

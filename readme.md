@@ -95,13 +95,13 @@ If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the
 
 ## Upgrade for pre 0.8.0 users
 
-If you wish to cleanup you're root dirrectory run you can run:
+If you wish to cleanup your root directory you can run:
 
 ```sh
 $ license_finder -m
 ```
 
-This will move you're dependencies.* files to the doc dirrectory and update the config.''
+This will move your dependencies.* files to the /doc directory and update the config.
 
 ## Compatibility
 
