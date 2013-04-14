@@ -1,0 +1,98 @@
+=== 0.8.1 / 2013-04-14
+
+* Features
+
+  * Add spinner to show that the binary is actually doing something.
+  * JRuby version of the gem.
+  * Official ruby 2.0 support.
+  * CLI interface for moving dependencies.* files to `doc/`.
+
+* Bugfixes
+
+  * Fix ruby 1.9.2 support.
+
+=== 0.8.0 / 2013-04-03
+
+* Features
+
+  * Add spinner to show that the binary is actually doing something.
+  * Add action items to dependencies.html.
+  * Add generation timestamp to dependencies.html.
+  * Default location for dependencies.* files is now `doc/`.
+  * Temporarily remove non-bundler (e.g. JavaScript) dependencies. This will
+    be readded in a more sustainable way soon.
+  * Use sqlite, not YAML, for dependencies.
+  * Officially deprecate rake tasks.
+
+* Bugfixes
+
+  * Don't blow away manually set licenses when dependencies are rescanned.
+  * Ignore empty `readme_files` section in dependencies.yml.
+  * Clean up HTML generation for dependencies.html.
+  * Add an option to silence the binary's spinner so as not to fill up log
+    files.
+
+=== 0.7.2 / 2013-02-18
+
+* Features
+
+  * Dependency cleanup.
+
+=== 0.7.1 / 2013-02-18
+
+* Features
+
+  * Add variants to detectable licenses.
+  * Remove README files from data persistence.
+
+=== 0.7.0 / 2012-09-25
+
+* Features
+
+  * Dependencies can be approved via CLI.
+  * Dependencies licenses can be set via CLI.
+
+=== 0.6.0 / 2012-09-15
+
+* Features
+
+  * Create a dependencies.html containing a nicely formatted version of
+    dependencies.txt, with lots of extra information.
+  * All rake tasks, and the binary, run the init task automatically.
+  * Simplify dependencies.txt file since more detail can now go into
+    dependencies.html.
+  * Promote binary to be the default, take first steps to deprecate rake task.
+
+* Bugfixes
+
+  * Fix formatting of `rake license:action_items` output.
+
+=== 0.5.0 / 2012-09-12
+
+* Features
+
+  * `rake license:action_items` exits with a non-zero status if there are
+    non-approved dependencies.
+  * New binary, eventual replacement for rake tasks.
+  * Initial implementation of non-gem dependencies.
+  * Support BSD, New BSD, and Simplified BSD licenses.
+  * Improve ruby license detection.
+  * Add dependency's bundler group to dependencies.txt output.
+  * Add description and summary to dependencies.txt output.
+
+* Bugfixes
+
+  * Create `config/` director if it doesn't exist, don't blow up.
+  * Better support for non-US word spellings.
+
+=== 0.4.5 / 2012-09-09
+
+* Features
+
+  * Allow dependencies.* files to be written to a custom directory.
+  * Detect LGPL licenses
+  * Detect ISC licenses
+
+* Bugfixes
+
+  * Fix blow up if there's not `ignore_groups` setting in the config file.
