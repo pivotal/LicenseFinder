@@ -1,3 +1,10 @@
+=== TBD
+
+* Bugfixes
+
+  * Fix issue with database URI when the absolute path to the database file
+    contains spaces.
+
 === 0.8.1 / 2013-04-14
 
 * Features

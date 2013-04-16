@@ -24,9 +24,12 @@ module LicenseFinder
           subject.dependencies_dir.should == attributes['dependencies_file_dir']
         end
       end
+    end
 
-      it "uses absolute path in database_path" do
-        subject.database_path.should_not start_with(".")
+    describe "#database_uri" do
+      it "should URI escape absolute path the dependencies_file_dir" do
+        config = described_class.new('dependencies_file_dir' => 'test path')
+        config.database_uri.should =~ /test%20path\/dependencies\.db$/
       end
     end
 
