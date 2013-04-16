@@ -9,7 +9,6 @@
 
 * Features
 
-  * Add spinner to show that the binary is actually doing something.
   * JRuby version of the gem.
   * Official ruby 2.0 support.
   * CLI interface for moving dependencies.* files to `doc/`.
