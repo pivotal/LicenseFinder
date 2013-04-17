@@ -50,7 +50,7 @@ OptionParser.new do |opts|
     `sed '$d' < config/license_finder.yml > tmp34567.txt`
     `mv tmp34567.txt config/license_finder.yml`
     `echo "dependencies_file_dir: './doc/'" >> config/license_finder.yml`
-    `mkdir doc`
+    `mkdir -p doc`
     `mv dependencies.* doc/`
     puts "Congratulations, you have cleaned up your root directory!'"
   end
