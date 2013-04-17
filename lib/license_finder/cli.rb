@@ -67,8 +67,7 @@ module LicenseFinder
       say "Congratulations, you have cleaned up your root directory!'", :green
     end
 
-    private
-
+    desc "action_items", "List unapproved dependencies"
     def action_items
       unapproved = Dependency.unapproved
 
@@ -80,6 +79,8 @@ module LicenseFinder
         exit 1
       end
     end
+
+    private
 
     def generate_reports
       Reporter.write_reports

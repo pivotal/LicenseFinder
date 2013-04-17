@@ -35,7 +35,7 @@ module LicenseFinder
         dependency = double :dependency, :name => nil
         dependency.should_receive(:set_license_manually).with("foo")
 
-        Dependency.stub(:first).with(name: "foo_gem").and_return dependency
+        Dependency.stub(:first).with(name: "foo_gem").and_return(dependency)
 
         silence_stdout do
           subject.license 'foo', 'foo_gem'
@@ -52,6 +52,26 @@ module LicenseFinder
 
         silence_stdout do
           subject.approve 'foo'
+        end
+      end
+    end
+
+    describe "#action_items" do
+      it "reports unapproved dependencies" do
+        Dependency.stub(:unapproved) { ['one dependency'] }
+        TextReport.stub(:new) { stub(:report, to_s: "a report!") }
+        silence_stdout do
+          $stdout.stub(:puts)
+          $stdout.should_receive(:puts).with(/dependencies/i)
+          expect { subject.action_items }.to raise_error(SystemExit)
+        end
+      end
+
+      it "reports that all dependencies are approved" do
+        Dependency.stub(:unapproved) { [] }
+        silence_stdout do
+          $stdout.should_receive(:puts).with(/approved/i)
+          expect { subject.action_items }.to_not raise_error
         end
       end
     end
