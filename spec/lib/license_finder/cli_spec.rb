@@ -2,15 +2,21 @@ require "spec_helper"
 
 module LicenseFinder
   describe CLI do
-    before do
-      CLI.stub(:log) {}
+    def silence_stdout
+      orig_stdout = $stdout
+      $stdout = File.open(File::NULL, "w")
+      yield
+    ensure
+      $stdout = orig_stdout
     end
 
     describe "default" do
       it "should check for action items" do
         BundleSyncer.should_receive(:sync!)
         Dependency.stub(:unapproved) { [] }
-        described_class.start(["--quiet"])
+        silence_stdout do
+          described_class.start([])
+        end
       end
     end
 
@@ -18,7 +24,9 @@ module LicenseFinder
       it "resyncs with Gemfile" do
         BundleSyncer.should_receive(:sync!)
         Dependency.stub(:unapproved) { [] }
-        described_class.start(["rescan", "--quiet"])
+        silence_stdout do
+          subject.rescan
+        end
       end
     end
 
@@ -29,7 +37,9 @@ module LicenseFinder
 
         Dependency.stub(:first).with(name: "foo_gem").and_return dependency
 
-        subject.license 'foo', 'foo_gem'
+        silence_stdout do
+          subject.license 'foo', 'foo_gem'
+        end
       end
     end
 
@@ -40,7 +50,9 @@ module LicenseFinder
 
         Dependency.stub(:first).with(name: 'foo').and_return(dependency)
 
-        subject.approve 'foo'
+        silence_stdout do
+          subject.approve 'foo'
+        end
       end
     end
   end

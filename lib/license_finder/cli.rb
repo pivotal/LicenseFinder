@@ -2,15 +2,7 @@ require 'thor'
 
 module LicenseFinder
   class CLI < Thor
-    def self.log(*messages)
-      puts messages
-    end
-
     no_commands do
-      def log(*messages)
-        self.class.log(*messages)
-      end
-
       def spinner
         if options[:quiet]
           yield
@@ -25,12 +17,13 @@ module LicenseFinder
           }
           yield
           thread.kill
+          puts "\r" + " "*24
         end
       end
     end
 
-    class_option :quiet, type: :boolean, aliases: :q
 
+    option :quiet, type: :boolean, aliases: :q
     desc "rescan", "Find new dependencies."
     def rescan
       spinner {
@@ -40,12 +33,11 @@ module LicenseFinder
 
       unapproved = Dependency.unapproved
 
-      log "\r" + " "*24
       if unapproved.count == 0
-        log "All gems are approved for use"
+        say "All gems are approved for use", :green
       else
-        log "Dependencies that need approval:"
-        log TextReport.new(unapproved)
+        say "Dependencies that need approval:", :red
+        say TextReport.new(unapproved)
         exit 1
       end
     end
@@ -56,7 +48,7 @@ module LicenseFinder
       dependency = Dependency.first(name: name)
       dependency.approve!
 
-      log "The #{dependency.name} has been approved!\n\n"
+      say "The #{dependency.name} has been approved!\n\n", :green
 
       generate_reports
     end
@@ -66,7 +58,7 @@ module LicenseFinder
       dependency = Dependency.first(name: name)
       dependency.set_license_manually license
 
-      log "The #{name} has been marked as using #{license} license!\n\n"
+      say "The #{name} has been marked as using #{license} license!\n\n", :green
 
       generate_reports
     end
@@ -78,7 +70,7 @@ module LicenseFinder
       `echo "dependencies_file_dir: './doc/'" >> config/license_finder.yml`
       `mkdir -p doc`
       `mv dependencies.* doc/`
-      log "Congratulations, you have cleaned up your root directory!'"
+      say "Congratulations, you have cleaned up your root directory!'", :green
     end
 
     private

@@ -7,7 +7,7 @@ end
 
 When(/^I set that gems license to MIT from the command line$/) do
   @output = @user.execute_command 'license_finder -q'
-  @output = @user.execute_command 'license_finder -q license MIT other_gem'
+  @output = @user.execute_command 'license_finder license MIT other_gem'
   @output = @user.execute_command 'license_finder -q'
 end
 
