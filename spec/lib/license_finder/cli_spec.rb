@@ -4,7 +4,7 @@ module LicenseFinder
   describe CLI do
     def silence_stdout
       orig_stdout = $stdout
-      $stdout = File.open(File::NULL, "w")
+      $stdout = File.open("/dev/null", "w")
       yield
     ensure
       $stdout = orig_stdout
