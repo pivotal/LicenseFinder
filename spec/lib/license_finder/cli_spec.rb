@@ -2,36 +2,45 @@ require "spec_helper"
 
 module LicenseFinder
   describe CLI do
-    describe "#execute!(options)" do
-      before { CLI.stub(:check_for_action_items) }
+    before do
+      CLI.stub(:log) {}
+    end
 
-      context "when the approve option is provided" do
-        it "should approve the requested gem" do
-          dependency = double('dependency', :name => nil)
-          dependency.should_receive(:approve!)
-
-          Dependency.stub(:first).with(name: 'foo').and_return(dependency)
-
-          CLI.execute! approve: true, dependency: 'foo'
-        end
+    describe "default" do
+      it "should check for action items" do
+        BundleSyncer.should_receive(:sync!)
+        Dependency.stub(:unapproved) { [] }
+        described_class.start(["--quiet"])
       end
+    end
 
-      context "when the -l (--license) switch is provided" do
-        it "should update the license on the requested gem" do
-          dependency = double :dependency, :name => nil
-          dependency.should_receive(:set_license_manually).with("foo")
-
-          Dependency.stub(:first).with(name: "foo_gem").and_return dependency
-
-          CLI.execute! license: "foo", dependency: 'foo_gem'
-        end
+    describe "#rescan" do
+      it "resyncs with Gemfile" do
+        BundleSyncer.should_receive(:sync!)
+        Dependency.stub(:unapproved) { [] }
+        described_class.start(["rescan", "--quiet"])
       end
+    end
 
-      context "when no options are provided" do
-        it "should check for action items" do
-          CLI.should_receive(:check_for_action_items)
-          CLI.execute!
-        end
+    describe "#license" do
+      it "should update the license on the requested gem" do
+        dependency = double :dependency, :name => nil
+        dependency.should_receive(:set_license_manually).with("foo")
+
+        Dependency.stub(:first).with(name: "foo_gem").and_return dependency
+
+        subject.license 'foo', 'foo_gem'
+      end
+    end
+
+    describe "#approve" do
+      it "should approve the requested gem" do
+        dependency = double('dependency', :name => nil)
+        dependency.should_receive(:approve!)
+
+        Dependency.stub(:first).with(name: 'foo').and_return(dependency)
+
+        subject.approve 'foo'
       end
     end
   end

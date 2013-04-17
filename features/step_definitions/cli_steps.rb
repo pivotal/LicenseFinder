@@ -18,7 +18,7 @@ Given(/^I have a project that depends on mime\-types with a manual license type$
   @user.add_gem_dependency('mime-types')
   @user.bundle_app
   @user.execute_command "license_finder -q"
-  @output = @user.execute_command "license_finder -l Ruby mime-types"
+  @output = @user.execute_command "license_finder license Ruby mime-types"
   @output.should =~ /mime-types.*Ruby/
 end
 

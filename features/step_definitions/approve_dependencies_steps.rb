@@ -7,7 +7,7 @@ end
 When(/^I approve that gem$/) do
   @output = @user.execute_command "license_finder"
   @output.should include "gpl_gem"
-  @output = @user.execute_command "license_finder -a gpl_gem"
+  @output = @user.execute_command "license_finder approve gpl_gem"
   @output = @user.execute_command "license_finder -q"
 end
 

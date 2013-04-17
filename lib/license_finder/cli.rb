@@ -1,47 +1,88 @@
+require 'thor'
+
 module LicenseFinder
-  module CLI
-    extend self
+  class CLI < Thor
+    def self.log(*messages)
+      puts messages
+    end
 
-    @@run_complete = false
+    no_commands do
+      def log(*messages)
+        self.class.log(*messages)
+      end
 
-    def check_for_action_items
-      BundleSyncer.sync!
-      @@run_complete = true
-      generate_reports
+      def spinner
+        if options[:quiet]
+          yield
+        else
+          thread = Thread.new() {
+            wheel = '\|/-'
+            i = 0
+            while true do
+              print "\r ---------- #{wheel[i]} ----------"
+              i = (i + 1) % 4
+            end
+          }
+          yield
+          thread.kill
+        end
+      end
+    end
+
+    class_option :quiet, type: :boolean, aliases: :q
+
+    desc "rescan", "Find new dependencies."
+    def rescan
+      spinner {
+        BundleSyncer.sync!
+        generate_reports
+      }
 
       unapproved = Dependency.unapproved
 
-      puts "\r" + " "*24
+      log "\r" + " "*24
       if unapproved.count == 0
-        puts "All gems are approved for use"
+        log "All gems are approved for use"
       else
-        puts "Dependencies that need approval:"
-        puts TextReport.new(unapproved)
+        log "Dependencies that need approval:"
+        log TextReport.new(unapproved)
         exit 1
       end
     end
+    default_task :rescan
 
-    def execute!(options={})
-      if options.empty?
-        check_for_action_items
-      else
-        dependency = Dependency.first(name: options[:dependency])
+    desc "approve DEPENDENCY_NAME", "Approve a dependency by name."
+    def approve(name)
+      dependency = Dependency.first(name: name)
+      dependency.approve!
 
-        @@run_complete = true
-        puts "\r" + " "*24
-        if options[:approve]
-          dependency.approve!
-          puts "The #{dependency.name} has been approved!\n\n"
-        elsif options[:license]
-          dependency.set_license_manually options[:license]
-          puts "The #{dependency.name} has been marked as using #{options[:license]} license!\n\n"
-        end
+      log "The #{dependency.name} has been approved!\n\n"
 
-        generate_reports
-      end
+      generate_reports
+    end
+
+    desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license."
+    def license(license, name)
+      dependency = Dependency.first(name: name)
+      dependency.set_license_manually license
+
+      log "The #{name} has been marked as using #{license} license!\n\n"
+
+      generate_reports
+    end
+
+    desc "move", "Move dependency.* files from root directory to doc/."
+    def move
+      `sed '$d' < config/license_finder.yml > tmp34567.txt`
+      `mv tmp34567.txt config/license_finder.yml`
+      `echo "dependencies_file_dir: './doc/'" >> config/license_finder.yml`
+      `mkdir -p doc`
+      `mv dependencies.* doc/`
+      log "Congratulations, you have cleaned up your root directory!'"
     end
 
     private
+
     def generate_reports
       Reporter.write_reports
     end

@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "bundler"
   s.add_dependency "sequel"
+  s.add_dependency "thor"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
   %w(rspec rake xpath cucumber database_cleaner).each do |gem|
