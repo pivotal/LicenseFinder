@@ -1,5 +1,9 @@
 === TBD
 
+* Features
+
+  * Switch to thor for CLI, to support future additions to CLI
+
 * Bugfixes
 
   * Fix bug preventing manual approval of child dependencies (Issue #23)
