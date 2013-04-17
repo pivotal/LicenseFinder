@@ -30,6 +30,7 @@ module LicenseFinder
 
         it "associates children" do
           subject.children.map(&:name).should == ['foo']
+          subject.children.each { |child| child.approval.should be }
         end
 
         it "marks depenency as unapproved by default" do

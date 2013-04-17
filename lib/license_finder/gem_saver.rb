@@ -5,9 +5,7 @@ module LicenseFinder
     def_delegators :bundled_gem, :bundler_dependency, :determine_license, :children
 
     def self.find_or_initialize_by_name(name, bundled_gem)
-      dependency = Dependency.find_or_create(name: name) do |d|
-        d.approval = Approval.create
-      end
+      dependency = Dependency.named(name)
       new(dependency, bundled_gem)
     end
 
@@ -55,7 +53,7 @@ module LicenseFinder
     def refresh_children
       dependency.remove_all_children
       children.each do |child|
-        dependency.add_child Dependency.find_or_create(name: child.to_s)
+        dependency.add_child Dependency.named(child)
       end
     end
 

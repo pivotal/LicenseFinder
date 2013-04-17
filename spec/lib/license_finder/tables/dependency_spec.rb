@@ -53,6 +53,25 @@ module LicenseFinder
       end
     end
 
+    describe ".named" do
+      it "creates a new dependency" do
+        dep = described_class.named("never_seen")
+        dep.name.should == "never_seen"
+        dep.should_not be_new
+      end
+      it "returns an existing dependency" do
+        described_class.named("referenced_again")
+        dep = described_class.named("referenced_again")
+        dep.name.should == "referenced_again"
+        dep.should_not be_new
+        Dependency.count(name: "referenced_again").should == 1
+      end
+      it "always attaches an approval" do
+        described_class.named("referenced_again").approval.should be
+        described_class.named("referenced_again").approval.should be
+      end
+    end
+
     describe '#approve!' do
       it "should update the database to show the dependency is approved" do
         dependency = Dependency.create(name: "foo", version: '0.0.1')

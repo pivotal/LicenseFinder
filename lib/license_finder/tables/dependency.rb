@@ -14,6 +14,12 @@ module LicenseFinder
       all.reject(&:approved?)
     end
 
+    def self.named(name)
+      find_or_create(name: name.to_s) do |d|
+        d.approval = Approval.create
+      end
+    end
+
     def approve!
       approval.state = true
       approval.save
