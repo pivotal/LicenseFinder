@@ -19,20 +19,21 @@ module LicenseFinder
       )
     end
 
-    def initialize(config={})
+    def self.config_hash(config)
       if File.exists?(config_file_path)
         yaml = File.read(config_file_path)
         config = YAML.load(yaml).merge config
       end
+      config
+    end
+
+    def initialize(config={})
+      config = self.class.config_hash(config)
 
       @whitelist = config['whitelist'] || []
       @ignore_groups = (config["ignore_groups"] || []).map(&:to_sym)
       @dependencies_dir = config['dependencies_file_dir'] || './doc/'
       FileUtils.mkdir_p(@dependencies_dir)
-    end
-
-    def config_file_path
-      self.class.config_file_path
     end
 
     def database_uri

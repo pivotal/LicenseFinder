@@ -31,15 +31,7 @@ module LicenseFinder
         generate_reports
       }
 
-      unapproved = Dependency.unapproved
-
-      if unapproved.count == 0
-        say "All gems are approved for use", :green
-      else
-        say "Dependencies that need approval:", :red
-        say TextReport.new(unapproved)
-        exit 1
-      end
+      action_items
     end
     default_task :rescan
 
@@ -65,15 +57,29 @@ module LicenseFinder
 
     desc "move", "Move dependency.* files from root directory to doc/."
     def move
-      `sed '$d' < config/license_finder.yml > tmp34567.txt`
-      `mv tmp34567.txt config/license_finder.yml`
-      `echo "dependencies_file_dir: './doc/'" >> config/license_finder.yml`
-      `mkdir -p doc`
-      `mv dependencies.* doc/`
+      config = Configuration.config_hash('dependencies_file_dir' => './doc/')
+      File.open(Configuration.config_file_path, 'w') do |f|
+        f.write YAML.dump(config)
+      end
+
+      FileUtils.mkdir_p("doc")
+      FileUtils.mv(Dir["dependencies.*"], "doc")
       say "Congratulations, you have cleaned up your root directory!'", :green
     end
 
     private
+
+    def action_items
+      unapproved = Dependency.unapproved
+
+      if unapproved.count == 0
+        say "All gems are approved for use", :green
+      else
+        say "Dependencies that need approval:", :red
+        say TextReport.new(unapproved)
+        exit 1
+      end
+    end
 
     def generate_reports
       Reporter.write_reports
