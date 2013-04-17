@@ -2,6 +2,7 @@
 
 * Bugfixes
 
+  * Fix bug preventing manual approval of child dependencies (Issue #23)
   * Fix issue with database URI when the absolute path to the database file
     contains spaces.
 
