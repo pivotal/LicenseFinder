@@ -10,6 +10,7 @@ module LicenseFinder
     "license_files", "bundler_groups", "summary",
     "description", "homepage", "children", "parents", "manual"
   ]
+  Error = Class.new(Exception)
 
   autoload :Bundle, 'license_finder/bundle'
   autoload :BundledGem, 'license_finder/bundled_gem'

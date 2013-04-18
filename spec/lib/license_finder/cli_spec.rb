@@ -10,6 +10,24 @@ module LicenseFinder
       $stdout = orig_stdout
     end
 
+    describe described_class::Dependencies do
+      describe "add" do
+        it "should add a dependency" do
+          Dependency.should_receive(:create_non_bundler).with("MIT", "js_dep", "1.2.3")
+          silence_stdout do
+            CLI::Dependencies.new.add("MIT", "js_dep", "1.2.3")
+          end
+        end
+
+        it "does not require a version" do
+          Dependency.should_receive(:create_non_bundler).with("MIT", "js_dep", nil)
+          silence_stdout do
+            CLI::Dependencies.new.add("MIT", "js_dep")
+          end
+        end
+      end
+    end
+
     describe "default" do
       it "should check for action items" do
         BundleSyncer.should_receive(:sync!)

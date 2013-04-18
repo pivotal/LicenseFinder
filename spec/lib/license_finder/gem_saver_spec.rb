@@ -48,13 +48,15 @@ module LicenseFinder
 
       context "when the dependency already existed" do
         let!(:old_copy) do
-          Dependency.create(
+          dep = Dependency.create(
             name: 'spec_name',
             version: '0.1.2',
             summary: 'old summary',
             description: 'old desription',
             homepage: 'old homepage'
           )
+          dep.approval = Approval.create
+          dep
         end
 
         it "merges in the latest data" do

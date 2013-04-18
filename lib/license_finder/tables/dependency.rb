@@ -1,13 +1,26 @@
 module LicenseFinder
   class Dependency < Sequel::Model
+    plugin :boolean_readers
     many_to_one :license, class: LicenseAlias
     many_to_one :approval
     many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
     many_to_many :parents, join_table: :ancestries, left_key: :child_dependency_id, right_key: :parent_dependency_id, class: self
     many_to_many :bundler_groups
 
+    def self.create_non_bundler(license, name, version)
+      raise Error.new("#{name} dependency already exists") unless Dependency.where(name: name).empty?
+      dependency = Dependency.new(manual: true, name: name, version: version)
+      dependency.license = LicenseAlias.create(name: license)
+      dependency.approval = Approval.create
+      dependency.save
+    end
+
+    def self.bundler
+      exclude(manual: true)
+    end
+
     def self.destroy_obsolete(current_dependencies)
-      exclude(id: current_dependencies.map(&:id)).each(&:destroy)
+      bundler.exclude(id: current_dependencies.map(&:id)).each(&:destroy)
     end
 
     def self.unapproved
@@ -26,7 +39,7 @@ module LicenseFinder
     end
 
     def approved?
-      (license && license.whitelisted?) || (approval && approval.state)
+      (license && license.whitelisted?) || approval.state
     end
 
     def set_license_manually(name)

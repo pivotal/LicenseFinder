@@ -7,7 +7,7 @@ module LicenseFinder
     def rescan
       spinner {
         BundleSyncer.sync!
-        generate_reports
+        Reporter.write_reports
       }
 
       action_items
@@ -21,7 +21,7 @@ module LicenseFinder
 
       say "The #{dependency.name} has been approved!\n\n", :green
 
-      generate_reports
+      Reporter.write_reports
     end
 
     desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license."
@@ -31,7 +31,7 @@ module LicenseFinder
 
       say "The #{name} has been marked as using #{license} license!\n\n", :green
 
-      generate_reports
+      Reporter.write_reports
     end
 
     desc "move", "Move dependency.* files from root directory to doc/."
@@ -59,11 +59,21 @@ module LicenseFinder
       end
     end
 
-    private
+    class Dependencies < Thor
+      desc "add LICENSE DEPENDENCY_NAME [VERSION]", "Add a dependency that is not managed by Bundler"
+      def add(license, name, version = nil)
+        Dependency.create_non_bundler(license, name, version)
+        say "The #{name} dependency has been added!\n\n", :green
 
-    def generate_reports
-      Reporter.write_reports
+        Reporter.write_reports
+      rescue LicenseFinder::Error => e
+        say e.message, :red
+      end
     end
+    desc "dependencies SUBCOMMAND _ARGS", "manual add and manage non bundler dependencies"
+    subcommand "dependencies", Dependencies
+
+    private
 
     def spinner
       if options[:quiet]

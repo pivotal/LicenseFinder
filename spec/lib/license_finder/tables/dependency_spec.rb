@@ -22,15 +22,43 @@ module LicenseFinder
       config.whitelist = ["MIT", "other"]
     end
 
+    describe ".create_non_bundler" do
+      it "should add a Dependency" do
+        expect do
+          Dependency.create_non_bundler("MIT", "js_dep", "0.0.0")
+        end.to change(Dependency, :count).by(1)
+      end
+
+      it "should mark the dependency as manual" do
+        Dependency.create_non_bundler("MIT", "js_dep", "0.0.0")
+          .should be_manual
+      end
+
+      it "should set the appropriate values" do
+        dep = Dependency.create_non_bundler("GPL", "js_dep", "0.0.0")
+        dep.name.should == "js_dep"
+        dep.version.should == "0.0.0"
+        dep.license.name.should == "GPL"
+        dep.should_not be_approved
+      end
+
+      it "should complain if the dependency already exists" do
+        Dependency.create(name: "current dependency 1")
+        expect { Dependency.create_non_bundler("GPL", "current dependency 1", "0.0.0") }
+          .to raise_error(LicenseFinder::Error)
+      end
+    end
+
     describe ".destroy_obsolete" do
-      it "destroys every dependency except for the ones provided as 'current'" do
+      it "destroys every dependency except for the ones provided as 'current' or marked as 'manual'" do
         cur1 = Dependency.create(name: "current dependency 1")
         cur2 = Dependency.create(name: "current dependency 2")
+        man1 = Dependency.create(name: "manual dependency", manual: true)
         Dependency.create(name: "old dependency 1")
         Dependency.create(name: "old dependency 2")
 
         Dependency.destroy_obsolete([cur1, cur2])
-        Dependency.all.should =~ [cur1, cur2]
+        Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
       end
     end
 
