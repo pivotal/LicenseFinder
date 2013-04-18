@@ -19,7 +19,7 @@ module LicenseFinder
       dependency = Dependency.first(name: name)
       dependency.approve!
 
-      say "The #{dependency.name} dependency has been approved!\n\n", :green
+      say "The #{dependency.name} dependency has been approved!", :green
 
       Reporter.write_reports
     end
@@ -29,7 +29,7 @@ module LicenseFinder
       dependency = Dependency.first(name: name)
       dependency.set_license_manually license
 
-      say "The #{name} dependency has been marked as using #{license} license!\n\n", :green
+      say "The #{name} dependency has been marked as using #{license} license!", :green
 
       Reporter.write_reports
     end
@@ -63,7 +63,7 @@ module LicenseFinder
       desc "add LICENSE DEPENDENCY_NAME [VERSION]", "Add a dependency that is not managed by Bundler"
       def add(license, name, version = nil)
         Dependency.create_non_bundler(license, name, version)
-        say "The #{name} dependency has been added!\n\n", :green
+        say "The #{name} dependency has been added!", :green
 
         Reporter.write_reports
       rescue LicenseFinder::Error => e
@@ -73,7 +73,7 @@ module LicenseFinder
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler"
       def remove(name)
         Dependency.destroy_non_bundler(name)
-        say "The #{name} dependency has been removed.\n\n", :green
+        say "The #{name} dependency has been removed.", :green
 
         Reporter.write_reports
       rescue LicenseFinder::Error => e
