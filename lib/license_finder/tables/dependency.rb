@@ -41,9 +41,9 @@ module LicenseFinder
     end
 
     def self.named(name)
-      find_or_create(name: name.to_s) do |d|
-        d.approval = Approval.create
-      end
+      d = find_or_create(name: name.to_s)
+      d.approval ||= Approval.create
+      d
     end
 
     def approve!

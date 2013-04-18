@@ -105,6 +105,7 @@ module LicenseFinder
         dep.name.should == "never_seen"
         dep.should_not be_new
       end
+
       it "returns an existing dependency" do
         described_class.named("referenced_again")
         dep = described_class.named("referenced_again")
@@ -112,9 +113,15 @@ module LicenseFinder
         dep.should_not be_new
         Dependency.count(name: "referenced_again").should == 1
       end
+
       it "always attaches an approval" do
         described_class.named("referenced_again").approval.should be
         described_class.named("referenced_again").approval.should be
+      end
+
+      it "attaches an approval to a dependency that is currently missing one" do
+        Dependency.create(name: "foo")
+        described_class.named("foo").approval.should be
       end
     end
 
