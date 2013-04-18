@@ -26,9 +26,9 @@ $ license_finder
 (Note) If you wish to run license_finder without the progress spinner use the -q or --quiet option.
 
 On a brand new Rails project, you could expect `license_finder` to output something like the following
-(assuming you whitelisted the MIT license -- see Configuration section below):
+(assuming you whitelisted the MIT license -- see [Configuration](#configuration)):
 
-```
+```yaml
 Dependencies that need approval:
 
 highline, 1.6.14, ruby
@@ -41,7 +41,7 @@ xml-simple, 1.1.1, other
 ```
 
 The executable task will also write out a dependencies.db, dependencies.txt, and dependencies.html file in the doc/
-directory (by default -- see Configuration).
+directory (by default -- see [Configuration](#configuration)).
 
 The latter two files are human readable reports that you could send to your non-technical business partners, lawyers, etc.
 
@@ -101,7 +101,7 @@ dependencies_file_dir: './doc/'
 
 By modifying this file, you can configure license_finder's behavior. `Whitelisted` licenses will be automatically approved
 and `ignore_groups` will limit which dependencies are included in your license report.  You can store the license database
-and text files in anothe directory by changing `dependencies_file_dir`.
+and text files in another directory by changing `dependencies_file_dir`.
 
 
 ## Upgrade for pre 0.8.0 users
