@@ -81,7 +81,7 @@ module LicenseFinder
       end
     end
 
-    desc "dependencies SUBCOMMAND ...ARGS", "manual add and manage non bundler dependencies"
+    desc "dependencies [add|remove]", "manage non-Bundler dependencies - see `license_finder dependencies help` for more information"
     subcommand "dependencies", Dependencies
 
     private
