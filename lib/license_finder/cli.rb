@@ -19,7 +19,7 @@ module LicenseFinder
       dependency = Dependency.first(name: name)
       dependency.approve!
 
-      say "The #{dependency.name} has been approved!\n\n", :green
+      say "The #{dependency.name} dependency has been approved!\n\n", :green
 
       Reporter.write_reports
     end
@@ -29,7 +29,7 @@ module LicenseFinder
       dependency = Dependency.first(name: name)
       dependency.set_license_manually license
 
-      say "The #{name} has been marked as using #{license} license!\n\n", :green
+      say "The #{name} dependency has been marked as using #{license} license!\n\n", :green
 
       Reporter.write_reports
     end
