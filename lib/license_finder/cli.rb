@@ -2,27 +2,6 @@ require 'thor'
 
 module LicenseFinder
   class CLI < Thor
-    no_commands do
-      def spinner
-        if options[:quiet]
-          yield
-        else
-          thread = Thread.new() {
-            wheel = '\|/-'
-            i = 0
-            while true do
-              print "\r ---------- #{wheel[i]} ----------"
-              i = (i + 1) % 4
-            end
-          }
-          yield
-          thread.kill
-          puts "\r" + " "*24
-        end
-      end
-    end
-
-
     option :quiet, type: :boolean, aliases: :q
     desc "rescan", "Find new dependencies."
     def rescan
@@ -84,6 +63,24 @@ module LicenseFinder
 
     def generate_reports
       Reporter.write_reports
+    end
+
+    def spinner
+      if options[:quiet]
+        yield
+      else
+        thread = Thread.new() {
+          wheel = '\|/-'
+          i = 0
+          while true do
+            print "\r ---------- #{wheel[i]} ----------"
+            i = (i + 1) % 4
+          end
+        }
+        yield
+        thread.kill
+        puts "\r" + " "*24
+      end
     end
   end
 end
