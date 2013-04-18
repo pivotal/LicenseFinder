@@ -1,13 +1,32 @@
 require 'thor'
 
 module LicenseFinder
-  class CLI < Thor
+  class CLIBase < Thor
+    def self.subcommand(namespace, klass, namespace_description)
+      description = "#{namespace} [#{(klass.tasks.keys - ["help"]).join("|")}]"
+      desc description, "#{namespace_description} - see `license_finder #{namespace} help` for more information"
+      super namespace, klass
+    end
+
+    private
+
+    def modifying
+      yield
+      Reporter.write_reports
+    rescue LicenseFinder::Error => e
+      say e.message, :red
+      exit 1
+    end
+  end
+
+  class CLI < CLIBase
     option :quiet, type: :boolean, aliases: :q
     desc "rescan", "Find new dependencies."
     def rescan
-      spinner {
-        BundleSyncer.sync!
-        Reporter.write_reports
+      modifying {
+        spinner {
+          BundleSyncer.sync!
+        }
       }
 
       action_items
@@ -16,22 +35,22 @@ module LicenseFinder
 
     desc "approve DEPENDENCY_NAME", "Approve a dependency by name."
     def approve(name)
-      dependency = Dependency.first(name: name)
-      dependency.approve!
+      modifying {
+        dependency = Dependency.first(name: name)
+        dependency.approve!
+      }
 
-      say "The #{dependency.name} dependency has been approved!", :green
-
-      Reporter.write_reports
+      say "The #{name} dependency has been approved!", :green
     end
 
     desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license."
     def license(license, name)
-      dependency = Dependency.first(name: name)
-      dependency.set_license_manually license
+      modifying {
+        dependency = Dependency.first(name: name)
+        dependency.set_license_manually license
+      }
 
       say "The #{name} dependency has been marked as using #{license} license!", :green
-
-      Reporter.write_reports
     end
 
     desc "move", "Move dependency.* files from root directory to doc/."
@@ -50,7 +69,7 @@ module LicenseFinder
     def action_items
       unapproved = Dependency.unapproved
 
-      if unapproved.count == 0
+      if unapproved.empty?
         say "All gems are approved for use", :green
       else
         say "Dependencies that need approval:", :red
@@ -59,30 +78,27 @@ module LicenseFinder
       end
     end
 
-    class Dependencies < Thor
+    class Dependencies < CLIBase
       desc "add LICENSE DEPENDENCY_NAME [VERSION]", "Add a dependency that is not managed by Bundler"
       def add(license, name, version = nil)
-        Dependency.create_non_bundler(license, name, version)
-        say "The #{name} dependency has been added!", :green
+        modifying {
+          Dependency.create_non_bundler(license, name, version)
+        }
 
-        Reporter.write_reports
-      rescue LicenseFinder::Error => e
-        say e.message, :red
+        say "The #{name} dependency has been added!", :green
       end
 
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler"
       def remove(name)
-        Dependency.destroy_non_bundler(name)
-        say "The #{name} dependency has been removed.", :green
+        modifying {
+          Dependency.destroy_non_bundler(name)
+        }
 
-        Reporter.write_reports
-      rescue LicenseFinder::Error => e
-        say e.message, :red
+        say "The #{name} dependency has been removed.", :green
       end
     end
 
-    desc "dependencies [add|remove]", "manage non-Bundler dependencies - see `license_finder dependencies help` for more information"
-    subcommand "dependencies", Dependencies
+    subcommand "dependencies", Dependencies, "manage non-Bundler dependencies"
 
     private
 
