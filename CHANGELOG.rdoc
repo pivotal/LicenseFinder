@@ -3,6 +3,7 @@
 * Features
 
   * Switch to thor for CLI, to support future additions to CLI
+  * Restore ability to manage (add/remove) dependencies that Bundler can't find
 
 * Bugfixes
 

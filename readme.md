@@ -49,6 +49,8 @@ The latter two files are human readable reports that you could send to your non-
 unapproved dependencies. You could use this in a CI build, for example, to alert you whenever someone adds an
 unapproved dependency to the project.
 
+Run `license_finder help` to see other available commands.
+
 ### Manually setting licenses
 
 When `license_finder` reports that a dependency's license is 'other', you should manually research what the actual
@@ -83,6 +85,24 @@ $ license_finder approve awesome_gpl_gem
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
+### Managing non-Bundler dependencies
+
+license_finder can track dependencies that Bundler doesn't know about (JS libraries that don't
+appear in your Gemfile, etc.)
+
+```sh
+$ license_finder dependencies add MIT my_js_dep 0.1.2
+```
+
+The version is optional.  Run `license_finder dependencies help` for additional documentation about
+managing non-Bundler dependencies.
+
+license_finder cannot automatically detect when a non-Bundler dependency has been removed from your
+project, so you can use:
+
+```sh
+$ license_finder dependencies remove my_js_dep
+```
 
 ## Configuration
 
