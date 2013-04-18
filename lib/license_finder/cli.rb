@@ -79,17 +79,22 @@ module LicenseFinder
       if options[:quiet]
         yield
       else
-        thread = Thread.new() {
-          wheel = '\|/-'
-          i = 0
-          while true do
-            print "\r ---------- #{wheel[i]} ----------"
-            i = (i + 1) % 4
+        begin
+          thread = Thread.new {
+            wheel = '\|/-'
+            i = 0
+            while true do
+              print "\r ---------- #{wheel[i]} ----------"
+              i = (i + 1) % 4
+            end
+          }
+          yield
+        ensure
+          if thread
+            thread.kill
+            puts "\r" + " "*24
           end
-        }
-        yield
-        thread.kill
-        puts "\r" + " "*24
+        end
       end
     end
   end
