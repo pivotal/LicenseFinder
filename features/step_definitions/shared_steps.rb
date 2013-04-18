@@ -5,6 +5,11 @@ require 'capybara'
 
 ########## COMMON STEPS ##########
 
+Given(/^I have an app with license finder$/) do
+  @user = ::DSL::User.new
+  @user.create_nonrails_app
+end
+
 When(/^I run license_finder$/) do
   @output = @user.execute_command "license_finder -q"
 end

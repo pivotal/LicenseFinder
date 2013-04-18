@@ -15,8 +15,21 @@ module LicenseFinder
       dependency.save
     end
 
+    def self.destroy_non_bundler(name)
+      dep = non_bundler.first(name: name)
+      if dep
+        dep.destroy
+      else
+        raise Error.new("could not find non-bundler dependency named #{name}")
+      end
+    end
+
     def self.bundler
       exclude(manual: true)
+    end
+
+    def self.non_bundler
+      bundler.invert
     end
 
     def self.destroy_obsolete(current_dependencies)

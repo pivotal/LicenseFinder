@@ -49,6 +49,24 @@ module LicenseFinder
       end
     end
 
+    describe ".destroy_non_bundler" do
+      it "should remove a non bundler Dependency" do
+        Dependency.create_non_bundler("GPL", "a non-bundler dep", nil)
+        expect do
+          Dependency.destroy_non_bundler("a non-bundler dep")
+        end.to change(Dependency, :count).by(-1)
+      end
+
+      it "should not remove a bundler Dependency" do
+        Dependency.create(name: "a bundler dep")
+        expect do
+          expect do
+            Dependency.destroy_non_bundler("a bundler dep")
+          end.to raise_error(LicenseFinder::Error)
+        end.to_not change(Dependency, :count)
+      end
+    end
+
     describe ".destroy_obsolete" do
       it "destroys every dependency except for the ones provided as 'current' or marked as 'manual'" do
         cur1 = Dependency.create(name: "current dependency 1")

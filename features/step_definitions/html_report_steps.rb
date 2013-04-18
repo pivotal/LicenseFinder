@@ -1,8 +1,3 @@
-Given(/^I have an app with license finder$/) do
-  @user = ::DSL::User.new
-  @user.create_nonrails_app
-end
-
 Given(/^my app depends on a gem with specific details$/) do
   @gem_name = "mit_licensed_gem"
   @table = {

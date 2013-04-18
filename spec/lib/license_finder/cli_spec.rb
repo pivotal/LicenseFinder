@@ -26,6 +26,17 @@ module LicenseFinder
           end
         end
       end
+
+      describe "remove" do
+        it "should remove a dependency" do
+          silence_stdout do
+            Dependency.should_receive(:destroy_non_bundler).with("js_dep")
+            silence_stdout do
+              CLI::Dependencies.new.remove("js_dep")
+            end
+          end
+        end
+      end
     end
 
     describe "default" do

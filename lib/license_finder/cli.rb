@@ -69,8 +69,19 @@ module LicenseFinder
       rescue LicenseFinder::Error => e
         say e.message, :red
       end
+
+      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler"
+      def remove(name)
+        Dependency.destroy_non_bundler(name)
+        say "The #{name} dependency has been removed.\n\n", :green
+
+        Reporter.write_reports
+      rescue LicenseFinder::Error => e
+        say e.message, :red
+      end
     end
-    desc "dependencies SUBCOMMAND _ARGS", "manual add and manage non bundler dependencies"
+
+    desc "dependencies SUBCOMMAND ...ARGS", "manual add and manage non bundler dependencies"
     subcommand "dependencies", Dependencies
 
     private
