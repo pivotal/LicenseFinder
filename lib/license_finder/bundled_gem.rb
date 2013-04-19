@@ -41,7 +41,7 @@ module LicenseFinder
       dependency_name.downcase
     end
 
-    def save_or_merge
+    def save_as_dependency
       GemSaver.find_or_initialize_by_name(@spec.name, self).save
     end
   end

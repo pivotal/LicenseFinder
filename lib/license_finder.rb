@@ -23,7 +23,6 @@ module LicenseFinder
   autoload :HtmlReport, 'license_finder/html_report'
   autoload :TextReport, 'license_finder/text_report'
   autoload :Reporter, 'license_finder/reporter'
-  autoload :BundleSyncer, 'license_finder/bundle_syncer'
   autoload :YmlToSql, 'license_finder/yml_to_sql'
   autoload :Dependency, 'license_finder/tables/dependency'
   autoload :Approval, 'license_finder/tables/approval'

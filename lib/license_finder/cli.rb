@@ -10,9 +10,8 @@ module LicenseFinder
 
     private
 
-    def modifying
+    def die_on_error
       yield
-      Reporter.write_reports
     rescue LicenseFinder::Error => e
       say e.message, :red
       exit 1
@@ -23,9 +22,9 @@ module LicenseFinder
     option :quiet, type: :boolean, aliases: :q
     desc "rescan", "Find new dependencies."
     def rescan
-      modifying {
+      die_on_error {
         spinner {
-          BundleSyncer.sync!
+          DependencyManager.sync_with_bundler
         }
       }
 
@@ -35,7 +34,7 @@ module LicenseFinder
 
     desc "approve DEPENDENCY_NAME", "Approve a dependency by name."
     def approve(name)
-      modifying {
+      die_on_error {
         DependencyManager.approve!(name)
       }
 
@@ -44,7 +43,7 @@ module LicenseFinder
 
     desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license."
     def license(license, name)
-      modifying {
+      die_on_error {
         DependencyManager.license!(name, license)
       }
 
@@ -79,7 +78,7 @@ module LicenseFinder
     class Dependencies < CLIBase
       desc "add LICENSE DEPENDENCY_NAME [VERSION]", "Add a dependency that is not managed by Bundler"
       def add(license, name, version = nil)
-        modifying {
+        die_on_error {
           DependencyManager.create_non_bundler(license, name, version)
         }
 
@@ -88,7 +87,7 @@ module LicenseFinder
 
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler"
       def remove(name)
-        modifying {
+        die_on_error {
           DependencyManager.destroy_non_bundler(name)
         }
 

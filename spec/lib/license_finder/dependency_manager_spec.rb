@@ -7,6 +7,26 @@ module LicenseFinder
     before do
       LicenseFinder.stub(:config).and_return config
       config.whitelist = ["MIT", "other"]
+      Reporter.stub(:write_reports)
+    end
+
+    describe "#sync_with_bundler" do
+      it "destroys every dependency except for the ones Bundler reports as 'current' or are marked as 'manual'" do
+        cur1 = Dependency.create(name: "current dependency 1")
+        cur2 = Dependency.create(name: "current dependency 2")
+        man1 = Dependency.create(name: "manual dependency", manual: true)
+        Dependency.create(name: "old dependency 1")
+        Dependency.create(name: "old dependency 2")
+
+        current_gems = [
+          stub(:gem1, save_as_dependency: cur1),
+          stub(:gem2, save_as_dependency: cur2)
+        ]
+        Bundle.stub(:current_gems) { current_gems }
+
+        described_class.sync_with_bundler
+        Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
+      end
     end
 
     describe ".create_non_bundler" do
@@ -51,19 +71,6 @@ module LicenseFinder
             described_class.destroy_non_bundler("a bundler dep")
           end.to raise_error(LicenseFinder::Error)
         end.to_not change(Dependency, :count)
-      end
-    end
-
-    describe ".clean_bundler_dependencies" do
-      it "destroys every dependency except for the ones provided as 'current' or marked as 'manual'" do
-        cur1 = Dependency.create(name: "current dependency 1")
-        cur2 = Dependency.create(name: "current dependency 2")
-        man1 = Dependency.create(name: "manual dependency", manual: true)
-        Dependency.create(name: "old dependency 1")
-        Dependency.create(name: "old dependency 2")
-
-        described_class.clean_bundler_dependencies([cur1, cur2])
-        Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
       end
     end
 

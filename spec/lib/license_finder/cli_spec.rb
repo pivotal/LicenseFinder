@@ -41,7 +41,7 @@ module LicenseFinder
 
     describe "default" do
       it "should check for action items" do
-        BundleSyncer.should_receive(:sync!)
+        DependencyManager.should_receive(:sync_with_bundler)
         Dependency.stub(:unapproved) { [] }
         silence_stdout do
           described_class.start([])
@@ -51,7 +51,7 @@ module LicenseFinder
 
     describe "#rescan" do
       it "resyncs with Gemfile" do
-        BundleSyncer.should_receive(:sync!)
+        DependencyManager.should_receive(:sync_with_bundler)
         Dependency.stub(:unapproved) { [] }
 
         silence_stdout do
