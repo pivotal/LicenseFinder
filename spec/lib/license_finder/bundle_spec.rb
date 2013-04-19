@@ -26,18 +26,13 @@ module LicenseFinder
       end
     end
 
-    describe '.current_gem_dependencies' do
+    describe '.current_gems' do
       subject do
-        Bundle.current_gem_dependencies(definition)
+        Bundle.current_gems(definition)
       end
 
       it "should have 2 dependencies" do
         subject.size.should == 2
-      end
-
-      it "returns persisted dependencies" do
-        subject.first.id.should be
-        subject.last.id.should be
       end
 
       context "when initialized with a parent and child gem" do
@@ -49,11 +44,9 @@ module LicenseFinder
         end
 
         it "should update the child dependency with its parent data" do
-          gem1 = subject.first.reload
-          gem2 = subject.last.reload
+          gem1 = subject.first
 
-          gem2.parents.should == [gem1]
-          gem1.children.should == [gem2]
+          gem1.children.should == ["gem2"]
         end
       end
     end

@@ -3,7 +3,8 @@ module LicenseFinder
     extend self
 
     def sync!
-      current_dependencies = Bundle.current_gem_dependencies
+      current_gems = Bundle.current_gems
+      current_dependencies = current_gems.map(&:save_or_merge)
       DependencyManager.clean_bundler_dependencies(current_dependencies)
     end
   end

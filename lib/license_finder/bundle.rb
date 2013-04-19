@@ -2,8 +2,8 @@ module LicenseFinder
   class Bundle
     attr_writer :ignore_groups
 
-    def self.current_gem_dependencies(bundler_definition=nil)
-      new(bundler_definition).gems.map(&:save_or_merge)
+    def self.current_gems(bundler_definition=nil)
+      new(bundler_definition).gems
     end
 
     def initialize(bundler_definition=nil)
