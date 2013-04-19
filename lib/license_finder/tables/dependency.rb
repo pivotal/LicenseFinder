@@ -42,7 +42,7 @@ module LicenseFinder
 
     def self.named(name)
       d = find_or_create(name: name.to_s)
-      d.approval ||= Approval.create
+      d.ensure_approval_exists!
       d
     end
 
@@ -57,6 +57,12 @@ module LicenseFinder
 
     def set_license_manually(name)
       license.set_manually(name)
+    end
+
+    def ensure_approval_exists!
+      return if approval
+      self.approval = Approval.create
+      save
     end
   end
 end

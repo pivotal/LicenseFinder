@@ -115,13 +115,13 @@ module LicenseFinder
       end
 
       it "always attaches an approval" do
-        described_class.named("referenced_again").approval.should be
-        described_class.named("referenced_again").approval.should be
+        described_class.named("referenced_again").reload.approval.should be
+        described_class.named("referenced_again").reload.approval.should be
       end
 
       it "attaches an approval to a dependency that is currently missing one" do
         Dependency.create(name: "foo")
-        described_class.named("foo").approval.should be
+        described_class.named("foo").reload.approval.should be
       end
     end
 
