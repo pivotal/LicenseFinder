@@ -19,6 +19,16 @@ module LicenseFinder
       )
     end
 
+    def self.move!
+      config = config_hash('dependencies_file_dir' => './doc/')
+      File.open(config_file_path, 'w') do |f|
+        f.write YAML.dump(config)
+      end
+
+      FileUtils.mkdir_p("doc")
+      FileUtils.mv(Dir["dependencies.*"], "doc")
+    end
+
     def self.config_hash(config)
       if File.exists?(config_file_path)
         yaml = File.read(config_file_path)

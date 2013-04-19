@@ -52,13 +52,7 @@ module LicenseFinder
 
     desc "move", "Move dependency.* files from root directory to doc/."
     def move
-      config = Configuration.config_hash('dependencies_file_dir' => './doc/')
-      File.open(Configuration.config_file_path, 'w') do |f|
-        f.write YAML.dump(config)
-      end
-
-      FileUtils.mkdir_p("doc")
-      FileUtils.mv(Dir["dependencies.*"], "doc")
+      Configuration.move!
       say "Congratulations, you have cleaned up your root directory!'", :green
     end
 
