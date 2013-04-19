@@ -8,35 +8,26 @@ module LicenseFinder
       dependency.save
     end
 
+    def self.clean_bundler_dependencies(current_dependencies)
+      Dependency.bundler.obsolete(current_dependencies).each(&:destroy)
+    end
+
     def self.destroy_non_bundler(name)
-      dep = Dependency.non_bundler.first(name: name)
-      if dep
-        dep.destroy
-      else
-        raise Error.new("could not find non-bundler dependency named #{name}")
-      end
+      find_by_name(name, Dependency.non_bundler).destroy
     end
 
     def self.license!(name, license)
-      dep = Dependency.first(name: name)
-      if dep
-        dep.license.set_manually(license)
-      else
-        raise Error.new("could not find dependency named #{name}")
-      end
+      find_by_name(name).license.set_manually(license)
     end
 
     def self.approve!(name)
-      dep = Dependency.first(name: name)
-      if dep
-        dep.approve!
-      else
-        raise Error.new("could not find dependency named #{name}")
-      end
+      find_by_name(name).approve!
     end
 
-    def self.clean_bundler_dependencies(current_dependencies)
-      Dependency.bundler.obsolete(current_dependencies).each(&:destroy)
+    def self.find_by_name(name, scope = Dependency)
+      dep = scope.first(name: name)
+      raise Error.new("could not find dependency named #{name}") unless dep
+      dep
     end
   end
 end
