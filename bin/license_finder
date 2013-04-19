@@ -2,4 +2,4 @@
 
 require 'license_finder'
 
-LicenseFinder::CLI.start
+LicenseFinder::CLI::Main.start
