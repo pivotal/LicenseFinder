@@ -154,6 +154,20 @@ end
 And add a `LICENSE` file to your gem that contains your license text.
 
 
+## Support
+
+* Send an email to the list: [license-finder@googlegroups.com](license-finder@googlegroups.com)
+* View the project backlog at Pivotal Tracker: [https://www.pivotaltracker.com/s/projects/234851](https://www.pivotaltracker.com/s/projects/234851)
+
+
+## Contributing
+
+* Fork the project
+* Create a feature branch
+* Make your feature addition or bug fix (with tests)
+* Rebase on top of master
+* Send a pull request
+
 ## License
 
 LicenseFinder is released under the MIT License. http://www.opensource.org/licenses/mit-license
