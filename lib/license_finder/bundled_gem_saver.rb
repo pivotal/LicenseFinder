@@ -1,5 +1,5 @@
 module LicenseFinder
-  class GemSaver
+  class BundledGemSaver
     extend Forwardable
     def_delegators :spec, :name, :version, :summary, :description, :homepage
     def_delegators :bundled_gem, :bundler_dependency, :determine_license, :children

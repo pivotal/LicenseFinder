@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module LicenseFinder
-  describe GemSaver do
+  describe BundledGemSaver do
     let(:gemspec) do
       Gem::Specification.new do |s|
         s.name = 'spec_name'
