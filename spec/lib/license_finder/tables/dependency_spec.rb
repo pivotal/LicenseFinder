@@ -80,6 +80,34 @@ module LicenseFinder
       end
     end
 
+    describe ".approve!" do
+      it "approves the dependency" do
+        dep = Dependency.named("current dependency")
+        dep.reload.should_not be_approved
+        Dependency.approve!("current dependency")
+        dep.reload.should be_approved
+      end
+
+      it "should raise an error if it can't find the dependency" do
+        expect { Dependency.approve!("non-existent dependency") }
+          .to raise_error(LicenseFinder::Error)
+      end
+    end
+
+    describe ".license!" do
+      it "adds a license for the dependency" do
+        dep = Dependency.create_non_bundler("old license", "current dependency", nil)
+        dep.reload.license.name.should == "old license"
+        Dependency.license!("current dependency", "a license")
+        dep.reload.license.name.should == "a license"
+      end
+
+      it "should raise an error if it can't find the dependency" do
+        expect { Dependency.license!("non-existent dependency", "a license") }
+          .to raise_error(LicenseFinder::Error)
+      end
+    end
+
     describe '.unapproved' do
       it "should return all unapproved dependencies" do
         dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
@@ -153,20 +181,6 @@ module LicenseFinder
         dependency.stub_chain(:license, whitelisted?: false)
         dependency.stub_chain(:approval, state: false)
         dependency.should_not be_approved
-      end
-    end
-
-    describe "#set_license_manually" do
-      let(:gem) do
-        dependency = Dependency.new(name: "bob", version: '0.0.1')
-        dependency.license = LicenseAlias.create(name: 'Original')
-        dependency.save
-        dependency
-      end
-
-      it "delegates to the license" do
-        gem.license.should_receive(:set_manually).with('Updated')
-        gem.set_license_manually('Updated')
       end
     end
   end

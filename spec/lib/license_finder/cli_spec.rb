@@ -14,6 +14,7 @@ module LicenseFinder
       describe "add" do
         it "should add a dependency" do
           Dependency.should_receive(:create_non_bundler).with("MIT", "js_dep", "1.2.3")
+
           silence_stdout do
             CLI::Dependencies.new.add("MIT", "js_dep", "1.2.3")
           end
@@ -21,6 +22,7 @@ module LicenseFinder
 
         it "does not require a version" do
           Dependency.should_receive(:create_non_bundler).with("MIT", "js_dep", nil)
+
           silence_stdout do
             CLI::Dependencies.new.add("MIT", "js_dep")
           end
@@ -29,11 +31,9 @@ module LicenseFinder
 
       describe "remove" do
         it "should remove a dependency" do
+          Dependency.should_receive(:destroy_non_bundler).with("js_dep")
           silence_stdout do
-            Dependency.should_receive(:destroy_non_bundler).with("js_dep")
-            silence_stdout do
-              CLI::Dependencies.new.remove("js_dep")
-            end
+            CLI::Dependencies.new.remove("js_dep")
           end
         end
       end
@@ -53,6 +53,7 @@ module LicenseFinder
       it "resyncs with Gemfile" do
         BundleSyncer.should_receive(:sync!)
         Dependency.stub(:unapproved) { [] }
+
         silence_stdout do
           subject.rescan
         end
@@ -61,10 +62,7 @@ module LicenseFinder
 
     describe "#license" do
       it "should update the license on the requested gem" do
-        dependency = double :dependency, :name => nil
-        dependency.should_receive(:set_license_manually).with("foo")
-
-        Dependency.stub(:first).with(name: "foo_gem").and_return(dependency)
+        Dependency.should_receive(:license!).with("foo_gem", "foo")
 
         silence_stdout do
           subject.license 'foo', 'foo_gem'
@@ -74,10 +72,7 @@ module LicenseFinder
 
     describe "#approve" do
       it "should approve the requested gem" do
-        dependency = double('dependency', :name => nil)
-        dependency.should_receive(:approve!)
-
-        Dependency.stub(:first).with(name: 'foo').and_return(dependency)
+        Dependency.should_receive(:approve!).with("foo")
 
         silence_stdout do
           subject.approve 'foo'

@@ -36,8 +36,7 @@ module LicenseFinder
     desc "approve DEPENDENCY_NAME", "Approve a dependency by name."
     def approve(name)
       modifying {
-        dependency = Dependency.first(name: name)
-        dependency.approve!
+        Dependency.approve!(name)
       }
 
       say "The #{name} dependency has been approved!", :green
@@ -46,8 +45,7 @@ module LicenseFinder
     desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license."
     def license(license, name)
       modifying {
-        dependency = Dependency.first(name: name)
-        dependency.set_license_manually license
+        Dependency.license!(name, license)
       }
 
       say "The #{name} dependency has been marked as using #{license} license!", :green

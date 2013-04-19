@@ -24,6 +24,24 @@ module LicenseFinder
       end
     end
 
+    def self.license!(name, license)
+      dep = first(name: name)
+      if dep
+        dep.license.set_manually(license)
+      else
+        raise Error.new("could not find dependency named #{name}")
+      end
+    end
+
+    def self.approve!(name)
+      dep = first(name: name)
+      if dep
+        dep.approve!
+      else
+        raise Error.new("could not find dependency named #{name}")
+      end
+    end
+
     def self.bundler
       exclude(manual: true)
     end
@@ -53,10 +71,6 @@ module LicenseFinder
 
     def approved?
       (license && license.whitelisted?) || approval.state
-    end
-
-    def set_license_manually(name)
-      license.set_manually(name)
     end
 
     def ensure_approval_exists!
