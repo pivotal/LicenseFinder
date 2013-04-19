@@ -56,9 +56,9 @@ module LicenseFinder
 
         def license_text
           unless defined?(@license_text)
-            template = File.join(ROOT_PATH, "data", "licenses", "#{demodulized_name}.txt").to_s
+            template = ROOT_PATH.join("data", "licenses", "#{demodulized_name}.txt")
 
-            @license_text = Text.new(File.read(template)).to_s if File.exists?(template)
+            @license_text = Text.new(template.read).to_s if template.exist?
           end
           @license_text
         end
@@ -85,6 +85,6 @@ module LicenseFinder
   end
 end
 
-Dir[File.join(File.dirname(__FILE__), 'license', '*.rb')].each do |license|
+Pathname.glob(LicenseFinder::ROOT_PATH.join('license_finder', 'license', "*.rb")) do |license|
   require license
 end

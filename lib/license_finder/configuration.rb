@@ -14,7 +14,7 @@ module LicenseFinder
     def self.make_config_file
       FileUtils.mkdir_p(File.join('.', 'config'))
       FileUtils.cp(
-        File.join(File.dirname(__FILE__), '..', '..', 'files', 'license_finder.yml'),
+        ROOT_PATH.join('..', 'files', 'license_finder.yml'),
         config_file_path
       )
     end
