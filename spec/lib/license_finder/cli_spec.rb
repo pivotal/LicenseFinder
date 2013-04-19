@@ -19,6 +19,15 @@ module LicenseFinder
             subject.add("MIT", "js_dep")
           end
         end
+
+        it "should have a -a option to approve the added dependency" do
+          DependencyManager.should_receive(:create_non_bundler).with("MIT", "js_dep", "1.2.3")
+          DependencyManager.should_receive(:approve!).with("js_dep")
+
+          silence_stdout do
+            LicenseFinder::CLI::Main.start(["dependencies", "add", "--approve", "MIT", "js_dep", "1.2.3"])
+          end
+        end
       end
 
       describe "remove" do

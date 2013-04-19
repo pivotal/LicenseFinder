@@ -8,6 +8,11 @@ Feature: Tracking non-Bundler Dependencies
     When I add my JS dependency
     Then I should see the JS dependency in the console output
 
+  Scenario: Auto approving a non-Bundler dependency I add
+    Given I have an app with license finder
+    When I add my JS dependency with an approval flag
+    Then I should not see the JS dependency in the console output since it is approved
+
   Scenario: Removing a non-Bundler dependency
     Given I have an app with license finder and a JS dependency
     When I remove my JS dependency

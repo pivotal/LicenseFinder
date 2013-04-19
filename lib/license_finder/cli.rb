@@ -20,13 +20,18 @@ module LicenseFinder
     end
 
     class Dependencies < Base
+      option :approve, type: :boolean, aliases: :a
       desc "add LICENSE DEPENDENCY_NAME [VERSION]", "Add a dependency that is not managed by Bundler"
       def add(license, name, version = nil)
         die_on_error {
           DependencyManager.create_non_bundler(license, name, version)
+          DependencyManager.approve!(name) if options[:approve]
         }
-
-        say "The #{name} dependency has been added!", :green
+        if options[:approve]
+          say "The #{name} dependency has been added and approved!", :green
+        else
+          say "The #{name} dependency has been added!", :green
+        end
       end
 
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler"

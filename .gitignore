@@ -10,3 +10,4 @@ doc/dependencies.*
 db/schema.rb
 config/
 .pairs
+*.swp
