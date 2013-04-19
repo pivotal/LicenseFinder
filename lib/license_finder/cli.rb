@@ -36,7 +36,7 @@ module LicenseFinder
     desc "approve DEPENDENCY_NAME", "Approve a dependency by name."
     def approve(name)
       modifying {
-        Dependency.approve!(name)
+        DependencyManager.approve!(name)
       }
 
       say "The #{name} dependency has been approved!", :green
@@ -45,7 +45,7 @@ module LicenseFinder
     desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license."
     def license(license, name)
       modifying {
-        Dependency.license!(name, license)
+        DependencyManager.license!(name, license)
       }
 
       say "The #{name} dependency has been marked as using #{license} license!", :green
@@ -80,7 +80,7 @@ module LicenseFinder
       desc "add LICENSE DEPENDENCY_NAME [VERSION]", "Add a dependency that is not managed by Bundler"
       def add(license, name, version = nil)
         modifying {
-          Dependency.create_non_bundler(license, name, version)
+          DependencyManager.create_non_bundler(license, name, version)
         }
 
         say "The #{name} dependency has been added!", :green
@@ -89,7 +89,7 @@ module LicenseFinder
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler"
       def remove(name)
         modifying {
-          Dependency.destroy_non_bundler(name)
+          DependencyManager.destroy_non_bundler(name)
         }
 
         say "The #{name} dependency has been removed.", :green

@@ -32,6 +32,7 @@ module LicenseFinder
   autoload :GemSaver, 'license_finder/gem_saver'
   autoload :LicenseFiles, 'license_finder/license_files'
   autoload :Platform, 'license_finder/platform'
+  autoload :DependencyManager, 'license_finder/dependency_manager'
 
   def self.config
     @config ||= Configuration.ensure_default

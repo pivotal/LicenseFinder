@@ -2,113 +2,14 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Dependency do
-    let(:attributes) do
-      {
-        'name' => "spec_name",
-        'version' => "2.1.3",
-        'license' => "GPLv2",
-        'approved' => false,
-        'notes' => 'some notes',
-        'homepage' => 'homepage',
-        'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
-        'bundler_groups' => ["test"]
-      }
-    end
-
-    let(:config) { Configuration.new }
-
-    before do
-      LicenseFinder.stub(:config).and_return config
-      config.whitelist = ["MIT", "other"]
-    end
-
-    describe ".create_non_bundler" do
-      it "should add a Dependency" do
-        expect do
-          Dependency.create_non_bundler("MIT", "js_dep", "0.0.0")
-        end.to change(Dependency, :count).by(1)
-      end
-
-      it "should mark the dependency as manual" do
-        Dependency.create_non_bundler("MIT", "js_dep", "0.0.0")
-          .should be_manual
-      end
-
-      it "should set the appropriate values" do
-        dep = Dependency.create_non_bundler("GPL", "js_dep", "0.0.0")
-        dep.name.should == "js_dep"
-        dep.version.should == "0.0.0"
-        dep.license.name.should == "GPL"
-        dep.should_not be_approved
-      end
-
-      it "should complain if the dependency already exists" do
-        Dependency.create(name: "current dependency 1")
-        expect { Dependency.create_non_bundler("GPL", "current dependency 1", "0.0.0") }
-          .to raise_error(LicenseFinder::Error)
-      end
-    end
-
-    describe ".destroy_non_bundler" do
-      it "should remove a non bundler Dependency" do
-        Dependency.create_non_bundler("GPL", "a non-bundler dep", nil)
-        expect do
-          Dependency.destroy_non_bundler("a non-bundler dep")
-        end.to change(Dependency, :count).by(-1)
-      end
-
-      it "should not remove a bundler Dependency" do
-        Dependency.create(name: "a bundler dep")
-        expect do
-          expect do
-            Dependency.destroy_non_bundler("a bundler dep")
-          end.to raise_error(LicenseFinder::Error)
-        end.to_not change(Dependency, :count)
-      end
-    end
-
-    describe ".clean_bundler_dependencies" do
-      it "destroys every dependency except for the ones provided as 'current' or marked as 'manual'" do
-        cur1 = Dependency.create(name: "current dependency 1")
-        cur2 = Dependency.create(name: "current dependency 2")
-        man1 = Dependency.create(name: "manual dependency", manual: true)
-        Dependency.create(name: "old dependency 1")
-        Dependency.create(name: "old dependency 2")
-
-        Dependency.clean_bundler_dependencies([cur1, cur2])
-        Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
-      end
-    end
-
-    describe ".approve!" do
-      it "approves the dependency" do
-        dep = Dependency.named("current dependency")
-        dep.reload.should_not be_approved
-        Dependency.approve!("current dependency")
-        dep.reload.should be_approved
-      end
-
-      it "should raise an error if it can't find the dependency" do
-        expect { Dependency.approve!("non-existent dependency") }
-          .to raise_error(LicenseFinder::Error)
-      end
-    end
-
-    describe ".license!" do
-      it "adds a license for the dependency" do
-        dep = Dependency.create_non_bundler("old license", "current dependency", nil)
-        dep.reload.license.name.should == "old license"
-        Dependency.license!("current dependency", "a license")
-        dep.reload.license.name.should == "a license"
-      end
-
-      it "should raise an error if it can't find the dependency" do
-        expect { Dependency.license!("non-existent dependency", "a license") }
-          .to raise_error(LicenseFinder::Error)
-      end
-    end
-
     describe '.unapproved' do
+      let(:config) { Configuration.new }
+
+      before do
+        LicenseFinder.stub(:config).and_return config
+        config.whitelist = ["MIT", "other"]
+      end
+
       it "should return all unapproved dependencies" do
         dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
         dependency.approval = Approval.create(state: false)
