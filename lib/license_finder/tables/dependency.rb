@@ -42,16 +42,22 @@ module LicenseFinder
       end
     end
 
-    def self.bundler
-      exclude(manual: true)
+    def self.clean_bundler_dependencies(current_dependencies)
+      bundler.obsolete(current_dependencies).each(&:destroy)
     end
 
-    def self.non_bundler
-      bundler.invert
-    end
+    dataset_module do
+      def bundler
+        exclude(manual: true)
+      end
 
-    def self.destroy_obsolete(current_dependencies)
-      bundler.exclude(id: current_dependencies.map(&:id)).each(&:destroy)
+      def non_bundler
+        bundler.invert
+      end
+
+      def obsolete(current)
+        exclude(id: current.map(&:id))
+      end
     end
 
     def self.unapproved

@@ -67,7 +67,7 @@ module LicenseFinder
       end
     end
 
-    describe ".destroy_obsolete" do
+    describe ".clean_bundler_dependencies" do
       it "destroys every dependency except for the ones provided as 'current' or marked as 'manual'" do
         cur1 = Dependency.create(name: "current dependency 1")
         cur2 = Dependency.create(name: "current dependency 2")
@@ -75,7 +75,7 @@ module LicenseFinder
         Dependency.create(name: "old dependency 1")
         Dependency.create(name: "old dependency 2")
 
-        Dependency.destroy_obsolete([cur1, cur2])
+        Dependency.clean_bundler_dependencies([cur1, cur2])
         Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
       end
     end

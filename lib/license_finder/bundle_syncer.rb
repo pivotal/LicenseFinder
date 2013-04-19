@@ -4,7 +4,7 @@ module LicenseFinder
 
     def sync!
       current_dependencies = Bundle.current_gem_dependencies
-      Dependency.destroy_obsolete(current_dependencies)
+      Dependency.clean_bundler_dependencies(current_dependencies)
     end
   end
 end
