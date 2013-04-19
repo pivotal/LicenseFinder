@@ -29,7 +29,7 @@ module LicenseFinder
   autoload :LicenseAlias, 'license_finder/tables/license_alias'
   autoload :BundlerGroup, 'license_finder/tables/bundler_group'
   autoload :BundledGemSaver, 'license_finder/bundled_gem_saver'
-  autoload :LicenseFiles, 'license_finder/license_files'
+  autoload :PossibleLicenseFiles, 'license_finder/possible_license_files'
   autoload :Platform, 'license_finder/platform'
   autoload :DependencyManager, 'license_finder/dependency_manager'
 

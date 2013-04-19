@@ -1,5 +1,5 @@
 module LicenseFinder
-  class LicenseFiles
+  class PossibleLicenseFiles
     LICENSE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
 
     def initialize(install_path)
@@ -8,7 +8,7 @@ module LicenseFinder
 
     attr_reader :install_path
 
-    def files
+    def find
       paths_for_license_files.map do |path|
         get_file_for_path(path)
       end

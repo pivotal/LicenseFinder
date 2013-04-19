@@ -34,7 +34,7 @@ module LicenseFinder
     end
 
     def license_files
-      LicenseFiles.new(@spec.full_gem_path).files
+      PossibleLicenseFiles.new(@spec.full_gem_path).find
     end
 
     def sort_order
