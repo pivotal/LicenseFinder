@@ -5,7 +5,7 @@ require 'erb'
 module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname
 
-  Error = Class.new(Exception)
+  Error = Class.new(StandardError)
 
   autoload :Bundle,               'license_finder/bundle'
   autoload :BundledGem,           'license_finder/bundled_gem'
