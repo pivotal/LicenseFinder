@@ -94,6 +94,12 @@ appear in your Gemfile, etc.)
 $ license_finder dependencies add MIT my_js_dep 0.1.2
 ```
 
+To automatically approve a non-bundler dependency when you add it, use:
+
+```sh
+$ license_finder dependencies add MIT my_js_dep 0.1.2 --approve
+```
+
 The version is optional.  Run `license_finder dependencies help` for additional documentation about
 managing non-Bundler dependencies.
 
