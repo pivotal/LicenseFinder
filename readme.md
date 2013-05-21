@@ -49,7 +49,7 @@ The latter two files are human readable reports that you could send to your non-
 unapproved dependencies. You could use this in a CI build, for example, to alert you whenever someone adds an
 unapproved dependency to the project.
 
-Run `license_finder help` to see other available commands.
+Run `license_finder --help` to see other available commands.
 
 ### Manually setting licenses
 
@@ -57,7 +57,7 @@ When `license_finder` reports that a dependency's license is 'other', you should
 license is.  When you have established the real license, you can record it with:
 
 ```sh
-$ license_finder license MIT my_unknown_dependency
+$ license_finder --license MIT my_unknown_dependency
 ```
 
 This command would assign the MIT license to the dependency `my_unknown_dependency`.
@@ -66,7 +66,7 @@ This command would assign the MIT license to the dependency `my_unknown_dependen
 
 Whenever you have a dependency that falls outside of your whitelist, `license_finder` will tell you.
 If your business decides that this is an acceptable risk, you can manually approve the dependency by using the
-`license_finder approve` command.
+`license_finder --approve` command.
 
 For example, lets assume you've only
 whitelisted the "MIT" license in your `config/license_finder.yml`. You then add the `awesome_gpl_gem` to your Gemfile,
@@ -80,7 +80,7 @@ awesome_gpl_gem, 1.0.0, GPL
 Your business tells you that in this case, it's acceptable to use this gem. You now run:
 
 ```sh
-$ license_finder approve awesome_gpl_gem
+$ license_finder --approve awesome_gpl_gem
 ```
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
@@ -135,7 +135,7 @@ and text files in another directory by changing `dependencies_file_dir`.
 If you wish to cleanup your root directory you can run:
 
 ```sh
-$ license_finder move
+$ license_finder --move
 ```
 
 This will move your dependencies.* files to the /doc directory and update the config.
