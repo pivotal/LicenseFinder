@@ -36,7 +36,7 @@ module LicenseFinder
       end
 
       context "when the gem has at least one bundler group" do
-        before { dependency.stub(bundler_groups: [stub(name: "group")]) }
+        before { dependency.stub(bundler_groups: [double(name: "group")]) }
         it "should show the bundler group(s) in parens" do
           should have_text "(group)"
         end
@@ -52,7 +52,7 @@ module LicenseFinder
       end
 
       context "when the gem has at least one parent" do
-        before { dependency.stub(parents: [stub(:name => "foo parent")]) }
+        before { dependency.stub(parents: [double(:name => "foo parent")]) }
         it "should include a parents section" do
           should have_text "Parents"
           should have_text "foo parent"
@@ -66,7 +66,7 @@ module LicenseFinder
       end
 
       context "when the gem has at least one child" do
-        before { dependency.stub(children: [stub(:name => "foo child")]) }
+        before { dependency.stub(children: [double(:name => "foo child")]) }
 
         it "should include a Children section" do
           should have_text "Children"

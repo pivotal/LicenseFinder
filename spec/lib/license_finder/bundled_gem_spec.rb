@@ -54,7 +54,7 @@ module LicenseFinder
 
     describe "#license_files" do
       it "delegates to the license files helper" do
-        PossibleLicenseFiles.should_receive(:new).with(gemspec.full_gem_path) { stub(find: [] )}
+        PossibleLicenseFiles.should_receive(:new).with(gemspec.full_gem_path) { double(find: [] )}
         subject.license_files
       end
     end

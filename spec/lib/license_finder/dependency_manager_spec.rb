@@ -19,8 +19,8 @@ module LicenseFinder
         Dependency.create(name: "old dependency 2")
 
         current_gems = [
-          stub(:gem1, save_as_dependency: cur1),
-          stub(:gem2, save_as_dependency: cur2)
+          double(:gem1, save_as_dependency: cur1),
+          double(:gem2, save_as_dependency: cur2)
         ]
         Bundle.stub(:current_gems) { current_gems }
 

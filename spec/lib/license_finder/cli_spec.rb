@@ -85,7 +85,7 @@ module LicenseFinder
       describe "#action_items" do
         it "reports unapproved dependencies" do
           Dependency.stub(:unapproved) { ['one dependency'] }
-          TextReport.stub(:new) { stub(:report, to_s: "a report!") }
+          TextReport.stub(:new) { double(:report, to_s: "a report!") }
           silence_stdout do
             $stdout.stub(:puts)
             $stdout.should_receive(:puts).with(/dependencies/i)
