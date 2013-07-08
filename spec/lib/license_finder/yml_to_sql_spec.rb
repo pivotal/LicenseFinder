@@ -8,19 +8,20 @@ describe LicenseFinder::YmlToSql do
       'license' => "GPLv2",
       'license_url' => "www.license_url.org",
       'approved' => true,
-      'manual' => true,
       'summary' => "some summary",
       'description' => "some description",
       'homepage' => 'www.homepage.com',
       'children' => ["child1_name"],
       'parents' => ["parent1_name"],
       'bundler_groups' => [:test],
+      'source' => source,
 
       'notes' => 'some notes',
       'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
     }
   end
   let(:config) { LicenseFinder::Configuration.new }
+  let(:source) { nil }
 
   before do
     LicenseFinder.stub(:config) { config }
@@ -53,6 +54,28 @@ describe LicenseFinder::YmlToSql do
       (DB.tables - [:schema_migrations]).each { |table| DB[table].truncate }
     end
 
+    describe "when dependency source is set to bundle" do
+      let(:source) { "bundle" }
+
+      it "sets manual to be false" do
+        described_class.convert_all([legacy_attributes])
+
+        saved_dep = described_class::Sql::Dependency.first
+        saved_dep.manual.should == false
+      end
+    end
+
+    describe "when dependency source is not set to bundle" do
+      let(:source) { "" }
+
+      it "sets manual to be false" do
+        described_class.convert_all([legacy_attributes])
+
+        saved_dep = described_class::Sql::Dependency.first
+        saved_dep.manual.should == true
+      end
+    end
+
     it "persists all of the dependency's attributes" do
       described_class.convert_all([legacy_attributes])
 
@@ -71,7 +94,6 @@ describe LicenseFinder::YmlToSql do
       saved_dep = described_class::Sql::Dependency.first
       saved_dep.license.name.should == "GPLv2"
       saved_dep.license.url.should == "www.license_url.org"
-      saved_dep.license.manual.should == true
     end
 
     it "associates bundler groups" do

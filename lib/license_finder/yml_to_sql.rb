@@ -41,6 +41,7 @@ module LicenseFinder
       @dep = create_dependency
       @dep.license = create_license
       @dep.approval = create_approval
+      @dep.manual = non_bundler_source?
       associate_bundler_groups
       @dep.save
     end
@@ -55,6 +56,10 @@ module LicenseFinder
       find_bundler_groups.each do |group|
         @dep.add_bundler_group(group)
       end
+    end
+
+    def non_bundler_source?
+      @legacy_attrs['source'] == "bundle" ? false : true
     end
 
     def create_dependency
