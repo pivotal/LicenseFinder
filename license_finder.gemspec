@@ -3,7 +3,7 @@ require './lib/license_finder/platform'
 Gem::Specification.new do |s|
   s.name        = "license_finder"
   s.version     = "0.8.1"
-  s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers", "Brent Wheeldon", "David Tengdin"]
+  s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers", "Brent Wheeldon", "David Tengdin", "William Ramsey"]
   s.email       = ["licensefinder@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
   s.summary     = "Audit the OSS licenses of your application's dependencies."
@@ -23,10 +23,11 @@ Gem::Specification.new do |s|
   s.add_dependency "thor"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
-  %w(rspec rake xpath cucumber database_cleaner).each do |gem|
+  %w(rspec rake xpath cucumber).each do |gem|
     s.add_development_dependency gem
   end
 
+  s.add_development_dependency "database_cleaner", "0.9.1"
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "rails", "~> 3.2.0"
 
