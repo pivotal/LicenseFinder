@@ -8,3 +8,9 @@ Feature: Ignore Bundle Groups
     And I ignore the test group
     When I run license_finder
     Then I should not see the GPL licensed gem in the output
+
+  Scenario:
+    Given I have an app with license finder
+    And I ignore the test group
+    When I get the ignored groups from the command line
+    Then I should see the test group in the output

@@ -40,6 +40,18 @@ module LicenseFinder
       end
     end
 
+    describe IgnoredBundlerGroups do
+      describe "list" do
+        it "should show the ignored groups in the standard output" do
+          LicenseFinder.config.should_receive(:ignore_groups).and_return([])
+
+          silence_stdout do
+            subject.list
+          end
+        end
+      end
+    end
+
     describe Main do
       describe "default" do
         it "should check for action items" do

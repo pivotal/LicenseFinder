@@ -11,3 +11,11 @@ end
 Then(/^I should not see the GPL licensed gem in the output$/) do
   @output.should_not include 'gpl_gem'
 end
+
+When(/^I get the ignored groups from the command line$/) do
+  @output = @user.execute_command('license_finder ignored_bundler_group list')
+end
+
+Then(/^I should see the test group in the output$/) do
+  @output.should include 'test'
+end

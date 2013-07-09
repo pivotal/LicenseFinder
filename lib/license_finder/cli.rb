@@ -44,6 +44,18 @@ module LicenseFinder
       end
     end
 
+    class IgnoredBundlerGroups < Base
+      desc "list", "List all the ignored bundler groups"
+      def list
+        ignored = LicenseFinder.config.ignore_groups
+
+        say "Ignored Bundler Groups:", :red
+        ignored.each do |group|
+          say group
+        end
+      end
+    end
+
     class Main < Base
       option :quiet, type: :boolean, aliases: :q
       desc "rescan", "Find new dependencies."
@@ -96,6 +108,7 @@ module LicenseFinder
       end
 
       subcommand "dependencies", Dependencies, "manage non-Bundler dependencies"
+      subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "manage ignored bundler groups"
 
       private
 
