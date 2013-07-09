@@ -60,6 +60,16 @@ module LicenseFinder
           end
         end
       end
+
+      describe "remove" do
+        it "removes the specified group from the ignored groups list" do
+          BundlerGroupManager.should_receive(:remove_ignored_group).with("test")
+
+          silence_stdout do
+            subject.remove("test")
+          end
+        end
+      end
     end
 
     describe Main do

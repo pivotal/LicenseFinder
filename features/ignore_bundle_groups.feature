@@ -14,3 +14,10 @@ Feature: Ignore Bundle Groups
     And I add the test group to the ignored bundler groups
     When I get the ignored groups from the command line
     Then I should see the test group in the output
+
+  Scenario: Bundler groups can be removed from the ignore list from command line
+    Given I have an app with license finder
+    And I add the test group to the ignored bundler groups
+    And I remove the test group from the ignored bundler groups
+    When I get the ignored groups from the command line
+    Then I should not see the test group in the output

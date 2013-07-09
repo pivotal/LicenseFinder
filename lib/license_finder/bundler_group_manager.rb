@@ -8,6 +8,15 @@ module LicenseFinder
       config.ignore_groups << group.to_sym
       config.save_to_yaml
     end
+
+    def self.remove_ignored_group(group)
+      config = LicenseFinder.config
+      ignored_groups = config.ignore_groups.map(&:to_s)
+      return unless ignored_groups.include?(group)
+
+      config.ignore_groups.delete(group.to_sym)
+      config.save_to_yaml
+    end
   end
 end
 

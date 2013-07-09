@@ -62,6 +62,14 @@ module LicenseFinder
         }
         say "Added #{group} to the ignored bundler groups"
       end
+
+      desc "remove", "Remove a bundler group from the ignored bundler groups"
+      def remove(group)
+        die_on_error {
+          BundlerGroupManager.remove_ignored_group(group)
+        }
+        say "Removed #{group} from the ignored bundler groups"
+      end
     end
 
     class Main < Base
