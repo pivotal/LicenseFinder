@@ -4,7 +4,7 @@ module LicenseFinder
   module CLI
     describe Dependencies do
       describe "add" do
-        it "should add a dependency" do
+        it "adds a dependency" do
           DependencyManager.should_receive(:create_non_bundler).with("MIT", "js_dep", "1.2.3")
 
           silence_stdout do
@@ -20,7 +20,7 @@ module LicenseFinder
           end
         end
 
-        it "should have a -a option to approve the added dependency" do
+        it "has an -a option to approve the added dependency" do
           DependencyManager.should_receive(:create_non_bundler).with("MIT", "js_dep", "1.2.3")
           DependencyManager.should_receive(:approve!).with("js_dep")
 
@@ -31,7 +31,7 @@ module LicenseFinder
       end
 
       describe "remove" do
-        it "should remove a dependency" do
+        it "removes a dependency" do
           DependencyManager.should_receive(:destroy_non_bundler).with("js_dep")
           silence_stdout do
             subject.remove("js_dep")
@@ -42,7 +42,7 @@ module LicenseFinder
 
     describe IgnoredBundlerGroups do
       describe "list" do
-        it "should show the ignored groups in the standard output" do
+        it "shows the ignored groups in the standard output" do
           LicenseFinder.config.should_receive(:ignore_groups).and_return([])
 
           silence_stdout do
@@ -52,7 +52,7 @@ module LicenseFinder
       end
 
       describe "add" do
-        it "should add the specified group to the ignored groups list" do
+        it "adds the specified group to the ignored groups list" do
           BundlerGroupManager.should_receive(:add_ignored_group).with("test")
 
           silence_stdout do
@@ -64,7 +64,7 @@ module LicenseFinder
 
     describe Main do
       describe "default" do
-        it "should check for action items" do
+        it "checks for action items" do
           DependencyManager.should_receive(:sync_with_bundler)
           Dependency.stub(:unapproved) { [] }
           silence_stdout do
@@ -85,7 +85,7 @@ module LicenseFinder
       end
 
       describe "#license" do
-        it "should update the license on the requested gem" do
+        it "updates the license on the requested gem" do
           DependencyManager.should_receive(:license!).with("foo_gem", "foo")
 
           silence_stdout do
@@ -95,7 +95,7 @@ module LicenseFinder
       end
 
       describe "#approve" do
-        it "should approve the requested gem" do
+        it "approves the requested gem" do
           DependencyManager.should_receive(:approve!).with("foo")
 
           silence_stdout do
