@@ -50,6 +50,16 @@ module LicenseFinder
           end
         end
       end
+
+      describe "add" do
+        it "should add the specified group to the ignored groups list" do
+          BundlerGroupManager.should_receive(:add_ignored_group).with("test")
+
+          silence_stdout do
+            subject.add("test")
+          end
+        end
+      end
     end
 
     describe Main do

@@ -10,6 +10,7 @@ module LicenseFinder
   autoload :Bundle,               'license_finder/bundle'
   autoload :BundledGem,           'license_finder/bundled_gem'
   autoload :BundledGemSaver,      'license_finder/bundled_gem_saver'
+  autoload :BundlerGroupManager,  'license_finder/bundler_group_manager'
   autoload :CLI,                  'license_finder/cli'
   autoload :Configuration,        'license_finder/configuration'
   autoload :DependencyManager,    'license_finder/dependency_manager'

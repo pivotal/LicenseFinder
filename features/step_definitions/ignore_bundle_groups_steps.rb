@@ -4,8 +4,8 @@ Given(/^I have an app with license finder that depends on a GPL licensed gem in 
   @user.add_dependency_to_app 'gpl_gem', :license => 'GPL', :bundler_groups => 'test'
 end
 
-And(/^I ignore the test group$/) do
-  @user.configure_license_finder_bundler_ignore_groups('test')
+And(/^I add the test group to the ignored bundler groups$/) do
+  @user.execute_command('license_finder ignored_bundler_group add test')
 end
 
 Then(/^I should not see the GPL licensed gem in the output$/) do

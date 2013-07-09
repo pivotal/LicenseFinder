@@ -54,6 +54,14 @@ module LicenseFinder
           say group
         end
       end
+
+      desc "add", "Add a bundler group to be ignored"
+      def add(group)
+        die_on_error {
+          BundlerGroupManager.add_ignored_group(group)
+        }
+        say "Added #{group} to the ignored bundler groups"
+      end
     end
 
     class Main < Base
