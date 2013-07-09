@@ -10,6 +10,7 @@
   * Fix bug preventing manual approval of child dependencies (Issue #23)
   * Fix issue with database URI when the absolute path to the database file
     contains spaces.
+  * Upgrading from 0.7.2 no longer removes non-gem dependencies (Issue #20)
 
 === 0.8.1 / 2013-04-14
 
