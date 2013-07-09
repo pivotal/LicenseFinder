@@ -2,6 +2,11 @@
 
 Build the gem for both ruby and jruby (use a later version of each ruby, if desired)
 
+
+The first time you rvm install jruby, you may also have to bundle. This will require you to delete
+any existing Gemfile.lock in the directory.
+
+
 ```sh
 $ rvm use jruby-1.7.3-d19
 $ rake build
