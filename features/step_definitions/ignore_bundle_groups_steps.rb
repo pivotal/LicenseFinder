@@ -5,7 +5,7 @@ Given(/^I have an app with license finder that depends on a GPL licensed gem in 
 end
 
 And(/^I ignore the test group$/) do
-  @user.configure_license_finder_bundler_whitelist('test')
+  @user.configure_license_finder_bundler_ignore_groups('test')
 end
 
 Then(/^I should not see the GPL licensed gem in the output$/) do

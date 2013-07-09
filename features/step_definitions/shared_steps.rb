@@ -108,11 +108,11 @@ module DSL
       end
     end
 
-    def configure_license_finder_bundler_whitelist(whitelisted_groups=[])
-      whitelisted_groups = Array whitelisted_groups
+    def configure_license_finder_bundler_ignore_groups(ignored_groups=[])
+      ignored_groups = Array ignored_groups
       FileUtils.mkdir_p(config_path)
       File.open(File.join(config_path, "license_finder.yml"), "w") do |f|
-        f.write({'ignore_groups' => whitelisted_groups}.to_yaml)
+        f.write({'ignore_groups' => ignored_groups}.to_yaml)
       end
     end
 
