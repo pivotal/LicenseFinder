@@ -85,6 +85,29 @@ $ license_finder approve awesome_gpl_gem
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
+### Managing ignored Bundler groups
+
+Bundler groups can be added to an ignore list which will prevent LicenseFinder from evaluating their licenses.
+These groups can be managed with the `ignored_bundler_groups` command.
+
+To list currently ignored Bundler groups:
+
+```sh
+$ license_finder ignored_bundler_groups list
+```
+
+To add a group to the ignored Bundler groups:
+
+```sh
+$ license_finder ignored_bundler_groups add development
+```
+
+To remove a group from the ignored Bundler groups:
+
+```sh
+$ license_finder ignored_bundler_groups remove development
+```
+
 ### Managing non-Bundler dependencies
 
 license_finder can track dependencies that Bundler doesn't know about (JS libraries that don't
