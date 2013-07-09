@@ -13,42 +13,22 @@ module LicenseFinder
       describe "when the group is already ignored" do
         let(:ignore_groups) { ["test", "other_group"] }
 
-        it "should not create a duplicate entry" do
-          File.should_not_receive(:open)
+        it "does not create a duplicate entry" do
+          config.should_not_receive(:save_to_yaml)
 
           described_class.add_ignored_group("test")
         end
       end
 
       describe "when the group is not ignored" do
-        let(:ignore_groups) { ["other_group"] }
-        let(:whitelist) { ["my_gem"] }
-        let(:tmp_yml) { '.tmp.bundler_group_manager_spec.yml' }
+        let(:ignore_groups) { [] }
 
-        before do
-          Configuration.stub(:config_file_path).and_return(tmp_yml)
-          config.whitelist = whitelist
-        end
+        it "calls save_to_yaml on config" do
+          config.should_receive(:save_to_yaml)
 
-        after do
-          File.delete(tmp_yml)
-        end
-
-        it "writes the ignore groups yaml config file" do
           described_class.add_ignored_group("test")
 
-          yaml = YAML.load(File.read(tmp_yml))
-
-          yaml["ignore_groups"].should include("other_group")
-          yaml["ignore_groups"].should include("test")
-        end
-
-        it "persists the whitelist in the yaml config" do
-          described_class.add_ignored_group("test")
-
-          yaml = YAML.load(File.read(tmp_yml))
-
-          yaml["whitelist"].should include("my_gem")
+          config.ignore_groups.should include(:test)
         end
       end
     end

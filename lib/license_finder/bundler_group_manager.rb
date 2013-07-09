@@ -1,17 +1,12 @@
 module LicenseFinder
   module BundlerGroupManager
     def self.add_ignored_group(group)
-      ignored_groups = LicenseFinder.config.ignore_groups.map(&:to_s)
+      config = LicenseFinder.config
+      ignored_groups = config.ignore_groups.map(&:to_s)
       return if ignored_groups.include?(group)
 
-      whitelist = LicenseFinder.config.whitelist
-      ignored_groups << group
-      File.open(Configuration.config_file_path, 'w') do |file|
-        file.write({
-          'whitelist' => whitelist,
-          'ignore_groups' => ignored_groups
-        }.to_yaml)
-      end
+      config.ignore_groups << group.to_sym
+      config.save_to_yaml
     end
   end
 end

@@ -59,14 +59,34 @@ module LicenseFinder
       end
     end
 
-    describe "#ignore_groups" do
-      it "should default to an empty array" do
-        config.ignore_groups.should == []
+    describe "#save_to_yaml" do
+      let(:tmp_yml) { '.tmp.configuration_spec.yml' }
+
+      before do
+        Configuration.stub(:config_file_path).and_return(tmp_yml)
+        config.whitelist = ['my_gem']
+        config.ignore_groups = ['other_group', 'test']
       end
 
-      it "should always return symbolized versions of the ignore groups" do
-        config.ignore_groups = %w[test development]
-        config.ignore_groups.should == [:test, :development]
+      after do
+        File.delete(tmp_yml)
+      end
+
+      it "writes the whitelist to the yaml file" do
+        config.save_to_yaml
+
+        yaml = YAML.load(File.read(tmp_yml))
+
+        yaml["whitelist"].should include("my_gem")
+      end
+
+      it "writes the ignored bundler groups to the yaml file" do
+        config.save_to_yaml
+
+        yaml = YAML.load(File.read(tmp_yml))
+
+        yaml["ignore_groups"].should include("other_group")
+        yaml["ignore_groups"].should include("test")
       end
     end
   end

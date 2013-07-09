@@ -62,13 +62,18 @@ module LicenseFinder
       File.join(dependencies_dir, "dependencies.html")
     end
 
-    def ignore_groups
-      @ignore_groups.map &:to_sym
-    end
-
     def whitelisted?(license_name)
       license = License.find_by_name(license_name) || license_name
       whitelisted_licenses.include? license
+    end
+
+    def save_to_yaml
+      File.open(Configuration.config_file_path, 'w') do |file|
+        file.write({
+          'whitelist' => @whitelist,
+          'ignore_groups' => @ignore_groups
+        }.to_yaml)
+      end
     end
 
     private
