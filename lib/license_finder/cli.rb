@@ -44,6 +44,18 @@ module LicenseFinder
       end
     end
 
+    class Whitelist < Base
+      desc "list", "List all the whitelisted licenses"
+      def list
+        whitelist = LicenseFinder.config.whitelist
+
+        say "Whitelisted Licenses"
+        whitelist.each do |license|
+          say license
+        end
+      end
+    end
+
     class IgnoredBundlerGroups < Base
       desc "list", "List all the ignored bundler groups"
       def list
@@ -125,6 +137,7 @@ module LicenseFinder
 
       subcommand "dependencies", Dependencies, "manage non-Bundler dependencies"
       subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "manage ignored bundler groups"
+      subcommand "whitelist", Whitelist, "manage whitelisted licenses"
 
       private
 

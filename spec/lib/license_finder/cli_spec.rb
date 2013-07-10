@@ -40,6 +40,18 @@ module LicenseFinder
       end
     end
 
+    describe Whitelist do
+      describe "list" do
+        it "shows the whitelist of licenses" do
+          LicenseFinder.config.should_receive(:whitelist).and_return([])
+
+          silence_stdout do
+            subject.list
+          end
+        end
+      end
+    end
+
     describe IgnoredBundlerGroups do
       describe "list" do
         it "shows the ignored groups in the standard output" do

@@ -12,3 +12,11 @@ end
 Then(/^I should not see a MIT licensed gem unapproved$/) do
   @output.should_not include 'mit_gem'
 end
+
+When(/^I view the whitelisted licenses from the command line$/) do
+  @output = @user.execute_command 'license_finder whitelist list'
+end
+
+Then(/^I should see Expat in the output$/) do
+  @output.should include 'Expat'
+end
