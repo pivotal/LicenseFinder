@@ -34,7 +34,7 @@ module LicenseFinder
     end
 
     def included_groups
-      definition.groups - ignore_groups
+      definition.groups - ignore_groups.map(&:to_sym)
     end
 
     def gemfile_path

@@ -28,7 +28,7 @@ module LicenseFinder
 
           described_class.add_ignored_group("test")
 
-          config.ignore_groups.should include(:test)
+          config.ignore_groups.should include("test")
         end
       end
     end
@@ -52,7 +52,7 @@ module LicenseFinder
 
           described_class.remove_ignored_group("test")
 
-          config.ignore_groups.should_not include(:test)
+          config.ignore_groups.should_not include("test")
         end
       end
     end

@@ -41,7 +41,7 @@ module LicenseFinder
       config = self.class.config_hash(config)
 
       @whitelist = config['whitelist'] || []
-      @ignore_groups = (config["ignore_groups"] || []).map(&:to_sym)
+      @ignore_groups = (config["ignore_groups"] || [])
       @dependencies_dir = config['dependencies_file_dir'] || './doc/'
       FileUtils.mkdir_p(@dependencies_dir)
     end

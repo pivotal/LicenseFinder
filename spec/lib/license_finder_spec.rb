@@ -49,7 +49,7 @@ describe LicenseFinder do
 
     describe "#ignore_groups" do
       it "should load a ignore_groups list from license_finder.yml" do
-        LicenseFinder.config.ignore_groups.should == [:test, :development]
+        LicenseFinder.config.ignore_groups.should == ["test", "development"]
       end
 
       it "should load an empty ignore_groups list from license_finder.yml when there are no ignore groups" do
