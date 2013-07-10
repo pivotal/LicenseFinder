@@ -49,7 +49,7 @@ module LicenseFinder
       def list
         whitelist = LicenseFinder.config.whitelist
 
-        say "Whitelisted Licenses"
+        say "Whitelisted Licenses:", :blue
         whitelist.each do |license|
           say license
         end
@@ -69,7 +69,7 @@ module LicenseFinder
       def list
         ignored = LicenseFinder.config.ignore_groups
 
-        say "Ignored Bundler Groups:", :red
+        say "Ignored Bundler Groups:", :blue
         ignored.each do |group|
           say group
         end
