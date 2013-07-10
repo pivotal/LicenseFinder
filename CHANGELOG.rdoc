@@ -1,3 +1,9 @@
+=== TBD
+
+* Features
+
+  * Can maintain whitelisted licenses from command line
+
 === 0.8.2 / 2012-07-09
 
 * Features
