@@ -1,9 +1,10 @@
-=== TBD
+=== 0.8.2 / 2012-07-09
 
 * Features
 
   * Switch to thor for CLI, to support future additions to CLI
   * Restore ability to manage (add/remove) dependencies that Bundler can't find
+  * Can maintain ignored bundler groups from command line
 
 * Bugfixes
 
