@@ -13,3 +13,10 @@ Feature: Whitelist licenses
     When I whitelist the Expat license from the command line
     And I view the whitelisted licenses from the command line
     Then I should see Expat in the output
+
+  Scenario: Viewing the whitelisted licenses from command line
+    Given I have an app with license finder
+    When I whitelist the Expat license from the command line
+    And I remove Expat from the whitelist using the command line
+    And I view the whitelisted licenses from the command line
+    Then I should not see Expat in the output

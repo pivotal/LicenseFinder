@@ -60,6 +60,16 @@ module LicenseFinder
           end
         end
       end
+
+      describe "remove" do
+        it "removes the specified license from the whitelist" do
+          WhitelistManager.should_receive(:remove_license).with("test")
+
+          silence_stdout do
+            subject.remove("test")
+          end
+        end
+      end
     end
 
     describe IgnoredBundlerGroups do

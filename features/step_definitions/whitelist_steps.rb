@@ -17,6 +17,14 @@ When(/^I view the whitelisted licenses from the command line$/) do
   @output = @user.execute_command 'license_finder whitelist list'
 end
 
+When(/^I remove Expat from the whitelist using the command line$/) do
+  @output = @user.execute_command 'license_finder whitelist remove Expat'
+end
+
 Then(/^I should see Expat in the output$/) do
   @output.should include 'Expat'
+end
+
+Then(/^I should not see Expat in the output$/) do
+  @output.should_not include 'Expat'
 end

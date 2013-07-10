@@ -102,6 +102,12 @@ To add a license to the whitelist:
 $ license_finder whitelist add MIT
 ```
 
+To remove a license from the whitelist:
+
+```sh
+$ license_finder whitelist remove MIT
+```
+
 ### Managing ignored Bundler groups
 
 Bundler groups can be added to an ignore list which will prevent LicenseFinder from evaluating their licenses.
