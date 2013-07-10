@@ -54,6 +54,14 @@ module LicenseFinder
           say license
         end
       end
+
+      desc "add", "Add a license to the whitelist"
+      def add(license)
+        die_on_error {
+          WhitelistManager.add_license(license)
+        }
+        say "Added #{license} to the license whitelist"
+      end
     end
 
     class IgnoredBundlerGroups < Base

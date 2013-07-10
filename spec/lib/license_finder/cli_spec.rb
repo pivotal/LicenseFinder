@@ -50,6 +50,16 @@ module LicenseFinder
           end
         end
       end
+
+      describe "add" do
+        it "adds the specified license to the whitelist" do
+          WhitelistManager.should_receive(:add_license).with("test")
+
+          silence_stdout do
+            subject.add("test")
+          end
+        end
+      end
     end
 
     describe IgnoredBundlerGroups do

@@ -19,6 +19,7 @@ module LicenseFinder
   autoload :Platform,             'license_finder/platform'
   autoload :PossibleLicenseFile,  'license_finder/possible_license_file'
   autoload :PossibleLicenseFiles, 'license_finder/possible_license_files'
+  autoload :WhitelistManager,     'license_finder/whitelist_manager'
   autoload :YmlToSql,             'license_finder/yml_to_sql'
 
   autoload :Approval,     'license_finder/tables/approval'
