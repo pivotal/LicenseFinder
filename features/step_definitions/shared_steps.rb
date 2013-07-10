@@ -14,8 +14,8 @@ When(/^I run license_finder$/) do
   @output = @user.execute_command "license_finder -q"
 end
 
-When(/^I whitelist MIT and 'other' licenses$/) do
-  @user.configure_license_finder_whitelist ["MIT","other"]
+When(/^I whitelist MIT and 'other' and New BSD licenses$/) do
+  @user.configure_license_finder_whitelist ["MIT","other","New BSD"]
   @output = @user.execute_command "license_finder -q"
 end
 
