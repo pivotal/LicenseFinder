@@ -58,7 +58,8 @@ module LicenseFinder
       desc "add", "Add a license to the whitelist"
       def add(license)
         die_on_error {
-          WhitelistManager.add_license(license)
+          LicenseFinder.config.whitelist.push(license)
+          LicenseFinder.config.save
         }
         say "Added #{license} to the license whitelist"
       end
@@ -66,7 +67,8 @@ module LicenseFinder
       desc "remove", "Remove a license from the whitelist"
       def remove(license)
         die_on_error {
-          WhitelistManager.remove_license(license)
+          LicenseFinder.config.whitelist.delete(license)
+          LicenseFinder.config.save
         }
         say "Removed #{license} from the license whitelist"
       end
@@ -86,7 +88,8 @@ module LicenseFinder
       desc "add", "Add a bundler group to be ignored"
       def add(group)
         die_on_error {
-          BundlerGroupManager.add_ignored_group(group)
+          LicenseFinder.config.ignore_groups.push(group)
+          LicenseFinder.config.save
         }
         say "Added #{group} to the ignored bundler groups"
       end
@@ -94,7 +97,8 @@ module LicenseFinder
       desc "remove", "Remove a bundler group from the ignored bundler groups"
       def remove(group)
         die_on_error {
-          BundlerGroupManager.remove_ignored_group(group)
+          LicenseFinder.config.ignore_groups.delete(group)
+          LicenseFinder.config.save
         }
         say "Removed #{group} from the ignored bundler groups"
       end

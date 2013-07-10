@@ -10,7 +10,6 @@ module LicenseFinder
   autoload :Bundle,               'license_finder/bundle'
   autoload :BundledGem,           'license_finder/bundled_gem'
   autoload :BundledGemSaver,      'license_finder/bundled_gem_saver'
-  autoload :BundlerGroupManager,  'license_finder/bundler_group_manager'
   autoload :CLI,                  'license_finder/cli'
   autoload :Configuration,        'license_finder/configuration'
   autoload :DependencyManager,    'license_finder/dependency_manager'
@@ -19,7 +18,6 @@ module LicenseFinder
   autoload :Platform,             'license_finder/platform'
   autoload :PossibleLicenseFile,  'license_finder/possible_license_file'
   autoload :PossibleLicenseFiles, 'license_finder/possible_license_files'
-  autoload :WhitelistManager,     'license_finder/whitelist_manager'
   autoload :YmlToSql,             'license_finder/yml_to_sql'
 
   autoload :Approval,     'license_finder/tables/approval'

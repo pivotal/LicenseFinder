@@ -67,11 +67,11 @@ module LicenseFinder
       whitelisted_licenses.include? license
     end
 
-    def save_to_yaml
+    def save
       File.open(Configuration.config_file_path, 'w') do |file|
         file.write({
-          'whitelist' => @whitelist,
-          'ignore_groups' => @ignore_groups
+          'whitelist' => @whitelist.uniq,
+          'ignore_groups' => @ignore_groups.uniq
         }.to_yaml)
       end
     end

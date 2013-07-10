@@ -41,9 +41,11 @@ module LicenseFinder
     end
 
     describe Whitelist do
+      let(:config) { LicenseFinder.config }
+
       describe "list" do
         it "shows the whitelist of licenses" do
-          LicenseFinder.config.should_receive(:whitelist).and_return([])
+          config.should_receive(:whitelist).and_return([])
 
           silence_stdout do
             subject.list
@@ -53,7 +55,8 @@ module LicenseFinder
 
       describe "add" do
         it "adds the specified license to the whitelist" do
-          WhitelistManager.should_receive(:add_license).with("test")
+          config.whitelist.should_receive(:push).with("test")
+          config.should_receive(:save)
 
           silence_stdout do
             subject.add("test")
@@ -63,7 +66,8 @@ module LicenseFinder
 
       describe "remove" do
         it "removes the specified license from the whitelist" do
-          WhitelistManager.should_receive(:remove_license).with("test")
+          config.should_receive(:save)
+          config.whitelist.should_receive(:delete).with("test")
 
           silence_stdout do
             subject.remove("test")
@@ -73,9 +77,11 @@ module LicenseFinder
     end
 
     describe IgnoredBundlerGroups do
+      let(:config) { LicenseFinder.config }
+
       describe "list" do
         it "shows the ignored groups in the standard output" do
-          LicenseFinder.config.should_receive(:ignore_groups).and_return([])
+          config.should_receive(:ignore_groups).and_return([])
 
           silence_stdout do
             subject.list
@@ -85,7 +91,8 @@ module LicenseFinder
 
       describe "add" do
         it "adds the specified group to the ignored groups list" do
-          BundlerGroupManager.should_receive(:add_ignored_group).with("test")
+          config.ignore_groups.should_receive(:push).with("test")
+          config.should_receive(:save)
 
           silence_stdout do
             subject.add("test")
@@ -95,7 +102,8 @@ module LicenseFinder
 
       describe "remove" do
         it "removes the specified group from the ignored groups list" do
-          BundlerGroupManager.should_receive(:remove_ignored_group).with("test")
+          config.ignore_groups.should_receive(:delete).with("test")
+          config.should_receive(:save)
 
           silence_stdout do
             subject.remove("test")

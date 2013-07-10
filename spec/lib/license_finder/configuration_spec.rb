@@ -59,7 +59,7 @@ module LicenseFinder
       end
     end
 
-    describe "#save_to_yaml" do
+    describe "#save" do
       let(:tmp_yml) { '.tmp.configuration_spec.yml' }
 
       before do
@@ -73,7 +73,7 @@ module LicenseFinder
       end
 
       it "writes the whitelist to the yaml file" do
-        config.save_to_yaml
+        config.save
 
         yaml = YAML.load(File.read(tmp_yml))
 
@@ -81,12 +81,24 @@ module LicenseFinder
       end
 
       it "writes the ignored bundler groups to the yaml file" do
-        config.save_to_yaml
+        config.save
 
         yaml = YAML.load(File.read(tmp_yml))
 
         yaml["ignore_groups"].should include("other_group")
         yaml["ignore_groups"].should include("test")
+      end
+
+      it "doesn't write duplicate entries" do
+        config.whitelist << 'my_gem'
+        config.ignore_groups << 'test'
+
+        config.save
+
+        yaml = YAML.load(File.read(tmp_yml))
+
+        yaml["whitelist"].count("my_gem").should == 1
+        yaml["ignore_groups"].count("test").should == 1
       end
     end
   end
