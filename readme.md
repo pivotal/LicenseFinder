@@ -85,6 +85,23 @@ $ license_finder approve awesome_gpl_gem
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
+### Managing license whitelist
+
+Licenses can be added to a whitelist that tells LicenseFinder to automatically approve dependencies using the specified licenses.
+These licenses can be managed with the `whitelist` command.
+
+To list licenses currently on the whitelist:
+
+```sh
+$ license_finder whitelist list
+```
+
+To add a license to the whitelist:
+
+```sh
+$ license_finder whitelist add MIT
+```
+
 ### Managing ignored Bundler groups
 
 Bundler groups can be added to an ignore list which will prevent LicenseFinder from evaluating their licenses.
