@@ -79,8 +79,11 @@ module LicenseFinder
 
     def apply_better_license
       if dependency.license && !dependency.license.manual && determine_license != 'other'
-        dependency.license.name = determine_license
-        dependency.license.save
+        new_name = determine_license
+        unless new_name == dependency.license.name
+          dependency.license.name = new_name
+          dependency.license.save
+        end
       end
     end
   end

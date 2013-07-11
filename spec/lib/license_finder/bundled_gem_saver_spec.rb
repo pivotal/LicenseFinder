@@ -178,6 +178,8 @@ module LicenseFinder
           end
 
           context "license does not change" do
+            let(:bundled_gem_saver) { described_class.find_or_create_by_name('spec_name', bundled_gem) }
+
             before do
               old_copy.license = LicenseAlias.create(name: 'MIT')
               old_copy.approval = Approval.create(state: false)
@@ -186,8 +188,14 @@ module LicenseFinder
             end
 
             it "should not change the license or approval" do
-              subject.should_not be_approved
-              subject.license.name.should == "MIT"
+              dependency = bundled_gem_saver.save
+              dependency.should_not be_approved
+              dependency.license.name.should == "MIT"
+            end
+
+            it "should not save the license" do
+              bundled_gem_saver.dependency.license.should_not_receive(:save)
+              bundled_gem_saver.save
             end
           end
         end
