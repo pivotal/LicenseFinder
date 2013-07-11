@@ -3,6 +3,7 @@
 * Features
 
   * Can maintain whitelisted licenses from command line
+  * Improve New BSD license detection
 
 === 0.8.2 / 2012-07-09
 
