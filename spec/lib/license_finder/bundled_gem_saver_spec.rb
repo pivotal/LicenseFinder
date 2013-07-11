@@ -62,109 +62,133 @@ module LicenseFinder
       context "when the dependency already existed" do
         before { LicenseFinder.stub(:current_gems).and_return([double(:gemspec, name: "foo 0.0")]) }
 
-        let!(:old_copy) do
-          dep = Dependency.create(
-            name: 'spec_name',
-            version: '0.1.2',
-            summary: 'old summary',
-            description: 'old desription',
-            homepage: 'old homepage'
-          )
-          dep.approval = Approval.create
-          dep
-        end
-
-        it "merges in the latest data" do
-          subject.id.should == old_copy.id
-          subject.name.should == old_copy.name
-          subject.version.should == "2.1.3"
-          subject.summary.should == "summary"
-          subject.description.should == "description"
-          subject.homepage.should == "homepage"
-        end
-
-        it "keeps a manually assigned license" do
-          old_copy.license = LicenseAlias.create(name: 'foo', manual: true)
-          old_copy.save
-          subject.license.name.should == 'foo'
-        end
-
-        it "keeps approval" do
-          old_copy.approval = Approval.create(state: true)
-          old_copy.save
-          subject.approval.state.should == true
-        end
-
-        it "ensures correct children are associated" do
-          old_copy.add_child Dependency.new(name: 'bob')
-          old_copy.add_child Dependency.new(name: 'joe')
-          old_copy.children.each(&:save)
-          subject.children.map(&:name).should =~ ['foo']
-        end
-
-        context "with a bundler dependency" do
-          let(:bundled_gem) { BundledGem.new(gemspec, double(:bundler_dependency, groups: %w[1 2 3]))}
-
-          before do
-            old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'a')
-            old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'b')
+        context "the values have not changed" do
+          let!(:original_dependency) do
+            license = LicenseAlias.create(
+              name: 'other'
+            )
+            Dependency.create(
+              name: 'spec_name',
+              version: '2.1.3',
+              summary: 'summary',
+              description: 'description',
+              homepage: 'homepage',
+              license: license
+            )
           end
+          let(:bundled_gem_saver) { described_class.find_or_create_by_name('spec_name', bundled_gem) }
 
-          it "ensures the correct bundler groups are associated" do
-            subject.bundler_groups.map(&:name).should =~ %w[1 2 3]
+          it "does not save the dependency" do
+            bundled_gem_saver.dependency.should_not_receive(:save)
+            bundled_gem_saver.save
           end
         end
 
-        context "license changes to something other than 'other'" do
-          before do
-            old_copy.license = LicenseAlias.create(name: 'other')
+        context "the values have changed" do
+          let!(:old_copy) do
+            dep = Dependency.create(
+              name: 'spec_name',
+              version: '0.1.2',
+              summary: 'old summary',
+              description: 'old desription',
+              homepage: 'old homepage'
+            )
+            dep.approval = Approval.create
+            dep
+          end
+
+          it "merges in the latest data" do
+            subject.id.should == old_copy.id
+            subject.name.should == old_copy.name
+            subject.version.should == "2.1.3"
+            subject.summary.should == "summary"
+            subject.description.should == "description"
+            subject.homepage.should == "homepage"
+          end
+
+          it "keeps a manually assigned license" do
+            old_copy.license = LicenseAlias.create(name: 'foo', manual: true)
             old_copy.save
-            gemspec.license = "new license"
+            subject.license.name.should == 'foo'
           end
 
-          context "new license is whitelisted" do
-            before { LicenseFinder.config.stub(:whitelist).and_return [gemspec.license] }
+          it "keeps approval" do
+            old_copy.approval = Approval.create(state: true)
+            old_copy.save
+            subject.approval.state.should == true
+          end
 
-            it "should set the approval to true" do
-              subject.should be_approved
+          it "ensures correct children are associated" do
+            old_copy.add_child Dependency.new(name: 'bob')
+            old_copy.add_child Dependency.new(name: 'joe')
+            old_copy.children.each(&:save)
+            subject.children.map(&:name).should =~ ['foo']
+          end
+
+          context "with a bundler dependency" do
+            let(:bundled_gem) { BundledGem.new(gemspec, double(:bundler_dependency, groups: %w[1 2 3]))}
+
+            before do
+              old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'a')
+              old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'b')
+            end
+
+            it "ensures the correct bundler groups are associated" do
+              subject.bundler_groups.map(&:name).should =~ %w[1 2 3]
             end
           end
 
-          context "new license is not whitelisted" do
-            it "should set the approval to false" do
+          context "license changes to something other than 'other'" do
+            before do
+              old_copy.license = LicenseAlias.create(name: 'other')
+              old_copy.save
+              gemspec.license = "new license"
+            end
+
+            context "new license is whitelisted" do
+              before { LicenseFinder.config.stub(:whitelist).and_return [gemspec.license] }
+
+              it "should set the approval to true" do
+                subject.should be_approved
+              end
+            end
+
+            context "new license is not whitelisted" do
+              it "should set the approval to false" do
+                subject.should_not be_approved
+              end
+            end
+          end
+
+          context "license changes to unknown (i.e., 'other')" do
+            before do
+              old_copy.license = LicenseAlias.create(name: 'MIT')
+              old_copy.approval = Approval.create(state: false)
+              old_copy.save
+              gemspec.license = "other"
+            end
+
+            it "should not change the license" do
+              subject.license.name.should == 'MIT'
+            end
+
+            it "should not change the approval" do
               subject.should_not be_approved
             end
           end
-        end
 
-        context "license changes to unknown (i.e., 'other')" do
-          before do
-            old_copy.license = LicenseAlias.create(name: 'MIT')
-            old_copy.approval = Approval.create(state: false)
-            old_copy.save
-            gemspec.license = "other"
-          end
+          context "license does not change" do
+            before do
+              old_copy.license = LicenseAlias.create(name: 'MIT')
+              old_copy.approval = Approval.create(state: false)
+              old_copy.save
+              gemspec.license = "MIT"
+            end
 
-          it "should not change the license" do
-            subject.license.name.should == 'MIT'
-          end
-
-          it "should not change the approval" do
-            subject.should_not be_approved
-          end
-        end
-
-        context "license does not change" do
-          before do
-            old_copy.license = LicenseAlias.create(name: 'MIT')
-            old_copy.approval = Approval.create(state: false)
-            old_copy.save
-            gemspec.license = "MIT"
-          end
-
-          it "should not change the license or approval" do
-            subject.should_not be_approved
-            subject.license.name.should == "MIT"
+            it "should not change the license or approval" do
+              subject.should_not be_approved
+              subject.license.name.should == "MIT"
+            end
           end
         end
       end

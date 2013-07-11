@@ -4,6 +4,8 @@ module LicenseFinder
     def_delegators :spec, :name, :version, :summary, :description, :homepage
     def_delegators :bundled_gem, :bundler_dependency, :determine_license, :children
 
+    attr_reader :dependency, :bundled_gem
+
     def self.find_or_create_by_name(name, bundled_gem)
       dependency = Dependency.named(name)
       new(dependency, bundled_gem)
@@ -26,19 +28,27 @@ module LicenseFinder
 
     private
 
-    attr_reader :dependency, :bundled_gem
-
     def spec
       bundled_gem.spec
     end
 
     def apply_dependency_definition
-      dependency.version = version.to_s
-      dependency.summary = summary
-      dependency.description = description
-      dependency.homepage = homepage
-      dependency.license ||= LicenseAlias.create(name: determine_license)
-      dependency.save
+      if values_have_changed?
+        dependency.version = version.to_s
+        dependency.summary = summary
+        dependency.description = description
+        dependency.homepage = homepage
+        dependency.license ||= LicenseAlias.create(name: determine_license)
+        dependency.save
+      end
+    end
+
+    def values_have_changed?
+      return dependency.version != version.to_s ||
+        dependency.summary != summary ||
+        dependency.description != description ||
+        dependency.homepage != homepage ||
+        dependency.license.name != determine_license
     end
 
     def refresh_bundler_groups
