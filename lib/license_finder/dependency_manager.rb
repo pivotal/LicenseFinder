@@ -1,9 +1,8 @@
 module LicenseFinder
   module DependencyManager
     def self.sync_with_bundler
-      current_gems = Bundle.current_gems
       modifying {
-        current_dependencies = current_gems.map(&:save_as_dependency)
+        current_dependencies = LicenseFinder.current_gems.map(&:save_as_dependency)
         Dependency.bundler.obsolete(current_dependencies).each(&:destroy)
       }
     end

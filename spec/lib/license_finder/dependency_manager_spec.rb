@@ -22,7 +22,7 @@ module LicenseFinder
           double(:gem1, save_as_dependency: cur1),
           double(:gem2, save_as_dependency: cur2)
         ]
-        Bundle.stub(:current_gems) { current_gems }
+        LicenseFinder.stub(:current_gems) { current_gems }
 
         described_class.sync_with_bundler
         Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)

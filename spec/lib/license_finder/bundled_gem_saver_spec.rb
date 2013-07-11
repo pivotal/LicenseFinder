@@ -28,9 +28,22 @@ module LicenseFinder
           subject.homepage.should == "homepage"
         end
 
-        it "associates children" do
-          subject.children.map(&:name).should == ['foo']
-          subject.children.each { |child| child.approval.should be }
+        describe "associating children" do
+          context "when the child is in Bundler's current gems" do
+            before { LicenseFinder.stub(:current_gems).and_return([double(:gemspec, name: "foo 0.0")]) }
+
+            it "associates children" do
+              subject.children.map(&:name).should == ['foo']
+              subject.children.each { |child| child.id.should_not be_nil }
+            end
+          end
+
+          context "when the child is not in Bundler's current gems" do
+            it "does not associates children" do
+              subject.children.map(&:name).should == []
+              subject.children.each { |child| child.id.should be_nil }
+            end
+          end
         end
 
         it "marks depenency as unapproved by default" do
@@ -47,6 +60,8 @@ module LicenseFinder
       end
 
       context "when the dependency already existed" do
+        before { LicenseFinder.stub(:current_gems).and_return([double(:gemspec, name: "foo 0.0")]) }
+
         let!(:old_copy) do
           dep = Dependency.create(
             name: 'spec_name',

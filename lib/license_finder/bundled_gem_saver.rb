@@ -53,8 +53,18 @@ module LicenseFinder
     def refresh_children
       dependency.remove_all_children
       children.each do |child|
-        dependency.add_child Dependency.named(child)
+        if child_required?(child)
+          dependency.add_child Dependency.named(child)
+        end
       end
+    end
+
+    def child_required?(child)
+      current_gem_names.include?(child)
+    end
+
+    def current_gem_names
+      @current_gem_names ||= LicenseFinder.current_gems.map { |gem| gem.name.split(" ")[0] }
     end
 
     def apply_better_license

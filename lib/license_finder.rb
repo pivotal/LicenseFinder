@@ -34,6 +34,10 @@ module LicenseFinder
     @config ||= Configuration.ensure_default
   end
 
+  def self.current_gems
+    @current_gems ||= Bundle.current_gems
+  end
+
   def self.load_rake_tasks
     load 'tasks/license_finder.rake'
   end
