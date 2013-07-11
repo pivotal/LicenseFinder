@@ -16,7 +16,7 @@ module LicenseFinder
 
     describe "#save" do
       let(:bundled_gem) { BundledGem.new(gemspec) }
-      subject { described_class.find_or_initialize_by_name('spec_name', bundled_gem).save }
+      subject { described_class.find_or_create_by_name('spec_name', bundled_gem).save }
 
       context "when the dependency is new" do
         it "persists gem data" do

@@ -4,7 +4,7 @@ module LicenseFinder
     def_delegators :spec, :name, :version, :summary, :description, :homepage
     def_delegators :bundled_gem, :bundler_dependency, :determine_license, :children
 
-    def self.find_or_initialize_by_name(name, bundled_gem)
+    def self.find_or_create_by_name(name, bundled_gem)
       dependency = Dependency.named(name)
       new(dependency, bundled_gem)
     end

@@ -42,7 +42,7 @@ module LicenseFinder
     end
 
     def save_as_dependency
-      BundledGemSaver.find_or_initialize_by_name(@spec.name, self).save
+      BundledGemSaver.find_or_create_by_name(@spec.name, self).save
     end
   end
 end
