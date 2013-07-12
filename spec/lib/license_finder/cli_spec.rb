@@ -20,7 +20,7 @@ module LicenseFinder
           end
         end
 
-        it "has an -a option to approve the added dependency" do
+        it "has an --approve option to approve the added dependency" do
           DependencyManager.should_receive(:create_non_bundler).with("MIT", "js_dep", "1.2.3")
           DependencyManager.should_receive(:approve!).with("js_dep")
 

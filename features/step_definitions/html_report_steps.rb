@@ -25,7 +25,7 @@ end
 
 When(/^I whitelist the MIT license$/) do
   @user.configure_license_finder_whitelist ["MIT"]
-  @user.execute_command "license_finder -q"
+  @user.execute_command "license_finder --quiet"
 end
 
 Then(/^I should see my specific gem details listed in the html$/) do

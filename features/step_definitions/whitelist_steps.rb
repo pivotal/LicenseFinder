@@ -27,7 +27,7 @@ When(/^I remove Expat from the whitelist$/) do
 end
 
 Then(/^I should not see a MIT licensed gem unapproved$/) do
-  @output = @user.execute_command 'license_finder -q'
+  @output = @user.execute_command 'license_finder --quiet'
   @output.should_not include 'mit_gem'
 end
 
@@ -40,6 +40,6 @@ Then(/^I should not see Expat in the output$/) do
 end
 
 Then(/^I should not see a BSD licensed gem unapproved$/) do
-  @output = @user.execute_command 'license_finder -q'
+  @output = @user.execute_command 'license_finder --quiet'
   @output.should_not include 'bsd_gem'
 end

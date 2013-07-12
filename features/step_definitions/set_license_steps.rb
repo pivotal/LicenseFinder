@@ -6,9 +6,9 @@ Given(/^I have an app with license finder that depends on an other licensed gem$
 end
 
 When(/^I set that gems license to MIT from the command line$/) do
-  @output = @user.execute_command 'license_finder -q'
+  @output = @user.execute_command 'license_finder --quiet'
   @output = @user.execute_command 'license_finder license MIT other_gem'
-  @output = @user.execute_command 'license_finder -q'
+  @output = @user.execute_command 'license_finder --quiet'
 end
 
 Then(/^I should see that other gems license set to MIT$/) do

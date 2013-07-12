@@ -4,7 +4,7 @@ Given /^I have a rails app(?:lication)? with license finder$/ do
 end
 
 When(/^I run rake license_finder$/) do
-  @output = @user.execute_command "rake license_finder -q"
+  @output = @user.execute_command "rake license_finder --quiet"
 end
 
 Then(/^I should see a normal output$/) do
