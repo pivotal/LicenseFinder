@@ -3,6 +3,12 @@ require 'thor'
 module LicenseFinder
   module CLI
     class Base < Thor
+      # Hack to override the help message produced by Thor.
+      # https://github.com/wycats/thor/issues/261#issuecomment-16880836
+      def self.banner(command, namespace = nil, subcommand = nil)
+        "#{basename} #{name.split("::").last.downcase} #{command.usage}"
+      end
+
       def self.subcommand(namespace, klass, namespace_description)
         description = "#{namespace} [#{(klass.tasks.keys - ["help"]).join("|")}]"
         desc description, "#{namespace_description} - see `license_finder #{namespace} help` for more information"
