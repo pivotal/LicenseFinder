@@ -105,8 +105,8 @@ module LicenseFinder
     end
 
     class Main < Base
-      option :quiet, type: :boolean, aliases: :q
-      desc "rescan", "Find new dependencies."
+      option :quiet, type: :boolean, desc: "silences loading output"
+      desc "rescan", "Find new dependencies. (Default action)"
       def rescan
         die_on_error {
           spinner {

@@ -23,7 +23,7 @@ License finder will generate reports of action items - i.e., dependencies that d
 $ license_finder
 ```
 
-(Note) If you wish to run license_finder without the progress spinner use the -q or --quiet option.
+(Note) If you wish to run license_finder without the progress spinner use the --quiet option.
 
 On a brand new Rails project, you could expect `license_finder` to output something like the following
 (assuming you whitelisted the MIT license -- see [Configuration](#configuration)):
