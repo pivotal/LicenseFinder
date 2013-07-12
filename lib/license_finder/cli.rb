@@ -26,7 +26,7 @@ module LicenseFinder
     end
 
     class Dependencies < Base
-      option :approve, type: :boolean, aliases: :a
+      option :approve, type: :boolean, desc: "Approve the added dependency"
       desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler"
       def add(license, name, version = nil)
         die_on_error {
