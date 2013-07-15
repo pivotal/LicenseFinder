@@ -22,6 +22,14 @@ Given(/^I have a project that depends on mime\-types with a manual license type$
   @output.should =~ /mime-types.*Ruby/
 end
 
+When(/^I run license_finder help on a specific command$/) do
+  @output = @user.execute_command "license_finder dependencies help add"
+end
+
+When(/^I run license_finder help$/) do
+  @output = @user.execute_command "license_finder help"
+end
+
 Then(/^it creates a config directory with the license_finder config$/) do
   File.should be_exists(@user.app_path('config'))
   text = "---\nwhitelist:\n#- MIT\n#- Apache 2.0\nignore_groups:\n#- test\n#- development\ndependencies_file_dir: './doc/'\n"
@@ -42,4 +50,12 @@ end
 
 Then(/^the mime\-types license remains set with my manual license type$/) do
   @output.should =~ /mime-types.*Ruby/
+end
+
+Then(/^I should see the correct subcommand usage instructions$/) do
+  @output.should include 'license_finder dependencies add LICENSE'
+end
+
+Then(/^I should the correct default usage instructions$/) do
+  @output.should include 'license_finder help [COMMAND]'
 end

@@ -24,3 +24,13 @@ Feature: License Finder command line executable
     Given I have a project that depends on mime-types with a manual license type
     When I run license_finder
     Then the mime-types license remains set with my manual license type
+
+  Scenario: Viewing help for license_finder subcommand
+    Given I have an app with license finder
+    When I run license_finder help on a specific command
+    Then I should see the correct subcommand usage instructions
+
+  Scenario: Viewing help for license_finder default
+    Given I have an app with license finder
+    When I run license_finder help
+    Then I should the correct default usage instructions

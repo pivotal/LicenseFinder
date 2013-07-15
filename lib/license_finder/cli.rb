@@ -3,12 +3,6 @@ require 'thor'
 module LicenseFinder
   module CLI
     class Base < Thor
-      # Hack to override the help message produced by Thor.
-      # https://github.com/wycats/thor/issues/261#issuecomment-16880836
-      def self.banner(command, namespace = nil, subcommand = nil)
-        "#{basename} #{name.split("::").last.downcase} #{command.usage}"
-      end
-
       def self.subcommand(namespace, klass, namespace_description)
         description = "#{namespace} [#{(klass.tasks.keys - ["help"]).join("|")}]"
         desc description, "#{namespace_description} - see `license_finder #{namespace} help` for more information"
@@ -25,7 +19,16 @@ module LicenseFinder
       end
     end
 
-    class Dependencies < Base
+    # Thor fix for `license_finder <subcommand> help <action>`
+    class Subcommand < Base
+      # Hack to override the help message produced by Thor.
+      # https://github.com/wycats/thor/issues/261#issuecomment-16880836
+      def self.banner(command, namespace = nil, subcommand = nil)
+        "#{basename} #{name.split("::").last.downcase} #{command.usage}"
+      end
+    end
+
+    class Dependencies < Subcommand
       option :approve, type: :boolean, desc: "Approve the added dependency"
       desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler"
       def add(license, name, version = nil)
@@ -50,7 +53,7 @@ module LicenseFinder
       end
     end
 
-    class Whitelist < Base
+    class Whitelist < Subcommand
       desc "list", "List all the whitelisted licenses"
       def list
         whitelist = LicenseFinder.config.whitelist
@@ -80,7 +83,7 @@ module LicenseFinder
       end
     end
 
-    class IgnoredBundlerGroups < Base
+    class IgnoredBundlerGroups < Subcommand
       desc "list", "List all the ignored bundler groups"
       def list
         ignored = LicenseFinder.config.ignore_groups
