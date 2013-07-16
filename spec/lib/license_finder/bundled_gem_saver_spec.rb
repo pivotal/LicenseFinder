@@ -14,6 +14,17 @@ module LicenseFinder
       end
     end
 
+    describe ".save_gems" do
+      let(:bundled_gems) { [gem] }
+      let(:gem) { double(:bundled_gem) }
+
+      it "calls find_or_create_by_name on all passed in gems" do
+        described_class.should_receive(:find_or_create_by_name).with(gem).and_return(gem)
+        gem.should_receive(:save)
+        described_class.save_gems(bundled_gems)
+      end
+    end
+
     describe "#save" do
       let(:bundled_gem) { BundledGem.new(gemspec) }
       subject { described_class.find_or_create_by_name(bundled_gem).save }

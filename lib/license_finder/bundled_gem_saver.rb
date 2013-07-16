@@ -11,6 +11,12 @@ module LicenseFinder
       new(dependency, bundled_gem)
     end
 
+    def self.save_gems(current_gems)
+      current_gems.map do |bundled_gem|
+        BundledGemSaver.find_or_create_by_name(bundled_gem).save
+      end
+    end
+
     def initialize(dependency, bundled_gem)
       @bundled_gem = bundled_gem
       @dependency = dependency

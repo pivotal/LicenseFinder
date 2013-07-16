@@ -23,8 +23,7 @@ module LicenseFinder
 
         current_gems = [gem1, gem2]
         LicenseFinder.stub(:current_gems) { current_gems }
-        BundledGemSaver.should_receive(:find_or_create_by_name).with(gem1).and_return(cur1)
-        BundledGemSaver.should_receive(:find_or_create_by_name).with(gem2).and_return(cur2)
+        BundledGemSaver.should_receive(:save_gems).with(current_gems).and_return([cur1, cur2])
 
         described_class.sync_with_bundler
         Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
