@@ -2,7 +2,7 @@ module LicenseFinder
   class BundledGemSaver
     extend Forwardable
     def_delegators :spec, :name, :version, :summary, :description, :homepage
-    def_delegators :bundled_gem, :bundler_dependency, :license, :children
+    def_delegators :bundled_gem, :bundler_dependency, :license, :children, :groups
 
     attr_reader :dependency, :bundled_gem
 
@@ -59,10 +59,8 @@ module LicenseFinder
 
     def refresh_bundler_groups
       dependency.remove_all_bundler_groups
-      if bundler_dependency
-        bundler_dependency.groups.each { |group|
+      groups.each do |group|
           dependency.add_bundler_group BundlerGroup.find_or_create(name: group.to_s)
-        }
       end
     end
 

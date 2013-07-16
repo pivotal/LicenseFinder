@@ -23,6 +23,10 @@ module LicenseFinder
       @spec.version.to_s
     end
 
+    def groups
+      @groups ||= bundler_dependency ? bundler_dependency.groups : []
+    end
+
     def children
       @children ||= @spec.dependencies.collect(&:name)
     end
@@ -40,7 +44,7 @@ module LicenseFinder
     end
 
     private 
-    
+
     def determine_license
       return @spec.license if @spec.license
 

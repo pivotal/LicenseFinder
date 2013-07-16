@@ -58,5 +58,23 @@ module LicenseFinder
         subject.license_files
       end
     end
+
+    describe "#groups" do
+      context "bundler_dependency is present" do
+        subject { described_class.new(gemspec, bundler_dependency) }
+
+        let(:bundler_dependency) { double(:dependency, groups: [1, 2, 3]) }
+
+        it "returns bundler dependency's groups" do
+          subject.groups.should == bundler_dependency.groups
+        end
+      end
+
+      context "bundler_dependency is nil" do
+        it "returns empty array" do
+          subject.groups.should == []
+        end
+      end
+    end
   end
 end
