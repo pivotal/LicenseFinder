@@ -16,7 +16,7 @@ module LicenseFinder
 
     describe "#save" do
       let(:bundled_gem) { BundledGem.new(gemspec) }
-      subject { described_class.find_or_create_by_name('spec_name', bundled_gem).save }
+      subject { described_class.find_or_create_by_name(bundled_gem).save }
 
       context "when the dependency is new" do
         it "persists gem data" do
@@ -76,7 +76,7 @@ module LicenseFinder
               license: license
             )
           end
-          let(:bundled_gem_saver) { described_class.find_or_create_by_name('spec_name', bundled_gem) }
+          let(:bundled_gem_saver) { described_class.find_or_create_by_name(bundled_gem) }
 
           it "does not save the dependency" do
             bundled_gem_saver.dependency.should_not_receive(:save)
@@ -178,7 +178,7 @@ module LicenseFinder
           end
 
           context "license does not change" do
-            let(:bundled_gem_saver) { described_class.find_or_create_by_name('spec_name', bundled_gem) }
+            let(:bundled_gem_saver) { described_class.find_or_create_by_name(bundled_gem) }
 
             before do
               old_copy.license = LicenseAlias.create(name: 'MIT')

@@ -6,8 +6,8 @@ module LicenseFinder
 
     attr_reader :dependency, :bundled_gem
 
-    def self.find_or_create_by_name(name, bundled_gem)
-      dependency = Dependency.named(name)
+    def self.find_or_create_by_name(bundled_gem)
+      dependency = Dependency.named(bundled_gem.spec.name)
       new(dependency, bundled_gem)
     end
 

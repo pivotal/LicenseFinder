@@ -11,6 +11,9 @@ module LicenseFinder
     end
 
     describe "#sync_with_bundler" do
+      let(:gem1) { double(:bundled_gem) }
+      let(:gem2) { double(:bundled_gem) }
+
       it "destroys every dependency except for the ones Bundler reports as 'current' or are marked as 'manual'" do
         cur1 = Dependency.create(name: "current dependency 1")
         cur2 = Dependency.create(name: "current dependency 2")
@@ -18,11 +21,10 @@ module LicenseFinder
         Dependency.create(name: "old dependency 1")
         Dependency.create(name: "old dependency 2")
 
-        current_gems = [
-          double(:gem1, save_as_dependency: cur1),
-          double(:gem2, save_as_dependency: cur2)
-        ]
+        current_gems = [gem1, gem2]
         LicenseFinder.stub(:current_gems) { current_gems }
+        BundledGemSaver.should_receive(:find_or_create_by_name).with(gem1).and_return(cur1)
+        BundledGemSaver.should_receive(:find_or_create_by_name).with(gem2).and_return(cur2)
 
         described_class.sync_with_bundler
         Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
