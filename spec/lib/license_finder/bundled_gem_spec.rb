@@ -24,7 +24,7 @@ module LicenseFinder
     its(:dependency_name) { should == 'spec_name' }
     its(:dependency_version) { should == '2.1.3' }
 
-    describe "#determine_license" do
+    describe "#license" do
       subject do
         details = BundledGem.new(gemspec)
         details.stub(:license_files).and_return([license_file])
@@ -36,19 +36,19 @@ module LicenseFinder
       it "returns the license from the gemspec if provided" do
         gemspec.stub(:license).and_return('Some License')
 
-        subject.determine_license.should == "Some License"
+        subject.license.should == "Some License"
       end
 
       it "returns the matched license if detected" do
         license_file.stub(:license).and_return('Detected License')
 
-        subject.determine_license.should == "Detected License"
+        subject.license.should == "Detected License"
       end
 
       it "returns 'other' otherwise" do
         license_file.stub(:license).and_return(nil)
 
-        subject.determine_license.should == "other"
+        subject.license.should == "other"
       end
     end
 

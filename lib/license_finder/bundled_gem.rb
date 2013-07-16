@@ -27,18 +27,24 @@ module LicenseFinder
       @children ||= @spec.dependencies.collect(&:name)
     end
 
-    def determine_license
-      return @spec.license if @spec.license
+    def license
+      @license ||= determine_license
+    end
 
-      license_files.map(&:license).compact.first || 'other'
+    def sort_order
+      dependency_name.downcase
     end
 
     def license_files
       PossibleLicenseFiles.new(@spec.full_gem_path).find
     end
 
-    def sort_order
-      dependency_name.downcase
+    private 
+    
+    def determine_license
+      return @spec.license if @spec.license
+
+      license_files.map(&:license).compact.first || 'other'
     end
   end
 end

@@ -2,7 +2,7 @@ module LicenseFinder
   class BundledGemSaver
     extend Forwardable
     def_delegators :spec, :name, :version, :summary, :description, :homepage
-    def_delegators :bundled_gem, :bundler_dependency, :determine_license, :children
+    def_delegators :bundled_gem, :bundler_dependency, :license, :children
 
     attr_reader :dependency, :bundled_gem
 
@@ -44,7 +44,7 @@ module LicenseFinder
         dependency.summary = summary
         dependency.description = description
         dependency.homepage = homepage
-        dependency.license ||= LicenseAlias.create(name: determine_license)
+        dependency.license ||= LicenseAlias.create(name: license)
         dependency.save
       end
     end
@@ -54,7 +54,7 @@ module LicenseFinder
         dependency.summary != summary ||
         dependency.description != description ||
         dependency.homepage != homepage ||
-        dependency.license.name != determine_license
+        dependency.license.name != license
     end
 
     def refresh_bundler_groups
@@ -84,8 +84,8 @@ module LicenseFinder
     end
 
     def apply_better_license
-      if dependency.license && !dependency.license.manual && determine_license != 'other'
-        new_name = determine_license
+      if dependency.license && !dependency.license.manual && license != 'other'
+        new_name = license
         unless new_name == dependency.license.name
           dependency.license.name = new_name
           dependency.license.save
