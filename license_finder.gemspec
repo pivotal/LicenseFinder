@@ -21,8 +21,8 @@ Gem::Specification.new do |s|
   s.add_dependency "bundler"
   s.add_dependency "sequel"
   s.add_dependency "thor"
-  s.add_dependency LicenseFinder::Platform.sqlite_gem
   s.add_dependency "rake"
+  s.add_dependency LicenseFinder::Platform.sqlite_gem
 
   %w(rspec xpath cucumber).each do |gem|
     s.add_development_dependency gem

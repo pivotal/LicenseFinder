@@ -1,3 +1,5 @@
+require "bundler"
+
 module LicenseFinder
   class Bundle
     attr_writer :ignore_groups

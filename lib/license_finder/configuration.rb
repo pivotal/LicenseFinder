@@ -1,3 +1,5 @@
+require "rake"
+
 module LicenseFinder
   class Configuration
     attr_accessor :whitelist, :ignore_groups, :dependencies_dir
