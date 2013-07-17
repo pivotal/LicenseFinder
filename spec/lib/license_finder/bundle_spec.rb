@@ -28,7 +28,11 @@ module LicenseFinder
 
     describe '.current_gems' do
       subject do
-        Bundle.current_gems(definition)
+        Bundle.current_gems
+      end
+
+      before do
+        Bundler::Definition.stub(:build).and_return(definition)
       end
 
       it "should have 2 dependencies" do
