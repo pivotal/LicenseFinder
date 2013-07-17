@@ -1,10 +1,11 @@
 module LicenseFinder
   class BundledGem
-    attr_reader :parents, :spec, :bundler_dependency
+    attr_reader :parents, :spec, :bundler_dependency, :children
 
     def initialize(spec, bundler_dependency = nil)
       @spec = spec
       @bundler_dependency = bundler_dependency
+      @children = []
     end
 
     def name
@@ -27,10 +28,6 @@ module LicenseFinder
       @groups ||= bundler_dependency ? bundler_dependency.groups : []
     end
 
-    def children
-      @children ||= @spec.dependencies.collect(&:name)
-    end
-
     def license
       @license ||= determine_license
     end
@@ -43,7 +40,11 @@ module LicenseFinder
       PossibleLicenseFiles.new(@spec.full_gem_path).find
     end
 
-    private 
+    def children=(childs)
+      @children = childs
+    end
+
+    private
 
     def determine_license
       return @spec.license if @spec.license

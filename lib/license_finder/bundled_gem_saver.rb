@@ -60,25 +60,15 @@ module LicenseFinder
     def refresh_bundler_groups
       dependency.remove_all_bundler_groups
       groups.each do |group|
-          dependency.add_bundler_group BundlerGroup.find_or_create(name: group.to_s)
+        dependency.add_bundler_group BundlerGroup.find_or_create(name: group.to_s)
       end
     end
 
     def refresh_children
       dependency.remove_all_children
       children.each do |child|
-        if child_required?(child)
-          dependency.add_child Dependency.named(child)
-        end
+        dependency.add_child Dependency.named(child)
       end
-    end
-
-    def child_required?(child)
-      current_gem_names.include?(child)
-    end
-
-    def current_gem_names
-      @current_gem_names ||= LicenseFinder.current_gems.map { |gem| gem.name.split(" ")[0] }
     end
 
     def apply_better_license

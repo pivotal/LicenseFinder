@@ -21,6 +21,10 @@ module LicenseFinder
         BundledGem.new(spec, dependency)
       end
 
+      @gems.each do |gem|
+        gem.children = children_for(gem)
+      end
+
       @gems
     end
 
@@ -45,6 +49,11 @@ module LicenseFinder
 
     def lockfile_path
       gemfile_path.dirname.join('Gemfile.lock')
+    end
+
+    def children_for(gem)
+      gem_names = gems.map { |gem| gem.name.split(" ")[0] }
+      gem.spec.dependencies.map(&:name).select { |name| gem_names.include?(name) }
     end
   end
 end

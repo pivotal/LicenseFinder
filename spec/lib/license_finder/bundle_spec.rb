@@ -39,7 +39,7 @@ module LicenseFinder
         before do
           definition.stub(:specs_for).and_return([
             build_gemspec('gem1', '1.2.3', 'gem2'),
-            build_gemspec('gem2', '0.4.2')
+            build_gemspec('gem2', '0.4.2', 'gem3')
           ])
         end
 
@@ -47,6 +47,12 @@ module LicenseFinder
           gem1 = subject.first
 
           gem1.children.should == ["gem2"]
+        end
+
+        it "should only include the children which are project dependencies" do
+          gem2 = subject[1]
+
+          gem2.children.should == []
         end
       end
     end

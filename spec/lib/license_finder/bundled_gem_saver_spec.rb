@@ -29,6 +29,8 @@ module LicenseFinder
       let(:bundled_gem) { BundledGem.new(gemspec) }
       subject { described_class.find_or_create_by_name(bundled_gem).save }
 
+      before { bundled_gem.children = ["foo"] }
+
       context "when the dependency is new" do
         it "persists gem data" do
           subject.id.should be
@@ -40,20 +42,9 @@ module LicenseFinder
         end
 
         describe "associating children" do
-          context "when the child is in Bundler's current gems" do
-            before { LicenseFinder.stub(:current_gems).and_return([double(:gemspec, name: "foo 0.0")]) }
-
-            it "associates children" do
-              subject.children.map(&:name).should == ['foo']
-              subject.children.each { |child| child.id.should_not be_nil }
-            end
-          end
-
-          context "when the child is not in Bundler's current gems" do
-            it "does not associates children" do
-              subject.children.map(&:name).should == []
-              subject.children.each { |child| child.id.should be_nil }
-            end
+          it "associates children" do
+            subject.children.map(&:name).should == ['foo']
+            subject.children.each { |child| child.id.should_not be_nil }
           end
         end
 
