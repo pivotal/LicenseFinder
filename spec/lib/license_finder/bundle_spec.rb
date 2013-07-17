@@ -5,7 +5,7 @@ module LicenseFinder
     let(:definition) do
       double('definition', {
         :dependencies => [],
-        :groups => [],
+        :groups => [:dev, :production],
         :specs_for => [
           build_gemspec('gem1', '1.2.3'),
           build_gemspec('gem2', '0.4.2')
@@ -28,8 +28,10 @@ module LicenseFinder
 
     describe '.current_gems' do
       subject do
-        Bundle.current_gems
+        Bundle.current_gems(config)
       end
+
+      let(:config) { double(:config, ignore_groups: ['dev', 'test']) }
 
       before do
         Bundler::Definition.stub(:build).and_return(definition)
@@ -41,7 +43,7 @@ module LicenseFinder
 
       context "when initialized with a parent and child gem" do
         before do
-          definition.stub(:specs_for).and_return([
+          definition.stub(:specs_for).with([:production]).and_return([
             build_gemspec('gem1', '1.2.3', 'gem2'),
             build_gemspec('gem2', '0.4.2', 'gem3')
           ])
