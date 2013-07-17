@@ -4,12 +4,12 @@ module LicenseFinder
   class Bundle
     attr_writer :ignore_groups
 
-    def self.current_gems(config)
-      new(config).gems
+    def self.current_gems(config, bundler_definition=nil)
+      new(config, bundler_definition).gems
     end
 
-    def initialize(config=nil)
-      @definition = Bundler::Definition.build(gemfile_path, lockfile_path, nil)
+    def initialize(config=nil, bundler_definition=nil)
+      @definition = bundler_definition || Bundler::Definition.build(gemfile_path, lockfile_path, nil)
       @config ||= config
     end
 
