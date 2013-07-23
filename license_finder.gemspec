@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rake"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
-  %w(rspec xpath cucumber).each do |gem|
+  %w(rspec xpath cucumber pry).each do |gem|
     s.add_development_dependency gem
   end
 
