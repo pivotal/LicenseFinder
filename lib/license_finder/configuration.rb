@@ -2,7 +2,7 @@ require "rake"
 
 module LicenseFinder
   class Configuration
-    attr_accessor :whitelist, :ignore_groups, :dependencies_dir
+    attr_accessor :whitelist, :ignore_groups, :dependencies_dir, :project_name
 
     def self.config_file_path
       File.join('.', 'config', 'license_finder.yml')
@@ -45,6 +45,7 @@ module LicenseFinder
       @whitelist = config['whitelist'] || []
       @ignore_groups = (config["ignore_groups"] || [])
       @dependencies_dir = config['dependencies_file_dir'] || './doc/'
+      @project_name = config['project_name'] || determine_project_name
       FileUtils.mkdir_p(@dependencies_dir)
     end
 
@@ -84,6 +85,10 @@ module LicenseFinder
       whitelist.map do |license_name|
         License.find_by_name(license_name) || license_name
       end.compact
+    end
+
+    def determine_project_name
+      File.basename(Dir.getwd)
     end
   end
 end

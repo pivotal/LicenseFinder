@@ -32,7 +32,7 @@ end
 
 Then(/^it creates a config directory with the license_finder config$/) do
   File.should be_exists(@user.app_path('config'))
-  text = "---\nwhitelist:\n#- MIT\n#- Apache 2.0\nignore_groups:\n#- test\n#- development\ndependencies_file_dir: './doc/'\n"
+  text = "---\nwhitelist:\n#- MIT\n#- Apache 2.0\nignore_groups:\n#- test\n#- development\ndependencies_file_dir: './doc/'\nproject_name: # project name\n"
   File.read(@user.app_path('config/license_finder.yml')).should == text.gsub(/^\s+/, "")
 end
 

@@ -16,8 +16,9 @@
 </head>
 <body>
 <div class="container">
+  <h1><%= LicenseFinder.config.project_name %></h1>
   <div class="summary hero-unit">
-    <h1>Dependencies</h1>
+    <h2>Dependencies</h2>
 
     <p>As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %></p>
 
@@ -37,7 +38,7 @@
   </div>
   <% if unapproved_dependencies.any? -%>
     <div class="action-items hero-unit">
-      <h1>Action Items</h1>
+      <h2>Action Items</h2>
       <h4><%= unapproved_dependencies.size %> unapproved dependencies</h4>
       <ul>
         <% unapproved_dependencies.each do |dependency| -%>

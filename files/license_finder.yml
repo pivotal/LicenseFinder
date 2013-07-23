@@ -6,3 +6,4 @@ ignore_groups:
 #- test
 #- development
 dependencies_file_dir: './doc/'
+project_name: # project name

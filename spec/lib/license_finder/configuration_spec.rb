@@ -11,7 +11,8 @@ module LicenseFinder
         {
           "whitelist" => ["FooLicense", "BarLicense"],
           "ignore_groups" => [:test, :development],
-          "dependencies_file_dir" => "."
+          "dependencies_file_dir" => ".",
+          "project_name" => "my_app"
         }
       end
 
@@ -22,6 +23,7 @@ module LicenseFinder
           subject.whitelist.should == attributes['whitelist']
           subject.ignore_groups.should == attributes['ignore_groups']
           subject.dependencies_dir.should == attributes['dependencies_file_dir']
+          subject.project_name.should == attributes['project_name']
         end
       end
     end
@@ -36,6 +38,19 @@ module LicenseFinder
     describe "#whitelist" do
       it "should default to an empty array" do
         klass.new.whitelist.should == []
+      end
+    end
+
+    describe "#project_name" do
+      let(:directory_name) { "test_dir" }
+
+      before do
+        Configuration.stub(:config_hash).and_return({})
+        Dir.stub(:getwd).and_return("/path/to/#{directory_name}")
+      end
+
+      it "should default to the directory name" do
+        klass.new.project_name.should == directory_name
       end
     end
 

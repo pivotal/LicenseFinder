@@ -54,6 +54,14 @@ Then(/^I should see only see GPL liceneses as unapproved in the html$/) do
   page.should have_content '1 GPL'
 end
 
+Then(/^I should see my project name$/) do
+  html = File.read(@user.dependencies_html_path)
+  page = Capybara.string(html)
+  title = page.find("h1")
+
+  title.should have_content "my_app"
+end
+
 def is_html_status?(gem, approval)
   html = File.read(@user.dependencies_html_path)
   page = Capybara.string(html)
