@@ -16,7 +16,7 @@ module LicenseFinder
 
     def to_s
       filename = ROOT_PATH.join('templates', "#{self.class.underscored_name}.erb")
-      template = ERB.new(File.read(filename), 0, '-')
+      template = ERB.new(File.read(filename), nil, '-')
       template.result(binding)
     end
 
