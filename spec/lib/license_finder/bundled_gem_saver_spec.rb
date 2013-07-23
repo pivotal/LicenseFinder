@@ -117,7 +117,12 @@ module LicenseFinder
           it "keeps approval" do
             old_copy.approval = Approval.create(state: true)
             old_copy.save
-            subject.approval.state.should == true
+            subject.approval.state.should
+            if LicenseFinder::Platform.java?
+              subject.approval.state.should == 1
+            else
+              subject.approval.state.should == true
+            end
           end
 
           it "ensures correct children are associated" do
@@ -175,7 +180,11 @@ module LicenseFinder
             end
 
             it "should not change the approval" do
-              subject.should_not be_approved
+              if LicenseFinder::Platform.java?
+                subject.approved?.should_not == 1
+              else
+                subject.should_not be_approved
+              end
             end
           end
 
@@ -191,7 +200,11 @@ module LicenseFinder
 
             it "should not change the license or approval" do
               dependency = bundled_gem_saver.save
-              dependency.should_not be_approved
+              if LicenseFinder::Platform.java?
+                dependency.approved?.should_not == 1
+              else
+                dependency.should_not be_approved
+              end
               dependency.license.name.should == "MIT"
             end
 

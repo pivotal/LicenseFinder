@@ -61,7 +61,11 @@ describe LicenseFinder::YmlToSql do
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        saved_dep.manual.should == false
+        if LicenseFinder::Platform.java?
+          saved_dep.manual.should == 0
+        else
+          saved_dep.manual.should == false
+        end
       end
     end
 
@@ -72,7 +76,11 @@ describe LicenseFinder::YmlToSql do
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        saved_dep.manual.should == true
+        if LicenseFinder::Platform.java?
+          saved_dep.manual.should == 1
+        else
+          saved_dep.manual.should == true
+        end
       end
     end
 
