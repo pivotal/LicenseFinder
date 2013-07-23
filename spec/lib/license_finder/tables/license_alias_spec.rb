@@ -24,6 +24,11 @@ module LicenseFinder
         subject.set_manually('Updated')
         subject.reload.manual.should be_true
       end
+
+      it "resets the license url" do
+        subject.set_manually('New BSD')
+        subject.reload.url.should == 'http://opensource.org/licenses/BSD-3-Clause'
+      end
     end
 
     describe "#whitelisted?" do

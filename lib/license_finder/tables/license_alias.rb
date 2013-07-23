@@ -10,7 +10,8 @@ module LicenseFinder
     end
 
     def set_manually(name)
-      update('name' => name, 'manual' => true)
+      new_url = LicenseUrl.find_by_name(name)
+      update('name' => name, 'manual' => true, 'url' => new_url)
     end
 
     private
