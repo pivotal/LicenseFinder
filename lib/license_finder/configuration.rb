@@ -75,6 +75,7 @@ module LicenseFinder
         file.write({
           'whitelist' => @whitelist.uniq,
           'ignore_groups' => @ignore_groups.uniq,
+          'dependencies_dir' => @dependencies_dir,
           'project_name' => @project_name
         }.to_yaml)
       end

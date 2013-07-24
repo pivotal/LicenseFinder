@@ -76,41 +76,39 @@ module LicenseFinder
 
     describe "#save" do
       let(:tmp_yml) { '.tmp.configuration_spec.yml' }
+      let(:yaml) { YAML.load(File.read(tmp_yml)) }
 
       before do
         Configuration.stub(:config_file_path).and_return(tmp_yml)
         config.whitelist = ['my_gem']
         config.ignore_groups = ['other_group', 'test']
         config.project_name = "New Project Name"
+        config.dependencies_dir = "./deps"
       end
 
       after do
         File.delete(tmp_yml)
       end
 
-      it "writes the whitelist to the yaml file" do
-        config.save
+      describe "writes the configuration attributes to the yaml file" do
+        before { config.save }
 
-        yaml = YAML.load(File.read(tmp_yml))
+        it "writes the whitelist" do
+          yaml["whitelist"].should include("my_gem")
+        end
 
-        yaml["whitelist"].should include("my_gem")
-      end
+        it "writes the ignored bundler groups" do
+          yaml["ignore_groups"].should include("other_group")
+          yaml["ignore_groups"].should include("test")
+        end
 
-      it "writes the ignored bundler groups to the yaml file" do
-        config.save
+        it "writes the dependencies_dir" do
+          yaml["dependencies_dir"].should eq("./deps")
+        end
 
-        yaml = YAML.load(File.read(tmp_yml))
-
-        yaml["ignore_groups"].should include("other_group")
-        yaml["ignore_groups"].should include("test")
-      end
-
-      it "writes the project name to the yaml file" do
-        config.save
-
-        yaml = YAML.load(File.read(tmp_yml))
-
-        yaml["project_name"].should eq("New Project Name")
+        it "writes the project name" do
+          yaml["project_name"].should eq("New Project Name")
+        end
       end
 
       it "doesn't write duplicate entries" do
@@ -118,8 +116,6 @@ module LicenseFinder
         config.ignore_groups << 'test'
 
         config.save
-
-        yaml = YAML.load(File.read(tmp_yml))
 
         yaml["whitelist"].count("my_gem").should == 1
         yaml["ignore_groups"].count("test").should == 1
