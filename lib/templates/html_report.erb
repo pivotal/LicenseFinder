@@ -13,6 +13,15 @@
       content: " (unapproved)"
     }
   </style>
+  <script>
+    // Loads stylesheet when viewing file locally.
+    if (location.protocol === "file:") {
+      var link = document.querySelector('head link')
+        , href = link.href.replace(/file/, "http");
+
+      link.href = href;
+    }
+  </script>
 </head>
 <body>
 <div class="container">
