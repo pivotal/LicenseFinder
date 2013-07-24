@@ -23,7 +23,7 @@ Given(/^I have a project that depends on mime\-types with a manual license type$
 end
 
 When(/^I run license_finder help on a specific command$/) do
-  @output = @user.execute_command "license_finder dependencies help add"
+  @output = @user.execute_command "license_finder ignored_bundler_groups help add"
 end
 
 When(/^I run license_finder help$/) do
@@ -53,7 +53,7 @@ Then(/^the mime\-types license remains set with my manual license type$/) do
 end
 
 Then(/^I should see the correct subcommand usage instructions$/) do
-  @output.should include 'license_finder dependencies add LICENSE'
+  @output.should include 'license_finder ignored_bundler_groups add GROUP'
 end
 
 Then(/^I should the correct default usage instructions$/) do

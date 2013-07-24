@@ -24,7 +24,17 @@ module LicenseFinder
       # Hack to override the help message produced by Thor.
       # https://github.com/wycats/thor/issues/261#issuecomment-16880836
       def self.banner(command, namespace = nil, subcommand = nil)
-        "#{basename} #{name.split("::").last.downcase} #{command.usage}"
+        "#{basename} #{underscore_name(name)} #{command.usage}"
+      end
+
+      protected
+
+      def self.underscore_name(name)
+        underscored = name.split("::").last
+        underscored.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
+        underscored.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+        underscored.tr!("-", "_")
+        underscored.downcase
       end
     end
 
@@ -64,7 +74,7 @@ module LicenseFinder
         end
       end
 
-      desc "add", "Add a license to the whitelist"
+      desc "add LICENSE", "Add a license to the whitelist"
       def add(license)
         die_on_error {
           LicenseFinder.config.whitelist.push(license)
@@ -73,7 +83,7 @@ module LicenseFinder
         say "Added #{license} to the license whitelist"
       end
 
-      desc "remove", "Remove a license from the whitelist"
+      desc "remove LICENSE", "Remove a license from the whitelist"
       def remove(license)
         die_on_error {
           LicenseFinder.config.whitelist.delete(license)
@@ -84,7 +94,7 @@ module LicenseFinder
     end
 
     class ProjectName < Subcommand
-      desc "set", "Set the project name"
+      desc "set NAME", "Set the project name"
       def set(name)
         die_on_error {
           LicenseFinder.config.project_name = name
@@ -105,7 +115,7 @@ module LicenseFinder
         end
       end
 
-      desc "add", "Add a bundler group to be ignored"
+      desc "add GROUP", "Add a bundler group to be ignored"
       def add(group)
         die_on_error {
           LicenseFinder.config.ignore_groups.push(group)
@@ -114,7 +124,7 @@ module LicenseFinder
         say "Added #{group} to the ignored bundler groups"
       end
 
-      desc "remove", "Remove a bundler group from the ignored bundler groups"
+      desc "remove GROUP", "Remove a bundler group from the ignored bundler groups"
       def remove(group)
         die_on_error {
           LicenseFinder.config.ignore_groups.delete(group)
