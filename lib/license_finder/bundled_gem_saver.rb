@@ -25,8 +25,8 @@ module LicenseFinder
     def save
       DB.transaction do
         apply_dependency_definition
-        refresh_bundler_groups
-        refresh_children
+        sync_bundler_groups
+        sync_children
         apply_better_license
       end
       dependency
@@ -57,17 +57,37 @@ module LicenseFinder
         dependency.license.name != license
     end
 
-    def refresh_bundler_groups
-      dependency.remove_all_bundler_groups
-      groups.each do |group|
-        dependency.add_bundler_group BundlerGroup.find_or_create(name: group.to_s)
+    def sync_bundler_groups
+      existing_groups = dependency.bundler_groups
+      new_groups = groups.map(&:to_s)
+
+      existing_groups.reverse.each do |group|
+        unless new_groups.include?(group.name)
+          dependency.remove_bundler_group(group)
+        end
+      end
+
+      new_groups.each do |group|
+        unless existing_groups.map(&:name).include? group
+          dependency.add_bundler_group BundlerGroup.find_or_create(name: group)
+        end
       end
     end
 
-    def refresh_children
-      dependency.remove_all_children
-      children.each do |child|
-        dependency.add_child Dependency.named(child)
+    def sync_children
+      existing_children = dependency.children
+      new_children = children
+
+      existing_children.reverse.each do |child|
+        unless new_children.include?(child.name)
+          dependency.remove_child(child)
+        end
+      end
+
+      new_children.each do |child|
+        unless existing_children.map(&:name).include?(child)
+          dependency.add_child Dependency.named(child)
+        end
       end
     end
 

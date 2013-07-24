@@ -133,15 +133,16 @@ module LicenseFinder
           end
 
           context "with a bundler dependency" do
-            let(:bundled_gem) { BundledGem.new(gemspec, double(:bundler_dependency, groups: %w[1 2 3]))}
+            let(:bundled_gem) { BundledGem.new(gemspec, double(:bundler_dependency)) }
 
             before do
+              bundled_gem.stub(:groups) { [:group_1, :group_2, :b] }
               old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'a')
               old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'b')
             end
 
             it "ensures the correct bundler groups are associated" do
-              subject.bundler_groups.map(&:name).should =~ %w[1 2 3]
+              subject.bundler_groups.map(&:name).should =~ %w[group_1 group_2 b]
             end
           end
 
