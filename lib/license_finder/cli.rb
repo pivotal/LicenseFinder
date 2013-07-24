@@ -83,6 +83,17 @@ module LicenseFinder
       end
     end
 
+    class ProjectName < Subcommand
+      desc "set", "Set the project name"
+      def set(name)
+        die_on_error {
+          LicenseFinder.config.project_name = name
+          LicenseFinder.config.save
+        }
+        say "Set the project name to #{name}", :green
+      end
+    end
+
     class IgnoredBundlerGroups < Subcommand
       desc "list", "List all the ignored bundler groups"
       def list
@@ -167,6 +178,7 @@ module LicenseFinder
       subcommand "dependencies", Dependencies, "manage non-Bundler dependencies"
       subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "manage ignored bundler groups"
       subcommand "whitelist", Whitelist, "manage whitelisted licenses"
+      subcommand "project_name", ProjectName, "manage the project name"
 
       private
 

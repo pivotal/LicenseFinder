@@ -9,7 +9,7 @@ Feature: HTML Report
   Scenario: Dependency details listed in HTML report
     And my app depends on a gem with specific details
     When I run license_finder
-    Then I should see my project name
+    Then I should see the project name my_app in the html
     And I should see my specific gem details listed in the html
 
   Scenario: Approval status of dependencies indicated in HTML report

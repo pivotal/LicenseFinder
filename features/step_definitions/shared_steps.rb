@@ -19,6 +19,15 @@ When(/^I whitelist MIT and 'other' and New BSD licenses$/) do
   @output = @user.execute_command "license_finder --quiet"
 end
 
+Then(/^I should see the project name (\w+) in the html$/) do |project_name|
+  html = File.read(@user.dependencies_html_path)
+  page = Capybara.string(html)
+  title = page.find("h1")
+
+  title.should have_content project_name
+end
+
+
 module DSL
   class User
     def create_nonrails_app

@@ -76,6 +76,23 @@ module LicenseFinder
       end
     end
 
+    describe ProjectName do
+      let(:config) { LicenseFinder.config }
+
+      describe "set" do
+        it "sets the project name" do
+          config.should_receive(:save)
+          config.project_name.should_not eq("new_project_name")
+
+          silence_stdout do
+            subject.set("new_project_name")
+          end
+
+          config.project_name.should eq("new_project_name")
+        end
+      end
+    end
+
     describe IgnoredBundlerGroups do
       let(:config) { LicenseFinder.config }
 

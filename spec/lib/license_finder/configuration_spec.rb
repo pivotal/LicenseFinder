@@ -81,6 +81,7 @@ module LicenseFinder
         Configuration.stub(:config_file_path).and_return(tmp_yml)
         config.whitelist = ['my_gem']
         config.ignore_groups = ['other_group', 'test']
+        config.project_name = "New Project Name"
       end
 
       after do
@@ -102,6 +103,14 @@ module LicenseFinder
 
         yaml["ignore_groups"].should include("other_group")
         yaml["ignore_groups"].should include("test")
+      end
+
+      it "writes the project name to the yaml file" do
+        config.save
+
+        yaml = YAML.load(File.read(tmp_yml))
+
+        yaml["project_name"].should eq("New Project Name")
       end
 
       it "doesn't write duplicate entries" do

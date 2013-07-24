@@ -74,7 +74,8 @@ module LicenseFinder
       File.open(Configuration.config_file_path, 'w') do |file|
         file.write({
           'whitelist' => @whitelist.uniq,
-          'ignore_groups' => @ignore_groups.uniq
+          'ignore_groups' => @ignore_groups.uniq,
+          'project_name' => @project_name
         }.to_yaml)
       end
     end
