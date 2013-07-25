@@ -101,7 +101,7 @@ describe LicenseFinder::YmlToSql do
 
       saved_dep = described_class::Sql::Dependency.first
       saved_dep.license.name.should == "GPLv2"
-      saved_dep.license.url.should == "www.license_url.org"
+      saved_dep.license.url.should == "http://www.gnu.org/licenses/gpl-2.0.txt"
     end
 
     it "associates bundler groups" do

@@ -67,7 +67,7 @@ module LicenseFinder
     end
 
     def create_license
-      Sql::LicenseAlias.convert(legacy_attrs)
+      LicenseAlias.find_or_create(name: legacy_attrs['license'])
     end
 
     def create_approval
@@ -108,15 +108,6 @@ module LicenseFinder
       end
 
       class BundlerGroup < Sequel::Model
-      end
-
-      class LicenseAlias < Sequel::Model
-        extend Convertable
-
-        VALID_ATTRIBUTES = {
-          'license' => 'name',
-          'license_url' => 'url'
-        }
       end
 
       class Approval < Sequel::Model
