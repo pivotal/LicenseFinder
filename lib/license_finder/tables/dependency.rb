@@ -37,7 +37,9 @@ module LicenseFinder
     end
 
     def approved?
-      (license && license.whitelisted?) || approval.state
+      # jruby adapter receives approval.state as Fixnum '0', which ruby evaluates
+      # as truthy, so we catch this here for jruby support.
+      (license && license.whitelisted?) || (approval.state && approval.state != 0)
     end
 
     def set_license_manually!(license_name)

@@ -16,7 +16,7 @@ Feature: License Finder command line executable
 
   Scenario: Auditing an application with whitelisted licenses
     Given I have an app with license finder that depends on a MIT licensed gem
-    When I whitelist MIT and 'other' and New BSD licenses
+    When I whitelist MIT and 'other' and New BSD and Apache 2.0 licenses
     Then it should exit with status code 0
     And I should see all gems approved for use
 

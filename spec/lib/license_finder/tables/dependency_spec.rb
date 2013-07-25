@@ -76,11 +76,17 @@ module LicenseFinder
         dependency.stub_chain(:license, whitelisted?: false)
         dependency.stub_chain(:approval, state: true)
         dependency.should be_approved
+
+        dependency.stub_chain(:approval, state: 1) # jruby
+        dependency.should be_approved
       end
 
       it "is false otherwise" do
         dependency.stub_chain(:license, whitelisted?: false)
         dependency.stub_chain(:approval, state: false)
+        dependency.should_not be_approved
+
+        dependency.stub_chain(:approval, state: 0) # jruby
         dependency.should_not be_approved
       end
     end
