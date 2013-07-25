@@ -66,7 +66,7 @@ describe LicenseFinder do
         config = LicenseFinder.config
         config.dependencies_dir.should == './elsewhere'
         config.dependencies_yaml.should == './elsewhere/dependencies.yml'
-        config.dependencies_text.should == './elsewhere/dependencies.txt'
+        config.dependencies_text.should == './elsewhere/dependencies.csv'
         config.dependencies_html.should == './elsewhere/dependencies.html'
       end
 
@@ -74,7 +74,7 @@ describe LicenseFinder do
         config = LicenseFinder.config
         config.dependencies_dir.should == './doc/'
         config.dependencies_yaml.should == './doc/dependencies.yml'
-        config.dependencies_text.should == './doc/dependencies.txt'
+        config.dependencies_text.should == './doc/dependencies.csv'
         config.dependencies_html.should == './doc/dependencies.html'
       end
     end

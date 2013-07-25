@@ -58,6 +58,10 @@ module LicenseFinder
     end
 
     def dependencies_text
+      File.join(dependencies_dir, "dependencies.csv")
+    end
+
+    def dependencies_legacy_text
       File.join(dependencies_dir, "dependencies.txt")
     end
 

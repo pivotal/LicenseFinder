@@ -40,7 +40,7 @@ rubyzip, 0.9.9, ruby
 xml-simple, 1.1.1, other
 ```
 
-The executable task will also write out a dependencies.db, dependencies.txt, and dependencies.html file in the doc/
+The executable task will also write out a dependencies.db, dependencies.csv, and dependencies.html file in the doc/
 directory (by default -- see [Configuration](#configuration)).
 
 The latter two files are human readable reports that you could send to your non-technical business partners, lawyers, etc.
@@ -73,7 +73,7 @@ whitelisted the "MIT" license in your `config/license_finder.yml`. You then add 
 which we'll assume is licensed with the `GPL` license. You then run `license_finder` and see
 the gem listed in the output:
 
-```txt
+```sh
 awesome_gpl_gem, 1.0.0, GPL
 ```
 

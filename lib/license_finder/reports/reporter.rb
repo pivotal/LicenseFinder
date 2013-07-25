@@ -7,6 +7,10 @@ module LicenseFinder
 
       write_file LicenseFinder.config.dependencies_text, TextReport.new(dependencies).to_s
       write_file LicenseFinder.config.dependencies_html, HtmlReport.new(dependencies).to_s
+
+      if File.exists?(LicenseFinder.config.dependencies_legacy_text)
+        File.delete(LicenseFinder.config.dependencies_legacy_text)
+      end
     end
 
     private
