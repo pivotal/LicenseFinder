@@ -146,7 +146,7 @@ module LicenseFinder
             end
           end
 
-          context "license changes to something other than 'other'" do
+          context "license has changed" do
             before do
               old_copy.license = LicenseAlias.create(name: 'other')
               old_copy.save
@@ -163,27 +163,6 @@ module LicenseFinder
 
             context "new license is not whitelisted" do
               it "should set the approval to false" do
-                subject.should_not be_approved
-              end
-            end
-          end
-
-          context "license changes to unknown (i.e., 'other')" do
-            before do
-              old_copy.license = LicenseAlias.create(name: 'MIT')
-              old_copy.approval = Approval.create(state: false)
-              old_copy.save
-              gemspec.license = "other"
-            end
-
-            it "should not change the license" do
-              subject.license.name.should == 'MIT'
-            end
-
-            it "should not change the approval" do
-              if LicenseFinder::Platform.java?
-                subject.approved?.should_not == 1
-              else
                 subject.should_not be_approved
               end
             end
