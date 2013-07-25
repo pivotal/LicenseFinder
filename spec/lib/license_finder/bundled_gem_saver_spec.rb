@@ -109,7 +109,8 @@ module LicenseFinder
           end
 
           it "keeps a manually assigned license" do
-            old_copy.license = LicenseAlias.create(name: 'foo', manual: true)
+            old_copy.license = LicenseAlias.create(name: 'foo')
+            old_copy.license_manual = true
             old_copy.save
             subject.license.name.should == 'foo'
           end
@@ -164,6 +165,15 @@ module LicenseFinder
             context "new license is not whitelisted" do
               it "should set the approval to false" do
                 subject.should_not be_approved
+              end
+            end
+
+            context "license already exists" do
+              # let!(:new_license) { LicenseAlias.create(name: 'new license') }
+
+              it "uses the existing license" do
+                new_license = LicenseAlias.create(name: 'new license')
+                subject.license.should == new_license
               end
             end
           end

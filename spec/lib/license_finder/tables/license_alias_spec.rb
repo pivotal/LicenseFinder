@@ -10,27 +10,6 @@ module LicenseFinder
       end
     end
 
-    describe "#set_manually" do
-      subject do
-        described_class.create(name: 'Original')
-      end
-
-      it "modifies the license" do
-        subject.set_manually('Updated')
-        subject.reload.name.should == 'Updated'
-      end
-
-      it "marks the approval as manual" do
-        subject.set_manually('Updated')
-        subject.reload.manual.should be_true
-      end
-
-      it "resets the license url" do
-        subject.set_manually('New BSD')
-        subject.reload.url.should == 'http://opensource.org/licenses/BSD-3-Clause'
-      end
-    end
-
     describe "#whitelisted?" do
       let(:config) { Configuration.new }
 

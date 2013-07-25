@@ -9,11 +9,6 @@ module LicenseFinder
       !!(config.whitelisted?(name))
     end
 
-    def set_manually(name)
-      new_url = LicenseUrl.find_by_name(name)
-      update('name' => name, 'manual' => true, 'url' => new_url)
-    end
-
     private
 
     def config

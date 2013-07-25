@@ -44,7 +44,6 @@ module LicenseFinder
         dependency.summary = summary
         dependency.description = description
         dependency.homepage = homepage
-        dependency.license ||= LicenseAlias.create(name: license)
         dependency.save
       end
     end
@@ -53,8 +52,7 @@ module LicenseFinder
       return dependency.version != version.to_s ||
         dependency.summary != summary ||
         dependency.description != description ||
-        dependency.homepage != homepage ||
-        dependency.license.name != license
+        dependency.homepage != homepage
     end
 
     def sync_bundler_groups
@@ -92,11 +90,11 @@ module LicenseFinder
     end
 
     def apply_better_license
-      if dependency.license && !dependency.license.manual
-        new_name = license
-        unless new_name == dependency.license.name
-          dependency.license.name = new_name
-          dependency.license.save
+      if !dependency.license_manual
+        bundled_license = license
+        if dependency.license.nil? || bundled_license != dependency.license.name
+          dependency.license = LicenseAlias.find_or_create(name: bundled_license)
+          dependency.save
         end
       end
     end

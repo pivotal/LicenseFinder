@@ -90,11 +90,12 @@ module LicenseFinder
     end
 
     describe ".license!" do
+      let(:dependency) { double(:dependency) }
+
       it "adds a license for the dependency" do
-        dep = described_class.create_non_bundler("old license", "current dependency", nil)
-        dep.reload.license.name.should == "old license"
-        described_class.license!("current dependency", "a license")
-        dep.reload.license.name.should == "a license"
+        DependencyManager.stub(:find_by_name).with("dependency").and_return(dependency)
+        dependency.should_receive(:set_license_manually!).with("MIT")
+        described_class.license!("dependency", "MIT")
       end
 
       it "should raise an error if it can't find the dependency" do

@@ -115,8 +115,7 @@ module LicenseFinder
 
         VALID_ATTRIBUTES = {
           'license' => 'name',
-          'license_url' => 'url',
-          'manual' => 'manual'
+          'license_url' => 'url'
         }
       end
 

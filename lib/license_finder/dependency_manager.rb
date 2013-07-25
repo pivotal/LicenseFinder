@@ -23,7 +23,7 @@ module LicenseFinder
     end
 
     def self.license!(name, license)
-      modifying { find_by_name(name).license.set_manually(license) }
+      modifying { find_by_name(name).set_license_manually!(license) }
     end
 
     def self.approve!(name)

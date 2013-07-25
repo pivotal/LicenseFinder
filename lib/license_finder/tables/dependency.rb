@@ -40,6 +40,12 @@ module LicenseFinder
       (license && license.whitelisted?) || approval.state
     end
 
+    def set_license_manually!(license_name)
+      self.license = LicenseAlias.find_or_create(name: license_name)
+      self.license_manual = true
+      save
+    end
+
     def ensure_approval_exists!
       return if approval
       self.approval = Approval.create

@@ -84,6 +84,23 @@ module LicenseFinder
         dependency.should_not be_approved
       end
     end
+
+    describe "#set_license_manually!" do
+      let(:license) { LicenseAlias.create(name: 'foolicense') }
+      let(:dependency) { Dependency.create(name: 'foogem') }
+
+      it "sets manual license to true" do
+        dependency.license_manual.should be_false
+        dependency.set_license_manually!('Updated')
+        dependency.license_manual.should be_true
+      end
+
+      it "modifies the license" do
+        LicenseAlias.should_receive(:find_or_create).with(name: 'Updated').and_return(license)
+        dependency.set_license_manually!('Updated')
+        dependency.reload.license.should == license
+      end
+    end
   end
 end
 
