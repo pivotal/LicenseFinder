@@ -104,6 +104,54 @@ module LicenseFinder
       end
     end
 
+    describe ".modifying" do
+      context "when the database doesn't exist" do
+        before { File.stub(:exists?) { false } }
+
+        it "writes reports" do
+          Reporter.should_receive(:write_reports)
+          DependencyManager.modifying {}
+        end
+      end
+
+      context "when the database exists" do
+        before { File.stub(:exists?) { true } }
+
+        context "when the database has changed" do
+          before do
+            i = 0
+            File::Stat.stub_chain(:new, :mtime) { i += 1 }
+          end
+
+          it "writes reports" do
+            Reporter.should_receive(:write_reports)
+            DependencyManager.modifying {}
+          end
+        end
+
+        context "when the database has not changed" do
+          before do
+            File::Stat.stub_chain(:new, :mtime) { 5 }
+          end
+
+          it "does not write reports" do
+            Reporter.should_not_receive(:write_reports)
+            DependencyManager.modifying {}
+          end
+        end
+
+        context "when the reports do not exist" do
+          before do
+            File::Stat.stub_chain(:new, :mtime) { 5 }
+            File.stub(:exists?).with(LicenseFinder.config.dependencies_html) { false }
+          end
+
+          it "writes reports" do
+            Reporter.should_receive(:write_reports)
+            DependencyManager.modifying {}
+          end
+        end
+      end
+    end
   end
 end
-

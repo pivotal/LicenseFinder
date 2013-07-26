@@ -79,6 +79,8 @@ module LicenseFinder
         die_on_error {
           LicenseFinder.config.whitelist.push(license)
           LicenseFinder.config.save
+
+          Reporter.write_reports
         }
         say "Added #{license} to the license whitelist"
       end
@@ -88,6 +90,8 @@ module LicenseFinder
         die_on_error {
           LicenseFinder.config.whitelist.delete(license)
           LicenseFinder.config.save
+
+          Reporter.write_reports
         }
         say "Removed #{license} from the license whitelist"
       end
@@ -99,6 +103,8 @@ module LicenseFinder
         die_on_error {
           LicenseFinder.config.project_name = name
           LicenseFinder.config.save
+
+          Reporter.write_reports
         }
         say "Set the project name to #{name}", :green
       end
@@ -120,6 +126,8 @@ module LicenseFinder
         die_on_error {
           LicenseFinder.config.ignore_groups.push(group)
           LicenseFinder.config.save
+
+          Reporter.write_reports
         }
         say "Added #{group} to the ignored bundler groups"
       end
@@ -129,6 +137,8 @@ module LicenseFinder
         die_on_error {
           LicenseFinder.config.ignore_groups.delete(group)
           LicenseFinder.config.save
+
+          Reporter.write_reports
         }
         say "Removed #{group} from the ignored bundler groups"
       end

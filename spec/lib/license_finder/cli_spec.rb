@@ -57,6 +57,7 @@ module LicenseFinder
         it "adds the specified license to the whitelist" do
           config.whitelist.should_receive(:push).with("test")
           config.should_receive(:save)
+          Reporter.should_receive(:write_reports)
 
           silence_stdout do
             subject.add("test")
@@ -68,6 +69,7 @@ module LicenseFinder
         it "removes the specified license from the whitelist" do
           config.should_receive(:save)
           config.whitelist.should_receive(:delete).with("test")
+          Reporter.should_receive(:write_reports)
 
           silence_stdout do
             subject.remove("test")
@@ -83,6 +85,7 @@ module LicenseFinder
         it "sets the project name" do
           config.should_receive(:save)
           config.project_name.should_not eq("new_project_name")
+          Reporter.should_receive(:write_reports)
 
           silence_stdout do
             subject.set("new_project_name")
@@ -110,6 +113,7 @@ module LicenseFinder
         it "adds the specified group to the ignored groups list" do
           config.ignore_groups.should_receive(:push).with("test")
           config.should_receive(:save)
+          Reporter.should_receive(:write_reports)
 
           silence_stdout do
             subject.add("test")
@@ -121,6 +125,7 @@ module LicenseFinder
         it "removes the specified group from the ignored groups list" do
           config.ignore_groups.should_receive(:delete).with("test")
           config.should_receive(:save)
+          Reporter.should_receive(:write_reports)
 
           silence_stdout do
             subject.remove("test")

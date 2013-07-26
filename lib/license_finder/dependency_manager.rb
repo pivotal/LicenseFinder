@@ -30,18 +30,30 @@ module LicenseFinder
       modifying { find_by_name(name).approve!  }
     end
 
+    def self.modifying
+      timestamp_before_modifying = nil
+      if File.exists? LicenseFinder.config.database_uri
+        timestamp_before_modifying = File::Stat.new(LicenseFinder.config.database_uri).mtime.to_i
+      end
+      result = yield
+      timestamp_after_modifying = File::Stat.new(LicenseFinder.config.database_uri).mtime.to_i
+
+      unless timestamp_after_modifying == timestamp_before_modifying
+        Reporter.write_reports
+      end
+      unless File.exists?(LicenseFinder.config.dependencies_html)
+        Reporter.write_reports
+      end
+
+      result
+    end
+
     private # not really private, but it looks like it is!
 
     def self.find_by_name(name, scope = Dependency)
       dep = scope.first(name: name)
       raise Error.new("could not find dependency named #{name}") unless dep
       dep
-    end
-
-    def self.modifying
-      result = yield
-      Reporter.write_reports
-      result
     end
   end
 end
