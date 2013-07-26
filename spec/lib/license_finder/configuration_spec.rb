@@ -103,7 +103,7 @@ module LicenseFinder
         end
 
         it "writes the dependencies_dir" do
-          yaml["dependencies_dir"].should eq("./deps")
+          yaml["dependencies_file_dir"].should eq("./deps")
         end
 
         it "writes the project name" do
