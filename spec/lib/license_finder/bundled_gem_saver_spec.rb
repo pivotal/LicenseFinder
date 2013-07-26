@@ -169,8 +169,6 @@ module LicenseFinder
             end
 
             context "license already exists" do
-              # let!(:new_license) { LicenseAlias.create(name: 'new license') }
-
               it "uses the existing license" do
                 new_license = LicenseAlias.create(name: 'new license')
                 subject.license.should == new_license
