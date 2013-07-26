@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
     s.add_development_dependency gem
   end
 
-  s.add_development_dependency "database_cleaner", "0.9.1"
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "rails", "~> 3.2.0"
 
