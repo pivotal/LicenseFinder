@@ -2,10 +2,34 @@
 
 * Features
 
-  * Can maintain whitelisted licenses from command line
-  * Improve New BSD license detection
+  * Projects now have a title which can be configured from CLI
+  * JRuby officially supported. Test suite works against jruby, removed 
+    warnings
+  * Internal clean-up of database behavior
+  * Updated documentation with breakdown of HTML report
 
-=== 0.8.2 / 2012-07-09
+* Bugfixes
+
+  * dependencies.db is no longer modified after license_finder runs and finds
+    no changes
+  * Fix more CLI grammar/syntax errors
+  * HTML report now works when served over https (PR #36 - bwalding)
+  * dependencies.txt is now dependencies.csv (It was always a csv in spirit)
+
+=== 0.9.0 / 2013-07-16
+
+* Features
+
+  * Clarify CLI options and commands in help output
+  * Can manage whitelisted licenses from command line
+  * Improved New BSD license detection
+
+* Bugfixes
+
+  * Fix CLI grammar errors
+  * Using license_finder in a non-RVM environment now works (Issue #35)
+
+=== 0.8.2 / 2013-07-09
 
 * Features
 
