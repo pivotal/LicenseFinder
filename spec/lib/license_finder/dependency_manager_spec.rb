@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'digest'
 
 module LicenseFinder
   describe DependencyManager do
@@ -120,7 +121,7 @@ module LicenseFinder
         context "when the database has changed" do
           before do
             i = 0
-            File::Stat.stub_chain(:new, :mtime) { i += 1 }
+            Digest::SHA2.stub_chain(:file, :hexdigest) { i += 1 }
           end
 
           it "writes reports" do
@@ -131,7 +132,7 @@ module LicenseFinder
 
         context "when the database has not changed" do
           before do
-            File::Stat.stub_chain(:new, :mtime) { 5 }
+            Digest::SHA2.stub_chain(:file, :hexdigest) { 5 }
           end
 
           it "does not write reports" do
@@ -142,7 +143,7 @@ module LicenseFinder
 
         context "when the reports do not exist" do
           before do
-            File::Stat.stub_chain(:new, :mtime) { 5 }
+            Digest::SHA2.stub_chain(:file, :hexdigest) { 5 }
             File.stub(:exists?).with(LicenseFinder.config.dependencies_html) { false }
           end
 

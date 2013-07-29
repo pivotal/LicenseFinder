@@ -1,3 +1,5 @@
+require 'digest'
+
 module LicenseFinder
   module DependencyManager
     def self.sync_with_bundler
@@ -31,17 +33,16 @@ module LicenseFinder
     end
 
     def self.modifying
-      timestamp_before_modifying = nil
-      if File.exists? LicenseFinder.config.database_uri
-        timestamp_before_modifying = File::Stat.new(LicenseFinder.config.database_uri).mtime.to_i
-      end
+      checksum_before_modifying = if File.exists? LicenseFinder.config.database_uri
+                                    Digest::SHA2.file(LicenseFinder.config.database_uri).hexdigest
+                                  end
       result = yield
-      timestamp_after_modifying = File::Stat.new(LicenseFinder.config.database_uri).mtime.to_i
+      checksum_after_modifying = Digest::SHA2.file(LicenseFinder.config.database_uri).hexdigest
 
-      unless timestamp_after_modifying == timestamp_before_modifying
+      unless checksum_after_modifying == checksum_before_modifying
         Reporter.write_reports
       end
-      unless File.exists?(LicenseFinder.config.dependencies_html)
+      unless File.exists? LicenseFinder.config.dependencies_html
         Reporter.write_reports
       end
 
