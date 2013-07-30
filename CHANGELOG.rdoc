@@ -2,6 +2,12 @@
 
 * Features
 
+* Bugfixes
+
+=== 0.9.1 / 2013-07-30
+
+* Features
+
   * Projects now have a title which can be configured from CLI
   * JRuby officially supported. Test suite works against jruby, removed 
     warnings
