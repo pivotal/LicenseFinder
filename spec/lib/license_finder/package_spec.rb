@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module LicenseFinder
-  describe BundledGem do
+  describe Package do
     subject { described_class.new(gemspec) }
 
     let(:gemspec) do
@@ -26,7 +26,7 @@ module LicenseFinder
 
     describe "#license" do
       subject do
-        details = BundledGem.new(gemspec)
+        details = Package.new(gemspec)
         details.stub(:license_files).and_return([license_file])
         details
       end
@@ -75,6 +75,24 @@ module LicenseFinder
           subject.groups.should == []
         end
       end
+    end
+  end
+
+  describe PythonPackage do
+    it "calls out to Pip if no license is found using conventional means" do
+      allow(Pip).to receive(:license_for).and_return("PSF")
+
+      package = PythonPackage.new(OpenStruct.new(name: 'jasmine', version: '1.3.1', full_gem_path: '/foo/bar'))
+
+      expect(package.determine_license).to eq("PSF")
+    end
+
+    it "returns other if no license could be found" do
+      allow(Pip).to receive(:license_for).and_return("other")
+
+      package = PythonPackage.new(OpenStruct.new(name: 'jasmine', version: '1.3.1', full_gem_path: '/foo/bar'))
+
+      expect(package.determine_license).to eq("other")
     end
   end
 end
