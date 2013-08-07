@@ -62,5 +62,29 @@ module LicenseFinder
         end
       end
     end
+
+    describe '.has_gemfile?' do
+      let(:gemfile) { Pathname.new('Gemfile').expand_path }
+
+      before :each do
+        allow(File).to receive(:exists?).and_call_original
+      end
+
+      context 'without a Gemfile' do
+        it 'returns false' do
+          allow(File).to receive(:exists?).with(gemfile).and_return(false)
+
+          Bundle.has_gemfile?.should == false
+        end
+      end
+
+      context 'with a Gemfile' do
+        it 'returns true' do
+          allow(File).to receive(:exists?).with(gemfile).and_return(true)
+
+          Bundle.has_gemfile?.should == true
+        end
+      end
+    end
   end
 end

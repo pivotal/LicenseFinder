@@ -4,12 +4,22 @@ module LicenseFinder
   class Bundle
     attr_writer :ignore_groups
 
-    def self.current_gems(config, bundler_definition=nil)
-      new(config, bundler_definition).gems
+    class << self
+      def current_gems(config, bundler_definition=nil)
+        new(config, bundler_definition).gems
+      end
+
+      def has_gemfile?
+        File.exists?(gemfile_path)
+      end
+
+      def gemfile_path
+        Pathname.new("Gemfile").expand_path
+      end
     end
 
     def initialize(config=nil, bundler_definition=nil)
-      @definition = bundler_definition || Bundler::Definition.build(gemfile_path, lockfile_path, nil)
+      @definition = bundler_definition || Bundler::Definition.build(self.class.gemfile_path, lockfile_path, nil)
       @config ||= config
     end
 
@@ -24,7 +34,7 @@ module LicenseFinder
         formatted_name = format_name(spec)
         gem_names_cache[format_name(spec)] = true
 
-        BundledGem.new(spec, dependency)
+        Package.new(spec, dependency)
       end
 
       @gems.each do |gem|
@@ -49,12 +59,8 @@ module LicenseFinder
       definition.groups - ignore_groups.map(&:to_sym)
     end
 
-    def gemfile_path
-      Pathname.new("Gemfile").expand_path
-    end
-
     def lockfile_path
-      gemfile_path.dirname.join('Gemfile.lock')
+      self.class.gemfile_path.dirname.join('Gemfile.lock')
     end
 
     def children_for(gem, cache)

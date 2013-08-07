@@ -30,6 +30,17 @@ end
 
 module DSL
   class User
+    def create_python_app
+      reset_projects!
+
+      `mkdir -p #{app_path}`
+      `cd #{app_path} && touch requirements.txt`
+
+      add_pip_dependency('jasmine==1.3.1')
+
+      pip_install
+    end
+
     def create_nonrails_app
       reset_projects!
 
@@ -160,10 +171,18 @@ module DSL
       add_to_gemfile(line)
     end
 
+    def add_pip_dependency(dependency)
+      add_to_requirements(dependency)
+    end
+
     def bundle_app
       Bundler.with_clean_env do
         `bundle install --gemfile=#{File.join(app_path, "Gemfile")} --path=#{bundle_path}`
       end
+    end
+
+    def pip_install
+      `cd #{app_path} && pip install --force-reinstall -r requirements.txt`
     end
 
     def modifying_dependencies_file
@@ -179,6 +198,10 @@ module DSL
 
     def add_to_rakefile(line)
       `echo #{line.inspect} >> #{File.join(app_path, "Rakefile")}`
+    end
+
+    def add_to_requirements(line)
+      `echo #{line.inspect} >> #{File.join(app_path, "requirements.txt")}`
     end
 
     def app_name

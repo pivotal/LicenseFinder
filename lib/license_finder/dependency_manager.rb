@@ -4,7 +4,16 @@ module LicenseFinder
   module DependencyManager
     def self.sync_with_bundler
       modifying {
-        current_dependencies = BundledGemSaver.save_gems(Bundle.current_gems(LicenseFinder.config))
+        current_dependencies = []
+
+        if Bundle.has_gemfile?
+          current_dependencies += PackageSaver.save_packages(Bundle.current_gems(LicenseFinder.config))
+        end
+
+        if Pip.has_requirements?
+          current_dependencies += PackageSaver.save_packages(Pip.current_dists())
+        end
+
         Dependency.bundler.obsolete(current_dependencies).each(&:destroy)
       }
     end

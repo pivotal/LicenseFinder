@@ -1,24 +1,26 @@
+require 'forwardable'
+
 module LicenseFinder
-  class BundledGemSaver
+  class PackageSaver
     extend Forwardable
-    def_delegators :spec, :name, :version, :summary, :description, :homepage
-    def_delegators :bundled_gem, :bundler_dependency, :license, :children, :groups
+    def_delegators :spec, :name, :version, :homepage
+    def_delegators :package, :bundler_dependency, :license, :children, :groups, :summary, :description
 
-    attr_reader :dependency, :bundled_gem
+    attr_reader :dependency, :package
 
-    def self.find_or_create_by_name(bundled_gem)
-      dependency = Dependency.named(bundled_gem.spec.name)
-      new(dependency, bundled_gem)
+    def self.find_or_create_by_name(package)
+      dependency = Dependency.named(package.spec.name)
+      new(dependency, package)
     end
 
-    def self.save_gems(current_gems)
-      current_gems.map do |bundled_gem|
-        BundledGemSaver.find_or_create_by_name(bundled_gem).save
+    def self.save_packages(current_packages)
+      current_packages.map do |package|
+        PackageSaver.find_or_create_by_name(package).save
       end
     end
 
-    def initialize(dependency, bundled_gem)
-      @bundled_gem = bundled_gem
+    def initialize(dependency, package)
+      @package = package
       @dependency = dependency
     end
 
@@ -35,7 +37,7 @@ module LicenseFinder
     private
 
     def spec
-      bundled_gem.spec
+      package.spec
     end
 
     def apply_dependency_definition
