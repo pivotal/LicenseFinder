@@ -182,7 +182,7 @@ module DSL
     end
 
     def pip_install
-      `cd #{app_path} && pip install -r requirements.txt -M`
+      `cd #{app_path} && pip install --force-reinstall -r requirements.txt`
     end
 
     def modifying_dependencies_file
