@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module LicenseFinder
-  describe BundledGemSaver do
+  describe PackageSaver do
     let(:gemspec) do
       Gem::Specification.new do |s|
         s.name = 'spec_name'
@@ -15,21 +15,21 @@ module LicenseFinder
     end
 
     describe ".save_gems" do
-      let(:bundled_gems) { [gem] }
-      let(:gem) { double(:bundled_gem) }
+      let(:packages) { [gem] }
+      let(:gem) { double(:package) }
 
       it "calls find_or_create_by_name on all passed in gems" do
         described_class.should_receive(:find_or_create_by_name).with(gem).and_return(gem)
         gem.should_receive(:save)
-        described_class.save_gems(bundled_gems)
+        described_class.save_packages(packages)
       end
     end
 
     describe "#save" do
-      let(:bundled_gem) { BundledGem.new(gemspec) }
-      subject { described_class.find_or_create_by_name(bundled_gem).save }
+      let(:package) { Package.new(gemspec) }
+      subject { described_class.find_or_create_by_name(package).save }
 
-      before { bundled_gem.children = ["foo"] }
+      before { package.children = ["foo"] }
 
       context "when the dependency is new" do
         it "persists gem data" do
@@ -53,7 +53,7 @@ module LicenseFinder
         end
 
         context "with a bundler dependency" do
-          let(:bundled_gem) { BundledGem.new(gemspec, double(:bundler_dependency, groups: %w[1 2 3]))}
+          let(:package) { Package.new(gemspec, double(:bundler_dependency, groups: %w[1 2 3]))}
 
           it "saves the bundler groups" do
             subject.bundler_groups.map(&:name).should =~ %w[1 2 3]
@@ -78,11 +78,11 @@ module LicenseFinder
               license: license
             )
           end
-          let(:bundled_gem_saver) { described_class.find_or_create_by_name(bundled_gem) }
+          let(:package_saver) { described_class.find_or_create_by_name(package) }
 
           it "does not save the dependency" do
-            bundled_gem_saver.dependency.should_not_receive(:save)
-            bundled_gem_saver.save
+            package_saver.dependency.should_not_receive(:save)
+            package_saver.save
           end
         end
 
@@ -134,10 +134,10 @@ module LicenseFinder
           end
 
           context "with a bundler dependency" do
-            let(:bundled_gem) { BundledGem.new(gemspec, double(:bundler_dependency)) }
+            let(:package) { Package.new(gemspec, double(:bundler_dependency)) }
 
             before do
-              bundled_gem.stub(:groups) { [:group_1, :group_2, :b] }
+              package.stub(:groups) { [:group_1, :group_2, :b] }
               old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'a')
               old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'b')
             end
@@ -177,7 +177,7 @@ module LicenseFinder
           end
 
           context "license does not change" do
-            let(:bundled_gem_saver) { described_class.find_or_create_by_name(bundled_gem) }
+            let(:package_saver) { described_class.find_or_create_by_name(package) }
 
             before do
               old_copy.license = LicenseAlias.create(name: 'MIT')
@@ -187,7 +187,7 @@ module LicenseFinder
             end
 
             it "should not change the license or approval" do
-              dependency = bundled_gem_saver.save
+              dependency = package_saver.save
               if LicenseFinder::Platform.java?
                 dependency.approved?.should_not == 1
               else
@@ -197,8 +197,8 @@ module LicenseFinder
             end
 
             it "should not save the license" do
-              bundled_gem_saver.dependency.license.should_not_receive(:save)
-              bundled_gem_saver.save
+              package_saver.dependency.license.should_not_receive(:save)
+              package_saver.save
             end
           end
         end

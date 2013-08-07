@@ -49,9 +49,12 @@ end
 Then(/^I should see only see GPL liceneses as unapproved in the html$/) do
   html = File.read(@user.dependencies_html_path)
   page = Capybara.string(html)
-  page.should have_content '9 total'
+  page.should have_content '12 total'
   page.should have_content '1 unapproved'
   page.should have_content '1 GPL'
+  page.should have_content '1 other'
+  page.should have_content '1 New BSD'
+  page.should have_content '9 MIT'
 end
 
 def is_html_status?(gem, approval)
