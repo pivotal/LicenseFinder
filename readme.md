@@ -3,7 +3,9 @@
 [![Build Status](https://secure.travis-ci.org/pivotal/LicenseFinder.png)](http://travis-ci.org/pivotal/LicenseFinder)
 [![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
 
-With bundler it's easy for your project to depend on many gems.  This decomposition is nice, but managing licenses becomes difficult.  This tool gathers info about the licenses of the gems in your project.
+With bundler and other dependency management tools, it's easy for your project to depend on many packages.  This decomposition is nice, but managing licenses becomes difficult.  License Finter gathers info about the licenses of the packages in your project.
+
+License Finder currently supports ruby gems, python eggs, and node modules. If you are looking to manage licenses on a java/maven project, we recommend using the [license maven plugin](http://mojo.codehaus.org/license-maven-plugin/).
 
 
 ## Installation
@@ -24,6 +26,8 @@ $ license_finder
 ```
 
 (Note) If you wish to run license_finder without the progress spinner use the --quiet option.
+
+License finder will include packages for all supported languages, as long as that language has a Gemfile/requirements.txt/package.json in the project directory.
 
 On a brand new Rails project, you could expect `license_finder` to output something like the following
 (assuming you whitelisted the MIT license -- see [Configuration](#configuration)):
@@ -131,10 +135,10 @@ To remove a group from the ignored Bundler groups:
 $ license_finder ignored_bundler_groups remove development
 ```
 
-### Managing non-Bundler dependencies
+### Managing unsupported dependencies
 
-license_finder can track dependencies that Bundler doesn't know about (JS libraries that don't
-appear in your Gemfile, etc.)
+license_finder can track dependencies that Bundler/PyPi/NPM doesn't know about (JS libraries that don't
+appear in your Gemfile/requirements.txt/package.json, etc.)
 
 ```sh
 $ license_finder dependencies add MIT my_js_dep 0.1.2
