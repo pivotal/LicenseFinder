@@ -41,6 +41,17 @@ module DSL
       pip_install
     end
 
+    def create_node_app
+      reset_projects!
+
+      `mkdir -p #{app_path}`
+      `cd #{app_path} && touch package.json`
+
+      add_npm_dependency('jshint', '2.1.9')
+
+      npm_install
+    end
+
     def create_nonrails_app
       reset_projects!
 
@@ -175,6 +186,12 @@ module DSL
       add_to_requirements(dependency)
     end
 
+    def add_npm_dependency(dependency, version)
+      line = "{\"dependencies\" : {\"#{dependency}\": \"#{version}\"}}"
+
+      add_to_package(line)
+    end
+
     def bundle_app
       Bundler.with_clean_env do
         `bundle install --gemfile=#{File.join(app_path, "Gemfile")} --path=#{bundle_path}`
@@ -183,6 +200,10 @@ module DSL
 
     def pip_install
       `cd #{app_path} && pip install -r requirements.txt`
+    end
+
+    def npm_install
+      `cd #{app_path} && npm install 2>/dev/null`
     end
 
     def modifying_dependencies_file
@@ -202,6 +223,10 @@ module DSL
 
     def add_to_requirements(line)
       `echo #{line.inspect} >> #{File.join(app_path, "requirements.txt")}`
+    end
+
+    def add_to_package(line)
+      `echo #{line.inspect} >> #{File.join(app_path, "package.json")}`
     end
 
     def app_name

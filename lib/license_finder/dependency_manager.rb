@@ -14,6 +14,10 @@ module LicenseFinder
           current_dependencies += PackageSaver.save_packages(Pip.current_dists())
         end
 
+        if NPM.has_package?
+          current_dependencies += PackageSaver.save_packages(NPM.current_modules())
+        end
+
         Dependency.bundler.obsolete(current_dependencies).each(&:destroy)
       }
     end

@@ -15,9 +15,6 @@ module LicenseFinder
       let(:gem1) { double(:package) }
       let(:gem2) { double(:package) }
 
-      let(:dist1) { double(:distribution) }
-      let(:dist2) { double(:distribution) }
-
       it "destroys every dependency except for the ones Bundler reports as 'current' or are marked as 'manual'" do
         cur1 = Dependency.create(name: "current dependency 1")
         cur2 = Dependency.create(name: "current dependency 2")

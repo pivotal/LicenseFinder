@@ -8,12 +8,13 @@ module LicenseFinder
   Error = Class.new(StandardError)
 
   autoload :Bundle,               'license_finder/bundle'
-  autoload :PackageSaver,      'license_finder/package_saver'
+  autoload :PackageSaver,         'license_finder/package_saver'
   autoload :CLI,                  'license_finder/cli'
   autoload :Configuration,        'license_finder/configuration'
   autoload :DependencyManager,    'license_finder/dependency_manager'
   autoload :License,              'license_finder/license'
   autoload :LicenseUrl,           'license_finder/license_url'
+  autoload :NPM,                  'license_finder/npm'
   autoload :Pip,                  'license_finder/pip'
   autoload :Package,              'license_finder/package'
   autoload :Platform,             'license_finder/platform'
