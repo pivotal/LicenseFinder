@@ -1,8 +1,12 @@
-=== TBD
+=== 0.9.2 / 2013-08-17
 
 * Features
 
+  * Support for python and node.js projects
+
 * Bugfixes
+
+  * Fix HTML output in firefox
 
 === 0.9.1 / 2013-07-30
 
