@@ -246,6 +246,8 @@ And add a `LICENSE` file to your gem that contains your license text.
 * Rebase on top of master
 * Send a pull request
 
+To successfully run the test suite, you will need node.js, and python installed.
+
 ## License
 
 LicenseFinder is released under the MIT License. http://www.opensource.org/licenses/mit-license
