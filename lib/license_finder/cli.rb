@@ -39,7 +39,7 @@ module LicenseFinder
     end
 
     class Dependencies < Subcommand
-      option :approve, type: :boolean, desc: "Approve the added dependency"
+      method_option :approve, type: :boolean, desc: "Approve the added dependency"
       desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler"
       def add(license, name, version = nil)
         die_on_error {
@@ -145,7 +145,7 @@ module LicenseFinder
     end
 
     class Main < Base
-      option :quiet, type: :boolean, desc: "silences loading output"
+      method_option :quiet, type: :boolean, desc: "silences loading output"
       desc "rescan", "Find new dependencies. (Default action)"
       def rescan
         die_on_error {
