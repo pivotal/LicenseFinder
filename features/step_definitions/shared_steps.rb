@@ -77,7 +77,6 @@ module DSL
       add_to_rakefile <<-RUBY
         require 'bundler/setup'
         require 'license_finder'
-        LicenseFinder.load_rake_tasks
       RUBY
     end
 
