@@ -211,6 +211,10 @@ module DSL
       File.open(dependencies_file_path, 'w+') { |f| yield f }
     end
 
+    def jruby?
+      `ruby -v`.match /^jruby/
+    end
+
     private
 
     def add_to_gemfile(line)
