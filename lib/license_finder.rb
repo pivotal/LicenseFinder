@@ -38,5 +38,7 @@ module LicenseFinder
 end
 
 require 'license_finder/railtie' if defined?(Rails)
-require 'license_finder/tables'
-LicenseFinder::YmlToSql.convert_if_required
+unless defined?(LicenseAudit)
+  require 'license_finder/tables'
+  LicenseFinder::YmlToSql.convert_if_required
+end
