@@ -1,3 +1,13 @@
+=== 0.9.3 / 2012-10-01
+
+* Features
+
+  * New Apache 2.0 license alias
+
+* Bugfixes
+
+  * Fix problem which prevented license finder from running in rails < 3.2
+
 === 0.9.2 / 2013-08-17
 
 * Features
