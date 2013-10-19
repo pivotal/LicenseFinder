@@ -31,6 +31,7 @@ module LicenseFinder
   autoload :HtmlReport,       'license_finder/reports/html_report'
   autoload :Reporter,         'license_finder/reports/reporter'
   autoload :TextReport,       'license_finder/reports/text_report'
+  autoload :DetailedTextReport,   'license_finder/reports/detailed_text_report'
 
   def self.config
     @config ||= Configuration.ensure_default

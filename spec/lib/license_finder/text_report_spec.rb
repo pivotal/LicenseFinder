@@ -6,7 +6,7 @@ module LicenseFinder
       let(:dep1) do
         dependency = Dependency.new(
           'name' => 'gem_a',
-          'version' => '1.0',
+          'version' => '1.0'
         )
         dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
         dependency
@@ -15,7 +15,7 @@ module LicenseFinder
       let(:dep2) do
         dependency = Dependency.new(
           'name' => 'gem_b',
-          'version' => '1.0',
+          'version' => '1.0'
         )
         dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
         dependency
@@ -23,7 +23,7 @@ module LicenseFinder
 
       subject { TextReport.new([dep2, dep1]).to_s }
 
-      it 'should generate a text report with the name, version, and license of each dependency, sorted by name' do
+      it 'should generate a text report with the name, version and license of each dependency, sorted by name' do
         should == "gem_a, 1.0, MIT\ngem_b, 1.0, MIT"
       end
     end
