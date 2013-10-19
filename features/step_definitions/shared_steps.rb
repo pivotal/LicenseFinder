@@ -14,8 +14,8 @@ When(/^I run license_finder$/) do
   @output = @user.execute_command "license_finder --quiet"
 end
 
-When(/^I whitelist MIT and 'other' and New BSD and Apache 2.0 and Ruby licenses$/) do
-  @user.configure_license_finder_whitelist ["MIT","other","New BSD","Apache 2.0","Ruby"]
+When(/^I whitelist MIT and 'other' and New BSD and Apache 2.0 licenses$/) do
+  @user.configure_license_finder_whitelist ["MIT","other","New BSD","Apache 2.0"]
   @output = @user.execute_command "license_finder --quiet"
 end
 

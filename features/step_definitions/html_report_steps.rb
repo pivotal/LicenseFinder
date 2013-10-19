@@ -54,12 +54,11 @@ Then(/^I should see only see GPL liceneses as unapproved in the html$/) do
   page.should have_content '1 GPL'
   page.should have_content '1 other'
   if @user.jruby?
-    page.should have_content '8 MIT'
+    page.should have_content '9 MIT'
     page.should have_content '1 Apache 2.0'
   else
-    page.should have_content '9 MIT'
+    page.should have_content '10 MIT'
   end
-  page.should have_content '1 ruby'
 end
 
 def is_html_status?(gem, approval)
