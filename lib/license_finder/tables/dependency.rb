@@ -31,6 +31,24 @@ module LicenseFinder
       d
     end
 
+    def bundler_group_names=(names)
+      current_groups = names.map { |name| BundlerGroup.find_or_create(name: name) }
+
+      remove, add = set_diff(bundler_groups, current_groups)
+
+      remove.each { |g| remove_bundler_group(g) }
+      add.each { |g| add_bundler_group(g) }
+    end
+
+    def children_names=(names)
+      current_children = names.map { |name| Dependency.named(name) }
+
+      remove, add = set_diff(children, current_children)
+
+      remove.each { |c| remove_child(c) }
+      add.each { |c| add_child(c) }
+    end
+
     def approve!
       approval.state = true
       approval.save
@@ -52,6 +70,17 @@ module LicenseFinder
       return if approval
       self.approval = Approval.create
       save
+    end
+
+    private
+
+    # Foreign method, belongs on Set
+    #
+    # Returns a pair of sets, which contain the elements that would have to be
+    # removed from (and respectively added to) the first set in order to obtain
+    # the second set.
+    def set_diff(older, newer)
+      return older - newer, newer - older
     end
   end
 end
