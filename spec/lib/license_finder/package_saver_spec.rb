@@ -137,13 +137,13 @@ module LicenseFinder
             let(:package) { Package.new(gemspec, double(:bundler_dependency)) }
 
             before do
-              package.stub(:groups) { [:group_1, :group_2, :b] }
-              old_copy.add_bundler_group BundlerGroup.named('a')
-              old_copy.add_bundler_group BundlerGroup.named('b')
+              old_copy.add_bundler_group BundlerGroup.named('old')
+              old_copy.add_bundler_group BundlerGroup.named('maintained')
+              package.stub(:groups) { [:new, :maintained] }
             end
 
             it "ensures the correct bundler groups are associated" do
-              subject.bundler_groups.map(&:name).should =~ %w[group_1 group_2 b]
+              subject.bundler_groups.map(&:name).should =~ %w[new maintained]
             end
           end
 
