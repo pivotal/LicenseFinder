@@ -107,6 +107,79 @@ module LicenseFinder
         dependency.reload.license.should == license
       end
     end
+
+    describe "#bundler_group_names=" do
+      let(:dependency) { Dependency.named('some gem') }
+
+      it "saves the bundler groups" do
+        dependency.bundler_group_names = %w[1 2 3]
+        dependency.bundler_groups.map(&:name).should =~ %w[1 2 3]
+      end
+
+      it "removed outdated groups and adds new groups" do
+        dependency.add_bundler_group BundlerGroup.named('old')
+        dependency.add_bundler_group BundlerGroup.named('maintained')
+        dependency.bundler_group_names = %w[new maintained]
+        dependency.bundler_groups.map(&:name).should =~ %w[new maintained]
+      end
+    end
+
+    describe "children_names=" do
+      let(:dependency) { Dependency.named('some gem') }
+
+      it "saves the children" do
+        dependency.children_names = %w[1 2 3]
+        dependency.children.map(&:name).should =~ %w[1 2 3]
+      end
+
+      it "removes outdated children and adds new children" do
+        dependency.add_child Dependency.named('old')
+        dependency.add_child Dependency.named('maintained')
+        dependency.children_names = %w[new maintained]
+        dependency.children.map(&:name).should =~ %w[new maintained]
+      end
+    end
+
+    describe "#apply_better_license" do
+      let(:dependency) { Dependency.named('some gem') }
+
+      it "keeps a manually assigned license" do
+        dependency.license = LicenseAlias.named("manual")
+        dependency.license_manual = true
+
+        dependency.apply_better_license "new"
+        dependency.license.name.should == "manual"
+      end
+
+      it "saves a new license" do
+        dependency.apply_better_license "new license"
+        dependency.license.name.should == "new license"
+      end
+
+      it "re-uses an existing, unassociated, license alias" do
+        dependency.license = LicenseAlias.named("old")
+
+        new_license = LicenseAlias.named("new license")
+
+        dependency.apply_better_license "new license"
+        dependency.license.should == new_license
+      end
+
+      it "updates the license's name" do
+        dependency.license = LicenseAlias.named("old")
+
+        dependency.apply_better_license "new license"
+        dependency.license.name.should == "new license"
+      end
+
+      it "does not change the approval" do
+        dependency.license = LicenseAlias.named("old")
+        dependency.approval = Approval.create(state: true)
+
+        dependency.apply_better_license "new license"
+        dependency.should be_approved
+      end
+    end
   end
 end
 
