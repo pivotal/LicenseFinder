@@ -102,7 +102,7 @@ module LicenseFinder
       end
 
       it "modifies the license" do
-        LicenseAlias.should_receive(:find_or_create).with(name: 'Updated').and_return(license)
+        LicenseAlias.should_receive(:named).with('Updated').and_return(license)
         dependency.set_license_manually!('Updated')
         dependency.reload.license.should == license
       end
