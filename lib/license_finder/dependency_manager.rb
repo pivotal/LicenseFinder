@@ -7,15 +7,15 @@ module LicenseFinder
         current_dependencies = []
 
         if Bundle.has_gemfile?
-          current_dependencies += PackageSaver.save_packages(Bundle.current_gems(LicenseFinder.config))
+          current_dependencies += PackageSaver.save_all(Bundle.current_gems(LicenseFinder.config))
         end
 
         if Pip.has_requirements?
-          current_dependencies += PackageSaver.save_packages(Pip.current_dists())
+          current_dependencies += PackageSaver.save_all(Pip.current_dists())
         end
 
         if NPM.has_package?
-          current_dependencies += PackageSaver.save_packages(NPM.current_modules())
+          current_dependencies += PackageSaver.save_all(NPM.current_modules())
         end
 
         if Bower.has_package_file?
