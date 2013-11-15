@@ -49,37 +49,23 @@ module LicenseFinder
     end
 
     def sync_bundler_groups
-      existing_groups = dependency.bundler_groups
-      new_groups = groups.map(&:to_s)
+      saved_groups = dependency.bundler_groups
+      current_groups = groups.map { |name| BundlerGroup.find_or_create(name: name.to_s) }
 
-      existing_groups.reverse.each do |group|
-        unless new_groups.include?(group.name)
-          dependency.remove_bundler_group(group)
-        end
-      end
+      remove, add = set_diff(saved_groups, current_groups)
 
-      new_groups.each do |group|
-        unless existing_groups.map(&:name).include? group
-          dependency.add_bundler_group BundlerGroup.find_or_create(name: group)
-        end
-      end
+      remove.each { |g| dependency.remove_bundler_group(g) }
+      add.each { |g| dependency.add_bundler_group(g) }
     end
 
     def sync_children
-      existing_children = dependency.children
-      new_children = children
+      saved_children = dependency.children
+      current_children = children.map { |name| Dependency.named(name) }
 
-      existing_children.reverse.each do |child|
-        unless new_children.include?(child.name)
-          dependency.remove_child(child)
-        end
-      end
+      remove, add = set_diff(saved_children, current_children)
 
-      new_children.each do |child|
-        unless existing_children.map(&:name).include?(child)
-          dependency.add_child Dependency.named(child)
-        end
-      end
+      remove.each { |c| dependency.remove_child(c) }
+      add.each { |c| dependency.add_child(c) }
     end
 
     def apply_better_license
@@ -90,6 +76,17 @@ module LicenseFinder
           dependency.save
         end
       end
+    end
+
+    private
+
+    # Foreign method, belongs on Set
+    #
+    # Returns a pair of sets, which contain the elements that would have to be
+    # removed from (and respectively added to) the first set in order to obtain
+    # the second set.
+    def set_diff(older, newer)
+      return older - newer, newer - older
     end
   end
 end
