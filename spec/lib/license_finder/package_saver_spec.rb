@@ -115,8 +115,8 @@ module LicenseFinder
 
           before do
             package.stub(:groups) { [:group_1, :group_2, :b] }
-            old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'a')
-            old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'b')
+            old_copy.add_bundler_group BundlerGroup.named(name: 'a')
+            old_copy.add_bundler_group BundlerGroup.named(name: 'b')
           end
 
           it "ensures the correct bundler groups are associated" do

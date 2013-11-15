@@ -32,7 +32,7 @@ module LicenseFinder
     end
 
     def bundler_group_names=(names)
-      current_groups = names.map { |name| BundlerGroup.find_or_create(name: name) }
+      current_groups = names.map { |name| BundlerGroup.named(name) }
 
       remove, add = set_diff(bundler_groups, current_groups)
 
@@ -67,7 +67,7 @@ module LicenseFinder
     end
 
     def set_license_manually!(license_name)
-      self.license = LicenseAlias.find_or_create(name: license_name)
+      self.license = LicenseAlias.named(license_name)
       self.license_manual = true
       save
     end
@@ -75,7 +75,7 @@ module LicenseFinder
     def apply_better_license(license_name)
       return if license_manual
       if license.nil? || license_name != license.name
-        self.license = LicenseAlias.find_or_create(name: license_name)
+        self.license = LicenseAlias.named(license_name)
         save
       end
     end
