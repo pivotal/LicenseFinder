@@ -41,20 +41,11 @@ module LicenseFinder
     end
 
     def apply_dependency_definition
-      if values_have_changed?
-        dependency.version = version.to_s
-        dependency.summary = summary
-        dependency.description = description
-        dependency.homepage = homepage
-        dependency.save
-      end
-    end
-
-    def values_have_changed?
-      return dependency.version != version.to_s ||
-        dependency.summary != summary ||
-        dependency.description != description ||
-        dependency.homepage != homepage
+      dependency.version = version.to_s
+      dependency.summary = summary
+      dependency.description = description
+      dependency.homepage = homepage
+      dependency.save_changes
     end
 
     def sync_bundler_groups
