@@ -57,13 +57,7 @@ module LicenseFinder
     end
 
     def apply_better_license
-      if !dependency.license_manual
-        bundled_license = license
-        if dependency.license.nil? || bundled_license != dependency.license.name
-          dependency.license = LicenseAlias.find_or_create(name: bundled_license)
-          dependency.save
-        end
-      end
+      dependency.apply_better_license license
     end
   end
 end
