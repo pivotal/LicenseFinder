@@ -15,13 +15,13 @@ module LicenseFinder
     end
 
     describe ".save_all" do
-      let(:packages) { [gem] }
-      let(:gem) { double(:package) }
+      let(:package) { Package.new(gemspec) }
+      let(:dependency) { double(:dependency).as_null_object }
 
-      it "calls find_or_create_by_name on all passed in gems" do
-        described_class.should_receive(:find_or_create_by_name).with(gem).and_return(gem)
-        gem.should_receive(:save)
-        described_class.save_all(packages)
+      it "find and updates relevant dependencies" do
+        Dependency.should_receive(:named).with('spec_name').and_return(dependency)
+        dependency.should_receive(:save_changes)
+        described_class.save_all([package])
       end
     end
 
