@@ -14,14 +14,14 @@ module LicenseFinder
       end
     end
 
-    describe ".save_gems" do
+    describe ".save_all" do
       let(:packages) { [gem] }
       let(:gem) { double(:package) }
 
       it "calls find_or_create_by_name on all passed in gems" do
         described_class.should_receive(:find_or_create_by_name).with(gem).and_return(gem)
         gem.should_receive(:save)
-        described_class.save_packages(packages)
+        described_class.save_all(packages)
       end
     end
 

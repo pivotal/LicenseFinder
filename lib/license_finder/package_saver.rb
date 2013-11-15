@@ -13,9 +13,9 @@ module LicenseFinder
       new(dependency, package)
     end
 
-    def self.save_packages(current_packages)
-      current_packages.map do |package|
-        PackageSaver.find_or_create_by_name(package).save
+    def self.save_all(packages)
+      packages.map do |package|
+        find_or_create_by_name(package).save
       end
     end
 
