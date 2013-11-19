@@ -19,14 +19,14 @@ module LicenseFinder
         end
 
         if Bower.has_package_file?
-          current_dependencies += PackageSaver.save_packages(Bower.current_packages())
+          current_dependencies += PackageSaver.save_all(Bower.current_packages())
         end
 
-        Dependency.bundler.obsolete(current_dependencies).each(&:destroy)
+        Dependency.managed.obsolete(current_dependencies).each(&:destroy)
       }
     end
 
-    def self.create_non_bundler(license, name, version)
+    def self.create_manually_managed(license, name, version)
       raise Error.new("#{name} dependency already exists") unless Dependency.where(name: name).empty?
 
       modifying {
@@ -37,8 +37,8 @@ module LicenseFinder
       }
     end
 
-    def self.destroy_non_bundler(name)
-      modifying { find_by_name(name, Dependency.non_bundler).destroy }
+    def self.destroy_manually_managed(name)
+      modifying { find_by_name(name, Dependency.manually_managed).destroy }
     end
 
     def self.license!(name, license)

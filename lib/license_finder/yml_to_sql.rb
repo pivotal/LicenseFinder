@@ -41,7 +41,7 @@ module LicenseFinder
       @dep = create_dependency
       @dep.license = create_license
       @dep.approval = create_approval
-      @dep.manual = non_bundler_source?
+      @dep.manual = manually_managed?
       associate_bundler_groups
       @dep.save
     end
@@ -58,8 +58,8 @@ module LicenseFinder
       end
     end
 
-    def non_bundler_source?
-      @legacy_attrs['source'] == "bundle" ? false : true
+    def manually_managed?
+      @legacy_attrs['source'] != "bundle"
     end
 
     def create_dependency
