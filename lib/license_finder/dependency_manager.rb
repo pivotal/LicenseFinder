@@ -28,7 +28,6 @@ module LicenseFinder
       modifying {
         dependency = Dependency.new(manual: true, name: name, version: version)
         dependency.license = LicenseAlias.create(name: license)
-        dependency.approval = Approval.create
         dependency.save
       }
     end

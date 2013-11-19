@@ -59,7 +59,7 @@ module LicenseFinder
       it "keeps approval" do
         dep = Dependency.create(
           name: 'spec_name',
-          approval: Approval.create(state: true)
+          manually_approved: true
         )
         saver = described_class.new(dep, package)
         subject = saver.save

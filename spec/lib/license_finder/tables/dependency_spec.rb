@@ -12,14 +12,11 @@ module LicenseFinder
 
       it "should return all unapproved dependencies" do
         dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
-        dependency.approval = Approval.create(state: false)
-        dependency.save
         approved = Dependency.create(name: "approved dependency", version: '0.0.1')
-        approved.approval = Approval.create(state: true)
+        approved.manually_approved = true
         approved.save
         whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
         whitelisted.license = LicenseAlias.create(name: 'MIT')
-        whitelisted.approval = Approval.create(state: false)
         whitelisted.save
 
         unapproved = Dependency.unapproved
@@ -42,23 +39,11 @@ module LicenseFinder
         dep.should_not be_new
         Dependency.count(name: "referenced_again").should == 1
       end
-
-      it "always attaches an approval" do
-        described_class.named("referenced_again").reload.approval.should be
-        described_class.named("referenced_again").reload.approval.should be
-      end
-
-      it "attaches an approval to a dependency that is currently missing one" do
-        Dependency.create(name: "foo")
-        described_class.named("foo").reload.approval.should be
-      end
     end
 
     describe '#approve!' do
       it "should update the database to show the dependency is approved" do
         dependency = Dependency.create(name: "foo", version: '0.0.1')
-        dependency.approval = Approval.create(state: false)
-        dependency.save
         dependency.approve!
         dependency.reload.should be_approved
       end
@@ -74,19 +59,13 @@ module LicenseFinder
 
       it "is true if it has been approved" do
         dependency.stub_chain(:license, whitelisted?: false)
-        dependency.stub_chain(:approval, state: true)
-        dependency.should be_approved
-
-        dependency.stub_chain(:approval, state: 1) # jruby
+        dependency.stub(manually_approved: true)
         dependency.should be_approved
       end
 
       it "is false otherwise" do
         dependency.stub_chain(:license, whitelisted?: false)
-        dependency.stub_chain(:approval, state: false)
-        dependency.should_not be_approved
-
-        dependency.stub_chain(:approval, state: 0) # jruby
+        dependency.stub(manually_approved: false)
         dependency.should_not be_approved
       end
     end
@@ -174,7 +153,7 @@ module LicenseFinder
 
       it "does not change the approval" do
         dependency.license = LicenseAlias.named("old")
-        dependency.approval = Approval.create(state: true)
+        dependency.manually_approved = true
 
         dependency.apply_better_license "new license"
         dependency.should be_approved
