@@ -2,7 +2,6 @@ module LicenseFinder
   class Dependency < Sequel::Model
     plugin :boolean_readers
     many_to_one :license, class: LicenseAlias
-    many_to_one :approval
     many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
     many_to_many :parents, join_table: :ancestries, left_key: :child_dependency_id, right_key: :parent_dependency_id, class: self
     many_to_many :bundler_groups
@@ -26,9 +25,7 @@ module LicenseFinder
     end
 
     def self.named(name)
-      d = find_or_create(name: name.to_s)
-      d.ensure_approval_exists!
-      d
+      find_or_create(name: name.to_s)
     end
 
     def bundler_group_names=(names)
@@ -50,20 +47,12 @@ module LicenseFinder
     end
 
     def approve!
-      approval.state = true
-      approval.save
+      self.manually_approved = true
+      save
     end
 
     def approved?
-      # jruby adapter receives approval.state as Fixnum '0', which ruby evaluates
-      # as truthy, so we catch this here for jruby support.
-      (license && license.whitelisted?) || (approval.state && approval.state != 0)
-    end
-
-    def ensure_approval_exists!
-      return if approval
-      self.approval = Approval.create
-      save
+      (license && license.whitelisted?) || manually_approved?
     end
 
     def set_license_manually!(license_name)

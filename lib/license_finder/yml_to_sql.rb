@@ -40,7 +40,6 @@ module LicenseFinder
     def convert
       @dep = create_dependency
       @dep.license = create_license
-      @dep.approval = create_approval
       @dep.manual = manually_managed?
       associate_bundler_groups
       @dep.save
@@ -70,10 +69,6 @@ module LicenseFinder
       LicenseAlias.find_or_create(name: legacy_attrs['license'])
     end
 
-    def create_approval
-      Sql::Approval.convert(legacy_attrs)
-    end
-
     def find_children
       Sql::Dependency.where(name: legacy_attrs['children'])
     end
@@ -99,23 +94,21 @@ module LicenseFinder
 
       class Dependency < Sequel::Model
         extend Convertable
-        VALID_ATTRIBUTES = Hash[*%w[name version summary description homepage].map { |k| [k, k] }.flatten]
+        VALID_ATTRIBUTES = {
+          'name' => 'name',
+          'version' => 'version',
+          'summary' => 'summary',
+          'description' => 'description',
+          'homepage' => 'homepage',
+          'approved' => 'manually_approved'
+        }
 
         many_to_one :license, class: LicenseAlias
-        many_to_one :approval
         many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
         many_to_many :bundler_groups
       end
 
       class BundlerGroup < Sequel::Model
-      end
-
-      class Approval < Sequel::Model
-        extend Convertable
-
-        VALID_ATTRIBUTES = {
-          'approved' => 'state'
-        }
       end
     end
   end
