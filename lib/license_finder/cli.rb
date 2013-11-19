@@ -40,10 +40,10 @@ module LicenseFinder
 
     class Dependencies < Subcommand
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
-      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler"
+      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler, NPM, etc."
       def add(license, name, version = nil)
         die_on_error {
-          DependencyManager.create_non_bundler(license, name, version)
+          DependencyManager.create_manually_managed(license, name, version)
           DependencyManager.approve!(name) if options[:approve]
         }
         if options[:approve]
@@ -53,10 +53,10 @@ module LicenseFinder
         end
       end
 
-      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler"
+      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler, NPM, etc."
       def remove(name)
         die_on_error {
-          DependencyManager.destroy_non_bundler(name)
+          DependencyManager.destroy_manually_managed(name)
         }
 
         say "The #{name} dependency has been removed.", :green
@@ -195,7 +195,7 @@ module LicenseFinder
         end
       end
 
-      subcommand "dependencies", Dependencies, "manage non-Bundler dependencies"
+      subcommand "dependencies", Dependencies, "manually manage dependencies outside of Bundler, NPM, pip, etc."
       subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "manage ignored bundler groups"
       subcommand "whitelist", Whitelist, "manage whitelisted licenses"
       subcommand "project_name", ProjectName, "manage the project name"

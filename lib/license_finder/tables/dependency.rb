@@ -8,12 +8,12 @@ module LicenseFinder
     many_to_many :bundler_groups
 
     dataset_module do
-      def bundler
-        exclude(manual: true)
+      def managed
+        manually_managed.invert
       end
 
-      def non_bundler
-        bundler.invert
+      def manually_managed
+        where(manual: true)
       end
 
       def obsolete(current)
