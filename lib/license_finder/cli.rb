@@ -40,7 +40,7 @@ module LicenseFinder
 
     class Dependencies < Subcommand
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
-      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler, NPM, etc."
+      desc "Add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler, NPM, etc"
       def add(license, name, version = nil)
         die_on_error {
           DependencyManager.create_manually_managed(license, name, version)
@@ -53,7 +53,7 @@ module LicenseFinder
         end
       end
 
-      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler, NPM, etc."
+      desc "Remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler, NPM, etc"
       def remove(name)
         die_on_error {
           DependencyManager.destroy_manually_managed(name)
@@ -158,7 +158,7 @@ module LicenseFinder
       end
       default_task :rescan
 
-      desc "approve DEPENDENCY_NAME", "Approve a dependency by name."
+      desc "approve DEPENDENCY_NAME", "Approve a dependency by name"
       def approve(name)
         die_on_error {
           DependencyManager.approve!(name)
@@ -167,7 +167,7 @@ module LicenseFinder
         say "The #{name} dependency has been approved!", :green
       end
 
-      desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license."
+      desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
         die_on_error {
           DependencyManager.license!(name, license)
@@ -176,7 +176,7 @@ module LicenseFinder
         say "The #{name} dependency has been marked as using #{license} license!", :green
       end
 
-      desc "move", "Move dependency.* files from root directory to doc/."
+      desc "move", "Move dependency.* files from root directory to doc/"
       def move
         Configuration.move!
         say "Congratulations, you have cleaned up your root directory!'", :green
@@ -195,10 +195,10 @@ module LicenseFinder
         end
       end
 
-      subcommand "dependencies", Dependencies, "manually manage dependencies outside of Bundler, NPM, pip, etc."
-      subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "manage ignored bundler groups"
-      subcommand "whitelist", Whitelist, "manage whitelisted licenses"
-      subcommand "project_name", ProjectName, "manage the project name"
+      subcommand "dependencies", Dependencies, "Manually manage dependencies outside of Bundler, NPM, pip, etc"
+      subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "Manage ignored bundler groups"
+      subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
+      subcommand "project_name", ProjectName, "Manage the project name"
 
       private
 
