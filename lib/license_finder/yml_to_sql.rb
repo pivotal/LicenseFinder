@@ -94,6 +94,8 @@ module LicenseFinder
 
       class Dependency < Sequel::Model
         extend Convertable
+        plugin :boolean_readers
+
         VALID_ATTRIBUTES = {
           'name' => 'name',
           'version' => 'version',

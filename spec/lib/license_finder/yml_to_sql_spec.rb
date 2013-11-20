@@ -61,26 +61,18 @@ describe LicenseFinder::YmlToSql do
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        if LicenseFinder::Platform.java?
-          saved_dep.manual.should == 0
-        else
-          saved_dep.manual.should == false
-        end
+        saved_dep.should_not be_manual
       end
     end
 
     describe "when dependency source is not set to bundle" do
       let(:source) { "" }
 
-      it "sets manual to be false" do
+      it "sets manual to be true" do
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        if LicenseFinder::Platform.java?
-          saved_dep.manual.should == 1
-        else
-          saved_dep.manual.should == true
-        end
+        saved_dep.should be_manual
       end
     end
 
