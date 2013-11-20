@@ -1,6 +1,6 @@
 module LicenseFinder
   class Package
-    attr_reader :parents, :spec, :bundler_dependency, :children
+    attr_reader :spec, :bundler_dependency, :children
 
     def initialize(spec, bundler_dependency = nil)
       @spec = spec
@@ -10,10 +10,6 @@ module LicenseFinder
 
     def name
       "#{dependency_name} #{dependency_version}"
-    end
-
-    def parents
-      @parents ||= []
     end
 
     def dependency_name
