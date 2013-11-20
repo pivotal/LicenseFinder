@@ -31,7 +31,6 @@ module LicenseFinder
       @gems ||= definition.specs_for(included_groups).map do |spec|
         dependency = dependencies.detect { |dep| dep.name == spec.name }
 
-        formatted_name = format_name(spec)
         gem_names_cache[format_name(spec)] = true
 
         Package.new(spec, dependency)

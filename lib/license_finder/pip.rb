@@ -24,8 +24,7 @@ print "[" + ",".join(dists) + "]"
         PythonPackage.new(OpenStruct.new(
           :name => dist_ary[0],
           :version => dist_ary[1],
-          :full_gem_path => File.join(dist_ary[2], dist_ary[0]),
-          :python? => true
+          :full_gem_path => File.join(dist_ary[2], dist_ary[0])
         ))
       end
     end
