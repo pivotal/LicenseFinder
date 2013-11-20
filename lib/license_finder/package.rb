@@ -64,8 +64,6 @@ module LicenseFinder
 
   class PythonPackage < Package
     def determine_license
-      return @spec.license if @spec.license
-
       license = super
 
       if !license || license == "other"
