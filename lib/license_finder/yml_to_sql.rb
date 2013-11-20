@@ -80,21 +80,12 @@ module LicenseFinder
     end
 
     module Sql
-      module Convertable
-        def convert(attrs)
-          create remap_attrs(attrs)
-        end
-
-        def remap_attrs(legacy_attrs)
-          self::VALID_ATTRIBUTES.each_with_object({}) do |(legacy_key, new_key), new_attrs|
-            new_attrs[new_key] = legacy_attrs[legacy_key]
-          end
-        end
-      end
-
       class Dependency < Sequel::Model
-        extend Convertable
         plugin :boolean_readers
+
+        many_to_one :license, class: LicenseAlias
+        many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
+        many_to_many :bundler_groups
 
         VALID_ATTRIBUTES = {
           'name' => 'name',
@@ -105,9 +96,15 @@ module LicenseFinder
           'approved' => 'manually_approved'
         }
 
-        many_to_one :license, class: LicenseAlias
-        many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
-        many_to_many :bundler_groups
+        def self.convert(attrs)
+          create remap_attrs(attrs)
+        end
+
+        def self.remap_attrs(legacy_attrs)
+          VALID_ATTRIBUTES.each_with_object({}) do |(legacy_key, new_key), new_attrs|
+            new_attrs[new_key] = legacy_attrs[legacy_key]
+          end
+        end
       end
 
       class BundlerGroup < Sequel::Model
