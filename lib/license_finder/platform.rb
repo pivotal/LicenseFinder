@@ -1,27 +1,15 @@
 module LicenseFinder
   module Platform
     def self.sqlite_adapter
-      if java?
-        'jdbc:sqlite'
-      else
-        'sqlite'
-      end
+      java? ? 'jdbc:sqlite' : 'sqlite'
     end
 
     def self.sqlite_gem
-      if java?
-        'jdbc-sqlite3'
-      else
-        'sqlite3'
-      end
+      java? ? 'jdbc-sqlite3' : 'sqlite3'
     end
 
     def self.sqlite_load_path
-      if java?
-        'jdbc/sqlite3'
-      else
-        'sqlite3'
-      end
+      java? ? 'jdbc/sqlite3' : 'sqlite3'
     end
 
     def self.java?
