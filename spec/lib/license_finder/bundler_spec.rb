@@ -1,7 +1,7 @@
 require "spec_helper"
 
 module LicenseFinder
-  describe Bundle do
+  describe Bundler do
     let(:definition) do
       double('definition', {
         :dependencies => [],
@@ -28,13 +28,13 @@ module LicenseFinder
 
     describe '.current_gems' do
       subject do
-        Bundle.current_gems(config)
+        Bundler.current_gems(config)
       end
 
       let(:config) { double(:config, ignore_groups: ['dev', 'test']) }
 
       before do
-        Bundler::Definition.stub(:build).and_return(definition)
+        ::Bundler::Definition.stub(:build).and_return(definition)
       end
 
       it "should have 2 dependencies" do
@@ -74,7 +74,7 @@ module LicenseFinder
         it 'returns false' do
           allow(File).to receive(:exists?).with(gemfile).and_return(false)
 
-          Bundle.has_gemfile?.should == false
+          Bundler.has_gemfile?.should == false
         end
       end
 
@@ -82,7 +82,7 @@ module LicenseFinder
         it 'returns true' do
           allow(File).to receive(:exists?).with(gemfile).and_return(true)
 
-          Bundle.has_gemfile?.should == true
+          Bundler.has_gemfile?.should == true
         end
       end
     end

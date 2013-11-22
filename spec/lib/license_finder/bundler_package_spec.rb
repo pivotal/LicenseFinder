@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module LicenseFinder
-  describe GemPackage do
+  describe BundlerPackage do
     subject { described_class.new(gemspec, nil) }
 
     it_behaves_like "it conforms to interface required by PackageSaver"
