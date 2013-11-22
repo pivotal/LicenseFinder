@@ -33,7 +33,7 @@ module LicenseFinder
 
         gem_names_cache[format_name(spec)] = true
 
-        Package.new(spec, dependency)
+        GemPackage.new(spec, dependency)
       end
 
       @gems.each do |gem|
@@ -63,7 +63,7 @@ module LicenseFinder
     end
 
     def children_for(gem, cache)
-      gem.spec.dependencies.map(&:name).select { |name| cache[name] }
+      gem.gem_def.dependencies.map(&:name).select { |name| cache[name] }
     end
 
     def format_name(gem)

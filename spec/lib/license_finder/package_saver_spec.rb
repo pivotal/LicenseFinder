@@ -10,12 +10,9 @@ module LicenseFinder
         groups: [:group],
         summary: 'summary',
         description: 'description',
-        spec: double(
-          :spec,
-          name: 'spec_name',
-          version: '1.2.3',
-          homepage: 'http://example.com'
-        )
+        name: 'spec_name',
+        version: '1.2.3',
+        homepage: 'http://example.com'
       )
     end
 
