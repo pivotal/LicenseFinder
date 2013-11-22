@@ -6,8 +6,8 @@ module LicenseFinder
       modifying {
         current_dependencies = []
 
-        if Bundle.has_gemfile?
-          current_dependencies += PackageSaver.save_all(Bundle.current_gems(LicenseFinder.config))
+        if Bundler.has_gemfile?
+          current_dependencies += PackageSaver.save_all(Bundler.current_gems(LicenseFinder.config))
         end
 
         if Pip.has_requirements?

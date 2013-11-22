@@ -1,5 +1,5 @@
 module LicenseFinder
-  class GemPackage < Package
+  class BundlerPackage < Package
     extend Forwardable
     def_delegators :gem_def, :summary, :description, :name, :homepage
 

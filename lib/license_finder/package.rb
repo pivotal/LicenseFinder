@@ -4,7 +4,7 @@ module LicenseFinder
   #
   # For guidance on adding a new system use the shared behavior
   #     it_behaves_like "it conforms to interface required by PackageSaver"
-  # and see GemPackage, PipPackage and NpmPackage
+  # and see BundlerPackage, PipPackage and NpmPackage
   class Package
     def license
       @license ||= determine_license

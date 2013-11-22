@@ -1,12 +1,12 @@
 require "bundler"
 
 module LicenseFinder
-  class Bundle
+  class Bundler
     attr_writer :ignore_groups
 
     class << self
       def current_gems(config, bundler_definition=nil)
-        new(config, bundler_definition).gems
+        new(config, bundler_definition).packages
       end
 
       def has_gemfile?
@@ -19,28 +19,28 @@ module LicenseFinder
     end
 
     def initialize(config=nil, bundler_definition=nil)
-      @definition = bundler_definition || Bundler::Definition.build(self.class.gemfile_path, lockfile_path, nil)
+      @definition = bundler_definition || ::Bundler::Definition.build(self.class.gemfile_path, lockfile_path, nil)
       @config ||= config
     end
 
-    def gems
-      return @gems if @gems
+    def packages
+      return @packages if @packages
 
       gem_names_cache = {}
 
-      @gems ||= definition.specs_for(included_groups).map do |spec|
-        dependency = dependencies.detect { |dep| dep.name == spec.name }
+      @packages ||= definition.specs_for(included_groups).map do |gem_def|
+        bundler_def = bundler_defs.detect { |bundler_def| bundler_def.name == gem_def.name }
 
-        gem_names_cache[format_name(spec)] = true
+        gem_names_cache[format_name(gem_def)] = true
 
-        GemPackage.new(spec, dependency)
+        BundlerPackage.new(gem_def, bundler_def)
       end
 
-      @gems.each do |gem|
+      @packages.each do |gem|
         gem.children = children_for(gem, gem_names_cache)
       end
 
-      @gems
+      @packages
     end
 
     private
@@ -50,8 +50,8 @@ module LicenseFinder
       @ignore_groups ||= @config.ignore_groups
     end
 
-    def dependencies
-      @dependencies ||= definition.dependencies
+    def bundler_defs
+      @bundler_defs ||= definition.dependencies
     end
 
     def included_groups

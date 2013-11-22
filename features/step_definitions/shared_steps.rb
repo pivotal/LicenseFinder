@@ -139,7 +139,7 @@ module DSL
     end
 
     def execute_command(command)
-      Bundler.with_clean_env do
+      ::Bundler.with_clean_env do
         @output = `cd #{app_path} && bundle exec #{command}`
       end
 
@@ -192,7 +192,7 @@ module DSL
     end
 
     def bundle_app
-      Bundler.with_clean_env do
+      ::Bundler.with_clean_env do
         `bundle install --gemfile=#{File.join(app_path, "Gemfile")} --path=#{bundle_path}`
       end
     end

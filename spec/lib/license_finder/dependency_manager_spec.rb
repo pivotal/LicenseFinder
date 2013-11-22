@@ -23,7 +23,7 @@ module LicenseFinder
         Dependency.create(name: "old dependency 2")
 
         current_gems = [gem1, gem2]
-        Bundle.stub(:current_gems).with(config) { current_gems }
+        Bundler.stub(:current_gems).with(config) { current_gems }
         PackageSaver.should_receive(:save_all).with(current_gems).and_return([cur1, cur2])
 
         described_class.sync_with_bundler
