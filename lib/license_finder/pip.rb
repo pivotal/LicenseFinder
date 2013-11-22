@@ -1,6 +1,6 @@
 module LicenseFinder
   class Pip
-    GET_DEPENDENCIES_PY = <<-PYTHON
+    GET_DEPENDENCIES_PY = <<-PYTHON.gsub(/\n+/, ";")
 from pip.util import get_installed_distributions
 
 dists = [(x.project_name, x.version, x.location) for x in get_installed_distributions()]
@@ -12,9 +12,7 @@ print "[" + ",".join(dists) + "]"
     def self.current_packages
       return @dists if @dists
 
-      command = GET_DEPENDENCIES_PY.gsub(/\n+/, ";")
-
-      output = `python -c '#{command}'`
+      output = `python -c '#{GET_DEPENDENCIES_PY}'`
 
       @dists = JSON(output).map do |dist_ary|
         PipPackage.new(
