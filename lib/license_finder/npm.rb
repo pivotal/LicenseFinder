@@ -1,12 +1,10 @@
 require 'json'
-require 'license_finder/package'
 
 module LicenseFinder
   class NPM
-
     DEPENDENCY_GROUPS = ["dependencies", "devDependencies", "bundleDependencies", "bundledDependencies"]
 
-    def self.current_modules
+    def self.current_packages
       return @modules if @modules
 
       json = npm_json
@@ -17,7 +15,7 @@ module LicenseFinder
       end
     end
 
-    def self.has_package?
+    def self.active?
       File.exists?(package_path)
     end
 

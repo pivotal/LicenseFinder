@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module LicenseFinder
   describe NPM do
-    describe '.current_modules' do
+    describe '.current_packages' do
       before { NPM.instance_variable_set(:@modules, nil) }
 
       it 'lists all the current modules' do
@@ -64,10 +64,10 @@ module LicenseFinder
         JSON
         allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
 
-        current_modules = NPM.current_modules
+        current_packages = NPM.current_packages
 
-        expect(current_modules.map(&:name)).to eq(["depjs 1.3.3.7", "dep2js 4.2", "dep3js 4.2", "dep5js 4.2", "dep4js 4.2"])
-        expect(current_modules.first).to be_a(Package)
+        expect(current_packages.map(&:name)).to eq(["depjs 1.3.3.7", "dep2js 4.2", "dep3js 4.2", "dep5js 4.2", "dep4js 4.2"])
+        expect(current_packages.first).to be_a(Package)
       end
 
       it "does not support name version string" do
@@ -80,30 +80,30 @@ module LicenseFinder
         JSON
         allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
 
-        current_modules = NPM.current_modules
+        current_packages = NPM.current_packages
 
-        expect(current_modules.map(&:name)).to eq([])
+        expect(current_packages.map(&:name)).to eq([])
       end
 
-      it 'memoizes the current_modules' do
+      it 'memoizes the current_packages' do
         allow(NPM).to receive(:capture).with(/npm/).and_return(['{}', true]).once
 
-        NPM.current_modules
-        NPM.current_modules
+        NPM.current_packages
+        NPM.current_packages
       end
 
       it "fails when command fails" do
         allow(NPM).to receive(:capture).with(/npm/).and_return('Some error', false).once
-        expect { NPM.current_modules }.to raise_error(RuntimeError)
+        expect { NPM.current_packages }.to raise_error(RuntimeError)
       end
 
       it "does not fail when command fails but produces output" do
         allow(NPM).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
-        NPM.current_modules
+        NPM.current_packages
       end
     end
 
-    describe '.has_package?' do
+    describe '.active?' do
       let(:package) { Pathname.new('package.json').expand_path }
 
       context 'with a package.json file' do
@@ -112,7 +112,7 @@ module LicenseFinder
         end
 
         it 'returns true' do
-          expect(NPM.has_package?).to eq(true)
+          expect(NPM.active?).to eq(true)
         end
       end
 
@@ -122,7 +122,7 @@ module LicenseFinder
         end
 
         it 'returns false' do
-          expect(NPM.has_package?).to eq(false)
+          expect(NPM.active?).to eq(false)
         end
       end
     end

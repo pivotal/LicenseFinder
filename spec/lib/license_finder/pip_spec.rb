@@ -2,25 +2,25 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Pip do
-    describe '.current_dists' do
+    describe '.current_packages' do
       it 'lists all the current dists' do
         allow(Pip).to receive(:`).with(/python/).and_return('[["jasmine", "1.3.1", "MIT"], ["jasmine-core", "1.3.1", "MIT"]]')
 
-        current_dists = Pip.current_dists
+        current_packages = Pip.current_packages
 
-        expect(current_dists.size).to eq(2)
-        expect(current_dists.first).to be_a(Package)
+        expect(current_packages.size).to eq(2)
+        expect(current_packages.first).to be_a(Package)
       end
 
-      it 'memoizes the current_dists' do
+      it 'memoizes the current_packages' do
         allow(Pip).to receive(:`).with(/python/).and_return('[]').once
 
-        Pip.current_dists
-        Pip.current_dists
+        Pip.current_packages
+        Pip.current_packages
       end
     end
 
-    describe '.has_requirements' do
+    describe '.active?' do
       let(:requirements) { Pathname.new('requirements.txt').expand_path }
 
       context 'with a requirements file' do
@@ -29,7 +29,7 @@ module LicenseFinder
         end
 
         it 'returns true' do
-          expect(Pip.has_requirements?).to eq(true)
+          expect(Pip.active?).to eq(true)
         end
       end
 
@@ -39,7 +39,7 @@ module LicenseFinder
         end
 
         it 'returns false' do
-          expect(Pip.has_requirements?).to eq(false)
+          expect(Pip.active?).to eq(false)
         end
       end
     end

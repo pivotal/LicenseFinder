@@ -9,7 +9,7 @@ dists = ["[\\\"{0}\\\", \\\"{1}\\\", \\\"{2}\\\"]".format(*dist) for dist in dis
 print "[" + ",".join(dists) + "]"
     PYTHON
 
-    def self.current_dists
+    def self.current_packages
       return @dists if @dists
 
       command = GET_DEPENDENCIES_PY.gsub(/\n+/, ";")
@@ -25,7 +25,7 @@ print "[" + ",".join(dists) + "]"
       end
     end
 
-    def self.has_requirements?
+    def self.active?
       File.exists?(requirements_path)
     end
 
