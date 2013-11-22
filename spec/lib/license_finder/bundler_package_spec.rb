@@ -22,6 +22,8 @@ module LicenseFinder
     its(:version) { should == '2.1.3' }
     its(:summary) { should == "summary" }
     its(:description) { should == "description" }
+    its(:groups) { should == [] }
+    its(:children) { should == [] }
 
     describe "#license" do
       def stub_license_files(license_files)
