@@ -43,47 +43,5 @@ module LicenseFinder
         end
       end
     end
-
-    describe '.license_for' do
-      let(:package) { PythonPackage.new(OpenStruct.new(name: 'jasmine', version: '1.3.1')) }
-
-      before :each do
-        stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").
-            to_return(:status => 200, :body => "{}", :headers => {})
-      end
-
-      it 'reaches out to PyPI with the package name and version' do
-        Pip.license_for(package)
-
-        WebMock.should have_requested(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json")
-      end
-
-      it 'returns the license from info => license preferentially' do
-        data = { info: { license: "MIT", classifiers: [ 'License :: OSI Approved :: Apache 2.0 License' ] } }
-
-        stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").
-            to_return(:status => 200, :body => JSON.generate(data), :headers => {})
-
-        expect(Pip.license_for(package)).to eq('MIT')
-      end
-
-      it 'returns the first license from the classifiers if no info => license exists' do
-        data = { info: { classifiers: [ 'License :: OSI Approved :: Apache 2.0 License' ] } }
-
-        stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").
-            to_return(:status => 200, :body => JSON.generate(data), :headers => {})
-
-        expect(Pip.license_for(package)).to eq('Apache 2.0 License')
-      end
-
-      it 'returns other if no license can be found' do
-        data = {}
-
-        stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").
-            to_return(:status => 200, :body => JSON.generate(data), :headers => {})
-
-        expect(Pip.license_for(package)).to eq('other')
-      end
-    end
   end
 end

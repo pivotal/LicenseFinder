@@ -19,3 +19,16 @@ RSpec.configure do |config|
     DB.transaction(rollback: :always) { example.run }
   end
 end
+
+module LicenseFinder
+  shared_examples "it conforms to interface required by PackageSaver" do
+    it { should respond_to :name }
+    it { should respond_to :version }
+    it { should respond_to :summary }
+    it { should respond_to :description }
+    it { should respond_to :homepage }
+    it { should respond_to :groups }
+    it { should respond_to :children }
+    it { should respond_to :license }
+  end
+end

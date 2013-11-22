@@ -3,13 +3,12 @@ require 'forwardable'
 module LicenseFinder
   class PackageSaver
     extend Forwardable
-    def_delegators :package, :license, :children, :groups, :summary, :description, :spec
-    def_delegators :spec, :version, :homepage
+    def_delegators :package, :license, :children, :groups, :summary, :description, :version, :homepage
 
     attr_reader :dependency, :package
 
     def self.find_or_create_by_name(package)
-      dependency = Dependency.named(package.spec.name)
+      dependency = Dependency.named(package.name)
       new(dependency, package)
     end
 

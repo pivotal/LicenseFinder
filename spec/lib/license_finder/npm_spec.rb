@@ -40,18 +40,6 @@ module LicenseFinder
       end
     end
 
-    describe '.harvest_license' do
-      let(:node_module1) { {"license" => "MIT"} }
-      let(:node_module2) { {"licenses" => [{"type" => "BSD", "url" => "github.github/github"}]} }
-      let(:node_module3) { {"license" => {"type" => "PSF", "url" => "github.github/github"}} }
-
-      it 'finds the license for both license structures' do
-        NPM.harvest_license(node_module1).should eq("MIT")
-        NPM.harvest_license(node_module2).should eq("BSD")
-        NPM.harvest_license(node_module3).should eq("PSF")
-      end
-    end
-
     describe '.has_package?' do
       let(:package) { Pathname.new('package.json').expand_path }
 

@@ -2,6 +2,10 @@ module LicenseFinder
   class PossibleLicenseFiles
     LICENSE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
 
+    def self.find(install_path)
+      new(install_path).find
+    end
+
     def initialize(install_path)
       @install_path = install_path
     end
