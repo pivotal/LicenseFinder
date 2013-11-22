@@ -150,7 +150,7 @@ module LicenseFinder
       def rescan
         die_on_error {
           spinner {
-            DependencyManager.sync_with_bundler
+            DependencyManager.sync_with_package_managers
           }
         }
 

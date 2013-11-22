@@ -26,9 +26,9 @@ module LicenseFinder
       end
     end
 
-    describe '.current_gems' do
+    describe '.current_packages' do
       subject do
-        Bundler.current_gems(config)
+        Bundler.current_packages(config)
       end
 
       let(:config) { double(:config, ignore_groups: ['dev', 'test']) }
@@ -63,7 +63,7 @@ module LicenseFinder
       end
     end
 
-    describe '.has_gemfile?' do
+    describe '.active?' do
       let(:gemfile) { Pathname.new('Gemfile').expand_path }
 
       before :each do
@@ -74,7 +74,7 @@ module LicenseFinder
         it 'returns false' do
           allow(File).to receive(:exists?).with(gemfile).and_return(false)
 
-          Bundler.has_gemfile?.should == false
+          Bundler.active?.should == false
         end
       end
 
@@ -82,7 +82,7 @@ module LicenseFinder
         it 'returns true' do
           allow(File).to receive(:exists?).with(gemfile).and_return(true)
 
-          Bundler.has_gemfile?.should == true
+          Bundler.active?.should == true
         end
       end
     end

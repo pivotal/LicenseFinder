@@ -2,21 +2,9 @@ require 'digest'
 
 module LicenseFinder
   module DependencyManager
-    def self.sync_with_bundler
+    def self.sync_with_package_managers
       modifying {
-        current_dependencies = []
-
-        if Bundler.has_gemfile?
-          current_dependencies += PackageSaver.save_all(Bundler.current_gems(LicenseFinder.config))
-        end
-
-        if Pip.has_requirements?
-          current_dependencies += PackageSaver.save_all(Pip.current_dists())
-        end
-
-        if NPM.has_package?
-          current_dependencies += PackageSaver.save_all(NPM.current_modules())
-        end
+        current_dependencies = PackageSaver.save_all(current_packages)
 
         Dependency.managed.obsolete(current_dependencies).each(&:destroy)
       }
@@ -62,6 +50,14 @@ module LicenseFinder
     end
 
     private # not really private, but it looks like it is!
+
+    def self.current_packages
+      package_managers.select(&:active?).map(&:current_packages).flatten
+    end
+
+    def self.package_managers
+      @package_managers = [Bundler, NPM, Pip]
+    end
 
     def self.find_by_name(name, scope = Dependency)
       dep = scope.first(name: name)

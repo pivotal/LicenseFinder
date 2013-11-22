@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'digest'
 
 module LicenseFinder
   describe DependencyManager do
@@ -22,11 +21,11 @@ module LicenseFinder
         Dependency.create(name: "old dependency 1")
         Dependency.create(name: "old dependency 2")
 
-        current_gems = [gem1, gem2]
-        Bundler.stub(:current_gems).with(config) { current_gems }
-        PackageSaver.should_receive(:save_all).with(current_gems).and_return([cur1, cur2])
+        current_packages = [gem1, gem2]
+        Bundler.stub(:current_packages) { current_packages }
+        PackageSaver.should_receive(:save_all).with(current_packages).and_return([cur1, cur2])
 
-        described_class.sync_with_bundler
+        described_class.sync_with_package_managers
         Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
       end
     end

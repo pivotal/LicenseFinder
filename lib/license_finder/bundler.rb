@@ -5,11 +5,11 @@ module LicenseFinder
     attr_writer :ignore_groups
 
     class << self
-      def current_gems(config, bundler_definition=nil)
+      def current_packages(config = LicenseFinder.config, bundler_definition=nil)
         new(config, bundler_definition).packages
       end
 
-      def has_gemfile?
+      def active?
         File.exists?(gemfile_path)
       end
 
@@ -18,9 +18,9 @@ module LicenseFinder
       end
     end
 
-    def initialize(config=nil, bundler_definition=nil)
+    def initialize(config, bundler_definition=nil)
       @definition = bundler_definition || ::Bundler::Definition.build(self.class.gemfile_path, lockfile_path, nil)
-      @config ||= config
+      @config = config
     end
 
     def packages

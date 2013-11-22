@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module LicenseFinder
   describe NPM do
-    describe '.current_modules' do
+    describe '.current_packages' do
       it 'lists all the current modules' do
         json = <<-resp
 {
@@ -26,21 +26,21 @@ module LicenseFinder
         resp
         allow(NPM).to receive(:`).with(/npm/).and_return(json)
 
-        current_modules = NPM.current_modules
+        current_packages = NPM.current_packages
 
-        expect(current_modules.size).to eq(2)
-        expect(current_modules.first).to be_a(Package)
+        expect(current_packages.size).to eq(2)
+        expect(current_packages.first).to be_a(Package)
       end
 
-      it 'memoizes the current_modules' do
+      it 'memoizes the current_packages' do
         allow(NPM).to receive(:`).with(/npm/).and_return('{}').once
 
-        NPM.current_modules
-        NPM.current_modules
+        NPM.current_packages
+        NPM.current_packages
       end
     end
 
-    describe '.has_package?' do
+    describe '.active?' do
       let(:package) { Pathname.new('package.json').expand_path }
 
       context 'with a package.json file' do
@@ -49,7 +49,7 @@ module LicenseFinder
         end
 
         it 'returns true' do
-          expect(NPM.has_package?).to eq(true)
+          expect(NPM.active?).to eq(true)
         end
       end
 
@@ -59,7 +59,7 @@ module LicenseFinder
         end
 
         it 'returns false' do
-          expect(NPM.has_package?).to eq(false)
+          expect(NPM.active?).to eq(false)
         end
       end
     end
