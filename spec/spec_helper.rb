@@ -22,13 +22,13 @@ end
 
 module LicenseFinder
   shared_examples "it conforms to interface required by PackageSaver" do
-    it { should respond_to :name }
-    it { should respond_to :version }
-    it { should respond_to :summary }
-    it { should respond_to :description }
-    it { should respond_to :homepage }
-    it { should respond_to :groups }
-    it { should respond_to :children }
-    it { should respond_to :license }
+    it { expect { subject.name }.to_not raise_error }
+    it { expect { subject.version }.to_not raise_error }
+    it { expect { subject.summary }.to_not raise_error }
+    it { expect { subject.description }.to_not raise_error }
+    it { expect { subject.homepage }.to_not raise_error }
+    it { expect { subject.groups }.to_not raise_error }
+    it { expect { subject.children }.to_not raise_error }
+    it { expect { subject.license }.to_not raise_error }
   end
 end

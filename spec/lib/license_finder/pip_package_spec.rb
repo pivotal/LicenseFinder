@@ -4,7 +4,11 @@ module LicenseFinder
   describe PipPackage do
     subject { described_class.new('jasmine', '1.3.1', "jasmine/install/path") }
 
-    it_behaves_like "it conforms to interface required by PackageSaver"
+    it_behaves_like "it conforms to interface required by PackageSaver" do
+      before do
+        stub_pypi({})
+      end
+    end
 
     def stub_pypi(data)
       stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").

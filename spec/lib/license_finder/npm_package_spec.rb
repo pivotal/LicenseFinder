@@ -7,7 +7,8 @@ module LicenseFinder
         "name" => "jasmine-node",
         "version" => "1.3.1",
         "description" => "a description",
-        "readme" => "a readme"
+        "readme" => "a readme",
+        "path" => "some/node/package/path"
       )
     end
 
@@ -20,7 +21,7 @@ module LicenseFinder
 
     describe '#license' do
       def stub_license_files(license_files)
-        PossibleLicenseFiles.stub(:find).and_return(license_files)
+        PossibleLicenseFiles.stub(:find).with("some/node/package/path").and_return(license_files)
       end
 
       let(:node_module1) { {"license" => "MIT"} }
