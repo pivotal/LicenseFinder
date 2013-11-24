@@ -50,23 +50,22 @@ module LicenseFinder
     end
 
     describe "#approved?" do
-      let(:dependency) { Dependency.create(name: 'some gem') }
+      let(:not_manually_approved) { Dependency.create(name: 'some gem', manually_approved: false).reload }
+      let(:manually_approved) { Dependency.create(name: 'some gem', manually_approved: true).reload }
 
       it "is true if its license is whitelisted" do
-        dependency.stub_chain(:license, whitelisted?: true)
-        dependency.should be_approved
+        not_manually_approved.stub_chain(:license, whitelisted?: true)
+        not_manually_approved.should be_approved
       end
 
       it "is true if it has been approved" do
-        dependency.stub_chain(:license, whitelisted?: false)
-        dependency.stub(manually_approved: true)
-        dependency.should be_approved
+        manually_approved.stub_chain(:license, whitelisted?: false)
+        manually_approved.should be_approved
       end
 
       it "is false otherwise" do
-        dependency.stub_chain(:license, whitelisted?: false)
-        dependency.stub(manually_approved: false)
-        dependency.should_not be_approved
+        not_manually_approved.stub_chain(:license, whitelisted?: false)
+        not_manually_approved.should_not be_approved
       end
     end
 
