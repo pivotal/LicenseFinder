@@ -5,12 +5,10 @@ module LicenseFinder
     DEPENDENCY_GROUPS = ["dependencies", "devDependencies", "bundleDependencies", "bundledDependencies"]
 
     def self.current_packages
-      return @modules if @modules
-
       json = npm_json
       dependencies = DEPENDENCY_GROUPS.map { |g| (json[g] || {}).values }.flatten(1).reject{ |d| d.is_a?(String) }
 
-      @modules = dependencies.map do |node_module|
+      dependencies.map do |node_module|
         NpmPackage.new(node_module)
       end
     end

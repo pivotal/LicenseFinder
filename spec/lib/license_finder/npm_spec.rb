@@ -5,7 +5,7 @@ module LicenseFinder
     describe '.current_packages' do
       before { NPM.instance_variable_set(:@modules, nil) }
 
-      it 'lists all the current modules' do
+      it 'fetches data from npm' do
         json = <<-JSON
           {
             "dependencies": {
@@ -83,13 +83,6 @@ module LicenseFinder
         current_packages = NPM.current_packages
 
         expect(current_packages.map(&:name)).to eq([])
-      end
-
-      it 'memoizes the current_packages' do
-        allow(NPM).to receive(:capture).with(/npm/).and_return(['{}', true]).once
-
-        NPM.current_packages
-        NPM.current_packages
       end
 
       it "fails when command fails" do

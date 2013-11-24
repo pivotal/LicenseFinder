@@ -1,3 +1,6 @@
+require 'json'
+require 'httparty'
+
 module LicenseFinder
   class Pip
     GET_DEPENDENCIES_PY = <<-PYTHON.gsub(/\n+/, ";")
@@ -10,15 +13,14 @@ print "[" + ",".join(dists) + "]"
     PYTHON
 
     def self.current_packages
-      return @dists if @dists
-
       output = `python -c '#{GET_DEPENDENCIES_PY}'`
 
-      @dists = JSON(output).map do |dist_ary|
+      JSON(output).map do |(name, version, install_dir)|
         PipPackage.new(
-          dist_ary[0],
-          dist_ary[1],
-          File.join(dist_ary[2], dist_ary[0])
+          name,
+          version,
+          File.join(install_dir, name),
+          pypi_def(name, version)
         )
       end
     end
@@ -31,6 +33,15 @@ print "[" + ",".join(dists) + "]"
 
     def self.requirements_path
       Pathname.new('requirements.txt').expand_path
+    end
+
+    def self.pypi_def(name, version)
+      response = HTTParty.get("https://pypi.python.org/pypi/#{name}/#{version}/json")
+      if response.code == 200
+        JSON.parse(response.body).fetch("info", {})
+      else
+        {}
+      end
     end
   end
 end
