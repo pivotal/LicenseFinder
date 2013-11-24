@@ -60,7 +60,7 @@ module LicenseFinder
     end
 
     def self.package_managers
-      @package_managers = [Bundler, NPM, Pip]
+      [Bundler, NPM, Pip]
     end
 
     def self.find_by_name(name, scope = Dependency)
