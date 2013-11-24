@@ -3,7 +3,7 @@ require 'spec_helper'
 module LicenseFinder
   describe NPM do
     describe '.current_packages' do
-      it 'lists all the current modules' do
+      it 'fetches data from npm' do
         json = <<-resp
 {
   "dependencies": {
@@ -30,13 +30,6 @@ module LicenseFinder
 
         expect(current_packages.size).to eq(2)
         expect(current_packages.first).to be_a(Package)
-      end
-
-      it 'memoizes the current_packages' do
-        allow(NPM).to receive(:`).with(/npm/).and_return('{}').once
-
-        NPM.current_packages
-        NPM.current_packages
       end
     end
 

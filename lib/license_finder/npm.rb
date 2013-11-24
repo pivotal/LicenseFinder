@@ -3,15 +3,9 @@ require 'json'
 module LicenseFinder
   class NPM
     def self.current_packages
-      return @modules if @modules
-
       output = `npm list --json --long`
 
-      json = JSON(output)
-
-      @modules = json.fetch("dependencies",[]).map do |node_module|
-        node_module = node_module[1]
-
+      JSON(output).fetch("dependencies",[]).map do |(node_module)|
         NpmPackage.new(node_module)
       end
     end

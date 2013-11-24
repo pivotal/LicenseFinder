@@ -1,22 +1,20 @@
-require 'json'
-require 'httparty'
-
 module LicenseFinder
   class PipPackage < Package
-    def initialize(name, version, install_path)
+    def initialize(name, version, install_path, pypi_def)
       @name = name
       @version = version
       @install_path = install_path
+      @pypi_def = pypi_def
     end
 
     attr_reader :name, :version
 
     def summary
-      json.fetch("summary", "")
+      pypi_def.fetch("summary", "")
     end
 
     def description
-      json.fetch("description", "")
+      pypi_def.fetch("description", "")
     end
 
     def children
@@ -33,13 +31,13 @@ module LicenseFinder
 
     private
 
-    attr_reader :install_path
+    attr_reader :install_path, :pypi_def
 
     def license_from_spec
-      license = json.fetch("license", "UNKNOWN")
+      license = pypi_def.fetch("license", "UNKNOWN")
 
       if license == "UNKNOWN"
-        classifiers = json.fetch("classifiers", [])
+        classifiers = pypi_def.fetch("classifiers", [])
         license = classifiers.map do |c|
           if c.start_with?("License")
             c.gsub(/^License.*::\s*(.*)$/, '\1')
@@ -48,17 +46,6 @@ module LicenseFinder
       end
 
       license
-    end
-
-    def json
-      return @json if @json
-
-      response = HTTParty.get("https://pypi.python.org/pypi/#{name}/#{version}/json")
-      if response.code == 200
-        @json = JSON.parse(response.body).fetch("info", {})
-      end
-
-      @json ||= {}
     end
   end
 end
