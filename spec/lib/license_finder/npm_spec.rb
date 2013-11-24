@@ -30,6 +30,7 @@ module LicenseFinder
 
         expect(current_packages.size).to eq(2)
         expect(current_packages.first).to be_a(Package)
+        expect(current_packages.first.name).to eq("depjs")
       end
     end
 
