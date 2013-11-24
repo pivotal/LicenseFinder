@@ -63,7 +63,20 @@ module LicenseFinder
       end
     end
 
-    class Whitelist < Subcommand
+    class ConfigSubcommand < Subcommand
+      private
+
+      def modifying
+        die_on_error {
+          yield
+
+          LicenseFinder.config.save
+          Reporter.write_reports
+        }
+      end
+    end
+
+    class Whitelist < ConfigSubcommand
       desc "list", "List all the whitelisted licenses"
       def list
         whitelist = LicenseFinder.config.whitelist
@@ -76,45 +89,36 @@ module LicenseFinder
 
       desc "add LICENSE", "Add one ore more licenses to the whitelist"
       def add(*licenses)
-        die_on_error {
+        modifying {
           licenses.each do |license|
             LicenseFinder.config.whitelist.push(license)
           end
-          LicenseFinder.config.save
-
-          Reporter.write_reports
         }
         say "Added #{licenses.join(", ")} to the license whitelist"
       end
 
       desc "remove LICENSE", "Remove one ore more licenses from the whitelist"
       def remove(*licenses)
-        die_on_error {
+        modifying {
           licenses.each do |license|
             LicenseFinder.config.whitelist.delete(license)
           end
-          LicenseFinder.config.save
-
-          Reporter.write_reports
         }
         say "Removed #{licenses.join(", ")} from the license whitelist"
       end
     end
 
-    class ProjectName < Subcommand
+    class ProjectName < ConfigSubcommand
       desc "set NAME", "Set the project name"
       def set(name)
-        die_on_error {
+        modifying {
           LicenseFinder.config.project_name = name
-          LicenseFinder.config.save
-
-          Reporter.write_reports
         }
         say "Set the project name to #{name}", :green
       end
     end
 
-    class IgnoredBundlerGroups < Subcommand
+    class IgnoredBundlerGroups < ConfigSubcommand
       desc "list", "List all the ignored bundler groups"
       def list
         ignored = LicenseFinder.config.ignore_groups
@@ -127,22 +131,16 @@ module LicenseFinder
 
       desc "add GROUP", "Add a bundler group to be ignored"
       def add(group)
-        die_on_error {
+        modifying {
           LicenseFinder.config.ignore_groups.push(group)
-          LicenseFinder.config.save
-
-          Reporter.write_reports
         }
         say "Added #{group} to the ignored bundler groups"
       end
 
       desc "remove GROUP", "Remove a bundler group from the ignored bundler groups"
       def remove(group)
-        die_on_error {
+        modifying {
           LicenseFinder.config.ignore_groups.delete(group)
-          LicenseFinder.config.save
-
-          Reporter.write_reports
         }
         say "Removed #{group} from the ignored bundler groups"
       end
