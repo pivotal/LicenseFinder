@@ -38,6 +38,17 @@ module LicenseFinder
       end
     end
 
+    describe "#homepage" do
+      it "delegates to pypi def" do
+        subject = make_package("home_page" => "A homepage")
+        expect(subject.homepage).to eq("A homepage")
+      end
+
+      it "falls back to nothing" do
+        expect(subject.homepage).to be_nil
+      end
+    end
+
     describe '#license' do
       describe "with pypi license" do
         it "returns the license from 'license' preferentially" do

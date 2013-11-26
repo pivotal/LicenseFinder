@@ -17,16 +17,16 @@ module LicenseFinder
       pypi_def.fetch("description", "")
     end
 
+    def homepage
+      pypi_def["home_page"]
+    end
+
     def children
       [] # no way to determine child deps from pip (maybe?)
     end
 
     def groups
       [] # no concept of dev/test groups in pip (maybe?)
-    end
-
-    def homepage
-      nil # no way to extract homepage from pip (maybe?)
     end
 
     private
