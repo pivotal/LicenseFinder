@@ -15,29 +15,27 @@ module LicenseFinder
       it "includes files with names like LICENSE, License or COPYING" do
         subject = described_class.new(fixture_path('license_names'))
 
-        subject.find.map(&:file_name).should =~
+        subject.find.map(&:file_path).should =~
         %w[COPYING.txt LICENSE Mit-License README.rdoc Licence.rdoc]
       end
 
       it "includes files deep in the hierarchy" do
         subject = described_class.new(fixture_path('nested_gem'))
 
-        subject.find.map { |f| [f.file_name, f.file_path] }.should =~ [
-          %w[LICENSE vendor/LICENSE]
-        ]
+        subject.find.map(&:file_path).should =~ %w[vendor/LICENSE]
       end
 
       it "includes both files nested inside LICENSE directory and top level files" do
         subject = described_class.new(fixture_path('license_directory'))
         found_license_files = subject.find
 
-        found_license_files.map { |f| [f.file_name, f.file_path] }.should =~ [
-          %w[BSD-2-Clause.txt LICENSE/BSD-2-Clause.txt],
-          %w[GPL-2.0.txt LICENSE/GPL-2.0.txt],
-          %w[MIT.txt LICENSE/MIT.txt],
-          %w[RUBY.txt LICENSE/RUBY.txt],
-          %w[COPYING COPYING],
-          %w[LICENSE LICENSE/LICENSE]
+        found_license_files.map(&:file_path).should =~ %w[
+          LICENSE/BSD-2-Clause.txt
+          LICENSE/GPL-2.0.txt
+          LICENSE/MIT.txt
+          LICENSE/RUBY.txt
+          COPYING
+          LICENSE/LICENSE
         ]
       end
 
