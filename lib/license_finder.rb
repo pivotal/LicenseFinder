@@ -25,7 +25,6 @@ module LicenseFinder
   autoload :PipPackage,           'license_finder/pip_package'
   autoload :NpmPackage,           'license_finder/npm_package'
 
-  autoload :Approval,             'license_finder/tables/approval'
   autoload :BundlerGroup,         'license_finder/tables/bundler_group'
   autoload :Dependency,           'license_finder/tables/dependency'
   autoload :LicenseAlias,         'license_finder/tables/license_alias'
