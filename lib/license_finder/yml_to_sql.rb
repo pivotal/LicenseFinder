@@ -40,8 +40,7 @@ module LicenseFinder
     def convert
       @dep = create_dependency
       @dep.license = create_license
-      @dep.approval = create_approval
-      @dep.manual = non_bundler_source?
+      @dep.manual = manually_managed?
       associate_bundler_groups
       @dep.save
     end
@@ -58,8 +57,8 @@ module LicenseFinder
       end
     end
 
-    def non_bundler_source?
-      @legacy_attrs['source'] == "bundle" ? false : true
+    def manually_managed?
+      @legacy_attrs['source'] != "bundle"
     end
 
     def create_dependency
@@ -68,10 +67,6 @@ module LicenseFinder
 
     def create_license
       LicenseAlias.find_or_create(name: legacy_attrs['license'])
-    end
-
-    def create_approval
-      Sql::Approval.convert(legacy_attrs)
     end
 
     def find_children
@@ -85,37 +80,34 @@ module LicenseFinder
     end
 
     module Sql
-      module Convertable
-        def convert(attrs)
+      class Dependency < Sequel::Model
+        plugin :boolean_readers
+
+        many_to_one :license, class: LicenseAlias
+        many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
+        many_to_many :bundler_groups
+
+        VALID_ATTRIBUTES = {
+          'name' => 'name',
+          'version' => 'version',
+          'summary' => 'summary',
+          'description' => 'description',
+          'homepage' => 'homepage',
+          'approved' => 'manually_approved'
+        }
+
+        def self.convert(attrs)
           create remap_attrs(attrs)
         end
 
-        def remap_attrs(legacy_attrs)
-          self::VALID_ATTRIBUTES.each_with_object({}) do |(legacy_key, new_key), new_attrs|
+        def self.remap_attrs(legacy_attrs)
+          VALID_ATTRIBUTES.each_with_object({}) do |(legacy_key, new_key), new_attrs|
             new_attrs[new_key] = legacy_attrs[legacy_key]
           end
         end
       end
 
-      class Dependency < Sequel::Model
-        extend Convertable
-        VALID_ATTRIBUTES = Hash[*%w[name version summary description homepage].map { |k| [k, k] }.flatten]
-
-        many_to_one :license, class: LicenseAlias
-        many_to_one :approval
-        many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
-        many_to_many :bundler_groups
-      end
-
       class BundlerGroup < Sequel::Model
-      end
-
-      class Approval < Sequel::Model
-        extend Convertable
-
-        VALID_ATTRIBUTES = {
-          'approved' => 'state'
-        }
       end
     end
   end

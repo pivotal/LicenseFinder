@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module LicenseFinder
   describe NPM do
-    describe '.current_modules' do
-      it 'lists all the current modules' do
+    describe '.current_packages' do
+      it 'fetches data from npm' do
         json = <<-resp
 {
   "dependencies": {
@@ -26,33 +26,15 @@ module LicenseFinder
         resp
         allow(NPM).to receive(:`).with(/npm/).and_return(json)
 
-        current_modules = NPM.current_modules
+        current_packages = NPM.current_packages
 
-        expect(current_modules.size).to eq(2)
-        expect(current_modules.first).to be_a(Package)
-      end
-
-      it 'memoizes the current_modules' do
-        allow(NPM).to receive(:`).with(/npm/).and_return('{}').once
-
-        NPM.current_modules
-        NPM.current_modules
+        expect(current_packages.size).to eq(2)
+        expect(current_packages.first).to be_a(Package)
+        expect(current_packages.first.name).to eq("depjs")
       end
     end
 
-    describe '.harvest_license' do
-      let(:node_module1) { {"license" => "MIT"} }
-      let(:node_module2) { {"licenses" => [{"type" => "BSD", "url" => "github.github/github"}]} }
-      let(:node_module3) { {"license" => {"type" => "PSF", "url" => "github.github/github"}} }
-
-      it 'finds the license for both license structures' do
-        NPM.harvest_license(node_module1).should eq("MIT")
-        NPM.harvest_license(node_module2).should eq("BSD")
-        NPM.harvest_license(node_module3).should eq("PSF")
-      end
-    end
-
-    describe '.has_package?' do
+    describe '.active?' do
       let(:package) { Pathname.new('package.json').expand_path }
 
       context 'with a package.json file' do
@@ -61,7 +43,7 @@ module LicenseFinder
         end
 
         it 'returns true' do
-          expect(NPM.has_package?).to eq(true)
+          expect(NPM.active?).to eq(true)
         end
       end
 
@@ -71,7 +53,7 @@ module LicenseFinder
         end
 
         it 'returns false' do
-          expect(NPM.has_package?).to eq(false)
+          expect(NPM.active?).to eq(false)
         end
       end
     end

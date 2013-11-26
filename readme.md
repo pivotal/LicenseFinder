@@ -135,25 +135,25 @@ To remove a group from the ignored Bundler groups:
 $ license_finder ignored_bundler_groups remove development
 ```
 
-### Managing unsupported dependencies
+### Manually managing dependencies
 
-license_finder can track dependencies that Bundler/PyPi/NPM doesn't know about (JS libraries that don't
+license_finder can track dependencies that your package managers don't know about (JS libraries that don't
 appear in your Gemfile/requirements.txt/package.json, etc.)
 
 ```sh
 $ license_finder dependencies add MIT my_js_dep 0.1.2
 ```
 
-To automatically approve a non-bundler dependency when you add it, use:
+To automatically approve an unmanaged dependency when you add it, use:
 
 ```sh
 $ license_finder dependencies add MIT my_js_dep 0.1.2 --approve
 ```
 
 The version is optional.  Run `license_finder dependencies help` for additional documentation about
-managing non-Bundler dependencies.
+managing these dependencies.
 
-license_finder cannot automatically detect when a non-Bundler dependency has been removed from your
+license_finder cannot automatically detect when one of these dependencies has been removed from your
 project, so you can use:
 
 ```sh
@@ -215,7 +215,7 @@ This will move your dependencies.* files to the /doc directory and update the co
 
 ## Compatibility
 
-license_finder is compatible with ruby 1.9, and ruby 2.0. There is also experimental support for jruby.
+license_finder is compatible with ruby 1.9, ruby 2.0 and jruby.
 
 
 ## A note to gem authors / maintainers

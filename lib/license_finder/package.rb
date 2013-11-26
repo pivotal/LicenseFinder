@@ -1,97 +1,31 @@
 module LicenseFinder
+  # Super-class that adapts data from different package management
+  # systems (gems, npm, pip, etc.) to a common interface.
+  #
+  # For guidance on adding a new system use the shared behavior
+  #     it_behaves_like "it conforms to interface required by PackageSaver"
+  # and see BundlerPackage, PipPackage and NpmPackage
   class Package
-    attr_reader :parents, :spec, :bundler_dependency, :children
-
-    def initialize(spec, bundler_dependency = nil)
-      @spec = spec
-      @bundler_dependency = bundler_dependency
-      @children = []
-    end
-
-    def name
-      "#{dependency_name} #{dependency_version}"
-    end
-
-    def parents
-      @parents ||= []
-    end
-
-    def dependency_name
-      @spec.name
-    end
-
-    def dependency_version
-      @spec.version.to_s
-    end
-
-    def summary
-      @spec.summary
-    end
-
-    def description
-      @spec.description
-    end
-
-    def groups
-      @groups ||= bundler_dependency ? bundler_dependency.groups : []
-    end
-
     def license
       @license ||= determine_license
-    end
-
-    def sort_order
-      dependency_name.downcase
-    end
-
-    def license_files
-      PossibleLicenseFiles.new(@spec.full_gem_path).find
-    end
-
-    def children=(childs)
-      @children = childs
     end
 
     private
 
     def determine_license
-      return @spec.license if @spec.license
-
-      license = license_files.map(&:license).compact.first
-      license || "other"
-    end
-  end
-
-  class PythonPackage < Package
-    def determine_license
-      return @spec.license if @spec.license
-
-      license = super
-
-      if !license || license == "other"
-        license = Pip.license_for self
-      end
-
-      license
+      license_from_spec || license_from_files || default_license
     end
 
-    def summary
-      json.fetch("summary", "")
+    def license_from_files
+      license_files.map(&:license).compact.first
     end
 
-    def description
-      json.fetch("description", "")
+    def license_files
+      PossibleLicenseFiles.find(install_path)
     end
 
-    def json
-      return @json if @json
-
-      response = HTTParty.get("https://pypi.python.org/pypi/#{dependency_name}/#{dependency_version}/json")
-      if response.code == 200
-        @json = JSON.parse(response.body).fetch("info", {})
-      end
-
-      @json ||= {}
+    def default_license
+      "other"
     end
   end
 end

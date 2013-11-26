@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'digest'
 
 module LicenseFinder
   describe DependencyManager do
@@ -22,29 +21,29 @@ module LicenseFinder
         Dependency.create(name: "old dependency 1")
         Dependency.create(name: "old dependency 2")
 
-        current_gems = [gem1, gem2]
-        Bundle.stub(:current_gems).with(config) { current_gems }
-        PackageSaver.should_receive(:save_packages).with(current_gems).and_return([cur1, cur2])
+        current_packages = [gem1, gem2]
+        Bundler.stub(:current_packages) { current_packages }
+        PackageSaver.should_receive(:save_all).with(current_packages).and_return([cur1, cur2])
 
-        described_class.sync_with_bundler
+        described_class.sync_with_package_managers
         Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
       end
     end
 
-    describe ".create_non_bundler" do
+    describe ".create_manually_managed" do
       it "should add a Dependency" do
         expect do
-          described_class.create_non_bundler("MIT", "js_dep", "0.0.0")
+          described_class.create_manually_managed("MIT", "js_dep", "0.0.0")
         end.to change(Dependency, :count).by(1)
       end
 
       it "should mark the dependency as manual" do
-        described_class.create_non_bundler("MIT", "js_dep", "0.0.0")
+        described_class.create_manually_managed("MIT", "js_dep", "0.0.0")
           .should be_manual
       end
 
       it "should set the appropriate values" do
-        dep = described_class.create_non_bundler("GPL", "js_dep", "0.0.0")
+        dep = described_class.create_manually_managed("GPL", "js_dep", "0.0.0")
         dep.name.should == "js_dep"
         dep.version.should == "0.0.0"
         dep.license.name.should == "GPL"
@@ -53,16 +52,16 @@ module LicenseFinder
 
       it "should complain if the dependency already exists" do
         Dependency.create(name: "current dependency 1")
-        expect { described_class.create_non_bundler("GPL", "current dependency 1", "0.0.0") }
+        expect { described_class.create_manually_managed("GPL", "current dependency 1", "0.0.0") }
           .to raise_error(LicenseFinder::Error)
       end
     end
 
-    describe ".destroy_non_bundler" do
-      it "should remove a non bundler Dependency" do
-        described_class.create_non_bundler("GPL", "a non-bundler dep", nil)
+    describe ".destroy_manually_managed" do
+      it "should remove a manually managed Dependency" do
+        described_class.create_manually_managed("GPL", "a manually managed dep", nil)
         expect do
-          described_class.destroy_non_bundler("a non-bundler dep")
+          described_class.destroy_manually_managed("a manually managed dep")
         end.to change(Dependency, :count).by(-1)
       end
 
@@ -70,7 +69,7 @@ module LicenseFinder
         Dependency.create(name: "a bundler dep")
         expect do
           expect do
-            described_class.destroy_non_bundler("a bundler dep")
+            described_class.destroy_manually_managed("a bundler dep")
           end.to raise_error(LicenseFinder::Error)
         end.to_not change(Dependency, :count)
       end

@@ -1,31 +1,16 @@
 require 'json'
-require 'license_finder/package'
 
 module LicenseFinder
   class NPM
-
-    def self.current_modules
-      return @modules if @modules
-
+    def self.current_packages
       output = `npm list --json --long`
 
-      json = JSON(output)
-
-      @modules = json.fetch("dependencies",[]).map do |node_module|
-        node_module = node_module[1]
-
-        Package.new(OpenStruct.new(
-          :name => node_module.fetch("name", nil),
-          :version => node_module.fetch("version", nil),
-          :full_gem_path => node_module.fetch("path", nil),
-          :license => self.harvest_license(node_module),
-          :summary => node_module.fetch("description", nil),
-          :description => node_module.fetch("readme", nil)
-        ))
+      JSON(output).fetch("dependencies",[]).map do |(_, node_module)|
+        NpmPackage.new(node_module)
       end
     end
 
-    def self.has_package?
+    def self.active?
       File.exists?(package_path)
     end
 
@@ -33,24 +18,6 @@ module LicenseFinder
 
     def self.package_path
       Pathname.new('package.json').expand_path
-    end
-
-    def self.harvest_license(node_module)
-      license = node_module.fetch("licenses", []).first
-
-      if license
-        license = license.fetch("type", nil)
-      end
-
-      if license.nil?
-        license = node_module.fetch("license", nil)
-
-        if license.is_a? Hash
-          license = license.fetch("type", nil)
-        end
-      end
-
-      license
     end
   end
 end
