@@ -18,6 +18,9 @@ module LicenseFinder
     its(:version) { should == "1.3.1" }
     its(:summary) { should == "a description" }
     its(:description) { should == "a readme" }
+    its(:homepage) { should == nil }
+    its(:groups) { should == [] }
+    its(:children) { should == [] }
 
     describe '#license' do
       def stub_license_files(license_files)

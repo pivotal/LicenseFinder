@@ -22,6 +22,7 @@ module LicenseFinder
     its(:version) { should == '2.1.3' }
     its(:summary) { should == "summary" }
     its(:description) { should == "description" }
+    its(:homepage) { should == "homepage" }
     its(:groups) { should == [] }
     its(:children) { should == [] }
 

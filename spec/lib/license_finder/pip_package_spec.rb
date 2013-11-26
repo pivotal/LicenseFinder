@@ -12,6 +12,9 @@ module LicenseFinder
 
     its(:name) { should == "jasmine" }
     its(:version) { should == "1.3.1" }
+    its(:homepage) { should == nil }
+    its(:groups) { should == [] }
+    its(:children) { should == [] }
 
     describe "#summary" do
       it "delegates to pypi def" do
