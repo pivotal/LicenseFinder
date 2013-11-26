@@ -36,7 +36,7 @@ module LicenseFinder
         subject.license.should == "Gemspec License"
       end
 
-      it "returns the first license from the gemspec if many are provided" do
+      it "returns the first license if the gemspec provides many" do
         gemspec.licenses = ['First Gemspec License', 'Second Gemspec License']
 
         subject.license.should == "First Gemspec License"
