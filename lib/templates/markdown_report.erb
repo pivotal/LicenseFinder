@@ -37,8 +37,7 @@ license_text = (dependency.license.url && !dependency.license.url.empty?) ? "<a 
 |---------|-------------|---------|
 |<%= dependency.summary %>|<%= license_text %>| <%= dependency.approved? ? 'Yes' : '_*No*_' %> |
 
-
-```
-<%= dependency.description %>
-```
+<% if dependency.description %>
+<% dependency.description.lines.each{|l| %>> <%= l -%><% } %>
+<% end %>
 <% end -%>
