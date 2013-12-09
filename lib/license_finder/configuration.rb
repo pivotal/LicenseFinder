@@ -73,6 +73,10 @@ module LicenseFinder
       File.join(dependencies_dir, "dependencies.html")
     end
 
+    def dependencies_markdown
+      File.join(dependencies_dir, "dependencies.md")
+    end
+
     def whitelisted?(license_name)
       license = License.find_by_name(license_name) || license_name
       whitelisted_licenses.include? license
