@@ -12,7 +12,9 @@ module LicenseFinder
         LicenseFinder.stub_chain(:config, :dependencies_html) { 'html_file_path' }
         LicenseFinder.stub_chain(:config, :dependencies_text) { 'text_file_path' }
         LicenseFinder.stub_chain(:config, :dependencies_detailed_text) { 'detailed_text_file_path' }
+        LicenseFinder.stub_chain(:config, :dependencies_markdown) { 'markdown_file_path' }
 
+        MarkdownReport.stub_chain(:new, :to_s) { 'text report' }
         DetailedTextReport.stub_chain(:new, :to_s) { 'text report' }
         TextReport.stub_chain(:new, :to_s) { 'text report' }
         HtmlReport.stub_chain(:new, :to_s) { 'text report' }
@@ -23,12 +25,14 @@ module LicenseFinder
         File.stub(:open).with('html_file_path', 'w+')
         File.stub(:open).with('text_file_path', 'w+')
         File.stub(:open).with('detailed_text_file_path', 'w+')
+        File.stub(:open).with('markdown_file_path', 'w+')
       end
 
       it "writes an html file" do
         File.should_receive(:open).with('html_file_path', 'w+')
         File.should_receive(:open).with('text_file_path', 'w+')
         File.should_receive(:open).with('detailed_text_file_path', 'w+')
+        File.should_receive(:open).with('markdown_file_path', 'w+')
         subject
       end
 

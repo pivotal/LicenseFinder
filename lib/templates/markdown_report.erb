@@ -1,6 +1,6 @@
 # <%= LicenseFinder.config.project_name %>
 
-As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %> there are <%= dependencies.size %> total, _<%= unapproved_dependencies.size %> unapproved_
+As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %>. <%= dependencies.size %> total, _<%= unapproved_dependencies.size %> unapproved_
 
 ## Summary
 <% grouped_dependencies.each do |license_name, group| -%>
