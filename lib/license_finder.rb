@@ -29,6 +29,7 @@ module LicenseFinder
 
   autoload :DependencyReport, 'license_finder/reports/dependency_report'
   autoload :HtmlReport,       'license_finder/reports/html_report'
+  autoload :MarkdownReport,   'license_finder/reports/markdown_report'
   autoload :Reporter,         'license_finder/reports/reporter'
   autoload :TextReport,       'license_finder/reports/text_report'
   autoload :DetailedTextReport,   'license_finder/reports/detailed_text_report'
