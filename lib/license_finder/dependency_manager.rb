@@ -18,6 +18,10 @@ module LicenseFinder
           current_dependencies += PackageSaver.save_packages(NPM.current_modules())
         end
 
+        if Bower.has_package_file?
+          current_dependencies += PackageSaver.save_packages(Bower.current_packages())
+        end
+
         Dependency.bundler.obsolete(current_dependencies).each(&:destroy)
       }
     end
