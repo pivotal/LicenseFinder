@@ -38,7 +38,7 @@ module LicenseFinder
     def self.harvest_license(node_module)
       license = node_module.fetch("licenses", []).first
 
-      if license
+      if license.is_a? Hash
         license = license.fetch("type", nil)
       end
 
