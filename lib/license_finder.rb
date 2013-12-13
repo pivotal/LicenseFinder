@@ -9,6 +9,7 @@ module LicenseFinder
 
   autoload :Bundle,               'license_finder/bundle'
   autoload :PackageSaver,         'license_finder/package_saver'
+  autoload :Bower,                'license_finder/bower'
   autoload :CLI,                  'license_finder/cli'
   autoload :Configuration,        'license_finder/configuration'
   autoload :DependencyManager,    'license_finder/dependency_manager'
