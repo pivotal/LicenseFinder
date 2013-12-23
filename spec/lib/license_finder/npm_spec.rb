@@ -6,31 +6,67 @@ module LicenseFinder
       before { NPM.instance_variable_set(:@modules, nil) }
 
       it 'lists all the current modules' do
-        json = <<-resp
-{
-  "dependencies": {
-    "dependency.js": {
-      "name": "depjs",
-      "version": "1.3.3.7",
-      "description": "description",
-      "readme": "readme",
-      "path": "/path/to/thing"
-    },
-    "dependency2.js": {
-      "name": "dep2js",
-      "version": "4.2",
-      "description": "description2",
-      "readme": "readme2",
-      "path": "/path/to/thing2"
-    }
-  }
-}
-        resp
+        json = <<-JSON
+          {
+            "dependencies": {
+              "dependency.js": {
+                "name": "depjs",
+                "version": "1.3.3.7",
+                "description": "description",
+                "readme": "readme",
+                "path": "/path/to/thing"
+              },
+              "dependency2.js": {
+                "name": "dep2js",
+                "version": "4.2",
+                "description": "description2",
+                "readme": "readme2",
+                "path": "/path/to/thing2"
+              }
+            },
+            "devDependencies": {
+              "dependency3.js": {
+                "name": "dep3js",
+                "version": "4.2",
+                "description": "description3",
+                "readme": "readme3",
+                "path": "/path/to/thing3"
+              }
+            },
+            "bundledDependencies": {
+              "dependency4.js": {
+                "name": "dep4js",
+                "version": "4.2",
+                "description": "description4",
+                "readme": "readme4",
+                "path": "/path/to/thing4"
+              }
+            },
+            "bundleDependencies": {
+              "dependency5.js": {
+                "name": "dep5js",
+                "version": "4.2",
+                "description": "description5",
+                "readme": "readme5",
+                "path": "/path/to/thing5"
+              }
+            },
+            "notADependency": {
+              "dependency6.js": {
+                "name": "dep6js",
+                "version": "4.2",
+                "description": "description6",
+                "readme": "readme6",
+                "path": "/path/to/thing6"
+              }
+            }
+          }
+        JSON
         allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
 
         current_modules = NPM.current_modules
 
-        expect(current_modules.size).to eq(2)
+        expect(current_modules.map(&:name)).to eq(["depjs 1.3.3.7", "dep2js 4.2", "dep3js 4.2", "dep5js 4.2", "dep4js 4.2"])
         expect(current_modules.first).to be_a(Package)
       end
 
