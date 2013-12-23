@@ -7,7 +7,9 @@ module LicenseFinder
     def self.current_modules
       return @modules if @modules
 
-      output = `npm list --json --long`
+      command = "npm list --json --long"
+      output, success = capture(command)
+      raise "Command #{command} failed to execute: #{output}" unless success
 
       json = JSON(output)
 
@@ -30,6 +32,10 @@ module LicenseFinder
     end
 
     private
+
+    def self.capture(command)
+      [`#{command}`, $?.success?]
+    end
 
     def self.package_path
       Pathname.new('package.json').expand_path
