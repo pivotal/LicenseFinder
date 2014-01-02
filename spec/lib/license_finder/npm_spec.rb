@@ -3,6 +3,8 @@ require 'spec_helper'
 module LicenseFinder
   describe NPM do
     describe '.current_modules' do
+      before { NPM.instance_variable_set(:@modules, nil) }
+
       it 'lists all the current modules' do
         json = <<-resp
 {
@@ -24,7 +26,7 @@ module LicenseFinder
   }
 }
         resp
-        allow(NPM).to receive(:`).with(/npm/).and_return(json)
+        allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
 
         current_modules = NPM.current_modules
 
@@ -33,10 +35,15 @@ module LicenseFinder
       end
 
       it 'memoizes the current_modules' do
-        allow(NPM).to receive(:`).with(/npm/).and_return('{}').once
+        allow(NPM).to receive(:capture).with(/npm/).and_return(['{}', true]).once
 
         NPM.current_modules
         NPM.current_modules
+      end
+
+      it "fails when command fails" do
+        allow(NPM).to receive(:capture).with(/npm/).and_return('Some error', false).once
+        expect { NPM.current_modules }.to raise_error(RuntimeError)
       end
     end
 
