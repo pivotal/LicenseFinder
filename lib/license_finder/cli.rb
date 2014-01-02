@@ -187,7 +187,7 @@ module LicenseFinder
         unapproved = Dependency.unapproved
 
         if unapproved.empty?
-          say "All gems are approved for use", :green
+          say "All dependencies are approved for use", :green
         else
           say "Dependencies that need approval:", :red
           say TextReport.new(unapproved)

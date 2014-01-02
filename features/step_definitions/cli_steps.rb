@@ -44,8 +44,8 @@ Then(/^should list my MIT gem in the output$/) do
   @output.should include 'mit_gem'
 end
 
-Then(/^I should see all gems approved for use$/) do
-  @output.should include 'All gems are approved for use'
+Then(/^I should see all dependencies approved for use$/) do
+  @output.should include 'All dependencies are approved for use'
 end
 
 Then(/^the mime\-types license remains set with my manual license type$/) do
