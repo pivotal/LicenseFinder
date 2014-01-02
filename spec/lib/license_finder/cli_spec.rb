@@ -63,6 +63,17 @@ module LicenseFinder
             subject.add("test")
           end
         end
+
+        it "adds multiple licenses to the whitelist" do
+          config.whitelist.should_receive(:push).with("test")
+          config.whitelist.should_receive(:push).with("rest")
+          config.should_receive(:save)
+          Reporter.should_receive(:write_reports)
+
+          silence_stdout do
+            subject.add("test", "rest")
+          end
+        end
       end
 
       describe "remove" do
@@ -72,7 +83,19 @@ module LicenseFinder
           Reporter.should_receive(:write_reports)
 
           silence_stdout do
+
             subject.remove("test")
+          end
+        end
+
+        it "removes multiple licenses from the whitelist" do
+          config.should_receive(:save)
+          config.whitelist.should_receive(:delete).with("test")
+          config.whitelist.should_receive(:delete).with("rest")
+          Reporter.should_receive(:write_reports)
+
+          silence_stdout do
+            subject.remove("test", "rest")
           end
         end
       end
@@ -172,6 +195,15 @@ module LicenseFinder
 
           silence_stdout do
             subject.approve 'foo'
+          end
+        end
+
+        it "approves multiple gem" do
+          DependencyManager.should_receive(:approve!).with("foo")
+          DependencyManager.should_receive(:approve!).with("bar")
+
+          silence_stdout do
+            subject.approve 'foo', 'bar'
           end
         end
       end

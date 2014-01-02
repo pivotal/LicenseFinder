@@ -74,26 +74,30 @@ module LicenseFinder
         end
       end
 
-      desc "add LICENSE", "Add a license to the whitelist"
-      def add(license)
+      desc "add LICENSE", "Add one ore more licenses to the whitelist"
+      def add(*licenses)
         die_on_error {
-          LicenseFinder.config.whitelist.push(license)
+          licenses.each do |license|
+            LicenseFinder.config.whitelist.push(license)
+          end
           LicenseFinder.config.save
 
           Reporter.write_reports
         }
-        say "Added #{license} to the license whitelist"
+        say "Added #{licenses.join(", ")} to the license whitelist"
       end
 
-      desc "remove LICENSE", "Remove a license from the whitelist"
-      def remove(license)
+      desc "remove LICENSE", "Remove one ore more licenses from the whitelist"
+      def remove(*licenses)
         die_on_error {
-          LicenseFinder.config.whitelist.delete(license)
+          licenses.each do |license|
+            LicenseFinder.config.whitelist.delete(license)
+          end
           LicenseFinder.config.save
 
           Reporter.write_reports
         }
-        say "Removed #{license} from the license whitelist"
+        say "Removed #{licenses.join(", ")} from the license whitelist"
       end
     end
 
@@ -158,13 +162,13 @@ module LicenseFinder
       end
       default_task :rescan
 
-      desc "approve DEPENDENCY_NAME", "Approve a dependency by name."
-      def approve(name)
+      desc "approve DEPENDENCY_NAME", "Approve one ore more dependencies by name."
+      def approve(*names)
         die_on_error {
-          DependencyManager.approve!(name)
+          names.each { |name| DependencyManager.approve!(name) }
         }
 
-        say "The #{name} dependency has been approved!", :green
+        say "The #{names.join(", ")} dependency has been approved!", :green
       end
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license."
