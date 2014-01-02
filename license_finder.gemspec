@@ -1,6 +1,7 @@
 require './lib/license_finder/platform'
 
 Gem::Specification.new do |s|
+  s.required_ruby_version = '>= 1.9.2'
   s.name        = "license_finder"
   s.version     = "0.9.3"
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers", "Brent Wheeldon", "Trevor John", "David Tengdin", "William Ramsey"]
