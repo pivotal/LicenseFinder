@@ -74,7 +74,7 @@ module LicenseFinder
         end
       end
 
-      desc "add LICENSE", "Add a license to the whitelist"
+      desc "add LICENSE", "Add one ore more licenses to the whitelist"
       def add(*licenses)
         die_on_error {
           licenses.each do |license|
@@ -87,7 +87,7 @@ module LicenseFinder
         say "Added #{licenses.join(", ")} to the license whitelist"
       end
 
-      desc "remove LICENSE", "Remove a license from the whitelist"
+      desc "remove LICENSE", "Remove one ore more licenses from the whitelist"
       def remove(*licenses)
         die_on_error {
           licenses.each do |license|
@@ -162,7 +162,7 @@ module LicenseFinder
       end
       default_task :rescan
 
-      desc "approve DEPENDENCY_NAME", "Approve a dependency by name."
+      desc "approve DEPENDENCY_NAME", "Approve one ore more dependencies by name."
       def approve(*names)
         die_on_error {
           names.each { |name| DependencyManager.approve!(name) }

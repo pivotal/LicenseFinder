@@ -100,16 +100,16 @@ To list licenses currently on the whitelist:
 $ license_finder whitelist list
 ```
 
-To add a license to the whitelist:
+To add a licenses to the whitelist:
 
 ```sh
-$ license_finder whitelist add MIT
+$ license_finder whitelist add MIT [BSD [...]]
 ```
 
-To remove a license from the whitelist:
+To remove a licenses from the whitelist:
 
 ```sh
-$ license_finder whitelist remove MIT
+$ license_finder whitelist remove MIT [BSD [...]]
 ```
 
 ### Managing ignored Bundler groups
