@@ -10,7 +10,7 @@ end
 
 When(/^I add my JS dependency with an approval flag$/) do
   @output = @user.execute_command 'license_finder dependencies add --approve MIT my_js_dep 1.2.3'
-  @output.should == "The my_js_dep dependency has been added and approved!\n"
+  @output.should match /The my_js_dep dependency has been added and approved/
 end
 
 When(/^I remove my JS dependency$/) do
