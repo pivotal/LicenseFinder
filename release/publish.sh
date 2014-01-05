@@ -14,12 +14,12 @@ function perform {
   $1
 }
 
-printf "\nBuilding jruby... (1.7.4)"
-perform "rvm use jruby-1.7.4"
+printf "\nBuilding jruby..."
+perform "rvm use jruby"
 perform "rake build"
 
-printf "\nBuilding ruby... (2.0.0)"
-perform "rvm use ruby-2.0.0"
+printf "\nBuilding ruby..."
+perform "rvm use ruby"
 perform "rake build"
 
 printf "\nPublishing to rubygems..."

@@ -15,9 +15,9 @@ any existing Gemfile.lock in the directory.
 
 
 ```sh
-$ rvm use jruby-1.7.4
+$ rvm use jruby
 $ rake build
-$ rvm use ruby-2.0.0
+$ rvm use ruby
 $ rake build
 ```
 
