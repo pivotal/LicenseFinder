@@ -1,3 +1,17 @@
+=== 0.9.4 / 2014-01-05
+
+* Features
+
+  * Add detailed csv report
+  * Add markdown report
+  * Add support for "licenses" => ["license"] (npn)
+  * Add basic bower support
+  * Allow adding/removing multiple licenses from whitelist
+
+* Bugfixes
+
+  * Use all dependencies by default for npm as bundler does
+
 === 0.9.3 / 2013-10-01
 
 * Features
