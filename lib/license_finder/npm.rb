@@ -4,6 +4,8 @@ require 'license_finder/package'
 module LicenseFinder
   class NPM
 
+    DEPENDENCY_GROUPS = ["dependencies", "devDependencies", "bundleDependencies", "bundledDependencies"]
+
     def self.current_modules
       return @modules if @modules
 
@@ -12,10 +14,9 @@ module LicenseFinder
       raise "Command #{command} failed to execute: #{output}" unless success
 
       json = JSON(output)
+      dependencies = DEPENDENCY_GROUPS.map { |g| (json[g] || {}).values }.flatten(1)
 
-      @modules = json.fetch("dependencies",[]).map do |node_module|
-        node_module = node_module[1]
-
+      @modules = dependencies.map do |node_module|
         Package.new(OpenStruct.new(
           :name => node_module.fetch("name", nil),
           :version => node_module.fetch("version", nil),
