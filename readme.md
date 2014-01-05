@@ -215,7 +215,7 @@ This will move your dependencies.* files to the /doc directory and update the co
 
 ## Compatibility
 
-license_finder is compatible with ruby 1.9, and ruby 2.0. There is also experimental support for jruby.
+license_finder is compatible with ruby >= 1.9, and jruby.
 
 
 ## A note to gem authors / maintainers
