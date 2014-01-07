@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "sequel"
   s.add_dependency "thor"
   s.add_dependency "rake"
-  s.add_dependency "httparty", "~> 0.12.0"
+  s.add_dependency "httparty", ">= 0.11.0"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
   %w(rspec xpath cucumber pry).each do |gem|
