@@ -49,16 +49,9 @@ end
 Then(/^I should see only see GPL liceneses as unapproved in the html$/) do
   html = File.read(@user.dependencies_html_path)
   page = Capybara.string(html)
-  page.should have_content '12 total'
-  page.should have_content '1 unapproved'
   page.should have_content '1 GPL'
-  page.should have_content '1 other'
-  if @user.jruby?
-    page.should have_content '9 MIT'
-    page.should have_content '1 Apache 2.0'
-  else
-    page.should have_content '10 MIT'
-  end
+  action_items = page.find('.action-items')
+  action_items.should have_content '(GPL)'
 end
 
 def is_html_status?(gem, approval)

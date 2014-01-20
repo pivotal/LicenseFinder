@@ -14,8 +14,8 @@ When(/^I run license_finder$/) do
   @output = @user.execute_command "license_finder --quiet"
 end
 
-When(/^I whitelist MIT and 'other' and New BSD and Apache 2.0 licenses$/) do
-  @user.configure_license_finder_whitelist ["MIT","other","New BSD","Apache 2.0"]
+When(/^I whitelist MIT, New BSD, Apache 2.0, Ruby, and other licenses$/) do
+  @user.configure_license_finder_whitelist ["MIT","other","New BSD","Apache 2.0","Ruby"]
   @output = @user.execute_command "license_finder --quiet"
 end
 
@@ -208,10 +208,6 @@ module DSL
     def modifying_dependencies_file
       FileUtils.mkdir_p(File.dirname(dependencies_file_path))
       File.open(dependencies_file_path, 'w+') { |f| yield f }
-    end
-
-    def jruby?
-      `ruby -v`.match /^jruby/
     end
 
     private

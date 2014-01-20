@@ -20,5 +20,5 @@ Feature: HTML Report
 
   Scenario: Dependency summary
     And my app depends on MIT and GPL licensed gems
-    When I whitelist MIT and 'other' and New BSD and Apache 2.0 licenses
+    When I whitelist MIT, New BSD, Apache 2.0, Ruby, and other licenses
     Then I should see only see GPL liceneses as unapproved in the html
