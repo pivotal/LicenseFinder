@@ -1,3 +1,10 @@
+=== 0.9.5 / TBD
+
+* Features
+
+  * Add more aliases for known licenses
+  * Drop support for ruby 1.9.2
+
 === 0.9.4 / 2014-01-05
 
 * Features
