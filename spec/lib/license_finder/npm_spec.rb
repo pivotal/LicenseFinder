@@ -70,6 +70,22 @@ module LicenseFinder
         expect(current_modules.first).to be_a(Package)
       end
 
+      it "supports name version string" do
+        json = <<-JSON
+          {
+            "devDependencies": {
+              "foo": "4.2"
+            }
+          }
+        JSON
+        allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
+
+        current_modules = NPM.current_modules
+
+        expect(current_modules.map(&:name)).to eq(["foo 4.2"])
+        expect(current_modules.first).to be_a(Package)
+      end
+
       it 'memoizes the current_modules' do
         allow(NPM).to receive(:capture).with(/npm/).and_return(['{}', true]).once
 
