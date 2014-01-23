@@ -4,7 +4,7 @@ require 'license_finder/package'
 module LicenseFinder
   class NPM
 
-    DEPENDENCY_GROUPS = ["dependencies", "devDependencies", "bundleDependencies", "bundledDependencies"]
+    DEPENDENCY_GROUPS = ["dependencies", "bundleDependencies", "bundledDependencies"]
 
     def self.current_modules
       return @modules if @modules
