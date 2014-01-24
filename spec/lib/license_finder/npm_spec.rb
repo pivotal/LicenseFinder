@@ -96,6 +96,11 @@ module LicenseFinder
         allow(NPM).to receive(:capture).with(/npm/).and_return('Some error', false).once
         expect { NPM.current_modules }.to raise_error(RuntimeError)
       end
+
+      it "does not fail when command fails but produces output" do
+        allow(NPM).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
+        NPM.current_modules
+      end
     end
 
     describe '.harvest_license' do
