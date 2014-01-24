@@ -14,7 +14,7 @@ module LicenseFinder
       raise "Command #{command} failed to execute: #{output}" unless success
 
       json = JSON(output)
-      dependencies = DEPENDENCY_GROUPS.map { |g| (json[g] || {}).values }.flatten(1)
+      dependencies = DEPENDENCY_GROUPS.map { |g| (json[g] || {}).values }.flatten(1).reject{ |d| d.is_a?(String) }
 
       @modules = dependencies.map do |node_module|
         Package.new(OpenStruct.new(
