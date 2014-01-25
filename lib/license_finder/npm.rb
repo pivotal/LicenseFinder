@@ -9,15 +9,8 @@ module LicenseFinder
     def self.current_modules
       return @modules if @modules
 
-      command = "npm list --json --long"
-      output, success = capture(command)
-      raise "Command #{command} failed to execute: #{output}" unless success
-
-      json = JSON(output)
-      dependencies = DEPENDENCY_GROUPS.map do |g|
-        found = (json[g] || {})
-        found.map { |k,v| v.is_a?(String) ? {"name" => k, "version" => v} : v }
-      end.flatten(1)
+      json = npm_json
+      dependencies = DEPENDENCY_GROUPS.map { |g| (json[g] || {}).values }.flatten(1).reject{ |d| d.is_a?(String) }
 
       @modules = dependencies.map do |node_module|
         Package.new(OpenStruct.new(
@@ -36,6 +29,22 @@ module LicenseFinder
     end
 
     private
+
+    def self.npm_json
+      command = "npm list --json --long"
+      output, success = capture(command)
+      if success
+        json = JSON(output)
+      else
+        json = JSON(output) rescue nil
+        if json
+          $stderr.puts "Command #{command} returned error but parsing succeeded."
+        else
+          raise "Command #{command} failed to execute: #{output}"
+        end
+      end
+      json
+    end
 
     def self.capture(command)
       [`#{command}`, $?.success?]

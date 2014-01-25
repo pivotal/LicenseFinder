@@ -70,7 +70,7 @@ module LicenseFinder
         expect(current_modules.first).to be_a(Package)
       end
 
-      it "supports name version string" do
+      it "does not support name version string" do
         json = <<-JSON
           {
             "devDependencies": {
@@ -82,8 +82,7 @@ module LicenseFinder
 
         current_modules = NPM.current_modules
 
-        expect(current_modules.map(&:name)).to eq(["foo 4.2"])
-        expect(current_modules.first).to be_a(Package)
+        expect(current_modules.map(&:name)).to eq([])
       end
 
       it 'memoizes the current_modules' do
@@ -96,6 +95,11 @@ module LicenseFinder
       it "fails when command fails" do
         allow(NPM).to receive(:capture).with(/npm/).and_return('Some error', false).once
         expect { NPM.current_modules }.to raise_error(RuntimeError)
+      end
+
+      it "does not fail when command fails but produces output" do
+        allow(NPM).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
+        NPM.current_modules
       end
     end
 
