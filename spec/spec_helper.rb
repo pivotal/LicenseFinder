@@ -17,6 +17,6 @@ end
 RSpec.configure do |config|
   config.before { FileUtils.rm_f("config/license_finder.yml") }
   config.around do |example|
-    DB.transaction(rollback: :always) { example.run }
+    LicenseFinder::DB.transaction(rollback: :always) { example.run }
   end
 end

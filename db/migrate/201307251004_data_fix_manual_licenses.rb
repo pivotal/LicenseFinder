@@ -1,6 +1,6 @@
 Sequel.migration do
   up do
-  DB << <<EOS
+    LicenseFinder::DB << <<-SQL
 UPDATE dependencies
 SET license_manual = 1
 WHERE id
@@ -10,6 +10,6 @@ IN
   INNER JOIN license_aliases l
     ON d.license_id = l.id
   WHERE l.manual = 1)
-EOS
+    SQL
   end
 end
