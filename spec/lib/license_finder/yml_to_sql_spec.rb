@@ -51,7 +51,7 @@ describe LicenseFinder::YmlToSql do
 
   describe '.convert_all' do
     before do
-      (DB.tables - [:schema_migrations]).each { |table| DB[table].truncate }
+      (LicenseFinder::DB.tables - [:schema_migrations]).each { |table| LicenseFinder::DB[table].truncate }
     end
 
     describe "when dependency source is set to bundle" do
