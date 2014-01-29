@@ -64,142 +64,113 @@ module LicenseFinder
       context "when the dependency already existed" do
         before { LicenseFinder.stub(:current_gems).and_return([double(:gemspec, name: "foo 0.0")]) }
 
-        context "the values have not changed" do
-          let!(:original_dependency) do
-            license = LicenseAlias.create(
-              name: 'other'
-            )
-            Dependency.create(
-              name: 'spec_name',
-              version: '2.1.3',
-              summary: 'summary',
-              description: 'description',
-              homepage: 'homepage',
-              license: license
-            )
-          end
-          let(:package_saver) { described_class.find_or_create_by_name(package) }
+        let!(:old_copy) do
+          dep = Dependency.create(
+            name: 'spec_name',
+            version: '0.1.2',
+            summary: 'old summary',
+            description: 'old desription',
+            homepage: 'old homepage'
+          )
+          dep.approval = Approval.create
+          dep
+        end
 
-          it "does not save the dependency" do
-            package_saver.dependency.should_not_receive(:save)
-            package_saver.save
+        it "merges in the latest data" do
+          subject.id.should == old_copy.id
+          subject.name.should == old_copy.name
+          subject.version.should == "2.1.3"
+          subject.summary.should == "summary"
+          subject.description.should == "description"
+          subject.homepage.should == "homepage"
+        end
+
+        it "keeps a manually assigned license" do
+          old_copy.license = LicenseAlias.create(name: 'foo')
+          old_copy.license_manual = true
+          old_copy.save
+          subject.license.name.should == 'foo'
+        end
+
+        it "keeps approval" do
+          old_copy.approval = Approval.create(state: true)
+          old_copy.save
+          subject.approval.state.should
+          if LicenseFinder::Platform.java?
+            subject.approval.state.should == 1
+          else
+            subject.approval.state.should == true
           end
         end
 
-        context "the values have changed" do
-          let!(:old_copy) do
-            dep = Dependency.create(
-              name: 'spec_name',
-              version: '0.1.2',
-              summary: 'old summary',
-              description: 'old desription',
-              homepage: 'old homepage'
-            )
-            dep.approval = Approval.create
-            dep
+        it "ensures correct children are associated" do
+          old_copy.add_child Dependency.new(name: 'bob')
+          old_copy.add_child Dependency.new(name: 'joe')
+          old_copy.children.each(&:save)
+          subject.children.map(&:name).should =~ ['foo']
+        end
+
+        context "with a bundler dependency" do
+          let(:package) { Package.new(gemspec, double(:bundler_dependency)) }
+
+          before do
+            package.stub(:groups) { [:group_1, :group_2, :b] }
+            old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'a')
+            old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'b')
           end
 
-          it "merges in the latest data" do
-            subject.id.should == old_copy.id
-            subject.name.should == old_copy.name
-            subject.version.should == "2.1.3"
-            subject.summary.should == "summary"
-            subject.description.should == "description"
-            subject.homepage.should == "homepage"
+          it "ensures the correct bundler groups are associated" do
+            subject.bundler_groups.map(&:name).should =~ %w[group_1 group_2 b]
           end
+        end
 
-          it "keeps a manually assigned license" do
-            old_copy.license = LicenseAlias.create(name: 'foo')
-            old_copy.license_manual = true
+        context "license has changed" do
+          before do
+            old_copy.license = LicenseAlias.create(name: 'other')
             old_copy.save
-            subject.license.name.should == 'foo'
+            gemspec.license = "new license"
           end
 
-          it "keeps approval" do
-            old_copy.approval = Approval.create(state: true)
+          context "new license is whitelisted" do
+            before { LicenseFinder.config.stub(:whitelist).and_return [gemspec.license] }
+
+            it "should set the approval to true" do
+              subject.should be_approved
+            end
+          end
+
+          context "new license is not whitelisted" do
+            it "should set the approval to false" do
+              subject.should_not be_approved
+            end
+          end
+
+          context "license already exists" do
+            it "uses the existing license" do
+              new_license = LicenseAlias.create(name: 'new license')
+              subject.license.should == new_license
+            end
+          end
+        end
+
+        context "license does not change" do
+          let(:package_saver) { described_class.find_or_create_by_name(package) }
+
+          before do
+            old_copy.license = LicenseAlias.create(name: 'MIT')
+            old_copy.approval = Approval.create(state: false)
             old_copy.save
-            subject.approval.state.should
+            gemspec.license = "MIT"
+          end
+
+          it "should not change the license or approval" do
+            dependency = package_saver.save
             if LicenseFinder::Platform.java?
-              subject.approval.state.should == 1
+              dependency.approved?.should_not == 1
             else
-              subject.approval.state.should == true
+              dependency.should_not be_approved
             end
-          end
-
-          it "ensures correct children are associated" do
-            old_copy.add_child Dependency.new(name: 'bob')
-            old_copy.add_child Dependency.new(name: 'joe')
-            old_copy.children.each(&:save)
-            subject.children.map(&:name).should =~ ['foo']
-          end
-
-          context "with a bundler dependency" do
-            let(:package) { Package.new(gemspec, double(:bundler_dependency)) }
-
-            before do
-              package.stub(:groups) { [:group_1, :group_2, :b] }
-              old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'a')
-              old_copy.add_bundler_group BundlerGroup.find_or_create(name: 'b')
-            end
-
-            it "ensures the correct bundler groups are associated" do
-              subject.bundler_groups.map(&:name).should =~ %w[group_1 group_2 b]
-            end
-          end
-
-          context "license has changed" do
-            before do
-              old_copy.license = LicenseAlias.create(name: 'other')
-              old_copy.save
-              gemspec.license = "new license"
-            end
-
-            context "new license is whitelisted" do
-              before { LicenseFinder.config.stub(:whitelist).and_return [gemspec.license] }
-
-              it "should set the approval to true" do
-                subject.should be_approved
-              end
-            end
-
-            context "new license is not whitelisted" do
-              it "should set the approval to false" do
-                subject.should_not be_approved
-              end
-            end
-
-            context "license already exists" do
-              it "uses the existing license" do
-                new_license = LicenseAlias.create(name: 'new license')
-                subject.license.should == new_license
-              end
-            end
-          end
-
-          context "license does not change" do
-            let(:package_saver) { described_class.find_or_create_by_name(package) }
-
-            before do
-              old_copy.license = LicenseAlias.create(name: 'MIT')
-              old_copy.approval = Approval.create(state: false)
-              old_copy.save
-              gemspec.license = "MIT"
-            end
-
-            it "should not change the license or approval" do
-              dependency = package_saver.save
-              if LicenseFinder::Platform.java?
-                dependency.approved?.should_not == 1
-              else
-                dependency.should_not be_approved
-              end
-              dependency.license.name.should == "MIT"
-            end
-
-            it "should not save the license" do
-              package_saver.dependency.license.should_not_receive(:save)
-              package_saver.save
-            end
+            dependency.license.name.should == "MIT"
           end
         end
       end
