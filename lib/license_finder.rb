@@ -22,6 +22,7 @@ module LicenseFinder
   autoload :NPM,                  'license_finder/npm'
   autoload :Pip,                  'license_finder/pip'
   autoload :Package,              'license_finder/package'
+  autoload :BowerPackage,         'license_finder/bower_package'
   autoload :BundlerPackage,       'license_finder/bundler_package'
   autoload :PipPackage,           'license_finder/pip_package'
   autoload :NpmPackage,           'license_finder/npm_package'

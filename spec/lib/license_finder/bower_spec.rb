@@ -35,30 +35,9 @@ module LicenseFinder
         expect(current_packages.size).to eq(2)
         expect(current_packages.first).to be_a(Package)
       end
-
-      it 'memoizes the current_packages' do
-        allow(Bower).to receive(:`).with(/bower/).and_return('{}').once
-
-        Bower.current_packages
-        Bower.current_packages
-      end
     end
 
-    describe '.harvest_license' do
-      let(:package1) { {"license" => "MIT"} }
-      let(:package2) { {"licenses" => [{"type" => "BSD", "url" => "github.github/github"}]} }
-      let(:package3) { {"license" => {"type" => "PSF", "url" => "github.github/github"}} }
-      let(:package4) { {"licenses" => ["MIT"]} }
-
-      it 'finds the license for both license structures' do
-        Bower.harvest_license(package1).should eq("MIT")
-        Bower.harvest_license(package2).should eq("BSD")
-        Bower.harvest_license(package3).should eq("PSF")
-        Bower.harvest_license(package4).should eq("MIT")
-      end
-    end
-
-    describe '.has_package_file?' do
+    describe '.active?' do
       let(:package) { Pathname.new('bower.json').expand_path }
 
       context 'with a bower.json file' do
@@ -67,7 +46,7 @@ module LicenseFinder
         end
 
         it 'returns true' do
-          expect(Bower.has_package_file?).to eq(true)
+          expect(Bower.active?).to eq(true)
         end
       end
 
@@ -77,7 +56,7 @@ module LicenseFinder
         end
 
         it 'returns false' do
-          expect(Bower.has_package_file?).to eq(false)
+          expect(Bower.active?).to eq(false)
         end
       end
     end

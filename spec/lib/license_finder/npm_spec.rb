@@ -66,7 +66,7 @@ module LicenseFinder
 
         current_packages = NPM.current_packages
 
-        expect(current_packages.map(&:name)).to eq(["depjs 1.3.3.7", "dep2js 4.2", "dep3js 4.2", "dep5js 4.2", "dep4js 4.2"])
+        expect(current_packages.map(&:name)).to eq(["depjs", "dep2js", "dep3js", "dep5js", "dep4js"])
         expect(current_packages.first).to be_a(Package)
         expect(current_packages.first.name).to eq("depjs")
       end

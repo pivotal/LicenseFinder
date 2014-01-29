@@ -21,7 +21,7 @@ module LicenseFinder
 
       it "find and updates relevant dependencies" do
         Dependency.should_receive(:named).with('spec_name').and_return(dependency)
-        dependency.should_receive(:save_changes)
+        dependency.should_receive(:save)
         described_class.save_all([package])
       end
     end
@@ -62,20 +62,6 @@ module LicenseFinder
         subject = saver.save
 
         subject.should be_approved
-      end
-
-      it "does not save dependency if it has not changed" do
-        dep = Dependency.create(
-          name: 'spec_name',
-          version: '1.2.3',
-          summary: 'summary',
-          description: 'description',
-          homepage: 'http://example.com',
-          license: LicenseAlias.named('license')
-        )
-        package_saver = described_class.new(dep, package)
-        package_saver.dependency.should_not_receive(:save)
-        package_saver.save
       end
     end
   end

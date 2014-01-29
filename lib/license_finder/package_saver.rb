@@ -7,11 +7,6 @@ module LicenseFinder
 
     attr_reader :dependency, :package
 
-    def self.find_or_create_by_name(package)
-      dependency = Dependency.named(package.name)
-      new(dependency, package)
-    end
-
     def self.save_all(packages)
       packages.map do |package|
         find_or_create_by_name(package).save
@@ -35,6 +30,13 @@ module LicenseFinder
         dependency.save
       end
       dependency
+    end
+
+    private
+
+    def self.find_or_create_by_name(package)
+      dependency = Dependency.named(package.name)
+      new(dependency, package)
     end
   end
 end

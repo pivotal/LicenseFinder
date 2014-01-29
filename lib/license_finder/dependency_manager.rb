@@ -6,10 +6,6 @@ module LicenseFinder
       modifying {
         current_dependencies = PackageSaver.save_all(current_packages)
 
-        if Bower.has_package_file?
-          current_dependencies += PackageSaver.save_all(Bower.current_packages())
-        end
-
         Dependency.managed.obsolete(current_dependencies).each(&:destroy)
       }
     end
@@ -60,7 +56,7 @@ module LicenseFinder
     end
 
     def self.package_managers
-      [Bundler, NPM, Pip]
+      [Bundler, NPM, Pip, Bower]
     end
 
     def self.find_by_name(name, scope = Dependency)
