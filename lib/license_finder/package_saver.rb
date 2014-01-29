@@ -30,6 +30,7 @@ module LicenseFinder
         sync_bundler_groups
         sync_children
         apply_better_license
+        dependency.save
       end
       dependency
     end
@@ -45,7 +46,6 @@ module LicenseFinder
       dependency.summary = summary
       dependency.description = description
       dependency.homepage = homepage
-      dependency.save
     end
 
     def sync_bundler_groups

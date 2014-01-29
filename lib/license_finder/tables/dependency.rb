@@ -74,9 +74,8 @@ module LicenseFinder
 
     def apply_better_license(license_name)
       return if license_manual
-      if license.nil? || license_name != license.name
+      if license.nil? || license.name != license_name
         self.license = LicenseAlias.named(license_name)
-        save
       end
     end
 
