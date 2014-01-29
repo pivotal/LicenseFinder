@@ -4,6 +4,11 @@
 
   * Add more aliases for known licenses
   * Drop support for ruby 1.9.2
+  * Large refactoring to simply things, and make it easier to add new package managers
+  
+* Bugfixes
+
+  * Make node dependency json parsing more robust
 
 === 0.9.4 / 2014-01-05
 
