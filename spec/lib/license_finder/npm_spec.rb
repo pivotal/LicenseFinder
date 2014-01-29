@@ -2,10 +2,10 @@ require 'spec_helper'
 
 module LicenseFinder
   describe NPM do
-    describe '.current_modules' do
+    describe '.current_packages' do
       before { NPM.instance_variable_set(:@modules, nil) }
 
-      it 'lists all the current modules' do
+      it 'fetches data from npm' do
         json = <<-JSON
           {
             "dependencies": {
@@ -64,10 +64,11 @@ module LicenseFinder
         JSON
         allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
 
-        current_modules = NPM.current_modules
+        current_packages = NPM.current_packages
 
-        expect(current_modules.map(&:name)).to eq(["depjs 1.3.3.7", "dep2js 4.2", "dep3js 4.2", "dep5js 4.2", "dep4js 4.2"])
-        expect(current_modules.first).to be_a(Package)
+        expect(current_packages.map(&:name)).to eq(["depjs", "dep2js", "dep3js", "dep5js", "dep4js"])
+        expect(current_packages.first).to be_a(Package)
+        expect(current_packages.first.name).to eq("depjs")
       end
 
       it "does not support name version string" do
@@ -80,44 +81,23 @@ module LicenseFinder
         JSON
         allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
 
-        current_modules = NPM.current_modules
+        current_packages = NPM.current_packages
 
-        expect(current_modules.map(&:name)).to eq([])
-      end
-
-      it 'memoizes the current_modules' do
-        allow(NPM).to receive(:capture).with(/npm/).and_return(['{}', true]).once
-
-        NPM.current_modules
-        NPM.current_modules
+        expect(current_packages.map(&:name)).to eq([])
       end
 
       it "fails when command fails" do
         allow(NPM).to receive(:capture).with(/npm/).and_return('Some error', false).once
-        expect { NPM.current_modules }.to raise_error(RuntimeError)
+        expect { NPM.current_packages }.to raise_error(RuntimeError)
       end
 
       it "does not fail when command fails but produces output" do
         allow(NPM).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
-        NPM.current_modules
+        NPM.current_packages
       end
     end
 
-    describe '.harvest_license' do
-      let(:node_module1) { {"license" => "MIT"} }
-      let(:node_module2) { {"licenses" => [{"type" => "BSD", "url" => "github.github/github"}]} }
-      let(:node_module3) { {"license" => {"type" => "PSF", "url" => "github.github/github"}} }
-      let(:node_module4) { {"licenses" => ["MIT"]} }
-
-      it 'finds the license for both license structures' do
-        NPM.harvest_license(node_module1).should eq("MIT")
-        NPM.harvest_license(node_module2).should eq("BSD")
-        NPM.harvest_license(node_module3).should eq("PSF")
-        NPM.harvest_license(node_module4).should eq("MIT")
-      end
-    end
-
-    describe '.has_package?' do
+    describe '.active?' do
       let(:package) { Pathname.new('package.json').expand_path }
 
       context 'with a package.json file' do
@@ -126,7 +106,7 @@ module LicenseFinder
         end
 
         it 'returns true' do
-          expect(NPM.has_package?).to eq(true)
+          expect(NPM.active?).to eq(true)
         end
       end
 
@@ -136,7 +116,7 @@ module LicenseFinder
         end
 
         it 'returns false' do
-          expect(NPM.has_package?).to eq(false)
+          expect(NPM.active?).to eq(false)
         end
       end
     end

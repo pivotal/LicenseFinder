@@ -2,43 +2,26 @@ require 'digest'
 
 module LicenseFinder
   module DependencyManager
-    def self.sync_with_bundler
+    def self.sync_with_package_managers
       modifying {
-        current_dependencies = []
+        current_dependencies = PackageSaver.save_all(current_packages)
 
-        if Bundle.has_gemfile?
-          current_dependencies += PackageSaver.save_packages(Bundle.current_gems(LicenseFinder.config))
-        end
-
-        if Pip.has_requirements?
-          current_dependencies += PackageSaver.save_packages(Pip.current_dists())
-        end
-
-        if NPM.has_package?
-          current_dependencies += PackageSaver.save_packages(NPM.current_modules())
-        end
-
-        if Bower.has_package_file?
-          current_dependencies += PackageSaver.save_packages(Bower.current_packages())
-        end
-
-        Dependency.bundler.obsolete(current_dependencies).each(&:destroy)
+        Dependency.managed.obsolete(current_dependencies).each(&:destroy)
       }
     end
 
-    def self.create_non_bundler(license, name, version)
+    def self.create_manually_managed(license, name, version)
       raise Error.new("#{name} dependency already exists") unless Dependency.where(name: name).empty?
 
       modifying {
         dependency = Dependency.new(manual: true, name: name, version: version)
         dependency.license = LicenseAlias.create(name: license)
-        dependency.approval = Approval.create
         dependency.save
       }
     end
 
-    def self.destroy_non_bundler(name)
-      modifying { find_by_name(name, Dependency.non_bundler).destroy }
+    def self.destroy_manually_managed(name)
+      modifying { find_by_name(name, Dependency.manually_managed).destroy }
     end
 
     def self.license!(name, license)
@@ -67,6 +50,14 @@ module LicenseFinder
     end
 
     private # not really private, but it looks like it is!
+
+    def self.current_packages
+      package_managers.select(&:active?).map(&:current_packages).flatten
+    end
+
+    def self.package_managers
+      [Bundler, NPM, Pip, Bower]
+    end
 
     def self.find_by_name(name, scope = Dependency)
       dep = scope.first(name: name)

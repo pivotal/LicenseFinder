@@ -2,25 +2,45 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Pip do
-    describe '.current_dists' do
-      it 'lists all the current dists' do
-        allow(Pip).to receive(:`).with(/python/).and_return('[["jasmine", "1.3.1", "MIT"], ["jasmine-core", "1.3.1", "MIT"]]')
-
-        current_dists = Pip.current_dists
-
-        expect(current_dists.size).to eq(2)
-        expect(current_dists.first).to be_a(Package)
+    describe '.current_packages' do
+      def stub_pip(stdout)
+        allow(Pip).to receive(:`).with(/python/).and_return(stdout)
       end
 
-      it 'memoizes the current_dists' do
-        allow(Pip).to receive(:`).with(/python/).and_return('[]').once
+      def stub_pypi(name, version, response)
+        stub_request(:get, "https://pypi.python.org/pypi/#{name}/#{version}/json").
+          to_return(response)
+      end
 
-        Pip.current_dists
-        Pip.current_dists
+      it 'fetches data from pip' do
+        stub_pip('[["jasmine", "1.3.1", "jasmine/path"], ["jasmine-core", "1.3.1", "jasmine-core/path"]]')
+        stub_pypi("jasmine", "1.3.1", status: 200, body: '{}')
+        stub_pypi("jasmine-core", "1.3.1", status: 200, body: '{}')
+
+        current_packages = Pip.current_packages
+
+        expect(current_packages.size).to eq(2)
+        expect(current_packages.first).to be_a(Package)
+      end
+
+      it "fetches data from pypi" do
+        stub_pip('[["jasmine", "1.3.1", "jasmine/path"]]')
+        stub_pypi("jasmine", "1.3.1", status: 200, body: JSON.generate(info: {summary: "A summary"}))
+
+        expect(PipPackage).to receive(:new).with("jasmine", "1.3.1", "jasmine/path/jasmine", "summary" => "A summary")
+        Pip.current_packages
+      end
+
+      it "ignores pypi if it can't find useful info" do
+        stub_pip('[["jasmine", "1.3.1", "jasmine/path"]]')
+        stub_pypi("jasmine", "1.3.1", status: 404, body: '')
+
+        expect(PipPackage).to receive(:new).with("jasmine", "1.3.1", "jasmine/path/jasmine", {})
+        Pip.current_packages
       end
     end
 
-    describe '.has_requirements' do
+    describe '.active?' do
       let(:requirements) { Pathname.new('requirements.txt').expand_path }
 
       context 'with a requirements file' do
@@ -29,7 +49,7 @@ module LicenseFinder
         end
 
         it 'returns true' do
-          expect(Pip.has_requirements?).to eq(true)
+          expect(Pip.active?).to eq(true)
         end
       end
 
@@ -39,50 +59,8 @@ module LicenseFinder
         end
 
         it 'returns false' do
-          expect(Pip.has_requirements?).to eq(false)
+          expect(Pip.active?).to eq(false)
         end
-      end
-    end
-
-    describe '.license_for' do
-      let(:package) { PythonPackage.new(OpenStruct.new(name: 'jasmine', version: '1.3.1')) }
-
-      before :each do
-        stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").
-            to_return(:status => 200, :body => "{}", :headers => {})
-      end
-
-      it 'reaches out to PyPI with the package name and version' do
-        Pip.license_for(package)
-
-        WebMock.should have_requested(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json")
-      end
-
-      it 'returns the license from info => license preferentially' do
-        data = { info: { license: "MIT", classifiers: [ 'License :: OSI Approved :: Apache 2.0 License' ] } }
-
-        stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").
-            to_return(:status => 200, :body => JSON.generate(data), :headers => {})
-
-        expect(Pip.license_for(package)).to eq('MIT')
-      end
-
-      it 'returns the first license from the classifiers if no info => license exists' do
-        data = { info: { classifiers: [ 'License :: OSI Approved :: Apache 2.0 License' ] } }
-
-        stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").
-            to_return(:status => 200, :body => JSON.generate(data), :headers => {})
-
-        expect(Pip.license_for(package)).to eq('Apache 2.0 License')
-      end
-
-      it 'returns other if no license can be found' do
-        data = {}
-
-        stub_request(:get, "https://pypi.python.org/pypi/jasmine/1.3.1/json").
-            to_return(:status => 200, :body => JSON.generate(data), :headers => {})
-
-        expect(Pip.license_for(package)).to eq('other')
       end
     end
   end

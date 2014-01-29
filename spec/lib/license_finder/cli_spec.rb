@@ -5,7 +5,7 @@ module LicenseFinder
     describe Dependencies do
       describe "add" do
         it "adds a dependency" do
-          DependencyManager.should_receive(:create_non_bundler).with("MIT", "js_dep", "1.2.3")
+          DependencyManager.should_receive(:create_manually_managed).with("MIT", "js_dep", "1.2.3")
 
           silence_stdout do
             subject.add("MIT", "js_dep", "1.2.3")
@@ -13,7 +13,7 @@ module LicenseFinder
         end
 
         it "does not require a version" do
-          DependencyManager.should_receive(:create_non_bundler).with("MIT", "js_dep", nil)
+          DependencyManager.should_receive(:create_manually_managed).with("MIT", "js_dep", nil)
 
           silence_stdout do
             subject.add("MIT", "js_dep")
@@ -21,7 +21,7 @@ module LicenseFinder
         end
 
         it "has an --approve option to approve the added dependency" do
-          DependencyManager.should_receive(:create_non_bundler).with("MIT", "js_dep", "1.2.3")
+          DependencyManager.should_receive(:create_manually_managed).with("MIT", "js_dep", "1.2.3")
           DependencyManager.should_receive(:approve!).with("js_dep")
 
           silence_stdout do
@@ -32,7 +32,7 @@ module LicenseFinder
 
       describe "remove" do
         it "removes a dependency" do
-          DependencyManager.should_receive(:destroy_non_bundler).with("js_dep")
+          DependencyManager.should_receive(:destroy_manually_managed).with("js_dep")
           silence_stdout do
             subject.remove("js_dep")
           end
@@ -160,7 +160,7 @@ module LicenseFinder
     describe Main do
       describe "default" do
         it "checks for action items" do
-          DependencyManager.should_receive(:sync_with_bundler)
+          DependencyManager.should_receive(:sync_with_package_managers)
           Dependency.stub(:unapproved) { [] }
           silence_stdout do
             described_class.start([])
@@ -170,7 +170,7 @@ module LicenseFinder
 
       describe "#rescan" do
         it "resyncs with Gemfile" do
-          DependencyManager.should_receive(:sync_with_bundler)
+          DependencyManager.should_receive(:sync_with_package_managers)
           Dependency.stub(:unapproved) { [] }
 
           silence_stdout do
