@@ -3,8 +3,8 @@ require 'forwardable'
 module LicenseFinder
   class PackageSaver
     extend Forwardable
+    def_delegators :package, :license, :children, :groups, :summary, :description, :spec
     def_delegators :spec, :name, :version, :homepage
-    def_delegators :package, :bundler_dependency, :license, :children, :groups, :summary, :description
 
     attr_reader :dependency, :package
 
@@ -26,38 +26,16 @@ module LicenseFinder
 
     def save
       DB.transaction do
-        apply_dependency_definition
-        sync_bundler_groups
-        sync_children
-        apply_better_license
+        dependency.version = version.to_s
+        dependency.summary = summary
+        dependency.description = description
+        dependency.homepage = homepage
+        dependency.bundler_group_names = groups.map(&:to_s)
+        dependency.children_names = children
+        dependency.apply_better_license license
         dependency.save
       end
       dependency
-    end
-
-    private
-
-    def spec
-      package.spec
-    end
-
-    def apply_dependency_definition
-      dependency.version = version.to_s
-      dependency.summary = summary
-      dependency.description = description
-      dependency.homepage = homepage
-    end
-
-    def sync_bundler_groups
-      dependency.bundler_group_names = groups.map(&:to_s)
-    end
-
-    def sync_children
-      dependency.children_names = children
-    end
-
-    def apply_better_license
-      dependency.apply_better_license license
     end
   end
 end
