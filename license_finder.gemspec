@@ -3,7 +3,7 @@ require './lib/license_finder/platform'
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.name        = "license_finder"
-  s.version     = "0.9.4"
+  s.version     = "0.9.5"
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers", "Brent Wheeldon", "Trevor John", "David Tengdin", "William Ramsey"]
   s.email       = ["licensefinder@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
