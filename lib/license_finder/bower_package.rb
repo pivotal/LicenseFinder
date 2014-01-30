@@ -21,16 +21,16 @@ module LicenseFinder
       module_metadata.fetch("readme", nil)
     end
 
+    def homepage
+      module_metadata.fetch("homepage", nil)
+    end
+
     def children
       [] # no way to determine child deps from bower (maybe?)
     end
 
     def groups
       [] # no concept of dev/test groups in bower (maybe?)
-    end
-
-    def homepage
-      nil # no way to extract homepage from bower (maybe?)
     end
 
     private

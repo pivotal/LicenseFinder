@@ -5,12 +5,10 @@ module LicenseFinder
       @file_path = Pathname.new(file_path)
     end
 
+    # Unused, except in tests, but might be useful if LF ever reports the
+    # locations of all the files it searched.
     def file_path
       @file_path.relative_path_from(@install_path).to_s
-    end
-
-    def file_name
-      @file_path.basename.to_s
     end
 
     def text

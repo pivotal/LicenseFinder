@@ -10,7 +10,6 @@ describe LicenseFinder::PossibleLicenseFile do
       end
 
       its(:file_path) { should == 'nested/path' }
-      its(:file_name) { should == 'path' }
       its(:text) { should == 'file text' }
     end
   end

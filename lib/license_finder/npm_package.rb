@@ -20,16 +20,16 @@ module LicenseFinder
       node_module["readme"]
     end
 
+    def homepage
+      node_module["homepage"]
+    end
+
     def children
       [] # no way to determine child deps from npm (maybe?)
     end
 
     def groups
       [] # no concept of dev/test groups in npm (maybe?)
-    end
-
-    def homepage
-      nil # no way to extract homepage from npm (maybe?)
     end
 
     private

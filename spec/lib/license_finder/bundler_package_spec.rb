@@ -22,6 +22,7 @@ module LicenseFinder
     its(:version) { should == '2.1.3' }
     its(:summary) { should == "summary" }
     its(:description) { should == "description" }
+    its(:homepage) { should == "homepage" }
     its(:groups) { should == [] }
     its(:children) { should == [] }
 
@@ -31,9 +32,15 @@ module LicenseFinder
       end
 
       it "returns the license from the gemspec if provided" do
-        gemspec.stub(:license).and_return('Gemspec License')
+        gemspec.license = 'Gemspec License'
 
         subject.license.should == "Gemspec License"
+      end
+
+      it "returns the first license if the gemspec provides many" do
+        gemspec.licenses = ['First Gemspec License', 'Second Gemspec License']
+
+        subject.license.should == "First Gemspec License"
       end
 
       it "returns a license in a file if detected" do

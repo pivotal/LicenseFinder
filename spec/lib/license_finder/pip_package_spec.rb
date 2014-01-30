@@ -12,6 +12,9 @@ module LicenseFinder
 
     its(:name) { should == "jasmine" }
     its(:version) { should == "1.3.1" }
+    its(:homepage) { should == nil }
+    its(:groups) { should == [] }
+    its(:children) { should == [] }
 
     describe "#summary" do
       it "delegates to pypi def" do
@@ -32,6 +35,17 @@ module LicenseFinder
 
       it "falls back to nothing" do
         expect(subject.description).to eq("")
+      end
+    end
+
+    describe "#homepage" do
+      it "delegates to pypi def" do
+        subject = make_package("home_page" => "A homepage")
+        expect(subject.homepage).to eq("A homepage")
+      end
+
+      it "falls back to nothing" do
+        expect(subject.homepage).to be_nil
       end
     end
 

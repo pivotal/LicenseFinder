@@ -8,7 +8,8 @@ module LicenseFinder
         "version" => "1.3.1",
         "description" => "a description",
         "readme" => "a readme",
-        "path" => "some/node/package/path"
+        "path" => "some/node/package/path",
+        "homepage" => "a homepage"
       )
     end
 
@@ -18,6 +19,9 @@ module LicenseFinder
     its(:version) { should == "1.3.1" }
     its(:summary) { should == "a description" }
     its(:description) { should == "a readme" }
+    its(:homepage) { should == "a homepage" }
+    its(:groups) { should == [] }
+    its(:children) { should == [] }
 
     describe '#license' do
       def stub_license_files(license_files)
