@@ -9,6 +9,7 @@
 * Bugfixes
 
   * Make node dependency json parsing more robust
+  * Clean up directories created during test runs
 
 === 0.9.4 / 2014-01-05
 
