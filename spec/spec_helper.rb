@@ -17,9 +17,14 @@ RSpec.configure do |config|
 end
 
 RSpec.configure do |config|
-  config.before { FileUtils.rm_f("config/license_finder.yml") }
   config.around do |example|
     LicenseFinder::DB.transaction(rollback: :always) { example.run }
+  end
+
+  config.after(:suite) do
+    ["./doc", "./elsewhere", "./test path", "./config"].each do |tmp_dir|
+      FileUtils.rm_rf(tmp_dir)
+    end
   end
 end
 
