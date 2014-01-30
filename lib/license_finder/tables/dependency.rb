@@ -29,21 +29,11 @@ module LicenseFinder
     end
 
     def bundler_group_names=(names)
-      current_groups = names.map { |name| BundlerGroup.named(name) }
-
-      remove, add = set_diff(bundler_groups, current_groups)
-
-      remove.each { |g| remove_bundler_group(g) }
-      add.each { |g| add_bundler_group(g) }
+      update_association_collection(:bundler_groups, names)
     end
 
     def children_names=(names)
-      current_children = names.map { |name| Dependency.named(name) }
-
-      remove, add = set_diff(children, current_children)
-
-      remove.each { |c| remove_child(c) }
-      add.each { |c| add_child(c) }
+      update_association_collection(:children, names)
     end
 
     def approve!
@@ -69,6 +59,16 @@ module LicenseFinder
     end
 
     private
+
+    def update_association_collection(association_name, names)
+      association = model.association_reflection(association_name)
+      current_records = names.map { |name| association.associated_class.named(name) }
+
+      remove, add = set_diff(public_send(association_name), current_records)
+
+      remove.each { |r| public_send(association.remove_method, r) }
+      add.each { |r| public_send(association.add_method, r) }
+    end
 
     # Foreign method, belongs on Set
     #
