@@ -33,6 +33,7 @@ module LicenseFinder
   autoload :YmlToSql,             'license_finder/yml_to_sql'
 
   autoload :DependencyReport,     'license_finder/reports/dependency_report'
+  autoload :FormattedReport,     'license_finder/reports/formatted_report'
   autoload :HtmlReport,           'license_finder/reports/html_report'
   autoload :MarkdownReport,       'license_finder/reports/markdown_report'
   autoload :Reporter,             'license_finder/reports/reporter'
