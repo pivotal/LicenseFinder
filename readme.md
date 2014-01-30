@@ -246,7 +246,11 @@ And add a `LICENSE` file to your gem that contains your license text.
 * Rebase on top of master
 * Send a pull request
 
-To successfully run the test suite, you will need node.js, and python installed.
+To successfully run the test suite, you will need node.js, and python installed. If you're running the test suite with jruby, you're probably going to want to set up these environment variables:
+
+```
+JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true'
+```
 
 ## License
 
