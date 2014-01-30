@@ -27,7 +27,7 @@ module LicenseFinder
         dependency.bundler_group_names = groups.map(&:to_s)
         dependency.children_names = children
         dependency.apply_better_license license
-        dependency.save
+        dependency.save_changes
       end
       dependency
     end
