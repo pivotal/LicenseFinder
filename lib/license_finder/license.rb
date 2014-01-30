@@ -46,10 +46,6 @@ module LicenseFinder
           name.gsub(/^.*::/, '')
         end
 
-        def slug
-          demodulized_name.downcase
-        end
-
         def pretty_name
           demodulized_name
         end
