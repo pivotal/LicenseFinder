@@ -1,13 +1,6 @@
 pkg/*
-*.gem
-.bundle
 Gemfile.lock
 .rvmrc
 .idea/*
 tmp/
-dependencies.*
-doc/dependencies.*
-db/schema.rb
-config/
 .pairs
-*.swp
