@@ -10,7 +10,8 @@ module LicenseFinder
           "description" => "description",
           "version" => "1.3.3.7",
           "main" => "normalize.css",
-          "readme" => "some readme stuff"
+          "readme" => "some readme stuff",
+          "homepage" => "homepage"
         }
       )
     end
@@ -21,7 +22,7 @@ module LicenseFinder
     its(:version) { should == "1.3.3.7" }
     its(:summary) { should == "description" }
     its(:description) { should == "some readme stuff" }
-    its(:homepage) { should == nil }
+    its(:homepage) { should == "homepage" }
     its(:groups) { should == [] }
     its(:children) { should == [] }
 
