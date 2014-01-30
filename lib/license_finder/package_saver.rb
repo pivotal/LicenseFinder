@@ -14,8 +14,8 @@ module LicenseFinder
     end
 
     def initialize(dependency, package)
-      @package = package
       @dependency = dependency
+      @package = package
     end
 
     def save
