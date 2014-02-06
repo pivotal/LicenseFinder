@@ -10,13 +10,15 @@ module LicenseFinder
       @install_path = install_path
     end
 
-    attr_reader :install_path
-
     def find
       paths_for_license_files.map do |path|
         get_file_for_path(path)
       end
     end
+
+    private
+
+    attr_reader :install_path
 
     def paths_for_license_files
       find_matching_files.map do |path|
