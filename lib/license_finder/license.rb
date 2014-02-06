@@ -50,17 +50,23 @@ module LicenseFinder
           demodulized_name
         end
 
+        def compile_text_to_regex(text)
+          Regexp.new(Regexp.escape(text).gsub(/<[^<>]+>/, '(.*)'))
+        end
+
         def license_text
           unless defined?(@license_text)
-            template = ROOT_PATH.join("data", "licenses", "#{demodulized_name}.txt")
-
             @license_text = Text.new(template.read).to_s if template.exist?
           end
           @license_text
         end
 
         def license_regex
-          /#{Regexp.escape(license_text).gsub(/<[^<>]+>/, '(.*)')}/ if license_text
+          compile_text_to_regex(license_text) if license_text
+        end
+
+        def template
+          ROOT_PATH.join("data", "licenses", "#{demodulized_name}.txt")
         end
       end
 
@@ -75,7 +81,13 @@ module LicenseFinder
       end
 
       def matches?
-        !!(text =~ self.class.license_regex if self.class.license_regex)
+        text_matches? self.class.license_regex
+      end
+
+      private
+
+      def text_matches?(regex)
+        !!(text =~ regex if regex)
       end
     end
   end
