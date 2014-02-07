@@ -8,6 +8,10 @@ module LicenseFinder
       def find_by_name(license_name)
         all.detect { |l| l.names.map(&:downcase).include? license_name.to_s.downcase }
       end
+
+      def find_by_text(text)
+        all.detect { |klass| klass.new(text).matches? }
+      end
     end
 
     class Text

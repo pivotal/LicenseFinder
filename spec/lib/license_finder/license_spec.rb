@@ -28,18 +28,15 @@ module LicenseFinder
         License.find_by_name(:unknown).should be_nil
       end
     end
-  end
-end
 
-describe LicenseFinder::License::Base do
-  describe ".names" do
-    subject do
-      Class.new(LicenseFinder::License::Base) do
-        def self.demodulized_name; "FooLicense"; end
-        self.alternative_names = ["foo license"]
-      end.names
+    describe ".find_by_text" do
+      before do
+        LicenseFinder::License::MIT.stub(:new).with('a known license').and_return(double('MIT license', :matches? => true))
+      end
+
+      it "should match" do
+        License.find_by_text('a known license').should == LicenseFinder::License::MIT
+      end
     end
-
-    it { should =~ ["FooLicense", "foo license"] }
   end
 end
