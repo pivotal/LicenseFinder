@@ -17,10 +17,15 @@ module LicenseFinder
     module Text
       SPACES = /\s+/
       QUOTES = /['`"]{1,2}/
+      PLACEHOLDERS = /<[^<>]+>/
 
       def self.normalize_punctuation(text)
         text.gsub(SPACES, ' ')
             .gsub(QUOTES, '"')
+      end
+
+      def self.compile_to_regex(text)
+        Regexp.new(Regexp.escape(text).gsub(PLACEHOLDERS, '(.*)'))
       end
     end
 
@@ -49,16 +54,12 @@ module LicenseFinder
           name.gsub(/^.*::/, '')
         end
 
-        def compile_text_to_regex(text)
-          Regexp.new(Regexp.escape(text).gsub(/<[^<>]+>/, '(.*)'))
-        end
-
         def license_text
           @license_text ||= Text.normalize_punctuation(template.read)
         end
 
         def license_regex
-          compile_text_to_regex(license_text)
+          Text.compile_to_regex(license_text)
         end
 
         def template
