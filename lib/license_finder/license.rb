@@ -54,14 +54,11 @@ module LicenseFinder
         end
 
         def license_text
-          unless defined?(@license_text)
-            @license_text = Text.normalize_punctuation(template.read) if template.exist?
-          end
-          @license_text
+          @license_text ||= Text.normalize_punctuation(template.read)
         end
 
         def license_regex
-          compile_text_to_regex(license_text) if license_text
+          compile_text_to_regex(license_text)
         end
 
         def template
@@ -86,7 +83,7 @@ module LicenseFinder
       private
 
       def text_matches?(regex)
-        !!(text =~ regex if regex)
+        !!(text =~ regex)
       end
     end
   end

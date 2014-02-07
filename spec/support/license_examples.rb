@@ -24,7 +24,7 @@ shared_examples_for "a license matcher" do
 
   describe "#license_text" do
     it "should always produce a license text" do
-      subject.class.license_text.should_not be_nil, "No license text found for #{subject.class}! Add a license template to lib/data/licenses named '#{subject.class.demodulized_name}.txt'"
+      expect { subject.class.license_text }.not_to raise_error, "No license text found for #{subject.class}! Add a license template to lib/data/licenses named '#{subject.class.demodulized_name}.txt'"
     end
   end
 end
