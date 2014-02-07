@@ -1,6 +1,7 @@
 class LicenseFinder::License::NewBSD < LicenseFinder::License::Base
-  self.license_url = "http://opensource.org/licenses/BSD-3-Clause"
+  self.pretty_name       = "New BSD"
   self.alternative_names = ["Modified BSD", "BSD3", "BSD-3", "3-clause BSD", "BSD-3-Clause"]
+  self.license_url       = "http://opensource.org/licenses/BSD-3-Clause"
 
   ALTERNATE_LICENSE_REGEX = compile_text_to_regex(
     license_text.gsub(
@@ -8,10 +9,6 @@ class LicenseFinder::License::NewBSD < LicenseFinder::License::Base
       "The names of its contributors may not be used to endorse or promote products derived from this software without specific prior written permission."
     )
   )
-
-  def self.pretty_name
-    'New BSD'
-  end
 
   def matches?
     super || matches_alternate?

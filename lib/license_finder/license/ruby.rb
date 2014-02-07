@@ -1,10 +1,8 @@
 class LicenseFinder::License::Ruby < LicenseFinder::License::Base
+  self.pretty_name = "ruby"
   self.license_url = "http://www.ruby-lang.org/en/LICENSE.txt"
-  URL_REGEX = Regexp.new(license_url)
 
-  def self.pretty_name
-    'ruby'
-  end
+  URL_REGEX = Regexp.new(license_url)
 
   def matches?
     super || matches_url?

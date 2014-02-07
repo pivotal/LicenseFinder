@@ -3,10 +3,7 @@ require 'spec_helper'
 class FooLicense < LicenseFinder::License::Base
   self.alternative_names = ["the foo license"]
   self.license_url = "http://foo.license.com"
-
-  def self.pretty_name
-    "Ye Ole Foo License"
-  end
+  self.pretty_name = "Ye Ole Foo License"
 end
 
 module LicenseFinder

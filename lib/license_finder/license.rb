@@ -26,7 +26,8 @@ module LicenseFinder
 
     class Base
       class << self
-        attr_accessor :license_url, :alternative_names
+        attr_accessor :license_url
+        attr_writer :alternative_names, :pretty_name
 
         def inherited(descendant)
           License.all << descendant
@@ -40,12 +41,12 @@ module LicenseFinder
           @alternative_names ||= []
         end
 
-        def demodulized_name
-          name.gsub(/^.*::/, '')
+        def pretty_name
+          @pretty_name ||= demodulized_name
         end
 
-        def pretty_name
-          demodulized_name
+        def demodulized_name
+          name.gsub(/^.*::/, '')
         end
 
         def compile_text_to_regex(text)

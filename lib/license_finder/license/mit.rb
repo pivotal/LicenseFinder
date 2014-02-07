@@ -1,6 +1,6 @@
 class LicenseFinder::License::MIT < LicenseFinder::License::Base
-  self.license_url = "http://opensource.org/licenses/mit-license"
   self.alternative_names = ["Expat", "MIT license", "MIT License"]
+  self.license_url       = "http://opensource.org/licenses/mit-license"
 
   HEADER_REGEX = /The MIT Licen[sc]e/
   ONE_LINER_REGEX = /is released under the MIT licen[sc]e/
