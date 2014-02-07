@@ -14,19 +14,13 @@ module LicenseFinder
       end
     end
 
-    class Text
-      def initialize(text)
-        @text = normalized(text)
-      end
+    module Text
+      SPACES = /\s+/
+      QUOTES = /['`"]{1,2}/
 
-      def to_s
-        @text
-      end
-
-      private
-
-      def normalized(text)
-        text.gsub(/\s+/, ' ').gsub(/['`"]{1,2}/, "\"")
+      def self.normalize_punctuation(text)
+        text.gsub(SPACES, ' ')
+            .gsub(QUOTES, '"')
       end
     end
 
@@ -60,7 +54,7 @@ module LicenseFinder
 
         def license_text
           unless defined?(@license_text)
-            @license_text = Text.new(template.read).to_s if template.exist?
+            @license_text = Text.normalize_punctuation(template.read) if template.exist?
           end
           @license_text
         end
@@ -81,7 +75,7 @@ module LicenseFinder
       attr_reader :text
 
       def text=(text)
-        @text = Text.new(text).to_s
+        @text = Text.normalize_punctuation(text)
       end
 
       def matches?
