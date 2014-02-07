@@ -1,16 +1,15 @@
-class LicenseFinder::License::Ruby < LicenseFinder::License::Base
-  self.pretty_name = "ruby"
-  self.license_url = "http://www.ruby-lang.org/en/LICENSE.txt"
+class LicenseFinder::License
+  ruby_license_url = "http://www.ruby-lang.org/en/LICENSE.txt"
+  ruby_url_regex = Regexp.new(Regexp.escape(ruby_license_url))
+  ruby_matcher = AnyMatcher.new(
+    TemplateMatcher.new(Template.named("Ruby")),
+    RegexpMatcher.new(ruby_url_regex)
+  )
 
-  URL_REGEX = Regexp.new(Regexp.escape(license_url))
-
-  def matches?
-    super || matches_url?
-  end
-
-  private
-
-  def matches_url?
-    text_matches? URL_REGEX
-  end
+  all << new(
+    demodulized_name:  "Ruby",
+    pretty_name:       "ruby",
+    license_url:       ruby_license_url,
+    matching_algorithm: ruby_matcher
+  )
 end

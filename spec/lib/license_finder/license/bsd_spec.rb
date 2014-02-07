@@ -1,12 +1,8 @@
 require 'spec_helper'
 
-describe LicenseFinder::License::BSD do
-  subject { LicenseFinder::License::BSD.new("") }
-
-  it_behaves_like "a license matcher"
-
+describe LicenseFinder::License, "BSD" do
   it "should match regardless of organization or copyright holder names or quotes" do
-    license = LicenseFinder::License::BSD.new <<-LICENSE
+    license = <<-LICENSE
       Copyright (c) 2000, Widgets, Inc.
       All rights reserved.
 
@@ -36,6 +32,6 @@ describe LicenseFinder::License::BSD do
       SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     LICENSE
 
-    license.should be_matches
+    LicenseFinder::License.find_by_name("BSD").should be_matches_text license
   end
 end

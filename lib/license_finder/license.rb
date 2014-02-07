@@ -1,17 +1,41 @@
 module LicenseFinder
-  module License
+  class License
     class << self
       def all
         @all ||= []
       end
 
-      def find_by_name(license_name)
-        all.detect { |l| l.names.map(&:downcase).include? license_name.to_s.downcase }
+      def find_by_name(name)
+        all.detect { |l| l.matches_name? name }
       end
 
       def find_by_text(text)
-        all.detect { |klass| klass.new(text).matches? }
+        all.detect { |l| l.matches_text? text }
       end
+    end
+
+    attr_reader :license_url, :alternative_names, :pretty_name, :matching_algorithm, :demodulized_name
+
+    def initialize(settings)
+      @demodulized_name   = settings.fetch(:demodulized_name)
+      @pretty_name        = settings.fetch(:pretty_name, demodulized_name)
+      @alternative_names  = settings.fetch(:alternative_names, [])
+      @license_url        = settings.fetch(:license_url)
+      @matching_algorithm = settings.fetch(:matching_algorithm) { TemplateMatcher.new(Template.named(demodulized_name)) }
+    end
+
+    def matches_name?(name)
+      names.map(&:downcase).include? name.to_s.downcase
+    end
+
+    def matches_text?(text)
+      matching_algorithm.matches_text?(text)
+    end
+
+    private
+
+    def names
+      ([demodulized_name, pretty_name] + alternative_names).uniq
     end
 
     module Text
@@ -29,63 +53,57 @@ module LicenseFinder
       end
     end
 
-    class Base
-      class << self
-        attr_accessor :license_url
-        attr_writer :alternative_names, :pretty_name
-
-        def inherited(descendant)
-          License.all << descendant
-        end
-
-        def names
-          ([demodulized_name, pretty_name] + self.alternative_names).uniq
-        end
-
-        def alternative_names
-          @alternative_names ||= []
-        end
-
-        def pretty_name
-          @pretty_name ||= demodulized_name
-        end
-
-        def demodulized_name
-          name.gsub(/^.*::/, '')
-        end
-
-        def license_text
-          @license_text ||= Text.normalize_punctuation(template.read)
-        end
-
-        def license_regex
-          Text.compile_to_regex(license_text)
-        end
-
-        def template
-          ROOT_PATH.join("data", "licenses", "#{demodulized_name}.txt")
-        end
+    class Template
+      def self.named(name)
+        path = ROOT_PATH.join("data", "licenses", "#{name}.txt")
+        new(path.read)
       end
 
+      attr_reader :content
+
+      def initialize(raw_content)
+        @content = Text.normalize_punctuation(raw_content)
+      end
+    end
+
+    class RegexpMatcher
+      attr_reader :regexp
+
+      def initialize(regexp)
+        @regexp = regexp
+      end
+
+      def matches_text?(text)
+        !!(Text.normalize_punctuation(text) =~ regexp)
+      end
+    end
+
+    class TextMatcher < RegexpMatcher
       def initialize(text)
-        self.text = text
+        super(Text.compile_to_regex(text))
+      end
+    end
+
+    class TemplateMatcher < TextMatcher
+      def initialize(template)
+        super(template.content)
+      end
+    end
+
+    HeaderMatcher = Struct.new(:base_matcher) do
+      def matches_text?(text)
+        header = text.split("\n").first || ''
+        base_matcher.matches_text?(header)
+      end
+    end
+
+    class AnyMatcher
+      def initialize(*algos)
+        @algos = algos
       end
 
-      attr_reader :text, :raw_text
-
-      def text=(text)
-        @raw_text = text
-        @text = Text.normalize_punctuation(text)
-      end
-
-      def matches?
-        text_matches? self.class.license_regex
-      end
-
-      private
-
-      def text_matches?(regex)
-        !!(text =~ regex)
+      def matches_text?(text)
+        @algos.any? { |a| a.matches_text? text }
       end
     end
   end

@@ -1,12 +1,10 @@
 require 'spec_helper'
 
-describe LicenseFinder::License::NewBSD do
-  subject { LicenseFinder::License::NewBSD.new("") }
-
-  it_behaves_like "a license matcher"
+describe LicenseFinder::License, "NewBSD" do
+  subject { LicenseFinder::License.find_by_name "NewBSD" }
 
   it "should match regardless of organization or copyright holder names" do
-    license = LicenseFinder::License::NewBSD.new <<-LICENSE
+    license = <<-LICENSE
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
     * Redistributions of source code must retain the above copyright
@@ -30,11 +28,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     LICENSE
 
-    license.should be_matches
+    subject.should be_matches_text license
   end
 
   it "should match with the alternate wording of third clause" do
-    license = LicenseFinder::License::NewBSD.new <<-LICENSE
+    license = <<-LICENSE
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
     * Redistributions of source code must retain the above copyright
@@ -58,6 +56,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     LICENSE
 
-    license.should be_matches
+    subject.should be_matches_text license
   end
 end

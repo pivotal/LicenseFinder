@@ -56,20 +56,18 @@ module LicenseFinder
 
     describe "whitelisted?" do
       context "canonical name whitelisted" do
-        before { config.whitelist = [License::Apache2.names[rand(License::Apache2.names.count)]]}
-
-        let(:possible_license_names) { License::Apache2.names }
+        before { config.whitelist = ["Apache2"]}
 
         it "should return true if if the license is the canonical name, pretty name, or alternative name of the license" do
-          possible_license_names.each do |name|
-            config.whitelisted?(name).should be_true, "expected #{name} to be whitelisted, but wasn't."
-          end
+          config.should be_whitelisted "Apache2"
+          config.should be_whitelisted "Apache 2.0"
+          config.should be_whitelisted "Apache-2.0"
         end
 
         it "should be case-insensitive" do
-          possible_license_names.map(&:downcase).each do |name|
-            config.whitelisted?(name).should be_true, "expected #{name} to be whitelisted, but wasn't"
-          end
+          config.should be_whitelisted "apache2"
+          config.should be_whitelisted "apache 2.0"
+          config.should be_whitelisted "apache-2.0"
         end
       end
     end

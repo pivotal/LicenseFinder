@@ -1,24 +1,19 @@
-module LicenseFinder::License
-  class NewBSD < Base
-    self.pretty_name       = "New BSD"
-    self.alternative_names = ["Modified BSD", "BSD3", "BSD-3", "3-clause BSD", "BSD-3-Clause"]
-    self.license_url       = "http://opensource.org/licenses/BSD-3-Clause"
+class LicenseFinder::License
+  new_bsd_template = Template.named("NewBSD")
+  new_bsd_alternate_content = new_bsd_template.content.gsub(
+    "Neither the name of <organization> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.",
+    "The names of its contributors may not be used to endorse or promote products derived from this software without specific prior written permission."
+  )
+  new_bsd_matcher = AnyMatcher.new(
+    TemplateMatcher.new(new_bsd_template),
+    TextMatcher.new(new_bsd_alternate_content)
+  )
 
-    ALTERNATE_LICENSE_REGEX = Text.compile_to_regex(
-      license_text.gsub(
-        "Neither the name of <organization> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.",
-        "The names of its contributors may not be used to endorse or promote products derived from this software without specific prior written permission."
-      )
-    )
-
-    def matches?
-      super || matches_alternate?
-    end
-
-    private
-
-    def matches_alternate?
-      text_matches? ALTERNATE_LICENSE_REGEX
-    end
-  end
+  all << new(
+    demodulized_name:  "NewBSD",
+    pretty_name:       "New BSD",
+    alternative_names: ["Modified BSD", "BSD3", "BSD-3", "3-clause BSD", "BSD-3-Clause"],
+    license_url:       "http://opensource.org/licenses/BSD-3-Clause",
+    matching_algorithm: new_bsd_matcher
+  )
 end

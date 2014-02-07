@@ -1,39 +1,28 @@
 require 'spec_helper'
 
-describe LicenseFinder::License::MIT do
-  subject { LicenseFinder::License::MIT.new("") }
-
-  it_behaves_like "a license matcher"
-
-  describe "#matches?" do
+describe LicenseFinder::License, "MIT" do
+  subject { LicenseFinder::License.find_by_name "MIT" }
+  describe "#matches_text?" do
     it "should return true if the text contains the MIT url" do
-      subject.text = "MIT License is awesome http://opensource.org/licenses/mit-license"
-      should be_matches
+      subject.should be_matches_text "MIT License is awesome http://opensource.org/licenses/mit-license"
 
-      subject.text = "MIT Licence is awesome http://www.opensource.org/licenses/mit-license"
-      should be_matches
+      subject.should be_matches_text "MIT Licence is awesome http://www.opensource.org/licenses/mit-license"
 
-      subject.text = "MIT Licence is awesome http://www!opensource!org/licenses/mit-license"
-      should_not be_matches
+      subject.should_not be_matches_text "MIT Licence is awesome http://www!opensource!org/licenses/mit-license"
     end
 
     it "should return true if the text begins with 'The MIT License'" do
-      subject.text = "The MIT License"
-      should be_matches
+      subject.should be_matches_text "The MIT License"
 
-      subject.text = "The MIT Licence"
-      should be_matches
+      subject.should be_matches_text "The MIT Licence"
 
-      subject.text = "Something else\nThe MIT License"
-      should_not be_matches
+      subject.should_not be_matches_text "Something else\nThe MIT License"
     end
 
     it "should return true if the text contains 'is released under the MIT license'" do
-      subject.text = "is released under the MIT license"
-      should be_matches
+      subject.should be_matches_text "is released under the MIT license"
 
-      subject.text = "is released under the MIT licence"
-      should be_matches
+      subject.should be_matches_text "is released under the MIT licence"
     end
   end
 end

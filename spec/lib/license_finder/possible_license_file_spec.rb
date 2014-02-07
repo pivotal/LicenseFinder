@@ -20,7 +20,7 @@ describe LicenseFinder::PossibleLicenseFile do
     before do
       subject.stub(:text).and_return('a known license')
 
-      LicenseFinder::License.stub(:find_by_text).with('a known license').and_return(LicenseFinder::License::MIT)
+      LicenseFinder::License.stub(:find_by_text).with('a known license').and_return(LicenseFinder::License.find_by_name("MIT"))
     end
 
     its(:license) { should == "MIT" }

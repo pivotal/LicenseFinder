@@ -1,24 +1,19 @@
 require 'spec_helper'
 
-describe LicenseFinder::License::Ruby do
-  subject { LicenseFinder::License::Ruby.new("") }
-
-  it_behaves_like "a license matcher"
+describe LicenseFinder::License, "Ruby" do
+  subject { LicenseFinder::License.find_by_name "Ruby" }
 
   describe "#matches?" do
     it "should return true when the Ruby license URL is present" do
-      subject.text = "This gem is available under the following license:\nhttp://www.ruby-lang.org/en/LICENSE.txt\nOkay?"
-      should be_matches
+      subject.should be_matches_text "This gem is available under the following license:\nhttp://www.ruby-lang.org/en/LICENSE.txt\nOkay?"
     end
 
     it "should return false when the Ruby License URL is not present" do
-      subject.text = "This gem is available under the following license:\nhttp://www.example.com\nOkay?"
-      should_not be_matches
+      subject.should_not be_matches_text "This gem is available under the following license:\nhttp://www.example.com\nOkay?"
     end
 
     it "should return false for pathological licenses" do
-      subject.text = "This gem is available under the following license:\nhttp://wwwzruby-langzorg/en/LICENSEztxt\nOkay?"
-      should_not be_matches
+      subject.should_not be_matches_text "This gem is available under the following license:\nhttp://wwwzruby-langzorg/en/LICENSEztxt\nOkay?"
     end
   end
 end
