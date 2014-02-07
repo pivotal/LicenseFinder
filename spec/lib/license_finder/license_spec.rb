@@ -36,6 +36,12 @@ module LicenseFinder
       license.should be_matches_name "Bar"
     end
 
+    it "should match on text" do
+      license = make_license(matcher: License::RegexpMatcher.new(/The license text/))
+      license.should be_matches_text "The license text"
+      license.should_not be_matches_text "Some other text"
+    end
+
     it "should default pretty_name to short_name" do
       make_license.pretty_name.should == "Default Short Name"
     end

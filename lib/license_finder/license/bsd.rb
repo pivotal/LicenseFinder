@@ -5,5 +5,3 @@ class LicenseFinder::License
     url:         "http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29"
   )
 end
-
-
