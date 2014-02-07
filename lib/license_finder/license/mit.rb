@@ -4,7 +4,7 @@ class LicenseFinder::License::MIT < LicenseFinder::License::Base
 
   HEADER_REGEX = /The MIT Licen[sc]e/
   ONE_LINER_REGEX = /is released under the MIT licen[sc]e/
-  URL_REGEX = %r{MIT Licen[sc]e.*http://(?:www.)?opensource.org/licenses/mit-license}
+  URL_REGEX = %r{MIT Licen[sc]e.*http://(?:www\.)?opensource\.org/licenses/mit-license}
 
   def matches?
     super || matches_url? || matches_header? || matches_one_liner?

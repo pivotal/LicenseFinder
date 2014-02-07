@@ -12,6 +12,9 @@ describe LicenseFinder::License::MIT do
 
       subject.text = "MIT Licence is awesome http://www.opensource.org/licenses/mit-license"
       should be_matches
+
+      subject.text = "MIT Licence is awesome http://www!opensource!org/licenses/mit-license"
+      should_not be_matches
     end
 
     it "should return true if the text contains 'The MIT License'" do

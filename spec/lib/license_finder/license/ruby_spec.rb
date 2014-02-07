@@ -15,5 +15,10 @@ describe LicenseFinder::License::Ruby do
       subject.text = "This gem is available under the following license:\nhttp://www.example.com\nOkay?"
       should_not be_matches
     end
+
+    it "should return false for pathological licenses" do
+      subject.text = "This gem is available under the following license:\nhttp://wwwzruby-langzorg/en/LICENSEztxt\nOkay?"
+      should_not be_matches
+    end
   end
 end
