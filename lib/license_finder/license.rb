@@ -14,14 +14,14 @@ module LicenseFinder
       end
     end
 
-    attr_reader :license_url, :alternative_names, :pretty_name, :matching_algorithm, :demodulized_name
+    attr_reader :url, :other_names, :pretty_name, :matcher, :short_name
 
     def initialize(settings)
-      @demodulized_name   = settings.fetch(:demodulized_name)
-      @pretty_name        = settings.fetch(:pretty_name, demodulized_name)
-      @alternative_names  = settings.fetch(:alternative_names, [])
-      @license_url        = settings.fetch(:license_url)
-      @matching_algorithm = settings.fetch(:matching_algorithm) { TemplateMatcher.new(Template.named(demodulized_name)) }
+      @short_name  = settings.fetch(:short_name)
+      @pretty_name = settings.fetch(:pretty_name, short_name)
+      @other_names = settings.fetch(:other_names, [])
+      @url         = settings.fetch(:url)
+      @matcher     = settings.fetch(:matcher) { TemplateMatcher.new(Template.named(short_name)) }
     end
 
     def matches_name?(name)
@@ -29,13 +29,13 @@ module LicenseFinder
     end
 
     def matches_text?(text)
-      matching_algorithm.matches_text?(text)
+      matcher.matches_text?(text)
     end
 
     private
 
     def names
-      ([demodulized_name, pretty_name] + alternative_names).uniq
+      ([short_name, pretty_name] + other_names).uniq
     end
 
     module Text

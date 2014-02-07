@@ -1,6 +1,6 @@
 class LicenseFinder::License
   all << new(
-    demodulized_name:  "ISC",
-    license_url:        "http://en.wikipedia.org/wiki/ISC_license"
+    short_name: "ISC",
+    url:        "http://en.wikipedia.org/wiki/ISC_license"
   )
 end

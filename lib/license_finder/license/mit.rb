@@ -11,9 +11,9 @@ class LicenseFinder::License
   )
 
   all << new(
-    demodulized_name:  "MIT",
-    alternative_names: ["Expat", "MIT license", "MIT License"],
-    license_url:       "http://opensource.org/licenses/mit-license",
-    matching_algorithm: mit_matcher
+    short_name:  "MIT",
+    other_names: ["Expat", "MIT license", "MIT License"],
+    url:         "http://opensource.org/licenses/mit-license",
+    matcher:     mit_matcher
   )
 end

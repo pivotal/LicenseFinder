@@ -7,9 +7,9 @@ class LicenseFinder::License
   )
 
   all << new(
-    demodulized_name:  "Ruby",
-    pretty_name:       "ruby",
-    license_url:       ruby_license_url,
-    matching_algorithm: ruby_matcher
+    short_name:  "Ruby",
+    pretty_name: "ruby",
+    url:         ruby_license_url,
+    matcher:     ruby_matcher
   )
 end

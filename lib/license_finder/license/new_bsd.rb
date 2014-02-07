@@ -10,10 +10,10 @@ class LicenseFinder::License
   )
 
   all << new(
-    demodulized_name:  "NewBSD",
-    pretty_name:       "New BSD",
-    alternative_names: ["Modified BSD", "BSD3", "BSD-3", "3-clause BSD", "BSD-3-Clause"],
-    license_url:       "http://opensource.org/licenses/BSD-3-Clause",
-    matching_algorithm: new_bsd_matcher
+    short_name:  "NewBSD",
+    pretty_name: "New BSD",
+    other_names: ["Modified BSD", "BSD3", "BSD-3", "3-clause BSD", "BSD-3-Clause"],
+    url:         "http://opensource.org/licenses/BSD-3-Clause",
+    matcher:     new_bsd_matcher
   )
 end

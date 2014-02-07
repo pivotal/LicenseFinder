@@ -8,7 +8,7 @@ module LicenseFinder
       describe "when found" do
         before do
           License.stub(:find_by_name).with("Foo").
-            and_return(double(:foo_license, license_url: "http://foo.license.com"))
+            and_return(double(:foo_license, url: "http://foo.license.com"))
         end
 
         specify { subject.find_by_name("Foo").should == "http://foo.license.com" }
