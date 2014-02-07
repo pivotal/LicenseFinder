@@ -17,12 +17,15 @@ describe LicenseFinder::License::MIT do
       should_not be_matches
     end
 
-    it "should return true if the text contains 'The MIT License'" do
+    it "should return true if the text begins with 'The MIT License'" do
       subject.text = "The MIT License"
       should be_matches
 
       subject.text = "The MIT Licence"
       should be_matches
+
+      subject.text = "Something else\nThe MIT License"
+      should_not be_matches
     end
 
     it "should return true if the text contains 'is released under the MIT license'" do

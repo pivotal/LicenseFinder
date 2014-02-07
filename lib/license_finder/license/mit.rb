@@ -17,7 +17,7 @@ class LicenseFinder::License::MIT < LicenseFinder::License::Base
   end
 
   def matches_header?
-    header = text.split("\n").first || ''
+    header = raw_text.split("\n").first || ''
     !!(header.strip =~ HEADER_REGEX)
   end
 

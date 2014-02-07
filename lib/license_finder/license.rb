@@ -70,9 +70,10 @@ module LicenseFinder
         self.text = text
       end
 
-      attr_reader :text
+      attr_reader :text, :raw_text
 
       def text=(text)
+        @raw_text = text
         @text = Text.normalize_punctuation(text)
       end
 
