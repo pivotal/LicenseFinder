@@ -4,10 +4,10 @@ class LicenseFinder::License
   mit_url_regexp = %r{MIT Licen[sc]e.*http://(?:www\.)?opensource\.org/licenses/mit-license}
 
   mit_matcher = AnyMatcher.new(
-    TemplateMatcher.new(Template.named("MIT")),
-    RegexpMatcher.new(mit_url_regexp),
-    HeaderMatcher.new(RegexpMatcher.new(mit_header_regexp)),
-    RegexpMatcher.new(mit_one_liner_regexp)
+    Matcher.from_template(Template.named("MIT")),
+    Matcher.new(mit_url_regexp),
+    HeaderMatcher.new(Matcher.new(mit_header_regexp)),
+    Matcher.new(mit_one_liner_regexp)
   )
 
   all << new(

@@ -5,8 +5,8 @@ class LicenseFinder::License
     "The names of its contributors may not be used to endorse or promote products derived from this software without specific prior written permission."
   )
   new_bsd_matcher = AnyMatcher.new(
-    TemplateMatcher.new(new_bsd_template),
-    TextMatcher.new(new_bsd_alternate_content)
+    Matcher.from_template(new_bsd_template),
+    Matcher.from_text(new_bsd_alternate_content)
   )
 
   all << new(

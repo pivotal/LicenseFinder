@@ -18,7 +18,7 @@ module LicenseFinder
       described_class.new({
         short_name: "Default Short Name",
         url: "http://example.com/license",
-        matcher: License::TextMatcher.new('Default Matcher')
+        matcher: License::Matcher.from_text('Default Matcher')
       }.merge(settings))
     end
 
@@ -37,7 +37,7 @@ module LicenseFinder
     end
 
     it "should match on text" do
-      license = make_license(matcher: License::RegexpMatcher.new(/The license text/))
+      license = make_license(matcher: License::Matcher.new(/The license text/))
       license.should be_matches_text "The license text"
       license.should_not be_matches_text "Some other text"
     end

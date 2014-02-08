@@ -21,7 +21,7 @@ module LicenseFinder
       @pretty_name = settings.fetch(:pretty_name, short_name)
       @other_names = settings.fetch(:other_names, [])
       @url         = settings.fetch(:url)
-      @matcher     = settings.fetch(:matcher) { TemplateMatcher.new(Template.named(short_name)) }
+      @matcher     = settings.fetch(:matcher) { Matcher.from_template(Template.named(short_name)) }
     end
 
     def matches_name?(name)
@@ -66,8 +66,16 @@ module LicenseFinder
       end
     end
 
-    class RegexpMatcher
+    class Matcher
       attr_reader :regexp
+
+      def self.from_template(template)
+        from_text(template.content)
+      end
+
+      def self.from_text(text)
+        new(Text.compile_to_regex(text))
+      end
 
       def initialize(regexp)
         @regexp = regexp
@@ -75,18 +83,6 @@ module LicenseFinder
 
       def matches_text?(text)
         !!(Text.normalize_punctuation(text) =~ regexp)
-      end
-    end
-
-    class TextMatcher < RegexpMatcher
-      def initialize(text)
-        super(Text.compile_to_regex(text))
-      end
-    end
-
-    class TemplateMatcher < TextMatcher
-      def initialize(template)
-        super(template.content)
       end
     end
 
@@ -98,12 +94,12 @@ module LicenseFinder
     end
 
     class AnyMatcher
-      def initialize(*algos)
-        @algos = algos
+      def initialize(*matchers)
+        @matchers = matchers
       end
 
       def matches_text?(text)
-        @algos.any? { |a| a.matches_text? text }
+        @matchers.any? { |m| m.matches_text? text }
       end
     end
   end
