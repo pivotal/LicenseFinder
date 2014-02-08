@@ -66,19 +66,13 @@ module LicenseFinder
       end
     end
 
-    class Matcher
-      attr_reader :regexp
-
+    Matcher = Struct.new(:regexp) do
       def self.from_template(template)
         from_text(template.content)
       end
 
       def self.from_text(text)
         new(Text.compile_to_regex(text))
-      end
-
-      def initialize(regexp)
-        @regexp = regexp
       end
 
       def matches_text?(text)
