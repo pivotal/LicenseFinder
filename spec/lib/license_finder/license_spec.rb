@@ -22,27 +22,29 @@ module LicenseFinder
       }.merge(settings))
     end
 
-    it "should match on short_name" do
-      make_license(short_name: "Foo").should be_matches_name "Foo"
-    end
+    describe "#matches_name?" do
+      it "should match on short_name" do
+        make_license(short_name: "Foo").should be_matches_name "Foo"
+      end
 
-    it "should match on pretty name" do
-      make_license(pretty_name: "Foo").should be_matches_name "Foo"
-    end
+      it "should match on pretty name" do
+        make_license(pretty_name: "Foo").should be_matches_name "Foo"
+      end
 
-    it "should match on alternative names" do
-      license = make_license(other_names: ["Foo", "Bar"])
-      license.should be_matches_name "Foo"
-      license.should be_matches_name "Bar"
-    end
+      it "should match on alternative names" do
+        license = make_license(other_names: ["Foo", "Bar"])
+        license.should be_matches_name "Foo"
+        license.should be_matches_name "Bar"
+      end
 
-    it "should ignore case" do
-      make_license(pretty_name: "Foo").should be_matches_name "foo"
-      make_license(pretty_name: "foo").should be_matches_name "Foo"
-    end
+      it "should ignore case" do
+        make_license(pretty_name: "Foo").should be_matches_name "foo"
+        make_license(pretty_name: "foo").should be_matches_name "Foo"
+      end
 
-    it "should not fail if pretty_name or other_names are omitted" do
-      make_license.should be_matches_name "Default Short Name"
+      it "should not fail if pretty_name or other_names are omitted" do
+        make_license.should be_matches_name "Default Short Name"
+      end
     end
 
     it "should match on text" do
