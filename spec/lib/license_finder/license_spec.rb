@@ -46,8 +46,8 @@ module LicenseFinder
       make_license.pretty_name.should == "Default Short Name"
     end
 
-    it "should default other_names to none" do
-      make_license.other_names.should be_empty
+    it "should not fail if pretty_name or other_names are omitted" do
+      make_license.should be_matches_name "Default Short Name"
     end
   end
 end

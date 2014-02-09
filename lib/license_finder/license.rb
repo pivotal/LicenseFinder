@@ -14,7 +14,7 @@ module LicenseFinder
       end
     end
 
-    attr_reader :url, :other_names, :pretty_name, :matcher, :short_name
+    attr_reader :url, :pretty_name
 
     def initialize(settings)
       @short_name  = settings.fetch(:short_name)
@@ -33,6 +33,8 @@ module LicenseFinder
     end
 
     private
+
+    attr_reader :short_name, :other_names, :matcher
 
     def names
       ([short_name, pretty_name] + other_names).uniq
