@@ -36,6 +36,15 @@ module LicenseFinder
       license.should be_matches_name "Bar"
     end
 
+    it "should ignore case" do
+      make_license(pretty_name: "Foo").should be_matches_name "foo"
+      make_license(pretty_name: "foo").should be_matches_name "Foo"
+    end
+
+    it "should not fail if pretty_name or other_names are omitted" do
+      make_license.should be_matches_name "Default Short Name"
+    end
+
     it "should match on text" do
       license = make_license(matcher: License::Matcher.new(/The license text/))
       license.should be_matches_text "The license text"
@@ -44,10 +53,6 @@ module LicenseFinder
 
     it "should default pretty_name to short_name" do
       make_license.pretty_name.should == "Default Short Name"
-    end
-
-    it "should not fail if pretty_name or other_names are omitted" do
-      make_license.should be_matches_name "Default Short Name"
     end
   end
 end
