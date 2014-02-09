@@ -14,6 +14,12 @@ module LicenseFinder
       end
     end
 
+    autoload :Text,          "license_finder/license/text"
+    autoload :Template,      "license_finder/license/template"
+    autoload :Matcher,       "license_finder/license/matcher"
+    autoload :HeaderMatcher, "license_finder/license/header_matcher"
+    autoload :AnyMatcher,    "license_finder/license/any_matcher"
+
     attr_reader :url, :pretty_name
 
     def initialize(settings)
@@ -39,68 +45,7 @@ module LicenseFinder
     def names
       ([short_name, pretty_name] + other_names).uniq
     end
-
-    module Text
-      SPACES = /\s+/
-      QUOTES = /['`"]{1,2}/
-      PLACEHOLDERS = /<[^<>]+>/
-
-      def self.normalize_punctuation(text)
-        text.gsub(SPACES, ' ')
-            .gsub(QUOTES, '"')
-      end
-
-      def self.compile_to_regex(text)
-        Regexp.new(Regexp.escape(text).gsub(PLACEHOLDERS, '(.*)'))
-      end
-    end
-
-    class Template
-      def self.named(name)
-        path = ROOT_PATH.join("data", "licenses", "#{name}.txt")
-        new(path.read)
-      end
-
-      attr_reader :content
-
-      def initialize(raw_content)
-        @content = Text.normalize_punctuation(raw_content)
-      end
-    end
-
-    Matcher = Struct.new(:regexp) do
-      def self.from_template(template)
-        from_text(template.content)
-      end
-
-      def self.from_text(text)
-        new(Text.compile_to_regex(text))
-      end
-
-      def matches_text?(text)
-        !!(Text.normalize_punctuation(text) =~ regexp)
-      end
-    end
-
-    HeaderMatcher = Struct.new(:base_matcher) do
-      def matches_text?(text)
-        header = text.split("\n").first || ''
-        base_matcher.matches_text?(header)
-      end
-    end
-
-    class AnyMatcher
-      def initialize(*matchers)
-        @matchers = matchers
-      end
-
-      def matches_text?(text)
-        @matchers.any? { |m| m.matches_text? text }
-      end
-    end
   end
 end
 
-Pathname.glob(LicenseFinder::ROOT_PATH.join('license_finder', 'license', "*.rb")) do |license|
-  require license
-end
+require LicenseFinder::ROOT_PATH.join("license_finder", "license", "definitions.rb")
