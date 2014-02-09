@@ -1,30 +1,42 @@
 class LicenseFinder::License
-  mit_header_regexp = /The MIT Licen[sc]e/
-  mit_one_liner_regexp = /is released under the MIT licen[sc]e/
-  mit_url_regexp = %r{MIT Licen[sc]e.*http://(?:www\.)?opensource\.org/licenses/mit-license}
-  mit_matcher = AnyMatcher.new(
-    Matcher.from_template(Template.named("MIT")),
-    Matcher.new(mit_url_regexp),
-    HeaderMatcher.new(Matcher.new(mit_header_regexp)),
-    Matcher.new(mit_one_liner_regexp)
-  )
+  def self.mit_matcher
+    url_regexp = %r{MIT Licen[sc]e.*http://(?:www\.)?opensource\.org/licenses/mit-license}
+    header_regexp = /The MIT Licen[sc]e/
+    one_liner_regexp = /is released under the MIT licen[sc]e/
 
-  new_bsd_template = Template.named("NewBSD")
-  new_bsd_alternate_content = new_bsd_template.content.gsub(
-    "Neither the name of <organization> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.",
-    "The names of its contributors may not be used to endorse or promote products derived from this software without specific prior written permission."
-  )
-  new_bsd_matcher = AnyMatcher.new(
-    Matcher.from_template(new_bsd_template),
-    Matcher.from_text(new_bsd_alternate_content)
-  )
+    AnyMatcher.new(
+      Matcher.from_template(Template.named("MIT")),
+      Matcher.new(url_regexp),
+      HeaderMatcher.new(Matcher.new(header_regexp)),
+      Matcher.new(one_liner_regexp)
+    )
+  end
 
-  ruby_license_url = "http://www.ruby-lang.org/en/LICENSE.txt"
-  ruby_url_regex = Regexp.new(Regexp.escape(ruby_license_url))
-  ruby_matcher = AnyMatcher.new(
-    Matcher.from_template(Template.named("Ruby")),
-    Matcher.new(ruby_url_regex)
-  )
+  def self.new_bsd_matcher
+    template = Template.named("NewBSD")
+    alternate_content = template.content.gsub(
+      "Neither the name of <organization> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.",
+      "The names of its contributors may not be used to endorse or promote products derived from this software without specific prior written permission."
+    )
+
+    AnyMatcher.new(
+      Matcher.from_template(template),
+      Matcher.from_text(alternate_content)
+    )
+  end
+
+  def self.ruby_license_url
+    "http://www.ruby-lang.org/en/LICENSE.txt"
+  end
+
+  def self.ruby_matcher
+    url_regex = Regexp.new(Regexp.escape(ruby_license_url))
+
+    AnyMatcher.new(
+      Matcher.from_template(Template.named("Ruby")),
+      Matcher.new(url_regex)
+    )
+  end
 
   all << new(
     short_name:  "Apache2",
