@@ -47,23 +47,25 @@ module LicenseFinder
       end
     end
 
-    it "should match on text" do
-      license = make_license(matcher: License::Matcher.new(/The license text/))
-      license.should be_matches_text "The license text"
-      license.should_not be_matches_text "Some other text"
-    end
+    describe ".matches_text?" do
+      it "should match on text" do
+        license = make_license(matcher: License::Matcher.new(/The license text/))
+        license.should be_matches_text "The license text"
+        license.should_not be_matches_text "Some other text"
+      end
 
-    it "should match regardless of placeholder names, whitespace, or quotes" do
-      license_text = <<-LICENSE
-        The "company" of <company name> shall not be
-        held `responsible` for 'anything'.
-      LICENSE
-      license = make_license(matcher: License::Matcher.from_text(License::Text.normalize_punctuation(license_text)))
+      it "should match regardless of placeholder names, whitespace, or quotes" do
+        license_text = <<-LICENSE
+          The "company" of <company name> shall not be
+          held `responsible` for 'anything'.
+        LICENSE
+        license = make_license(matcher: License::Matcher.from_text(License::Text.normalize_punctuation(license_text)))
 
-      license.should be_matches_text <<-FILE
-        The ''company'' of foo bar *%*%*%*%
-        shall not be held "responsible" for `anything`.
-      FILE
+        license.should be_matches_text <<-FILE
+          The ''company'' of foo bar *%*%*%*%
+          shall not be held "responsible" for `anything`.
+        FILE
+      end
     end
 
     it "should default pretty_name to short_name" do
