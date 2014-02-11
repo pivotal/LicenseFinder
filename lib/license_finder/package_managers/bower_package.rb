@@ -43,21 +43,7 @@ module LicenseFinder
     end
 
     def license_from_spec
-      license = module_metadata.fetch("licenses", []).first
-
-      if license.is_a? Hash
-        license = license.fetch("type", nil)
-      end
-
-      if license.nil?
-        license = module_metadata.fetch("license", nil)
-
-        if license.is_a? Hash
-          license = license.fetch("type", nil)
-        end
-      end
-
-      license
+      extract_license_from_standard_spec(module_metadata)
     end
   end
 end

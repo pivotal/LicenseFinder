@@ -27,5 +27,23 @@ module LicenseFinder
     def default_license
       "other"
     end
+
+    def extract_license_from_standard_spec(spec)
+      license = spec.fetch("licenses", []).first
+
+      if license.is_a? Hash
+        license = license.fetch("type", nil)
+      end
+
+      if license.nil?
+        license = spec.fetch("license", nil)
+
+        if license.is_a? Hash
+          license = license.fetch("type", nil)
+        end
+      end
+
+      license
+    end
   end
 end
