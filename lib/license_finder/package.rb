@@ -29,21 +29,13 @@ module LicenseFinder
     end
 
     def extract_license_from_standard_spec(spec)
-      license = spec.fetch("licenses", []).first
+      license = spec.fetch("licenses", []).first || spec["license"]
 
       if license.is_a? Hash
-        license = license.fetch("type", nil)
+        license["type"]
+      else
+        license
       end
-
-      if license.nil?
-        license = spec.fetch("license", nil)
-
-        if license.is_a? Hash
-          license = license.fetch("type", nil)
-        end
-      end
-
-      license
     end
   end
 end
