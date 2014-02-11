@@ -16,9 +16,7 @@ module LicenseFinder
     end
 
     def license
-      license = License.all.detect do |klass|
-        klass.new(text).matches?
-      end
+      license = License.find_by_text(text)
 
       license.pretty_name if license
     end

@@ -1,45 +1,75 @@
 require 'spec_helper'
 
-class FooLicense < LicenseFinder::License::Base
-  self.alternative_names = ["the foo license"]
-  self.license_url = "http://foo.license.com"
-
-  def self.pretty_name
-    "Ye Ole Foo License"
-  end
-end
-
 module LicenseFinder
   describe License do
     describe ".find_by_name" do
-      it "should match on demodulized names" do
-        License.find_by_name("FooLicense").should == FooLicense
+      it "should find a registered license" do
+        License.find_by_name("Apache2").should be_a License
+      end
+    end
+
+    describe ".find_by_text" do
+      it "should find a registered license" do
+        License.find_by_text('This gem is released under the MIT license').should be_a License
+      end
+    end
+
+    def make_license(settings = {})
+      described_class.new({
+        short_name: "Default Short Name",
+        url: "http://example.com/license",
+        matcher: License::Matcher.from_text('Default Matcher')
+      }.merge(settings))
+    end
+
+    describe "#matches_name?" do
+      it "should match on short_name" do
+        make_license(short_name: "Foo").should be_matches_name "Foo"
       end
 
-      it "should match on pretty names" do
-        License.find_by_name("Ye Ole Foo License").should == FooLicense
+      it "should match on pretty name" do
+        make_license(pretty_name: "Foo").should be_matches_name "Foo"
       end
 
       it "should match on alternative names" do
-        License.find_by_name("the foo license").should == FooLicense
+        license = make_license(other_names: ["Foo", "Bar"])
+        license.should be_matches_name "Foo"
+        license.should be_matches_name "Bar"
       end
 
-      it "should return nil if no match" do
-        License.find_by_name(:unknown).should be_nil
+      it "should ignore case" do
+        make_license(pretty_name: "Foo").should be_matches_name "foo"
+        make_license(pretty_name: "foo").should be_matches_name "Foo"
+      end
+
+      it "should not fail if pretty_name or other_names are omitted" do
+        make_license.should be_matches_name "Default Short Name"
       end
     end
-  end
-end
 
-describe LicenseFinder::License::Base do
-  describe ".names" do
-    subject do
-      Class.new(LicenseFinder::License::Base) do
-        def self.demodulized_name; "FooLicense"; end
-        self.alternative_names = ["foo license"]
-      end.names
+    describe ".matches_text?" do
+      it "should match on text" do
+        license = make_license(matcher: License::Matcher.new(/The license text/))
+        license.should be_matches_text "The license text"
+        license.should_not be_matches_text "Some other text"
+      end
+
+      it "should match regardless of placeholder names, whitespace, or quotes" do
+        license_text = <<-LICENSE
+          The "company" of <company name> shall not be
+          held `responsible` for 'anything'.
+        LICENSE
+        license = make_license(matcher: License::Matcher.from_text(License::Text.normalize_punctuation(license_text)))
+
+        license.should be_matches_text <<-FILE
+          The ''company'' of foo bar *%*%*%*%
+          shall not be held "responsible" for `anything`.
+        FILE
+      end
     end
 
-    it { should =~ ["FooLicense", "foo license"] }
+    it "should default pretty_name to short_name" do
+      make_license.pretty_name.should == "Default Short Name"
+    end
   end
 end

@@ -1,12 +1,68 @@
 require 'spec_helper'
 
-describe LicenseFinder::License::NewBSD do
-  subject { LicenseFinder::License::NewBSD.new("") }
+describe LicenseFinder::License, "Apache2" do
+  it "should be findable" do |e|
+    described_class.find_by_name("Apache2").should be
+  end
+end
 
-  it_behaves_like "a license matcher"
+describe LicenseFinder::License, "BSD" do
+  it "should be findable" do |e|
+    described_class.find_by_name("BSD").should be
+  end
+end
+
+describe LicenseFinder::License, "GPLv2" do
+  it "should be findable" do
+    described_class.find_by_name("GPLv2").should be
+  end
+end
+
+describe LicenseFinder::License, "ISC" do
+  it "should be findable" do
+    described_class.find_by_name("ISC").should be
+  end
+end
+
+describe LicenseFinder::License, "LGPL" do
+  it "should be findable" do
+    described_class.find_by_name("LGPL").should be
+  end
+end
+
+describe LicenseFinder::License, "MIT" do
+  subject { described_class.find_by_name "MIT" }
+
+  describe "#matches_text?" do
+    it "should return true if the text contains the MIT url" do
+      subject.should be_matches_text "MIT License is awesome http://opensource.org/licenses/mit-license"
+
+      subject.should be_matches_text "MIT Licence is awesome http://www.opensource.org/licenses/mit-license"
+
+      subject.should_not be_matches_text "MIT Licence is awesome http://www!opensource!org/licenses/mit-license"
+    end
+
+    it "should return true if the text begins with 'The MIT License'" do
+      subject.should be_matches_text "The MIT License"
+
+      subject.should be_matches_text "The MIT Licence"
+
+      subject.should_not be_matches_text "Something else\nThe MIT License"
+    end
+
+    it "should return true if the text contains 'is released under the MIT license'" do
+      subject.should be_matches_text "is released under the MIT license"
+
+      subject.should be_matches_text "is released under the MIT licence"
+    end
+  end
+end
+
+describe LicenseFinder::License, "NewBSD" do
+  subject { described_class.find_by_name "NewBSD" }
 
   it "should match regardless of organization or copyright holder names" do
-    license = LicenseFinder::License::NewBSD.new <<-LICENSE
+    license = <<-LICENSE
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
     * Redistributions of source code must retain the above copyright
@@ -30,11 +86,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     LICENSE
 
-    license.should be_matches
+    subject.should be_matches_text license
   end
 
   it "should match with the alternate wording of third clause" do
-    license = LicenseFinder::License::NewBSD.new <<-LICENSE
+    license = <<-LICENSE
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
     * Redistributions of source code must retain the above copyright
@@ -58,6 +114,36 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     LICENSE
 
-    license.should be_matches
+    subject.should be_matches_text license
+  end
+end
+
+describe LicenseFinder::License, "Python" do
+  it "should be findable" do
+    described_class.find_by_name("Python").should be
+  end
+end
+
+describe LicenseFinder::License, "Ruby" do
+  subject { described_class.find_by_name "Ruby" }
+
+  describe "#matches?" do
+    it "should return true when the Ruby license URL is present" do
+      subject.should be_matches_text "This gem is available under the following license:\nhttp://www.ruby-lang.org/en/LICENSE.txt\nOkay?"
+    end
+
+    it "should return false when the Ruby License URL is not present" do
+      subject.should_not be_matches_text "This gem is available under the following license:\nhttp://www.example.com\nOkay?"
+    end
+
+    it "should return false for pathological licenses" do
+      subject.should_not be_matches_text "This gem is available under the following license:\nhttp://wwwzruby-langzorg/en/LICENSEztxt\nOkay?"
+    end
+  end
+end
+
+describe LicenseFinder::License, "SimplifiedBSD" do
+  it "should be findable" do
+    described_class.find_by_name("SimplifiedBSD").should be
   end
 end

@@ -6,7 +6,7 @@ module LicenseFinder
       name = name.to_s
 
       license = License.find_by_name(name)
-      license.license_url if license
+      license.url if license
     end
   end
 end
