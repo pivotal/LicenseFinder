@@ -43,7 +43,7 @@ module LicenseFinder
     end
 
     def license_from_spec
-      extract_license_from_standard_spec(module_metadata)
+      Package.extract_license_from_standard_spec(module_metadata)
     end
   end
 end
