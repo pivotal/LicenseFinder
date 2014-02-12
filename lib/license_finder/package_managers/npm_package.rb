@@ -41,21 +41,7 @@ module LicenseFinder
     end
 
     def license_from_spec
-      license = node_module.fetch("licenses", []).first
-
-      if license
-        license = license.fetch("type", nil)
-      end
-
-      if license.nil?
-        license = node_module.fetch("license", nil)
-
-        if license.is_a? Hash
-          license = license.fetch("type", nil)
-        end
-      end
-
-      license
+      Package.extract_license_from_standard_spec(node_module)
     end
   end
 end

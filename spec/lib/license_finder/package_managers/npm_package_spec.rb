@@ -31,11 +31,13 @@ module LicenseFinder
       let(:node_module1) { {"license" => "MIT"} }
       let(:node_module2) { {"licenses" => [{"type" => "BSD"}]} }
       let(:node_module3) { {"license" => {"type" => "PSF"}} }
+      let(:node_module4) { {"licenses" => ["MIT"]} }
 
       it 'finds the license for both license structures' do
         NpmPackage.new(node_module1).license.should eq("MIT")
         NpmPackage.new(node_module2).license.should eq("BSD")
         NpmPackage.new(node_module3).license.should eq("PSF")
+        NpmPackage.new(node_module4).license.should eq("MIT")
       end
 
       it "returns a license in a file if detected" do
