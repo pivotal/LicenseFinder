@@ -7,7 +7,7 @@ module LicenseFinder
     end
 
     def initialize(install_path)
-      @install_path = install_path
+      @install_path = Pathname(install_path)
     end
 
     def find
@@ -22,17 +22,12 @@ module LicenseFinder
 
     def paths_for_license_files
       find_matching_files.map do |path|
-        File.directory?(path) ? paths_for_files_in_license_directory(path) : path
+        path.directory? ? path.children : path
       end.flatten.uniq
     end
 
     def find_matching_files
-      Dir.glob(File.join(install_path, '**', "*{#{LICENSE_FILE_NAMES.join(',')}}*"))
-    end
-
-    def paths_for_files_in_license_directory(path)
-      entries_in_directory = Dir::entries(path).reject { |p| p.match(/^(\.){1,2}$/) }
-      entries_in_directory.map { |entry_name| File.join(path, entry_name) }
+      Pathname.glob(install_path.join('**', "*{#{LICENSE_FILE_NAMES.join(',')}}*"))
     end
 
     def get_file_for_path(path)
