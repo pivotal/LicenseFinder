@@ -40,7 +40,7 @@ module LicenseFinder
 
     class Dependencies < Subcommand
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
-      desc "Add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler, NPM, etc"
+      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler, NPM, etc"
       def add(license, name, version = nil)
         die_on_error {
           DependencyManager.create_manually_managed(license, name, version)
@@ -53,7 +53,7 @@ module LicenseFinder
         end
       end
 
-      desc "Remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler, NPM, etc"
+      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler, NPM, etc"
       def remove(name)
         die_on_error {
           DependencyManager.destroy_manually_managed(name)
@@ -87,7 +87,7 @@ module LicenseFinder
         end
       end
 
-      desc "add LICENSE", "Add one ore more licenses to the whitelist"
+      desc "add LICENSE...", "Add one or more licenses to the whitelist"
       def add(*licenses)
         modifying {
           licenses.each do |license|
@@ -97,7 +97,7 @@ module LicenseFinder
         say "Added #{licenses.join(", ")} to the license whitelist"
       end
 
-      desc "remove LICENSE", "Remove one ore more licenses from the whitelist"
+      desc "remove LICENSE...", "Remove one or more licenses from the whitelist"
       def remove(*licenses)
         modifying {
           licenses.each do |license|
@@ -160,7 +160,7 @@ module LicenseFinder
       end
       default_task :rescan
 
-      desc "approve DEPENDENCY_NAME", "Approve one ore more dependencies by name"
+      desc "approve DEPENDENCY_NAME...", "Approve one or more dependencies by name"
       def approve(*names)
         die_on_error {
           names.each { |name| DependencyManager.approve!(name) }
