@@ -1,60 +1,6 @@
 require "spec_helper"
 
 module LicenseFinder
-  describe Configuration::Persistence do
-    describe ".get" do
-      it "should use saved configuration" do
-        file = double(:file,
-                      :exist? => true,
-                      :read => {'some' => 'config'}.to_yaml)
-        described_class.stub(:file).and_return(file)
-
-        described_class.get.should == {'some' => 'config'}
-      end
-
-      it "should not mind if config is not saved" do
-        file = double(:file, :exist? => false)
-        described_class.stub(:file).and_return(file)
-
-        file.should_not_receive(:read)
-        described_class.get.should == {}
-      end
-    end
-
-    describe ".set" do
-      let(:tmp_yml) { '.tmp.configuration_spec.yml' }
-
-      after do
-        File.delete(tmp_yml)
-      end
-
-      it "writes the configuration attributes to the yaml file" do
-        described_class.stub(:file).and_return(Pathname.new(tmp_yml))
-
-        described_class.set('some' => 'config')
-        described_class.get.should == {'some' => 'config'}
-      end
-    end
-
-    describe ".init!" do
-      it "initializes the config file" do
-        file = double(:file, :exist? => false)
-        described_class.stub(:file).and_return(file)
-
-        FileUtils.should_receive(:cp).with(described_class.send(:file_template), file)
-        described_class.init!
-      end
-
-      it "does nothing if there is already a config file" do
-        file = double(:file, :exist? => true)
-        described_class.stub(:file).and_return(file)
-
-        FileUtils.should_not_receive(:cp)
-        described_class.init!
-      end
-    end
-  end
-
   describe Configuration do
     describe ".ensure_default" do
       it "should init and use saved config" do
@@ -152,6 +98,60 @@ module LicenseFinder
 
         Configuration::Persistence.should_receive(:set).with(attributes)
         config.save
+      end
+    end
+  end
+
+  describe Configuration::Persistence do
+    describe ".get" do
+      it "should use saved configuration" do
+        file = double(:file,
+                      :exist? => true,
+                      :read => {'some' => 'config'}.to_yaml)
+        described_class.stub(:file).and_return(file)
+
+        described_class.get.should == {'some' => 'config'}
+      end
+
+      it "should not mind if config is not saved" do
+        file = double(:file, :exist? => false)
+        described_class.stub(:file).and_return(file)
+
+        file.should_not_receive(:read)
+        described_class.get.should == {}
+      end
+    end
+
+    describe ".set" do
+      let(:tmp_yml) { '.tmp.configuration_spec.yml' }
+
+      after do
+        File.delete(tmp_yml)
+      end
+
+      it "writes the configuration attributes to the yaml file" do
+        described_class.stub(:file).and_return(Pathname.new(tmp_yml))
+
+        described_class.set('some' => 'config')
+        described_class.get.should == {'some' => 'config'}
+      end
+    end
+
+    describe ".init!" do
+      it "initializes the config file" do
+        file = double(:file, :exist? => false)
+        described_class.stub(:file).and_return(file)
+
+        FileUtils.should_receive(:cp).with(described_class.send(:file_template), file)
+        described_class.init!
+      end
+
+      it "does nothing if there is already a config file" do
+        file = double(:file, :exist? => true)
+        described_class.stub(:file).and_return(file)
+
+        FileUtils.should_not_receive(:cp)
+        described_class.init!
       end
     end
   end
