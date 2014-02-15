@@ -56,48 +56,41 @@ module LicenseFinder
   end
 
   describe Configuration do
-    let(:config) { described_class.new }
-
-    let(:klass) { described_class }
-
     describe ".ensure_default" do
       it "should init and use saved config" do
         Configuration::Persistence.should_receive(:init!)
         Configuration::Persistence.stub(:get).and_return('whitelist' => ['Saved License'])
 
-        klass.ensure_default.whitelist.should == ['Saved License']
+        described_class.ensure_default.whitelist.should == ['Saved License']
       end
     end
 
     describe '.new' do
-      let(:attributes) do
-        {
-          "whitelist" => ["FooLicense", "BarLicense"],
-          "ignore_groups" => [:test, :development],
-          "dependencies_file_dir" => ".",
-          "project_name" => "my_app"
-        }
-      end
-
       it "should default missing attributes" do
-        subject = klass.new
+        subject = described_class.new
         subject.whitelist.should == []
         subject.ignore_groups.should == []
         subject.dependencies_dir.should == './doc/'
       end
 
       it "should set the all of the attributes on the instance" do
-        subject = klass.new(attributes)
-        subject.whitelist.should == attributes['whitelist']
-        subject.ignore_groups.should == attributes['ignore_groups']
-        subject.dependencies_dir.should == attributes['dependencies_file_dir']
-        subject.project_name.should == attributes['project_name']
+        attributes = {
+          "whitelist" => %w{a whitelist},
+          "ignore_groups" => %w{test development},
+          "dependencies_file_dir" => "some/path",
+          "project_name" => "my_app"
+        }
+        subject = described_class.new(attributes)
+        subject.whitelist.should == %w{a whitelist}
+        subject.ignore_groups.should == %w{test development}
+        subject.dependencies_dir.should == "some/path"
+        subject.project_name.should == "my_app"
       end
     end
 
     describe "file paths" do
       it "should be relative to dependencies_dir" do
-        config = klass.new('dependencies_file_dir' => './elsewhere')
+        config = described_class.new('dependencies_file_dir' => './elsewhere')
         config.dependencies_dir.should == './elsewhere'
         config.dependencies_yaml.should == './elsewhere/dependencies.yml'
         config.dependencies_text.should == './elsewhere/dependencies.csv'
@@ -106,38 +99,33 @@ module LicenseFinder
     end
 
     describe "#database_uri" do
-      it "should URI escape absolute path the dependencies_file_dir" do
-        config = described_class.new('dependencies_file_dir' => 'test path')
-        config.database_uri.should =~ /test%20path\/dependencies\.db$/
+      it "should URI escape absolute path to dependencies_file_dir" do
+        config = described_class.new('dependencies_file_dir' => 'test/path')
+        config.database_uri.should =~ %r{test/path/dependencies\.db$}
       end
     end
 
     describe "#project_name" do
-      let(:directory_name) { "test_dir" }
-
-      before do
-        Dir.stub(:getwd).and_return("/path/to/#{directory_name}")
-      end
-
       it "should default to the directory name" do
-        klass.new.project_name.should == directory_name
+        Dir.stub(:getwd).and_return("/path/to/a_project")
+        described_class.new.project_name.should == "a_project"
       end
     end
 
     describe "whitelisted?" do
-      context "canonical name whitelisted" do
-        before { config.whitelist = ["Apache2"]}
+      context "short name whitelisted" do
+        before { subject.whitelist = ["Apache2"]}
 
-        it "should return true if if the license is the canonical name, pretty name, or alternative name of the license" do
-          config.should be_whitelisted "Apache2"
-          config.should be_whitelisted "Apache 2.0"
-          config.should be_whitelisted "Apache-2.0"
+        it "should accept any of the licenses names" do
+          subject.should be_whitelisted "Apache2"
+          subject.should be_whitelisted "Apache 2.0"
+          subject.should be_whitelisted "Apache-2.0"
         end
 
         it "should be case-insensitive" do
-          config.should be_whitelisted "apache2"
-          config.should be_whitelisted "apache 2.0"
-          config.should be_whitelisted "apache-2.0"
+          subject.should be_whitelisted "apache2"
+          subject.should be_whitelisted "apache 2.0"
+          subject.should be_whitelisted "apache-2.0"
         end
       end
     end
