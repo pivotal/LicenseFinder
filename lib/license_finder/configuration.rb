@@ -10,7 +10,7 @@ module LicenseFinder
 
     def self.ensure_default
       make_config_file unless File.exists?(config_file_path)
-      new
+      new(persisted_config_hash)
     end
 
     def self.make_config_file
@@ -22,31 +22,33 @@ module LicenseFinder
     end
 
     def self.move!
-      config = config_hash('dependencies_file_dir' => './doc/')
-      File.open(config_file_path, 'w') do |f|
-        f.write YAML.dump(config)
-      end
+      config = new(persisted_config_hash.merge('dependencies_file_dir' => './doc/'))
+      config.save
 
-      FileUtils.mkdir_p("doc")
-      FileUtils.mv(Dir["dependencies.*"], "doc")
+      FileUtils.mv(Dir["dependencies*"], config.dependencies_dir)
     end
 
-    def self.config_hash(config)
+    def self.persisted_config_hash
       if File.exists?(config_file_path)
         yaml = File.read(config_file_path)
-        config = YAML.load(yaml).merge config
+        YAML.load(yaml)
+      else
+        {}
       end
-      config
+    end
+
+    def self.save(config_hash)
+      File.open(config_file_path, 'w') do |file|
+        file.write(config_hash.to_yaml)
+      end
     end
 
     def initialize(config={})
-      config = self.class.config_hash(config)
-
       @whitelist = config['whitelist'] || []
       @ignore_groups = (config["ignore_groups"] || [])
       @dependencies_dir = config['dependencies_file_dir'] || './doc/'
       @project_name = config['project_name'] || determine_project_name
-      FileUtils.mkdir_p(@dependencies_dir)
+      FileUtils.mkdir_p(dependencies_dir)
     end
 
     def database_uri
@@ -83,17 +85,19 @@ module LicenseFinder
     end
 
     def save
-      File.open(Configuration.config_file_path, 'w') do |file|
-        file.write({
-          'whitelist' => @whitelist.uniq,
-          'ignore_groups' => @ignore_groups.uniq,
-          'dependencies_file_dir' => @dependencies_dir,
-          'project_name' => @project_name
-        }.to_yaml)
-      end
+      Configuration.save(to_hash)
     end
 
     private
+
+    def to_hash
+      {
+        'whitelist' => whitelist.uniq,
+        'ignore_groups' => ignore_groups.uniq,
+        'dependencies_file_dir' => dependencies_dir,
+        'project_name' => project_name
+      }
+    end
 
     def whitelisted_licenses
       whitelist.map do |license_name|

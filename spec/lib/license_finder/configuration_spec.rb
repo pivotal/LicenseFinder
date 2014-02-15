@@ -45,7 +45,7 @@ module LicenseFinder
       let(:directory_name) { "test_dir" }
 
       before do
-        Configuration.stub(:config_hash).and_return({})
+        Configuration.stub(:persisted_config_hash).and_return({})
         Dir.stub(:getwd).and_return("/path/to/#{directory_name}")
       end
 
