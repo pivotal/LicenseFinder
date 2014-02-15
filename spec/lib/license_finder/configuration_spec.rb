@@ -7,9 +7,13 @@ module LicenseFinder
     let(:klass) { described_class }
 
     describe ".ensure_default" do
+      before do
+        FileUtils.stub(:cp).and_return(false)
+      end
+
       it "should handle a missing configuration file" do
         file = double(:file, :exist? => false)
-        Configuration.stub(:config_file).and_return(file)
+        Configuration::Persistence.stub(:file).and_return(file)
 
         file.should_not_receive(:read)
         klass.ensure_default.whitelist.should == []
@@ -19,7 +23,7 @@ module LicenseFinder
         file = double(:file,
                       :exist? => true,
                       :read => {'whitelist' => ['Apache']}.to_yaml)
-        Configuration.stub(:config_file).and_return(file)
+        Configuration::Persistence.stub(:file).and_return(file)
 
         klass.ensure_default.whitelist.should == ['Apache']
       end
@@ -104,7 +108,7 @@ module LicenseFinder
       let(:yaml) { YAML.load(File.read(tmp_yml)) }
 
       before do
-        Configuration.stub(:config_file).and_return(Pathname.new(tmp_yml))
+        Configuration::Persistence.stub(:file).and_return(Pathname.new(tmp_yml))
         config.whitelist = ['my_gem']
         config.ignore_groups = ['other_group', 'test']
         config.project_name = "New Project Name"

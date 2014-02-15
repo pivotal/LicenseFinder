@@ -4,51 +4,49 @@ module LicenseFinder
   class Configuration
     attr_accessor :whitelist, :ignore_groups, :dependencies_dir, :project_name
 
-    def self.config_file_dir
-      Pathname.new('.').join('config')
-    end
+    module Persistence
+      def self.file_dir
+        Pathname.new('.').join('config')
+      end
 
-    def self.config_file
-      config_file_dir.join('license_finder.yml')
-    end
+      def self.file
+        file_dir.join('license_finder.yml')
+      end
 
-    def self.config_file_template
-      ROOT_PATH.join('..', 'files', 'license_finder.yml')
+      def self.file_template
+        ROOT_PATH.join('..', 'files', 'license_finder.yml')
+      end
+
+      def self.inited?
+        file.exist?
+      end
+
+      def self.init
+        file_dir.mkpath
+        FileUtils.cp(file_template, file)
+      end
+
+      def self.get
+        return {} unless inited?
+
+        YAML.load(file.read)
+      end
+
+      def self.set(hash)
+        file.open('w') { |f| f.write(hash.to_yaml) }
+      end
     end
 
     def self.ensure_default
-      make_config_file unless config_file_exists?
-      new(persisted_config_hash)
-    end
-
-    def self.config_file_exists?
-      config_file.exist?
-    end
-
-    def self.make_config_file
-      config_file_dir.mkpath
-      FileUtils.cp(config_file_template, config_file)
+      Persistence.init unless Persistence.inited?
+      new(Persistence.get)
     end
 
     def self.move!
-      config = new(persisted_config_hash.merge('dependencies_file_dir' => './doc/'))
+      config = new(Persistence.get.merge('dependencies_file_dir' => './doc/'))
       config.save
 
       FileUtils.mv(Dir["dependencies*"], config.dependencies_dir)
-    end
-
-    def self.persisted_config_hash
-      if config_file_exists?
-        YAML.load(config_file.read)
-      else
-        {}
-      end
-    end
-
-    def self.save(config_hash)
-      config_file.open('w') do |file|
-        file.write(config_hash.to_yaml)
-      end
     end
 
     def initialize(config={})
@@ -93,7 +91,7 @@ module LicenseFinder
     end
 
     def save
-      Configuration.save(to_hash)
+      Persistence.set(to_hash)
     end
 
     private
