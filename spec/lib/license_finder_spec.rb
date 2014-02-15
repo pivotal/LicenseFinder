@@ -10,9 +10,8 @@ describe LicenseFinder do
     end
 
     before do
-      LicenseFinder.instance_variable_set(:@config, nil)
-      File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
-      File.stub(:read).with('./config/license_finder.yml').and_return(config.to_yaml)
+      LicenseFinder::Configuration.stub(:config_file_exists?).and_return(true)
+      LicenseFinder::Configuration.stub(:persisted_config_hash).and_return(config)
     end
 
     after do
@@ -20,7 +19,7 @@ describe LicenseFinder do
     end
 
     it "should handle a missing configuration file" do
-      File.stub(:exists?).with('./config/license_finder.yml').and_return(false)
+      LicenseFinder::Configuration.stub(:config_file_exists?).and_return(false)
       File.should_not_receive(:open).with('./config/license_finder.yml')
 
       LicenseFinder.config.whitelist.should == []
@@ -29,7 +28,7 @@ describe LicenseFinder do
     end
 
     it "should load the configuration exactly once" do
-      File.should_receive(:read).with('./config/license_finder.yml').once.and_return(config.to_yaml)
+      LicenseFinder::Configuration.should_receive(:persisted_config_hash).once.and_return(config)
 
       LicenseFinder.config.whitelist
       LicenseFinder.config.whitelist
@@ -41,7 +40,7 @@ describe LicenseFinder do
       end
 
       it "should load an empty whitelist from license_finder.yml when there are no whitelist items" do
-        File.stub(:read).with('./config/license_finder.yml').and_return(config.merge('whitelist' => nil).to_yaml)
+        LicenseFinder::Configuration.stub(:persisted_config_hash).and_return(config.merge('whitelist' => nil))
 
         LicenseFinder.config.whitelist.should =~ []
       end
@@ -53,7 +52,7 @@ describe LicenseFinder do
       end
 
       it "should load an empty ignore_groups list from license_finder.yml when there are no ignore groups" do
-        File.stub(:read).with('./config/license_finder.yml').and_return(config.merge('ignore_groups' => nil).to_yaml)
+        LicenseFinder::Configuration.stub(:persisted_config_hash).and_return(config.merge('ignore_groups' => nil))
 
         LicenseFinder.config.ignore_groups.should == []
       end
@@ -61,7 +60,7 @@ describe LicenseFinder do
 
     describe "#dependencies_dir" do
       it 'should allow the dependencies file directory to be configured' do
-        File.stub(:read).with('./config/license_finder.yml').and_return(config.merge('dependencies_file_dir' => './elsewhere').to_yaml)
+        LicenseFinder::Configuration.stub(:persisted_config_hash).and_return(config.merge('dependencies_file_dir' => './elsewhere'))
 
         config = LicenseFinder.config
         config.dependencies_dir.should == './elsewhere'

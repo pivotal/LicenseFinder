@@ -9,8 +9,12 @@ module LicenseFinder
     end
 
     def self.ensure_default
-      make_config_file unless File.exists?(config_file_path)
+      make_config_file unless config_file_exists?
       new(persisted_config_hash)
+    end
+
+    def self.config_file_exists?
+      File.exists?(config_file_path)
     end
 
     def self.make_config_file
@@ -29,7 +33,7 @@ module LicenseFinder
     end
 
     def self.persisted_config_hash
-      if File.exists?(config_file_path)
+      if config_file_exists?
         yaml = File.read(config_file_path)
         YAML.load(yaml)
       else

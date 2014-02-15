@@ -6,6 +6,30 @@ module LicenseFinder
 
     let(:klass) { described_class }
 
+    describe "persistence" do
+      describe ".config_file_exists?" do
+        it "checks whether the config file exists" do
+          File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
+          described_class.should be_config_file_exists
+          File.stub(:exists?).with('./config/license_finder.yml').and_return(false)
+          described_class.should_not be_config_file_exists
+        end
+      end
+
+      describe ".persisted_config_hash" do
+        it "loads data from the file system" do
+          File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
+          File.stub(:read).with('./config/license_finder.yml').and_return({'some' => 'config'}.to_yaml)
+          described_class.persisted_config_hash.should == {'some' => 'config'}
+        end
+
+        it "doesn't blow up if config file doesn't exist" do
+          File.stub(:exists?).with('./config/license_finder.yml').and_return(false)
+          described_class.persisted_config_hash.should == {}
+        end
+      end
+    end
+
     describe '.new' do
       let(:attributes) do
         {
