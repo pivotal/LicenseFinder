@@ -16,7 +16,7 @@ module LicenseFinder
         subject = described_class.new
         subject.whitelist.should == []
         subject.ignore_groups.should == []
-        subject.dependencies_dir.should == './doc/'
+        subject.dependencies_dir.should == Pathname('./doc/')
       end
 
       it "should set the all of the attributes on the instance" do
@@ -29,7 +29,7 @@ module LicenseFinder
         subject = described_class.new(attributes)
         subject.whitelist.should == %w{a whitelist}
         subject.ignore_groups.should == %w{test development}
-        subject.dependencies_dir.should == "some/path"
+        subject.dependencies_dir.should == Pathname("some/path")
         subject.project_name.should == "my_app"
       end
     end
@@ -37,10 +37,10 @@ module LicenseFinder
     describe "file paths" do
       it "should be relative to dependencies_dir" do
         config = described_class.new('dependencies_file_dir' => './elsewhere')
-        config.dependencies_dir.should == './elsewhere'
-        config.dependencies_yaml.should == './elsewhere/dependencies.yml'
-        config.dependencies_text.should == './elsewhere/dependencies.csv'
-        config.dependencies_html.should == './elsewhere/dependencies.html'
+        config.dependencies_dir.should == Pathname('./elsewhere')
+        config.legacy_dependencies_yaml.should == Pathname('./elsewhere/dependencies.yml')
+        config.dependencies_text.should == Pathname('./elsewhere/dependencies.csv')
+        config.dependencies_html.should == Pathname('./elsewhere/dependencies.html')
       end
     end
 

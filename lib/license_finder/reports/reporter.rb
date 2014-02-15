@@ -10,8 +10,8 @@ module LicenseFinder
       write_file LicenseFinder.config.dependencies_html, HtmlReport.new(dependencies).to_s
       write_file LicenseFinder.config.dependencies_markdown, MarkdownReport.new(dependencies).to_s
 
-      if File.exists?(LicenseFinder.config.dependencies_legacy_text)
-        File.delete(LicenseFinder.config.dependencies_legacy_text)
+      if File.exists?(LicenseFinder.config.legacy_dependencies_text)
+        File.delete(LicenseFinder.config.legacy_dependencies_text)
       end
     end
 

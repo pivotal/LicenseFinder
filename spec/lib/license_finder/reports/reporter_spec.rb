@@ -19,7 +19,7 @@ module LicenseFinder
         TextReport.stub_chain(:new, :to_s) { 'text report' }
         HtmlReport.stub_chain(:new, :to_s) { 'text report' }
 
-        LicenseFinder.stub_chain(:config, :dependencies_legacy_text) { 'legacy_text_path' }
+        LicenseFinder.stub_chain(:config, :legacy_dependencies_text) { 'legacy_text_path' }
         File.stub(:exists?).with('legacy_text_path') { false }
 
         File.stub(:open).with('html_file_path', 'w+')

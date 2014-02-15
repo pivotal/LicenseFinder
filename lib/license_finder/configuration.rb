@@ -17,39 +17,39 @@ module LicenseFinder
     end
 
     def initialize(config={})
-      @whitelist = config['whitelist'] || []
-      @ignore_groups = (config["ignore_groups"] || [])
-      @dependencies_dir = config['dependencies_file_dir'] || './doc/'
+      @whitelist = Array(config['whitelist'])
+      @ignore_groups = Array(config["ignore_groups"])
+      @dependencies_dir = Pathname(config['dependencies_file_dir'] || './doc/')
       @project_name = config['project_name'] || determine_project_name
-      FileUtils.mkdir_p(dependencies_dir)
+      dependencies_dir.mkpath
     end
 
     def database_uri
-      URI.escape(File.expand_path(File.join(dependencies_dir, "dependencies.db")))
-    end
-
-    def dependencies_yaml
-      File.join(dependencies_dir, "dependencies.yml")
+      URI.escape(dependencies_dir.join("dependencies.db").expand_path.to_s)
     end
 
     def dependencies_text
-      File.join(dependencies_dir, "dependencies.csv")
+      dependencies_dir.join("dependencies.csv")
     end
 
     def dependencies_detailed_text
-      File.join(dependencies_dir, "dependencies_detailed.csv")
-    end
-
-    def dependencies_legacy_text
-      File.join(dependencies_dir, "dependencies.txt")
+      dependencies_dir.join("dependencies_detailed.csv")
     end
 
     def dependencies_html
-      File.join(dependencies_dir, "dependencies.html")
+      dependencies_dir.join("dependencies.html")
     end
 
     def dependencies_markdown
-      File.join(dependencies_dir, "dependencies.md")
+      dependencies_dir.join("dependencies.md")
+    end
+
+    def legacy_dependencies_yaml
+      dependencies_dir.join("dependencies.yml")
+    end
+
+    def legacy_dependencies_text
+      dependencies_dir.join("dependencies.txt")
     end
 
     def whitelisted?(license_name)
@@ -67,7 +67,7 @@ module LicenseFinder
       {
         'whitelist' => whitelist.uniq,
         'ignore_groups' => ignore_groups.uniq,
-        'dependencies_file_dir' => dependencies_dir,
+        'dependencies_file_dir' => dependencies_dir.to_s,
         'project_name' => project_name
       }
     end
@@ -79,7 +79,7 @@ module LicenseFinder
     end
 
     def determine_project_name
-      File.basename(Dir.getwd)
+      Pathname.pwd.basename.to_s
     end
 
     module Persistence
