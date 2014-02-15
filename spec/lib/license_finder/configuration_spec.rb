@@ -6,27 +6,19 @@ module LicenseFinder
 
     let(:klass) { described_class }
 
-    describe "persistence" do
-      describe ".config_file_exists?" do
-        it "checks whether the config file exists" do
-          File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
-          described_class.should be_config_file_exists
-          File.stub(:exists?).with('./config/license_finder.yml').and_return(false)
-          described_class.should_not be_config_file_exists
-        end
+    describe ".ensure_default" do
+      it "should handle a missing configuration file" do
+        File.stub(:exists?).with('./config/license_finder.yml').and_return(false)
+        File.should_not_receive(:read).with('./config/license_finder.yml')
+
+        klass.ensure_default.whitelist.should == []
       end
 
-      describe ".persisted_config_hash" do
-        it "loads data from the file system" do
-          File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
-          File.stub(:read).with('./config/license_finder.yml').and_return({'some' => 'config'}.to_yaml)
-          described_class.persisted_config_hash.should == {'some' => 'config'}
-        end
+      it "should use saved configuration" do
+        File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
+        File.stub(:read).with('./config/license_finder.yml').and_return({'whitelist' => ['Apache']}.to_yaml)
 
-        it "doesn't blow up if config file doesn't exist" do
-          File.stub(:exists?).with('./config/license_finder.yml').and_return(false)
-          described_class.persisted_config_hash.should == {}
-        end
+        klass.ensure_default.whitelist.should == ['Apache']
       end
     end
 
@@ -40,15 +32,29 @@ module LicenseFinder
         }
       end
 
-      subject { klass.new(attributes) }
+      it "should default missing attributes" do
+        subject = klass.new
+        subject.whitelist.should == []
+        subject.ignore_groups.should == []
+        subject.dependencies_dir.should == './doc/'
+      end
 
-      context "with known attributes" do
-        it "should set the all of the attributes on the instance" do
-          subject.whitelist.should == attributes['whitelist']
-          subject.ignore_groups.should == attributes['ignore_groups']
-          subject.dependencies_dir.should == attributes['dependencies_file_dir']
-          subject.project_name.should == attributes['project_name']
-        end
+      it "should set the all of the attributes on the instance" do
+        subject = klass.new(attributes)
+        subject.whitelist.should == attributes['whitelist']
+        subject.ignore_groups.should == attributes['ignore_groups']
+        subject.dependencies_dir.should == attributes['dependencies_file_dir']
+        subject.project_name.should == attributes['project_name']
+      end
+    end
+
+    describe "file paths" do
+      it "should be relative to dependencies_dir" do
+        config = klass.new('dependencies_file_dir' => './elsewhere')
+        config.dependencies_dir.should == './elsewhere'
+        config.dependencies_yaml.should == './elsewhere/dependencies.yml'
+        config.dependencies_text.should == './elsewhere/dependencies.csv'
+        config.dependencies_html.should == './elsewhere/dependencies.html'
       end
     end
 
@@ -56,12 +62,6 @@ module LicenseFinder
       it "should URI escape absolute path the dependencies_file_dir" do
         config = described_class.new('dependencies_file_dir' => 'test path')
         config.database_uri.should =~ /test%20path\/dependencies\.db$/
-      end
-    end
-
-    describe "#whitelist" do
-      it "should default to an empty array" do
-        klass.new.whitelist.should == []
       end
     end
 
