@@ -8,15 +8,18 @@ module LicenseFinder
 
     describe ".ensure_default" do
       it "should handle a missing configuration file" do
-        File.stub(:exists?).with('./config/license_finder.yml').and_return(false)
-        File.should_not_receive(:read).with('./config/license_finder.yml')
+        file = double(:file, :exist? => false)
+        Configuration.stub(:config_file).and_return(file)
 
+        file.should_not_receive(:read)
         klass.ensure_default.whitelist.should == []
       end
 
       it "should use saved configuration" do
-        File.stub(:exists?).with('./config/license_finder.yml').and_return(true)
-        File.stub(:read).with('./config/license_finder.yml').and_return({'whitelist' => ['Apache']}.to_yaml)
+        file = double(:file,
+                      :exist? => true,
+                      :read => {'whitelist' => ['Apache']}.to_yaml)
+        Configuration.stub(:config_file).and_return(file)
 
         klass.ensure_default.whitelist.should == ['Apache']
       end
@@ -101,7 +104,7 @@ module LicenseFinder
       let(:yaml) { YAML.load(File.read(tmp_yml)) }
 
       before do
-        Configuration.stub(:config_file_path).and_return(tmp_yml)
+        Configuration.stub(:config_file).and_return(Pathname.new(tmp_yml))
         config.whitelist = ['my_gem']
         config.ignore_groups = ['other_group', 'test']
         config.project_name = "New Project Name"

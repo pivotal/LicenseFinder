@@ -4,8 +4,16 @@ module LicenseFinder
   class Configuration
     attr_accessor :whitelist, :ignore_groups, :dependencies_dir, :project_name
 
-    def self.config_file_path
-      File.join('.', 'config', 'license_finder.yml')
+    def self.config_file_dir
+      Pathname.new('.').join('config')
+    end
+
+    def self.config_file
+      config_file_dir.join('license_finder.yml')
+    end
+
+    def self.config_file_template
+      ROOT_PATH.join('..', 'files', 'license_finder.yml')
     end
 
     def self.ensure_default
@@ -14,15 +22,12 @@ module LicenseFinder
     end
 
     def self.config_file_exists?
-      File.exists?(config_file_path)
+      config_file.exist?
     end
 
     def self.make_config_file
-      FileUtils.mkdir_p(File.join('.', 'config'))
-      FileUtils.cp(
-        ROOT_PATH.join('..', 'files', 'license_finder.yml'),
-        config_file_path
-      )
+      config_file_dir.mkpath
+      FileUtils.cp(config_file_template, config_file)
     end
 
     def self.move!
@@ -34,15 +39,14 @@ module LicenseFinder
 
     def self.persisted_config_hash
       if config_file_exists?
-        yaml = File.read(config_file_path)
-        YAML.load(yaml)
+        YAML.load(config_file.read)
       else
         {}
       end
     end
 
     def self.save(config_hash)
-      File.open(config_file_path, 'w') do |file|
+      config_file.open('w') do |file|
         file.write(config_hash.to_yaml)
       end
     end
