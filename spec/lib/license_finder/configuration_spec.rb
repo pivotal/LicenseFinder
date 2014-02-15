@@ -13,7 +13,7 @@ module LicenseFinder
 
     describe '.new' do
       it "should default missing attributes" do
-        subject = described_class.new
+        subject = described_class.new({})
         subject.whitelist.should == []
         subject.ignore_groups.should == []
         subject.dependencies_dir.should == Pathname('./doc/')
@@ -54,13 +54,13 @@ module LicenseFinder
     describe "#project_name" do
       it "should default to the directory name" do
         Dir.stub(:getwd).and_return("/path/to/a_project")
-        described_class.new.project_name.should == "a_project"
+        described_class.new({}).project_name.should == "a_project"
       end
     end
 
     describe "whitelisted?" do
       context "short name whitelisted" do
-        before { subject.whitelist = ["Apache2"]}
+        subject { described_class.new('whitelist' => ["Apache2"]) }
 
         it "should accept any of the licenses names" do
           subject.should be_whitelisted "Apache2"
@@ -88,7 +88,7 @@ module LicenseFinder
 
       it "persists the configuration attributes" do
         Configuration::Persistence.should_receive(:set).with(attributes)
-        described_class.new(attributes.dup).save
+        described_class.new(attributes).save
       end
 
       it "doesn't persist duplicate entries" do

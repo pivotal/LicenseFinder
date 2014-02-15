@@ -16,7 +16,7 @@ module LicenseFinder
       FileUtils.mv(Dir["dependencies*"], config.dependencies_dir)
     end
 
-    def initialize(config={})
+    def initialize(config)
       @whitelist        = Array(config['whitelist'])
       @ignore_groups    = Array(config["ignore_groups"])
       @dependencies_dir = Pathname(config['dependencies_file_dir'] || './doc/')
@@ -122,6 +122,5 @@ module LicenseFinder
         ROOT_PATH.join('..', 'files', 'license_finder.yml')
       end
     end
-
   end
 end

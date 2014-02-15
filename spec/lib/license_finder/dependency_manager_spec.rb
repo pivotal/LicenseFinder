@@ -2,11 +2,10 @@ require 'spec_helper'
 
 module LicenseFinder
   describe DependencyManager do
-    let(:config) { Configuration.new }
+    let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
 
     before do
       LicenseFinder.stub(:config).and_return config
-      config.whitelist = ["MIT", "other"]
       Reporter.stub(:write_reports)
     end
 
