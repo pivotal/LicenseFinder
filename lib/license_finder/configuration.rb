@@ -5,40 +5,48 @@ module LicenseFinder
     attr_accessor :whitelist, :ignore_groups, :dependencies_dir, :project_name
 
     module Persistence
-      def self.file_dir
-        Pathname.new('.').join('config')
+      extend self
+
+      def init!
+        init unless inited?
       end
 
-      def self.file
-        file_dir.join('license_finder.yml')
-      end
-
-      def self.file_template
-        ROOT_PATH.join('..', 'files', 'license_finder.yml')
-      end
-
-      def self.inited?
-        file.exist?
-      end
-
-      def self.init
-        file_dir.mkpath
-        FileUtils.cp(file_template, file)
-      end
-
-      def self.get
+      def get
         return {} unless inited?
 
         YAML.load(file.read)
       end
 
-      def self.set(hash)
+      def set(hash)
         file.open('w') { |f| f.write(hash.to_yaml) }
+      end
+
+      private
+
+      def inited?
+        file.exist?
+      end
+
+      def init
+        file_dir.mkpath
+        FileUtils.cp(file_template, file)
+      end
+
+      def file_dir
+        Pathname.new('.').join('config')
+      end
+
+      def file
+        file_dir.join('license_finder.yml')
+      end
+
+      def file_template
+        ROOT_PATH.join('..', 'files', 'license_finder.yml')
       end
     end
 
     def self.ensure_default
-      Persistence.init unless Persistence.inited?
+      Persistence.init!
       new(Persistence.get)
     end
 
