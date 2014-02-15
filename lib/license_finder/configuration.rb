@@ -17,10 +17,10 @@ module LicenseFinder
     end
 
     def initialize(config={})
-      @whitelist = Array(config['whitelist'])
-      @ignore_groups = Array(config["ignore_groups"])
+      @whitelist        = Array(config['whitelist'])
+      @ignore_groups    = Array(config["ignore_groups"])
       @dependencies_dir = Pathname(config['dependencies_file_dir'] || './doc/')
-      @project_name = config['project_name'] || determine_project_name
+      @project_name     = config['project_name'] || determine_project_name
       dependencies_dir.mkpath
     end
 
