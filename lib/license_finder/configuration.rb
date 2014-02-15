@@ -18,7 +18,7 @@ module LicenseFinder
       end
 
       def set(hash)
-        file.open('w') { |f| f.write(hash.to_yaml) }
+        file.open('w') { |f| f.write(YAML.dump(hash)) }
       end
 
       private
