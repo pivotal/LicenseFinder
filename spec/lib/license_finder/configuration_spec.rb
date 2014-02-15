@@ -1,31 +1,71 @@
 require "spec_helper"
 
 module LicenseFinder
+  describe Configuration::Persistence do
+    describe ".get" do
+      it "should use saved configuration" do
+        file = double(:file,
+                      :exist? => true,
+                      :read => {'some' => 'config'}.to_yaml)
+        described_class.stub(:file).and_return(file)
+
+        described_class.get.should == {'some' => 'config'}
+      end
+
+      it "should not mind if config is not saved" do
+        file = double(:file, :exist? => false)
+        described_class.stub(:file).and_return(file)
+
+        file.should_not_receive(:read)
+        described_class.get.should == {}
+      end
+    end
+
+    describe ".set" do
+      let(:tmp_yml) { '.tmp.configuration_spec.yml' }
+
+      after do
+        File.delete(tmp_yml)
+      end
+
+      it "writes the configuration attributes to the yaml file" do
+        described_class.stub(:file).and_return(Pathname.new(tmp_yml))
+
+        described_class.set('some' => 'config')
+        described_class.get.should == {'some' => 'config'}
+      end
+    end
+
+    describe ".init!" do
+      it "initializes the config file" do
+        file = double(:file, :exist? => false)
+        described_class.stub(:file).and_return(file)
+
+        FileUtils.should_receive(:cp).with(described_class.send(:file_template), file)
+        described_class.init!
+      end
+
+      it "does nothing if there is already a config file" do
+        file = double(:file, :exist? => true)
+        described_class.stub(:file).and_return(file)
+
+        FileUtils.should_not_receive(:cp)
+        described_class.init!
+      end
+    end
+  end
+
   describe Configuration do
     let(:config) { described_class.new }
 
     let(:klass) { described_class }
 
     describe ".ensure_default" do
-      before do
-        FileUtils.stub(:cp).and_return(false)
-      end
+      it "should init and use saved config" do
+        Configuration::Persistence.should_receive(:init!)
+        Configuration::Persistence.stub(:get).and_return('whitelist' => ['Saved License'])
 
-      it "should handle a missing configuration file" do
-        file = double(:file, :exist? => false)
-        Configuration::Persistence.stub(:file).and_return(file)
-
-        file.should_not_receive(:read)
-        klass.ensure_default.whitelist.should == []
-      end
-
-      it "should use saved configuration" do
-        file = double(:file,
-                      :exist? => true,
-                      :read => {'whitelist' => ['Apache']}.to_yaml)
-        Configuration::Persistence.stub(:file).and_return(file)
-
-        klass.ensure_default.whitelist.should == ['Apache']
+        klass.ensure_default.whitelist.should == ['Saved License']
       end
     end
 
@@ -76,7 +116,6 @@ module LicenseFinder
       let(:directory_name) { "test_dir" }
 
       before do
-        Configuration.stub(:persisted_config_hash).and_return({})
         Dir.stub(:getwd).and_return("/path/to/#{directory_name}")
       end
 
@@ -104,50 +143,27 @@ module LicenseFinder
     end
 
     describe "#save" do
-      let(:tmp_yml) { '.tmp.configuration_spec.yml' }
-      let(:yaml) { YAML.load(File.read(tmp_yml)) }
-
-      before do
-        Configuration::Persistence.stub(:file).and_return(Pathname.new(tmp_yml))
-        config.whitelist = ['my_gem']
-        config.ignore_groups = ['other_group', 'test']
-        config.project_name = "New Project Name"
-        config.dependencies_dir = "./deps"
+      def attributes # can't be a let... the caching causes polution
+        {
+          'whitelist' => ['my_gem'],
+          'ignore_groups' => ['other_group', 'test'],
+          'project_name' => "New Project Name",
+          'dependencies_file_dir' => "./deps"
+        }
       end
 
-      after do
-        File.delete(tmp_yml)
+      it "persists the configuration attributes" do
+        Configuration::Persistence.should_receive(:set).with(attributes)
+        described_class.new(attributes.dup).save
       end
 
-      describe "writes the configuration attributes to the yaml file" do
-        before { config.save }
-
-        it "writes the whitelist" do
-          yaml["whitelist"].should include("my_gem")
-        end
-
-        it "writes the ignored bundler groups" do
-          yaml["ignore_groups"].should include("other_group")
-          yaml["ignore_groups"].should include("test")
-        end
-
-        it "writes the dependencies_dir" do
-          yaml["dependencies_file_dir"].should eq("./deps")
-        end
-
-        it "writes the project name" do
-          yaml["project_name"].should eq("New Project Name")
-        end
-      end
-
-      it "doesn't write duplicate entries" do
+      it "doesn't persist duplicate entries" do
+        config = described_class.new(attributes)
         config.whitelist << 'my_gem'
         config.ignore_groups << 'test'
 
+        Configuration::Persistence.should_receive(:set).with(attributes)
         config.save
-
-        yaml["whitelist"].count("my_gem").should == 1
-        yaml["ignore_groups"].count("test").should == 1
       end
     end
   end
