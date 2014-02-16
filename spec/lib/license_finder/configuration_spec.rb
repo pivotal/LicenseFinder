@@ -45,9 +45,9 @@ module LicenseFinder
     end
 
     describe "#database_uri" do
-      it "should URI escape absolute path to dependencies_file_dir" do
-        config = described_class.new('dependencies_file_dir' => 'test/path')
-        config.database_uri.should =~ %r{test/path/dependencies\.db$}
+      it "should URI escape absolute path to dependencies_file_dir, even with spaces" do
+        config = described_class.new('dependencies_file_dir' => 'test path')
+        config.database_uri.should =~ %r{test%20path/dependencies\.db$}
       end
     end
 
