@@ -19,6 +19,20 @@ module LicenseFinder
         subject.dependencies_dir.should == Pathname('./doc/')
       end
 
+      it "should default missing attributes even if they are saved as nils in the YAML file" do
+        attributes = {
+          "whitelist" => nil,
+          "ignore_groups" => nil,
+          "dependencies_file_dir" => nil,
+          "project_name" => nil
+        }
+        subject = described_class.new(attributes)
+        subject.whitelist.should == []
+        subject.ignore_groups.should == []
+        subject.dependencies_dir.should == Pathname('./doc/')
+        subject.project_name.should_not be_nil
+      end
+
       it "should set the all of the attributes on the instance" do
         attributes = {
           "whitelist" => %w{a whitelist},
