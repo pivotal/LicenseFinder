@@ -149,7 +149,7 @@ module LicenseFinder
         context "when the reports do not exist" do
           before do
             Digest::SHA2.stub_chain(:file, :hexdigest) { 5 }
-            File.stub(:exists?).with(LicenseFinder.config.dependencies_html) { false }
+            File.stub(:exists?).with(LicenseFinder.config.artifacts.dependencies_html) { false }
           end
 
           it "writes reports" do

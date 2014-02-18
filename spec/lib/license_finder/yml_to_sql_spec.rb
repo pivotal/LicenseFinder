@@ -25,14 +25,14 @@ describe LicenseFinder::YmlToSql do
   describe ".needs_conversion?" do
     it "is true if the yml still exists" do
       yaml_file = double(:yaml_file, :exist? => true)
-      LicenseFinder.config.stub(legacy_dependencies_yaml: yaml_file)
+      LicenseFinder.config.artifacts.stub(legacy_dependencies_yaml: yaml_file)
 
       described_class.needs_conversion?.should be_true
     end
 
     it "is false otherwise" do
       yaml_file = double(:yaml_file, :exist? => false)
-      LicenseFinder.config.stub(legacy_dependencies_yaml: yaml_file)
+      LicenseFinder.config.artifacts.stub(legacy_dependencies_yaml: yaml_file)
 
       described_class.needs_conversion?.should be_false
     end
@@ -41,7 +41,7 @@ describe LicenseFinder::YmlToSql do
   describe ".remove_yml" do
     it "removes the yml file" do
       yaml_file = double(:yaml_file)
-      LicenseFinder.config.stub(legacy_dependencies_yaml: yaml_file)
+      LicenseFinder.config.artifacts.stub(legacy_dependencies_yaml: yaml_file)
 
       yaml_file.should_receive(:delete)
       described_class.remove_yml

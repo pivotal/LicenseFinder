@@ -33,16 +33,17 @@ module LicenseFinder
     end
 
     def self.modifying
-      checksum_before_modifying = if File.exists? LicenseFinder.config.database_uri
-                                    Digest::SHA2.file(LicenseFinder.config.database_uri).hexdigest
+      database = LicenseFinder.config.artifacts.database_uri
+      checksum_before_modifying = if File.exists? database
+                                    Digest::SHA2.file(database).hexdigest
                                   end
       result = yield
-      checksum_after_modifying = Digest::SHA2.file(LicenseFinder.config.database_uri).hexdigest
+      checksum_after_modifying = Digest::SHA2.file(database).hexdigest
 
       unless checksum_after_modifying == checksum_before_modifying
         Reporter.write_reports
       end
-      unless File.exists? LicenseFinder.config.dependencies_html
+      unless File.exists? LicenseFinder.config.artifacts.dependencies_html
         Reporter.write_reports
       end
 

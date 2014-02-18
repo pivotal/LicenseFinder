@@ -28,7 +28,7 @@ module LicenseFinder
     end
 
     def self.yml_path
-      LicenseFinder.config.legacy_dependencies_yaml
+      LicenseFinder.config.artifacts.legacy_dependencies_yaml
     end
 
     def initialize(attrs)

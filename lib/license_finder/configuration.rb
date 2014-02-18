@@ -2,12 +2,12 @@ require "rake"
 
 module LicenseFinder
   class Configuration
-    attr_accessor :whitelist, :ignore_groups, :dependencies_dir, :project_name
+    attr_accessor :whitelist, :ignore_groups, :artifacts, :project_name
 
     def self.ensure_default
       Persistence.init
       default = new(Persistence.get)
-      default.init_dependencies_dir
+      default.artifacts.init
       default
     end
 
@@ -15,47 +15,53 @@ module LicenseFinder
       config = new(Persistence.get.merge('dependencies_file_dir' => './doc/'))
       config.save
 
-      config.init_dependencies_dir
-      FileUtils.mv(Dir["dependencies*"], config.dependencies_dir)
+      config.artifacts.init
+      FileUtils.mv(Dir["dependencies*"], config.artifats.dependencies_dir)
     end
 
     def initialize(config)
-      @whitelist        = Array(config['whitelist'])
-      @ignore_groups    = Array(config["ignore_groups"])
-      @dependencies_dir = Pathname(config['dependencies_file_dir'] || './doc/')
-      @project_name     = config['project_name'] || determine_project_name
+      @whitelist     = Array(config['whitelist'])
+      @ignore_groups = Array(config["ignore_groups"])
+      @artifacts     = Artifacts.new(Pathname(config['dependencies_file_dir'] || './doc/'))
+      @project_name  = config['project_name'] || determine_project_name
     end
 
-    def init_dependencies_dir
-      dependencies_dir.mkpath
-    end
+    class Artifacts < SimpleDelegator
+      def init
+        mkpath
+      end
 
-    def database_uri
-      URI.escape(dependencies_dir.join("dependencies.db").expand_path.to_s)
-    end
+      def dependencies_dir
+        __getobj__
+      end
 
-    def dependencies_text
-      dependencies_dir.join("dependencies.csv")
-    end
+      def database_uri
+        URI.escape(join("dependencies.db").expand_path.to_s)
+      end
 
-    def dependencies_detailed_text
-      dependencies_dir.join("dependencies_detailed.csv")
-    end
+      def dependencies_text
+        join("dependencies.csv")
+      end
 
-    def dependencies_html
-      dependencies_dir.join("dependencies.html")
-    end
+      def dependencies_detailed_text
+        join("dependencies_detailed.csv")
+      end
 
-    def dependencies_markdown
-      dependencies_dir.join("dependencies.md")
-    end
+      def dependencies_html
+        join("dependencies.html")
+      end
 
-    def legacy_dependencies_yaml
-      dependencies_dir.join("dependencies.yml")
-    end
+      def dependencies_markdown
+        join("dependencies.md")
+      end
 
-    def legacy_dependencies_text
-      dependencies_dir.join("dependencies.txt")
+      def legacy_dependencies_yaml
+        join("dependencies.yml")
+      end
+
+      def legacy_dependencies_text
+        join("dependencies.txt")
+      end
     end
 
     def whitelisted?(license_name)
@@ -73,7 +79,7 @@ module LicenseFinder
       {
         'whitelist' => whitelist.uniq,
         'ignore_groups' => ignore_groups.uniq,
-        'dependencies_file_dir' => dependencies_dir.to_s,
+        'dependencies_file_dir' => artifacts.dependencies_dir.to_s,
         'project_name' => project_name
       }
     end

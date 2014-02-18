@@ -16,7 +16,7 @@ module LicenseFinder
         subject = described_class.new({})
         subject.whitelist.should == []
         subject.ignore_groups.should == []
-        subject.dependencies_dir.should == Pathname('./doc/')
+        subject.artifacts.dependencies_dir.should == Pathname('./doc/')
       end
 
       it "should default missing attributes even if they are saved as nils in the YAML file" do
@@ -29,7 +29,7 @@ module LicenseFinder
         subject = described_class.new(attributes)
         subject.whitelist.should == []
         subject.ignore_groups.should == []
-        subject.dependencies_dir.should == Pathname('./doc/')
+        subject.artifacts.dependencies_dir.should == Pathname('./doc/')
         subject.project_name.should_not be_nil
       end
 
@@ -43,25 +43,25 @@ module LicenseFinder
         subject = described_class.new(attributes)
         subject.whitelist.should == %w{a whitelist}
         subject.ignore_groups.should == %w{test development}
-        subject.dependencies_dir.should == Pathname("some/path")
+        subject.artifacts.dependencies_dir.should == Pathname("some/path")
         subject.project_name.should == "my_app"
       end
     end
 
     describe "file paths" do
       it "should be relative to dependencies_dir" do
-        config = described_class.new('dependencies_file_dir' => './elsewhere')
-        config.dependencies_dir.should == Pathname('./elsewhere')
-        config.legacy_dependencies_yaml.should == Pathname('./elsewhere/dependencies.yml')
-        config.dependencies_text.should == Pathname('./elsewhere/dependencies.csv')
-        config.dependencies_html.should == Pathname('./elsewhere/dependencies.html')
+        artifacts = described_class.new('dependencies_file_dir' => './elsewhere').artifacts
+        artifacts.dependencies_dir.should == Pathname('./elsewhere')
+        artifacts.legacy_dependencies_yaml.should == Pathname('./elsewhere/dependencies.yml')
+        artifacts.dependencies_text.should == Pathname('./elsewhere/dependencies.csv')
+        artifacts.dependencies_html.should == Pathname('./elsewhere/dependencies.html')
       end
     end
 
     describe "#database_uri" do
       it "should URI escape absolute path to dependencies_file_dir, even with spaces" do
-        config = described_class.new('dependencies_file_dir' => 'test path')
-        config.database_uri.should =~ %r{test%20path/dependencies\.db$}
+        artifacts = described_class.new('dependencies_file_dir' => 'test path').artifacts
+        artifacts.database_uri.should =~ %r{test%20path/dependencies\.db$}
       end
     end
 
