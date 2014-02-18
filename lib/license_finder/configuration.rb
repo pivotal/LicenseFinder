@@ -15,6 +15,7 @@ module LicenseFinder
       config = new(Persistence.get.merge('dependencies_file_dir' => './doc/'))
       config.save
 
+      config.init_dependencies_dir
       FileUtils.mv(Dir["dependencies*"], config.dependencies_dir)
     end
 
