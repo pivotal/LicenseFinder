@@ -4,7 +4,7 @@ module LicenseFinder
   describe Configuration do
     describe ".ensure_default" do
       it "should init and use saved config" do
-        Configuration::Persistence.should_receive(:init!)
+        Configuration::Persistence.should_receive(:init)
         Configuration::Persistence.stub(:get).and_return('whitelist' => ['Saved License'])
 
         described_class.ensure_default.whitelist.should == ['Saved License']
@@ -137,13 +137,13 @@ module LicenseFinder
       end
     end
 
-    describe ".init!" do
+    describe ".init" do
       it "initializes the config file" do
         file = double(:file, :exist? => false)
         described_class.stub(:file).and_return(file)
 
         FileUtils.should_receive(:cp).with(described_class.send(:file_template), file)
-        described_class.init!
+        described_class.init
       end
 
       it "does nothing if there is already a config file" do
@@ -151,7 +151,7 @@ module LicenseFinder
         described_class.stub(:file).and_return(file)
 
         FileUtils.should_not_receive(:cp)
-        described_class.init!
+        described_class.init
       end
     end
   end

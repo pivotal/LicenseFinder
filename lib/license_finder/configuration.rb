@@ -5,7 +5,7 @@ module LicenseFinder
     attr_accessor :whitelist, :ignore_groups, :dependencies_dir, :project_name
 
     def self.ensure_default
-      Persistence.init!
+      Persistence.init
       default = new(Persistence.get)
       default.init_dependencies_dir
       default
@@ -90,8 +90,8 @@ module LicenseFinder
     module Persistence
       extend self
 
-      def init!
-        init unless inited?
+      def init
+        init! unless inited?
       end
 
       def get
@@ -110,7 +110,7 @@ module LicenseFinder
         file.exist?
       end
 
-      def init
+      def init!
         file_dir.mkpath
         FileUtils.cp(file_template, file)
       end
