@@ -16,7 +16,7 @@ module LicenseFinder
         subject = described_class.new({})
         subject.whitelist.should == []
         subject.ignore_groups.should == []
-        subject.artifacts.dependencies_dir.should == Pathname('./doc/')
+        subject.artifacts.dir.should == Pathname('./doc/')
       end
 
       it "should default missing attributes even if they are saved as nils in the YAML file" do
@@ -29,7 +29,7 @@ module LicenseFinder
         subject = described_class.new(attributes)
         subject.whitelist.should == []
         subject.ignore_groups.should == []
-        subject.artifacts.dependencies_dir.should == Pathname('./doc/')
+        subject.artifacts.dir.should == Pathname('./doc/')
         subject.project_name.should_not be_nil
       end
 
@@ -43,18 +43,18 @@ module LicenseFinder
         subject = described_class.new(attributes)
         subject.whitelist.should == %w{a whitelist}
         subject.ignore_groups.should == %w{test development}
-        subject.artifacts.dependencies_dir.should == Pathname("some/path")
+        subject.artifacts.dir.should == Pathname("some/path")
         subject.project_name.should == "my_app"
       end
     end
 
     describe "file paths" do
-      it "should be relative to dependencies_dir" do
+      it "should be relative to artifacts dir" do
         artifacts = described_class.new('dependencies_file_dir' => './elsewhere').artifacts
-        artifacts.dependencies_dir.should == Pathname('./elsewhere')
-        artifacts.legacy_dependencies_yaml.should == Pathname('./elsewhere/dependencies.yml')
-        artifacts.dependencies_text.should == Pathname('./elsewhere/dependencies.csv')
-        artifacts.dependencies_html.should == Pathname('./elsewhere/dependencies.html')
+        artifacts.dir.should == Pathname('./elsewhere')
+        artifacts.legacy_yaml_file.should == Pathname('./elsewhere/dependencies.yml')
+        artifacts.text_file.should == Pathname('./elsewhere/dependencies.csv')
+        artifacts.html_file.should == Pathname('./elsewhere/dependencies.html')
       end
     end
 

@@ -16,7 +16,7 @@ module LicenseFinder
       config.save
 
       config.artifacts.init
-      FileUtils.mv(Dir["dependencies*"], config.artifats.dependencies_dir)
+      FileUtils.mv(Dir["dependencies*"], config.artifacts.dir)
     end
 
     def initialize(config)
@@ -31,35 +31,39 @@ module LicenseFinder
         mkpath
       end
 
-      def dependencies_dir
+      def dir
         __getobj__
       end
 
       def database_uri
-        URI.escape(join("dependencies.db").expand_path.to_s)
+        URI.escape(database_file.expand_path.to_s)
       end
 
-      def dependencies_text
+      def database_file
+        join("dependencies.db")
+      end
+
+      def text_file
         join("dependencies.csv")
       end
 
-      def dependencies_detailed_text
+      def detailed_text_file
         join("dependencies_detailed.csv")
       end
 
-      def dependencies_html
+      def html_file
         join("dependencies.html")
       end
 
-      def dependencies_markdown
+      def markdown_file
         join("dependencies.md")
       end
 
-      def legacy_dependencies_yaml
+      def legacy_yaml_file
         join("dependencies.yml")
       end
 
-      def legacy_dependencies_text
+      def legacy_text_file
         join("dependencies.txt")
       end
     end
@@ -79,7 +83,7 @@ module LicenseFinder
       {
         'whitelist' => whitelist.uniq,
         'ignore_groups' => ignore_groups.uniq,
-        'dependencies_file_dir' => artifacts.dependencies_dir.to_s,
+        'dependencies_file_dir' => artifacts.dir.to_s,
         'project_name' => project_name
       }
     end
