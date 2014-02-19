@@ -34,16 +34,18 @@ module LicenseFinder
 
     def self.modifying
       database = LicenseFinder.config.artifacts.database_file
-      checksum_before_modifying = if File.exists? database
+      checksum_before_modifying = if database.exist?
                                     Digest::SHA2.file(database).hexdigest
                                   end
       result = yield
-      checksum_after_modifying = Digest::SHA2.file(database).hexdigest
+      checksum_after_modifying = if database.exist?
+                                   Digest::SHA2.file(database).hexdigest
+                                 end
 
       unless checksum_after_modifying == checksum_before_modifying
         Reporter.write_reports
       end
-      unless File.exists? LicenseFinder.config.artifacts.html_file
+      unless LicenseFinder.config.artifacts.html_file.exist?
         Reporter.write_reports
       end
 
