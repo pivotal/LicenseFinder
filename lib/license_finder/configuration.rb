@@ -4,17 +4,24 @@ module LicenseFinder
   class Configuration
     def self.ensure_default
       Persistence.init
-      default = new(Persistence.get)
-      default.artifacts.init
-      default
+      prepare(Persistence.get)
     end
 
     def self.move!
-      config = new(Persistence.get.merge('dependencies_file_dir' => './doc/'))
+      config = prepare(Persistence.get.merge('dependencies_file_dir' => './doc/'))
       config.save
 
-      config.artifacts.init
       FileUtils.mv(Dir["dependencies*"], config.artifacts.dir)
+    end
+
+    # It's nice to keep destructive file system manipulation out of the
+    # initializer.  That reduces test polution, but is slightly inconvenient
+    # for methods like Configuration.ensure_default and Configuration.move!,
+    # which need a working artifacts directory. This helper is a compromise.
+    def self.prepare(config)
+      result = new(config)
+      result.artifacts.init
+      result
     end
 
     attr_accessor :whitelist, :ignore_groups, :artifacts, :project_name
