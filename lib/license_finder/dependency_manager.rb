@@ -33,14 +33,10 @@ module LicenseFinder
     end
 
     def self.modifying
-      database = LicenseFinder.config.artifacts.database_file
-      checksum_before_modifying = if database.exist?
-                                    Digest::SHA2.file(database).hexdigest
-                                  end
+      database_file = LicenseFinder.config.artifacts.database_file
+      checksum_before_modifying = checksum(database_file)
       result = yield
-      checksum_after_modifying = if database.exist?
-                                   Digest::SHA2.file(database).hexdigest
-                                 end
+      checksum_after_modifying = checksum(database_file)
 
       unless checksum_after_modifying == checksum_before_modifying
         Reporter.write_reports
@@ -66,6 +62,12 @@ module LicenseFinder
       dep = scope.first(name: name)
       raise Error.new("could not find dependency named #{name}") unless dep
       dep
+    end
+
+    def self.checksum(database_file)
+      if database_file.exist?
+        Digest::SHA2.file(database_file).hexdigest
+      end
     end
   end
 end
