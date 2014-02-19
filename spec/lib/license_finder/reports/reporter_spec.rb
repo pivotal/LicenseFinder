@@ -8,10 +8,10 @@ module LicenseFinder
       before do
         Dependency.stub(:all) { [double(:dep)] }
 
-        MarkdownReport.stub_chain(:new, :to_s) { 'markdown report' }
-        DetailedTextReport.stub_chain(:new, :to_s) { 'detailed csv report' }
-        TextReport.stub_chain(:new, :to_s) { 'csv report' }
-        HtmlReport.stub_chain(:new, :to_s) { 'html report' }
+        MarkdownReport.stub(:of) { 'markdown report' }
+        DetailedTextReport.stub(:of) { 'detailed csv report' }
+        TextReport.stub(:of) { 'csv report' }
+        HtmlReport.stub(:of) { 'html report' }
       end
 
       it "writes an html file" do
