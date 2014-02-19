@@ -2,8 +2,6 @@ require "rake"
 
 module LicenseFinder
   class Configuration
-    attr_accessor :whitelist, :ignore_groups, :artifacts, :project_name
-
     def self.ensure_default
       Persistence.init
       default = new(Persistence.get)
@@ -19,11 +17,43 @@ module LicenseFinder
       FileUtils.mv(Dir["dependencies*"], config.artifacts.dir)
     end
 
+    attr_accessor :whitelist, :ignore_groups, :artifacts, :project_name
+
     def initialize(config)
       @whitelist     = Array(config['whitelist'])
       @ignore_groups = Array(config["ignore_groups"])
       @artifacts     = Artifacts.new(Pathname(config['dependencies_file_dir'] || './doc/'))
       @project_name  = config['project_name'] || determine_project_name
+    end
+
+    def whitelisted?(license_name)
+      license = License.find_by_name(license_name) || license_name
+      whitelisted_licenses.include? license
+    end
+
+    def save
+      Persistence.set(to_hash)
+    end
+
+    private
+
+    def to_hash
+      {
+        'whitelist' => whitelist.uniq,
+        'ignore_groups' => ignore_groups.uniq,
+        'dependencies_file_dir' => artifacts.dir.to_s,
+        'project_name' => project_name
+      }
+    end
+
+    def whitelisted_licenses
+      whitelist.map do |license_name|
+        License.find_by_name(license_name) || license_name
+      end.compact
+    end
+
+    def determine_project_name
+      Pathname.pwd.basename.to_s
     end
 
     class Artifacts < SimpleDelegator
@@ -66,36 +96,6 @@ module LicenseFinder
       def legacy_text_file
         join("dependencies.txt")
       end
-    end
-
-    def whitelisted?(license_name)
-      license = License.find_by_name(license_name) || license_name
-      whitelisted_licenses.include? license
-    end
-
-    def save
-      Persistence.set(to_hash)
-    end
-
-    private
-
-    def to_hash
-      {
-        'whitelist' => whitelist.uniq,
-        'ignore_groups' => ignore_groups.uniq,
-        'dependencies_file_dir' => artifacts.dir.to_s,
-        'project_name' => project_name
-      }
-    end
-
-    def whitelisted_licenses
-      whitelist.map do |license_name|
-        License.find_by_name(license_name) || license_name
-      end.compact
-    end
-
-    def determine_project_name
-      Pathname.pwd.basename.to_s
     end
 
     module Persistence
