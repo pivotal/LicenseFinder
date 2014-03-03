@@ -1,4 +1,5 @@
 require "rake"
+require "delegate"
 
 module LicenseFinder
   class Configuration
