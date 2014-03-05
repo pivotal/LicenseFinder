@@ -14,7 +14,7 @@ module LicenseFinder
     end
 
     def self.active?
-      File.exists?(package_path)
+      package_path.exist?
     end
 
     private
@@ -40,7 +40,7 @@ module LicenseFinder
     end
 
     def self.package_path
-      Pathname.new('package.json').expand_path
+      Pathname.new('package.json')
     end
   end
 end

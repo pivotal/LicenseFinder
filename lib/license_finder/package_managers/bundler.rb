@@ -10,7 +10,7 @@ module LicenseFinder
       end
 
       def active?
-        File.exists?(gemfile_path)
+        gemfile_path.exist?
       end
 
       def gemfile_path

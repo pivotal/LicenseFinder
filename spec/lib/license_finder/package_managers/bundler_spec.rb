@@ -64,26 +64,20 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:gemfile) { Pathname.new('Gemfile').expand_path }
+      let(:gemfile) { double(:gemfile_file) }
 
-      before :each do
-        allow(File).to receive(:exists?).and_call_original
+      before do
+        Bundler.stub(gemfile_path: gemfile)
       end
 
-      context 'without a Gemfile' do
-        it 'returns false' do
-          allow(File).to receive(:exists?).with(gemfile).and_return(false)
-
-          Bundler.active?.should == false
-        end
+      it 'is true with a gemfile file' do
+        gemfile.stub(:exist? => true)
+        expect(Bundler).to be_active
       end
 
-      context 'with a Gemfile' do
-        it 'returns true' do
-          allow(File).to receive(:exists?).with(gemfile).and_return(true)
-
-          Bundler.active?.should == true
-        end
+      it 'is false without a gemfile file' do
+        gemfile.stub(:exist? => false)
+        expect(Bundler).to_not be_active
       end
     end
   end
