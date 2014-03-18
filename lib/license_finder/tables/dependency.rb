@@ -12,7 +12,7 @@ module LicenseFinder
       end
 
       def manually_managed
-        where(manual: true)
+        where(added_manually: true)
       end
 
       def obsolete(current)
@@ -37,22 +37,22 @@ module LicenseFinder
     end
 
     def approve!
-      self.manually_approved = true
+      self.approved_manually = true
       save
     end
 
     def approved?
-      (license && license.whitelisted?) || manually_approved?
+      (license && license.whitelisted?) || approved_manually?
     end
 
     def set_license_manually!(license_name)
       self.license = LicenseAlias.named(license_name)
-      self.license_manual = true
+      self.license_assigned_manually = true
       save
     end
 
     def apply_better_license(license_name)
-      return if license_manual
+      return if license_assigned_manually?
       if license.nil? || license.name != license_name
         self.license = LicenseAlias.named(license_name)
       end

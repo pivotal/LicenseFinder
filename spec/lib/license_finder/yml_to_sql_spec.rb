@@ -60,7 +60,7 @@ describe LicenseFinder::YmlToSql do
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        saved_dep.should_not be_manual
+        saved_dep.should_not be_added_manually
       end
     end
 
@@ -71,7 +71,7 @@ describe LicenseFinder::YmlToSql do
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        saved_dep.should be_manual
+        saved_dep.should be_added_manually
       end
     end
 
@@ -85,7 +85,7 @@ describe LicenseFinder::YmlToSql do
       saved_dep.summary.should == "some summary"
       saved_dep.description.should == "some description"
       saved_dep.homepage.should == "www.homepage.com"
-      saved_dep.manually_approved.should be_true
+      saved_dep.should be_approved_manually
     end
 
     it "associates the license to the dependency" do

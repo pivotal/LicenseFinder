@@ -14,7 +14,7 @@ module LicenseFinder
       raise Error.new("#{name} dependency already exists") unless Dependency.where(name: name).empty?
 
       modifying {
-        dependency = Dependency.new(manual: true, name: name, version: version)
+        dependency = Dependency.new(added_manually: true, name: name, version: version)
         dependency.license = LicenseAlias.named(license)
         dependency.save
       }

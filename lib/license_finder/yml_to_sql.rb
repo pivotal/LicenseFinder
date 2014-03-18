@@ -40,7 +40,7 @@ module LicenseFinder
     def convert
       @dep = create_dependency
       @dep.license = create_license
-      @dep.manual = manually_managed?
+      @dep.added_manually = manually_managed?
       associate_bundler_groups
       @dep.save
     end
@@ -93,7 +93,7 @@ module LicenseFinder
           'summary' => 'summary',
           'description' => 'description',
           'homepage' => 'homepage',
-          'approved' => 'manually_approved'
+          'approved' => 'approved_manually'
         }
 
         def self.convert(attrs)
