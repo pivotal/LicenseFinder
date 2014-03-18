@@ -29,20 +29,20 @@ module LicenseFinder
       end
     end
 
-    describe ".create_manually_managed" do
+    describe ".manually_add" do
       it "should add a Dependency" do
         expect do
-          described_class.create_manually_managed("MIT", "js_dep", "0.0.0")
+          described_class.manually_add("MIT", "js_dep", "0.0.0")
         end.to change(Dependency, :count).by(1)
       end
 
       it "should mark the dependency as manual" do
-        described_class.create_manually_managed("MIT", "js_dep", "0.0.0")
+        described_class.manually_add("MIT", "js_dep", "0.0.0")
           .should be_added_manually
       end
 
       it "should set the appropriate values" do
-        dep = described_class.create_manually_managed("GPL", "js_dep", "0.0.0")
+        dep = described_class.manually_add("GPL", "js_dep", "0.0.0")
         dep.name.should == "js_dep"
         dep.version.should == "0.0.0"
         dep.license.name.should == "GPL"
@@ -51,23 +51,23 @@ module LicenseFinder
 
       it "should complain if the dependency already exists" do
         Dependency.create(name: "current dependency 1")
-        expect { described_class.create_manually_managed("GPL", "current dependency 1", "0.0.0") }
+        expect { described_class.manually_add("GPL", "current dependency 1", "0.0.0") }
           .to raise_error(LicenseFinder::Error)
       end
 
       it "re-uses an existing, unassociated, license alias" do
         existing_license = LicenseAlias.named("existing license")
 
-        dep = described_class.create_manually_managed("existing license", "js_dep", "0.0.0")
+        dep = described_class.manually_add("existing license", "js_dep", "0.0.0")
         dep.license.should == existing_license
       end
     end
 
-    describe ".destroy_manually_managed" do
+    describe ".manually_remove" do
       it "should remove a manually managed Dependency" do
-        described_class.create_manually_managed("GPL", "a manually managed dep", nil)
+        described_class.manually_add("GPL", "a manually managed dep", nil)
         expect do
-          described_class.destroy_manually_managed("a manually managed dep")
+          described_class.manually_remove("a manually managed dep")
         end.to change(Dependency, :count).by(-1)
       end
 
@@ -75,7 +75,7 @@ module LicenseFinder
         Dependency.create(name: "a bundler dep")
         expect do
           expect do
-            described_class.destroy_manually_managed("a bundler dep")
+            described_class.manually_remove("a bundler dep")
           end.to raise_error(LicenseFinder::Error)
         end.to_not change(Dependency, :count)
       end

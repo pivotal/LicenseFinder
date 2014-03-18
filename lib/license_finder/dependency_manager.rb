@@ -6,11 +6,11 @@ module LicenseFinder
       modifying {
         current_dependencies = PackageSaver.save_all(current_packages)
 
-        Dependency.managed.obsolete(current_dependencies).each(&:destroy)
+        Dependency.added_automatically.obsolete(current_dependencies).each(&:destroy)
       }
     end
 
-    def self.create_manually_managed(license, name, version)
+    def self.manually_add(license, name, version)
       raise Error.new("#{name} dependency already exists") unless Dependency.where(name: name).empty?
 
       modifying {
@@ -20,8 +20,8 @@ module LicenseFinder
       }
     end
 
-    def self.destroy_manually_managed(name)
-      modifying { find_by_name(name, Dependency.manually_managed).destroy }
+    def self.manually_remove(name)
+      modifying { find_by_name(name, Dependency.added_manually).destroy }
     end
 
     def self.license!(name, license)
