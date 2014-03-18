@@ -103,23 +103,6 @@ module DSL
       shell_out("cd #{app_path} && pod install --no-integrate")
     end
 
-    def update_gem(name, attrs)
-      file_contents = YAML.load(File.read(dependencies_file_path))
-
-      index = file_contents.index { |gem| gem['name'] == name }
-      file_contents[index].merge!(attrs)
-
-      File.open(dependencies_file_path, "w") do |f|
-        f.puts file_contents.to_yaml
-      end
-    end
-
-    def append_to_file(filename, text)
-      File.open(File.join(app_path, filename), "a") do |f|
-        f.puts text
-      end
-    end
-
     def add_dependency_to_app(gem_name, options={})
       license = options.fetch(:license)
       summary = options.fetch(:summary, "")
@@ -189,10 +172,6 @@ module DSL
       File.join(app_path, 'doc')
     end
 
-    def dependencies_file_path
-      File.join(doc_path, 'dependencies.yml')
-    end
-
     def dependencies_html_path
       File.join(doc_path, 'dependencies.html')
     end
@@ -230,11 +209,6 @@ module DSL
 
     def mvn_install
       shell_out("cd #{app_path} && mvn install")
-    end
-
-    def modifying_dependencies_file
-      FileUtils.mkdir_p(File.dirname(dependencies_file_path))
-      File.open(dependencies_file_path, 'w+') { |f| yield f }
     end
 
     private
