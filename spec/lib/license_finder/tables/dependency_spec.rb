@@ -13,7 +13,7 @@ module LicenseFinder
       it "should return all unapproved dependencies" do
         dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
         approved = Dependency.create(name: "approved dependency", version: '0.0.1')
-        approved.manually_approved = true
+        approved.approved_manually = true
         approved.save
         whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
         whitelisted.license = LicenseAlias.create(name: 'MIT')
@@ -50,22 +50,22 @@ module LicenseFinder
     end
 
     describe "#approved?" do
-      let(:not_manually_approved) { Dependency.create(name: 'some gem', manually_approved: false).reload }
-      let(:manually_approved) { Dependency.create(name: 'some gem', manually_approved: true).reload }
+      let(:not_approved_manually) { Dependency.create(name: 'some gem', approved_manually: false).reload }
+      let(:approved_manually) { Dependency.create(name: 'some gem', approved_manually: true).reload }
 
       it "is true if its license is whitelisted" do
-        not_manually_approved.stub_chain(:license, whitelisted?: true)
-        not_manually_approved.should be_approved
+        not_approved_manually.stub_chain(:license, whitelisted?: true)
+        not_approved_manually.should be_approved
       end
 
       it "is true if it has been approved" do
-        manually_approved.stub_chain(:license, whitelisted?: false)
-        manually_approved.should be_approved
+        approved_manually.stub_chain(:license, whitelisted?: false)
+        approved_manually.should be_approved
       end
 
       it "is false otherwise" do
-        not_manually_approved.stub_chain(:license, whitelisted?: false)
-        not_manually_approved.should_not be_approved
+        not_approved_manually.stub_chain(:license, whitelisted?: false)
+        not_approved_manually.should_not be_approved
       end
     end
 
@@ -74,9 +74,9 @@ module LicenseFinder
       let(:dependency) { Dependency.create(name: 'foogem') }
 
       it "sets manual license to true" do
-        dependency.license_manual.should be_false
+        dependency.should_not be_license_assigned_manually
         dependency.set_license_manually!('Updated')
-        dependency.license_manual.should be_true
+        dependency.should be_license_assigned_manually
       end
 
       it "modifies the license" do
@@ -123,7 +123,7 @@ module LicenseFinder
 
       it "keeps a manually assigned license" do
         dependency.license = LicenseAlias.named("manual")
-        dependency.license_manual = true
+        dependency.license_assigned_manually = true
 
         dependency.apply_better_license "new"
         dependency.license.name.should == "manual"
@@ -152,7 +152,7 @@ module LicenseFinder
 
       it "does not change the approval" do
         dependency.license = LicenseAlias.named("old")
-        dependency.manually_approved = true
+        dependency.approved_manually = true
 
         dependency.apply_better_license "new license"
         dependency.should be_approved

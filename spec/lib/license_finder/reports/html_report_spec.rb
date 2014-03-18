@@ -5,7 +5,7 @@ module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
       let(:dependency) do
-        dep = Dependency.new name: "the-name", manually_approved: true
+        dep = Dependency.new name: "the-name", approved_manually: true
         dep.license = LicenseAlias.create name: 'MIT'
         dep
       end
@@ -23,7 +23,7 @@ module LicenseFinder
       end
 
       context "when the dependency is not approved" do
-        before { dependency.manually_approved = false }
+        before { dependency.approved_manually = false }
 
         it "should not add an approved class to he dependency's container" do
           should have_selector ".unapproved"

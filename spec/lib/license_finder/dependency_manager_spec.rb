@@ -14,10 +14,10 @@ module LicenseFinder
       let(:gem1) { double(:package) }
       let(:gem2) { double(:package) }
 
-      it "destroys every dependency except for the ones Bundler reports as 'current' or are marked as 'manual'" do
+      it "destroys every dependency except for the ones Bundler reports as 'current' or are marked as 'added_manually'" do
         cur1 = Dependency.create(name: "current dependency 1")
         cur2 = Dependency.create(name: "current dependency 2")
-        man1 = Dependency.create(name: "manual dependency", manual: true)
+        man1 = Dependency.create(name: "manual dependency", added_manually: true)
         Dependency.create(name: "old dependency 1")
         Dependency.create(name: "old dependency 2")
 
@@ -39,7 +39,7 @@ module LicenseFinder
 
       it "should mark the dependency as manual" do
         described_class.create_manually_managed("MIT", "js_dep", "0.0.0")
-          .should be_manual
+          .should be_added_manually
       end
 
       it "should set the appropriate values" do
