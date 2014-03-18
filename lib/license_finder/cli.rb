@@ -43,7 +43,7 @@ module LicenseFinder
       desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler, NPM, etc"
       def add(license, name, version = nil)
         die_on_error {
-          DependencyManager.create_manually_managed(license, name, version)
+          DependencyManager.manually_add(license, name, version)
           DependencyManager.approve!(name) if options[:approve]
         }
         if options[:approve]
@@ -56,7 +56,7 @@ module LicenseFinder
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler, NPM, etc"
       def remove(name)
         die_on_error {
-          DependencyManager.destroy_manually_managed(name)
+          DependencyManager.manually_remove(name)
         }
 
         say "The #{name} dependency has been removed.", :green

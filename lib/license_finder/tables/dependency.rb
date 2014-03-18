@@ -7,11 +7,11 @@ module LicenseFinder
     many_to_many :bundler_groups
 
     dataset_module do
-      def managed
-        manually_managed.invert
+      def added_automatically
+        added_manually.invert
       end
 
-      def manually_managed
+      def added_manually
         where(added_manually: true)
       end
 
