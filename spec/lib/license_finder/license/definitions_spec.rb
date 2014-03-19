@@ -1,32 +1,48 @@
 require 'spec_helper'
 
+describe LicenseFinder::License::Definitions do
+  it "should create unrecognized licenses" do
+    license = described_class.build_unrecognized("foo", [])
+    license.name.should == "foo"
+    license.url.should be_nil
+    license.should be_matches_name("foo")
+    license.should_not be_matches_text("foo")
+    license.should_not be_whitelisted
+  end
+
+  it "should whitelist unrecognized licenses" do
+    license = described_class.build_unrecognized("foo", ["foo"])
+    license.should be_whitelisted
+  end
+end
+
 describe LicenseFinder::License, "Apache2" do
-  it "should be findable" do |e|
-    described_class.find_by_name("Apache2").should be
+  it "should be recognized" do |e|
+    described_class.find_by_name("Apache2").url.should be
   end
 end
 
 describe LicenseFinder::License, "BSD" do
-  it "should be findable" do |e|
-    described_class.find_by_name("BSD").should be
+  it "should be recognized" do |e|
+    described_class.find_by_name("BSD").url.should be
   end
 end
 
 describe LicenseFinder::License, "GPLv2" do
-  it "should be findable" do
-    described_class.find_by_name("GPLv2").should be
+  it "should be recognized" do
+    described_class.find_by_name("GPLv2").url.should be
   end
 end
 
 describe LicenseFinder::License, "ISC" do
-  it "should be findable" do
-    described_class.find_by_name("ISC").should be
+  it "should be recognized" do
+    described_class.find_by_name("ISC").url.should be
   end
 end
 
 describe LicenseFinder::License, "LGPL" do
-  it "should be findable" do
-    described_class.find_by_name("LGPL").should be
+  it "should be recognized" do
+    described_class.find_by_name("LGPL").url.should be
   end
 end
 
@@ -119,8 +135,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 end
 
 describe LicenseFinder::License, "Python" do
-  it "should be findable" do
-    described_class.find_by_name("Python").should be
+  it "should be recognized" do
+    described_class.find_by_name("Python").url.should be
   end
 end
 
@@ -143,7 +159,7 @@ describe LicenseFinder::License, "Ruby" do
 end
 
 describe LicenseFinder::License, "SimplifiedBSD" do
-  it "should be findable" do
-    described_class.find_by_name("SimplifiedBSD").should be
+  it "should be recognized" do
+    described_class.find_by_name("SimplifiedBSD").url.should be
   end
 end

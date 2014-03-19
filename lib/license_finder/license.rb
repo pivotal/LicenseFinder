@@ -2,63 +2,50 @@ module LicenseFinder
   class License
     class << self
       def all
-        @all ||= []
+        @all ||= Definitions.build_all(LicenseFinder.config.whitelist)
       end
 
       def find_by_name(name)
-        all.detect { |l| l.matches_name? name } || UnknownLicense.new(name)
+        all.detect { |l| l.matches_name? name } || Definitions.build_unrecognized(name, LicenseFinder.config.whitelist)
       end
 
       def find_by_text(text)
-        all.detect { |l| l.matches_text? text } || UnknownLicense.new
+        all.detect { |l| l.matches_text? text }
       end
     end
 
+    autoload :Definitions,   "license_finder/license/definitions"
+    autoload :Names,         "license_finder/license/names"
     autoload :Text,          "license_finder/license/text"
     autoload :Template,      "license_finder/license/template"
     autoload :Matcher,       "license_finder/license/matcher"
     autoload :HeaderMatcher, "license_finder/license/header_matcher"
     autoload :AnyMatcher,    "license_finder/license/any_matcher"
+    autoload :NoneMatcher,   "license_finder/license/none_matcher"
 
-    attr_reader :url, :pretty_name
+    attr_reader :url
 
     def initialize(settings)
-      @short_name  = settings.fetch(:short_name)
-      @pretty_name = settings.fetch(:pretty_name, short_name)
-      @other_names = settings.fetch(:other_names, [])
+      @names       = settings.fetch(:names)
       @url         = settings.fetch(:url)
-      @matcher     = settings.fetch(:matcher) { Matcher.from_template(Template.named(short_name)) }
+      @whitelisted = settings.fetch(:whitelisted)
+      @matcher     = settings.fetch(:matcher)
+    end
+
+    def whitelisted?
+      @whitelisted
+    end
+
+    def name
+      @names.pretty_name
     end
 
     def matches_name?(name)
-      names.map(&:downcase).include? name.to_s.downcase
+      @names.matches_name?(name)
     end
 
     def matches_text?(text)
-      matcher.matches_text?(text)
-    end
-
-    private
-
-    attr_reader :short_name, :other_names, :matcher
-
-    def names
-      ([short_name, pretty_name] + other_names).uniq
-    end
-  end
-
-  class UnknownLicense
-    attr_reader :pretty_name
-
-    def initialize(name = nil)
-      @pretty_name = name
-    end
-    def url; end
-
-    def ==(other)
-      pretty_name.eql?(other.pretty_name)
+      @matcher.matches_text?(text)
     end
   end
 end
-
-require LicenseFinder::ROOT_PATH.join("license_finder", "license", "definitions.rb")

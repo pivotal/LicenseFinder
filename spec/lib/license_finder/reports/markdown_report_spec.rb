@@ -4,23 +4,21 @@ module LicenseFinder
   describe MarkdownReport do
     describe '#to_s' do
       let(:dep1) do
-        dependency = Dependency.new(
+        Dependency.new(
           'name' => 'gem_a',
           'version' => '1.0',
-          'manually_approved' => false
+          'manually_approved' => false,
+          'license' => License.find_by_name('other')
         )
-        dependency.license = LicenseAlias.create(name: 'MIT')
-        dependency
       end
 
       let(:dep2) do
-        dependency = Dependency.new(
+        Dependency.new(
           'name' => 'gem_b',
           'version' => '2.3',
-          'manually_approved' => true
+          'manually_approved' => true,
+          'license' => License.find_by_name('BSD')
         )
-        dependency.license = LicenseAlias.create(name: 'BSD')
-        dependency
       end
 
       subject { MarkdownReport.new([dep2, dep1]).to_s }
@@ -40,7 +38,7 @@ module LicenseFinder
 
       it "should display a summary" do
         should match "## Summary"
-        should match /\s+\* 1 MIT/
+        should match /\s+\* 1 other/
         should match /\s+\* 1 BSD/
       end
 

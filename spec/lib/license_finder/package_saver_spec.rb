@@ -34,7 +34,7 @@ module LicenseFinder
           summary: 'old summary',
           description: 'old desription',
           homepage: 'old homepage',
-          license: LicenseAlias.named('old license')
+          license_name: 'old license'
         )
         dep.add_bundler_group BundlerGroup.named("old group")
         dep.add_child Dependency.named("old child")

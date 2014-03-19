@@ -5,9 +5,7 @@ module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
       let(:dependency) do
-        dep = Dependency.new name: "the-name", manually_approved: true
-        dep.license = LicenseAlias.create name: 'MIT'
-        dep
+        Dependency.new name: "the-name", manually_approved: true, license: License.find_by_name('MIT')
       end
 
       subject { Capybara.string(HtmlReport.new([dependency]).to_s) }
@@ -23,7 +21,10 @@ module LicenseFinder
       end
 
       context "when the dependency is not approved" do
-        before { dependency.manually_approved = false }
+        before {
+          dependency.license = License.find_by_name('GPL')
+          dependency.manually_approved = false
+        }
 
         it "should not add an approved class to he dependency's container" do
           should have_selector ".unapproved"

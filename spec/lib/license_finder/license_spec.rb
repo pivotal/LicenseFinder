@@ -7,13 +7,11 @@ module LicenseFinder
         License.find_by_name("Apache2").should be_a License
       end
 
-      context "when license not found" do
-        it "should return UnknownLicense with the name" do
-          license = License.find_by_name("New License")
+      it "should make an unrecognized license" do
+        license = License.find_by_name("not a known license")
 
-          expect(license).to be_a UnknownLicense
-          expect(license.pretty_name).to eq "New License"
-        end
+        expect(license).to be_a License
+        expect(license.name).to eq "not a known license"
       end
     end
 
@@ -25,17 +23,27 @@ module LicenseFinder
       it "returns UnknownLicense with nil name if not found" do
         license = License.find_by_text("foo")
 
-        expect(license).to be_a UnknownLicense
-        expect(license.pretty_name).to be_nil
+        expect(license).to be_nil
       end
     end
 
     def make_license(settings = {})
-      described_class.new({
+      settings = {
         short_name: "Default Short Name",
         url: "http://example.com/license",
+        whitelisted: false,
         matcher: License::Matcher.from_text('Default Matcher')
-      }.merge(settings))
+      }.merge(settings)
+
+      names = License::Names.new(settings)
+
+      License.new(settings.merge(names: names))
+    end
+
+    describe "#whitelisted?" do
+      it "is true if the settings say it is" do
+        make_license(whitelisted: true).should be_whitelisted
+      end
     end
 
     describe "#matches_name?" do
@@ -85,7 +93,7 @@ module LicenseFinder
     end
 
     it "should default pretty_name to short_name" do
-      make_license.pretty_name.should == "Default Short Name"
+      make_license.name.should == "Default Short Name"
     end
   end
 end

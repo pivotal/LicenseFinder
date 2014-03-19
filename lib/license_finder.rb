@@ -11,7 +11,6 @@ module LicenseFinder
   autoload :DependencyManager,    'license_finder/dependency_manager'
   autoload :PackageSaver,         'license_finder/package_saver'
   autoload :License,              'license_finder/license'
-  autoload :LicenseUrl,           'license_finder/license_url'
   autoload :PossibleLicenseFile,  'license_finder/possible_license_file'
   autoload :PossibleLicenseFiles, 'license_finder/possible_license_files'
   autoload :Configuration,        'license_finder/configuration'
@@ -29,7 +28,6 @@ module LicenseFinder
 
   autoload :BundlerGroup,         'license_finder/tables/bundler_group'
   autoload :Dependency,           'license_finder/tables/dependency'
-  autoload :LicenseAlias,         'license_finder/tables/license_alias'
   autoload :YmlToSql,             'license_finder/yml_to_sql'
 
   autoload :DependencyReport,     'license_finder/reports/dependency_report'

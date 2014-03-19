@@ -54,13 +54,6 @@ module LicenseFinder
         expect { described_class.create_manually_managed("GPL", "current dependency 1", "0.0.0") }
           .to raise_error(Error)
       end
-
-      it "re-uses an existing, unassociated, license alias" do
-        existing_license = LicenseAlias.named("existing license")
-
-        dep = described_class.create_manually_managed("existing license", "js_dep", "0.0.0")
-        dep.license.should == existing_license
-      end
     end
 
     describe ".destroy_manually_managed" do
@@ -84,6 +77,8 @@ module LicenseFinder
     describe ".approve!" do
       it "approves the dependency" do
         dep = Dependency.named("current dependency")
+        dep.license = License.find_by_name('not approved')
+        dep.save
         dep.reload.should_not be_approved
         described_class.approve!("current dependency")
         dep.reload.should be_approved

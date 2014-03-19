@@ -39,7 +39,6 @@ module LicenseFinder
 
     def convert
       @dep = create_dependency
-      @dep.license = create_license
       @dep.manual = manually_managed?
       associate_bundler_groups
       @dep.save
@@ -65,10 +64,6 @@ module LicenseFinder
       Sql::Dependency.convert(legacy_attrs)
     end
 
-    def create_license
-      LicenseAlias.find_or_create(name: legacy_attrs['license'])
-    end
-
     def find_children
       Sql::Dependency.where(name: legacy_attrs['children'])
     end
@@ -83,7 +78,6 @@ module LicenseFinder
       class Dependency < Sequel::Model
         plugin :boolean_readers
 
-        many_to_one :license, class: LicenseAlias
         many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
         many_to_many :bundler_groups
 
@@ -93,7 +87,8 @@ module LicenseFinder
           'summary' => 'summary',
           'description' => 'description',
           'homepage' => 'homepage',
-          'approved' => 'manually_approved'
+          'approved' => 'manually_approved',
+          'license' => 'license_name'
         }
 
         def self.convert(attrs)

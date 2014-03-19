@@ -10,12 +10,11 @@ module LicenseFinder
       end
 
       it "should return all unapproved dependencies" do
-        dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
-        approved = Dependency.create(name: "approved dependency", version: '0.0.1')
+        dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1', 'license_name' => 'other')
+        approved = Dependency.create(name: "approved dependency", version: '0.0.1', 'license_name' => 'other')
         approved.manually_approved = true
         approved.save
-        whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
-        whitelisted.license = LicenseAlias.create(name: 'MIT')
+        whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1', 'license_name' => License.find_by_name('MIT'))
         whitelisted.save
 
         unapproved = Dependency.unapproved
@@ -69,7 +68,6 @@ module LicenseFinder
     end
 
     describe "#set_license_manually!" do
-      let(:license) { LicenseAlias.create(name: 'foolicense') }
       let(:dependency) { Dependency.create(name: 'foogem') }
 
       it "sets manual license to true" do
@@ -79,9 +77,8 @@ module LicenseFinder
       end
 
       it "modifies the license" do
-        LicenseAlias.should_receive(:named).with('Updated').and_return(license)
         dependency.set_license_manually!('Updated')
-        dependency.reload.license.should == license
+        dependency.reload.license.name.should == 'Updated'
       end
     end
 
@@ -121,9 +118,7 @@ module LicenseFinder
       let(:dependency) { Dependency.named('some gem') }
 
       it "keeps a manually assigned license" do
-        dependency.license = LicenseAlias.named("manual")
-        dependency.license_manual = true
-
+        dependency.set_license_manually!("manual")
         dependency.apply_better_license "new"
         dependency.license.name.should == "manual"
       end
@@ -133,24 +128,15 @@ module LicenseFinder
         dependency.license.name.should == "new license"
       end
 
-      it "re-uses an existing, unassociated, license alias" do
-        dependency.license = LicenseAlias.named("old")
-
-        new_license = LicenseAlias.named("new license")
-
-        dependency.apply_better_license "new license"
-        dependency.license.should == new_license
-      end
-
       it "updates the license's name" do
-        dependency.license = LicenseAlias.named("old")
+        dependency.license = License.find_by_name("old")
 
         dependency.apply_better_license "new license"
         dependency.license.name.should == "new license"
       end
 
       it "does not change the approval" do
-        dependency.license = LicenseAlias.named("old")
+        dependency.license = License.find_by_name("old")
         dependency.manually_approved = true
 
         dependency.apply_better_license "new license"
