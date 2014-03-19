@@ -1,5 +1,3 @@
-require 'time'
-
 module LicenseFinder
   class FormattedReport < DependencyReport
     private
