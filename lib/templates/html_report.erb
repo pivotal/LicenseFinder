@@ -71,9 +71,12 @@
               <span class="badge badge-success">&#x2713;</span>
             </p>
             <p><%= dependency.manual_approval.notes %></p>
-            <% if dependency.manual_approval.approver -%>
-              <small><%= dependency.manual_approval.approver %></small>
-            <% end -%>
+            <small>
+              <% if dependency.manual_approval.approver -%>
+                <%= dependency.manual_approval.approver %>,
+              <% end -%>
+              <time datetime="<%= dependency.manual_approval.created_at.utc.iso8601 %>"><%= dependency.manual_approval.created_at.to_date %></time>
+            </small>
           </blockquote>
         <% elsif dependency.whitelisted? -%>
           <blockquote class="pull-right">
