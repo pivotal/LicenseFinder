@@ -22,10 +22,10 @@ module LicenseFinder
 
         it "has an --approve option to approve the added dependency" do
           DependencyManager.should_receive(:manually_add).with("MIT", "js_dep", "1.2.3")
-          DependencyManager.should_receive(:approve!).with("js_dep")
+          DependencyManager.should_receive(:approve!).with("js_dep", "Julian", "We really need this")
 
           silence_stdout do
-            Main.start(["dependencies", "add", "--approve", "MIT", "js_dep", "1.2.3"])
+            Main.start(["dependencies", "add", "--approve", "--approver", "Julian", "--message", "We really need this", "MIT", "js_dep", "1.2.3"])
           end
         end
       end
