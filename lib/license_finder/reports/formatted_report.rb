@@ -17,5 +17,13 @@ module LicenseFinder
 
       dependencies.group_by(&find_name).sort_by { |_, group| group.size }.reverse
     end
+
+    def link_to_license(license)
+      if license.url && !license.url.empty?
+        %{<a href="#{license.url}">#{license.name}</a>}
+      else
+        license.name
+      end
+    end
   end
 end

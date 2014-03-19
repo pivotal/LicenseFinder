@@ -30,7 +30,8 @@ module LicenseFinder
       end
 
       it 'should list the total, and unapproved counts' do
-        should match "2 total, _1 unapproved_"
+        should match "2 total"
+        should match /1 \*unapproved\*/
       end
 
       it "should list the unapproved dependency" do
