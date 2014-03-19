@@ -28,8 +28,8 @@ module LicenseFinder
       modifying { find_by_name(name).set_license_manually!(license) }
     end
 
-    def self.approve!(name)
-      modifying { find_by_name(name).approve!  }
+    def self.approve!(name, approver = nil, notes = nil)
+      modifying { find_by_name(name).approve!(approver, notes)  }
     end
 
     def self.modifying

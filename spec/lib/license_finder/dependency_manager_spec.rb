@@ -89,6 +89,14 @@ module LicenseFinder
         dep.reload.should be_approved
       end
 
+      it "optionally adds approver and approval notes" do
+        dep = Dependency.named("current dependency")
+        described_class.approve!("current dependency", "Julian", "We really need this")
+        approval = dep.reload.manual_approval
+        approval.approver.should eq "Julian"
+        approval.notes.should eq "We really need this"
+      end
+
       it "should raise an error if it can't find the dependency" do
         expect { described_class.approve!("non-existent dependency") }
           .to raise_error(LicenseFinder::Error)

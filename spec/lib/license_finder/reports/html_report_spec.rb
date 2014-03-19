@@ -5,8 +5,9 @@ module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
       let(:dependency) do
-        dep = Dependency.new name: "the-name", approved_manually: true
-        dep.license = LicenseAlias.create name: 'MIT'
+        dep = Dependency.create name: "the-name"
+        dep.approve! "the-approver", "the-approval-note"
+        dep.apply_better_license "MIT"
         dep
       end
 
@@ -20,10 +21,15 @@ module LicenseFinder
         it "does not list the dependency in the action items" do
           should_not have_selector ".action-items"
         end
+
+        it "shows the approver and approval notes" do
+          should have_content "the-approver"
+          should have_content "the-approval-note"
+        end
       end
 
       context "when the dependency is not approved" do
-        before { dependency.approved_manually = false }
+        before { dependency.manual_approval = nil }
 
         it "should not add an approved class to he dependency's container" do
           should have_selector ".unapproved"

@@ -6,19 +6,18 @@ module LicenseFinder
       let(:dep1) do
         dependency = Dependency.new(
           'name' => 'gem_a',
-          'version' => '1.0',
-          'approved_manually' => false
+          'version' => '1.0'
         )
         dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
         dependency
       end
 
       let(:dep2) do
-        dependency = Dependency.new(
+        dependency = Dependency.create(
           'name' => 'gem_b',
-          'version' => '2.3',
-          'approved_manually' => true
+          'version' => '2.3'
         )
+        dependency.approve!
         dependency.license = LicenseFinder::LicenseAlias.create(name: 'BSD')
         dependency
       end

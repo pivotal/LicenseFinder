@@ -160,13 +160,15 @@ module LicenseFinder
       end
       default_task :rescan
 
-      desc "approve DEPENDENCY_NAME...", "Approve one or more dependencies by name"
+      method_option :approver, desc: "the person granting the approval"
+      method_option :message, desc: "the reason for the approval"
+      desc "approve DEPENDENCY_NAME... [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
       def approve(*names)
         if(names.count < 1)
           say "Warning: Must specify dependencies to approve.", :red
         else
           die_on_error {
-            names.each { |name| DependencyManager.approve!(name) }
+            names.each { |name| DependencyManager.approve!(name, options[:approver], options[:message]) }
           }
 
           say "The #{names.join(", ")} dependency has been approved!", :green

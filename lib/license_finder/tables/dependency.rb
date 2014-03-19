@@ -2,6 +2,7 @@ module LicenseFinder
   class Dependency < Sequel::Model
     plugin :boolean_readers
     many_to_one :license, class: LicenseAlias
+    one_to_one :manual_approval
     many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
     many_to_many :parents, join_table: :ancestries, left_key: :child_dependency_id, right_key: :parent_dependency_id, class: self
     many_to_many :bundler_groups
@@ -36,13 +37,17 @@ module LicenseFinder
       update_association_collection(:children, names)
     end
 
-    def approve!
-      self.approved_manually = true
+    def approve!(approver = nil, notes = nil)
+      self.manual_approval = ManualApproval.new(approver: approver, notes: notes)
       save
     end
 
     def approved?
       (license && license.whitelisted?) || approved_manually?
+    end
+
+    def approved_manually?
+      !!manual_approval
     end
 
     def set_license_manually!(license_name)

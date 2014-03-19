@@ -85,7 +85,7 @@ describe LicenseFinder::YmlToSql do
       saved_dep.summary.should == "some summary"
       saved_dep.description.should == "some description"
       saved_dep.homepage.should == "www.homepage.com"
-      saved_dep.should be_approved_manually
+      saved_dep.manual_approval.should be
     end
 
     it "associates the license to the dependency" do
