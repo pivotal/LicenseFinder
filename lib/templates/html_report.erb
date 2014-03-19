@@ -75,7 +75,7 @@
               <% if dependency.manual_approval.approver -%>
                 <%= dependency.manual_approval.approver %>,
               <% end -%>
-              <time datetime="<%= dependency.manual_approval.created_at.utc.iso8601 %>"><%= dependency.manual_approval.created_at.to_date %></time>
+              <time datetime="<%= dependency.manual_approval.safe_created_at.utc.iso8601 %>"><%= dependency.manual_approval.safe_created_at.to_date %></time>
             </small>
           </blockquote>
         <% elsif dependency.whitelisted? -%>
