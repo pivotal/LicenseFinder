@@ -93,17 +93,8 @@
           </blockquote>
         <% end -%>
         <h2>
-          <% if dependency.homepage && !dependency.homepage.empty? -%>
-            <a href="<%= dependency.homepage %>"><%= dependency.name %></a>
-          <% else -%>
-            <%= dependency.name %>
-          <% end -%>
-          <small>
-            v<%= dependency.version %>
-            <% if dependency.bundler_groups.any? -%>
-              (<%= dependency.bundler_groups.map(&:name).join(", ") %>)
-            <% end -%>
-          </small>
+          <%= link_to_dependency(dependency) %>
+          <small><%= version_groups(dependency) %></small>
         </h2>
         <h4><%= dependency.summary %></h4>
         <p><%= dependency.description %></p>
