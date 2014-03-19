@@ -10,7 +10,7 @@ module LicenseFinder
           'summary' => 'Summary',
           'description' => 'Description'
         )
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
+        dependency.license = LicenseAlias.create(name: 'MIT')
         dependency
       end
 
@@ -21,7 +21,7 @@ module LicenseFinder
           'summary' => 'Summary',
           'description' => 'Description'
         )
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
+        dependency.license = LicenseAlias.create(name: 'MIT')
         dependency
       end
 

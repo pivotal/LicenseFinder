@@ -1,8 +1,9 @@
 require 'spec_helper'
 
-describe LicenseFinder::PossibleLicenseFile do
+module LicenseFinder
+describe PossibleLicenseFile do
   context "file parsing" do
-    subject { LicenseFinder::PossibleLicenseFile.new('root', 'root/nested/path') }
+    subject { described_class.new('root', 'root/nested/path') }
 
     context "ignoring text" do
       before do
@@ -14,13 +15,13 @@ describe LicenseFinder::PossibleLicenseFile do
     end
   end
 
-  subject { LicenseFinder::PossibleLicenseFile.new('gem', 'gem/license/path') }
+  subject { described_class.new('gem', 'gem/license/path') }
 
   context "with a known license" do
     before do
       subject.stub(:text).and_return('a known license')
 
-      LicenseFinder::License.stub(:find_by_text).with('a known license').and_return(LicenseFinder::License.find_by_name("MIT"))
+      License.stub(:find_by_text).with('a known license').and_return(License.find_by_name("MIT"))
     end
 
     its(:license) { should == "MIT" }
@@ -33,4 +34,5 @@ describe LicenseFinder::PossibleLicenseFile do
 
     its(:license) { should be_nil }
   end
+end
 end

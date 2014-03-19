@@ -1,6 +1,7 @@
 require "spec_helper"
 
-describe LicenseFinder::YmlToSql do
+module LicenseFinder
+describe YmlToSql do
   let(:legacy_attributes) do
     {
       'name' => "spec_name",
@@ -20,6 +21,7 @@ describe LicenseFinder::YmlToSql do
       'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
     }
   end
+
   let(:source) { nil }
 
   describe ".needs_conversion?" do
@@ -50,7 +52,7 @@ describe LicenseFinder::YmlToSql do
 
   describe '.convert_all' do
     before do
-      (LicenseFinder::DB.tables - [:schema_migrations]).each { |table| LicenseFinder::DB[table].truncate }
+      (DB.tables - [:schema_migrations]).each { |table| DB[table].truncate }
     end
 
     describe "when dependency source is set to bundle" do
@@ -118,4 +120,5 @@ describe LicenseFinder::YmlToSql do
       saved_dep.children.first.name.should == 'child1_name'
     end
   end
+end
 end

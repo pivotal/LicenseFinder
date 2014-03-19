@@ -9,7 +9,7 @@ module LicenseFinder
           'version' => '1.0',
           'manually_approved' => false
         )
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
+        dependency.license = LicenseAlias.create(name: 'MIT')
         dependency
       end
 
@@ -19,7 +19,7 @@ module LicenseFinder
           'version' => '2.3',
           'manually_approved' => true
         )
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'BSD')
+        dependency.license = LicenseAlias.create(name: 'BSD')
         dependency
       end
 

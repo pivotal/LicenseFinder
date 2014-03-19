@@ -8,7 +8,7 @@ module LicenseFinder
           'name' => 'gem_a',
           'version' => '1.0'
         )
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
+        dependency.license = LicenseAlias.create(name: 'MIT')
         dependency
       end
 
@@ -17,7 +17,7 @@ module LicenseFinder
           'name' => 'gem_b',
           'version' => '1.0'
         )
-        dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
+        dependency.license = LicenseAlias.create(name: 'MIT')
         dependency
       end
 

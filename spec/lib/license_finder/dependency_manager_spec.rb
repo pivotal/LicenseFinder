@@ -52,7 +52,7 @@ module LicenseFinder
       it "should complain if the dependency already exists" do
         Dependency.create(name: "current dependency 1")
         expect { described_class.create_manually_managed("GPL", "current dependency 1", "0.0.0") }
-          .to raise_error(LicenseFinder::Error)
+          .to raise_error(Error)
       end
 
       it "re-uses an existing, unassociated, license alias" do
@@ -76,7 +76,7 @@ module LicenseFinder
         expect do
           expect do
             described_class.destroy_manually_managed("a bundler dep")
-          end.to raise_error(LicenseFinder::Error)
+          end.to raise_error(Error)
         end.to_not change(Dependency, :count)
       end
     end
@@ -91,7 +91,7 @@ module LicenseFinder
 
       it "should raise an error if it can't find the dependency" do
         expect { described_class.approve!("non-existent dependency") }
-          .to raise_error(LicenseFinder::Error)
+          .to raise_error(Error)
       end
     end
 
@@ -106,7 +106,7 @@ module LicenseFinder
 
       it "should raise an error if it can't find the dependency" do
         expect { described_class.license!("non-existent dependency", "a license") }
-          .to raise_error(LicenseFinder::Error)
+          .to raise_error(Error)
       end
     end
 
