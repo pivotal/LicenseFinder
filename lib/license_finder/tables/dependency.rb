@@ -49,16 +49,16 @@ module LicenseFinder
       license.whitelisted? || manually_approved?
     end
 
-    def set_license_manually!(license_name)
-      self.license = License.find_by_name(license_name)
+    def set_license_manually!(license)
+      self.license = license
       self.license_manual = true
       save
     end
 
-    def apply_better_license(license_name)
+    def apply_better_license(other_license)
       return if license_manual
-      if license.nil? || license.name != license_name
-        self.license = License.find_by_name(license_name)
+      if license.name != other_license.name
+        self.license = other_license
       end
     end
 

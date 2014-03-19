@@ -32,6 +32,12 @@ module LicenseFinder
       end
     end
 
+    def licenses_from_spec
+      license_names_from_spec.map do |name|
+        License.find_by_name(name)
+      end
+    end
+
     def license_from_files
       license_files.map(&:license).compact
     end
@@ -41,7 +47,7 @@ module LicenseFinder
     end
 
     def default_license
-      "other"
+      License::Definitions.build_unrecognized "other", LicenseFinder.config.whitelist
     end
   end
 end

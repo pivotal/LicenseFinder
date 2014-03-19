@@ -24,7 +24,8 @@ module LicenseFinder
       modifying { find_by_name(name, Dependency.manually_managed).destroy }
     end
 
-    def self.license!(name, license)
+    def self.license!(name, license_name)
+      license = License.find_by_name(license_name)
       modifying { find_by_name(name).set_license_manually!(license) }
     end
 

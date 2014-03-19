@@ -5,7 +5,7 @@ module LicenseFinder
     let(:package) do
       double(
         :package,
-        license: 'license',
+        license: License.find_by_name('license'),
         children: ['child'],
         groups: [:group],
         summary: 'summary',

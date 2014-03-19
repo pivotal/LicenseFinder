@@ -3,10 +3,8 @@ require 'spec_helper'
 module LicenseFinder
   describe Dependency do
     describe '.unapproved' do
-      let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
-
       before do
-        LicenseFinder.stub(:config).and_return config
+        License.find_by_name('MIT').stub(:whitelisted? =>  true)
       end
 
       it "should return all unapproved dependencies" do
@@ -14,7 +12,7 @@ module LicenseFinder
         approved = Dependency.create(name: "approved dependency", version: '0.0.1', 'license_name' => 'other')
         approved.manually_approved = true
         approved.save
-        whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1', 'license_name' => License.find_by_name('MIT'))
+        whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1', 'license_name' => 'MIT')
         whitelisted.save
 
         unapproved = Dependency.unapproved
@@ -72,12 +70,12 @@ module LicenseFinder
 
       it "sets manual license to true" do
         dependency.license_manual.should be_false
-        dependency.set_license_manually!('Updated')
+        dependency.set_license_manually! License.find_by_name("Updated")
         dependency.license_manual.should be_true
       end
 
       it "modifies the license" do
-        dependency.set_license_manually!('Updated')
+        dependency.set_license_manually! License.find_by_name("Updated")
         dependency.reload.license.name.should == 'Updated'
       end
     end
@@ -118,20 +116,20 @@ module LicenseFinder
       let(:dependency) { Dependency.named('some gem') }
 
       it "keeps a manually assigned license" do
-        dependency.set_license_manually!("manual")
+        dependency.set_license_manually! License.find_by_name("manual")
         dependency.apply_better_license "new"
         dependency.license.name.should == "manual"
       end
 
       it "saves a new license" do
-        dependency.apply_better_license "new license"
+        dependency.apply_better_license License.find_by_name("new license")
         dependency.license.name.should == "new license"
       end
 
       it "updates the license's name" do
         dependency.license = License.find_by_name("old")
 
-        dependency.apply_better_license "new license"
+        dependency.apply_better_license License.find_by_name("new license")
         dependency.license.name.should == "new license"
       end
 
@@ -139,7 +137,7 @@ module LicenseFinder
         dependency.license = License.find_by_name("old")
         dependency.manually_approved = true
 
-        dependency.apply_better_license "new license"
+        dependency.apply_better_license License.find_by_name("new license")
         dependency.should be_approved
       end
     end

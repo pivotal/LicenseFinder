@@ -56,7 +56,7 @@ module LicenseFinder
 
           subject = make_package(data)
 
-          expect(subject.license).to eq('MIT')
+          expect(subject.license.name).to eq('MIT')
         end
 
         context "when there's no explicit license" do
@@ -65,7 +65,7 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license).to eq('Apache 2.0 License')
+            expect(subject.license.name).to eq('Apache 2.0 License')
           end
 
           it "returns 'other' if there is are multiple licenses in 'classifiers'" do
@@ -73,7 +73,7 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license).to eq('other')
+            expect(subject.license.name).to eq('other')
           end
         end
 
@@ -84,7 +84,7 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license).to eq('Apache 2.0 License')
+            expect(subject.license.name).to eq('Apache 2.0 License')
           end
         end
       end
@@ -96,13 +96,13 @@ module LicenseFinder
         end
 
         it 'returns license from file' do
-          stub_license_files [double(:license_file, license: 'License from file')]
-          expect(subject.license).to eq('License from file')
+          stub_license_files [double(:license_file, license: License.find_by_name('License from file'))]
+          expect(subject.license.name).to eq('License from file')
         end
 
         it 'returns other if no license can be found' do
           stub_license_files []
-          expect(subject.license).to eq('other')
+          expect(subject.license.name).to eq('other')
         end
       end
     end

@@ -24,7 +24,7 @@ module LicenseFinder
         License.stub(:find_by_text).with('a known license').and_return(License.find_by_name("MIT"))
       end
 
-      its(:license) { should == "MIT" }
+      its(:license) { should == License.find_by_name("MIT") }
     end
 
     context "with an unknown license" do

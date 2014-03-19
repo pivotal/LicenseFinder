@@ -33,7 +33,7 @@ module LicenseFinder
 
     attr_reader :install_path, :pypi_def
 
-    def licenses_from_spec
+    def license_names_from_spec
       license = pypi_def["license"]
 
       if pypi_def["license"] && pypi_def["license"] != "UNKNOWN"

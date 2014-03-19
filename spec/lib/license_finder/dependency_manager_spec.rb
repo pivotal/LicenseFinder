@@ -95,7 +95,7 @@ module LicenseFinder
 
       it "adds a license for the dependency" do
         DependencyManager.stub(:find_by_name).with("dependency").and_return(dependency)
-        dependency.should_receive(:set_license_manually!).with("MIT")
+        dependency.should_receive(:set_license_manually!).with(License.find_by_name "MIT")
         described_class.license!("dependency", "MIT")
       end
 

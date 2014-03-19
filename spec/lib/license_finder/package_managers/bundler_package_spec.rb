@@ -34,25 +34,25 @@ module LicenseFinder
       it "returns the license from the gemspec if provided" do
         gemspec.license = 'Gemspec License'
 
-        subject.license.should == "Gemspec License"
+        subject.license.name.should == "Gemspec License"
       end
 
       it "returns 'other' if the gemspec provides many" do
         gemspec.licenses = ['First Gemspec License', 'Second Gemspec License']
 
-        subject.license.should == "other"
+        subject.license.name.should == "other"
       end
 
       it "returns a license in a file if detected" do
-        stub_license_files [double(:file, license: 'Detected License')]
+        stub_license_files [double(:file, license: License.find_by_name('Detected License'))]
 
-        subject.license.should == "Detected License"
+        subject.license.name.should == "Detected License"
       end
 
       it "returns 'other' otherwise" do
         stub_license_files []
 
-        subject.license.should == "other"
+        subject.license.name.should == "other"
       end
     end
 
