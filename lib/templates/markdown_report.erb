@@ -29,7 +29,7 @@ As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %>. <%= dependencies.size %> to
 
 ><%= dependency.manual_approval.notes %>
 
-><cite> <%= dependency.manual_approval.approver %> </cite>
+><cite> <%= dependency.manual_approval.approver %> <%= dependency.manual_approval.created_at.to_date %></cite>
 <% elsif dependency.whitelisted? -%>
 <%= link_to_license(dependency.license) %> whitelisted
 <% else -%>

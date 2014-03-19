@@ -28,6 +28,7 @@ module LicenseFinder
           deps.should have_content "MIT"
           deps.should have_content "the-approver"
           deps.should have_content "the-approval-note"
+          deps.should have_selector "time"
         end
       end
 
