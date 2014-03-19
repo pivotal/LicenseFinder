@@ -77,6 +77,22 @@
             (<%= dependency.bundler_groups.map(&:name).join(", ") %>)
           <% end -%>
         </h2>
+        <% if dependency.approved_manually? -%>
+          <blockquote>
+            <p>
+              Manually approved
+              <% if dependency.license.url && !dependency.license.url.empty? -%>
+                <a href="<%= dependency.license.url %>"><%= dependency.license.name %></a>
+              <% else -%>
+                <%= dependency.license.name %>
+              <% end -%>
+            </p>
+            <p><%= dependency.manual_approval.notes %></p>
+            <% if dependency.manual_approval.approver -%>
+              <small><%= dependency.manual_approval.approver %></small>
+            <% end -%>
+          </blockquote>
+        <% end -%>
         <table class="table table-striped table-bordered">
           <thead>
           <tr>

@@ -13,8 +13,7 @@ module LicenseFinder
       it "should return all unapproved dependencies" do
         dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
         approved = Dependency.create(name: "approved dependency", version: '0.0.1')
-        approved.approved_manually = true
-        approved.save
+        approved.approve!
         whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
         whitelisted.license = LicenseAlias.create(name: 'MIT')
         whitelisted.save
@@ -43,15 +42,23 @@ module LicenseFinder
 
     describe '#approve!' do
       it "should update the database to show the dependency is approved" do
-        dependency = Dependency.create(name: "foo", version: '0.0.1')
+        dependency = Dependency.named("foo")
         dependency.approve!
         dependency.reload.should be_approved
+      end
+
+      it "should record the approver and notes" do
+        dependency = Dependency.named("foo")
+        dependency.approve!("Julian", "We really need this")
+        approval = dependency.reload.manual_approval
+        approval.approver.should eq "Julian"
+        approval.notes.should eq "We really need this"
       end
     end
 
     describe "#approved?" do
-      let(:not_approved_manually) { Dependency.create(name: 'some gem', approved_manually: false).reload }
-      let(:approved_manually) { Dependency.create(name: 'some gem', approved_manually: true).reload }
+      let(:not_approved_manually) { Dependency.create(name: 'some gem').reload }
+      let(:approved_manually) { Dependency.create(name: 'some gem').approve!.reload }
 
       it "is true if its license is whitelisted" do
         not_approved_manually.stub_chain(:license, whitelisted?: true)
@@ -152,7 +159,7 @@ module LicenseFinder
 
       it "does not change the approval" do
         dependency.license = LicenseAlias.named("old")
-        dependency.approved_manually = true
+        dependency.approve!
 
         dependency.apply_better_license "new license"
         dependency.should be_approved

@@ -7,7 +7,7 @@ end
 When(/^I approve that gem$/) do
   @output = @user.execute_command "license_finder"
   @output.should include "gpl_gem"
-  @output = @user.execute_command "license_finder approve gpl_gem"
+  @output = @user.execute_command "license_finder approve gpl_gem --approver 'Julian' --message 'We really need this'"
   @output = @user.execute_command "license_finder --quiet"
 end
 
@@ -16,10 +16,10 @@ Then(/^I should not see that gem in the console output$/) do
 end
 
 Then(/^I should see that gem approved in dependencies\.html$/) do
-  gem_name = "gpl_gem"
-  css_class = "approved"
   html = File.read(@user.dependencies_html_path)
   page = Capybara.string(html)
-  gpl_gem = page.find("##{gem_name}")
-  gpl_gem[:class].should == css_class
+  gpl_gem = page.find("#gpl_gem")
+  gpl_gem[:class].should == "approved"
+  gpl_gem.should have_content "Julian"
+  gpl_gem.should have_content "We really need this"
 end
