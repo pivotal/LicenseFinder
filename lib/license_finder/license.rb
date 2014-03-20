@@ -22,8 +22,6 @@ module LicenseFinder
     autoload :AnyMatcher,    "license_finder/license/any_matcher"
     autoload :NoneMatcher,   "license_finder/license/none_matcher"
 
-    attr_reader :url
-
     def initialize(settings)
       @short_name  = settings.fetch(:short_name)
       @pretty_name = settings.fetch(:pretty_name, short_name)
@@ -33,9 +31,7 @@ module LicenseFinder
       @matcher     = settings.fetch(:matcher) { Matcher.from_template(Template.named(short_name)) }
     end
 
-    def whitelisted?
-      @whitelisted
-    end
+    attr_reader :url
 
     def name
       pretty_name
@@ -47,6 +43,10 @@ module LicenseFinder
 
     def matches_text?(text)
       matcher.matches_text?(text)
+    end
+
+    def whitelisted?
+      @whitelisted
     end
 
     def whitelist
