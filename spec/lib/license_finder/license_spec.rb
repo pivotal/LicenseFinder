@@ -28,21 +28,30 @@ module LicenseFinder
     end
 
     def make_license(settings = {})
-      settings = {
+      defaults = {
         short_name: "Default Short Name",
         url: "http://example.com/license",
         whitelisted: false,
         matcher: License::Matcher.from_text('Default Matcher')
-      }.merge(settings)
+      }
 
-      names = License::Names.new(settings)
-
-      License.new(settings.merge(names: names))
+      License.new(defaults.merge(settings))
     end
 
     describe "#whitelisted?" do
       it "is true if the settings say it is" do
+        make_license.should_not be_whitelisted
         make_license(whitelisted: true).should be_whitelisted
+      end
+
+      it "can be made true (without mutating original)" do
+        original = make_license
+        license = original.whitelist
+        license.should_not == original
+        license.should be_whitelisted
+        license.url.should == "http://example.com/license"
+        license.should be_matches_name "Default Short Name"
+        license.should be_matches_text "Default Matcher"
       end
     end
 

@@ -15,7 +15,6 @@ module LicenseFinder
     end
 
     autoload :Definitions,   "license_finder/license/definitions"
-    autoload :Names,         "license_finder/license/names"
     autoload :Text,          "license_finder/license/text"
     autoload :Template,      "license_finder/license/template"
     autoload :Matcher,       "license_finder/license/matcher"
@@ -26,10 +25,12 @@ module LicenseFinder
     attr_reader :url
 
     def initialize(settings)
-      @names       = settings.fetch(:names)
+      @short_name  = settings.fetch(:short_name)
+      @pretty_name = settings.fetch(:pretty_name, @short_name)
+      @other_names = settings.fetch(:other_names, [])
       @url         = settings.fetch(:url)
-      @whitelisted = settings.fetch(:whitelisted)
-      @matcher     = settings.fetch(:matcher)
+      @whitelisted = settings.fetch(:whitelisted, false)
+      @matcher     = settings.fetch(:matcher) { Matcher.from_template(Template.named(@short_name)) }
     end
 
     def whitelisted?
@@ -37,15 +38,37 @@ module LicenseFinder
     end
 
     def name
-      @names.pretty_name
+      @pretty_name
     end
 
     def matches_name?(name)
-      @names.matches_name?(name)
+      names.map(&:downcase).include? name.to_s.downcase
     end
 
     def matches_text?(text)
       @matcher.matches_text?(text)
+    end
+
+    def whitelist
+      copy(whitelisted: true)
+    end
+
+    private
+
+    def names
+      ([@short_name, @pretty_name] + @other_names).uniq
+    end
+
+    def copy(overrides)
+      settings = {
+        short_name:  @short_name,
+        pretty_name: @pretty_name,
+        other_names: @other_names,
+        url:         @url,
+        whitelisted: @whitelisted,
+        matcher:     @matcher
+      }
+      self.class.new(settings.merge(overrides))
     end
   end
 end
