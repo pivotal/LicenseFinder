@@ -29,12 +29,12 @@ module LicenseFinder
         whitelist_if_necessary(result, whitelist)
       end
 
+      private
+
       def whitelist_if_necessary(license, whitelist)
         whitelisted = whitelist.any? { |name| license.matches_name? name }
         whitelisted ? license.whitelist : license
       end
-
-      private
 
       def build_apache2
         License.new(
