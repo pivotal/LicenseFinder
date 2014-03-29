@@ -65,7 +65,7 @@ module LicenseFinder
 
     describe ".matches_text?" do
       it "should match on text" do
-        license = make_license(matcher: License::Matcher.new(/The license text/))
+        license = make_license(matcher: License::Matcher.from_regex(/The license text/))
         license.should be_matches_text "The license text"
         license.should_not be_matches_text "Some other text"
       end

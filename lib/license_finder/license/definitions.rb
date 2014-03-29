@@ -67,9 +67,9 @@ module LicenseFinder
 
         matcher = AnyMatcher.new(
           Matcher.from_template(Template.named("MIT")),
-          Matcher.new(url_regexp),
-          HeaderMatcher.new(Matcher.new(header_regexp)),
-          Matcher.new(one_liner_regexp)
+          Matcher.from_regex(url_regexp),
+          HeaderMatcher.new(Matcher.from_regex(header_regexp)),
+          Matcher.from_regex(one_liner_regexp)
         )
 
         License.new(
