@@ -1,7 +1,6 @@
 Given(/^I have an app with license finder that depends on an other licensed gem$/) do
   @user = ::DSL::User.new
   @user.create_nonrails_app
-  @user.add_license_finder_to_rakefile
   @user.add_dependency_to_app 'other_gem', version: '1.0', license: 'other'
   @user.add_dependency_to_app 'control_gem', version: '1.0', license: 'other'
 end

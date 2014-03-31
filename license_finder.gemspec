@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency "bundler"
   s.add_dependency "sequel"
   s.add_dependency "thor"
-  s.add_dependency "rake"
   s.add_dependency "httparty"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
@@ -33,6 +32,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "rails", "~> 3.2.0"
   s.add_development_dependency "webmock", "~> 1.13"
+  s.add_development_dependency "rake"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

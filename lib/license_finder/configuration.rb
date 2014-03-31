@@ -1,4 +1,3 @@
-require "rake"
 require "delegate"
 
 module LicenseFinder
