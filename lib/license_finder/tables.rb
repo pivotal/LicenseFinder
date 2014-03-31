@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'sequel'
 require LicenseFinder::Platform.sqlite_load_path
 
