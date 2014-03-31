@@ -63,8 +63,8 @@
   <div class="dependencies">
     <% sorted_dependencies.each do |dependency| -%>
       <div id="<%= dependency.name %>" class="<%= dependency.approved? ? "approved" : "unapproved" %>">
-        <% if dependency.approved_manually? -%>
-          <blockquote class="pull-right">
+        <blockquote class="pull-right">
+          <% if dependency.approved_manually? -%>
             <p>
               <%= link_to_license(dependency.license) %>
               manually approved
@@ -77,24 +77,20 @@
               <% end -%>
               <time datetime="<%= dependency.manual_approval.safe_created_at.utc.iso8601 %>"><%= dependency.manual_approval.safe_created_at.to_date %></time>
             </small>
-          </blockquote>
-        <% elsif dependency.whitelisted? -%>
-          <blockquote class="pull-right">
+          <% elsif dependency.whitelisted? -%>
             <p>
               <%= link_to_license(dependency.license) %>
               whitelisted
               <span class="badge badge-success">&#x2713;</span>
             </p>
-          </blockquote>
-        <% else -%>
-          <blockquote class="pull-right">
+          <% else -%>
             <p>
             <%= link_to_license(dependency.license) %>
             unapproved
             <span class="badge badge-important">&#x2717;</span>
             </p>
-          </blockquote>
-        <% end -%>
+          <% end -%>
+        </blockquote>
         <h2>
           <%= link_to_dependency(dependency) %>
           <small><%= version_groups(dependency) %></small>
