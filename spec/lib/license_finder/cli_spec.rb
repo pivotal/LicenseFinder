@@ -213,8 +213,8 @@ module LicenseFinder
           Dependency.stub(:unapproved) { ['one dependency'] }
           TextReport.stub(:new) { double(:report, to_s: "a report!") }
           silence_stdout do
-            $stdout.stub(:puts)
-            $stdout.should_receive(:puts).with(/dependencies/i)
+            subject.stub(:say)
+            subject.should_receive(:say).with(/dependencies/i, :red)
             expect { subject.action_items }.to raise_error(SystemExit)
           end
         end
@@ -222,7 +222,7 @@ module LicenseFinder
         it "reports that all dependencies are approved" do
           Dependency.stub(:unapproved) { [] }
           silence_stdout do
-            $stdout.should_receive(:puts).with(/approved/i)
+            subject.should_receive(:say).with(/approved/i, :green)
             expect { subject.action_items }.to_not raise_error
           end
         end
