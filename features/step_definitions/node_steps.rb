@@ -4,5 +4,5 @@ Given(/^A package file with dependencies$/) do
 end
 
 Then(/^I should see a Node dependency with a license$/) do
-  @output.should =~ /^jshint, 2.1.9, MIT$/
+  @output.should =~ /^http-server, 0.6.1, MIT$/
 end

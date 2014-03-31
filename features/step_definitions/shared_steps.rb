@@ -47,7 +47,7 @@ module DSL
       `mkdir -p #{app_path}`
       `cd #{app_path} && touch package.json`
 
-      add_npm_dependency('jshint', '2.1.9')
+      add_npm_dependency('http-server', '0.6.1')
 
       npm_install
     end

@@ -50,7 +50,7 @@ module LicenseFinder
     end
 
     describe '#license' do
-      describe "with pypi license" do
+      describe "with valid pypi license" do
         it "returns the license from 'license' preferentially" do
           data = { "license" => "MIT", "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License' ] }
 
@@ -59,14 +59,36 @@ module LicenseFinder
           expect(subject.license).to eq('MIT')
         end
 
-        it "returns the first license from the 'classifiers' if no 'license' exists" do
-          data = { "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License' ] }
+        context "when there's no explicit license" do
+          it "returns the license from the 'classifiers' if there is only one" do
+            data = { "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License' ] }
 
-          subject = make_package(data)
+            subject = make_package(data)
 
-          expect(subject.license).to eq('Apache 2.0 License')
+            expect(subject.license).to eq('Apache 2.0 License')
+          end
+
+          it "returns 'other' if there is are multiple licenses in 'classifiers'" do
+            data = { "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License', 'License :: OSI Approved :: GPL' ] }
+
+            subject = make_package(data)
+
+            expect(subject.license).to eq('other')
+          end
+        end
+
+
+        context "with UNKNOWN license" do
+          it "returns the license from the classifier if it exists" do
+            data = { "license" => "UNKNOWN", "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License' ] }
+
+            subject = make_package(data)
+
+            expect(subject.license).to eq('Apache 2.0 License')
+          end
         end
       end
+
 
       describe "without pypi license" do
         def stub_license_files(license_files)

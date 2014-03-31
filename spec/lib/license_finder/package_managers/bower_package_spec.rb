@@ -31,12 +31,12 @@ module LicenseFinder
         PossibleLicenseFiles.stub(:find).with("/path/to/thing").and_return(license_files)
       end
 
-      let(:package1) { { "pkgMeta" => {"license" => "MIT"} } }
-      let(:package2) { { "pkgMeta" => {"licenses" => [{"type" => "BSD", "url" => "github.github/github"}]} } }
-      let(:package3) { { "pkgMeta" => {"license" => {"type" => "PSF", "url" => "github.github/github"}} } }
-      let(:package4) { { "pkgMeta" => {"licenses" => ["MIT"]} } }
+      let(:package1) { { "pkgMeta" => {"license" => "MIT"}, "canonicalDir" => "/some/path" } }
+      let(:package2) { { "pkgMeta" => {"licenses" => [{"type" => "BSD", "url" => "github.github/github"}]}, "canonicalDir" => "/some/path" } }
+      let(:package3) { { "pkgMeta" => {"license" => {"type" => "PSF", "url" => "github.github/github"}}, "canonicalDir" => "/some/path" } }
+      let(:package4) { { "pkgMeta" => {"licenses" => ["MIT"]}, "canonicalDir" => "/some/path" } }
 
-      it 'finds the license for both license structures' do
+      it 'finds the license for both license  structures' do
         BowerPackage.new(package1).license.should eq("MIT")
         BowerPackage.new(package2).license.should eq("BSD")
         BowerPackage.new(package3).license.should eq("PSF")
@@ -47,6 +47,18 @@ module LicenseFinder
         stub_license_files [double(:file, license: 'Detected License')]
 
         subject.license.should == "Detected License"
+      end
+
+      it "returns other if there's more than one license" do
+        package = BowerPackage.new({ "pkgMeta" => {"licenses" => ["MIT", "BSD"]}, "canonicalDir" => "/some/path" })
+        expect(package.license).to eq("other")
+      end
+
+      it "returns other if the license from spec and license from files are different" do
+        stub_license_files [double(:file, license: 'Detected License')]
+        package = BowerPackage.new({ "pkgMeta" => {"licenses" => ["MIT"]}, "canonicalDir" => "/path/to/thing" })
+
+        expect(package.license).to eq("other")
       end
 
       it "returns 'other' otherwise" do

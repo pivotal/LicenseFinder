@@ -33,19 +33,19 @@ module LicenseFinder
 
     attr_reader :install_path, :pypi_def
 
-    def license_from_spec
-      license = pypi_def.fetch("license", "UNKNOWN")
+    def licenses_from_spec
+      license = pypi_def["license"]
 
-      if license == "UNKNOWN"
+      if pypi_def["license"] && pypi_def["license"] != "UNKNOWN"
+        return [license]
+      else
         classifiers = pypi_def.fetch("classifiers", [])
-        license = classifiers.map do |c|
+        classifiers.map do |c|
           if c.start_with?("License")
             c.gsub(/^License.*::\s*(.*)$/, '\1')
           end
-        end.compact.first
+        end.compact
       end
-
-      license
     end
   end
 end

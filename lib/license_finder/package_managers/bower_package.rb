@@ -39,11 +39,11 @@ module LicenseFinder
     attr_reader :module_metadata
 
     def install_path
-      bower_module.fetch("canonicalDir", nil)
+      bower_module["canonicalDir"]
     end
 
-    def license_from_spec
-      Package.extract_license_from_standard_spec(module_metadata)
+    def licenses_from_spec
+      Package.extract_licenses_from_standard_spec(module_metadata)
     end
   end
 end
