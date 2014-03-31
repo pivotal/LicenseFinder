@@ -2,11 +2,10 @@ require 'spec_helper'
 
 module LicenseFinder
   describe DependencyManager do
-    let(:config) { Configuration.new }
+    let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
 
     before do
       LicenseFinder.stub(:config).and_return config
-      config.whitelist = ["MIT", "other"]
       Reporter.stub(:write_reports)
     end
 
@@ -112,8 +111,13 @@ module LicenseFinder
     end
 
     describe ".modifying" do
+      let(:file_exists) { double(:file, :exist? => true) }
+      let(:file_does_not_exist) { double(:file, :exist? => false) }
+
       context "when the database doesn't exist" do
-        before { File.stub(:exists?) { false } }
+        before do
+          config.artifacts.stub(:database_file).and_return(file_does_not_exist)
+        end
 
         it "writes reports" do
           Reporter.should_receive(:write_reports)
@@ -122,7 +126,9 @@ module LicenseFinder
       end
 
       context "when the database exists" do
-        before { File.stub(:exists?) { true } }
+        before do
+          config.artifacts.stub(:database_file).and_return(file_exists)
+        end
 
         context "when the database has changed" do
           before do
@@ -141,21 +147,26 @@ module LicenseFinder
             Digest::SHA2.stub_chain(:file, :hexdigest) { 5 }
           end
 
-          it "does not write reports" do
-            Reporter.should_not_receive(:write_reports)
-            DependencyManager.modifying {}
-          end
-        end
+          context "when the reports exist" do
+            before do
+              config.artifacts.stub(:html_file).and_return(file_exists)
+            end
 
-        context "when the reports do not exist" do
-          before do
-            Digest::SHA2.stub_chain(:file, :hexdigest) { 5 }
-            File.stub(:exists?).with(LicenseFinder.config.dependencies_html) { false }
+            it "does not write reports" do
+              Reporter.should_not_receive(:write_reports)
+              DependencyManager.modifying {}
+            end
           end
 
-          it "writes reports" do
-            Reporter.should_receive(:write_reports)
-            DependencyManager.modifying {}
+          context "when the reports do not exist" do
+            before do
+              config.artifacts.stub(:html_file).and_return(file_does_not_exist)
+            end
+
+            it "writes reports" do
+              Reporter.should_receive(:write_reports)
+              DependencyManager.modifying {}
+            end
           end
         end
       end

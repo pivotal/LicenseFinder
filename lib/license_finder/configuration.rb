@@ -1,80 +1,37 @@
 require "rake"
+require "delegate"
 
 module LicenseFinder
   class Configuration
-    attr_accessor :whitelist, :ignore_groups, :dependencies_dir, :project_name
-
-    def self.config_file_path
-      File.join('.', 'config', 'license_finder.yml')
-    end
-
     def self.ensure_default
-      make_config_file unless File.exists?(config_file_path)
-      new
-    end
-
-    def self.make_config_file
-      FileUtils.mkdir_p(File.join('.', 'config'))
-      FileUtils.cp(
-        ROOT_PATH.join('..', 'files', 'license_finder.yml'),
-        config_file_path
-      )
+      Persistence.init
+      prepare(Persistence.get)
     end
 
     def self.move!
-      config = config_hash('dependencies_file_dir' => './doc/')
-      File.open(config_file_path, 'w') do |f|
-        f.write YAML.dump(config)
-      end
+      config = prepare(Persistence.get.merge('dependencies_file_dir' => './doc/'))
+      config.save
 
-      FileUtils.mkdir_p("doc")
-      FileUtils.mv(Dir["dependencies.*"], "doc")
+      FileUtils.mv(Dir["dependencies*"], config.artifacts.dir)
     end
 
-    def self.config_hash(config)
-      if File.exists?(config_file_path)
-        yaml = File.read(config_file_path)
-        config = YAML.load(yaml).merge config
-      end
-      config
+    # It's nice to keep destructive file system manipulation out of the
+    # initializer.  That reduces test polution, but is slightly inconvenient
+    # for methods like Configuration.ensure_default and Configuration.move!,
+    # which need a working artifacts directory. This helper is a compromise.
+    def self.prepare(config)
+      result = new(config)
+      result.artifacts.init
+      result
     end
 
-    def initialize(config={})
-      config = self.class.config_hash(config)
+    attr_accessor :whitelist, :ignore_groups, :artifacts, :project_name
 
-      @whitelist = config['whitelist'] || []
-      @ignore_groups = (config["ignore_groups"] || [])
-      @dependencies_dir = config['dependencies_file_dir'] || './doc/'
-      @project_name = config['project_name'] || determine_project_name
-      FileUtils.mkdir_p(@dependencies_dir)
-    end
-
-    def database_uri
-      URI.escape(File.expand_path(File.join(dependencies_dir, "dependencies.db")))
-    end
-
-    def dependencies_yaml
-      File.join(dependencies_dir, "dependencies.yml")
-    end
-
-    def dependencies_text
-      File.join(dependencies_dir, "dependencies.csv")
-    end
-
-    def dependencies_detailed_text
-      File.join(dependencies_dir, "dependencies_detailed.csv")
-    end
-
-    def dependencies_legacy_text
-      File.join(dependencies_dir, "dependencies.txt")
-    end
-
-    def dependencies_html
-      File.join(dependencies_dir, "dependencies.html")
-    end
-
-    def dependencies_markdown
-      File.join(dependencies_dir, "dependencies.md")
+    def initialize(config)
+      @whitelist     = Array(config['whitelist'])
+      @ignore_groups = Array(config["ignore_groups"])
+      @artifacts     = Artifacts.new(Pathname(config['dependencies_file_dir'] || './doc/'))
+      @project_name  = config['project_name'] || determine_project_name
     end
 
     def whitelisted?(license_name)
@@ -83,17 +40,19 @@ module LicenseFinder
     end
 
     def save
-      File.open(Configuration.config_file_path, 'w') do |file|
-        file.write({
-          'whitelist' => @whitelist.uniq,
-          'ignore_groups' => @ignore_groups.uniq,
-          'dependencies_file_dir' => @dependencies_dir,
-          'project_name' => @project_name
-        }.to_yaml)
-      end
+      Persistence.set(to_hash)
     end
 
     private
+
+    def to_hash
+      {
+        'whitelist' => whitelist.uniq,
+        'ignore_groups' => ignore_groups.uniq,
+        'dependencies_file_dir' => artifacts.dir.to_s,
+        'project_name' => project_name
+      }
+    end
 
     def whitelisted_licenses
       whitelist.map do |license_name|
@@ -102,7 +61,90 @@ module LicenseFinder
     end
 
     def determine_project_name
-      File.basename(Dir.getwd)
+      Pathname.pwd.basename.to_s
+    end
+
+    class Artifacts < SimpleDelegator
+      def init
+        mkpath
+      end
+
+      def dir
+        __getobj__
+      end
+
+      def database_uri
+        URI.escape(database_file.expand_path.to_s)
+      end
+
+      def database_file
+        join("dependencies.db")
+      end
+
+      def text_file
+        join("dependencies.csv")
+      end
+
+      def detailed_text_file
+        join("dependencies_detailed.csv")
+      end
+
+      def html_file
+        join("dependencies.html")
+      end
+
+      def markdown_file
+        join("dependencies.md")
+      end
+
+      def legacy_yaml_file
+        join("dependencies.yml")
+      end
+
+      def legacy_text_file
+        join("dependencies.txt")
+      end
+    end
+
+    module Persistence
+      extend self
+
+      def init
+        init! unless inited?
+      end
+
+      def get
+        return {} unless inited?
+
+        YAML.load(file.read)
+      end
+
+      def set(hash)
+        file.open('w') { |f| f.write(YAML.dump(hash)) }
+      end
+
+      private
+
+      def inited?
+        file.exist?
+      end
+
+      def init!
+        file_dir.mkpath
+        FileUtils.cp(file_template, file)
+      end
+
+      def file_dir
+        Pathname.new('.').join('config')
+      end
+
+      def file
+        file_dir.join('license_finder.yml')
+      end
+
+      def file_template
+        ROOT_PATH.join('..', 'files', 'license_finder.yml')
+      end
     end
   end
 end

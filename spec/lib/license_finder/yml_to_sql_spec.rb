@@ -20,31 +20,30 @@ describe LicenseFinder::YmlToSql do
       'license_files' => ['/Users/pivotal/foo/lic1', '/Users/pivotal/bar/lic2'],
     }
   end
-  let(:config) { LicenseFinder::Configuration.new }
   let(:source) { nil }
-
-  before do
-    LicenseFinder.stub(:config) { config }
-  end
 
   describe ".needs_conversion?" do
     it "is true if the yml still exists" do
-      config.stub(dependencies_dir: 'path/to')
-      File.should_receive(:exists?).with('path/to/dependencies.yml') { true }
+      yaml_file = double(:yaml_file, :exist? => true)
+      LicenseFinder.config.artifacts.stub(legacy_yaml_file: yaml_file)
+
       described_class.needs_conversion?.should be_true
     end
 
     it "is false otherwise" do
-      config.stub(dependencies_dir: 'path/to')
-      File.should_receive(:exists?).with('path/to/dependencies.yml') { false }
+      yaml_file = double(:yaml_file, :exist? => false)
+      LicenseFinder.config.artifacts.stub(legacy_yaml_file: yaml_file)
+
       described_class.needs_conversion?.should be_false
     end
   end
 
   describe ".remove_yml" do
     it "removes the yml file" do
-      config.stub(dependencies_dir: 'path/to')
-      File.should_receive(:delete).with('path/to/dependencies.yml')
+      yaml_file = double(:yaml_file)
+      LicenseFinder.config.artifacts.stub(legacy_yaml_file: yaml_file)
+
+      yaml_file.should_receive(:delete)
       described_class.remove_yml
     end
   end

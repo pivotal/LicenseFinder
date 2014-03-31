@@ -8,7 +8,7 @@ module LicenseFinder
     end
 
     def self.load_yml
-      YAML.load File.read(yml_path)
+      YAML.load yml_path.read
     end
 
     def self.convert_all(all_legacy_attrs)
@@ -20,15 +20,15 @@ module LicenseFinder
     end
 
     def self.needs_conversion?
-      File.exists?(yml_path)
+      yml_path.exist?
     end
 
     def self.remove_yml
-      File.delete(yml_path)
+      yml_path.delete
     end
 
     def self.yml_path
-      LicenseFinder.config.dependencies_yaml
+      LicenseFinder.config.artifacts.legacy_yaml_file
     end
 
     def initialize(attrs)

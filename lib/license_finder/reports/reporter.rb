@@ -4,20 +4,21 @@ module LicenseFinder
 
     def write_reports
       dependencies = Dependency.all
+      artifacts = LicenseFinder.config.artifacts
 
-      write_file LicenseFinder.config.dependencies_text, TextReport.new(dependencies).to_s
-      write_file LicenseFinder.config.dependencies_detailed_text, DetailedTextReport.new(dependencies).to_s
-      write_file LicenseFinder.config.dependencies_html, HtmlReport.new(dependencies).to_s
-      write_file LicenseFinder.config.dependencies_markdown, MarkdownReport.new(dependencies).to_s
+      write_file artifacts.text_file,          TextReport.of(dependencies)
+      write_file artifacts.detailed_text_file, DetailedTextReport.of(dependencies)
+      write_file artifacts.html_file,          HtmlReport.of(dependencies)
+      write_file artifacts.markdown_file,      MarkdownReport.of(dependencies)
 
-      if File.exists?(LicenseFinder.config.dependencies_legacy_text)
-        File.delete(LicenseFinder.config.dependencies_legacy_text)
+      if LicenseFinder.config.artifacts.legacy_text_file.exist?
+        LicenseFinder.config.artifacts.legacy_text_file.delete
       end
     end
 
     private
     def write_file(file_path, content)
-      File.open(file_path, 'w+') do |f|
+      file_path.open('w+') do |f|
         f.puts content
       end
     end
