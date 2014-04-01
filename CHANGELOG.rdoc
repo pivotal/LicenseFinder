@@ -1,3 +1,12 @@
+=== 1.0.0 / Unreleased
+
+* Features
+
+  * When approving a license, can specify who is approving, and why.
+  * Remove `rake license_finder` task from Rails projects.  Just include
+    'license_finder' as a development dependency, and run `license_finder` in
+    the shell.
+
 === 0.9.5.1 / 2014-01-30
 
 * Features

@@ -57,7 +57,6 @@ module DSL
 
       `cd #{projects_path} && bundle gem #{app_name}`
 
-      add_gem_dependency('rake')
       add_gem_dependency('license_finder', :path => root_path)
 
       bundle_app
@@ -71,13 +70,6 @@ module DSL
       add_gem_dependency('license_finder', :path => root_path)
 
       bundle_app
-    end
-
-    def add_license_finder_to_rakefile
-      add_to_rakefile <<-RUBY
-        require 'bundler/setup'
-        require 'license_finder'
-      RUBY
     end
 
     def update_gem(name, attrs)
@@ -214,10 +206,6 @@ module DSL
 
     def add_to_gemfile(line)
       `echo #{line.inspect} >> #{File.join(app_path, "Gemfile")}`
-    end
-
-    def add_to_rakefile(line)
-      `echo #{line.inspect} >> #{File.join(app_path, "Rakefile")}`
     end
 
     def add_to_requirements(line)
