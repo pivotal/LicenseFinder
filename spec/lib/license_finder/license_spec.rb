@@ -20,7 +20,7 @@ module LicenseFinder
         License.find_by_text('This gem is released under the MIT license').should be_a License
       end
 
-      it "returns UnknownLicense with nil name if not found" do
+      it "returns nil if not found" do
         license = License.find_by_text("foo")
 
         expect(license).to be_nil
