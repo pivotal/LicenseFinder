@@ -6,11 +6,27 @@ module LicenseFinder
       it "should find a registered license" do
         License.find_by_name("Apache2").should be_a License
       end
+
+      context "when license not found" do
+        it "should return UnknownLicense with the name" do
+          license = License.find_by_name("New License")
+
+          expect(license).to be_a UnknownLicense
+          expect(license.pretty_name).to eq "New License"
+        end
+      end
     end
 
     describe ".find_by_text" do
       it "should find a registered license" do
         License.find_by_text('This gem is released under the MIT license').should be_a License
+      end
+
+      it "returns UnknownLicense with nil name if not found" do
+        license = License.find_by_text("foo")
+
+        expect(license).to be_a UnknownLicense
+        expect(license.pretty_name).to be_nil
       end
     end
 
