@@ -36,16 +36,12 @@ module LicenseFinder
     def license_names_from_spec
       license = pypi_def["license"]
 
-      if pypi_def["license"] && pypi_def["license"] != "UNKNOWN"
-        return [license]
-      else
-        classifiers = pypi_def.fetch("classifiers", [])
-        classifiers.map do |c|
-          if c.start_with?("License")
-            c.gsub(/^License.*::\s*(.*)$/, '\1')
-          end
-        end.compact
-      end
+      return [license] if license && license != "UNKNOWN"
+
+      pypi_def.
+        fetch("classifiers", []).
+        select { |c| c.start_with?("License") }.
+        map { |c| c.gsub(/^License.*::\s*(.*)$/, '\1') }
     end
   end
 end
