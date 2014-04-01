@@ -22,6 +22,8 @@ module LicenseFinder
   autoload :Bundler,              'license_finder/package_managers/bundler'
   autoload :NPM,                  'license_finder/package_managers/npm'
   autoload :Pip,                  'license_finder/package_managers/pip'
+  autoload :Maven,                'license_finder/package_managers/maven'
+  autoload :MavenPackage,         'license_finder/package_managers/maven_package'
   autoload :BowerPackage,         'license_finder/package_managers/bower_package'
   autoload :BundlerPackage,       'license_finder/package_managers/bundler_package'
   autoload :PipPackage,           'license_finder/package_managers/pip_package'
