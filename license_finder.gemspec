@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "sequel"
   s.add_dependency "thor"
   s.add_dependency "httparty"
+  s.add_dependency "xml-simple"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
   %w(rspec xpath cucumber pry).each do |gem|

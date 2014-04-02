@@ -52,6 +52,27 @@ module DSL
       npm_install
     end
 
+    def create_maven_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/pom.xml")
+
+      `mkdir -p #{app_path}`
+      `cd #{app_path} && cp #{path} .`
+
+      mvn_install
+    end
+
+    def create_gradle_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/build.gradle")
+
+      `mkdir -p #{app_path}`
+      `cd #{app_path} && cp #{path} .`
+      `gradle dependencies`
+    end
+
     def create_nonrails_app
       reset_projects!
 
@@ -195,6 +216,10 @@ module DSL
 
     def npm_install
       `cd #{app_path} && npm install 2>/dev/null`
+    end
+
+    def mvn_install
+      `cd #{app_path} && mvn install`
     end
 
     def modifying_dependencies_file

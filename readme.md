@@ -16,8 +16,13 @@ Add license_finder to your project's Gemfile and `bundle`:
 gem 'license_finder'
 ```
 
+#### For gradle projects
+
+You need to install the license gradle plugin: [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
+
 
 ## Usage
+
 
 License finder will generate reports of action items - i.e., dependencies that do not fall within your license "whitelist".
 
