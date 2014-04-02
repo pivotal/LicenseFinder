@@ -14,16 +14,19 @@ function perform {
   $1
 }
 
-printf "\nBuilding jruby..."
+printf "\nBuilding jruby gem"
 perform "rvm use jruby"
-perform "rake build"
+perform "gem build *.gemspec"
 
-printf "\nBuilding ruby..."
+printf "\nBuilding ruby gem"
 perform "rvm use ruby"
-perform "rake build"
+perform "gem build *.gemspec"
 
-printf "\nPublishing to rubygems..."
-perform "rake release"
-perform "gem push pkg/license_finder-$LF_GEM_VERSION-java.gem"
+for file in *.gem
+do
+    perform "gem push $file"
+done
+
+perform "rm *.gem"
 
 printf "\nRelease finished."
