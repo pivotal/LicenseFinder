@@ -162,11 +162,15 @@ module LicenseFinder
 
       desc "approve DEPENDENCY_NAME...", "Approve one or more dependencies by name"
       def approve(*names)
-        die_on_error {
-          names.each { |name| DependencyManager.approve!(name) }
-        }
+        if(names.count < 1)
+          say "Warning: Must specify dependencies to approve.", :red
+        else
+          die_on_error {
+            names.each { |name| DependencyManager.approve!(name) }
+          }
 
-        say "The #{names.join(", ")} dependency has been approved!", :green
+          say "The #{names.join(", ")} dependency has been approved!", :green
+        end
       end
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
