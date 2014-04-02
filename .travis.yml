@@ -27,3 +27,4 @@ before_install:
   
 install:
   - sudo apt-get install gradle -qq -y
+  - bundle install
