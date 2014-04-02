@@ -14,6 +14,10 @@ module LicenseFinder
     end
 
     describe '.current_packages' do
+      before do
+        expect(described_class).to receive(:`).with(/mvn/)
+      end
+
       it 'lists all the current packages' do
         license_xml = license_xml("""
           <dependency>
