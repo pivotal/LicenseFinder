@@ -23,11 +23,14 @@ module LicenseFinder
   autoload :NPM,                  'license_finder/package_managers/npm'
   autoload :Pip,                  'license_finder/package_managers/pip'
   autoload :Maven,                'license_finder/package_managers/maven'
-  autoload :MavenPackage,         'license_finder/package_managers/maven_package'
+  autoload :Gradle,               'license_finder/package_managers/gradle'
   autoload :BowerPackage,         'license_finder/package_managers/bower_package'
   autoload :BundlerPackage,       'license_finder/package_managers/bundler_package'
   autoload :PipPackage,           'license_finder/package_managers/pip_package'
   autoload :NpmPackage,           'license_finder/package_managers/npm_package'
+  autoload :MavenPackage,         'license_finder/package_managers/maven_package'
+  autoload :GradlePackage,        'license_finder/package_managers/gradle_package'
+
 
   autoload :BundlerGroup,         'license_finder/tables/bundler_group'
   autoload :Dependency,           'license_finder/tables/dependency'

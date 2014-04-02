@@ -63,6 +63,16 @@ module DSL
       mvn_install
     end
 
+    def create_gradle_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/build.gradle")
+
+      `mkdir -p #{app_path}`
+      `cd #{app_path} && cp #{path} .`
+      `gradle dependencies`
+    end
+
     def create_nonrails_app
       reset_projects!
 
