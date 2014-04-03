@@ -12,7 +12,9 @@ matrix:
     - rvm: ruby-head
     - rvm: jruby-head
 
-env: JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true'
+env:
+  - JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true'
+  - PATH=$PATH:$HOME/gradle/bin
 
 notifications:
   email:
@@ -23,8 +25,8 @@ notifications:
     on_start: true
 
 before_install:
-  - sudo apt-get update
-  
-install:
-  - sudo apt-get install gradle -qq -y
-  - bundle install
+  - cd /tmp
+  - wget http://services.gradle.org/distributions/gradle-1.11-all.zip
+  - unzip gradle*
+  - rm gradle*.zip
+  - mv gradle* ~/gradle
