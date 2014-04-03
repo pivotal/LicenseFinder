@@ -70,7 +70,6 @@ module DSL
 
       shell_out("mkdir -p #{app_path}")
       shell_out("cd #{app_path} && cp #{path} .")
-      shell_out("gradle dependencies")
     end
 
     def create_nonrails_app
