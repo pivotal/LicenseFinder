@@ -93,6 +93,17 @@ module DSL
       bundle_app
     end
 
+    def create_cocoapods_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/Podfile")
+
+      `mkdir -p #{app_path}`
+      `cp #{path} #{app_path}`
+
+      `cd #{app_path} && pod install --no-integrate`
+    end
+
     def update_gem(name, attrs)
       file_contents = YAML.load(File.read(dependencies_file_path))
 
