@@ -13,8 +13,7 @@ matrix:
     - rvm: jruby-head
 
 env:
-  - JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true'
-  - PATH=$PATH:$HOME/gradle/bin
+  - JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true' PATH=$PATH:$HOME/gradle/bin
 
 notifications:
   email:
@@ -30,3 +29,4 @@ before_install:
   - unzip gradle*
   - rm gradle*.zip
   - mv gradle* ~/gradle
+  - cd -
