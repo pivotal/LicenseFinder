@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.name        = "license_finder"
   s.version     = "1.0.0.0"
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers", "Brent Wheeldon", "Trevor John", "David Tengdin", "William Ramsey"]
-  s.email       = ["licensefinder@pivotalabs.com"]
+  s.email       = ["commoncode@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
   s.summary     = "Audit the OSS licenses of your application's dependencies."
 
