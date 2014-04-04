@@ -166,11 +166,15 @@ module LicenseFinder
       method_option :message, desc: "The reason for the approval"
       desc "approve DEPENDENCY_NAME... [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
       def approve(*names)
-        die_on_error {
-          names.each { |name| DependencyManager.approve!(name, options[:approver], options[:message]) }
-        }
+        if(names.count < 1)
+          say "Warning: Must specify dependencies to approve.", :red
+        else
+          die_on_error {
+            names.each { |name| DependencyManager.approve!(name, options[:approver], options[:message]) }
+          }
 
-        say "The #{names.join(", ")} dependency has been approved!", :green
+          say "The #{names.join(", ")} dependency has been approved!", :green
+        end
       end
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"

@@ -47,9 +47,30 @@ module DSL
       `mkdir -p #{app_path}`
       `cd #{app_path} && touch package.json`
 
-      add_npm_dependency('jshint', '2.1.9')
+      add_npm_dependency('http-server', '0.6.1')
 
       npm_install
+    end
+
+    def create_maven_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/pom.xml")
+
+      `mkdir -p #{app_path}`
+      `cd #{app_path} && cp #{path} .`
+
+      mvn_install
+    end
+
+    def create_gradle_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/build.gradle")
+
+      `mkdir -p #{app_path}`
+      `cd #{app_path} && cp #{path} .`
+      `gradle dependencies`
     end
 
     def create_nonrails_app
@@ -57,7 +78,6 @@ module DSL
 
       `cd #{projects_path} && bundle gem #{app_name}`
 
-      add_gem_dependency('rake')
       add_gem_dependency('license_finder', :path => root_path)
 
       bundle_app
@@ -73,11 +93,15 @@ module DSL
       bundle_app
     end
 
-    def add_license_finder_to_rakefile
-      add_to_rakefile <<-RUBY
-        require 'bundler/setup'
-        require 'license_finder'
-      RUBY
+    def create_cocoapods_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/Podfile")
+
+      `mkdir -p #{app_path}`
+      `cp #{path} #{app_path}`
+
+      `cd #{app_path} && pod install --no-integrate`
     end
 
     def add_dependency_to_app(gem_name, options={})
@@ -184,14 +208,14 @@ module DSL
       `cd #{app_path} && npm install 2>/dev/null`
     end
 
+    def mvn_install
+      `cd #{app_path} && mvn install`
+    end
+
     private
 
     def add_to_gemfile(line)
       `echo #{line.inspect} >> #{File.join(app_path, "Gemfile")}`
-    end
-
-    def add_to_rakefile(line)
-      `echo #{line.inspect} >> #{File.join(app_path, "Rakefile")}`
     end
 
     def add_to_requirements(line)

@@ -3,11 +3,10 @@ require 'spec_helper'
 module LicenseFinder
   describe Dependency do
     describe '.unapproved' do
-      let(:config) { Configuration.new }
+      let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
 
       before do
         LicenseFinder.stub(:config).and_return config
-        config.whitelist = ["MIT", "other"]
       end
 
       it "should return all unapproved dependencies" do

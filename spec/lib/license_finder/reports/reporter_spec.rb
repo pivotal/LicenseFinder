@@ -7,38 +7,25 @@ module LicenseFinder
 
       before do
         Dependency.stub(:all) { [double(:dep)] }
-        File.any_instance.stub(:puts)
 
-        LicenseFinder.stub_chain(:config, :dependencies_html) { 'html_file_path' }
-        LicenseFinder.stub_chain(:config, :dependencies_text) { 'text_file_path' }
-        LicenseFinder.stub_chain(:config, :dependencies_detailed_text) { 'detailed_text_file_path' }
-        LicenseFinder.stub_chain(:config, :dependencies_markdown) { 'markdown_file_path' }
-
-        MarkdownReport.stub_chain(:new, :to_s) { 'text report' }
-        DetailedTextReport.stub_chain(:new, :to_s) { 'text report' }
-        TextReport.stub_chain(:new, :to_s) { 'text report' }
-        HtmlReport.stub_chain(:new, :to_s) { 'text report' }
-
-        LicenseFinder.stub_chain(:config, :dependencies_legacy_text) { 'legacy_text_path' }
-        File.stub(:exists?).with('legacy_text_path') { false }
-
-        File.stub(:open).with('html_file_path', 'w+')
-        File.stub(:open).with('text_file_path', 'w+')
-        File.stub(:open).with('detailed_text_file_path', 'w+')
-        File.stub(:open).with('markdown_file_path', 'w+')
+        MarkdownReport.stub(:of) { 'markdown report' }
+        DetailedTextReport.stub(:of) { 'detailed csv report' }
+        TextReport.stub(:of) { 'csv report' }
+        HtmlReport.stub(:of) { 'html report' }
       end
 
       it "writes an html file" do
-        File.should_receive(:open).with('html_file_path', 'w+')
-        File.should_receive(:open).with('text_file_path', 'w+')
-        File.should_receive(:open).with('detailed_text_file_path', 'w+')
-        File.should_receive(:open).with('markdown_file_path', 'w+')
         subject
+        LicenseFinder.config.artifacts.text_file.read.should == "csv report\n"
+        LicenseFinder.config.artifacts.detailed_text_file.read.should == "detailed csv report\n"
+        LicenseFinder.config.artifacts.markdown_file.read.should == "markdown report\n"
+        LicenseFinder.config.artifacts.html_file.read.should == "html report\n"
       end
 
       it "deletes old dependencies.txt file" do
-        File.stub(:exists?).with('legacy_text_path') { true }
-        File.should_receive(:delete).with('legacy_text_path')
+        fake_file =  double(:fake_file, :exist? => true)
+        LicenseFinder.config.artifacts.stub(:legacy_text_file) { fake_file }
+        fake_file.should_receive(:delete)
         subject
       end
     end

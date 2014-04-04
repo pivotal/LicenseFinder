@@ -40,8 +40,8 @@ module LicenseFinder
       node_module["path"]
     end
 
-    def license_from_spec
-      Package.extract_license_from_standard_spec(node_module)
+    def licenses_from_spec
+      Package.extract_licenses_from_standard_spec(node_module)
     end
   end
 end

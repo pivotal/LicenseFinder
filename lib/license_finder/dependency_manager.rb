@@ -33,16 +33,15 @@ module LicenseFinder
     end
 
     def self.modifying
-      checksum_before_modifying = if File.exists? LicenseFinder.config.database_uri
-                                    Digest::SHA2.file(LicenseFinder.config.database_uri).hexdigest
-                                  end
+      database_file = LicenseFinder.config.artifacts.database_file
+      checksum_before_modifying = checksum(database_file)
       result = yield
-      checksum_after_modifying = Digest::SHA2.file(LicenseFinder.config.database_uri).hexdigest
+      checksum_after_modifying = checksum(database_file)
 
       unless checksum_after_modifying == checksum_before_modifying
         Reporter.write_reports
       end
-      unless File.exists? LicenseFinder.config.dependencies_html
+      unless LicenseFinder.config.artifacts.html_file.exist?
         Reporter.write_reports
       end
 
@@ -56,13 +55,19 @@ module LicenseFinder
     end
 
     def self.package_managers
-      [Bundler, NPM, Pip, Bower]
+      [Bundler, NPM, Pip, Bower, Maven, Gradle, CocoaPods]
     end
 
     def self.find_by_name(name, scope = Dependency)
       dep = scope.first(name: name)
       raise Error.new("could not find dependency named #{name}") unless dep
       dep
+    end
+
+    def self.checksum(database_file)
+      if database_file.exist?
+        Digest::SHA2.file(database_file).hexdigest
+      end
     end
   end
 end

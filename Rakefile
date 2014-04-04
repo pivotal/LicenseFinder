@@ -12,10 +12,10 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = %w[--color]
 end
 
-
 desc "Run all cukes in features/"
 Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = "features --format pretty"
+  tags = RUBY_PLATFORM =~ /darwin/ ? "" : "--tags ~@ios"
+  t.cucumber_opts = "features --format pretty #{tags}"
 end
 
 task :default => [:spec, :features]

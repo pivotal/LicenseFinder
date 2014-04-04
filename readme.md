@@ -16,8 +16,13 @@ Add license_finder to your project's Gemfile and `bundle`:
 gem 'license_finder'
 ```
 
+#### For gradle projects
+
+You need to install the license gradle plugin: [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
+
 
 ## Usage
+
 
 License finder will generate reports of action items - i.e., dependencies that do not fall within your license "whitelist".
 
@@ -246,7 +251,7 @@ And add a `LICENSE` file to your gem that contains your license text.
 * Rebase on top of master
 * Send a pull request
 
-To successfully run the test suite, you will need node.js, and python installed. If you're running the test suite with jruby, you're probably going to want to set up these environment variables:
+To successfully run the test suite, you will need node.js, python and pip installed (pip should not require sudo to work, virtualenv will work for this). If you're running the test suite with jruby, you're probably going to want to set up these environment variables:
 
 ```
 JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true'

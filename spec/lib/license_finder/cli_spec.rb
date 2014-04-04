@@ -214,6 +214,16 @@ module LicenseFinder
             Main.start(["approve", "--approver", "Julian", "--message", "We really need this", "foo"])
           end
         end
+
+        it "raises a warning if no gem was specified" do
+          DependencyManager.should_not_receive(:approve!)
+
+          silence_stdout do
+            subject.should_receive(:say).with(/Warning/, :red)
+            subject.should_not_receive(:say).with(/dependency has been approved/, anything)
+            subject.approve
+          end
+        end
       end
 
       describe "#action_items" do

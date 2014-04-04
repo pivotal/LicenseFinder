@@ -10,13 +10,17 @@ module LicenseFinder
       end
     end
 
+    def self.of(dependencies)
+      new(dependencies).to_s
+    end
+
     def initialize(dependencies=[])
       @dependencies = Array dependencies
     end
 
     def to_s
       filename = ROOT_PATH.join('templates', "#{self.class.underscored_name}.erb")
-      template = ERB.new(File.read(filename), nil, '-')
+      template = ERB.new(filename.read, nil, '-')
       template.result(binding)
     end
 

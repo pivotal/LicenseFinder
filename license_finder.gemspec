@@ -3,9 +3,9 @@ require './lib/license_finder/platform'
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.name        = "license_finder"
-  s.version     = "0.9.5.1"
+  s.version     = "1.0.0.0"
   s.authors     = ["Jacob Maine", "Matthew Kane Parker", "Ian Lesperance", "David Edwards", "Paul Meskers", "Brent Wheeldon", "Trevor John", "David Tengdin", "William Ramsey"]
-  s.email       = ["licensefinder@pivotalabs.com"]
+  s.email       = ["commoncode@pivotalabs.com"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
   s.summary     = "Audit the OSS licenses of your application's dependencies."
 
@@ -22,8 +22,8 @@ Gem::Specification.new do |s|
   s.add_dependency "bundler"
   s.add_dependency "sequel"
   s.add_dependency "thor"
-  s.add_dependency "rake"
   s.add_dependency "httparty"
+  s.add_dependency "xml-simple"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
   %w(rspec xpath cucumber pry).each do |gem|
@@ -33,6 +33,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "rails", "~> 3.2.0"
   s.add_development_dependency "webmock", "~> 1.13"
+  s.add_development_dependency "rake"
+  s.add_development_dependency "cocoapods" if RUBY_PLATFORM =~ /darwin/
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

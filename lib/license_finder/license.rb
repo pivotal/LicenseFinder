@@ -6,11 +6,11 @@ module LicenseFinder
       end
 
       def find_by_name(name)
-        all.detect { |l| l.matches_name? name }
+        all.detect { |l| l.matches_name? name } || UnknownLicense.new(name)
       end
 
       def find_by_text(text)
-        all.detect { |l| l.matches_text? text }
+        all.detect { |l| l.matches_text? text } || UnknownLicense.new
       end
     end
 
@@ -44,6 +44,19 @@ module LicenseFinder
 
     def names
       ([short_name, pretty_name] + other_names).uniq
+    end
+  end
+
+  class UnknownLicense
+    attr_reader :pretty_name
+
+    def initialize(name = nil)
+      @pretty_name = name
+    end
+    def url; end
+
+    def ==(other)
+      pretty_name.eql?(other.pretty_name)
     end
   end
 end

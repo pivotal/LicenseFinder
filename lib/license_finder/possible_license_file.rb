@@ -16,9 +16,7 @@ module LicenseFinder
     end
 
     def license
-      license = License.find_by_text(text)
-
-      license.pretty_name if license
+      License.find_by_text(text).pretty_name
     end
   end
 end

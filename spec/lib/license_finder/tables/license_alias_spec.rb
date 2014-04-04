@@ -11,11 +11,10 @@ module LicenseFinder
     end
 
     describe "#whitelisted?" do
-      let(:config) { Configuration.new }
+      let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
 
       before do
         LicenseFinder.stub(:config).and_return config
-        config.whitelist = ["MIT", "other"]
       end
 
       it "should return true when the license is whitelisted" do
