@@ -6,19 +6,18 @@ module LicenseFinder
       let(:dep1) do
         dependency = Dependency.new(
           'name' => 'gem_a',
-          'version' => '1.0',
-          'manually_approved' => false
+          'version' => '1.0'
         )
         dependency.license = LicenseFinder::LicenseAlias.create(name: 'MIT')
         dependency
       end
 
       let(:dep2) do
-        dependency = Dependency.new(
+        dependency = Dependency.create(
           'name' => 'gem_b',
-          'version' => '2.3',
-          'manually_approved' => true
+          'version' => '2.3'
         )
+        dependency.approve!
         dependency.license = LicenseFinder::LicenseAlias.create(name: 'BSD')
         dependency
       end
@@ -31,7 +30,8 @@ module LicenseFinder
       end
 
       it 'should list the total, and unapproved counts' do
-        should match "2 total, _1 unapproved_"
+        should match "2 total"
+        should match /1 \*unapproved\*/
       end
 
       it "should list the unapproved dependency" do

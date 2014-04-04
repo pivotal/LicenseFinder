@@ -37,6 +37,7 @@ module LicenseFinder
   autoload :BundlerGroup,         'license_finder/tables/bundler_group'
   autoload :Dependency,           'license_finder/tables/dependency'
   autoload :LicenseAlias,         'license_finder/tables/license_alias'
+  autoload :ManualApproval,       'license_finder/tables/manual_approval'
   autoload :YmlToSql,             'license_finder/yml_to_sql'
 
   autoload :DependencyReport,     'license_finder/reports/dependency_report'

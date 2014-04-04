@@ -5,7 +5,7 @@ module LicenseFinder
     describe Dependencies do
       describe "add" do
         it "adds a dependency" do
-          DependencyManager.should_receive(:create_manually_managed).with("MIT", "js_dep", "1.2.3")
+          DependencyManager.should_receive(:manually_add).with("MIT", "js_dep", "1.2.3")
 
           silence_stdout do
             subject.add("MIT", "js_dep", "1.2.3")
@@ -13,7 +13,7 @@ module LicenseFinder
         end
 
         it "does not require a version" do
-          DependencyManager.should_receive(:create_manually_managed).with("MIT", "js_dep", nil)
+          DependencyManager.should_receive(:manually_add).with("MIT", "js_dep", nil)
 
           silence_stdout do
             subject.add("MIT", "js_dep")
@@ -21,18 +21,18 @@ module LicenseFinder
         end
 
         it "has an --approve option to approve the added dependency" do
-          DependencyManager.should_receive(:create_manually_managed).with("MIT", "js_dep", "1.2.3")
-          DependencyManager.should_receive(:approve!).with("js_dep")
+          DependencyManager.should_receive(:manually_add).with("MIT", "js_dep", "1.2.3")
+          DependencyManager.should_receive(:approve!).with("js_dep", "Julian", "We really need this")
 
           silence_stdout do
-            LicenseFinder::CLI::Main.start(["dependencies", "add", "--approve", "MIT", "js_dep", "1.2.3"])
+            Main.start(["dependencies", "add", "--approve", "--approver", "Julian", "--message", "We really need this", "MIT", "js_dep", "1.2.3"])
           end
         end
       end
 
       describe "remove" do
         it "removes a dependency" do
-          DependencyManager.should_receive(:destroy_manually_managed).with("js_dep")
+          DependencyManager.should_receive(:manually_remove).with("js_dep")
           silence_stdout do
             subject.remove("js_dep")
           end
@@ -191,7 +191,7 @@ module LicenseFinder
 
       describe "#approve" do
         it "approves the requested gem" do
-          DependencyManager.should_receive(:approve!).with("foo")
+          DependencyManager.should_receive(:approve!).with("foo", nil, nil)
 
           silence_stdout do
             subject.approve 'foo'
@@ -199,11 +199,19 @@ module LicenseFinder
         end
 
         it "approves multiple gem" do
-          DependencyManager.should_receive(:approve!).with("foo")
-          DependencyManager.should_receive(:approve!).with("bar")
+          DependencyManager.should_receive(:approve!).with("foo", nil, nil)
+          DependencyManager.should_receive(:approve!).with("bar", nil, nil)
 
           silence_stdout do
             subject.approve 'foo', 'bar'
+          end
+        end
+
+        it "sets approver and approval message" do
+          DependencyManager.should_receive(:approve!).with("foo", "Julian", "We really need this")
+
+          silence_stdout do
+            Main.start(["approve", "--approver", "Julian", "--message", "We really need this", "foo"])
           end
         end
 
