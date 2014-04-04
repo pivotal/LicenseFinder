@@ -104,12 +104,12 @@ module LicenseFinder
         NPM.stub(package_path: package)
       end
 
-      it 'is true with a package file' do
+      it 'is true with a package.json file' do
         package.stub(:exist? => true)
         expect(NPM).to be_active
       end
 
-      it 'is false without a package file' do
+      it 'is false without a package.json file' do
         package.stub(:exist? => false)
         expect(NPM).to_not be_active
       end

@@ -65,12 +65,12 @@ module LicenseFinder
         CocoaPods.stub(package_path: package)
       end
 
-      it 'is true with a package file' do
+      it 'is true with a Podfile file' do
         package.stub(:exist? => true)
         expect(CocoaPods).to be_active
       end
 
-      it 'is false without a package file' do
+      it 'is false without a Podfile file' do
         package.stub(:exist? => false)
         expect(CocoaPods).to_not be_active
       end

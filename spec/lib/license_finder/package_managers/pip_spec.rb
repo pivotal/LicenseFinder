@@ -47,12 +47,12 @@ module LicenseFinder
         Pip.stub(requirements_path: requirements)
       end
 
-      it 'is true with a requirements file' do
+      it 'is true with a requirements.txt file' do
         requirements.stub(:exist? => true)
         expect(Pip).to be_active
       end
 
-      it 'is false without a requirements file' do
+      it 'is false without a requirements.txt file' do
         requirements.stub(:exist? => false)
         expect(Pip).to_not be_active
       end

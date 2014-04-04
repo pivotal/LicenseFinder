@@ -72,12 +72,12 @@ module LicenseFinder
         Gradle.stub(package_path: package)
       end
 
-      it 'is true with a package file' do
+      it 'is true with a build.gradle file' do
         package.stub(:exist? => true)
         expect(Gradle).to be_active
       end
 
-      it 'is false without a package file' do
+      it 'is false without a build.gradle file' do
         package.stub(:exist? => false)
         expect(Gradle).to_not be_active
       end

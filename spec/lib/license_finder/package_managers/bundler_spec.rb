@@ -70,12 +70,12 @@ module LicenseFinder
         Bundler.stub(gemfile_path: gemfile)
       end
 
-      it 'is true with a gemfile file' do
+      it 'is true with a Gemfile file' do
         gemfile.stub(:exist? => true)
         expect(Bundler).to be_active
       end
 
-      it 'is false without a gemfile file' do
+      it 'is false without a Gemfile file' do
         gemfile.stub(:exist? => false)
         expect(Bundler).to_not be_active
       end

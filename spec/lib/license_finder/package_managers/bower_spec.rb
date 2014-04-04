@@ -44,12 +44,12 @@ module LicenseFinder
         Bower.stub(package_path: package)
       end
 
-      it 'is true with a package file' do
+      it 'is true with a bower.json file' do
         package.stub(:exist? => true)
         expect(Bower).to be_active
       end
 
-      it 'is false without a package file' do
+      it 'is false without a bower.json file' do
         package.stub(:exist? => false)
         expect(Bower).to_not be_active
       end
