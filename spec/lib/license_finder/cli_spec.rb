@@ -211,9 +211,7 @@ module LicenseFinder
           DependencyManager.should_not_receive(:approve!)
 
           silence_stdout do
-            subject.should_receive(:say).with(/Warning/, :red)
-            subject.should_not_receive(:say).with(/dependency has been approved/, anything)
-            subject.approve
+            expect { subject.approve }.to raise_error(ArgumentError)
           end
         end
 
