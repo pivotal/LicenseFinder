@@ -18,17 +18,17 @@ module LicenseFinder
     end
 
     def self.active?
-      File.exists?(package_path)
+      package_path.exist?
     end
 
     private
 
     def self.package_path
-      Pathname.new("Podfile").expand_path
+      Pathname.new("Podfile")
     end
 
     def self.lockfile_path
-      Pathname.new("Podfile.lock").expand_path
+      Pathname.new("Podfile.lock")
     end
 
   end

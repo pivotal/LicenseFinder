@@ -18,7 +18,7 @@ module LicenseFinder
     end
 
     def stub_lockfile(pods)
-      allow(YAML).to receive(:load_file).with(Pathname.new("Podfile.lock").expand_path).and_return("PODS" => pods)
+      allow(YAML).to receive(:load_file).with(Pathname.new("Podfile.lock")).and_return("PODS" => pods)
     end
 
     describe '.current_packages' do
@@ -59,26 +59,20 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:package) { Pathname.new('Podfile').expand_path }
+      let(:package) { double(:package_file) }
 
-      context 'with a Podfile' do
-        before :each do
-          allow(File).to receive(:exists?).with(package).and_return(true)
-        end
-
-        it 'returns true' do
-          expect(CocoaPods.active?).to eq(true)
-        end
+      before do
+        CocoaPods.stub(package_path: package)
       end
 
-      context 'without a Podfile file' do
-        before :each do
-          allow(File).to receive(:exists?).with(package).and_return(false)
-        end
+      it 'is true with a package file' do
+        package.stub(:exist? => true)
+        expect(CocoaPods).to be_active
+      end
 
-        it 'returns false' do
-          expect(CocoaPods.active?).to eq(false)
-        end
+      it 'is false without a package file' do
+        package.stub(:exist? => false)
+        expect(CocoaPods).to_not be_active
       end
     end
   end
