@@ -5,8 +5,15 @@
 
 With bundler and other dependency management tools, it's easy for your project to depend on many packages.  This decomposition is nice, but managing licenses becomes difficult.  License Finder gathers info about the licenses of the packages in your project.
 
-License Finder currently supports ruby gems, python eggs, and node modules. If you are looking to manage licenses on a java/maven project, we recommend using the [license maven plugin](http://mojo.codehaus.org/license-maven-plugin/).
+### Supported project types
+- Ruby (+ Bundler)
+- Python (+ Eggs)
+- Node.js (+ Modules)
 
+### Experimental project types 
+- Java (+ Maven)
+- Java (+ Gradle)
+- Objective-C (+ CocoaPods)
 
 ## Installation
 
