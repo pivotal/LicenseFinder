@@ -44,7 +44,8 @@ module LicenseFinder
             </licenses>
            </dependency>
         """)
-        allow(File).to receive(:read).with("target/generated-resources/licenses.xml").and_return(license_xml)
+        fake_file = double(:license_report, read: license_xml)
+        allow(Maven).to receive(:license_report).and_return(fake_file)
 
         current_packages = Maven.current_packages
 
@@ -66,7 +67,8 @@ module LicenseFinder
           </dependency>
         """)
 
-        allow(File).to receive(:read).with("target/generated-resources/licenses.xml").and_return(license_xml)
+        fake_file = double(:license_report, read: license_xml)
+        allow(Maven).to receive(:license_report).and_return(fake_file)
 
         MavenPackage.should_receive(:new).with("licenses" => [{"name" => "License 1"}, {"name" => "License 2"}])
         Maven.current_packages
@@ -81,7 +83,8 @@ module LicenseFinder
           </dependency>
         """)
 
-        allow(File).to receive(:read).with("target/generated-resources/licenses.xml").and_return(license_xml)
+        fake_file = double(:license_report, read: license_xml)
+        allow(Maven).to receive(:license_report).and_return(fake_file)
 
         MavenPackage.should_receive(:new).with("licenses" => {})
         Maven.current_packages
@@ -89,26 +92,20 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:package) { Pathname.new('pom.xml').expand_path }
+      let(:package) { double(:package_file) }
 
-      context 'with a pom.xml file' do
-        before :each do
-          allow(File).to receive(:exists?).with(package).and_return(true)
-        end
-
-        it 'returns true' do
-          expect(Maven.active?).to eq(true)
-        end
+      before do
+        allow(Maven).to receive(:package_path).and_return(package)
       end
 
-      context 'without a pom.xml file' do
-        before :each do
-          allow(File).to receive(:exists?).with(package).and_return(false)
-        end
+      it 'is true with a pom.xml file' do
+        allow(package).to receive(:exist?).and_return(true)
+        expect(Maven.active?).to eq(true)
+      end
 
-        it 'returns false' do
-          expect(Maven.active?).to eq(false)
-        end
+      it 'is false without a pom.xml file' do
+        allow(package).to receive(:exist?).and_return(false)
+        expect(Maven.active?).to eq(false)
       end
     end
   end

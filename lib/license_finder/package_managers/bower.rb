@@ -14,13 +14,13 @@ module LicenseFinder
     end
 
     def self.active?
-      File.exists?(package_path)
+      package_path.exist?
     end
 
     private
 
     def self.package_path
-      Pathname.new('bower.json').expand_path
+      Pathname.new('bower.json')
     end
   end
 end

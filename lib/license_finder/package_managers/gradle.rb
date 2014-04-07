@@ -5,7 +5,7 @@ module LicenseFinder
     def self.current_packages
       `gradle downloadLicenses`
 
-      xml = File.read('build/reports/license/dependency-license.xml')
+      xml = license_report.read
 
       options = {
         'GroupTags' => { 'dependencies' => 'dependency' }
@@ -17,13 +17,17 @@ module LicenseFinder
     end
 
     def self.active?
-      File.exists?(package_path)
+      package_path.exist?
     end
 
     private
 
+    def self.license_report
+      Pathname.new('build/reports/license/dependency-license.xml')
+    end
+
     def self.package_path
-      Pathname.new('build.gradle').expand_path
+      Pathname.new('build.gradle')
     end
   end
 end

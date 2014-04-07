@@ -5,7 +5,7 @@ module LicenseFinder
     def self.current_packages
       `mvn license:download-licenses`
 
-      xml = File.read('target/generated-resources/licenses.xml')
+      xml = license_report.read
 
       options = {
         'GroupTags' => { 'licenses' => 'license', 'dependencies' => 'dependency' },
@@ -19,13 +19,17 @@ module LicenseFinder
     end
 
     def self.active?
-      File.exists?(package_path)
+      package_path.exist?
     end
 
     private
 
+    def self.license_report
+      Pathname.new('target/generated-resources/licenses.xml')
+    end
+
     def self.package_path
-      Pathname.new('pom.xml').expand_path
+      Pathname.new('pom.xml')
     end
   end
 end

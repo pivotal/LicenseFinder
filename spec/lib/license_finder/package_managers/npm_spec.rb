@@ -98,26 +98,20 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:package) { Pathname.new('package.json').expand_path }
+      let(:package) { double(:package_file) }
 
-      context 'with a package.json file' do
-        before :each do
-          allow(File).to receive(:exists?).with(package).and_return(true)
-        end
-
-        it 'returns true' do
-          expect(NPM.active?).to eq(true)
-        end
+      before do
+        NPM.stub(package_path: package)
       end
 
-      context 'without a package file' do
-        before :each do
-          allow(File).to receive(:exists?).with(package).and_return(false)
-        end
+      it 'is true with a package.json file' do
+        package.stub(:exist? => true)
+        expect(NPM).to be_active
+      end
 
-        it 'returns false' do
-          expect(NPM.active?).to eq(false)
-        end
+      it 'is false without a package.json file' do
+        package.stub(:exist? => false)
+        expect(NPM).to_not be_active
       end
     end
   end

@@ -26,7 +26,8 @@ module LicenseFinder
             <license name='The Apache Software License, Version 2.0' url='http://www.apache.org/licenses/LICENSE-2.0.txt' />
           </dependency>
         """)
-        allow(File).to receive(:read).with("build/reports/license/dependency-license.xml").and_return(license_xml)
+        fake_file = double(:license_report, read: license_xml)
+        allow(Gradle).to receive(:license_report).and_return(fake_file)
 
         current_packages = described_class.current_packages
 
@@ -42,7 +43,8 @@ module LicenseFinder
           </dependency>
         """)
 
-        allow(File).to receive(:read).with("build/reports/license/dependency-license.xml").and_return(license_xml)
+        fake_file = double(:license_report, read: license_xml)
+        allow(Gradle).to receive(:license_report).and_return(fake_file)
 
         GradlePackage.should_receive(:new).with("license" => [{"name" => "License 1"}, {"name" => "License 2"}])
         Gradle.current_packages
@@ -55,7 +57,8 @@ module LicenseFinder
           </dependency>
         """)
 
-        allow(File).to receive(:read).with("build/reports/license/dependency-license.xml").and_return(license_xml)
+        fake_file = double(:license_report, read: license_xml)
+        allow(Gradle).to receive(:license_report).and_return(fake_file)
 
         GradlePackage.should_receive(:new).with("license" => [])
         Gradle.current_packages
@@ -63,26 +66,20 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:package) { Pathname.new('build.gradle').expand_path }
+      let(:package) { double(:package_file) }
 
-      context 'with a build.gradle file' do
-        before :each do
-          allow(File).to receive(:exists?).with(package).and_return(true)
-        end
-
-        it 'returns true' do
-          expect(Gradle.active?).to eq(true)
-        end
+      before do
+        Gradle.stub(package_path: package)
       end
 
-      context 'without a build.gradle file' do
-        before :each do
-          allow(File).to receive(:exists?).with(package).and_return(false)
-        end
+      it 'is true with a build.gradle file' do
+        package.stub(:exist? => true)
+        expect(Gradle).to be_active
+      end
 
-        it 'returns false' do
-          expect(Gradle.active?).to eq(false)
-        end
+      it 'is false without a build.gradle file' do
+        package.stub(:exist? => false)
+        expect(Gradle).to_not be_active
       end
     end
   end

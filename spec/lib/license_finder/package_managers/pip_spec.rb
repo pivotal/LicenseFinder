@@ -41,26 +41,20 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:requirements) { Pathname.new('requirements.txt').expand_path }
+      let(:requirements) { double(:requirements_file) }
 
-      context 'with a requirements file' do
-        before :each do
-          allow(File).to receive(:exists?).with(requirements).and_return(true)
-        end
-
-        it 'returns true' do
-          expect(Pip.active?).to eq(true)
-        end
+      before do
+        Pip.stub(requirements_path: requirements)
       end
 
-      context 'without a requirements file' do
-        before :each do
-          allow(File).to receive(:exists?).with(requirements).and_return(false)
-        end
+      it 'is true with a requirements.txt file' do
+        requirements.stub(:exist? => true)
+        expect(Pip).to be_active
+      end
 
-        it 'returns false' do
-          expect(Pip.active?).to eq(false)
-        end
+      it 'is false without a requirements.txt file' do
+        requirements.stub(:exist? => false)
+        expect(Pip).to_not be_active
       end
     end
   end
