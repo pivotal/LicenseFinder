@@ -41,7 +41,7 @@ $ license_finder
 
 License finder will include packages for all supported languages, as long as that language has a Gemfile/requirements.txt/package.json in the project directory.
 
-On a brand new Rails project, you could expect `license_finder` to output something like the following
+On a brand new Rails project, you could expect license_finder to output something like the following
 (assuming you whitelisted the MIT license -- see [Configuration](#configuration)):
 
 ```
@@ -61,7 +61,7 @@ directory (by default -- see [Configuration](#configuration)).
 
 The latter two files are human readable reports that you could send to your non-technical business partners, lawyers, etc.
 
-`license_finder` will also return a non-zero exit status if there are
+license_finder will also return a non-zero exit status if there are
 unapproved dependencies. You could use this in a CI build, for example, to alert you whenever someone adds an
 unapproved dependency to the project.
 
@@ -69,7 +69,7 @@ Run `license_finder help` to see other available commands.
 
 ### Manually setting licenses
 
-When `license_finder` reports that a dependency's license is 'other', you should manually research what the actual
+When license_finder reports that a dependency's license is 'other', you should manually research what the actual
 license is.  When you have established the real license, you can record it with:
 
 ```sh
@@ -80,7 +80,7 @@ This command would assign the MIT license to the dependency `my_unknown_dependen
 
 ### Manually approving dependencies
 
-Whenever you have a dependency that falls outside of your whitelist, `license_finder` will tell you.
+Whenever you have a dependency that falls outside of your whitelist, license_finder will tell you.
 If your business decides that this is an acceptable risk, you can manually approve the dependency by using the
 `license_finder approve` command.
 
@@ -99,7 +99,7 @@ Your business tells you that in this case, it's acceptable to use this gem. You 
 $ license_finder approve awesome_gpl_gem
 ```
 
-If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
+If you rerun license_finder, you should no longer see `awesome_gpl_gem` in the output.
 
 To record who approved the dependency and why:
 
@@ -109,8 +109,8 @@ $ license_finder approve awesome_gpl_gem --approver CTO --message "Go ahead"
 
 ### Managing license whitelist
 
-Licenses can be added to a whitelist that tells LicenseFinder to automatically approve dependencies using the specified licenses.
-These licenses can be managed with the `whitelist` command.
+Licenses can be added to a whitelist that tells license_finder to automatically approve dependencies using the specified licenses.
+These licenses can be managed with the `license_finder whitelist` command.
 
 To list licenses currently on the whitelist:
 
@@ -132,8 +132,8 @@ $ license_finder whitelist remove MIT [BSD [...]]
 
 ### Managing ignored Bundler groups
 
-Bundler groups can be added to an ignore list which will prevent LicenseFinder from evaluating their licenses.
-These groups can be managed with the `ignored_bundler_groups` command.
+Bundler groups can be added to an ignore list which will prevent license_finder from evaluating their licenses.
+These groups can be managed with the `license_finder ignored_bundler_groups` command.
 
 To list currently ignored Bundler groups:
 
@@ -197,7 +197,7 @@ The changes will be reflected in the report the next time you run license_finder
 
 ## Configuration
 
-The first time you run `license_finder` it will create a default configuration file `./config/license_finder.yml`:
+The first time you run license_finder it will create a default configuration file `./config/license_finder.yml`:
 
 ```yaml
 ---
@@ -211,7 +211,7 @@ dependencies_file_dir: './doc/'
 project_name: My Project Name
 ```
 
-By modifying this file, you can configure license_finder's behavior. `Whitelisted` licenses will be automatically approved
+By modifying this file, you can configure license_finder's behavior. Licenses in the `whitelist` will be automatically approved
 and `ignore_groups` will limit which dependencies are included in your license report.  You can store the license database
 and text files in another directory by changing `dependencies_file_dir`.
 
@@ -234,7 +234,7 @@ If you wish to cleanup your root directory you can run:
 $ license_finder move
 ```
 
-This will move your dependencies.* files to the /doc directory and update the config.
+This will move your `dependencies.*` files to the doc/ directory and update the config.
 
 
 ## Compatibility
