@@ -1,9 +1,9 @@
 Given(/^I have an app with license finder that has no config directory$/) do
   @user = ::DSL::User.new
   @user.create_nonrails_app
-  path = @user.app_path('config')
-  FileUtils.rm_rf(path)
-  File.should_not be_exists(path)
+  path = @user.config_path
+  path.rmtree if path.exist?
+  path.should_not be_exist
 end
 
 Given(/^I have an app with license finder that depends on a MIT licensed gem$/) do
@@ -31,9 +31,9 @@ When(/^I run license_finder help$/) do
 end
 
 Then(/^it creates a config directory with the license_finder config$/) do
-  File.should be_exists(@user.app_path('config'))
+  @user.config_path.should be_exist
   text = "---\nwhitelist:\n#- MIT\n#- Apache 2.0\nignore_groups:\n#- test\n#- development\ndependencies_file_dir: './doc/'\nproject_name: # project name\n"
-  File.read(@user.app_path('config/license_finder.yml')).should == text.gsub(/^\s+/, "")
+  @user.config_file.read.should == text.gsub(/^\s+/, "")
 end
 
 Then /^it should exit with status code (\d)$/ do |status|

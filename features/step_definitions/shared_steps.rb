@@ -145,9 +145,8 @@ module DSL
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
-      config_path = app_path('config')
       config_path.mkpath
-      config_path.join("license_finder.yml").open("w") do |f|
+      config_file.open("w") do |f|
         f.write({'whitelist' => whitelisted_licenses}.to_yaml)
       end
     end
@@ -170,6 +169,14 @@ module DSL
       end
 
       path
+    end
+
+    def config_path
+      app_path('config')
+    end
+
+    def config_file
+      config_path.join("license_finder.yml")
     end
 
     def add_gem_dependency(name, options = {})
