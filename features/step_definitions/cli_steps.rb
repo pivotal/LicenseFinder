@@ -42,6 +42,6 @@ Then(/^I should see the correct subcommand usage instructions$/) do
   @user.should be_seeing 'license_finder ignored_bundler_groups add GROUP'
 end
 
-Then(/^I should the correct default usage instructions$/) do
+Then(/^I should see the default usage instructions$/) do
   @user.should be_seeing 'license_finder help [COMMAND]'
 end

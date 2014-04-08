@@ -23,7 +23,7 @@ Feature: License Finder command line executable
   Scenario: Viewing help for license_finder default
     Given I have an app
     When I run license_finder help
-    Then I should the correct default usage instructions
+    Then I should see the default usage instructions
 
   Scenario: Running without a configuration file
     Given I have an app that has no config directory
