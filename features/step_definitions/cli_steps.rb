@@ -9,7 +9,7 @@ end
 Given(/^I have an app with an unapproved dependency$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
-  @user.create_and_depend_on_gem 'unapproved_gem', :license => 'MIT'
+  @user.create_and_depend_on_gem 'unapproved_gem', license: 'MIT'
 end
 
 When(/^I run license_finder help on a specific command$/) do

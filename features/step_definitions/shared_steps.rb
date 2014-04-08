@@ -75,7 +75,7 @@ module DSL
 
       shell_out("cd #{projects_path} && bundle gem #{app_name}")
 
-      add_gem_dependency('license_finder', :path => root_path.to_s)
+      add_gem_dependency('license_finder', path: root_path.to_s)
 
       bundle_install
     end

@@ -22,7 +22,7 @@ end
 Given(/^I have an app that depends on a manually licensed gem$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
-  @user.create_and_depend_on_gem 'changed_gem', :license => 'MIT'
+  @user.create_and_depend_on_gem 'changed_gem', license: 'MIT'
   @user.execute_command "license_finder --quiet"
   @user.execute_command "license_finder license Ruby changed_gem"
   @user.should be_seeing_something_like /changed_gem.*Ruby/
