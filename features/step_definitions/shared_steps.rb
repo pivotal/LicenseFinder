@@ -205,7 +205,13 @@ module DSL
     end
 
     def in_html
-      yield Capybara.string(dependencies_html_path.read)
+      yield Capybara.string(app_path('doc/dependencies.html').read)
+    end
+
+    def in_gem_html(gem_name)
+      in_html do |page|
+        yield page.find("##{gem_name}")
+      end
     end
 
     private
@@ -236,10 +242,6 @@ module DSL
 
     def fixtures_path
       root_path.join("spec", "fixtures")
-    end
-
-    def dependencies_html_path
-      app_path.join('doc', 'dependencies.html')
     end
 
     def reset_projects!
