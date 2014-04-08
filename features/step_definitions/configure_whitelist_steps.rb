@@ -19,27 +19,27 @@ When(/^I whitelist the Expat license$/) do
 end
 
 When(/^I view the whitelisted licenses$/) do
-  @output = @user.execute_command 'license_finder whitelist list'
+  @user.execute_command 'license_finder whitelist list'
 end
 
 When(/^I remove Expat from the whitelist$/) do
-  @output = @user.execute_command 'license_finder whitelist remove Expat'
+  @user.execute_command 'license_finder whitelist remove Expat'
 end
 
 Then(/^I should not see a MIT licensed gem unapproved$/) do
-  @output = @user.execute_command 'license_finder --quiet'
-  @output.should_not include 'mit_gem'
+  @user.execute_command 'license_finder --quiet'
+  @user.should_not be_seeing 'mit_gem'
 end
 
 Then(/^I should see Expat in the output$/) do
-  @output.should include 'Expat'
+  @user.should be_seeing 'Expat'
 end
 
 Then(/^I should not see Expat in the output$/) do
-  @output.should_not include 'Expat'
+  @user.should_not be_seeing 'Expat'
 end
 
 Then(/^I should not see a BSD licensed gem unapproved$/) do
-  @output = @user.execute_command 'license_finder --quiet'
-  @output.should_not include 'bsd_gem'
+  @user.execute_command 'license_finder --quiet'
+  @user.should_not be_seeing 'bsd_gem'
 end

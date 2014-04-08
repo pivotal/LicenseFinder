@@ -13,11 +13,11 @@ Given(/^I have an app with an unapproved dependency$/) do
 end
 
 When(/^I run license_finder help on a specific command$/) do
-  @output = @user.execute_command "license_finder ignored_bundler_groups help add"
+  @user.execute_command "license_finder ignored_bundler_groups help add"
 end
 
 When(/^I run license_finder help$/) do
-  @output = @user.execute_command "license_finder help"
+  @user.execute_command "license_finder help"
 end
 
 Then(/^it creates a config directory with the license_finder config$/) do
@@ -31,17 +31,17 @@ Then /^it should exit with status code (\d)$/ do |status|
 end
 
 Then(/^should list my unapproved dependency in the output$/) do
-  @output.should include 'unapproved_gem'
+  @user.should be_seeing 'unapproved_gem'
 end
 
 Then(/^I should see all dependencies approved for use$/) do
-  @output.should include 'All dependencies are approved for use'
+  @user.should be_seeing 'All dependencies are approved for use'
 end
 
 Then(/^I should see the correct subcommand usage instructions$/) do
-  @output.should include 'license_finder ignored_bundler_groups add GROUP'
+  @user.should be_seeing 'license_finder ignored_bundler_groups add GROUP'
 end
 
 Then(/^I should the correct default usage instructions$/) do
-  @output.should include 'license_finder help [COMMAND]'
+  @user.should be_seeing 'license_finder help [COMMAND]'
 end

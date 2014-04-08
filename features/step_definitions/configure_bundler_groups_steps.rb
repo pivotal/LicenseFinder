@@ -14,17 +14,17 @@ When(/^I stop ignoring the test group$/) do
 end
 
 When(/^I get the ignored groups$/) do
-  @output = @user.execute_command('license_finder ignored_bundler_group list')
+  @user.execute_command('license_finder ignored_bundler_group list')
 end
 
 Then(/^I should not see the test gem in the output$/) do
-  @output.should_not include 'gpl_gem'
+  @user.should_not be_seeing 'gpl_gem'
 end
 
 Then(/^I should see the test group in the output$/) do
-  @output.should include 'test'
+  @user.should be_seeing 'test'
 end
 
 Then(/^I should not see the test group in the output$/) do
-  @output.should_not include 'test'
+  @user.should_not be_seeing 'test'
 end

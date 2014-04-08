@@ -11,12 +11,12 @@ Given(/^I have an app$/) do
 end
 
 When(/^I run license_finder$/) do
-  @output = @user.execute_command "license_finder --quiet"
+  @user.execute_command "license_finder --quiet"
 end
 
 When(/^I whitelist everything I can think of$/) do
   @user.configure_license_finder_whitelist ["MIT","other","New BSD","Apache 2.0","Ruby"]
-  @output = @user.execute_command "license_finder --quiet"
+  @user.execute_command "license_finder --quiet"
 end
 
 Then(/^I should see the project name (\w+) in the html$/) do |project_name|
@@ -124,8 +124,18 @@ module DSL
       ::Bundler.with_clean_env do
         @output = shell_out("cd #{app_path} && bundle exec #{command}", true)
       end
+    end
 
-      @output
+    def seeing?(content)
+      @output.include? content
+    end
+
+    def seeing_line?(content)
+      seeing_something_like? /^#{Regexp.escape content}$/
+    end
+
+    def seeing_something_like?(regex)
+      @output =~ regex
     end
 
     def app_path(sub_directory = nil)
