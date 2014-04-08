@@ -2,7 +2,7 @@ module LicenseFinder
   class License
     class << self
       def all
-        @all ||= []
+        @all ||= Definitions.all
       end
 
       def find_by_name(name)
@@ -14,6 +14,7 @@ module LicenseFinder
       end
     end
 
+    autoload :Definitions,   "license_finder/license/definitions"
     autoload :Text,          "license_finder/license/text"
     autoload :Template,      "license_finder/license/template"
     autoload :Matcher,       "license_finder/license/matcher"
@@ -60,5 +61,3 @@ module LicenseFinder
     end
   end
 end
-
-require LicenseFinder::ROOT_PATH.join("license_finder", "license", "definitions.rb")
