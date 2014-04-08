@@ -1,6 +1,6 @@
 Given(/^I have an app with license finder and a JS dependency$/) do
   @user = ::DSL::User.new
-  @user.create_nonrails_app
+  @user.create_ruby_app
   @output = @user.execute_command 'license_finder dependencies add MIT my_js_dep 1.2.3'
 end
 

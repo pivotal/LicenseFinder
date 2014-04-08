@@ -1,6 +1,6 @@
 Given(/^I have an app with license finder that has no config directory$/) do
   @user = ::DSL::User.new
-  @user.create_nonrails_app
+  @user.create_ruby_app
   path = @user.config_path
   path.rmtree if path.exist?
   path.should_not be_exist
@@ -8,18 +8,17 @@ end
 
 Given(/^I have an app with license finder that depends on a MIT licensed gem$/) do
   @user = ::DSL::User.new
-  @user.create_nonrails_app
+  @user.create_ruby_app
   @user.create_and_depend_on_gem 'mit_gem', :license => 'MIT'
 end
 
-Given(/^I have a project that depends on mime\-types with a manual license type$/) do
+Given(/^I have a project that depends on a manually licensed gem$/) do
   @user = ::DSL::User.new
-  @user.create_rails_app
-  @user.add_gem_dependency('mime-types')
-  @user.bundle_app
+  @user.create_ruby_app
+  @user.create_and_depend_on_gem 'changed_gem', :license => 'MIT'
   @user.execute_command "license_finder --quiet"
-  @output = @user.execute_command "license_finder license Ruby mime-types"
-  @output.should =~ /mime-types.*Ruby/
+  @output = @user.execute_command "license_finder license Ruby changed_gem"
+  @output.should =~ /changed_gem.*Ruby/
 end
 
 When(/^I run license_finder help on a specific command$/) do
@@ -48,8 +47,8 @@ Then(/^I should see all dependencies approved for use$/) do
   @output.should include 'All dependencies are approved for use'
 end
 
-Then(/^the mime\-types license remains set with my manual license type$/) do
-  @output.should =~ /mime-types.*ruby/
+Then(/^the gem should keep its manually assigned license$/) do
+  @output.should =~ /changed_gem.*ruby/
 end
 
 Then(/^I should see the correct subcommand usage instructions$/) do

@@ -21,9 +21,9 @@ Feature: License Finder command line executable
     And I should see all dependencies approved for use
 
   Scenario: Keep manually set license dependencies
-    Given I have a project that depends on mime-types with a manual license type
+    Given I have a project that depends on a manually licensed gem
     When I run license_finder
-    Then the mime-types license remains set with my manual license type
+    Then the gem should keep its manually assigned license
 
   Scenario: Viewing help for license_finder subcommand
     Given I have an app with license finder

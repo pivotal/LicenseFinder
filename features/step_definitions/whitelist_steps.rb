@@ -1,12 +1,12 @@
 Given(/^I have an app with license finder that depends on an MIT license$/) do
   @user = ::DSL::User.new
-  @user.create_nonrails_app
+  @user.create_ruby_app
   @user.create_and_depend_on_gem 'mit_gem', :license => 'MIT'
 end
 
 Given(/^I have an app with license finder that depends on an BSD license$/) do
   @user = ::DSL::User.new
-  @user.create_nonrails_app
+  @user.create_ruby_app
   @user.create_and_depend_on_gem 'bsd_gem', :license => 'BSD'
 end
 

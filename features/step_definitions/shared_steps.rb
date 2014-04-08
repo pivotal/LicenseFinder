@@ -7,7 +7,7 @@ require 'capybara'
 
 Given(/^I have an app with license finder$/) do
   @user = ::DSL::User.new
-  @user.create_nonrails_app
+  @user.create_ruby_app
 end
 
 When(/^I run license_finder$/) do
@@ -72,20 +72,10 @@ module DSL
       shell_out("cd #{app_path} && cp #{path} .")
     end
 
-    def create_nonrails_app
+    def create_ruby_app
       reset_projects!
 
       shell_out("cd #{projects_path} && bundle gem #{app_name}")
-
-      add_gem_dependency('license_finder', :path => root_path.to_s)
-
-      bundle_app
-    end
-
-    def create_rails_app
-      reset_projects!
-
-      shell_out("bundle exec rails new #{app_path} --skip-bundle")
 
       add_gem_dependency('license_finder', :path => root_path.to_s)
 
