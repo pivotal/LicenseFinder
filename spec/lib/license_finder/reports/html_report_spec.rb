@@ -5,12 +5,16 @@ module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
       let(:dependency) do
-        Dependency.new name: "the-name", manually_approved: true, license: License.find_by_name('MIT')
+        dep = Dependency.create name: "the-name"
+        dep.apply_better_license License.find_by_name("MIT")
+        dep
       end
 
       subject { Capybara.string(HtmlReport.new([dependency]).to_s) }
 
-      context "when the dependency is approved" do
+      context "when the dependency is manually approved" do
+        before { dependency.approve! "the-approver", "the-approval-note" }
+
         it "should add an approved class to dependency's container" do
           should have_selector ".approved"
         end
@@ -18,12 +22,37 @@ module LicenseFinder
         it "does not list the dependency in the action items" do
           should_not have_selector ".action-items"
         end
+
+        it "shows the license, approver and approval notes" do
+          deps = subject.find ".dependencies"
+          deps.should have_content "MIT"
+          deps.should have_content "the-approver"
+          deps.should have_content "the-approval-note"
+          deps.should have_selector "time"
+        end
+      end
+
+      context "when the dependency is whitelisted" do
+        before { dependency.stub(whitelisted?: true) }
+
+        it "should add an approved class to dependency's container" do
+          should have_selector ".approved"
+        end
+
+        it "does not list the dependency in the action items" do
+          should_not have_selector ".action-items"
+        end
+
+        it "shows the license" do
+          deps = subject.find ".dependencies"
+          deps.should have_content "MIT"
+        end
       end
 
       context "when the dependency is not approved" do
         before {
           dependency.license = License.find_by_name('GPL')
-          dependency.manually_approved = false
+          dependency.manual_approval = nil
         }
 
         it "should not add an approved class to he dependency's container" do

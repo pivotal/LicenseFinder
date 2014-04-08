@@ -2,7 +2,7 @@ module LicenseFinder
   class License
     class << self
       def all
-        @all ||= Definitions.build_all(LicenseFinder.config.whitelist)
+        @all ||= Definitions.all(LicenseFinder.config.whitelist)
       end
 
       def find_by_name(name)

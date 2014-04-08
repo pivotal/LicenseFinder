@@ -12,7 +12,8 @@ matrix:
     - rvm: ruby-head
     - rvm: jruby-head
 
-env: JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true'
+env:
+  - JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true' PATH=$PATH:$HOME/gradle/bin
 
 notifications:
   email:
@@ -21,3 +22,11 @@ notifications:
     urls:
     - http://pulse.pivotallabs.com/projects/657d35b7-b896-4bf3-8837-9d558e2ab651/status
     on_start: true
+
+before_install:
+  - cd /tmp
+  - wget http://services.gradle.org/distributions/gradle-1.11-all.zip
+  - unzip gradle*
+  - rm gradle*.zip
+  - mv gradle* ~/gradle
+  - cd -

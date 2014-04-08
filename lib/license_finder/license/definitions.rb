@@ -3,18 +3,18 @@ module LicenseFinder
     module Definitions
       extend self
 
-      def build_all(whitelist)
+      def all(whitelist)
         [
-          build_apache2,
-          build_bsd,
-          build_gplv2,
-          build_isc,
-          build_lgpl,
-          build_mit,
-          build_newbsd,
-          build_python,
-          build_ruby,
-          build_simplified_bsd
+          apache2,
+          bsd,
+          gplv2,
+          isc,
+          lgpl,
+          mit,
+          newbsd,
+          python,
+          ruby,
+          simplifiedbsd
         ].map { |license|
           whitelist_if_necessary(license, whitelist)
         }
@@ -36,7 +36,7 @@ module LicenseFinder
         whitelisted ? license.whitelist : license
       end
 
-      def build_apache2
+      def apache2
         License.new(
           short_name:  "Apache2",
           pretty_name: "Apache 2.0",
@@ -45,7 +45,7 @@ module LicenseFinder
         )
       end
 
-      def build_bsd
+      def bsd
         License.new(
           short_name:  "BSD",
           other_names: ["BSD4", "bsd-old", "4-clause BSD", "BSD-4-Clause", "BSD License"],
@@ -53,7 +53,7 @@ module LicenseFinder
         )
       end
 
-      def build_gplv2
+      def gplv2
         License.new(
           short_name:  "GPLv2",
           other_names: ["GPL V2", "gpl-v2", "GNU GENERAL PUBLIC LICENSE Version 2"],
@@ -61,14 +61,14 @@ module LicenseFinder
         )
       end
 
-      def build_isc
+      def isc
         License.new(
           short_name: "ISC",
           url:        "http://en.wikipedia.org/wiki/ISC_license"
         )
       end
 
-      def build_lgpl
+      def lgpl
         License.new(
           short_name:  "LGPL",
           other_names: ["LGPL-3", "LGPLv3", "LGPL-3.0"],
@@ -76,16 +76,16 @@ module LicenseFinder
         )
       end
 
-      def build_mit
+      def mit
         url_regexp = %r{MIT Licen[sc]e.*http://(?:www\.)?opensource\.org/licenses/mit-license}
         header_regexp = /The MIT Licen[sc]e/
         one_liner_regexp = /is released under the MIT licen[sc]e/
 
         matcher = AnyMatcher.new(
           Matcher.from_template(Template.named("MIT")),
-          Matcher.new(url_regexp),
-          HeaderMatcher.new(Matcher.new(header_regexp)),
-          Matcher.new(one_liner_regexp)
+          Matcher.from_regex(url_regexp),
+          HeaderMatcher.new(Matcher.from_regex(header_regexp)),
+          Matcher.from_regex(one_liner_regexp)
         )
 
         License.new(
@@ -96,7 +96,7 @@ module LicenseFinder
         )
       end
 
-      def build_newbsd
+      def newbsd
         template = Template.named("NewBSD")
         alternate_content = template.content.gsub(
           "Neither the name of <organization> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.",
@@ -117,7 +117,7 @@ module LicenseFinder
         )
       end
 
-      def build_python
+      def python
         License.new(
           short_name:  "Python",
           pretty_name: "Python Software Foundation License",
@@ -126,13 +126,12 @@ module LicenseFinder
         )
       end
 
-      def build_ruby
+      def ruby
         url = "http://www.ruby-lang.org/en/LICENSE.txt"
-        url_regex = Regexp.new(Regexp.escape(url))
 
         matcher = AnyMatcher.new(
           Matcher.from_template(Template.named("Ruby")),
-          Matcher.new(url_regex)
+          Matcher.from_text(url)
         )
 
         License.new(
@@ -143,7 +142,7 @@ module LicenseFinder
         )
       end
 
-      def build_simplified_bsd
+      def simplifiedbsd
         License.new(
           short_name:  "SimplifiedBSD",
           pretty_name: "Simplified BSD",

@@ -1,3 +1,4 @@
 module LicenseFinder
-  class HtmlReport < FormattedReport; end
+  class HtmlReport < FormattedReport
+  end
 end

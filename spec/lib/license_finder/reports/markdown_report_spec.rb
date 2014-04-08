@@ -7,18 +7,18 @@ module LicenseFinder
         Dependency.new(
           'name' => 'gem_a',
           'version' => '1.0',
-          'manually_approved' => false,
           'license' => License.find_by_name('other')
         )
       end
 
       let(:dep2) do
-        Dependency.new(
+        dependency = Dependency.create(
           'name' => 'gem_b',
           'version' => '2.3',
-          'manually_approved' => true,
           'license' => License.find_by_name('BSD')
         )
+        dependency.approve!
+        dependency
       end
 
       subject { MarkdownReport.new([dep2, dep1]).to_s }
@@ -29,7 +29,8 @@ module LicenseFinder
       end
 
       it 'should list the total, and unapproved counts' do
-        should match "2 total, _1 unapproved_"
+        should match "2 total"
+        should match /1 \*unapproved\*/
       end
 
       it "should list the unapproved dependency" do

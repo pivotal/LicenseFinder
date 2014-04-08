@@ -6,17 +6,18 @@ module LicenseFinder
       composer: ->(d) { License.find_by_name(d.license_name) },
       decomposer: ->(d) { self.license_name = license.name }
 
+    one_to_one :manual_approval
     many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
     many_to_many :parents, join_table: :ancestries, left_key: :child_dependency_id, right_key: :parent_dependency_id, class: self
     many_to_many :bundler_groups
 
     dataset_module do
-      def managed
-        manually_managed.invert
+      def added_automatically
+        added_manually.invert
       end
 
-      def manually_managed
-        where(manual: true)
+      def added_manually
+        where(added_manually: true)
       end
 
       def obsolete(current)
@@ -40,23 +41,31 @@ module LicenseFinder
       update_association_collection(:children, names)
     end
 
-    def approve!
-      self.manually_approved = true
+    def approve!(approver = nil, notes = nil)
+      self.manual_approval = ManualApproval.new(approver: approver, notes: notes)
       save
     end
 
     def approved?
-      license.whitelisted? || manually_approved?
+      whitelisted? || approved_manually?
+    end
+
+    def whitelisted?
+      license && license.whitelisted?
+    end
+
+    def approved_manually?
+      !!manual_approval
     end
 
     def set_license_manually!(license)
       self.license = license
-      self.license_manual = true
+      self.license_assigned_manually = true
       save
     end
 
     def apply_better_license(other_license)
-      return if license_manual
+      return if license_assigned_manually?
       if license.name != other_license.name
         self.license = other_license
       end

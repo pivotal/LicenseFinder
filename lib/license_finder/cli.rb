@@ -40,11 +40,13 @@ module LicenseFinder
 
     class Dependencies < Subcommand
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
-      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by Bundler, NPM, etc"
+      method_option :approver, desc: "The person granting the approval"
+      method_option :message, desc: "The reason for the approval"
+      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
       def add(license, name, version = nil)
         die_on_error {
-          DependencyManager.create_manually_managed(license, name, version)
-          DependencyManager.approve!(name) if options[:approve]
+          DependencyManager.manually_add(license, name, version)
+          DependencyManager.approve!(name, options[:approver], options[:message]) if options[:approve]
         }
         if options[:approve]
           say "The #{name} dependency has been added and approved!", :green
@@ -53,10 +55,10 @@ module LicenseFinder
         end
       end
 
-      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by Bundler, NPM, etc"
+      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
       def remove(name)
         die_on_error {
-          DependencyManager.destroy_manually_managed(name)
+          DependencyManager.manually_remove(name)
         }
 
         say "The #{name} dependency has been removed.", :green
@@ -160,13 +162,19 @@ module LicenseFinder
       end
       default_task :rescan
 
-      desc "approve DEPENDENCY_NAME...", "Approve one or more dependencies by name"
+      method_option :approver, desc: "The person granting the approval"
+      method_option :message, desc: "The reason for the approval"
+      desc "approve DEPENDENCY_NAME... [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
       def approve(*names)
-        die_on_error {
-          names.each { |name| DependencyManager.approve!(name) }
-        }
+        if(names.count < 1)
+          say "Warning: Must specify dependencies to approve.", :red
+        else
+          die_on_error {
+            names.each { |name| DependencyManager.approve!(name, options[:approver], options[:message]) }
+          }
 
-        say "The #{names.join(", ")} dependency has been approved!", :green
+          say "The #{names.join(", ")} dependency has been approved!", :green
+        end
       end
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
@@ -197,8 +205,8 @@ module LicenseFinder
         end
       end
 
-      subcommand "dependencies", Dependencies, "Manually manage dependencies outside of Bundler, NPM, pip, etc"
-      subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "Manage ignored bundler groups"
+      subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"
+      subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "Manage ignored Bundler groups"
       subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
       subcommand "project_name", ProjectName, "Manage the project name"
 

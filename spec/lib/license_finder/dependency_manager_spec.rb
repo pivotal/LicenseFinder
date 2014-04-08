@@ -13,10 +13,10 @@ module LicenseFinder
       let(:gem1) { double(:package) }
       let(:gem2) { double(:package) }
 
-      it "destroys every dependency except for the ones Bundler reports as 'current' or are marked as 'manual'" do
+      it "destroys every dependency except for the ones Bundler reports as 'current' or are marked as 'added_manually'" do
         cur1 = Dependency.create(name: "current dependency 1")
         cur2 = Dependency.create(name: "current dependency 2")
-        man1 = Dependency.create(name: "manual dependency", manual: true)
+        man1 = Dependency.create(name: "manual dependency", added_manually: true)
         Dependency.create(name: "old dependency 1")
         Dependency.create(name: "old dependency 2")
 
@@ -29,20 +29,20 @@ module LicenseFinder
       end
     end
 
-    describe ".create_manually_managed" do
+    describe ".manually_add" do
       it "should add a Dependency" do
         expect do
-          described_class.create_manually_managed("MIT", "js_dep", "0.0.0")
+          described_class.manually_add("MIT", "js_dep", "0.0.0")
         end.to change(Dependency, :count).by(1)
       end
 
       it "should mark the dependency as manual" do
-        described_class.create_manually_managed("MIT", "js_dep", "0.0.0")
-          .should be_manual
+        described_class.manually_add("MIT", "js_dep", "0.0.0")
+          .should be_added_manually
       end
 
       it "should set the appropriate values" do
-        dep = described_class.create_manually_managed("GPL", "js_dep", "0.0.0")
+        dep = described_class.manually_add("GPL", "js_dep", "0.0.0")
         dep.name.should == "js_dep"
         dep.version.should == "0.0.0"
         dep.license.name.should == "GPL"
@@ -51,16 +51,16 @@ module LicenseFinder
 
       it "should complain if the dependency already exists" do
         Dependency.create(name: "current dependency 1")
-        expect { described_class.create_manually_managed("GPL", "current dependency 1", "0.0.0") }
+        expect { described_class.manually_add("GPL", "current dependency 1", "0.0.0") }
           .to raise_error(Error)
       end
     end
 
-    describe ".destroy_manually_managed" do
+    describe ".manually_remove" do
       it "should remove a manually managed Dependency" do
-        described_class.create_manually_managed("GPL", "a manually managed dep", nil)
+        described_class.manually_add("GPL", "a manually managed dep", nil)
         expect do
-          described_class.destroy_manually_managed("a manually managed dep")
+          described_class.manually_remove("a manually managed dep")
         end.to change(Dependency, :count).by(-1)
       end
 
@@ -68,7 +68,7 @@ module LicenseFinder
         Dependency.create(name: "a bundler dep")
         expect do
           expect do
-            described_class.destroy_manually_managed("a bundler dep")
+            described_class.manually_remove("a bundler dep")
           end.to raise_error(Error)
         end.to_not change(Dependency, :count)
       end
@@ -82,6 +82,14 @@ module LicenseFinder
         dep.reload.should_not be_approved
         described_class.approve!("current dependency")
         dep.reload.should be_approved
+      end
+
+      it "optionally adds approver and approval notes" do
+        dep = Dependency.named("current dependency")
+        described_class.approve!("current dependency", "Julian", "We really need this")
+        approval = dep.reload.manual_approval
+        approval.approver.should eq "Julian"
+        approval.notes.should eq "We really need this"
       end
 
       it "should raise an error if it can't find the dependency" do

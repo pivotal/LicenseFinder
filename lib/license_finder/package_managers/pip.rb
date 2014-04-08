@@ -26,13 +26,13 @@ print "[" + ",".join(dists) + "]"
     end
 
     def self.active?
-      File.exists?(requirements_path)
+      requirements_path.exist?
     end
 
     private
 
     def self.requirements_path
-      Pathname.new('requirements.txt').expand_path
+      Pathname.new('requirements.txt')
     end
 
     def self.pypi_def(name, version)

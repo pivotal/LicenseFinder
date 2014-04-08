@@ -39,7 +39,8 @@ module LicenseFinder
 
     def convert
       @dep = create_dependency
-      @dep.manual = manually_managed?
+      @dep.added_manually = manually_managed?
+      add_approval
       associate_bundler_groups
       @dep.save
     end
@@ -57,7 +58,11 @@ module LicenseFinder
     end
 
     def manually_managed?
-      @legacy_attrs['source'] != "bundle"
+      legacy_attrs['source'] != "bundle"
+    end
+
+    def add_approval
+      @dep.manual_approval = Sql::ManualApproval.new if legacy_attrs['approved']
     end
 
     def create_dependency
@@ -78,6 +83,7 @@ module LicenseFinder
       class Dependency < Sequel::Model
         plugin :boolean_readers
 
+        one_to_one :manual_approval
         many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
         many_to_many :bundler_groups
 
@@ -87,7 +93,6 @@ module LicenseFinder
           'summary' => 'summary',
           'description' => 'description',
           'homepage' => 'homepage',
-          'approved' => 'manually_approved',
           'license' => 'license_name'
         }
 
@@ -103,6 +108,9 @@ module LicenseFinder
       end
 
       class BundlerGroup < Sequel::Model
+      end
+
+      class ManualApproval < Sequel::Model
       end
     end
   end

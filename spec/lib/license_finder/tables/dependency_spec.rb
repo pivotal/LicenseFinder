@@ -8,11 +8,11 @@ module LicenseFinder
       end
 
       it "should return all unapproved dependencies" do
-        dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1', 'license_name' => 'other')
-        approved = Dependency.create(name: "approved dependency", version: '0.0.1', 'license_name' => 'other')
-        approved.manually_approved = true
-        approved.save
-        whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1', 'license_name' => 'MIT')
+        dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
+        approved = Dependency.create(name: "approved dependency", version: '0.0.1')
+        approved.approve!
+        whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
+        whitelisted.license = License.find_by_name('MIT')
         whitelisted.save
 
         unapproved = Dependency.unapproved
@@ -39,29 +39,37 @@ module LicenseFinder
 
     describe '#approve!' do
       it "should update the database to show the dependency is approved" do
-        dependency = Dependency.create(name: "foo", version: '0.0.1')
+        dependency = Dependency.named("foo")
         dependency.approve!
         dependency.reload.should be_approved
+      end
+
+      it "should record the approver and notes" do
+        dependency = Dependency.named("foo")
+        dependency.approve!("Julian", "We really need this")
+        approval = dependency.reload.manual_approval
+        approval.approver.should eq "Julian"
+        approval.notes.should eq "We really need this"
       end
     end
 
     describe "#approved?" do
-      let(:not_manually_approved) { Dependency.create(name: 'some gem', manually_approved: false).reload }
-      let(:manually_approved) { Dependency.create(name: 'some gem', manually_approved: true).reload }
+      let(:not_approved_manually) { Dependency.create(name: 'some gem').reload }
+      let(:approved_manually) { Dependency.create(name: 'some gem').approve!.reload }
 
       it "is true if its license is whitelisted" do
-        not_manually_approved.stub_chain(:license, whitelisted?: true)
-        not_manually_approved.should be_approved
+        not_approved_manually.stub_chain(:license, whitelisted?: true)
+        not_approved_manually.should be_approved
       end
 
       it "is true if it has been approved" do
-        manually_approved.stub_chain(:license, whitelisted?: false)
-        manually_approved.should be_approved
+        approved_manually.stub_chain(:license, whitelisted?: false)
+        approved_manually.should be_approved
       end
 
       it "is false otherwise" do
-        not_manually_approved.stub_chain(:license, whitelisted?: false)
-        not_manually_approved.should_not be_approved
+        not_approved_manually.stub_chain(:license, whitelisted?: false)
+        not_approved_manually.should_not be_approved
       end
     end
 
@@ -69,9 +77,9 @@ module LicenseFinder
       let(:dependency) { Dependency.create(name: 'foogem') }
 
       it "sets manual license to true" do
-        dependency.license_manual.should be_false
+        dependency.should_not be_license_assigned_manually
         dependency.set_license_manually! License.find_by_name("Updated")
-        dependency.license_manual.should be_true
+        dependency.should be_license_assigned_manually
       end
 
       it "modifies the license" do
@@ -135,7 +143,7 @@ module LicenseFinder
 
       it "does not change the approval" do
         dependency.license = License.find_by_name("old")
-        dependency.manually_approved = true
+        dependency.approve!
 
         dependency.apply_better_license License.find_by_name("new license")
         dependency.should be_approved

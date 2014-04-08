@@ -6,7 +6,12 @@ module LicenseFinder
       end
 
       def self.from_text(text)
-        new(Text.compile_to_regex(text))
+        from_regex(Text.compile_to_regex(text))
+      end
+
+      # an alias for Matcher.new, for uniformity of constructors
+      def self.from_regex(regexp)
+        new(regexp)
       end
 
       def matches_text?(text)

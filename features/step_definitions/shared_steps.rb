@@ -33,8 +33,8 @@ module DSL
     def create_python_app
       reset_projects!
 
-      `mkdir -p #{app_path}`
-      `cd #{app_path} && touch requirements.txt`
+      shell_out("mkdir -p #{app_path}")
+      shell_out("cd #{app_path} && touch requirements.txt")
 
       add_pip_dependency('argparse==1.2.1')
 
@@ -44,18 +44,38 @@ module DSL
     def create_node_app
       reset_projects!
 
-      `mkdir -p #{app_path}`
-      `cd #{app_path} && touch package.json`
+      shell_out("mkdir -p #{app_path}")
+      shell_out("cd #{app_path} && touch package.json")
 
       add_npm_dependency('http-server', '0.6.1')
 
       npm_install
     end
 
+    def create_maven_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/pom.xml")
+
+      shell_out("mkdir -p #{app_path}")
+      shell_out("cd #{app_path} && cp #{path} .")
+
+      mvn_install
+    end
+
+    def create_gradle_app
+      reset_projects!
+
+      path = File.expand_path("spec/fixtures/build.gradle")
+
+      shell_out("mkdir -p #{app_path}")
+      shell_out("cd #{app_path} && cp #{path} .")
+    end
+
     def create_nonrails_app
       reset_projects!
 
-      `cd #{projects_path} && bundle gem #{app_name}`
+      shell_out("cd #{projects_path} && bundle gem #{app_name}")
 
       add_gem_dependency('license_finder', :path => root_path)
 
@@ -65,28 +85,22 @@ module DSL
     def create_rails_app
       reset_projects!
 
-      `bundle exec rails new #{app_path} --skip-bundle`
+      shell_out("bundle exec rails new #{app_path} --skip-bundle")
 
       add_gem_dependency('license_finder', :path => root_path)
 
       bundle_app
     end
 
-    def update_gem(name, attrs)
-      file_contents = YAML.load(File.read(dependencies_file_path))
+    def create_cocoapods_app
+      reset_projects!
 
-      index = file_contents.index { |gem| gem['name'] == name }
-      file_contents[index].merge!(attrs)
+      path = File.expand_path("spec/fixtures/Podfile")
 
-      File.open(dependencies_file_path, "w") do |f|
-        f.puts file_contents.to_yaml
-      end
-    end
+      shell_out("mkdir -p #{app_path}")
+      shell_out("cp #{path} #{app_path}")
 
-    def append_to_file(filename, text)
-      File.open(File.join(app_path, filename), "a") do |f|
-        f.puts text
-      end
+      shell_out("cd #{app_path} && pod install --no-integrate")
     end
 
     def add_dependency_to_app(gem_name, options={})
@@ -132,7 +146,7 @@ module DSL
 
     def execute_command(command)
       ::Bundler.with_clean_env do
-        @output = `cd #{app_path} && bundle exec #{command}`
+        @output = shell_out("cd #{app_path} && bundle exec #{command}", true)
       end
 
       @output
@@ -158,10 +172,6 @@ module DSL
       File.join(app_path, 'doc')
     end
 
-    def dependencies_file_path
-      File.join(doc_path, 'dependencies.yml')
-    end
-
     def dependencies_html_path
       File.join(doc_path, 'dependencies.html')
     end
@@ -185,35 +195,34 @@ module DSL
 
     def bundle_app
       ::Bundler.with_clean_env do
-        `bundle install --gemfile=#{File.join(app_path, "Gemfile")} --path=#{bundle_path}`
+        shell_out("bundle install --gemfile=#{File.join(app_path, "Gemfile")} --path=#{bundle_path}")
       end
     end
 
     def pip_install
-      `cd #{app_path} && pip install -r requirements.txt`
+      shell_out("cd #{app_path} && pip install -r requirements.txt")
     end
 
     def npm_install
-      `cd #{app_path} && npm install 2>/dev/null`
+      shell_out("cd #{app_path} && npm install 2>/dev/null")
     end
 
-    def modifying_dependencies_file
-      FileUtils.mkdir_p(File.dirname(dependencies_file_path))
-      File.open(dependencies_file_path, 'w+') { |f| yield f }
+    def mvn_install
+      shell_out("cd #{app_path} && mvn install")
     end
 
     private
 
     def add_to_gemfile(line)
-      `echo #{line.inspect} >> #{File.join(app_path, "Gemfile")}`
+      shell_out("echo #{line.inspect} >> #{File.join(app_path, "Gemfile")}")
     end
 
     def add_to_requirements(line)
-      `echo #{line.inspect} >> #{File.join(app_path, "requirements.txt")}`
+      shell_out("echo #{line.inspect} >> #{File.join(app_path, "requirements.txt")}")
     end
 
     def add_to_package(line)
-      `echo #{line.inspect} >> #{File.join(app_path, "package.json")}`
+      shell_out("echo #{line.inspect} >> #{File.join(app_path, "package.json")}")
     end
 
     def app_name
@@ -233,12 +242,18 @@ module DSL
     end
 
     def reset_projects!
-      `rm -rf #{projects_path}`
-      `mkdir -p #{projects_path}`
+      shell_out("rm -rf #{projects_path}")
+      shell_out("mkdir -p #{projects_path}")
     end
 
     def root_path
       Pathname.new(File.join(File.dirname(__FILE__), "..", "..")).realpath.to_s
+    end
+
+    def shell_out(command, allow_failures = false)
+      output = `#{command}`
+      raise RuntimeError.new("command failed #{command}") if !$?.success? && !allow_failures
+      output
     end
   end
 end
