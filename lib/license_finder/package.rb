@@ -6,7 +6,7 @@ module LicenseFinder
   #     it_behaves_like "it conforms to interface required by PackageSaver"
   # and see BundlerPackage, PipPackage and NpmPackage
   class Package
-    def self.extract_licenses_from_standard_spec(spec)
+    def self.license_names_from_standard_spec(spec)
       licenses = spec["licenses"] || [spec["license"]].compact
       licenses.map do |license|
         if license.is_a? Hash

@@ -41,7 +41,7 @@ module LicenseFinder
     end
 
     def license_names_from_spec
-      Package.extract_licenses_from_standard_spec(node_module)
+      Package.license_names_from_standard_spec(node_module)
     end
   end
 end
