@@ -9,6 +9,7 @@ With bundler and other dependency management tools, it's easy for your project t
 - Ruby (+ Bundler)
 - Python (+ Eggs)
 - Node.js (+ Modules)
+- Bower
 
 ### Experimental project types 
 - Java (+ Maven)
