@@ -28,11 +28,11 @@ module LicenseFinder
       []
     end
 
+    private
+
     def licenses_from_files
       []
     end
-
-    private
 
     def license_names_from_spec
       @gradle_dependency["license"].map { |l| l["name"] }
