@@ -1,7 +1,8 @@
 Given(/^I have an app with license finder that depends on a GPL licensed gem in the test bundler group$/) do
   @user = ::DSL::User.new
   @user.create_nonrails_app
-  @user.add_dependency_to_app 'gpl_gem', :license => 'GPL', :bundler_group => 'test'
+  @user.create_gem 'gpl_gem', :license => 'GPL'
+  @user.depend_on_gem 'gpl_gem', :bundler_group => 'test'
 end
 
 When(/^I add the test group to the ignored bundler groups$/) do

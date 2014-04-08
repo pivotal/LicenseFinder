@@ -1,7 +1,7 @@
 Given(/^I have an app with license finder that depends on a gem with license and version details$/) do
   @user = ::DSL::User.new
   @user.create_nonrails_app
-  @user.add_dependency_to_app('info_gem', license: 'MIT', version: '1.1.1')
+  @user.create_and_depend_on_gem('info_gem', license: 'MIT', version: '1.1.1')
 end
 
 Given(/^I have a dependencies\.txt file$/) do

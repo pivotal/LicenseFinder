@@ -8,19 +8,19 @@ Given(/^my app depends on a gem with specific details$/) do
     homepage:      "http://mit_licensed_gem.github.com",
     bundler_group: "test"
   }
-  @user.add_dependency_to_app(@gem_name,
+  @user.create_gem(@gem_name,
     :license        => @table[:license],
     :summary        => @table[:summary],
     :description    => @table[:description],
     :version        => @table[:version],
     :homepage       => @table[:homepage],
-    :bundler_group  => @table[:bundler_group]
   )
+  @user.depend_on_gem(@gem_name, :bundler_group  => @table[:bundler_group])
 end
 
 Given(/^my app depends on MIT and GPL licensed gems$/) do
-  @user.add_dependency_to_app 'gpl_licensed_gem', :license => "GPL"
-  @user.add_dependency_to_app 'mit_licensed_gem', :license => "MIT"
+  @user.create_and_depend_on_gem 'gpl_licensed_gem', :license => "GPL"
+  @user.create_and_depend_on_gem 'mit_licensed_gem', :license => "MIT"
 end
 
 When(/^I whitelist the MIT license$/) do

@@ -102,7 +102,12 @@ module DSL
       shell_out("cd #{app_path} && pod install --no-integrate")
     end
 
-    def add_dependency_to_app(gem_name, options={})
+    def create_and_depend_on_gem(gem_name, options)
+      create_gem(gem_name, options)
+      depend_on_gem(gem_name)
+    end
+
+    def create_gem(gem_name, options)
       license = options.fetch(:license)
       summary = options.fetch(:summary, "")
       description = options.fetch(:description, "")
@@ -125,6 +130,10 @@ module DSL
           end
         GEMSPEC
       end
+    end
+
+    def depend_on_gem(gem_name, options={})
+      gem_dir = projects_path.join(gem_name)
 
       gem_options = {}
       gem_options[:path] = gem_dir.to_s

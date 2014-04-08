@@ -9,7 +9,7 @@ end
 Given(/^I have an app with license finder that depends on a MIT licensed gem$/) do
   @user = ::DSL::User.new
   @user.create_nonrails_app
-  @user.add_dependency_to_app 'mit_gem', :license => 'MIT'
+  @user.create_and_depend_on_gem 'mit_gem', :license => 'MIT'
 end
 
 Given(/^I have a project that depends on mime\-types with a manual license type$/) do

@@ -1,7 +1,7 @@
 Given(/^I have an app with license finder that depends on a GPL licensed gem$/) do
   @user = ::DSL::User.new
   @user.create_nonrails_app
-  @user.add_dependency_to_app "gpl_gem", :license => "GPL"
+  @user.create_and_depend_on_gem "gpl_gem", :license => "GPL"
 end
 
 When(/^I approve that gem$/) do

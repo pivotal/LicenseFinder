@@ -1,8 +1,8 @@
 Given(/^I have an app with license finder that depends on an other licensed gem$/) do
   @user = ::DSL::User.new
   @user.create_nonrails_app
-  @user.add_dependency_to_app 'other_gem', version: '1.0', license: 'other'
-  @user.add_dependency_to_app 'control_gem', version: '1.0', license: 'other'
+  @user.create_and_depend_on_gem 'other_gem', version: '1.0', license: 'other'
+  @user.create_and_depend_on_gem 'control_gem', version: '1.0', license: 'other'
 end
 
 When(/^I set that gems license to MIT from the command line$/) do
