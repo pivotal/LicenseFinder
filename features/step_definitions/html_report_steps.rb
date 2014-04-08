@@ -1,12 +1,12 @@
 Given(/^my app depends on a gem with specific details$/) do
   @gem_name = "mit_licensed_gem"
   @table = {
-    license:        "MIT",
-    summary:        "mit is cool",
-    description:    "seriously",
-    version:        "0.0.1",
-    homepage:       "http://mit_licensed_gem.github.com",
-    bundler_groups: "test"
+    license:       "MIT",
+    summary:       "mit is cool",
+    description:   "seriously",
+    version:       "0.0.1",
+    homepage:      "http://mit_licensed_gem.github.com",
+    bundler_group: "test"
   }
   @user.add_dependency_to_app(@gem_name,
     :license        => @table[:license],
@@ -14,7 +14,7 @@ Given(/^my app depends on a gem with specific details$/) do
     :description    => @table[:description],
     :version        => @table[:version],
     :homepage       => @table[:homepage],
-    :bundler_groups => @table[:bundler_groups]
+    :bundler_group  => @table[:bundler_group]
   )
 end
 

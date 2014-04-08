@@ -126,10 +126,9 @@ module DSL
         GEMSPEC
       end
 
-      bundler_groups = options.fetch(:bundler_groups, "").to_s.split(',').map(&:strip)
       gem_options = {}
       gem_options[:path] = gem_dir.to_s
-      gem_options[:groups] = bundler_groups unless bundler_groups.empty?
+      gem_options[:groups] = [options[:bundler_group]] if options[:bundler_group]
 
       add_gem_dependency(gem_name, gem_options)
 
