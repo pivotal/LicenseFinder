@@ -29,12 +29,12 @@ When(/^I whitelist the MIT license$/) do
 end
 
 Then(/^I should see my specific gem details listed in the html$/) do
-  html = File.read(@user.dependencies_html_path)
-  page = Capybara.string(html)
-  section = page.find("##{@gem_name}")
+  @user.in_html do |page|
+    section = page.find("##{@gem_name}")
 
-  @table.first.each do |property_name, property_value|
-    section.should have_content property_value
+    @table.first.each do |property_name, property_value|
+      section.should have_content property_value
+    end
   end
 end
 
@@ -47,16 +47,16 @@ Then(/^the MIT gem approved in html$/) do
 end
 
 Then(/^I should see only see GPL liceneses as unapproved in the html$/) do
-  html = File.read(@user.dependencies_html_path)
-  page = Capybara.string(html)
-  page.should have_content '1 GPL'
-  action_items = page.find('.action-items')
-  action_items.should have_content '(GPL)'
+  @user.in_html do |page|
+    page.should have_content '1 GPL'
+    action_items = page.find('.action-items')
+    action_items.should have_content '(GPL)'
+  end
 end
 
 def is_html_status?(gem, approval)
-  html = File.read(@user.dependencies_html_path)
-  page = Capybara.string(html)
-  gpl_gem = page.find("##{gem}")
-  gpl_gem[:class].should == approval
+  @user.in_html do |page|
+    gpl_gem = page.find("##{gem}")
+    gpl_gem[:class].should == approval
+  end
 end

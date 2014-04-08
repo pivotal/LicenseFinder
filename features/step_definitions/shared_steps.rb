@@ -20,11 +20,11 @@ When(/^I whitelist MIT, New BSD, Apache 2.0, Ruby, and other licenses$/) do
 end
 
 Then(/^I should see the project name (\w+) in the html$/) do |project_name|
-  html = @user.dependencies_html_path.read
-  page = Capybara.string(html)
-  title = page.find("h1")
+  @user.in_html do |page|
+    title = page.find("h1")
 
-  title.should have_content project_name
+    title.should have_content project_name
+  end
 end
 
 
@@ -145,6 +145,7 @@ module DSL
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
+      config_path = app_path('config')
       config_path.mkpath
       config_path.join("license_finder.yml").open("w") do |f|
         f.write({'whitelist' => whitelisted_licenses}.to_yaml)
@@ -160,23 +161,15 @@ module DSL
     end
 
     def app_path(sub_directory = nil)
-      path = app_path = projects_path.join(app_name).cleanpath
+      path = base_path = projects_path.join(app_name).cleanpath
 
       if sub_directory
-        path = app_path.join(sub_directory).cleanpath
+        path = base_path.join(sub_directory).cleanpath
 
-        raise "#{sub_directory} is outside of the app" unless path.to_s =~ %r{^#{app_path}/}
+        raise "#{sub_directory} is outside of the app" unless path.to_s =~ %r{^#{base_path}/}
       end
 
       path
-    end
-
-    def config_path
-      app_path.join('config')
-    end
-
-    def dependencies_html_path
-      app_path.join('doc', 'dependencies.html')
     end
 
     def add_gem_dependency(name, options = {})
@@ -214,6 +207,10 @@ module DSL
       shell_out("cd #{app_path} && mvn install")
     end
 
+    def in_html
+      yield Capybara.string(dependencies_html_path.read)
+    end
+
     private
 
     def add_to_gemfile(line)
@@ -242,6 +239,10 @@ module DSL
 
     def fixtures_path
       root_path.join("spec", "fixtures")
+    end
+
+    def dependencies_html_path
+      app_path.join('doc', 'dependencies.html')
     end
 
     def reset_projects!

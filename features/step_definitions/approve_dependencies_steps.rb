@@ -16,10 +16,10 @@ Then(/^I should not see that gem in the console output$/) do
 end
 
 Then(/^I should see that gem approved in dependencies\.html$/) do
-  html = File.read(@user.dependencies_html_path)
-  page = Capybara.string(html)
-  gpl_gem = page.find("#gpl_gem")
-  gpl_gem[:class].should == "approved"
-  gpl_gem.should have_content "Julian"
-  gpl_gem.should have_content "We really need this"
+  @user.in_html do |page|
+    gpl_gem = page.find("#gpl_gem")
+    gpl_gem[:class].should == "approved"
+    gpl_gem.should have_content "Julian"
+    gpl_gem.should have_content "We really need this"
+  end
 end
