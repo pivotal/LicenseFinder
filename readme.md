@@ -101,6 +101,12 @@ $ license_finder approve awesome_gpl_gem
 
 If you rerun `license_finder`, you should no longer see `awesome_gpl_gem` in the output.
 
+To record who approved the dependency and why:
+
+```sh
+$ license_finder approve awesome_gpl_gem --approver CTO --message "Go ahead"
+```
+
 ### Managing license whitelist
 
 Licenses can be added to a whitelist that tells LicenseFinder to automatically approve dependencies using the specified licenses.
@@ -160,6 +166,12 @@ To automatically approve an unmanaged dependency when you add it, use:
 
 ```sh
 $ license_finder dependencies add MIT my_js_dep 0.1.2 --approve
+```
+
+To record who approved the dependency when you add it, use:
+
+```sh
+$ license_finder dependencies add MIT my_js_dep 0.1.2 --approve --approver CTO --message "Go ahead"
 ```
 
 The version is optional.  Run `license_finder dependencies help` for additional documentation about
