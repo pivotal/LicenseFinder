@@ -1,11 +1,11 @@
 Given(/^my app depends on a gem with specific details$/) do
   @gem_name = "mit_licensed_gem"
+  @gem_homepage = "http://mit_licensed_gem.github.com"
   @table = {
     license:       "MIT",
     summary:       "mit is cool",
     description:   "seriously",
     version:       "0.0.1",
-    homepage:      "http://mit_licensed_gem.github.com",
     bundler_group: "test"
   }
   @user.create_gem(@gem_name,
@@ -13,7 +13,7 @@ Given(/^my app depends on a gem with specific details$/) do
     :summary        => @table[:summary],
     :description    => @table[:description],
     :version        => @table[:version],
-    :homepage       => @table[:homepage],
+    :homepage       => @gem_homepage,
   )
   @user.depend_on_local_gem(@gem_name, :groups => [@table[:bundler_group]])
 end
@@ -30,7 +30,8 @@ end
 
 Then(/^I should see my specific gem details listed in the html$/) do
   @user.in_gem_html(@gem_name) do |section|
-    @table.first.each do |property_name, property_value|
+    section.find("a[href='#{@gem_homepage}']", text: @gem_name).should be
+    @table.values.each do |property_value|
       section.should have_content property_value
     end
   end
