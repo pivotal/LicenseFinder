@@ -55,10 +55,9 @@ module DSL
     def create_maven_app
       reset_projects!
 
-      path = fixtures_path.join("pom.xml")
-
       app_path.mkpath
-      shell_out("cp #{path} #{app_path}")
+
+      add_maven_dependency
 
       mvn_install
     end
@@ -66,10 +65,9 @@ module DSL
     def create_gradle_app
       reset_projects!
 
-      path = fixtures_path.join("build.gradle")
-
       app_path.mkpath
-      shell_out("cd #{app_path} && cp #{path} .")
+
+      add_gradle_dependency
     end
 
     def create_ruby_app
@@ -79,17 +77,17 @@ module DSL
 
       add_gem_dependency('license_finder', :path => root_path.to_s)
 
-      bundle_app
+      bundle_install
     end
 
     def create_cocoapods_app
       reset_projects!
 
-      path = fixtures_path.join("Podfile")
-
       app_path.mkpath
-      shell_out("cp #{path} #{app_path}")
-      shell_out("cd #{app_path} && pod install --no-integrate")
+
+      add_pod_dependency
+
+      pod_install
     end
 
     def create_and_depend_on_gem(gem_name, options)
@@ -131,7 +129,7 @@ module DSL
 
       add_gem_dependency(gem_name, gem_options)
 
-      bundle_app
+      bundle_install
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
@@ -169,6 +167,18 @@ module DSL
       config_path.join("license_finder.yml")
     end
 
+    def in_html
+      yield Capybara.string(app_path('doc/dependencies.html').read)
+    end
+
+    def in_gem_html(gem_name)
+      in_html do |page|
+        yield page.find("##{gem_name}")
+      end
+    end
+
+    private
+
     def add_gem_dependency(name, options = {})
       line = "gem #{name.inspect}"
       line << ", " + options.inspect unless options.empty?
@@ -186,7 +196,22 @@ module DSL
       add_to_package(line)
     end
 
-    def bundle_app
+    def add_maven_dependency
+      path = fixtures_path.join("pom.xml")
+      shell_out("cp #{path} #{app_path}")
+    end
+
+    def add_gradle_dependency
+      path = fixtures_path.join("build.gradle")
+      shell_out("cd #{app_path} && cp #{path} .")
+    end
+
+    def add_pod_dependency
+      path = fixtures_path.join("Podfile")
+      shell_out("cp #{path} #{app_path}")
+    end
+
+    def bundle_install
       ::Bundler.with_clean_env do
         shell_out("bundle install --gemfile=#{app_path.join("Gemfile")} --path=#{sandbox_path.join("bundle")}")
       end
@@ -204,17 +229,9 @@ module DSL
       shell_out("cd #{app_path} && mvn install")
     end
 
-    def in_html
-      yield Capybara.string(app_path('doc/dependencies.html').read)
+    def pod_install
+      shell_out("cd #{app_path} && pod install --no-integrate")
     end
-
-    def in_gem_html(gem_name)
-      in_html do |page|
-        yield page.find("##{gem_name}")
-      end
-    end
-
-    private
 
     def add_to_gemfile(line)
       shell_out("echo #{line.inspect} >> #{app_path.join("Gemfile")}")

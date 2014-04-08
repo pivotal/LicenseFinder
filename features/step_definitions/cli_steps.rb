@@ -6,10 +6,10 @@ Given(/^I have an app that has no config directory$/) do
   path.should_not be_exist
 end
 
-Given(/^I have an app that depends on a MIT licensed gem$/) do
+Given(/^I have an app with an unapproved dependency$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
-  @user.create_and_depend_on_gem 'mit_gem', :license => 'MIT'
+  @user.create_and_depend_on_gem 'unapproved_gem', :license => 'MIT'
 end
 
 When(/^I run license_finder help on a specific command$/) do
@@ -30,8 +30,8 @@ Then /^it should exit with status code (\d)$/ do |status|
   $?.exitstatus.should == status.to_i
 end
 
-Then(/^should list my MIT gem in the output$/) do
-  @output.should include 'mit_gem'
+Then(/^should list my unapproved dependency in the output$/) do
+  @output.should include 'unapproved_gem'
 end
 
 Then(/^I should see all dependencies approved for use$/) do

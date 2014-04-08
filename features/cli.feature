@@ -4,13 +4,13 @@ Feature: License Finder command line executable
   I want a command-line interface
 
   Scenario: Auditing an application with unapproved licenses
-    Given I have an app that depends on a MIT licensed gem
+    Given I have an app with an unapproved dependency
     When I run license_finder
     Then it should exit with status code 1
-    And should list my MIT gem in the output
+    And should list my unapproved dependency in the output
 
   Scenario: Auditing an application with approved licenses
-    Given I have an app that depends on a MIT licensed gem
+    Given I have an app with an unapproved dependency
     When I whitelist everything I can think of
     Then it should exit with status code 0
     And I should see all dependencies approved for use
