@@ -15,7 +15,7 @@ Given(/^my app depends on a gem with specific details$/) do
     :version        => @table[:version],
     :homepage       => @table[:homepage],
   )
-  @user.depend_on_gem(@gem_name, :bundler_group  => @table[:bundler_group])
+  @user.depend_on_local_gem(@gem_name, :groups => [@table[:bundler_group]])
 end
 
 Given(/^my app depends on MIT and GPL licensed gems$/) do

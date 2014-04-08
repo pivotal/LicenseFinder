@@ -92,7 +92,7 @@ module DSL
 
     def create_and_depend_on_gem(gem_name, options)
       create_gem(gem_name, options)
-      depend_on_gem(gem_name)
+      depend_on_local_gem(gem_name)
     end
 
     def create_gem(gem_name, options)
@@ -120,14 +120,11 @@ module DSL
       end
     end
 
-    def depend_on_gem(gem_name, options={})
+    def depend_on_local_gem(gem_name, options={})
       gem_dir = projects_path.join(gem_name)
+      options[:path] = gem_dir.to_s
 
-      gem_options = {}
-      gem_options[:path] = gem_dir.to_s
-      gem_options[:groups] = [options[:bundler_group]] if options[:bundler_group]
-
-      add_gem_dependency(gem_name, gem_options)
+      add_gem_dependency(gem_name, options)
 
       bundle_install
     end

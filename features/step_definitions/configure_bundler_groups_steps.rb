@@ -2,7 +2,7 @@ Given(/^I have an app that depends on a gem in the test bundler group$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
   @user.create_gem 'gpl_gem', :license => 'GPL'
-  @user.depend_on_gem 'gpl_gem', :bundler_group => 'test'
+  @user.depend_on_local_gem 'gpl_gem', :groups => ['test']
 end
 
 When(/^I ignore the test group$/) do
