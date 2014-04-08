@@ -1,4 +1,4 @@
-Given(/^I have an app with license finder that depends on a GPL licensed gem$/) do
+Given(/^I have an app that depends on a GPL licensed gem$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
   @user.create_and_depend_on_gem "gpl_gem", :license => "GPL"
@@ -7,7 +7,7 @@ end
 When(/^I approve that gem$/) do
   @output = @user.execute_command "license_finder"
   @output.should include "gpl_gem"
-  @output = @user.execute_command "license_finder approve gpl_gem --approver 'Julian' --message 'We really need this'"
+  @user.execute_command "license_finder approve gpl_gem --approver 'Julian' --message 'We really need this'"
   @output = @user.execute_command "license_finder --quiet"
 end
 

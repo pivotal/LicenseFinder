@@ -1,7 +1,7 @@
-Feature: Set a dependency's license through a command line interface
+Feature: Setting a dependency's license
   So that my dependencies all have the correct licenses
   As an application developer
-  I want a command line interface to set licenses for specific dependencies
+  I want to be able to manually set licenses
 
   Scenario: Setting a license for a dependency
     Given I have an app that depends on a few gems without known licenses

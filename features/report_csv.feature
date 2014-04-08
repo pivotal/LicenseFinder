@@ -4,12 +4,12 @@ Feature: Text Report
   I want license finder to generate an easy-to-understand text report
 
   Scenario: Viewing dependencies
-    Given I have an app with license finder that depends on a gem with license and version details
+    Given I have an app that depends on a gem with license and version details
     When I run license_finder
     Then I should see those version and license details in the dependencies.csv file
 
   Scenario: Cleaning up old versions of text report
-    Given I have an app with license finder
+    Given I have an app
     And I have a dependencies.txt file
     When I run license_finder
     Then I should see dependencies.txt replaced by dependencies.csv

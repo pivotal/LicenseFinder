@@ -4,7 +4,7 @@ Feature: HTML Report
   I want license finder to generate an easy-to-understand HTML report
 
   Background:
-    Given I have an app with license finder
+    Given I have an app
 
   Scenario: Dependency details listed in HTML report
     And my app depends on a gem with specific details
@@ -20,5 +20,5 @@ Feature: HTML Report
 
   Scenario: Dependency summary
     And my app depends on MIT and GPL licensed gems
-    When I whitelist MIT, New BSD, Apache 2.0, Ruby, and other licenses
+    When I whitelist everything I can think of
     Then I should see only see GPL liceneses as unapproved in the html

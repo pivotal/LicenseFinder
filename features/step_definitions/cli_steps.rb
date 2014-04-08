@@ -1,4 +1,4 @@
-Given(/^I have an app with license finder that has no config directory$/) do
+Given(/^I have an app that has no config directory$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
   path = @user.config_path
@@ -6,7 +6,7 @@ Given(/^I have an app with license finder that has no config directory$/) do
   path.should_not be_exist
 end
 
-Given(/^I have an app with license finder that depends on a MIT licensed gem$/) do
+Given(/^I have an app that depends on a MIT licensed gem$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
   @user.create_and_depend_on_gem 'mit_gem', :license => 'MIT'

@@ -5,7 +5,7 @@ require 'capybara'
 
 ########## COMMON STEPS ##########
 
-Given(/^I have an app with license finder$/) do
+Given(/^I have an app$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
 end
@@ -14,7 +14,7 @@ When(/^I run license_finder$/) do
   @output = @user.execute_command "license_finder --quiet"
 end
 
-When(/^I whitelist MIT, New BSD, Apache 2.0, Ruby, and other licenses$/) do
+When(/^I whitelist everything I can think of$/) do
   @user.configure_license_finder_whitelist ["MIT","other","New BSD","Apache 2.0","Ruby"]
   @output = @user.execute_command "license_finder --quiet"
 end
