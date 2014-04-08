@@ -96,27 +96,11 @@ module DSL
     end
 
     def create_gem(gem_name, options)
-      license = options.fetch(:license)
-      summary = options.fetch(:summary, "")
-      description = options.fetch(:description, "")
-      version = options[:version] || "0.0.0"
-      homepage = options[:homepage]
-
       gem_dir = projects_path.join(gem_name)
 
       gem_dir.mkpath
       gem_dir.join("#{gem_name}.gemspec").open('w') do |file|
-        file.write <<-GEMSPEC
-          Gem::Specification.new do |s|
-            s.name = "#{gem_name}"
-            s.version = "#{version}"
-            s.author = "Cucumber"
-            s.summary = "#{summary}"
-            s.license = "#{license}"
-            s.description = "#{description}"
-            s.homepage = "#{homepage}"
-          end
-        GEMSPEC
+        file.write gemspec_string(gem_name, options)
       end
     end
 
@@ -175,6 +159,26 @@ module DSL
     end
 
     private
+
+    def gemspec_string(gem_name, options)
+      license = options.fetch(:license)
+      summary = options.fetch(:summary, "")
+      description = options.fetch(:description, "")
+      version = options[:version] || "0.0.0"
+      homepage = options[:homepage]
+
+      <<-GEMSPEC
+      Gem::Specification.new do |s|
+        s.name = "#{gem_name}"
+        s.version = "#{version}"
+        s.author = "Cucumber"
+        s.summary = "#{summary}"
+        s.license = "#{license}"
+        s.description = "#{description}"
+        s.homepage = "#{homepage}"
+      end
+      GEMSPEC
+    end
 
     def add_gem_dependency(name, options = {})
       line = "gem #{name.inspect}"
