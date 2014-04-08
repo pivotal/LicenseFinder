@@ -8,22 +8,17 @@ Feature: License Finder command line executable
     When I run license_finder
     Then it creates a config directory with the license_finder config
 
-  Scenario: Auditing an application with non-whitelisted licenses
+  Scenario: Auditing an application with unapproved licenses
     Given I have an app with license finder that depends on a MIT licensed gem
     When I run license_finder
     Then it should exit with status code 1
     And should list my MIT gem in the output
 
-  Scenario: Auditing an application with whitelisted licenses
+  Scenario: Auditing an application with approved licenses
     Given I have an app with license finder that depends on a MIT licensed gem
     When I whitelist MIT, New BSD, Apache 2.0, Ruby, and other licenses
     Then it should exit with status code 0
     And I should see all dependencies approved for use
-
-  Scenario: Keep manually set license dependencies
-    Given I have a project that depends on a manually licensed gem
-    When I run license_finder
-    Then the gem should keep its manually assigned license
 
   Scenario: Viewing help for license_finder subcommand
     Given I have an app with license finder

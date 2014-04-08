@@ -12,15 +12,6 @@ Given(/^I have an app with license finder that depends on a MIT licensed gem$/) 
   @user.create_and_depend_on_gem 'mit_gem', :license => 'MIT'
 end
 
-Given(/^I have a project that depends on a manually licensed gem$/) do
-  @user = ::DSL::User.new
-  @user.create_ruby_app
-  @user.create_and_depend_on_gem 'changed_gem', :license => 'MIT'
-  @user.execute_command "license_finder --quiet"
-  @output = @user.execute_command "license_finder license Ruby changed_gem"
-  @output.should =~ /changed_gem.*Ruby/
-end
-
 When(/^I run license_finder help on a specific command$/) do
   @output = @user.execute_command "license_finder ignored_bundler_groups help add"
 end
@@ -45,10 +36,6 @@ end
 
 Then(/^I should see all dependencies approved for use$/) do
   @output.should include 'All dependencies are approved for use'
-end
-
-Then(/^the gem should keep its manually assigned license$/) do
-  @output.should =~ /changed_gem.*ruby/
 end
 
 Then(/^I should see the correct subcommand usage instructions$/) do
