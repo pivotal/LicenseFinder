@@ -47,7 +47,7 @@ module LicenseFinder
     end
 
     def default_license
-      License::Definitions.build_unrecognized "other", LicenseFinder.config.whitelist
+      License.find_by_name nil
     end
   end
 end

@@ -13,6 +13,26 @@ module LicenseFinder
         expect(license).to be_a License
         expect(license.name).to eq "not a known license"
       end
+
+      context "making the default license" do
+        it "set the name to 'other'" do
+          License.find_by_name(nil).name.should == "other"
+        end
+
+        it "does not equal other uses of the default license" do
+          License.find_by_name(nil).should_not == License.find_by_name(nil)
+        end
+
+        context "when there is a whitelist" do
+          before do
+            LicenseFinder.config.stub(:whitelist).and_return(["not empty"])
+          end
+
+          it "does not blow up" do
+            License.find_by_name(nil).name.should == "other"
+          end
+        end
+      end
     end
 
     describe ".find_by_text" do
