@@ -33,11 +33,6 @@ module LicenseFinder
       @project_name  = config['project_name'] || determine_project_name
     end
 
-    def whitelisted?(license_name)
-      license = License.find_by_name(license_name)
-      whitelisted_licenses.include? license
-    end
-
     def save
       Persistence.set(to_hash)
     end
@@ -51,12 +46,6 @@ module LicenseFinder
         'dependencies_file_dir' => artifacts.dir.to_s,
         'project_name' => project_name
       }
-    end
-
-    def whitelisted_licenses
-      whitelist.map do |license_name|
-        License.find_by_name(license_name) || license_name
-      end.compact
     end
 
     def determine_project_name
