@@ -26,14 +26,12 @@ Gem::Specification.new do |s|
   s.add_dependency "xml-simple"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
-  %w(rspec xpath cucumber pry).each do |gem|
+  %w(rake rspec xpath cucumber pry).each do |gem|
     s.add_development_dependency gem
   end
 
   s.add_development_dependency "capybara", "~> 2.0.0"
-  s.add_development_dependency "rails", "~> 3.2.0"
   s.add_development_dependency "webmock", "~> 1.13"
-  s.add_development_dependency "rake"
   s.add_development_dependency "cocoapods" if RUBY_PLATFORM =~ /darwin/
 
   s.files         = `git ls-files`.split("\n")

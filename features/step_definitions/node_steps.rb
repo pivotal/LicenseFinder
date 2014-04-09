@@ -4,5 +4,5 @@ Given(/^A package file with dependencies$/) do
 end
 
 Then(/^I should see a Node dependency with a license$/) do
-  @output.should =~ /^http-server, 0.6.1, MIT$/
+  @user.should be_seeing_line "http-server, 0.6.1, MIT"
 end

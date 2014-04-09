@@ -4,5 +4,5 @@ Given(/^A requirements file with dependencies$/) do
 end
 
 Then(/^I should see a Python dependency with a license$/) do
-  @output.should =~ /^argparse, 1.2.1, Python Software Foundation License$/
+  @user.should be_seeing_line "argparse, 1.2.1, Python Software Foundation License"
 end

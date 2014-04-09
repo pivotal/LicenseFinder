@@ -4,5 +4,5 @@ Given(/^A build.gradle file with dependencies$/) do
 end
 
 Then(/^I should see a Gradle dependency with a license$/) do
-  @output.should =~ /^junit, 4.11, Common Public License Version 1.0$/
+  @user.should be_seeing_line "junit, 4.11, Common Public License Version 1.0"
 end

@@ -5,26 +5,26 @@ require 'capybara'
 
 ########## COMMON STEPS ##########
 
-Given(/^I have an app with license finder$/) do
+Given(/^I have an app$/) do
   @user = ::DSL::User.new
-  @user.create_nonrails_app
+  @user.create_ruby_app
 end
 
 When(/^I run license_finder$/) do
-  @output = @user.execute_command "license_finder --quiet"
+  @user.execute_command "license_finder --quiet"
 end
 
-When(/^I whitelist MIT, New BSD, Apache 2.0, Ruby, and other licenses$/) do
+When(/^I whitelist everything I can think of$/) do
   @user.configure_license_finder_whitelist ["MIT","other","New BSD","Apache 2.0","Ruby"]
-  @output = @user.execute_command "license_finder --quiet"
+  @user.execute_command "license_finder --quiet"
 end
 
 Then(/^I should see the project name (\w+) in the html$/) do |project_name|
-  html = File.read(@user.dependencies_html_path)
-  page = Capybara.string(html)
-  title = page.find("h1")
+  @user.in_html do |page|
+    title = page.find("h1")
 
-  title.should have_content project_name
+    title.should have_content project_name
+  end
 end
 
 
@@ -33,7 +33,7 @@ module DSL
     def create_python_app
       reset_projects!
 
-      shell_out("mkdir -p #{app_path}")
+      app_path.mkpath
       shell_out("cd #{app_path} && touch requirements.txt")
 
       add_pip_dependency('argparse==1.2.1')
@@ -44,7 +44,7 @@ module DSL
     def create_node_app
       reset_projects!
 
-      shell_out("mkdir -p #{app_path}")
+      app_path.mkpath
       shell_out("cd #{app_path} && touch package.json")
 
       add_npm_dependency('http-server', '0.6.1')
@@ -55,10 +55,9 @@ module DSL
     def create_maven_app
       reset_projects!
 
-      path = File.expand_path("spec/fixtures/pom.xml")
+      app_path.mkpath
 
-      shell_out("mkdir -p #{app_path}")
-      shell_out("cd #{app_path} && cp #{path} .")
+      add_maven_dependency
 
       mvn_install
     end
@@ -66,80 +65,57 @@ module DSL
     def create_gradle_app
       reset_projects!
 
-      path = File.expand_path("spec/fixtures/build.gradle")
+      app_path.mkpath
 
-      shell_out("mkdir -p #{app_path}")
-      shell_out("cd #{app_path} && cp #{path} .")
+      add_gradle_dependency
     end
 
-    def create_nonrails_app
+    def create_ruby_app
       reset_projects!
 
       shell_out("cd #{projects_path} && bundle gem #{app_name}")
 
-      add_gem_dependency('license_finder', :path => root_path)
+      add_gem_dependency('license_finder', path: root_path.to_s)
 
-      bundle_app
-    end
-
-    def create_rails_app
-      reset_projects!
-
-      shell_out("bundle exec rails new #{app_path} --skip-bundle")
-
-      add_gem_dependency('license_finder', :path => root_path)
-
-      bundle_app
+      bundle_install
     end
 
     def create_cocoapods_app
       reset_projects!
 
-      path = File.expand_path("spec/fixtures/Podfile")
+      app_path.mkpath
 
-      shell_out("mkdir -p #{app_path}")
-      shell_out("cp #{path} #{app_path}")
+      add_pod_dependency
 
-      shell_out("cd #{app_path} && pod install --no-integrate")
+      pod_install
     end
 
-    def add_dependency_to_app(gem_name, options={})
-      license = options.fetch(:license)
-      summary = options.fetch(:summary, "")
-      description = options.fetch(:description, "")
-      bundler_groups = options.fetch(:bundler_groups, "").to_s.split(',').map(&:strip)
-      version = options[:version] || "0.0.0"
-      homepage = options[:homepage]
+    def create_and_depend_on_gem(gem_name, options)
+      create_gem(gem_name, options)
+      depend_on_local_gem(gem_name)
+    end
 
-      gem_dir = File.join(projects_path, gem_name)
+    def create_gem(gem_name, options)
+      gem_dir = projects_path.join(gem_name)
 
-      FileUtils.mkdir(gem_dir)
-      File.open(File.join(gem_dir, "#{gem_name}.gemspec"), 'w') do |file|
-        file.write <<-GEMSPEC
-          Gem::Specification.new do |s|
-            s.name = "#{gem_name}"
-            s.version = "#{version}"
-            s.author = "Cucumber"
-            s.summary = "#{summary}"
-            s.license = "#{license}"
-            s.description = "#{description}"
-            s.homepage = "#{homepage}"
-          end
-        GEMSPEC
+      gem_dir.mkpath
+      gem_dir.join("#{gem_name}.gemspec").open('w') do |file|
+        file.write gemspec_string(gem_name, options)
       end
+    end
 
-      gem_options = {}
-      gem_options[:path] = File.join(projects_path, gem_name)
-      gem_options[:groups] = bundler_groups unless bundler_groups.empty?
+    def depend_on_local_gem(gem_name, options={})
+      gem_dir = projects_path.join(gem_name)
+      options[:path] = gem_dir.to_s
 
-      add_gem_dependency(gem_name, gem_options)
+      add_gem_dependency(gem_name, options)
 
-      bundle_app
+      bundle_install
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
-      FileUtils.mkdir_p(config_path)
-      File.open(File.join(config_path, "license_finder.yml"), "w") do |f|
+      config_path.mkpath
+      config_file.open("w") do |f|
         f.write({'whitelist' => whitelisted_licenses}.to_yaml)
       end
     end
@@ -148,32 +124,70 @@ module DSL
       ::Bundler.with_clean_env do
         @output = shell_out("cd #{app_path} && bundle exec #{command}", true)
       end
+    end
 
-      @output
+    def seeing?(content)
+      @output.include? content
+    end
+
+    def seeing_line?(content)
+      seeing_something_like? /^#{Regexp.escape content}$/
+    end
+
+    def seeing_something_like?(regex)
+      @output =~ regex
     end
 
     def app_path(sub_directory = nil)
-      path = app_path = Pathname.new(File.join(projects_path, app_name)).cleanpath.to_s
+      path = base_path = projects_path.join(app_name).cleanpath
 
       if sub_directory
-        path = Pathname.new(File.join(app_path, sub_directory)).cleanpath.to_s
+        path = base_path.join(sub_directory).cleanpath
 
-        raise "#{name} is outside of the app" unless path =~ %r{^#{app_path}/}
+        raise "#{sub_directory} is outside of the app" unless path.to_s =~ %r{^#{base_path}/}
       end
 
       path
     end
 
     def config_path
-      File.join(app_path, 'config')
+      app_path('config')
     end
 
-    def doc_path
-      File.join(app_path, 'doc')
+    def config_file
+      config_path.join("license_finder.yml")
     end
 
-    def dependencies_html_path
-      File.join(doc_path, 'dependencies.html')
+    def in_html
+      yield Capybara.string(app_path('doc/dependencies.html').read)
+    end
+
+    def in_gem_html(gem_name)
+      in_html do |page|
+        yield page.find("##{gem_name}")
+      end
+    end
+
+    private
+
+    def gemspec_string(gem_name, options)
+      license = options.fetch(:license)
+      summary = options.fetch(:summary, "")
+      description = options.fetch(:description, "")
+      version = options[:version] || "0.0.0"
+      homepage = options[:homepage]
+
+      <<-GEMSPEC
+      Gem::Specification.new do |s|
+        s.name = "#{gem_name}"
+        s.version = "#{version}"
+        s.author = "Cucumber"
+        s.summary = "#{summary}"
+        s.license = "#{license}"
+        s.description = "#{description}"
+        s.homepage = "#{homepage}"
+      end
+      GEMSPEC
     end
 
     def add_gem_dependency(name, options = {})
@@ -193,9 +207,24 @@ module DSL
       add_to_package(line)
     end
 
-    def bundle_app
+    def add_maven_dependency
+      path = fixtures_path.join("pom.xml")
+      shell_out("cp #{path} #{app_path}")
+    end
+
+    def add_gradle_dependency
+      path = fixtures_path.join("build.gradle")
+      shell_out("cd #{app_path} && cp #{path} .")
+    end
+
+    def add_pod_dependency
+      path = fixtures_path.join("Podfile")
+      shell_out("cp #{path} #{app_path}")
+    end
+
+    def bundle_install
       ::Bundler.with_clean_env do
-        shell_out("bundle install --gemfile=#{File.join(app_path, "Gemfile")} --path=#{bundle_path}")
+        shell_out("bundle install --gemfile=#{app_path.join("Gemfile")} --path=#{sandbox_path.join("bundle")}")
       end
     end
 
@@ -211,18 +240,20 @@ module DSL
       shell_out("cd #{app_path} && mvn install")
     end
 
-    private
+    def pod_install
+      shell_out("cd #{app_path} && pod install --no-integrate")
+    end
 
     def add_to_gemfile(line)
-      shell_out("echo #{line.inspect} >> #{File.join(app_path, "Gemfile")}")
+      shell_out("echo #{line.inspect} >> #{app_path.join("Gemfile")}")
     end
 
     def add_to_requirements(line)
-      shell_out("echo #{line.inspect} >> #{File.join(app_path, "requirements.txt")}")
+      shell_out("echo #{line.inspect} >> #{app_path.join("requirements.txt")}")
     end
 
     def add_to_package(line)
-      shell_out("echo #{line.inspect} >> #{File.join(app_path, "package.json")}")
+      shell_out("echo #{line.inspect} >> #{app_path.join("package.json")}")
     end
 
     def app_name
@@ -230,24 +261,24 @@ module DSL
     end
 
     def sandbox_path
-      File.join(root_path, "tmp")
+      root_path.join("tmp")
     end
 
     def projects_path
-      File.join(sandbox_path, "projects")
+      sandbox_path.join("projects")
     end
 
-    def bundle_path
-      File.join(sandbox_path, "bundle")
+    def fixtures_path
+      root_path.join("spec", "fixtures")
     end
 
     def reset_projects!
       shell_out("rm -rf #{projects_path}")
-      shell_out("mkdir -p #{projects_path}")
+      projects_path.mkpath
     end
 
     def root_path
-      Pathname.new(File.join(File.dirname(__FILE__), "..", "..")).realpath.to_s
+      Pathname.new(__FILE__).dirname.join("..", "..").realpath
     end
 
     def shell_out(command, allow_failures = false)
