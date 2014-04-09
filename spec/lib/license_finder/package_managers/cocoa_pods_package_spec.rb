@@ -22,22 +22,21 @@ module LicenseFinder
         let(:license_text) { "LicenseText" }
 
         it "returns the name of the license if the license is found be text" do
-          license = double(:license, pretty_name: "LicenseName")
+          license = double(:license, name: "LicenseName")
           allow(License).to receive(:find_by_text).with(license_text).and_return(license)
 
-          expect(subject.license).to eq "LicenseName"
+          expect(subject.license.name).to eq "LicenseName"
         end
 
         it "returns other if the license can't be found by text" do
-          license = double(:license, pretty_name: nil)
-          allow(License).to receive(:find_by_text).with(license_text).and_return(license)
+          allow(License).to receive(:find_by_text).with(license_text).and_return(nil)
 
-          expect(subject.license).to eq "other"
+          expect(subject.license.name).to eq "other"
         end
       end
 
       it "returns other when there's no license" do
-        expect(subject.license).to eq "other"
+        expect(subject.license.name).to eq "other"
       end
     end
   end

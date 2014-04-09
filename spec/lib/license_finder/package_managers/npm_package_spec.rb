@@ -34,34 +34,34 @@ module LicenseFinder
       let(:node_module4) { {"licenses" => ["MIT"], "path" => "/some/path"} }
 
       it 'finds the license for both license structures' do
-        NpmPackage.new(node_module1).license.should eq("MIT")
-        NpmPackage.new(node_module2).license.should eq("BSD")
-        NpmPackage.new(node_module3).license.should eq("PSF")
-        NpmPackage.new(node_module4).license.should eq("MIT")
+        NpmPackage.new(node_module1).license.name.should eq("MIT")
+        NpmPackage.new(node_module2).license.name.should eq("BSD")
+        NpmPackage.new(node_module3).license.name.should eq("Python Software Foundation License")
+        NpmPackage.new(node_module4).license.name.should eq("MIT")
       end
 
       it "returns a license in a file if detected" do
-        stub_license_files [double(:file, license: 'Detected License')]
+        stub_license_files [double(:file, license: License.find_by_name('Detected License'))]
 
-        subject.license.should == "Detected License"
+        subject.license.name.should == "Detected License"
       end
 
       it "returns other if there's more than one license" do
         package = NpmPackage.new({ "licenses" => ["MIT", "BSD"], "path" => "/some/path" })
-        expect(package.license).to eq("other")
+        expect(package.license.name).to eq("other")
       end
 
       it "returns other if the license from spec and license from files are different" do
         stub_license_files [double(:file, license: 'Detected License')]
         package = NpmPackage.new({ "licenses" => ["MIT"], "path" => "some/node/package/path" })
 
-        expect(package.license).to eq("other")
+        expect(package.license.name).to eq("other")
       end
 
       it "returns 'other' otherwise" do
         stub_license_files []
 
-        subject.license.should == "other"
+        subject.license.name.should == "other"
       end
     end
   end

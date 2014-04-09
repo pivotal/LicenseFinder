@@ -49,7 +49,7 @@ Then(/^I should see all dependencies approved for use$/) do
 end
 
 Then(/^the mime\-types license remains set with my manual license type$/) do
-  @output.should =~ /mime-types.*Ruby/
+  @output.should =~ /mime-types.*ruby/
 end
 
 Then(/^I should see the correct subcommand usage instructions$/) do

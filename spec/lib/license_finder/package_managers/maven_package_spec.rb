@@ -21,11 +21,10 @@ module LicenseFinder
     its(:name) { should == "hamcrest-core" }
     its(:version) { should == "4.11" }
     its(:description) { should == "" }
-    its(:licenses_from_spec) { should == ["Common Public License Version 1.0"] }
 
     describe "#license" do
       it "returns the license if found" do
-        subject.license.should == "Common Public License Version 1.0"
+        subject.license.name.should == "Common Public License Version 1.0"
       end
 
       context "when there are multiple licenses" do
@@ -47,7 +46,7 @@ module LicenseFinder
         end
 
         it "returns 'other'" do
-          subject.license.should == 'other'
+          subject.license.name.should == 'other'
         end
       end
 
@@ -63,7 +62,7 @@ module LicenseFinder
         end
 
         it "returns 'other' otherwise" do
-          subject.license.should == "other"
+          subject.license.name.should == "other"
         end
       end
     end

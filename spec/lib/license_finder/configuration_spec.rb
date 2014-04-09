@@ -72,24 +72,6 @@ module LicenseFinder
       end
     end
 
-    describe "whitelisted?" do
-      context "short name whitelisted" do
-        subject { described_class.new('whitelist' => ["Apache2"]) }
-
-        it "should accept any of the licenses names" do
-          subject.should be_whitelisted "Apache2"
-          subject.should be_whitelisted "Apache 2.0"
-          subject.should be_whitelisted "Apache-2.0"
-        end
-
-        it "should be case-insensitive" do
-          subject.should be_whitelisted "apache2"
-          subject.should be_whitelisted "apache 2.0"
-          subject.should be_whitelisted "apache-2.0"
-        end
-      end
-    end
-
     describe "#save" do
       def attributes # can't be a let... the caching causes polution
         {

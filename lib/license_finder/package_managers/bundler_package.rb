@@ -26,7 +26,7 @@ module LicenseFinder
       gem_def.full_gem_path
     end
 
-    def licenses_from_spec
+    def license_names_from_spec
       gem_def.licenses
     end
   end

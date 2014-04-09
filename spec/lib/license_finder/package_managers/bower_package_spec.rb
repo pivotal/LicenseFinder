@@ -37,34 +37,34 @@ module LicenseFinder
       let(:package4) { { "pkgMeta" => {"licenses" => ["MIT"]}, "canonicalDir" => "/some/path" } }
 
       it 'finds the license for both license  structures' do
-        BowerPackage.new(package1).license.should eq("MIT")
-        BowerPackage.new(package2).license.should eq("BSD")
-        BowerPackage.new(package3).license.should eq("PSF")
-        BowerPackage.new(package4).license.should eq("MIT")
+        BowerPackage.new(package1).license.name.should eq("MIT")
+        BowerPackage.new(package2).license.name.should eq("BSD")
+        BowerPackage.new(package3).license.name.should eq("Python Software Foundation License")
+        BowerPackage.new(package4).license.name.should eq("MIT")
       end
 
       it "returns a license in a file if detected" do
-        stub_license_files [double(:file, license: 'Detected License')]
+        stub_license_files [double(:file, license: License.find_by_name('Detected License'))]
 
-        subject.license.should == "Detected License"
+        subject.license.name.should == "Detected License"
       end
 
       it "returns other if there's more than one license" do
         package = BowerPackage.new({ "pkgMeta" => {"licenses" => ["MIT", "BSD"]}, "canonicalDir" => "/some/path" })
-        expect(package.license).to eq("other")
+        expect(package.license.name).to eq("other")
       end
 
       it "returns other if the license from spec and license from files are different" do
         stub_license_files [double(:file, license: 'Detected License')]
         package = BowerPackage.new({ "pkgMeta" => {"licenses" => ["MIT"]}, "canonicalDir" => "/path/to/thing" })
 
-        expect(package.license).to eq("other")
+        expect(package.license.name).to eq("other")
       end
 
       it "returns 'other' otherwise" do
         stub_license_files []
 
-        subject.license.should == "other"
+        subject.license.name.should == "other"
       end
     end
   end

@@ -7,12 +7,30 @@ module LicenseFinder
         License.find_by_name("Apache2").should be_a License
       end
 
-      context "when license not found" do
-        it "should return UnknownLicense with the name" do
-          license = License.find_by_name("New License")
+      it "should make an unrecognized license" do
+        license = License.find_by_name("not a known license")
 
-          expect(license).to be_a UnknownLicense
-          expect(license.pretty_name).to eq "New License"
+        expect(license).to be_a License
+        expect(license.name).to eq "not a known license"
+      end
+
+      context "making the default license" do
+        it "set the name to 'other'" do
+          License.find_by_name(nil).name.should == "other"
+        end
+
+        it "does not equal other uses of the default license" do
+          License.find_by_name(nil).should_not == License.find_by_name(nil)
+        end
+
+        context "when there is a whitelist" do
+          before do
+            LicenseFinder.config.stub(:whitelist).and_return(["not empty"])
+          end
+
+          it "does not blow up" do
+            License.find_by_name(nil).name.should == "other"
+          end
         end
       end
     end
@@ -22,20 +40,39 @@ module LicenseFinder
         License.find_by_text('This gem is released under the MIT license').should be_a License
       end
 
-      it "returns UnknownLicense with nil name if not found" do
+      it "returns nil if not found" do
         license = License.find_by_text("foo")
 
-        expect(license).to be_a UnknownLicense
-        expect(license.pretty_name).to be_nil
+        expect(license).to be_nil
       end
     end
 
     def make_license(settings = {})
-      described_class.new({
+      defaults = {
         short_name: "Default Short Name",
         url: "http://example.com/license",
+        whitelisted: false,
         matcher: License::Matcher.from_text('Default Matcher')
-      }.merge(settings))
+      }
+
+      License.new(defaults.merge(settings))
+    end
+
+    describe "#whitelisted?" do
+      it "is true if the settings say it is" do
+        make_license.should_not be_whitelisted
+        make_license(whitelisted: true).should be_whitelisted
+      end
+
+      it "can be made true (without mutating original)" do
+        original = make_license
+        license = original.whitelist
+        license.should_not == original
+        license.should be_whitelisted
+        license.url.should == "http://example.com/license"
+        license.should be_matches_name "Default Short Name"
+        license.should be_matches_text "Default Matcher"
+      end
     end
 
     describe "#matches_name?" do
@@ -85,7 +122,7 @@ module LicenseFinder
     end
 
     it "should default pretty_name to short_name" do
-      make_license.pretty_name.should == "Default Short Name"
+      make_license.name.should == "Default Short Name"
     end
   end
 end

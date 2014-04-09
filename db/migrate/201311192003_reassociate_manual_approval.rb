@@ -6,9 +6,8 @@ Sequel.migration do
         (SELECT state
         FROM
           approvals
-        INNER JOIN
-          dependencies
-            ON approvals.id = dependencies.approval_id)
+        WHERE
+          approvals.id = dependencies.approval_id)
     EOS
   end
 end

@@ -52,14 +52,7 @@ module LicenseFinder
       it "should complain if the dependency already exists" do
         Dependency.create(name: "current dependency 1")
         expect { described_class.manually_add("GPL", "current dependency 1", "0.0.0") }
-          .to raise_error(LicenseFinder::Error)
-      end
-
-      it "re-uses an existing, unassociated, license alias" do
-        existing_license = LicenseAlias.named("existing license")
-
-        dep = described_class.manually_add("existing license", "js_dep", "0.0.0")
-        dep.license.should == existing_license
+          .to raise_error(Error)
       end
     end
 
@@ -76,7 +69,7 @@ module LicenseFinder
         expect do
           expect do
             described_class.manually_remove("a bundler dep")
-          end.to raise_error(LicenseFinder::Error)
+          end.to raise_error(Error)
         end.to_not change(Dependency, :count)
       end
     end
@@ -84,6 +77,8 @@ module LicenseFinder
     describe ".approve!" do
       it "approves the dependency" do
         dep = Dependency.named("current dependency")
+        dep.license = License.find_by_name('not approved')
+        dep.save
         dep.reload.should_not be_approved
         described_class.approve!("current dependency")
         dep.reload.should be_approved
@@ -99,7 +94,7 @@ module LicenseFinder
 
       it "should raise an error if it can't find the dependency" do
         expect { described_class.approve!("non-existent dependency") }
-          .to raise_error(LicenseFinder::Error)
+          .to raise_error(Error)
       end
     end
 
@@ -108,13 +103,13 @@ module LicenseFinder
 
       it "adds a license for the dependency" do
         DependencyManager.stub(:find_by_name).with("dependency").and_return(dependency)
-        dependency.should_receive(:set_license_manually!).with("MIT")
+        dependency.should_receive(:set_license_manually!).with(License.find_by_name "MIT")
         described_class.license!("dependency", "MIT")
       end
 
       it "should raise an error if it can't find the dependency" do
         expect { described_class.license!("non-existent dependency", "a license") }
-          .to raise_error(LicenseFinder::Error)
+          .to raise_error(Error)
       end
     end
 

@@ -39,7 +39,7 @@ module LicenseFinder
     private
     attr_reader :mvn_dependency
 
-    def licenses_from_spec
+    def license_names_from_spec
       mvn_dependency["licenses"].map { |l| l["name"] }
     end
   end

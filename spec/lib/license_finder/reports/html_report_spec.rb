@@ -6,7 +6,7 @@ module LicenseFinder
     describe "#to_s" do
       let(:dependency) do
         dep = Dependency.create name: "the-name"
-        dep.apply_better_license "MIT"
+        dep.apply_better_license License.find_by_name("MIT")
         dep
       end
 
@@ -50,7 +50,10 @@ module LicenseFinder
       end
 
       context "when the dependency is not approved" do
-        before { dependency.manual_approval = nil }
+        before {
+          dependency.license = License.find_by_name('GPL')
+          dependency.manual_approval = nil
+        }
 
         it "should not add an approved class to he dependency's container" do
           should have_selector ".unapproved"
