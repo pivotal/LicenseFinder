@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/pivotal/LicenseFinder.png)](http://travis-ci.org/pivotal/LicenseFinder)
 [![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
 
-With bundler and other dependency management tools, it's easy for your project to depend on many packages.  This decomposition is nice, but managing licenses becomes difficult.  License Finder gathers info about the licenses of the packages in your project.
+With bundler and other dependency management tools, it's easy for your project to depend on many packages.  This decomposition is nice, but managing licenses becomes difficult.  license_finder gathers info about the licenses of the packages in your project.
 
 ### Supported project types
 - Ruby (+ Bundler)
@@ -32,7 +32,7 @@ You need to install the license gradle plugin: [https://github.com/hierynomus/li
 ## Usage
 
 
-License finder will generate reports of action items - i.e., dependencies that do not fall within your license "whitelist".
+license_finder will generate reports of action items - i.e., dependencies that do not fall within your license "whitelist".
 
 ```sh
 $ license_finder
@@ -161,7 +161,7 @@ in the `whitelist` will be automatically approved.  You can exclude test or
 development dependencies by setting `ignore_groups`.  (Currently this only
 works for Bundler.)  You can store the license database and text files in
 another directory by changing `dependencies_file_dir`.  And the `project_name`,
-which defaults to your working directory, appears in the [HTML report](#HTML Report).
+which defaults to your working directory, appears in the [HTML report](#html-report).
 
 You can also configure license_finder through the command line.  See
 `license_finder whitelist help`, `license_finder ignored_bundler_groups help`
