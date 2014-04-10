@@ -283,7 +283,7 @@ module DSL
 
     def shell_out(command, allow_failures = false)
       output = `#{command}`
-      raise RuntimeError.new("command failed #{command}") if !$?.success? && !allow_failures
+      raise RuntimeError.new("command failed #{command}") unless $?.success? || allow_failures
       output
     end
   end
