@@ -24,12 +24,25 @@ module LicenseFinder
     private
 
     def determine_license
-      licenses = (licenses_from_spec + license_from_files).uniq
-      if licenses.length == 1
-        licenses.first
+      if one_license_from_spec?
+        licenses_from_spec.first
+      elsif no_licenses_from_spec? && one_license_from_files?
+        license_from_files.first
       else
         default_license
       end
+    end
+
+    def one_license_from_spec?
+      licenses_from_spec.uniq.size == 1
+    end
+
+    def one_license_from_files?
+      license_from_files.uniq.size == 1
+    end
+
+    def no_licenses_from_spec?
+      licenses_from_spec.uniq.size == 0
     end
 
     def licenses_from_spec

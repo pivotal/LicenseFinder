@@ -45,3 +45,7 @@ end
 Then(/^I should see the default usage instructions$/) do
   @user.should be_seeing 'license_finder help [COMMAND]'
 end
+
+Then(/^I should see License Finder has the MIT license$/) do
+  @user.should be_seeing_something_like /license_finder.*MIT/
+end
