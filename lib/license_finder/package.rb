@@ -27,7 +27,7 @@ module LicenseFinder
       if one_license_from_spec?
         licenses_from_spec.first
       elsif no_licenses_from_spec? && one_license_from_files?
-        license_from_files.first
+        licenses_from_files.first
       else
         default_license
       end
@@ -38,7 +38,7 @@ module LicenseFinder
     end
 
     def one_license_from_files?
-      license_from_files.uniq.size == 1
+      licenses_from_files.uniq.size == 1
     end
 
     def no_licenses_from_spec?
@@ -51,7 +51,7 @@ module LicenseFinder
       end
     end
 
-    def license_from_files
+    def licenses_from_files
       license_files.map(&:license).compact
     end
 

@@ -32,7 +32,7 @@ module LicenseFinder
       []
     end
 
-    def license_from_files
+    def licenses_from_files
       []
     end
 
