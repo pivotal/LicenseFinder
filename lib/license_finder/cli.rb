@@ -90,7 +90,8 @@ module LicenseFinder
       end
 
       desc "add LICENSE...", "Add one or more licenses to the whitelist"
-      def add(*licenses)
+      def add(license, *other_licenses)
+        licenses = other_licenses.unshift license
         modifying {
           licenses.each do |license|
             LicenseFinder.config.whitelist.push(license)
@@ -100,7 +101,8 @@ module LicenseFinder
       end
 
       desc "remove LICENSE...", "Remove one or more licenses from the whitelist"
-      def remove(*licenses)
+      def remove(license, *other_licenses)
+        licenses = other_licenses.unshift license
         modifying {
           licenses.each do |license|
             LicenseFinder.config.whitelist.delete(license)
@@ -165,16 +167,13 @@ module LicenseFinder
       method_option :approver, desc: "The person granting the approval"
       method_option :message, desc: "The reason for the approval"
       desc "approve DEPENDENCY_NAME... [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
-      def approve(*names)
-        if(names.count < 1)
-          say "Warning: Must specify dependencies to approve.", :red
-        else
-          die_on_error {
-            names.each { |name| DependencyManager.approve!(name, options[:approver], options[:message]) }
-          }
+      def approve(name, *other_names)
+        names = other_names.unshift name
+        die_on_error {
+          names.each { |name| DependencyManager.approve!(name, options[:approver], options[:message]) }
+        }
 
-          say "The #{names.join(", ")} dependency has been approved!", :green
-        end
+        say "The #{names.join(", ")} dependency has been approved!", :green
       end
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
