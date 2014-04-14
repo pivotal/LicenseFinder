@@ -40,28 +40,46 @@ module LicenseFinder
         NpmPackage.new(node_module4).license.name.should eq("MIT")
       end
 
-      it "returns a license in a file if detected" do
-        stub_license_files [double(:file, license: License.find_by_name('Detected License'))]
+      context "regardless of whether there are licenses in files" do
+        before do
+          stub_license_files [double(:file, license: License.find_by_name('Detected License'))]
+        end
 
-        subject.license.name.should == "Detected License"
+        it "returns the license from the spec if there is only one unique license" do
+          package = NpmPackage.new({ "licenses" => ["MIT", "Expat"], "path" => "/path/to/thing" })
+          expect(package.license.name).to eq("MIT")
+        end
+
+        it "returns other if there's more than one license" do
+          package = NpmPackage.new({ "licenses" => ["MIT", "BSD"], "path" => "/some/path" })
+          expect(package.license.name).to eq("other")
+        end
       end
 
-      it "returns other if there's more than one license" do
-        package = NpmPackage.new({ "licenses" => ["MIT", "BSD"], "path" => "/some/path" })
-        expect(package.license.name).to eq("other")
-      end
+      context "when there is nothing in the spec" do
+        it "returns a license in a file if only one unique license detected" do
+          stub_license_files([
+            double(:first_file, license: License.find_by_name('MIT')),
+            double(:second_file, license: License.find_by_name('Expat'))
+          ])
 
-      it "returns other if the license from spec and license from files are different" do
-        stub_license_files [double(:file, license: 'Detected License')]
-        package = NpmPackage.new({ "licenses" => ["MIT"], "path" => "some/node/package/path" })
+          subject.license.name.should == "MIT"
+        end
 
-        expect(package.license.name).to eq("other")
-      end
+        it "returns 'other' if there are no licenses in files" do
+          stub_license_files []
 
-      it "returns 'other' otherwise" do
-        stub_license_files []
+          subject.license.name.should == "other"
+        end
 
-        subject.license.name.should == "other"
+        it "returns 'other' if there are many licenses in files" do
+          stub_license_files([
+            double(:first_file, license: License.find_by_name('First Detected License')),
+            double(:second_file, license: License.find_by_name('Second Detected License'))
+          ])
+
+          subject.license.name.should == "other"
+        end
       end
     end
   end

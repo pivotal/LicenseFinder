@@ -30,3 +30,8 @@ Feature: License Finder command line executable
     When I run license_finder
     Then it creates a config directory with the license_finder config
 
+  Scenario: Viewing License Finder's own license
+    Given I have an app
+    When I run license_finder
+    Then I should see License Finder has the MIT license
+
