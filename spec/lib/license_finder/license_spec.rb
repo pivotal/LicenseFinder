@@ -119,6 +119,12 @@ module LicenseFinder
           shall not be held "responsible" for `anything`.
         FILE
       end
+
+      it "should match even if whitespace at beginning and end don't match" do
+        template = License::Template.new("\nThe license text")
+        license = make_license(matcher: License::Matcher.from_template(template))
+        license.should be_matches_text "The license text\n"
+      end
     end
 
     it "should default pretty_name to short_name" do

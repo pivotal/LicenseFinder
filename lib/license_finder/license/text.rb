@@ -8,6 +8,7 @@ module LicenseFinder
       def self.normalize_punctuation(text)
         text.gsub(SPACES, ' ')
             .gsub(QUOTES, '"')
+            .strip
       end
 
       def self.compile_to_regex(text)
