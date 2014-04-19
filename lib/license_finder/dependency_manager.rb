@@ -36,7 +36,7 @@ module LicenseFinder
     def self.modifying
       database_file = LicenseFinder.config.artifacts.database_file
       checksum_before_modifying = checksum(database_file)
-      result = yield
+      result = DB.transaction { yield }
       checksum_after_modifying = checksum(database_file)
 
       unless checksum_after_modifying == checksum_before_modifying
