@@ -125,7 +125,7 @@ module LicenseFinder
 
       it "keeps a manually assigned license" do
         dependency.set_license_manually! License.find_by_name("manual")
-        dependency.apply_better_license "new"
+        dependency.apply_better_license License.find_by_name("new")
         dependency.license.name.should == "manual"
       end
 
@@ -139,6 +139,17 @@ module LicenseFinder
 
         dependency.apply_better_license License.find_by_name("new license")
         dependency.license.name.should == "new license"
+      end
+
+      it "won't update the database if the license isn't changing" do
+        # See note in PackageSaver#save
+        dependency.license = License.find_by_name("same")
+        dependency.should be_modified
+        dependency.save
+        dependency.should_not be_modified
+
+        dependency.apply_better_license License.find_by_name("same")
+        dependency.should_not be_modified
       end
 
       it "does not change the approval" do
