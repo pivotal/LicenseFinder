@@ -28,13 +28,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       subject do
-        Bundler.current_packages(config)
-      end
-
-      let(:config) { double(:config, ignore_groups: ['dev', 'test']) }
-
-      before do
-        ::Bundler::Definition.stub(:build).and_return(definition)
+        Bundler.current_packages(['dev', 'test'], definition)
       end
 
       it "should have 2 dependencies" do

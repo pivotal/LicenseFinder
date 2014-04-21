@@ -51,7 +51,7 @@ module LicenseFinder
     end
 
     def whitelisted?
-      license && license.whitelisted?
+      license.whitelisted?
     end
 
     def approved_manually?

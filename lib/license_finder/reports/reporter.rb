@@ -11,8 +11,8 @@ module LicenseFinder
       write_file artifacts.html_file,          HtmlReport.of(dependencies)
       write_file artifacts.markdown_file,      MarkdownReport.of(dependencies)
 
-      if LicenseFinder.config.artifacts.legacy_text_file.exist?
-        LicenseFinder.config.artifacts.legacy_text_file.delete
+      if artifacts.legacy_text_file.exist?
+        artifacts.legacy_text_file.delete
       end
     end
 
