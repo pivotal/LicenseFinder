@@ -19,16 +19,18 @@ module LicenseFinder
     end
 
     def save
-      DB.transaction do
-        dependency.version = version.to_s
-        dependency.summary = summary
-        dependency.description = description
-        dependency.homepage = homepage
-        dependency.bundler_group_names = groups.map(&:to_s)
-        dependency.children_names = children
-        dependency.apply_better_license license
-        dependency.save_changes
-      end
+      dependency.version = version.to_s
+      dependency.summary = summary
+      dependency.description = description
+      dependency.homepage = homepage
+      dependency.bundler_group_names = groups.map(&:to_s)
+      dependency.children_names = children
+      dependency.apply_better_license license
+
+      # Only save *changed* dependencies. This ensures re-running
+      # `license_finder` won't always update the DB, and therefore won't always
+      # update the HTML/markdown reports with a new timestamp.
+      dependency.save_changes
       dependency
     end
 
