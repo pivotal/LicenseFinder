@@ -221,7 +221,11 @@ And add a `LICENSE` file to your gem that contains your license text.
 * Rebase on top of master
 * Send a pull request
 
-To successfully run the test suite, you will need node.js, python and pip installed (pip should not require sudo to work, virtualenv will work for this). If you're running the test suite with jruby, you're probably going to want to set up these environment variables:
+To successfully run the test suite, you will need node.js, python, pip and gradle installed.
+
+For the python dependency tests you will want to have virtualenv installed. See: http://hackercodex.com/guide/python-development-environment-on-mac-osx/#virtualenv (This will allow pip to work without sudo)
+
+If you're running the test suite with jruby, you're probably going to want to set up these environment variables:
 
 ```
 JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true'
