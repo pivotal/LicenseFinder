@@ -28,9 +28,15 @@ module LicenseFinder
         licenses_from_spec.first
       elsif no_licenses_from_spec? && one_license_from_files?
         licenses_from_files.first
+      elsif multiple_licenses_from_spec_and_files?
+        multiple_licenses
       else
         default_license
       end
+    end
+
+    def multiple_licenses_from_spec_and_files?
+      (licenses_from_spec+licenses_from_spec).uniq.size > 1
     end
 
     def one_license_from_spec?
@@ -57,6 +63,10 @@ module LicenseFinder
 
     def license_files
       PossibleLicenseFiles.find(install_path)
+    end
+
+    def multiple_licenses
+      License.find_by_name 'multiple licenses'
     end
 
     def default_license

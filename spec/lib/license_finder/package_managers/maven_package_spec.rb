@@ -45,8 +45,8 @@ module LicenseFinder
           )
         end
 
-        it "returns 'other'" do
-          subject.license.name.should == 'other'
+        it "returns 'multiple licenses'" do
+          subject.license.name.should == 'multiple licenses'
         end
       end
 

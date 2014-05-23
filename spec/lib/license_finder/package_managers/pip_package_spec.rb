@@ -68,12 +68,12 @@ module LicenseFinder
             expect(subject.license.name).to eq('Apache 2.0 License')
           end
 
-          it "returns 'other' if there is are multiple licenses in 'classifiers'" do
+          it "returns 'multiple licenses' if there are multiple licenses in 'classifiers'" do
             data = { "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License', 'License :: OSI Approved :: GPL' ] }
 
             subject = make_package(data)
 
-            expect(subject.license.name).to eq('other')
+            expect(subject.license.name).to eq('multiple licenses')
           end
         end
 

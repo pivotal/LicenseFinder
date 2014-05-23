@@ -50,9 +50,9 @@ module LicenseFinder
           expect(package.license.name).to eq("MIT")
         end
 
-        it "returns other if there's more than one license" do
+        it "returns 'multiple licenses' if there's more than one license" do
           package = NpmPackage.new({ "licenses" => ["MIT", "BSD"], "path" => "/some/path" })
-          expect(package.license.name).to eq("other")
+          expect(package.license.name).to eq("multiple licenses")
         end
       end
 
