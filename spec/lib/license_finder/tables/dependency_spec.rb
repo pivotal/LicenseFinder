@@ -5,11 +5,14 @@ module LicenseFinder
     describe '.unapproved' do
       before do
         License.find_by_name('MIT').stub(:whitelisted? =>  true)
+        allow(LicenseFinder.config).to receive(:ignore_dependencies) { ['this ignored dependency', 'that ignored dependency'] }
       end
 
-      it "should return all unapproved dependencies" do
+      it "should return all unapproved dependencies that are not ignored" do
         dependency = Dependency.create(name: "unapproved dependency", version: '0.0.1')
         approved = Dependency.create(name: "approved dependency", version: '0.0.1')
+        this_ignored = Dependency.create(name: "this ignored dependency", version: '0.0.1')
+        that_ignored = Dependency.create(name: "that ignored dependency", version: '0.0.1')
         approved.approve!
         whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
         whitelisted.license = License.find_by_name('MIT')
@@ -34,6 +37,16 @@ module LicenseFinder
         dep.name.should == "referenced_again"
         dep.should_not be_new
         Dependency.count(name: "referenced_again").should == 1
+      end
+    end
+
+    describe ".acknowledged" do
+      it "returns all dependencies that are not ignored" do
+        acknowledged_dependency = Dependency.create(name: "acknowledged dependency", version: '0.0.1')
+        ignored_dependency = Dependency.create(name: "ignored dependency", version: '0.0.1')
+        allow(LicenseFinder.config).to receive(:ignore_dependencies) { [ignored_dependency.name] }
+
+        expect(Dependency.acknowledged).to match_array [acknowledged_dependency]
       end
     end
 

@@ -24,11 +24,12 @@ module LicenseFinder
       result
     end
 
-    attr_accessor :whitelist, :ignore_groups, :artifacts, :project_name
+    attr_accessor :whitelist, :ignore_groups, :ignore_dependencies, :artifacts, :project_name
 
     def initialize(config)
       @whitelist     = Array(config['whitelist'])
       @ignore_groups = Array(config["ignore_groups"])
+      @ignore_dependencies = Array(config["ignore_dependencies"])
       @artifacts     = Artifacts.new(Pathname(config['dependencies_file_dir'] || './doc/'))
       @project_name  = config['project_name'] || determine_project_name
     end
@@ -43,6 +44,7 @@ module LicenseFinder
       {
         'whitelist' => whitelist.uniq,
         'ignore_groups' => ignore_groups.uniq,
+        'ignore_dependencies' => ignore_dependencies.uniq,
         'dependencies_file_dir' => artifacts.dir.to_s,
         'project_name' => project_name
       }

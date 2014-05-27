@@ -5,5 +5,7 @@ whitelist:
 ignore_groups:
 #- test
 #- development
+ignore_dependencies:
+#- bundler
 dependencies_file_dir: './doc/'
 project_name: # project name

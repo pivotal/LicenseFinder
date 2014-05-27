@@ -124,11 +124,9 @@ module LicenseFinder
 
       describe "list" do
         it "shows the ignored groups in the standard output" do
-          config.should_receive(:ignore_groups).and_return([])
+          config.should_receive(:ignore_groups).and_return(['development'])
 
-          silence_stdout do
-            subject.list
-          end
+          expect(capture_stdout { subject.list }).to match /development/
         end
       end
 
@@ -147,6 +145,41 @@ module LicenseFinder
       describe "remove" do
         it "removes the specified group from the ignored groups list" do
           config.ignore_groups.should_receive(:delete).with("test")
+          config.should_receive(:save)
+          Reporter.should_receive(:write_reports)
+
+          silence_stdout do
+            subject.remove("test")
+          end
+        end
+      end
+    end
+
+    describe IgnoredDependencies do
+      let(:config) { LicenseFinder.config }
+
+      describe "list" do
+        it "shows the ignored dependencies" do
+          expect(config).to receive(:ignore_dependencies).and_return(['bundler'])
+          expect(capture_stdout { subject.list }).to match /bundler/
+        end
+      end
+
+      describe "add" do
+        it "adds the specified group to the ignored groups list" do
+          config.ignore_dependencies.should_receive(:push).with("test")
+          config.should_receive(:save)
+          Reporter.should_receive(:write_reports)
+
+          silence_stdout do
+            subject.add("test")
+          end
+        end
+      end
+
+      describe "remove" do
+        it "removes the specified group from the ignored groups list" do
+          config.ignore_dependencies.should_receive(:delete).with("test")
           config.should_receive(:save)
           Reporter.should_receive(:write_reports)
 

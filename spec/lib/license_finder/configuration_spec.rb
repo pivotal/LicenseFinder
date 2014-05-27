@@ -16,6 +16,7 @@ module LicenseFinder
         subject = described_class.new({})
         subject.whitelist.should == []
         subject.ignore_groups.should == []
+        subject.ignore_dependencies.should == []
         subject.artifacts.dir.should == Pathname('./doc/')
       end
 
@@ -23,12 +24,14 @@ module LicenseFinder
         attributes = {
           "whitelist" => nil,
           "ignore_groups" => nil,
+          "ignore_dependencies" => nil,
           "dependencies_file_dir" => nil,
           "project_name" => nil
         }
         subject = described_class.new(attributes)
         subject.whitelist.should == []
         subject.ignore_groups.should == []
+        subject.ignore_dependencies.should == []
         subject.artifacts.dir.should == Pathname('./doc/')
         subject.project_name.should_not be_nil
       end
@@ -37,12 +40,14 @@ module LicenseFinder
         attributes = {
           "whitelist" => %w{a whitelist},
           "ignore_groups" => %w{test development},
+          "ignore_dependencies" => %w{bundler},
           "dependencies_file_dir" => "some/path",
           "project_name" => "my_app"
         }
         subject = described_class.new(attributes)
         subject.whitelist.should == %w{a whitelist}
         subject.ignore_groups.should == %w{test development}
+        subject.ignore_dependencies.should == %w{bundler}
         subject.artifacts.dir.should == Pathname("some/path")
         subject.project_name.should == "my_app"
       end
@@ -77,6 +82,7 @@ module LicenseFinder
         {
           'whitelist' => ['my_gem'],
           'ignore_groups' => ['other_group', 'test'],
+          'ignore_dependencies' => ['bundler'],
           'project_name' => "New Project Name",
           'dependencies_file_dir' => "./deps"
         }
@@ -91,6 +97,7 @@ module LicenseFinder
         config = described_class.new(attributes)
         config.whitelist << 'my_gem'
         config.ignore_groups << 'test'
+        config.ignore_dependencies << 'bundler'
 
         Configuration::Persistence.should_receive(:set).with(attributes)
         config.save

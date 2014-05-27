@@ -3,7 +3,7 @@ module LicenseFinder
     extend self
 
     def write_reports
-      dependencies = Dependency.all
+      dependencies = Dependency.acknowledged
       artifacts = LicenseFinder.config.artifacts
 
       write_file artifacts.text_file,          TextReport.of(dependencies)

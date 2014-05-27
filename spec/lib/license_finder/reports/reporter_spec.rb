@@ -6,7 +6,7 @@ module LicenseFinder
       subject { Reporter.write_reports }
 
       before do
-        Dependency.stub(:all) { [double(:dep)] }
+        Dependency.stub(:acknowledged) { [double(:dep)] }
 
         MarkdownReport.stub(:of) { 'markdown report' }
         DetailedTextReport.stub(:of) { 'detailed csv report' }

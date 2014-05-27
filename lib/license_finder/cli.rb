@@ -150,6 +150,34 @@ module LicenseFinder
       end
     end
 
+    class IgnoredDependencies < ConfigSubcommand
+      desc "list", "List all the ignored dependencies"
+      def list
+        ignored = LicenseFinder.config.ignore_dependencies
+
+        say "Ignored Dependencies:", :blue
+        ignored.each do |group|
+          say group
+        end
+      end
+
+      desc "add DEPENDENCY", "Add a dependency to be ignored"
+      def add(group)
+        modifying {
+          LicenseFinder.config.ignore_dependencies.push(group)
+        }
+        say "Added #{group} to the ignored dependencies"
+      end
+
+      desc "remove DEPENDENCY", "Remove a dependency from the ignored dependencies"
+      def remove(group)
+        modifying {
+          LicenseFinder.config.ignore_dependencies.delete(group)
+        }
+        say "Removed #{group} from the ignored dependencies"
+      end
+    end
+
     class Main < Base
       method_option :quiet, type: :boolean, desc: "silences loading output"
       desc "rescan", "Find new dependencies. (Default action)"
@@ -206,6 +234,7 @@ module LicenseFinder
 
       subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"
       subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "Manage ignored Bundler groups"
+      subcommand "ignored_dependencies", IgnoredDependencies, "Manage ignored dependencies"
       subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
       subcommand "project_name", ProjectName, "Manage the project name"
 

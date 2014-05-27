@@ -26,7 +26,14 @@ module LicenseFinder
     end
 
     def self.unapproved
-      all.reject(&:approved?)
+      acknowledged.reject(&:approved?)
+    end
+
+    def self.acknowledged
+      ignored_dependencies = LicenseFinder.config.ignore_dependencies
+      all.reject do |dependency|
+        ignored_dependencies.include? dependency.name
+      end
     end
 
     def self.named(name)
