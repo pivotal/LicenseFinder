@@ -19,12 +19,14 @@ Then(/^I should see 'bundler' in the output$/) do
   expect(@user).to be_seeing 'bundler_faker'
 end
 
-Then(/^the generated dependencies do not contain bundler$/) do
+Then(/^the bundler dependency is not listed as an action item$/) do
+  @user.execute_command('license_finder > /dev/null')
+  @user.execute_command('license_finder action_items')
   expect(@user).not_to be_seeing 'bundler_faker'
 end
 
 Then(/^I should not see 'bundler' in the dependency docs$/)do
-  @user.execute_command('license_finder') 
+  @user.execute_command('license_finder')
   dependencies_csv_path =  @user.app_path.join('doc', 'dependencies.csv')
   dependencies_csv = File.open(dependencies_csv_path, 'r')
 

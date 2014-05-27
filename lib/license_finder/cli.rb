@@ -156,8 +156,12 @@ module LicenseFinder
         ignored = LicenseFinder.config.ignore_dependencies
 
         say "Ignored Dependencies:", :blue
-        ignored.each do |group|
-          say group
+        if ignored.any?
+          ignored.each do |group|
+            say group
+          end
+        else
+          say '(none)'
         end
       end
 
@@ -188,6 +192,7 @@ module LicenseFinder
           }
         }
 
+        IgnoredDependencies.new.list
         action_items
       end
       default_task :rescan

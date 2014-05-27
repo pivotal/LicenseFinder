@@ -159,9 +159,18 @@ module LicenseFinder
       let(:config) { LicenseFinder.config }
 
       describe "list" do
-        it "shows the ignored dependencies" do
-          expect(config).to receive(:ignore_dependencies).and_return(['bundler'])
-          expect(capture_stdout { subject.list }).to match /bundler/
+        context "when there is at least one ignored dependency" do
+          it "shows the ignored dependencies" do
+            expect(config).to receive(:ignore_dependencies).and_return(['bundler'])
+            expect(capture_stdout { subject.list }).to match /bundler/
+          end
+        end
+
+        context "when there are no ignored dependencies" do
+          it "prints '(none)'" do
+            expect(config).to receive(:ignore_dependencies).and_return([])
+            expect(capture_stdout { subject.list }).to match /\(none\)/
+          end
         end
       end
 

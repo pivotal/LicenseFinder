@@ -12,6 +12,5 @@ Feature: Ignore Dependencies
 
   Scenario: Ignored dependencies do not appear in the unapproved list
     Given I have an app that depends on bundler
-    And I ignore the bundler dependency
-    When I run license_finder
-    Then the generated dependencies do not contain bundler
+    When I ignore the bundler dependency
+    Then the bundler dependency is not listed as an action item
