@@ -152,16 +152,24 @@ whitelist:
 ignore_groups:
 #- test
 #- development
+ignore_dependencies:
+#- bundler
 dependencies_file_dir: './doc/'
 project_name: My Project Name
 ```
 
-By modifying this file, you can configure license_finder's behavior.  Licenses
-in the `whitelist` will be automatically approved.  You can exclude test or
-development dependencies by setting `ignore_groups`.  (Currently this only
-works for Bundler.)  You can store the license database and text files in
-another directory by changing `dependencies_file_dir`.  And the `project_name`,
-which defaults to your working directory, appears in the [HTML report](#html-report).
+By modifying this file, you can configure license_finder's behavior.
+
+- Licenses in the `whitelist` will be automatically approved.
+- You can exclude test or development dependencies by setting `ignore_groups`.  (Currently this only
+works for Bundler.)
+- You can exclude specific dependencies by setting `ignore_dependencies`.
+(Think carefully before adding dependencies to this list. A likely item to exclude is
+bundler itself, to avoid noisy changes to the doc files when different people run
+license_finder with different versions of bundler.)
+- You can store the license database and text files in another directory by changing 
+`dependencies_file_dir`. And the `project_name`, which defaults to your working
+directory, appears in the [HTML report](#html-report).
 
 You can also configure license_finder through the command line.  See
 `license_finder whitelist help`, `license_finder ignored_bundler_groups help`
