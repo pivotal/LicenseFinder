@@ -73,7 +73,7 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license.name).to eq('multiple licenses')
+            expect(subject.license.name).to eq('multiple licenses: Apache 2.0 License, GPL')
           end
         end
 

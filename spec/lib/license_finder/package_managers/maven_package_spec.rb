@@ -46,7 +46,7 @@ module LicenseFinder
         end
 
         it "returns 'multiple licenses'" do
-          subject.license.name.should == 'multiple licenses'
+          subject.license.name.should == 'multiple licenses: Common Public License Version 1.0, Apache 2'
         end
       end
 

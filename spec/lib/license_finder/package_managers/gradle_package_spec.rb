@@ -40,7 +40,7 @@ module LicenseFinder
         end
 
         it "returns 'multiple licenses'" do
-          subject.license.name.should == 'multiple licenses'
+          subject.license.name.should == 'multiple licenses: Eclipse Public License - v 1.0, GNU Lesser General Public License'
         end
       end
 

@@ -24,32 +24,38 @@ module LicenseFinder
     private
 
     def determine_license
-      if one_license_from_spec?
-        licenses_from_spec.first
-      elsif no_licenses_from_spec? && one_license_from_files?
-        licenses_from_files.first
-      elsif multiple_licenses_from_spec_and_files?
-        multiple_licenses
+      if licenses_from_spec.any?
+        choose_license_from licenses_from_spec
+      elsif licenses_from_files.any?
+        choose_license_from licenses_from_files
       else
         default_license
       end
     end
 
-    def multiple_licenses_from_spec_and_files?
-      (licenses_from_spec+licenses_from_spec).uniq.size > 1
+    def choose_license_from licenses
+      if ( licenses.uniq.size > 1 )
+        License.find_by_name "multiple licenses: #{(licenses).map(&:name).uniq.join(', ')}"
+      else
+        licenses.first
+      end
     end
 
-    def one_license_from_spec?
-      licenses_from_spec.uniq.size == 1
-    end
+    # def multiple_licenses_from_spec_and_files?
+      # (licenses_from_spec+licenses_from_files).uniq.size > 1
+    # end
 
-    def one_license_from_files?
-      licenses_from_files.uniq.size == 1
-    end
+    # def one_license_from_spec?
+      # licenses_from_spec.uniq.size == 1
+    # end
 
-    def no_licenses_from_spec?
-      licenses_from_spec.uniq.size == 0
-    end
+    # def one_license_from_files?
+      # licenses_from_files.uniq.size == 1
+    # end
+
+    # def no_licenses_from_spec?
+      # licenses_from_spec.uniq.size == 0
+    # end
 
     def licenses_from_spec
       license_names_from_spec.map do |name|
@@ -66,7 +72,11 @@ module LicenseFinder
     end
 
     def multiple_licenses
-      License.find_by_name 'multiple licenses'
+      if ( licenses_from_spec.uniq.size > 1 )
+        License.find_by_name "multiple licenses: #{(licenses_from_spec).map(&:name).uniq.join(', ')}"
+      else 
+        License.find_by_name "multiple licenses: #{(licenses_from_files).map(&:name).uniq.join(', ')}"
+      end
     end
 
     def default_license

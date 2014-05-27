@@ -36,21 +36,25 @@ module LicenseFinder
           stub_license_files [double(:file, license: License.find_by_name('Detected License'))]
         end
 
-        it "returns the license from the gemspec if only one unique license provided" do
-          gemspec.licenses = ['MIT', 'Expat']
+        context 'if the gemspec provides two synonymous licenses' do
+          before { gemspec.licenses = ['MIT', 'Expat'] }
 
-          subject.license.name.should == "MIT"
+          it 'returns the license only once' do
+            subject.license.name.should == "MIT"
+          end
         end
 
-        it "returns 'other' if the gemspec provides many" do
-          gemspec.licenses = ['First Gemspec License', 'Second Gemspec License']
+        context 'if the gemspec provides many licenses' do
+          before { gemspec.licenses = ['First Gemspec License', 'Second Gemspec License'] }
 
-          subject.license.name.should == "multiple licenses"
+          it "returns 'multiple licenses' with the names of the licenses from the gemspec (but not those from detected files)" do
+            subject.license.name.should == "multiple licenses: First Gemspec License, Second Gemspec License"
+          end
         end
       end
 
       context "when there is nothing in the spec" do
-        it "returns a license in a file if only one unique license detected" do
+        it "returns a license in a file if there is only one unique license detected" do
           stub_license_files([
             double(:first_file, license: License.find_by_name('MIT')),
             double(:second_file, license: License.find_by_name('Expat'))
@@ -65,13 +69,13 @@ module LicenseFinder
           subject.license.name.should == "other"
         end
 
-        it "returns 'other' if there are many licenses in files" do
+        it "returns 'multiple licenses' if there are many licenses in files" do
           stub_license_files([
             double(:first_file, license: License.find_by_name('First Detected License')),
             double(:second_file, license: License.find_by_name('Second Detected License'))
           ])
 
-          subject.license.name.should == "other"
+          subject.license.name.should == "multiple licenses: First Detected License, Second Detected License"
         end
       end
     end

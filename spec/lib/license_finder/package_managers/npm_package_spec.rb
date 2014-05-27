@@ -52,7 +52,7 @@ module LicenseFinder
 
         it "returns 'multiple licenses' if there's more than one license" do
           package = NpmPackage.new({ "licenses" => ["MIT", "BSD"], "path" => "/some/path" })
-          expect(package.license.name).to eq("multiple licenses")
+          expect(package.license.name).to eq("multiple licenses: MIT, BSD")
         end
       end
 
@@ -78,7 +78,7 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Second Detected License'))
           ])
 
-          subject.license.name.should == "other"
+          subject.license.name.should == "multiple licenses: First Detected License, Second Detected License"
         end
       end
     end
