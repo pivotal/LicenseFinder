@@ -41,22 +41,6 @@ module LicenseFinder
       end
     end
 
-    # def multiple_licenses_from_spec_and_files?
-      # (licenses_from_spec+licenses_from_files).uniq.size > 1
-    # end
-
-    # def one_license_from_spec?
-      # licenses_from_spec.uniq.size == 1
-    # end
-
-    # def one_license_from_files?
-      # licenses_from_files.uniq.size == 1
-    # end
-
-    # def no_licenses_from_spec?
-      # licenses_from_spec.uniq.size == 0
-    # end
-
     def licenses_from_spec
       license_names_from_spec.map do |name|
         License.find_by_name(name)
