@@ -1,4 +1,24 @@
-=== 1.0.0 / Unreleased
+=== 1.0.1 / 2014-05-28
+
+* Features
+
+  * For dependencies with multiple licenses, the dependency is listed as
+    'multiple licenses' along with the names of each license
+  * Added 'ignore_dependencies' config option to allow specific
+    dependencies to be excluded from reports.
+
+* Bugfixes
+
+  * Dependency reports generate when license_finder.yml updates
+  * Dependency reports generate when config is changed through the command line
+
+=== 1.0.0.1 / 2014-05-23
+
+* Bugfixes
+
+  * LicenseFinder detects its own license
+
+=== 1.0.0 / 2014-04-03
 
 * Features
 
