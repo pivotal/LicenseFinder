@@ -11,11 +11,42 @@ module LicenseFinder
 
       private
 
+      def sync_with_spinner
+        die_on_error {
+          spinner {
+            DependencyManager.sync_with_package_managers
+          }
+        }
+      end
+
       def die_on_error
         yield
       rescue LicenseFinder::Error => e
         say e.message, :red
         exit 1
+      end
+
+      def spinner
+        if options[:quiet]
+          yield
+        else
+          begin
+            thread = Thread.new {
+              wheel = '\|/-'
+              i = 0
+              while true do
+                print "\r ---------- #{wheel[i]} ----------"
+                i = (i + 1) % 4
+              end
+            }
+            yield
+          ensure
+            if thread
+              thread.kill
+              puts "\r" + " "*24
+            end
+          end
+        end
       end
     end
 
@@ -73,7 +104,7 @@ module LicenseFinder
           yield
 
           LicenseFinder.config.save
-          Reporter.write_reports
+          sync_with_spinner
         }
       end
     end
@@ -186,15 +217,16 @@ module LicenseFinder
       method_option :quiet, type: :boolean, desc: "silences loading output"
       desc "rescan", "Find new dependencies. (Default action)"
       def rescan
-        die_on_error {
-          spinner {
-            DependencyManager.sync_with_package_managers
-          }
-        }
+        sync_with_spinner
+        show_results
+      end
 
+      desc "show_results", "Display ignored dependencies and action items"
+      def show_results
         IgnoredDependencies.new.list
         action_items
       end
+
       default_task :rescan
 
       method_option :approver, desc: "The person granting the approval"
@@ -243,30 +275,6 @@ module LicenseFinder
       subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
       subcommand "project_name", ProjectName, "Manage the project name"
 
-      private
-
-      def spinner
-        if options[:quiet]
-          yield
-        else
-          begin
-            thread = Thread.new {
-              wheel = '\|/-'
-              i = 0
-              while true do
-                print "\r ---------- #{wheel[i]} ----------"
-                i = (i + 1) % 4
-              end
-            }
-            yield
-          ensure
-            if thread
-              thread.kill
-              puts "\r" + " "*24
-            end
-          end
-        end
-      end
     end
   end
 end
