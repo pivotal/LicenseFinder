@@ -4,8 +4,9 @@ require "capybara"
 module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
+      let(:dependency_name) { "the-name" }
       let(:dependency) do
-        dep = Dependency.create name: "the-name"
+        dep = Dependency.create name: dependency_name
         dep.apply_better_license License.find_by_name("MIT")
         dep
       end
@@ -64,9 +65,9 @@ module LicenseFinder
 
         it "should show the relationships" do
           should have_text "(foo group)"
-          should have_text "Parents"
+          should have_text "#{dependency_name} is required by:"
           should have_text "foo parent"
-          should have_text "Children"
+          should have_text "#{dependency_name} relies on:"
           should have_text "foo child"
         end
       end
@@ -74,8 +75,8 @@ module LicenseFinder
       context "when the gem has no relationships" do
         it "should not show any relationships" do
           should_not have_text "()"
-          should_not have_text "Parents"
-          should_not have_text "Children"
+          should_not have_text "#{dependency_name} is required by:"
+          should_not have_text "#{dependency_name} relies on:"
         end
       end
     end

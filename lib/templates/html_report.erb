@@ -99,13 +99,13 @@
         <p><%= dependency.description %></p>
         <% if dependency.parents.any? -%>
           <dl>
-            <dt>Parents</dt>
+            <dt><%=dependency.name%> is required by:</dt>
             <dd><%= dependency.parents.map(&:name).join(", ") -%></dd>
           </dl>
         <% end -%>
         <% if dependency.children.any? -%>
           <dl>
-            <dt>Children</dt>
+            <dt><%=dependency.name%> relies on:</dt>
             <dd><%= dependency.children.map(&:name).join(", ") -%></dd>
           </dl>
         <% end -%>
