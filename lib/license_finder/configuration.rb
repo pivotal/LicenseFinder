@@ -7,6 +7,10 @@ module LicenseFinder
       prepare(Persistence.get)
     end
 
+    def last_modified
+      Persistence.last_modified
+    end
+
     def self.move!
       config = prepare(Persistence.get.merge('dependencies_file_dir' => './doc/'))
       config.save
@@ -94,6 +98,12 @@ module LicenseFinder
       def legacy_text_file
         join("dependencies.txt")
       end
+
+      def last_refreshed
+        [database_file, text_file, detailed_text_file, html_file, markdown_file].map do |path|
+          File.mtime(path)
+        end.min
+      end
     end
 
     module Persistence
@@ -111,6 +121,10 @@ module LicenseFinder
 
       def set(hash)
         file.open('w') { |f| f.write(YAML.dump(hash)) }
+      end
+
+      def last_modified
+        File.mtime(file)
       end
 
       private

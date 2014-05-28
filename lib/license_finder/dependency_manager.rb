@@ -38,10 +38,9 @@ module LicenseFinder
       result = DB.transaction { yield }
       checksum_after = checksum
 
-      unless checksum_before == checksum_after
-        Reporter.write_reports
-      end
-      unless LicenseFinder.config.artifacts.html_file.exist?
+      database_changed = checksum_before != checksum_after
+
+      if database_changed || reports_do_not_exist || reports_are_stale
         Reporter.write_reports
       end
 
@@ -49,6 +48,14 @@ module LicenseFinder
     end
 
     private # not really private, but it looks like it is!
+
+    def self.reports_do_not_exist
+      !(LicenseFinder.config.artifacts.html_file.exist?)
+    end
+
+    def self.reports_are_stale
+      LicenseFinder.config.last_modified > LicenseFinder.config.artifacts.last_refreshed
+    end
 
     def self.current_packages
       package_managers.select(&:active?).map(&:current_packages).flatten

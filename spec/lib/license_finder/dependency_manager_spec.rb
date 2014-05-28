@@ -148,20 +148,11 @@ module LicenseFinder
         context "when the database has not changed" do
           before do
             Digest::SHA2.stub_chain(:file, :hexdigest) { 5 }
+            allow(config).to receive(:last_modified) { config_last_update }
+            allow(config.artifacts).to receive(:last_refreshed) { artifacts_last_update }
           end
 
-          context "when the reports exist" do
-            before do
-              config.artifacts.stub(:html_file).and_return(file_exists)
-            end
-
-            it "does not write reports" do
-              Reporter.should_not_receive(:write_reports)
-              DependencyManager.modifying {}
-            end
-          end
-
-          context "when the reports do not exist" do
+          context "and the reports do not exist" do
             before do
               config.artifacts.stub(:html_file).and_return(file_does_not_exist)
             end
@@ -169,6 +160,31 @@ module LicenseFinder
             it "writes reports" do
               Reporter.should_receive(:write_reports)
               DependencyManager.modifying {}
+            end
+          end
+
+          context "and the reports exist" do
+            before do
+              config.artifacts.stub(:html_file).and_return(file_exists)
+            end
+
+            context "and configs are newer than the reports" do
+              let(:config_last_update) { 4 }
+              let(:artifacts_last_update) { 1 }
+              it "writes reports" do
+                expect(Reporter).to receive(:write_reports)
+                DependencyManager.modifying {}
+              end
+            end
+
+            context "and configs are older than the reports" do
+              let(:config_last_update) { 4 }
+              let(:artifacts_last_update) { 6 }
+
+              it "does not write reports" do
+                expect(Reporter).not_to receive(:write_reports)
+                DependencyManager.modifying {}
+              end
             end
           end
         end

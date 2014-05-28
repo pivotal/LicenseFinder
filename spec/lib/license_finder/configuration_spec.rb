@@ -11,6 +11,17 @@ module LicenseFinder
       end
     end
 
+    describe "#last_modified" do
+      let(:time) { double :time }
+      before do
+        allow(Configuration::Persistence).to receive(:last_modified) { time }
+      end
+
+      it 'returns the last modified date of the config file' do
+        expect(LicenseFinder::Configuration.new({}).last_modified).to eq time
+      end
+    end
+
     describe '.new' do
       it "should default missing attributes" do
         subject = described_class.new({})
@@ -105,6 +116,28 @@ module LicenseFinder
     end
   end
 
+  describe Configuration::Artifacts do
+    describe "#last_refreshed" do
+      let(:database_modified_time) { 1 }
+      let(:text_modified_time) { 2 }
+      let(:detailed_text_modified_time) { 3 }
+      let(:html_modified_time) { 4 }
+      let(:markdown_modified_time) { 5 }
+
+      before do
+        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies.db')) { database_modified_time }
+        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies.csv')) { text_modified_time }
+        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies_detailed.csv')) { detailed_text_modified_time }
+        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies.html')) { html_modified_time }
+        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies.md')) { markdown_modified_time }
+      end
+
+      it 'returns the earliest modified date of the config file' do
+        expect(described_class.new(Pathname('./doc')).last_refreshed).to eq database_modified_time
+      end
+    end
+  end
+
   describe Configuration::Persistence do
     describe ".get" do
       it "should use saved configuration" do
@@ -155,6 +188,18 @@ module LicenseFinder
 
         FileUtils.should_not_receive(:cp)
         described_class.init
+      end
+    end
+
+    describe ".last_modified" do
+      let(:time) { double :time }
+      let(:config_path) { Pathname.new('.').join('config').join('license_finder.yml') }
+      before do
+        allow(File).to receive(:mtime).with(config_path) { time }
+      end
+
+      it "returns the last time the yml file was modified" do
+        expect(described_class.last_modified).to eq time
       end
     end
   end
