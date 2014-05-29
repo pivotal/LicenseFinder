@@ -131,11 +131,11 @@ module LicenseFinder
       let(:markdown_modified_time) { 5 }
 
       before do
-        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies.db')) { database_modified_time }
-        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies.csv')) { text_modified_time }
-        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies_detailed.csv')) { detailed_text_modified_time }
-        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies.html')) { html_modified_time }
-        allow(File).to receive(:mtime).with(Pathname('./doc/dependencies.md')) { markdown_modified_time }
+        allow(File).to receive(:mtime).with('./doc/dependencies.db') { database_modified_time }
+        allow(File).to receive(:mtime).with('./doc/dependencies.csv') { text_modified_time }
+        allow(File).to receive(:mtime).with('./doc/dependencies_detailed.csv') { detailed_text_modified_time }
+        allow(File).to receive(:mtime).with('./doc/dependencies.html') { html_modified_time }
+        allow(File).to receive(:mtime).with('./doc/dependencies.md') { markdown_modified_time }
       end
 
       it 'returns the earliest modified date of the config file' do
@@ -199,9 +199,8 @@ module LicenseFinder
 
     describe ".last_modified" do
       let(:time) { double :time }
-      let(:config_path) { Pathname.new('.').join('config').join('license_finder.yml') }
       before do
-        allow(File).to receive(:mtime).with(config_path) { time }
+        allow(File).to receive(:mtime).with('config/license_finder.yml') { time }
       end
 
       it "returns the last time the yml file was modified" do
