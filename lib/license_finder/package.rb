@@ -55,14 +55,6 @@ module LicenseFinder
       PossibleLicenseFiles.find(install_path)
     end
 
-    def multiple_licenses
-      if ( licenses_from_spec.uniq.size > 1 )
-        License.find_by_name "multiple licenses: #{(licenses_from_spec).map(&:name).uniq.join(', ')}"
-      else 
-        License.find_by_name "multiple licenses: #{(licenses_from_files).map(&:name).uniq.join(', ')}"
-      end
-    end
-
     def default_license
       License.find_by_name nil
     end
