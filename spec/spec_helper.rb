@@ -5,6 +5,7 @@ require 'pry'
 require 'license_finder'
 require 'rspec'
 require 'webmock/rspec'
+require 'rspec/its'
 
 ENV['test_run'] = true.to_s
 

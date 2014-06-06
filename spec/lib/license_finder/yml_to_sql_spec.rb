@@ -29,14 +29,14 @@ module LicenseFinder
         yaml_file = double(:yaml_file, :exist? => true)
         LicenseFinder.config.artifacts.stub(legacy_yaml_file: yaml_file)
 
-        described_class.needs_conversion?.should be_true
+        described_class.needs_conversion?.should be_truthy
       end
 
       it "is false otherwise" do
         yaml_file = double(:yaml_file, :exist? => false)
         LicenseFinder.config.artifacts.stub(legacy_yaml_file: yaml_file)
 
-        described_class.needs_conversion?.should be_false
+        described_class.needs_conversion?.should be_falsey
       end
     end
 

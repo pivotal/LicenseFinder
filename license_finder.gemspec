@@ -26,10 +26,11 @@ Gem::Specification.new do |s|
   s.add_dependency "xml-simple"
   s.add_dependency LicenseFinder::Platform.sqlite_gem
 
-  %w(rake rspec xpath cucumber pry).each do |gem|
+  %w(rake rspec-its xpath cucumber pry).each do |gem|
     s.add_development_dependency gem
   end
 
+  s.add_development_dependency "rspec", "~> 3"
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "webmock", "~> 1.13"
   s.add_development_dependency "cocoapods" if RUBY_PLATFORM =~ /darwin/
