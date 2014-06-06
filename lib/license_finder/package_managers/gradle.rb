@@ -10,7 +10,7 @@ module LicenseFinder
       options = {
         'GroupTags' => { 'dependencies' => 'dependency' }
       }
-      XmlSimple.xml_in(xml, options)["dependency"].map do |d|
+      XmlSimple.xml_in(xml, options).fetch('dependency', []).map do |d|
         d["license"].reject! { |l| l["name"] == "No license found" }
         GradlePackage.new(d)
       end

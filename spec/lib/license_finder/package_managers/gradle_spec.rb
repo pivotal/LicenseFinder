@@ -63,6 +63,14 @@ module LicenseFinder
         GradlePackage.should_receive(:new).with("license" => [])
         Gradle.current_packages
       end
+
+      it "handles an empty list of licenses" do
+        license_xml = license_xml("")
+
+        fake_file = double(:license_report, read: license_xml)
+        allow(Gradle).to receive(:license_report).and_return(fake_file)
+        Gradle.current_packages
+      end
     end
 
     describe '.active?' do
