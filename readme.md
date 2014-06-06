@@ -24,11 +24,6 @@ Add license_finder to your project's Gemfile and `bundle`:
 gem 'license_finder'
 ```
 
-#### For gradle projects
-
-You need to install the license gradle plugin: [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
-
-
 ## Usage
 
 
@@ -156,6 +151,7 @@ ignore_dependencies:
 #- bundler
 dependencies_file_dir: './doc/'
 project_name: My Project Name
+gradle_command: # only meaningful if used with a Java/gradle project. Defaults to "gradle".
 ```
 
 By modifying this file, you can configure license_finder's behavior.
@@ -170,10 +166,33 @@ license_finder with different versions of bundler.)
 - You can store the license database and text files in another directory by changing 
 `dependencies_file_dir`. And the `project_name`, which defaults to your working
 directory, appears in the [HTML report](#html-report).
+- See below for explanation of "gradle_command".
 
 You can also configure license_finder through the command line.  See
 `license_finder whitelist help`, `license_finder ignored_bundler_groups help`
 and `license_finder project_name help` for more details.
+
+### For gradle projects
+
+You need to install the license gradle plugin: [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
+
+LicenseFinder assumes that gradle is on your shell's include path and is invoked by just calling `gradle`. If you invoke gradle some other way (say, with a custom `gradlew` script), set the `gradle_command` option in your project's `license_finder.yml`:
+
+```yaml
+# … other configuration …
+
+gradle_command: ./gradlew
+```
+
+By default, license_finder will report on gradle's "runtime" dependencies. If you want to generate a report for some other dependency configuration (e.g. Android projects will sometimes specify their meaningful dependencies in the "compile" group), you can specify it in your project's `build.gradle` like so:
+
+```
+// Must come *after* the 'apply plugin: license' line
+
+downloadLicenses {
+  dependencyConfiguration "compile"
+}
+```
 
 ## HTML Report
 

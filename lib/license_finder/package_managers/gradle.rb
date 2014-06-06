@@ -3,7 +3,7 @@ require "xmlsimple"
 module LicenseFinder
   class Gradle
     def self.current_packages
-      `gradle downloadLicenses`
+      `#{LicenseFinder.config.gradle_command} downloadLicenses`
 
       xml = license_report.read
 

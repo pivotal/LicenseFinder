@@ -12,7 +12,8 @@ module LicenseFinder
 
     describe '.current_packages' do
       before do
-        expect(described_class).to receive(:`).with(/gradle downloadLicenses/)
+        allow(LicenseFinder.config).to receive(:gradle_command) { 'gradlefoo' }
+        expect(described_class).to receive(:`).with(/gradlefoo downloadLicenses/)
       end
 
       it 'lists all the current packages' do

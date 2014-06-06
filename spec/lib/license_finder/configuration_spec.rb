@@ -29,6 +29,7 @@ module LicenseFinder
         subject.ignore_groups.should == []
         subject.ignore_dependencies.should == []
         subject.artifacts.dir.should == Pathname('./doc/')
+        subject.gradle_command.should == 'gradle'
       end
 
       it "should default missing attributes even if they are saved as nils in the YAML file" do
@@ -37,7 +38,8 @@ module LicenseFinder
           "ignore_groups" => nil,
           "ignore_dependencies" => nil,
           "dependencies_file_dir" => nil,
-          "project_name" => nil
+          "project_name" => nil,
+          "gradle_command" => nil
         }
         subject = described_class.new(attributes)
         subject.whitelist.should == []
@@ -45,6 +47,7 @@ module LicenseFinder
         subject.ignore_dependencies.should == []
         subject.artifacts.dir.should == Pathname('./doc/')
         subject.project_name.should_not be_nil
+        subject.gradle_command.should == 'gradle'
       end
 
       it "should set the all of the attributes on the instance" do
@@ -53,7 +56,8 @@ module LicenseFinder
           "ignore_groups" => %w{test development},
           "ignore_dependencies" => %w{bundler},
           "dependencies_file_dir" => "some/path",
-          "project_name" => "my_app"
+          "project_name" => "my_app",
+          "gradle_command" => "./gradlew"
         }
         subject = described_class.new(attributes)
         subject.whitelist.should == %w{a whitelist}
@@ -61,6 +65,7 @@ module LicenseFinder
         subject.ignore_dependencies.should == %w{bundler}
         subject.artifacts.dir.should == Pathname("some/path")
         subject.project_name.should == "my_app"
+        subject.gradle_command.should == "./gradlew"
       end
     end
 
@@ -95,7 +100,8 @@ module LicenseFinder
           'ignore_groups' => ['other_group', 'test'],
           'ignore_dependencies' => ['bundler'],
           'project_name' => "New Project Name",
-          'dependencies_file_dir' => "./deps"
+          'dependencies_file_dir' => "./deps",
+          'gradle_command' => './gradle'
         }
       end
 
