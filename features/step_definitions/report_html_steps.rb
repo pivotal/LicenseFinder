@@ -55,6 +55,6 @@ end
 
 def is_html_status?(gem, approval)
   @user.in_gem_html(gem) do |gpl_gem|
-    gpl_gem[:class].should == approval
+    gpl_gem[:class].split(' ').should include approval
   end
 end

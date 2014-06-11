@@ -62,7 +62,7 @@
   </div>
   <div class="dependencies">
     <% sorted_dependencies.each do |dependency| -%>
-      <div id="<%= dependency.name %>" class="<%= dependency.approved? ? "approved" : "unapproved" %>">
+      <div id="<%= dependency.name %>" class="clearfix <%= dependency.approved? ? "approved" : "unapproved" %>">
         <blockquote class="pull-right">
           <% if dependency.approved_manually? -%>
             <p>

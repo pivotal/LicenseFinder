@@ -17,7 +17,7 @@ end
 
 Then(/^I should see that gem approved in dependencies\.html$/) do
   @user.in_gem_html("gpl_gem") do |gpl_gem|
-    gpl_gem[:class].should == "approved"
+    gpl_gem[:class].split(' ').should include "approved"
     gpl_gem.should have_content "Julian"
     gpl_gem.should have_content "We really need this"
   end
