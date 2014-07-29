@@ -1,3 +1,11 @@
+=== 1.1.1 / 2014-07-29
+
+* Bugfixes
+
+  * Process incorrectly-defined dependencies.
+    [Original issue.](https://github.com/pivotal/LicenseFinder/issues/108)
+  * Allow license_finder to process incorrectly-defined dependencies.
+
 === 1.0.1 / 2014-05-28
 
 * Features
