@@ -32,12 +32,14 @@ module LicenseFinder
       let(:node_module2) { {"licenses" => [{"type" => "BSD"}], "path" => "/some/path"} }
       let(:node_module3) { {"license" => {"type" => "PSF"}, "path" => "/some/path"} }
       let(:node_module4) { {"licenses" => ["MIT"], "path" => "/some/path"} }
+      let(:misdeclared_node_module) { {"licenses" => {"type" => "MIT"}} }
 
       it 'finds the license for both license structures' do
         NpmPackage.new(node_module1).license.name.should eq("MIT")
         NpmPackage.new(node_module2).license.name.should eq("BSD")
         NpmPackage.new(node_module3).license.name.should eq("Python Software Foundation License")
         NpmPackage.new(node_module4).license.name.should eq("MIT")
+        NpmPackage.new(misdeclared_node_module).license.name.should eq("MIT")
       end
 
       context "regardless of whether there are licenses in files" do
