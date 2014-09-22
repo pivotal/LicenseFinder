@@ -13,11 +13,11 @@ module LicenseFinder
     end
 
     def summary
-      node_module["description"]
+      nil
     end
 
     def description
-      node_module["readme"]
+      node_module["description"]
     end
 
     def homepage
