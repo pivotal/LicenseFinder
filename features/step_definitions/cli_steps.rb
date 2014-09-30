@@ -27,7 +27,7 @@ Then(/^it creates a config directory with the license_finder config$/) do
 end
 
 Then /^it should exit with status code (\d)$/ do |status|
-  $?.exitstatus.should == status.to_i
+  $last_command_exit_status.exitstatus.should == status.to_i
 end
 
 Then(/^should list my unapproved dependency in the output$/) do

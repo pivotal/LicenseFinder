@@ -2,6 +2,7 @@ require 'fileutils'
 require 'pathname'
 require 'bundler'
 require 'capybara'
+require 'open3'
 
 ########## COMMON STEPS ##########
 
@@ -282,9 +283,19 @@ module DSL
     end
 
     def shell_out(command, allow_failures = false)
-      output = `#{command}`
-      raise RuntimeError.new("command failed #{command}") unless $?.success? || allow_failures
-      output
+      stdout, stderr, status = Open3.capture3 command
+      unless status.success? || allow_failures
+        message_format = <<EOM
+Command failed: `%s`
+stdout: %s
+stderr: %s
+exit: %d
+EOM
+        message = sprintf message_format, command, stdout.chomp, stderr.chomp, status.exitstatus
+        raise RuntimeError.new(message)
+      end
+      $last_command_exit_status = status
+      stdout
     end
   end
 end
