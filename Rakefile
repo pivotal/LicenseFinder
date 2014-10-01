@@ -19,4 +19,28 @@ Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = "features --format pretty #{tags}"
 end
 
+desc "Check for non-Ruby development dependencies."
+task :check_dependencies do
+  require "open3"
+
+  dependencies = {
+    "mvn" => "Maven",
+    "npm" => "node.js",
+    "pip" => "Python"
+  }
+  dependencies["pod"] = "Cocoapod" if LicenseFinder::Platform.darwin?
+  satisfied = true
+  dependencies.each do |dependency, description|
+    stdout, stderr, status = Open3.capture3 "which #{dependency}"
+    unless status.success?
+      puts "Development dependency missing: `#{dependency}` for #{description}"
+      satisfied = false
+    end
+  end
+  exit 1 unless satisfied
+end
+
+task :spec     => :check_dependencies
+task :features => :check_dependencies
+
 task :default => [:spec, :features]
