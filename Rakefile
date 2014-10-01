@@ -1,6 +1,7 @@
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
+require './lib/license_finder/platform'
 require 'rspec/core/rake_task'
 require 'cucumber'
 require 'cucumber/rake/task'
@@ -14,7 +15,7 @@ end
 
 desc "Run all cukes in features/"
 Cucumber::Rake::Task.new(:features) do |t|
-  tags = RUBY_PLATFORM =~ /darwin/ ? "" : "--tags ~@ios"
+  tags = LicenseFinder::Platform.darwin? ? "" : "--tags ~@ios"
   t.cucumber_opts = "features --format pretty #{tags}"
 end
 
