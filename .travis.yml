@@ -12,7 +12,7 @@ matrix:
     - rvm: jruby-head
 
 env:
-  - JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-J-Djruby.launch.inproc=true' PATH=$PATH:$HOME/gradle/bin
+  - PATH=$PATH:$HOME/gradle/bin
 
 notifications:
   email:
