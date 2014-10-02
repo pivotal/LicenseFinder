@@ -283,19 +283,20 @@ module DSL
     end
 
     def shell_out(command, allow_failures = false)
-      stdout, stderr, status = Open3.capture3 command
+      output = `#{command} 2>&1`
+      status = $?
       unless status.success? || allow_failures
         message_format = <<EOM
 Command failed: `%s`
-stdout: %s
-stderr: %s
+output: %s
 exit: %d
 EOM
         message = sprintf message_format, command, stdout.chomp, stderr.chomp, status.exitstatus
         raise RuntimeError.new(message)
       end
+
       $last_command_exit_status = status
-      stdout
+      output
     end
   end
 end
