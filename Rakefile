@@ -31,7 +31,7 @@ task :check_dependencies do
   dependencies["pod"] = "Cocoapod" if LicenseFinder::Platform.darwin?
   satisfied = true
   dependencies.each do |dependency, description|
-    stdout, stderr, status = Open3.capture3 "which #{dependency}"
+    `which #{dependency}` ; status = $?
     unless status.success?
       puts "Development dependency missing: `#{dependency}` for #{description}"
       satisfied = false
