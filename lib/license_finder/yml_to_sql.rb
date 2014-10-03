@@ -93,7 +93,7 @@ module LicenseFinder
           'summary' => 'summary',
           'description' => 'description',
           'homepage' => 'homepage',
-          'license' => 'license_name'
+          'license' => 'license_names'
         }
 
         def self.convert(attrs)

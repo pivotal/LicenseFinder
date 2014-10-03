@@ -1,10 +1,19 @@
+require 'json'
+
 module LicenseFinder
   class Dependency < Sequel::Model
     plugin :boolean_readers
     plugin :composition
     composition :licenses,
-      composer: ->(d) { [License.find_by_name(d.license_name)] },
-      decomposer: ->(d) { self.license_name = licenses.first.name }
+      composer: ->(d) do
+        if d.license_names.nil?
+          [License.find_by_name(nil)]
+        else
+          names = JSON.parse(d.license_names)
+          names.map { |n| License.find_by_name(n) }
+        end
+      end,
+      decomposer: ->(d) { self.license_names = licenses.map(&:name).to_json }
 
     one_to_one :manual_approval
     many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
