@@ -12,7 +12,7 @@ As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %>. <%= dependencies.size %> to
 <%= unapproved_dependencies.size %> *unapproved*
 
 <% unapproved_dependencies.each do |dependency| -%>
-* <a href='#<%= dependency.name %>'><%= dependency.name %></a> (<%= dependency.license.name %>)
+* <a href='#<%= dependency.name %>'><%= dependency.name %></a> (<%= dependency.licenses.map(&:name) %>)
 <% end %>
 <% end -%>
 
@@ -25,15 +25,15 @@ As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %>. <%= dependencies.size %> to
 #### <%= dependency.summary %>
 
 <% if dependency.approved_manually? -%>
-<%= link_to_license(dependency.license) %> manually approved
+<%= dependency.licenses.map { |l| link_to_license(l) }.join(', ') %> manually approved
 
 ><%= dependency.manual_approval.notes %>
 
 ><cite> <%= dependency.manual_approval.approver %> <%= dependency.manual_approval.safe_created_at.to_date %></cite>
 <% elsif dependency.whitelisted? -%>
-<%= link_to_license(dependency.license) %> whitelisted
+<%= dependency.licenses.map { |l| link_to_license(l) }.join(', ') %> whitelisted
 <% else -%>
-<%= link_to_license(dependency.license) %> _**unapproved**_
+<%= dependency.licenses.map { |l| link_to_license(l) }.join(', ') %> _**unapproved**_
 <% end -%>
 
 <% if dependency.description -%>

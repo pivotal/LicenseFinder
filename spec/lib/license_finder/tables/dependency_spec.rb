@@ -15,7 +15,7 @@ module LicenseFinder
         that_ignored = Dependency.create(name: "that ignored dependency", version: '0.0.1')
         approved.approve!
         whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
-        whitelisted.license = License.find_by_name('MIT')
+        whitelisted.licenses = [License.find_by_name('MIT')]
         whitelisted.save
 
         unapproved = Dependency.unapproved
@@ -71,7 +71,8 @@ module LicenseFinder
       let(:approved_manually) { Dependency.create(name: 'some gem').approve!.reload }
 
       it "is true if its license is whitelisted" do
-        not_approved_manually.stub_chain(:license, whitelisted?: true)
+        fake_license = double(:license, whitelisted?: true)
+        not_approved_manually.stub(:licenses).and_return [fake_license]
         not_approved_manually.should be_approved
       end
 
@@ -97,7 +98,7 @@ module LicenseFinder
 
       it "modifies the license" do
         dependency.set_license_manually! License.find_by_name("Updated")
-        dependency.reload.license.name.should == 'Updated'
+        dependency.reload.licenses.first.name.should == 'Updated'
       end
     end
 
@@ -133,43 +134,43 @@ module LicenseFinder
       end
     end
 
-    describe "#apply_better_license" do
+    describe "#set_licenses" do
       let(:dependency) { Dependency.named('some gem') }
 
       it "keeps a manually assigned license" do
         dependency.set_license_manually! License.find_by_name("manual")
-        dependency.apply_better_license License.find_by_name("new")
-        dependency.license.name.should == "manual"
+        dependency.set_licenses [License.find_by_name("new")]
+        dependency.licenses.first.name.should == "manual"
       end
 
       it "saves a new license" do
-        dependency.apply_better_license License.find_by_name("new license")
-        dependency.license.name.should == "new license"
+        dependency.set_licenses [License.find_by_name("new license")]
+        dependency.licenses.first.name.should == "new license"
       end
 
       it "updates the license's name" do
-        dependency.license = License.find_by_name("old")
+        dependency.licenses = [License.find_by_name("old")]
 
-        dependency.apply_better_license License.find_by_name("new license")
-        dependency.license.name.should == "new license"
+        dependency.set_licenses [License.find_by_name("new license")]
+        dependency.licenses.first.name.should == "new license"
       end
 
       it "won't update the database if the license isn't changing" do
         # See note in PackageSaver#save
-        dependency.license = License.find_by_name("same")
+        dependency.licenses = [License.find_by_name("same")]
         dependency.should be_modified
         dependency.save
         dependency.should_not be_modified
 
-        dependency.apply_better_license License.find_by_name("same")
+        dependency.set_licenses [License.find_by_name("same")]
         dependency.should_not be_modified
       end
 
       it "does not change the approval" do
-        dependency.license = License.find_by_name("old")
+        dependency.licenses = [License.find_by_name("old")]
         dependency.approve!
 
-        dependency.apply_better_license License.find_by_name("new license")
+        dependency.set_licenses [License.find_by_name("new license")]
         dependency.should be_approved
       end
     end

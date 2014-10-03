@@ -3,7 +3,7 @@ require 'forwardable'
 module LicenseFinder
   class PackageSaver
     extend Forwardable
-    def_delegators :package, :license, :children, :groups, :summary, :description, :version, :homepage
+    def_delegators :package, :licenses, :children, :groups, :summary, :description, :version, :homepage
 
     attr_reader :dependency, :package
 
@@ -25,7 +25,7 @@ module LicenseFinder
       dependency.homepage = homepage
       dependency.bundler_group_names = groups.map(&:to_s)
       dependency.children_names = children
-      dependency.apply_better_license license
+      dependency.set_licenses licenses
 
       # Only save *changed* dependencies. This ensures re-running
       # `license_finder` won't always update the DB, and therefore won't always

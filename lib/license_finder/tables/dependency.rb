@@ -2,9 +2,9 @@ module LicenseFinder
   class Dependency < Sequel::Model
     plugin :boolean_readers
     plugin :composition
-    composition :license,
-      composer: ->(d) { License.find_by_name(d.license_name) },
-      decomposer: ->(d) { self.license_name = license.name }
+    composition :licenses,
+      composer: ->(d) { [License.find_by_name(d.license_name)] },
+      decomposer: ->(d) { self.license_name = licenses.first.name }
 
     one_to_one :manual_approval
     many_to_many :children, join_table: :ancestries, left_key: :parent_dependency_id, right_key: :child_dependency_id, class: self
@@ -58,24 +58,24 @@ module LicenseFinder
     end
 
     def whitelisted?
-      license.whitelisted?
+      licenses.first.whitelisted?
     end
 
     def approved_manually?
       !!manual_approval
     end
 
-    def set_license_manually!(license)
-      self.license = license
-      self.license_assigned_manually = true
-      save
+    def set_licenses(other_licenses)
+      return if license_assigned_manually?
+      if licenses.first.name != other_licenses.first.name
+        self.licenses = other_licenses
+      end
     end
 
-    def apply_better_license(other_license)
-      return if license_assigned_manually?
-      if license.name != other_license.name
-        self.license = other_license
-      end
+    def set_license_manually!(license)
+      self.licenses = [license]
+      self.license_assigned_manually = true
+      save
     end
 
     private

@@ -26,7 +26,7 @@ module LicenseFinder
     its(:groups) { should == [] }
     its(:children) { should == [] }
 
-    describe '#license' do
+    describe '#licenses' do
       def stub_license_files(license_files)
         PossibleLicenseFiles.stub(:find).with("/path/to/thing").and_return(license_files)
       end
@@ -37,10 +37,21 @@ module LicenseFinder
       let(:package4) { { "pkgMeta" => {"licenses" => ["MIT"]}, "canonicalDir" => "/some/path" } }
 
       it 'finds the license for both license  structures' do
-        BowerPackage.new(package1).license.name.should eq("MIT")
-        BowerPackage.new(package2).license.name.should eq("BSD")
-        BowerPackage.new(package3).license.name.should eq("Python Software Foundation License")
-        BowerPackage.new(package4).license.name.should eq("MIT")
+        package = BowerPackage.new(package1)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("MIT")
+
+        package = BowerPackage.new(package2)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("BSD")
+
+        package = BowerPackage.new(package3)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("Python Software Foundation License")
+
+        package = BowerPackage.new(package4)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("MIT")
       end
 
 
@@ -51,12 +62,14 @@ module LicenseFinder
 
         it "returns the license from the spec if there is only one unique license" do
           package = BowerPackage.new({ "pkgMeta" => {"licenses" => ["MIT", "Expat"]}, "canonicalDir" => "/path/to/thing" })
-          expect(package.license.name).to eq("MIT")
+          expect(package.licenses.length).to eq 1
+          expect(package.licenses.first.name).to eq("MIT")
         end
 
         it "returns 'multiple licenses' if there's more than one license" do
           package = BowerPackage.new({ "pkgMeta" => {"licenses" => ["MIT", "BSD"]}, "canonicalDir" => "/some/path" })
-          expect(package.license.name).to eq("multiple licenses: MIT, BSD")
+          expect(package.licenses.length).to eq 2
+          expect(package.licenses.map(&:name)).to eq %w(MIT BSD)
         end
       end
 
@@ -67,13 +80,15 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Expat'))
           ])
 
-          subject.license.name.should == "MIT"
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "MIT"
         end
 
         it "returns 'other' if there are no licenses in files" do
           stub_license_files []
 
-          subject.license.name.should == "other"
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "other"
         end
 
         it "returns 'other' if there are many licenses in files" do
@@ -82,7 +97,8 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Second Detected License'))
           ])
 
-          subject.license.name.should == "multiple licenses: First Detected License, Second Detected License"
+          expect(subject.licenses.length).to eq 2
+          expect(subject.licenses.map(&:name)).to eq ["First Detected License", "Second Detected License"]
         end
       end
     end

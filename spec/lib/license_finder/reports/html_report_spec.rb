@@ -7,7 +7,7 @@ module LicenseFinder
       let(:dependency_name) { "the-name" }
       let(:dependency) do
         dep = Dependency.create name: dependency_name
-        dep.apply_better_license License.find_by_name("MIT")
+        dep.set_licenses [License.find_by_name("MIT")]
         dep
       end
 
@@ -46,7 +46,7 @@ module LicenseFinder
 
       context "when the dependency is not approved" do
         before {
-          dependency.license = License.find_by_name('GPL')
+          dependency.licenses = [License.find_by_name('GPL')]
           dependency.manual_approval = nil
         }
 

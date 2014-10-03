@@ -7,7 +7,7 @@ module LicenseFinder
         Dependency.new(
           'name' => 'gem_a',
           'version' => '1.0',
-          'license' => License.find_by_name('MIT')
+          'licenses' => [License.find_by_name('MIT')]
         )
       end
 
@@ -15,7 +15,7 @@ module LicenseFinder
         Dependency.new(
           'name' => 'gem_b',
           'version' => '1.0',
-          'license' => License.find_by_name('MIT')
+          'licenses' => [License.find_by_name('MIT')]
         )
       end
 

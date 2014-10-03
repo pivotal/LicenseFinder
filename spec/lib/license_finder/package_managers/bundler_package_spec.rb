@@ -26,7 +26,7 @@ module LicenseFinder
     its(:groups) { should == [] }
     its(:children) { should == [] }
 
-    describe "#license" do
+    describe "#licenses" do
       def stub_license_files(license_files)
         PossibleLicenseFiles.stub(:find).and_return(license_files)
       end
@@ -40,7 +40,8 @@ module LicenseFinder
           before { gemspec.licenses = ['MIT', 'Expat'] }
 
           it 'returns the license only once' do
-            subject.license.name.should == "MIT"
+            expect(subject.licenses.length).to eq 1
+            expect(subject.licenses.first.name).to eq "MIT"
           end
         end
 
@@ -48,7 +49,8 @@ module LicenseFinder
           before { gemspec.licenses = ['First Gemspec License', 'Second Gemspec License'] }
 
           it "returns 'multiple licenses' with the names of the licenses from the gemspec (but not those from detected files)" do
-            subject.license.name.should == "multiple licenses: First Gemspec License, Second Gemspec License"
+            expect(subject.licenses.length).to eq 2
+            expect(subject.licenses.map(&:name)).to eq ["First Gemspec License", "Second Gemspec License"]
           end
         end
       end
@@ -60,13 +62,15 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Expat'))
           ])
 
-          subject.license.name.should == "MIT"
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "MIT"
         end
 
         it "returns 'other' if there are no licenses in files" do
           stub_license_files []
 
-          subject.license.name.should == "other"
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "other"
         end
 
         it "returns 'multiple licenses' if there are many licenses in files" do
@@ -75,7 +79,8 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Second Detected License'))
           ])
 
-          subject.license.name.should == "multiple licenses: First Detected License, Second Detected License"
+          expect(subject.licenses.length).to eq 2
+          expect(subject.licenses.map(&:name)).to eq ["First Detected License", "Second Detected License"]
         end
       end
     end

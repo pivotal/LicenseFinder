@@ -52,7 +52,7 @@
               <a href='#<%= dependency.name %>'>
                 <%= dependency.name %>
               </a>
-              (<%= dependency.license.name %>)
+              (<%= dependency.licenses.map(&:name).join(', ') %>)
               </li>
             <% end -%>
           </ul>
@@ -66,7 +66,7 @@
         <blockquote class="pull-right">
           <% if dependency.approved_manually? -%>
             <p>
-              <%= link_to_license(dependency.license) %>
+            <%= dependency.licenses.map { |l| link_to_license(l) }.join(', ') %>
               manually approved
               <span class="badge badge-success">&#x2713;</span>
             </p>
@@ -79,13 +79,13 @@
             </small>
           <% elsif dependency.whitelisted? -%>
             <p>
-              <%= link_to_license(dependency.license) %>
+              <%= dependency.licenses.map { |l| link_to_license(l) }.join(', ') %>
               whitelisted
               <span class="badge badge-success">&#x2713;</span>
             </p>
           <% else -%>
             <p>
-            <%= link_to_license(dependency.license) %>
+            <%= dependency.licenses.map { |l| link_to_license(l) }.join(', ') %>
             unapproved
             <span class="badge badge-important">&#x2717;</span>
             </p>

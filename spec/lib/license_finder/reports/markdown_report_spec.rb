@@ -7,7 +7,7 @@ module LicenseFinder
         Dependency.new(
           'name' => 'gem_a',
           'version' => '1.0',
-          'license' => License.find_by_name('other')
+          'licenses' => [License.find_by_name('other')]
         )
       end
 
@@ -15,7 +15,7 @@ module LicenseFinder
         dependency = Dependency.create(
           'name' => 'gem_b',
           'version' => '2.3',
-          'license' => License.find_by_name('BSD')
+          'licenses' => [License.find_by_name('BSD')]
         )
         dependency.approve!
         dependency

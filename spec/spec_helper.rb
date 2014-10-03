@@ -38,6 +38,6 @@ module LicenseFinder
     it { expect { subject.homepage }.to_not raise_error }
     it { expect { subject.groups }.to_not raise_error }
     it { expect { subject.children }.to_not raise_error }
-    it { expect { subject.license }.to_not raise_error }
+    it { expect { subject.licenses }.to_not raise_error }
   end
 end

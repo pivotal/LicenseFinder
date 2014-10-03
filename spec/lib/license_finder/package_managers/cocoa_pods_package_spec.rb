@@ -17,7 +17,7 @@ module LicenseFinder
     its(:groups) { should == [] }
     its(:children) { should == [] }
 
-    describe '#license' do
+    describe '#licenses' do
       context "when there's a license" do
         let(:license_text) { "LicenseText" }
 
@@ -25,18 +25,21 @@ module LicenseFinder
           license = double(:license, name: "LicenseName")
           allow(License).to receive(:find_by_text).with(license_text).and_return(license)
 
-          expect(subject.license.name).to eq "LicenseName"
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "LicenseName"
         end
 
         it "returns other if the license can't be found by text" do
           allow(License).to receive(:find_by_text).with(license_text).and_return(nil)
 
-          expect(subject.license.name).to eq "other"
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "other"
         end
       end
 
       it "returns other when there's no license" do
-        expect(subject.license.name).to eq "other"
+        expect(subject.licenses.length).to eq 1
+        expect(subject.licenses.first.name).to eq "other"
       end
     end
   end

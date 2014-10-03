@@ -5,7 +5,7 @@ module LicenseFinder
     let(:package) do
       double(
         :package,
-        license: License.find_by_name('license'),
+        licenses: [License.find_by_name('license')],
         children: ['child'],
         groups: [:group],
         summary: 'summary',
@@ -50,7 +50,7 @@ module LicenseFinder
         subject.homepage.should == "http://example.com"
         subject.bundler_groups.map(&:name).should == ['group']
         subject.children.map(&:name).should == ['child']
-        subject.license.name.should == 'license'
+        subject.licenses.first.name.should == 'license'
       end
 
       it "keeps approval" do
