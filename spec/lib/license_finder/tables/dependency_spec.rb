@@ -76,6 +76,12 @@ module LicenseFinder
         not_approved_manually.should be_approved
       end
 
+      it "is true if one of its licenses is whitelisted" do
+        fake_licenses = [double(:license, whitelisted?: false), double(:license, whitelisted?: true)]
+        not_approved_manually.stub(:licenses).and_return fake_licenses
+        not_approved_manually.should be_approved
+      end
+
       it "is true if it has been approved" do
         approved_manually.stub_chain(:license, whitelisted?: false)
         approved_manually.should be_approved

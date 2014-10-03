@@ -58,7 +58,7 @@ module LicenseFinder
     end
 
     def whitelisted?
-      licenses.first.whitelisted?
+      licenses.any? &:whitelisted?
     end
 
     def approved_manually?
