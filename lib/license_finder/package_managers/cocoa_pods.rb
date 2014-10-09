@@ -6,7 +6,7 @@ module LicenseFinder
     def self.current_packages
       podfile = YAML.load_file(lockfile_path)
 
-      acknowledgements = JSON.parse(`plutil -convert json -o - '#{acknowledgements_path.expand_path}'`)["PreferenceSpecifiers"]
+      acknowledgements = read_plist(acknowledgements_path)["PreferenceSpecifiers"]
 
       podfile["PODS"].map do |pod|
         pod = pod.keys.first if pod.is_a?(Hash)
@@ -39,6 +39,10 @@ module LicenseFinder
       ]
 
       directories.map { |dir| Pathname.new(File.join(dir, filename)) }.find(&:exist?)
+    end
+
+    def self.read_plist pathname
+      JSON.parse(`plutil -convert json -o - '#{pathname.expand_path}'`)
     end
   end
 end

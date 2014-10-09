@@ -3,18 +3,16 @@ require 'spec_helper'
 module LicenseFinder
   describe CocoaPods do
     def stub_acknowledgments(hash = {})
-      plist_json = %{
-        {
-          "PreferenceSpecifiers": [
-            {
-              "FooterText": "#{hash[:license]}",
-              "Title": "#{hash[:name]}"
-            }
-          ]
-        }
+      plist = {
+        "PreferenceSpecifiers" => [
+          {
+            "FooterText" => hash[:license],
+            "Title" => hash[:name]
+          }
+        ]
       }
 
-      expect(described_class).to receive(:`).with(/plutil/).and_return(plist_json)
+      expect(described_class).to receive(:read_plist).and_return(plist)
     end
 
     def stub_lockfile(pods)
