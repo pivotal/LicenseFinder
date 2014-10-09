@@ -11,10 +11,10 @@ Given(/^I have a dependencies\.txt file$/) do
 end
 
 Then(/^I should see those version and license details in the dependencies\.csv file$/) do
-  @user.app_path("doc/dependencies.csv").read.should include "info_gem, 1.1.1, MIT"
+  expect(@user.app_path("doc/dependencies.csv").read).to include "info_gem, 1.1.1, MIT"
 end
 
 Then(/^I should see dependencies\.txt replaced by dependencies\.csv$/) do
-  @user.app_path("doc/dependencies.txt").should_not be_exist
-  @user.app_path("doc/dependencies.csv").should be_exist
+  expect(@user.app_path("doc/dependencies.txt")).to_not be_exist
+  expect(@user.app_path("doc/dependencies.csv")).to be_exist
 end

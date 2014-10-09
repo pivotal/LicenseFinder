@@ -12,11 +12,11 @@ When(/^I set one gem's license to MIT from the command line$/) do
 end
 
 Then(/^I should see that gem's license set to MIT$/) do
-  @user.should be_seeing 'other_gem, 1.0, MIT'
+  expect(@user).to be_seeing 'other_gem, 1.0, MIT'
 end
 
 Then(/^I should see other gems have not changed their licenses$/) do
-  @user.should be_seeing 'control_gem, 1.0, other'
+  expect(@user).to be_seeing 'control_gem, 1.0, other'
 end
 
 Given(/^I have an app that depends on a manually licensed gem$/) do
@@ -25,10 +25,10 @@ Given(/^I have an app that depends on a manually licensed gem$/) do
   @user.create_and_depend_on_gem 'changed_gem', license: 'MIT'
   @user.execute_command "license_finder --quiet"
   @user.execute_command "license_finder license Ruby changed_gem"
-  @user.should be_seeing_something_like /changed_gem.*Ruby/
+  expect(@user).to be_seeing_something_like /changed_gem.*Ruby/
 end
 
 Then(/^the gem should keep its manually assigned license$/) do
-  @user.should be_seeing_something_like /changed_gem.*ruby/
+  expect(@user).to be_seeing_something_like /changed_gem.*ruby/
 end
 

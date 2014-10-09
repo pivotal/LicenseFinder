@@ -24,7 +24,7 @@ Then(/^I should see the project name (\w+) in the html$/) do |project_name|
   @user.in_html do |page|
     title = page.find("h1")
 
-    title.should have_content project_name
+    expect(title).to have_content project_name
   end
 end
 

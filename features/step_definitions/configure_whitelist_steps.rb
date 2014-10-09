@@ -28,18 +28,18 @@ end
 
 Then(/^I should not see a MIT licensed gem unapproved$/) do
   @user.execute_command 'license_finder --quiet'
-  @user.should_not be_seeing 'mit_gem'
+  expect(@user).to_not be_seeing 'mit_gem'
 end
 
 Then(/^I should see Expat in the output$/) do
-  @user.should be_seeing 'Expat'
+  expect(@user).to be_seeing 'Expat'
 end
 
 Then(/^I should not see Expat in the output$/) do
-  @user.should_not be_seeing 'Expat'
+  expect(@user).to_not be_seeing 'Expat'
 end
 
 Then(/^I should not see a BSD licensed gem unapproved$/) do
   @user.execute_command 'license_finder --quiet'
-  @user.should_not be_seeing 'bsd_gem'
+  expect(@user).to_not be_seeing 'bsd_gem'
 end
