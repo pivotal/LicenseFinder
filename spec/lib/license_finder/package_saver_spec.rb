@@ -20,8 +20,8 @@ module LicenseFinder
       let(:dependency) { double(:dependency).as_null_object }
 
       it "find and updates relevant dependencies" do
-        Dependency.should_receive(:named).with('spec_name').and_return(dependency)
-        dependency.should_receive(:save_changes)
+        expect(Dependency).to receive(:named).with('spec_name').and_return(dependency)
+        expect(dependency).to receive(:save_changes)
         described_class.save_all([package])
       end
     end
@@ -42,15 +42,15 @@ module LicenseFinder
         saver = described_class.new(dep, package)
         subject = saver.save
 
-        subject.id.should be
-        subject.name.should == "spec_name"
-        subject.version.should == "1.2.3"
-        subject.summary.should == "summary"
-        subject.description.should == "description"
-        subject.homepage.should == "http://example.com"
-        subject.bundler_groups.map(&:name).should == ['group']
-        subject.children.map(&:name).should == ['child']
-        subject.license.name.should == 'license'
+        expect(subject.id).to be
+        expect(subject.name).to eq("spec_name")
+        expect(subject.version).to eq("1.2.3")
+        expect(subject.summary).to eq("summary")
+        expect(subject.description).to eq("description")
+        expect(subject.homepage).to eq("http://example.com")
+        expect(subject.bundler_groups.map(&:name)).to eq(['group'])
+        expect(subject.children.map(&:name)).to eq(['child'])
+        expect(subject.license.name).to eq('license')
       end
 
       it "keeps approval" do
@@ -61,7 +61,7 @@ module LicenseFinder
         saver = described_class.new(dep, package)
         subject = saver.save
 
-        subject.should be_approved
+        expect(subject).to be_approved
       end
 
       context "to minimize db changes" do

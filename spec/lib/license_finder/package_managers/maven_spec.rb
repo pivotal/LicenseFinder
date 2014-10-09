@@ -70,7 +70,7 @@ module LicenseFinder
         fake_file = double(:license_report, read: license_xml)
         allow(Maven).to receive(:license_report).and_return(fake_file)
 
-        MavenPackage.should_receive(:new).with("licenses" => [{"name" => "License 1"}, {"name" => "License 2"}])
+        expect(MavenPackage).to receive(:new).with("licenses" => [{"name" => "License 1"}, {"name" => "License 2"}])
         Maven.current_packages
       end
 
@@ -86,7 +86,7 @@ module LicenseFinder
         fake_file = double(:license_report, read: license_xml)
         allow(Maven).to receive(:license_report).and_return(fake_file)
 
-        MavenPackage.should_receive(:new).with("licenses" => {})
+        expect(MavenPackage).to receive(:new).with("licenses" => {})
         Maven.current_packages
       end
     end

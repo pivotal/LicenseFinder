@@ -101,16 +101,16 @@ module LicenseFinder
       let(:package) { double(:package_file) }
 
       before do
-        NPM.stub(package_path: package)
+        allow(NPM).to receive_messages(package_path: package)
       end
 
       it 'is true with a package.json file' do
-        package.stub(:exist? => true)
+        allow(package).to receive_messages(:exist? => true)
         expect(NPM).to be_active
       end
 
       it 'is false without a package.json file' do
-        package.stub(:exist? => false)
+        allow(package).to receive_messages(:exist? => false)
         expect(NPM).to_not be_active
       end
     end

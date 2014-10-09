@@ -4,10 +4,10 @@ module LicenseFinder
   describe Configuration do
     describe ".ensure_default" do
       it "should init and use saved config" do
-        Configuration::Persistence.should_receive(:init)
-        Configuration::Persistence.stub(:get).and_return('whitelist' => ['Saved License'])
+        expect(Configuration::Persistence).to receive(:init)
+        allow(Configuration::Persistence).to receive(:get).and_return('whitelist' => ['Saved License'])
 
-        described_class.ensure_default.whitelist.should == ['Saved License']
+        expect(described_class.ensure_default.whitelist).to eq(['Saved License'])
       end
     end
 
@@ -25,11 +25,11 @@ module LicenseFinder
     describe '.new' do
       it "should default missing attributes" do
         subject = described_class.new({})
-        subject.whitelist.should == []
-        subject.ignore_groups.should == []
-        subject.ignore_dependencies.should == []
-        subject.artifacts.dir.should == Pathname('./doc/')
-        subject.gradle_command.should == 'gradle'
+        expect(subject.whitelist).to eq([])
+        expect(subject.ignore_groups).to eq([])
+        expect(subject.ignore_dependencies).to eq([])
+        expect(subject.artifacts.dir).to eq(Pathname('./doc/'))
+        expect(subject.gradle_command).to eq('gradle')
       end
 
       it "should default missing attributes even if they are saved as nils in the YAML file" do
@@ -42,12 +42,12 @@ module LicenseFinder
           "gradle_command" => nil
         }
         subject = described_class.new(attributes)
-        subject.whitelist.should == []
-        subject.ignore_groups.should == []
-        subject.ignore_dependencies.should == []
-        subject.artifacts.dir.should == Pathname('./doc/')
-        subject.project_name.should_not be_nil
-        subject.gradle_command.should == 'gradle'
+        expect(subject.whitelist).to eq([])
+        expect(subject.ignore_groups).to eq([])
+        expect(subject.ignore_dependencies).to eq([])
+        expect(subject.artifacts.dir).to eq(Pathname('./doc/'))
+        expect(subject.project_name).not_to be_nil
+        expect(subject.gradle_command).to eq('gradle')
       end
 
       it "should set the all of the attributes on the instance" do
@@ -60,36 +60,36 @@ module LicenseFinder
           "gradle_command" => "./gradlew"
         }
         subject = described_class.new(attributes)
-        subject.whitelist.should == %w{a whitelist}
-        subject.ignore_groups.should == %w{test development}
-        subject.ignore_dependencies.should == %w{bundler}
-        subject.artifacts.dir.should == Pathname("some/path")
-        subject.project_name.should == "my_app"
-        subject.gradle_command.should == "./gradlew"
+        expect(subject.whitelist).to eq(%w{a whitelist})
+        expect(subject.ignore_groups).to eq(%w{test development})
+        expect(subject.ignore_dependencies).to eq(%w{bundler})
+        expect(subject.artifacts.dir).to eq(Pathname("some/path"))
+        expect(subject.project_name).to eq("my_app")
+        expect(subject.gradle_command).to eq("./gradlew")
       end
     end
 
     describe "file paths" do
       it "should be relative to artifacts dir" do
         artifacts = described_class.new('dependencies_file_dir' => './elsewhere').artifacts
-        artifacts.dir.should == Pathname('./elsewhere')
-        artifacts.legacy_yaml_file.should == Pathname('./elsewhere/dependencies.yml')
-        artifacts.text_file.should == Pathname('./elsewhere/dependencies.csv')
-        artifacts.html_file.should == Pathname('./elsewhere/dependencies.html')
+        expect(artifacts.dir).to eq(Pathname('./elsewhere'))
+        expect(artifacts.legacy_yaml_file).to eq(Pathname('./elsewhere/dependencies.yml'))
+        expect(artifacts.text_file).to eq(Pathname('./elsewhere/dependencies.csv'))
+        expect(artifacts.html_file).to eq(Pathname('./elsewhere/dependencies.html'))
       end
     end
 
     describe "#database_uri" do
       it "should URI escape absolute path to dependencies_file_dir, even with spaces" do
         artifacts = described_class.new('dependencies_file_dir' => 'test path').artifacts
-        artifacts.database_uri.should =~ %r{test%20path/dependencies\.db$}
+        expect(artifacts.database_uri).to match(%r{test%20path/dependencies\.db$})
       end
     end
 
     describe "#project_name" do
       it "should default to the directory name" do
-        Dir.stub(:getwd).and_return("/path/to/a_project")
-        described_class.new({}).project_name.should == "a_project"
+        allow(Dir).to receive(:getwd).and_return("/path/to/a_project")
+        expect(described_class.new({}).project_name).to eq("a_project")
       end
     end
 
@@ -106,7 +106,7 @@ module LicenseFinder
       end
 
       it "persists the configuration attributes" do
-        Configuration::Persistence.should_receive(:set).with(attributes)
+        expect(Configuration::Persistence).to receive(:set).with(attributes)
         described_class.new(attributes).save
       end
 
@@ -116,7 +116,7 @@ module LicenseFinder
         config.ignore_groups << 'test'
         config.ignore_dependencies << 'bundler'
 
-        Configuration::Persistence.should_receive(:set).with(attributes)
+        expect(Configuration::Persistence).to receive(:set).with(attributes)
         config.save
       end
     end
@@ -150,17 +150,17 @@ module LicenseFinder
         file = double(:file,
                       :exist? => true,
                       :read => {'some' => 'config'}.to_yaml)
-        described_class.stub(:file).and_return(file)
+        allow(described_class).to receive(:file).and_return(file)
 
-        described_class.get.should == {'some' => 'config'}
+        expect(described_class.get).to eq({'some' => 'config'})
       end
 
       it "should not mind if config is not saved" do
         file = double(:file, :exist? => false)
-        described_class.stub(:file).and_return(file)
+        allow(described_class).to receive(:file).and_return(file)
 
-        file.should_not_receive(:read)
-        described_class.get.should == {}
+        expect(file).not_to receive(:read)
+        expect(described_class.get).to eq({})
       end
     end
 
@@ -172,27 +172,27 @@ module LicenseFinder
       end
 
       it "writes the configuration attributes to the yaml file" do
-        described_class.stub(:file).and_return(Pathname.new(tmp_yml))
+        allow(described_class).to receive(:file).and_return(Pathname.new(tmp_yml))
 
         described_class.set('some' => 'config')
-        described_class.get.should == {'some' => 'config'}
+        expect(described_class.get).to eq({'some' => 'config'})
       end
     end
 
     describe ".init" do
       it "initializes the config file" do
         file = double(:file, :exist? => false)
-        described_class.stub(:file).and_return(file)
+        allow(described_class).to receive(:file).and_return(file)
 
-        FileUtils.should_receive(:cp).with(described_class.send(:file_template), file)
+        expect(FileUtils).to receive(:cp).with(described_class.send(:file_template), file)
         described_class.init
       end
 
       it "does nothing if there is already a config file" do
         file = double(:file, :exist? => true)
-        described_class.stub(:file).and_return(file)
+        allow(described_class).to receive(:file).and_return(file)
 
-        FileUtils.should_not_receive(:cp)
+        expect(FileUtils).not_to receive(:cp)
         described_class.init
       end
     end

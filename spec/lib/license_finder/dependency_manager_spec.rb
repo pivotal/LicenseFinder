@@ -5,8 +5,8 @@ module LicenseFinder
     let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
 
     before do
-      LicenseFinder.stub(:config).and_return config
-      Reporter.stub(:write_reports)
+      allow(LicenseFinder).to receive(:config).and_return config
+      allow(Reporter).to receive(:write_reports)
     end
 
     describe "#sync" do
@@ -21,11 +21,11 @@ module LicenseFinder
         Dependency.create(name: "old dependency 2")
 
         current_packages = [gem1, gem2]
-        Bundler.stub(:current_packages) { current_packages }
-        PackageSaver.should_receive(:save_all).with(current_packages).and_return([cur1, cur2])
+        allow(Bundler).to receive(:current_packages) { current_packages }
+        expect(PackageSaver).to receive(:save_all).with(current_packages).and_return([cur1, cur2])
 
         described_class.sync_with_package_managers
-        Dependency.all.map(&:name).should =~ [cur1, cur2, man1].map(&:name)
+        expect(Dependency.all.map(&:name)).to match_array([cur1, cur2, man1].map(&:name))
       end
     end
 
@@ -37,16 +37,16 @@ module LicenseFinder
       end
 
       it "should mark the dependency as manual" do
-        described_class.manually_add("MIT", "js_dep", "0.0.0")
-          .should be_added_manually
+        expect(described_class.manually_add("MIT", "js_dep", "0.0.0"))
+          .to be_added_manually
       end
 
       it "should set the appropriate values" do
         dep = described_class.manually_add("GPL", "js_dep", "0.0.0")
-        dep.name.should == "js_dep"
-        dep.version.should == "0.0.0"
-        dep.license.name.should == "GPL"
-        dep.should_not be_approved
+        expect(dep.name).to eq("js_dep")
+        expect(dep.version).to eq("0.0.0")
+        expect(dep.license.name).to eq("GPL")
+        expect(dep).not_to be_approved
       end
 
       it "should complain if the dependency already exists" do
@@ -79,17 +79,17 @@ module LicenseFinder
         dep = Dependency.named("current dependency")
         dep.license = License.find_by_name('not approved')
         dep.save
-        dep.reload.should_not be_approved
+        expect(dep.reload).not_to be_approved
         described_class.approve!("current dependency")
-        dep.reload.should be_approved
+        expect(dep.reload).to be_approved
       end
 
       it "optionally adds approver and approval notes" do
         dep = Dependency.named("current dependency")
         described_class.approve!("current dependency", "Julian", "We really need this")
         approval = dep.reload.manual_approval
-        approval.approver.should eq "Julian"
-        approval.notes.should eq "We really need this"
+        expect(approval.approver).to eq "Julian"
+        expect(approval.notes).to eq "We really need this"
       end
 
       it "should raise an error if it can't find the dependency" do
@@ -102,8 +102,8 @@ module LicenseFinder
       let(:dependency) { double(:dependency) }
 
       it "adds a license for the dependency" do
-        DependencyManager.stub(:find_by_name).with("dependency").and_return(dependency)
-        dependency.should_receive(:set_license_manually!).with(License.find_by_name "MIT")
+        allow(DependencyManager).to receive(:find_by_name).with("dependency").and_return(dependency)
+        expect(dependency).to receive(:set_license_manually!).with(License.find_by_name "MIT")
         described_class.license!("dependency", "MIT")
       end
 
@@ -119,53 +119,53 @@ module LicenseFinder
 
       context "when the database doesn't exist" do
         before do
-          config.artifacts.stub(:database_file).and_return(file_does_not_exist)
+          allow(config.artifacts).to receive(:database_file).and_return(file_does_not_exist)
         end
 
         it "writes reports" do
-          Reporter.should_receive(:write_reports)
+          expect(Reporter).to receive(:write_reports)
           DependencyManager.modifying {}
         end
       end
 
       context "when the database exists" do
         before do
-          config.artifacts.stub(:database_file).and_return(file_exists)
+          allow(config.artifacts).to receive(:database_file).and_return(file_exists)
         end
 
         context "when the database has changed" do
           before do
             i = 0
-            Digest::SHA2.stub_chain(:file, :hexdigest) { i += 1 }
+            allow(Digest::SHA2).to receive_message_chain(:file, :hexdigest) { i += 1 }
           end
 
           it "writes reports" do
-            Reporter.should_receive(:write_reports)
+            expect(Reporter).to receive(:write_reports)
             DependencyManager.modifying {}
           end
         end
 
         context "when the database has not changed" do
           before do
-            Digest::SHA2.stub_chain(:file, :hexdigest) { 5 }
+            allow(Digest::SHA2).to receive_message_chain(:file, :hexdigest) { 5 }
             allow(config).to receive(:last_modified) { config_last_update }
             allow(config.artifacts).to receive(:last_refreshed) { artifacts_last_update }
           end
 
           context "and the reports do not exist" do
             before do
-              config.artifacts.stub(:html_file).and_return(file_does_not_exist)
+              allow(config.artifacts).to receive(:html_file).and_return(file_does_not_exist)
             end
 
             it "writes reports" do
-              Reporter.should_receive(:write_reports)
+              expect(Reporter).to receive(:write_reports)
               DependencyManager.modifying {}
             end
           end
 
           context "and the reports exist" do
             before do
-              config.artifacts.stub(:html_file).and_return(file_exists)
+              allow(config.artifacts).to receive(:html_file).and_return(file_exists)
             end
 
             context "and configs are newer than the reports" do

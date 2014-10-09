@@ -7,7 +7,7 @@ module LicenseFinder
 
       context "ignoring text" do
         before do
-          subject.stub(:text).and_return('file text')
+          allow(subject).to receive(:text).and_return('file text')
         end
 
         its(:file_path) { should == 'nested/path' }
@@ -19,9 +19,9 @@ module LicenseFinder
 
     context "with a known license" do
       before do
-        subject.stub(:text).and_return('a known license')
+        allow(subject).to receive(:text).and_return('a known license')
 
-        License.stub(:find_by_text).with('a known license').and_return(License.find_by_name("MIT"))
+        allow(License).to receive(:find_by_text).with('a known license').and_return(License.find_by_name("MIT"))
       end
 
       its(:license) { should == License.find_by_name("MIT") }
@@ -29,7 +29,7 @@ module LicenseFinder
 
     context "with an unknown license" do
       before do
-        subject.stub(:text).and_return('')
+        allow(subject).to receive(:text).and_return('')
       end
 
       its(:license) { should be_nil }

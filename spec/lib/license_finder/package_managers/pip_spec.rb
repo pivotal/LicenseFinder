@@ -44,16 +44,16 @@ module LicenseFinder
       let(:requirements) { double(:requirements_file) }
 
       before do
-        Pip.stub(requirements_path: requirements)
+        allow(Pip).to receive_messages(requirements_path: requirements)
       end
 
       it 'is true with a requirements.txt file' do
-        requirements.stub(:exist? => true)
+        allow(requirements).to receive_messages(:exist? => true)
         expect(Pip).to be_active
       end
 
       it 'is false without a requirements.txt file' do
-        requirements.stub(:exist? => false)
+        allow(requirements).to receive_messages(:exist? => false)
         expect(Pip).to_not be_active
       end
     end

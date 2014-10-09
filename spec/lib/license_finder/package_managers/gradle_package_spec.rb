@@ -22,7 +22,7 @@ module LicenseFinder
 
     describe "#license" do
       it "returns the license if found" do
-        subject.license.name.should == "Eclipse Public License - v 1.0"
+        expect(subject.license.name).to eq("Eclipse Public License - v 1.0")
       end
 
       context "when there are multiple licenses" do
@@ -40,7 +40,7 @@ module LicenseFinder
         end
 
         it "returns 'multiple licenses'" do
-          subject.license.name.should == 'multiple licenses: Eclipse Public License - v 1.0, GNU Lesser General Public License'
+          expect(subject.license.name).to eq('multiple licenses: Eclipse Public License - v 1.0, GNU Lesser General Public License')
         end
       end
 
@@ -56,7 +56,7 @@ module LicenseFinder
         end
 
         it "returns 'other' otherwise" do
-          subject.license.name.should == "other"
+          expect(subject.license.name).to eq("other")
         end
       end
     end

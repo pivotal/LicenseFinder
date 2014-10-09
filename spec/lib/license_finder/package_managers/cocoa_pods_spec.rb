@@ -60,16 +60,16 @@ module LicenseFinder
       let(:package) { double(:package_file) }
 
       before do
-        CocoaPods.stub(package_path: package)
+        allow(CocoaPods).to receive_messages(package_path: package)
       end
 
       it 'is true with a Podfile file' do
-        package.stub(:exist? => true)
+        allow(package).to receive_messages(:exist? => true)
         expect(CocoaPods).to be_active
       end
 
       it 'is false without a Podfile file' do
-        package.stub(:exist? => false)
+        allow(package).to receive_messages(:exist? => false)
         expect(CocoaPods).to_not be_active
       end
     end

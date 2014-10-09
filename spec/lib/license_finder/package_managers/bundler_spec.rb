@@ -32,12 +32,12 @@ module LicenseFinder
       end
 
       it "should have 2 dependencies" do
-        subject.size.should == 2
+        expect(subject.size).to eq(2)
       end
 
       context "when initialized with a parent and child gem" do
         before do
-          definition.stub(:specs_for).with([:production]).and_return([
+          allow(definition).to receive(:specs_for).with([:production]).and_return([
             build_gemspec('gem1', '1.2.3', 'gem2'),
             build_gemspec('gem2', '0.4.2', 'gem3')
           ])
@@ -46,13 +46,13 @@ module LicenseFinder
         it "should update the child dependency with its parent data" do
           gem1 = subject.first
 
-          gem1.children.should == ["gem2"]
+          expect(gem1.children).to eq(["gem2"])
         end
 
         it "should only include the children which are project dependencies" do
           gem2 = subject[1]
 
-          gem2.children.should == []
+          expect(gem2.children).to eq([])
         end
       end
     end
@@ -61,16 +61,16 @@ module LicenseFinder
       let(:gemfile) { double(:gemfile_file) }
 
       before do
-        Bundler.stub(gemfile_path: gemfile)
+        allow(Bundler).to receive_messages(gemfile_path: gemfile)
       end
 
       it 'is true with a Gemfile file' do
-        gemfile.stub(:exist? => true)
+        allow(gemfile).to receive_messages(:exist? => true)
         expect(Bundler).to be_active
       end
 
       it 'is false without a Gemfile file' do
-        gemfile.stub(:exist? => false)
+        allow(gemfile).to receive_messages(:exist? => false)
         expect(Bundler).to_not be_active
       end
     end

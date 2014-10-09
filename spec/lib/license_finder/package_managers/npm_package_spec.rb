@@ -25,7 +25,7 @@ module LicenseFinder
 
     describe '#license' do
       def stub_license_files(license_files)
-        PossibleLicenseFiles.stub(:find).with("some/node/package/path").and_return(license_files)
+        allow(PossibleLicenseFiles).to receive(:find).with("some/node/package/path").and_return(license_files)
       end
 
       let(:node_module1) { {"license" => "MIT", "path" => "/some/path"} }
@@ -35,11 +35,11 @@ module LicenseFinder
       let(:misdeclared_node_module) { {"licenses" => {"type" => "MIT"}} }
 
       it 'finds the license for both license structures' do
-        NpmPackage.new(node_module1).license.name.should eq("MIT")
-        NpmPackage.new(node_module2).license.name.should eq("BSD")
-        NpmPackage.new(node_module3).license.name.should eq("Python Software Foundation License")
-        NpmPackage.new(node_module4).license.name.should eq("MIT")
-        NpmPackage.new(misdeclared_node_module).license.name.should eq("MIT")
+        expect(NpmPackage.new(node_module1).license.name).to eq("MIT")
+        expect(NpmPackage.new(node_module2).license.name).to eq("BSD")
+        expect(NpmPackage.new(node_module3).license.name).to eq("Python Software Foundation License")
+        expect(NpmPackage.new(node_module4).license.name).to eq("MIT")
+        expect(NpmPackage.new(misdeclared_node_module).license.name).to eq("MIT")
       end
 
       context "regardless of whether there are licenses in files" do
@@ -65,13 +65,13 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Expat'))
           ])
 
-          subject.license.name.should == "MIT"
+          expect(subject.license.name).to eq("MIT")
         end
 
         it "returns 'other' if there are no licenses in files" do
           stub_license_files []
 
-          subject.license.name.should == "other"
+          expect(subject.license.name).to eq("other")
         end
 
         it "returns 'other' if there are many licenses in files" do
@@ -80,7 +80,7 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Second Detected License'))
           ])
 
-          subject.license.name.should == "multiple licenses: First Detected License, Second Detected License"
+          expect(subject.license.name).to eq("multiple licenses: First Detected License, Second Detected License")
         end
       end
     end

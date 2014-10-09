@@ -28,7 +28,7 @@ module LicenseFinder
 
     describe '#license' do
       def stub_license_files(license_files)
-        PossibleLicenseFiles.stub(:find).with("/path/to/thing").and_return(license_files)
+        allow(PossibleLicenseFiles).to receive(:find).with("/path/to/thing").and_return(license_files)
       end
 
       let(:package1) { { "pkgMeta" => {"license" => "MIT"}, "canonicalDir" => "/some/path" } }
@@ -37,10 +37,10 @@ module LicenseFinder
       let(:package4) { { "pkgMeta" => {"licenses" => ["MIT"]}, "canonicalDir" => "/some/path" } }
 
       it 'finds the license for both license  structures' do
-        BowerPackage.new(package1).license.name.should eq("MIT")
-        BowerPackage.new(package2).license.name.should eq("BSD")
-        BowerPackage.new(package3).license.name.should eq("Python Software Foundation License")
-        BowerPackage.new(package4).license.name.should eq("MIT")
+        expect(BowerPackage.new(package1).license.name).to eq("MIT")
+        expect(BowerPackage.new(package2).license.name).to eq("BSD")
+        expect(BowerPackage.new(package3).license.name).to eq("Python Software Foundation License")
+        expect(BowerPackage.new(package4).license.name).to eq("MIT")
       end
 
 
@@ -67,13 +67,13 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Expat'))
           ])
 
-          subject.license.name.should == "MIT"
+          expect(subject.license.name).to eq("MIT")
         end
 
         it "returns 'other' if there are no licenses in files" do
           stub_license_files []
 
-          subject.license.name.should == "other"
+          expect(subject.license.name).to eq("other")
         end
 
         it "returns 'other' if there are many licenses in files" do
@@ -82,7 +82,7 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Second Detected License'))
           ])
 
-          subject.license.name.should == "multiple licenses: First Detected License, Second Detected License"
+          expect(subject.license.name).to eq("multiple licenses: First Detected License, Second Detected License")
         end
       end
     end
