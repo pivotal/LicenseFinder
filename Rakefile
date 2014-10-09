@@ -29,12 +29,15 @@ task :check_dependencies do
     "pip" => "Python",
     "gradle" => "Gradle"
   }
-  dependencies["pod"] = "Cocoapod" if LicenseFinder::Platform.darwin?
+  dependencies["pod"] = "Cocoapods" if LicenseFinder::Platform.darwin?
   satisfied = true
   dependencies.each do |dependency, description|
+    printf "checking dev dependency for #{description} ... "
     `which #{dependency}` ; status = $?
-    unless status.success?
-      puts "Development dependency missing: `#{dependency}` for #{description}"
+    if status.success?
+      puts "OK"
+    else
+      puts "missing `#{dependency}`"
       satisfied = false
     end
   end
