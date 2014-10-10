@@ -27,25 +27,25 @@ module LicenseFinder
     describe ".needs_conversion?" do
       it "is true if the yml still exists" do
         yaml_file = double(:yaml_file, :exist? => true)
-        LicenseFinder.config.artifacts.stub(legacy_yaml_file: yaml_file)
+        allow(LicenseFinder.config.artifacts).to receive_messages(legacy_yaml_file: yaml_file)
 
-        described_class.needs_conversion?.should be_truthy
+        expect(described_class.needs_conversion?).to be_truthy
       end
 
       it "is false otherwise" do
         yaml_file = double(:yaml_file, :exist? => false)
-        LicenseFinder.config.artifacts.stub(legacy_yaml_file: yaml_file)
+        allow(LicenseFinder.config.artifacts).to receive_messages(legacy_yaml_file: yaml_file)
 
-        described_class.needs_conversion?.should be_falsey
+        expect(described_class.needs_conversion?).to be_falsey
       end
     end
 
     describe ".remove_yml" do
       it "removes the yml file" do
         yaml_file = double(:yaml_file)
-        LicenseFinder.config.artifacts.stub(legacy_yaml_file: yaml_file)
+        allow(LicenseFinder.config.artifacts).to receive_messages(legacy_yaml_file: yaml_file)
 
-        yaml_file.should_receive(:delete)
+        expect(yaml_file).to receive(:delete)
         described_class.remove_yml
       end
     end
@@ -62,7 +62,7 @@ module LicenseFinder
           described_class.convert_all([legacy_attributes])
 
           saved_dep = described_class::Sql::Dependency.first
-          saved_dep.should_not be_added_manually
+          expect(saved_dep).not_to be_added_manually
         end
       end
 
@@ -73,36 +73,36 @@ module LicenseFinder
           described_class.convert_all([legacy_attributes])
 
           saved_dep = described_class::Sql::Dependency.first
-          saved_dep.should be_added_manually
+          expect(saved_dep).to be_added_manually
         end
       end
 
       it "persists all of the dependency's attributes" do
         described_class.convert_all([legacy_attributes])
 
-        described_class::Sql::Dependency.count.should == 1
+        expect(described_class::Sql::Dependency.count).to eq(1)
         saved_dep = described_class::Sql::Dependency.first
-        saved_dep.name.should == "spec_name"
-        saved_dep.version.should == "2.1.3"
-        saved_dep.summary.should == "some summary"
-        saved_dep.description.should == "some description"
-        saved_dep.homepage.should == "www.homepage.com"
-        saved_dep.manual_approval.should be
+        expect(saved_dep.name).to eq("spec_name")
+        expect(saved_dep.version).to eq("2.1.3")
+        expect(saved_dep.summary).to eq("some summary")
+        expect(saved_dep.description).to eq("some description")
+        expect(saved_dep.homepage).to eq("www.homepage.com")
+        expect(saved_dep.manual_approval).to be
       end
 
       it "associates the license to the dependency" do
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        saved_dep.license_names.should == "GPLv2"
+        expect(saved_dep.license_names).to eq("GPLv2")
       end
 
       it "associates bundler groups" do
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        saved_dep.bundler_groups.count.should == 1
-        saved_dep.bundler_groups.first.name.should == 'test'
+        expect(saved_dep.bundler_groups.count).to eq(1)
+        expect(saved_dep.bundler_groups.first.name).to eq('test')
       end
 
       it "associates children" do
@@ -113,10 +113,10 @@ module LicenseFinder
         }
         described_class.convert_all([legacy_attributes, child_attrs])
 
-        described_class::Sql::Dependency.count.should == 2
+        expect(described_class::Sql::Dependency.count).to eq(2)
         saved_dep = described_class::Sql::Dependency.first(name: 'spec_name')
-        saved_dep.children.count.should == 1
-        saved_dep.children.first.name.should == 'child1_name'
+        expect(saved_dep.children.count).to eq(1)
+        expect(saved_dep.children.first.name).to eq('child1_name')
       end
     end
   end

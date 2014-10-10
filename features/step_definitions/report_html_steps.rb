@@ -30,9 +30,9 @@ end
 
 Then(/^I should see my specific gem details listed in the html$/) do
   @user.in_gem_html(@gem_name) do |section|
-    section.find("a[href='#{@gem_homepage}']", text: @gem_name).should be
+    expect(section.find("a[href='#{@gem_homepage}']", text: @gem_name)).to be
     @table.values.each do |property_value|
-      section.should have_content property_value
+      expect(section).to have_content property_value
     end
   end
 end
@@ -47,14 +47,14 @@ end
 
 Then(/^I should see only see GPL liceneses as unapproved in the html$/) do
   @user.in_html do |page|
-    page.should have_content '1 GPL'
+    expect(page).to have_content '1 GPL'
     action_items = page.find('.action-items')
-    action_items.should have_content '(GPL)'
+    expect(action_items).to have_content '(GPL)'
   end
 end
 
 def is_html_status?(gem, approval)
   @user.in_gem_html(gem) do |gpl_gem|
-    gpl_gem[:class].split(' ').should include approval
+    expect(gpl_gem[:class].split(' ')).to include approval
   end
 end

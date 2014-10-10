@@ -28,7 +28,7 @@ module LicenseFinder
 
     describe '#licenses' do
       def stub_license_files(license_files)
-        PossibleLicenseFiles.stub(:find).with("/path/to/thing").and_return(license_files)
+        allow(PossibleLicenseFiles).to receive(:find).with("/path/to/thing").and_return(license_files)
       end
 
       let(:package1) { { "pkgMeta" => {"license" => "MIT"}, "canonicalDir" => "/some/path" } }

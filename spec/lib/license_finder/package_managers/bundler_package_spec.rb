@@ -28,7 +28,7 @@ module LicenseFinder
 
     describe "#licenses" do
       def stub_license_files(license_files)
-        PossibleLicenseFiles.stub(:find).and_return(license_files)
+        allow(PossibleLicenseFiles).to receive(:find).and_return(license_files)
       end
 
       context "regardless of whether there are licenses in files" do
@@ -91,7 +91,7 @@ module LicenseFinder
       let(:bundler_dependency) { double(:dependency, groups: [1, 2, 3]) }
 
       it "returns bundler dependency's groups" do
-        subject.groups.should == bundler_dependency.groups
+        expect(subject.groups).to eq(bundler_dependency.groups)
       end
     end
   end

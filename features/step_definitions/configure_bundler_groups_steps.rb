@@ -18,13 +18,13 @@ When(/^I get the ignored groups$/) do
 end
 
 Then(/^I should not see the test gem in the output$/) do
-  @user.should_not be_seeing 'gpl_gem'
+  expect(@user).to_not be_seeing 'gpl_gem'
 end
 
 Then(/^I should see the test group in the output$/) do
-  @user.should be_seeing 'test'
+  expect(@user).to be_seeing 'test'
 end
 
 Then(/^I should not see the test group in the output$/) do
-  @user.should_not be_seeing 'test'
+  expect(@user).to_not be_seeing 'test'
 end

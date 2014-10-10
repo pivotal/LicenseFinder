@@ -47,7 +47,7 @@ module LicenseFinder
         fake_file = double(:license_report, read: license_xml)
         allow(Gradle).to receive(:license_report).and_return(fake_file)
 
-        GradlePackage.should_receive(:new).with("license" => [{"name" => "License 1"}, {"name" => "License 2"}])
+        expect(GradlePackage).to receive(:new).with("license" => [{"name" => "License 1"}, {"name" => "License 2"}])
         Gradle.current_packages
       end
 
@@ -61,7 +61,7 @@ module LicenseFinder
         fake_file = double(:license_report, read: license_xml)
         allow(Gradle).to receive(:license_report).and_return(fake_file)
 
-        GradlePackage.should_receive(:new).with("license" => [])
+        expect(GradlePackage).to receive(:new).with("license" => [])
         Gradle.current_packages
       end
 
@@ -78,16 +78,16 @@ module LicenseFinder
       let(:package) { double(:package_file) }
 
       before do
-        Gradle.stub(package_path: package)
+        allow(Gradle).to receive_messages(package_path: package)
       end
 
       it 'is true with a build.gradle file' do
-        package.stub(:exist? => true)
+        allow(package).to receive_messages(:exist? => true)
         expect(Gradle).to be_active
       end
 
       it 'is false without a build.gradle file' do
-        package.stub(:exist? => false)
+        allow(package).to receive_messages(:exist? => false)
         expect(Gradle).to_not be_active
       end
     end

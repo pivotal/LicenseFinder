@@ -96,7 +96,7 @@ module LicenseFinder
 
       describe "without pypi license" do
         def stub_license_files(license_files)
-          PossibleLicenseFiles.stub(:find).with("jasmine/install/path").and_return(license_files)
+          allow(PossibleLicenseFiles).to receive(:find).with("jasmine/install/path").and_return(license_files)
         end
 
         it 'returns license from file' do

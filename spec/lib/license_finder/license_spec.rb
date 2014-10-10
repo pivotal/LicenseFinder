@@ -4,7 +4,7 @@ module LicenseFinder
   describe License do
     describe ".find_by_name" do
       it "should find a registered license" do
-        License.find_by_name("Apache2").should be_a License
+        expect(License.find_by_name("Apache2")).to be_a License
       end
 
       it "should make an unrecognized license" do
@@ -16,20 +16,20 @@ module LicenseFinder
 
       context "making the default license" do
         it "set the name to 'other'" do
-          License.find_by_name(nil).name.should == "other"
+          expect(License.find_by_name(nil).name).to eq("other")
         end
 
         it "does not equal other uses of the default license" do
-          License.find_by_name(nil).should_not == License.find_by_name(nil)
+          expect(License.find_by_name(nil)).not_to eq(License.find_by_name(nil))
         end
 
         context "when there is a whitelist" do
           before do
-            LicenseFinder.config.stub(:whitelist).and_return(["not empty"])
+            allow(LicenseFinder.config).to receive(:whitelist).and_return(["not empty"])
           end
 
           it "does not blow up" do
-            License.find_by_name(nil).name.should == "other"
+            expect(License.find_by_name(nil).name).to eq("other")
           end
         end
       end
@@ -37,7 +37,7 @@ module LicenseFinder
 
     describe ".find_by_text" do
       it "should find a registered license" do
-        License.find_by_text('This gem is released under the MIT license').should be_a License
+        expect(License.find_by_text('This gem is released under the MIT license')).to be_a License
       end
 
       it "returns nil if not found" do
@@ -60,51 +60,51 @@ module LicenseFinder
 
     describe "#whitelisted?" do
       it "is true if the settings say it is" do
-        make_license.should_not be_whitelisted
-        make_license(whitelisted: true).should be_whitelisted
+        expect(make_license).not_to be_whitelisted
+        expect(make_license(whitelisted: true)).to be_whitelisted
       end
 
       it "can be made true (without mutating original)" do
         original = make_license
         license = original.whitelist
-        license.should_not == original
-        license.should be_whitelisted
-        license.url.should == "http://example.com/license"
-        license.should be_matches_name "Default Short Name"
-        license.should be_matches_text "Default Matcher"
+        expect(license).not_to eq(original)
+        expect(license).to be_whitelisted
+        expect(license.url).to eq("http://example.com/license")
+        expect(license).to be_matches_name "Default Short Name"
+        expect(license).to be_matches_text "Default Matcher"
       end
     end
 
     describe "#matches_name?" do
       it "should match on short_name" do
-        make_license(short_name: "Foo").should be_matches_name "Foo"
+        expect(make_license(short_name: "Foo")).to be_matches_name "Foo"
       end
 
       it "should match on pretty name" do
-        make_license(pretty_name: "Foo").should be_matches_name "Foo"
+        expect(make_license(pretty_name: "Foo")).to be_matches_name "Foo"
       end
 
       it "should match on alternative names" do
         license = make_license(other_names: ["Foo", "Bar"])
-        license.should be_matches_name "Foo"
-        license.should be_matches_name "Bar"
+        expect(license).to be_matches_name "Foo"
+        expect(license).to be_matches_name "Bar"
       end
 
       it "should ignore case" do
-        make_license(pretty_name: "Foo").should be_matches_name "foo"
-        make_license(pretty_name: "foo").should be_matches_name "Foo"
+        expect(make_license(pretty_name: "Foo")).to be_matches_name "foo"
+        expect(make_license(pretty_name: "foo")).to be_matches_name "Foo"
       end
 
       it "should not fail if pretty_name or other_names are omitted" do
-        make_license.should be_matches_name "Default Short Name"
+        expect(make_license).to be_matches_name "Default Short Name"
       end
     end
 
     describe ".matches_text?" do
       it "should match on text" do
         license = make_license(matcher: License::Matcher.from_regex(/The license text/))
-        license.should be_matches_text "The license text"
-        license.should_not be_matches_text "Some other text"
+        expect(license).to be_matches_text "The license text"
+        expect(license).not_to be_matches_text "Some other text"
       end
 
       it "should match regardless of placeholder names, whitespace, or quotes" do
@@ -114,7 +114,7 @@ module LicenseFinder
         LICENSE
         license = make_license(matcher: License::Matcher.from_text(License::Text.normalize_punctuation(license_text)))
 
-        license.should be_matches_text <<-FILE
+        expect(license).to be_matches_text <<-FILE
           The ''company'' of foo bar *%*%*%*%
           shall not be held "responsible" for `anything`.
         FILE
@@ -123,12 +123,12 @@ module LicenseFinder
       it "should match even if whitespace at beginning and end don't match" do
         template = License::Template.new("\nThe license text")
         license = make_license(matcher: License::Matcher.from_template(template))
-        license.should be_matches_text "The license text\n"
+        expect(license).to be_matches_text "The license text\n"
       end
     end
 
     it "should default pretty_name to short_name" do
-      make_license.name.should == "Default Short Name"
+      expect(make_license.name).to eq("Default Short Name")
     end
   end
 end

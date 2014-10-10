@@ -25,7 +25,7 @@ module LicenseFinder
 
     describe '#licenses' do
       def stub_license_files(license_files)
-        PossibleLicenseFiles.stub(:find).with("some/node/package/path").and_return(license_files)
+        allow(PossibleLicenseFiles).to receive(:find).with("some/node/package/path").and_return(license_files)
       end
 
       let(:node_module1) { {"license" => "MIT", "path" => "/some/path"} }

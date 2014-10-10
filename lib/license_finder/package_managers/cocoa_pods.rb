@@ -6,7 +6,7 @@ module LicenseFinder
     def self.current_packages
       podfile = YAML.load_file(lockfile_path)
 
-      acknowledgements = JSON.parse(`plutil -convert json -o - #{Pathname.new('Pods/Pods-acknowledgements.plist').expand_path}`)["PreferenceSpecifiers"]
+      acknowledgements = read_plist(acknowledgements_path)["PreferenceSpecifiers"]
 
       podfile["PODS"].map do |pod|
         pod = pod.keys.first if pod.is_a?(Hash)
@@ -31,5 +31,18 @@ module LicenseFinder
       Pathname.new("Podfile.lock")
     end
 
+    def self.acknowledgements_path
+      filename = 'Pods-acknowledgements.plist'
+      directories = [
+        'Pods',                          # cocoapods < 0.34
+        'Pods/Target Support Files/Pods' # cocoapods >= 0.34
+      ]
+
+      directories.map { |dir| Pathname.new(File.join(dir, filename)) }.find(&:exist?)
+    end
+
+    def self.read_plist pathname
+      JSON.parse(`plutil -convert json -o - '#{pathname.expand_path}'`)
+    end
   end
 end

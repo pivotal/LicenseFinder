@@ -3,46 +3,46 @@ require 'spec_helper'
 describe LicenseFinder::License::Definitions do
   it "should create unrecognized licenses" do
     license = described_class.build_unrecognized("foo", [])
-    license.name.should == "foo"
-    license.url.should be_nil
-    license.should be_matches_name("foo")
-    license.should_not be_matches_text("foo")
-    license.should_not be_whitelisted
+    expect(license.name).to eq("foo")
+    expect(license.url).to be_nil
+    expect(license).to be_matches_name("foo")
+    expect(license).not_to be_matches_text("foo")
+    expect(license).not_to be_whitelisted
   end
 
   it "should whitelist unrecognized licenses" do
     license = described_class.build_unrecognized("foo", ["foo"])
-    license.should be_whitelisted
+    expect(license).to be_whitelisted
   end
 end
 
 describe LicenseFinder::License, "Apache2" do
   it "should be recognized" do |e|
-    described_class.find_by_name("Apache2").url.should be
+    expect(described_class.find_by_name("Apache2").url).to be
   end
 end
 
 describe LicenseFinder::License, "BSD" do
   it "should be recognized" do |e|
-    described_class.find_by_name("BSD").url.should be
+    expect(described_class.find_by_name("BSD").url).to be
   end
 end
 
 describe LicenseFinder::License, "GPLv2" do
   it "should be recognized" do
-    described_class.find_by_name("GPLv2").url.should be
+    expect(described_class.find_by_name("GPLv2").url).to be
   end
 end
 
 describe LicenseFinder::License, "ISC" do
   it "should be recognized" do
-    described_class.find_by_name("ISC").url.should be
+    expect(described_class.find_by_name("ISC").url).to be
   end
 end
 
 describe LicenseFinder::License, "LGPL" do
   it "should be recognized" do
-    described_class.find_by_name("LGPL").url.should be
+    expect(described_class.find_by_name("LGPL").url).to be
   end
 end
 
@@ -51,25 +51,25 @@ describe LicenseFinder::License, "MIT" do
 
   describe "#matches_text?" do
     it "should return true if the text contains the MIT url" do
-      subject.should be_matches_text "MIT License is awesome http://opensource.org/licenses/mit-license"
+      expect(subject).to be_matches_text "MIT License is awesome http://opensource.org/licenses/mit-license"
 
-      subject.should be_matches_text "MIT Licence is awesome http://www.opensource.org/licenses/mit-license"
+      expect(subject).to be_matches_text "MIT Licence is awesome http://www.opensource.org/licenses/mit-license"
 
-      subject.should_not be_matches_text "MIT Licence is awesome http://www!opensource!org/licenses/mit-license"
+      expect(subject).not_to be_matches_text "MIT Licence is awesome http://www!opensource!org/licenses/mit-license"
     end
 
     it "should return true if the text begins with 'The MIT License'" do
-      subject.should be_matches_text "The MIT License"
+      expect(subject).to be_matches_text "The MIT License"
 
-      subject.should be_matches_text "The MIT Licence"
+      expect(subject).to be_matches_text "The MIT Licence"
 
-      subject.should_not be_matches_text "Something else\nThe MIT License"
+      expect(subject).not_to be_matches_text "Something else\nThe MIT License"
     end
 
     it "should return true if the text contains 'is released under the MIT license'" do
-      subject.should be_matches_text "is released under the MIT license"
+      expect(subject).to be_matches_text "is released under the MIT license"
 
-      subject.should be_matches_text "is released under the MIT licence"
+      expect(subject).to be_matches_text "is released under the MIT licence"
     end
   end
 end
@@ -102,7 +102,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     LICENSE
 
-    subject.should be_matches_text license
+    expect(subject).to be_matches_text license
   end
 
   it "should match with the alternate wording of third clause" do
@@ -130,13 +130,13 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     LICENSE
 
-    subject.should be_matches_text license
+    expect(subject).to be_matches_text license
   end
 end
 
 describe LicenseFinder::License, "Python" do
   it "should be recognized" do
-    described_class.find_by_name("Python").url.should be
+    expect(described_class.find_by_name("Python").url).to be
   end
 end
 
@@ -145,21 +145,21 @@ describe LicenseFinder::License, "Ruby" do
 
   describe "#matches?" do
     it "should return true when the Ruby license URL is present" do
-      subject.should be_matches_text "This gem is available under the following license:\nhttp://www.ruby-lang.org/en/LICENSE.txt\nOkay?"
+      expect(subject).to be_matches_text "This gem is available under the following license:\nhttp://www.ruby-lang.org/en/LICENSE.txt\nOkay?"
     end
 
     it "should return false when the Ruby License URL is not present" do
-      subject.should_not be_matches_text "This gem is available under the following license:\nhttp://www.example.com\nOkay?"
+      expect(subject).not_to be_matches_text "This gem is available under the following license:\nhttp://www.example.com\nOkay?"
     end
 
     it "should return false for pathological licenses" do
-      subject.should_not be_matches_text "This gem is available under the following license:\nhttp://wwwzruby-langzorg/en/LICENSEztxt\nOkay?"
+      expect(subject).not_to be_matches_text "This gem is available under the following license:\nhttp://wwwzruby-langzorg/en/LICENSEztxt\nOkay?"
     end
   end
 end
 
 describe LicenseFinder::License, "SimplifiedBSD" do
   it "should be recognized" do
-    described_class.find_by_name("SimplifiedBSD").url.should be
+    expect(described_class.find_by_name("SimplifiedBSD").url).to be
   end
 end
