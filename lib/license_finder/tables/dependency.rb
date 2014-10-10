@@ -76,7 +76,7 @@ module LicenseFinder
 
     def set_licenses(other_licenses)
       return if license_assigned_manually?
-      if licenses.first.name != other_licenses.first.name
+      if licenses.map(&:name).to_set != other_licenses.map(&:name).to_set
         self.licenses = other_licenses
       end
     end

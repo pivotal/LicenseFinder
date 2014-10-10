@@ -172,6 +172,17 @@ module LicenseFinder
         expect(dependency).not_to be_modified
       end
 
+      it "updates the database if an additional license is added" do
+        # See note in PackageSaver#save
+        dependency.licenses = [License.find_by_name("first")]
+        expect(dependency).to be_modified
+        dependency.save
+        expect(dependency).not_to be_modified
+
+        dependency.set_licenses [License.find_by_name("first"), License.find_by_name("second")]
+        expect(dependency).to be_modified
+      end
+
       it "does not change the approval" do
         dependency.licenses = [License.find_by_name("old")]
         dependency.approve!
