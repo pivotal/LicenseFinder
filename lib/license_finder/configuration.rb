@@ -102,9 +102,13 @@ module LicenseFinder
       end
 
       def last_refreshed
-        [database_file, text_file, detailed_text_file, html_file, markdown_file].map do |path|
-          File.mtime(path)
-        end.min
+        [
+          database_file,
+          text_file,
+          detailed_text_file,
+          html_file,
+          markdown_file
+        ].map(&:mtime).min
       end
     end
 
@@ -126,7 +130,7 @@ module LicenseFinder
       end
 
       def last_modified
-        File.mtime(file)
+        file.mtime
       end
 
       private
