@@ -25,7 +25,7 @@ notifications:
 before_install:
   - cd /tmp
   - wget http://services.gradle.org/distributions/gradle-1.11-all.zip
-  - unzip gradle*
+  - unzip -q gradle*
   - rm gradle*.zip
   - mv gradle* ~/gradle
   - cd -
