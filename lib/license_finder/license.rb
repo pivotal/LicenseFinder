@@ -54,6 +54,14 @@ module LicenseFinder
       copy(whitelisted: true)
     end
 
+    def eql?(other)
+      name == other.name
+    end
+
+    def hash
+      name.hash
+    end
+
     private
 
     attr_reader :short_name, :pretty_name, :other_names

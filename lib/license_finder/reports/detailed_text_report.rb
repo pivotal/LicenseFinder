@@ -8,7 +8,7 @@ module LicenseFinder
           csv << [
             s.name,
             s.version,
-            s.license.name,
+            s.licenses.map(&:name).join(','),
             s.summary ? s.summary.strip : "",
             s.description ? s.description.strip : ""
           ]

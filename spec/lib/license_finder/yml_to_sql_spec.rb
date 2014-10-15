@@ -94,7 +94,7 @@ module LicenseFinder
         described_class.convert_all([legacy_attributes])
 
         saved_dep = described_class::Sql::Dependency.first
-        expect(saved_dep.license_name).to eq("GPLv2")
+        expect(saved_dep.license_names).to eq("GPLv2")
       end
 
       it "associates bundler groups" do

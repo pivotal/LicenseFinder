@@ -49,14 +49,15 @@ module LicenseFinder
       end
     end
 
-    describe '#license' do
+    describe '#licenses' do
       describe "with valid pypi license" do
         it "returns the license from 'license' preferentially" do
           data = { "license" => "MIT", "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License' ] }
 
           subject = make_package(data)
 
-          expect(subject.license.name).to eq('MIT')
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq('MIT')
         end
 
         context "when there's no explicit license" do
@@ -65,7 +66,8 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license.name).to eq('Apache 2.0 License')
+            expect(subject.licenses.length).to eq 1
+            expect(subject.licenses.first.name).to eq('Apache 2.0 License')
           end
 
           it "returns 'multiple licenses' if there are multiple licenses in 'classifiers'" do
@@ -73,7 +75,8 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license.name).to eq('multiple licenses: Apache 2.0 License, GPL')
+            expect(subject.licenses.length).to eq 2
+            expect(subject.licenses.map(&:name)).to eq ['Apache 2.0 License', 'GPL']
           end
         end
 
@@ -84,7 +87,8 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license.name).to eq('Apache 2.0 License')
+            expect(subject.licenses.length).to eq 1
+            expect(subject.licenses.first.name).to eq('Apache 2.0 License')
           end
         end
       end
@@ -97,12 +101,14 @@ module LicenseFinder
 
         it 'returns license from file' do
           stub_license_files [double(:license_file, license: License.find_by_name('License from file'))]
-          expect(subject.license.name).to eq('License from file')
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq('License from file')
         end
 
         it 'returns other if no license can be found' do
           stub_license_files []
-          expect(subject.license.name).to eq('other')
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq('other')
         end
       end
     end

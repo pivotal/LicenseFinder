@@ -12,8 +12,8 @@ module LicenseFinder
     def groups; []; end
     def children; []; end
 
-    def license
-      License.find_by_text(@license_text.to_s) || default_license
+    def licenses
+      [License.find_by_text(@license_text.to_s) || default_license].to_set
     end
   end
 end

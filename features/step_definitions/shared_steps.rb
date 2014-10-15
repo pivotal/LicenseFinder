@@ -172,7 +172,12 @@ module DSL
     private
 
     def gemspec_string(gem_name, options)
-      license = options.fetch(:license)
+      if options.has_key?(:license) && options.has_key?(:licenses)
+        raise "Can't specify both `license` and `licenses`"
+      end
+
+      license_key = ([:license, :licenses] & options.keys).first
+      license_value = options.fetch(license_key)
       summary = options.fetch(:summary, "")
       description = options.fetch(:description, "")
       version = options[:version] || "0.0.0"
@@ -184,7 +189,7 @@ module DSL
         s.version = "#{version}"
         s.author = "Cucumber"
         s.summary = "#{summary}"
-        s.license = "#{license}"
+        s.#{license_key} = #{license_value.inspect}
         s.description = "#{description}"
         s.homepage = "#{homepage}"
       end

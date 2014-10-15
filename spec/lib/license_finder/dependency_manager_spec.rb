@@ -45,7 +45,7 @@ module LicenseFinder
         dep = described_class.manually_add("GPL", "js_dep", "0.0.0")
         expect(dep.name).to eq("js_dep")
         expect(dep.version).to eq("0.0.0")
-        expect(dep.license.name).to eq("GPL")
+        expect(dep.licenses.first.name).to eq("GPL")
         expect(dep).not_to be_approved
       end
 
@@ -77,7 +77,7 @@ module LicenseFinder
     describe ".approve!" do
       it "approves the dependency" do
         dep = Dependency.named("current dependency")
-        dep.license = License.find_by_name('not approved')
+        dep.licenses = [License.find_by_name('not approved')].to_set
         dep.save
         expect(dep.reload).not_to be_approved
         described_class.approve!("current dependency")

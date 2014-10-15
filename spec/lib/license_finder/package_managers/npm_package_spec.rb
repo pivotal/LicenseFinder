@@ -23,7 +23,7 @@ module LicenseFinder
     its(:groups) { should == [] }
     its(:children) { should == [] }
 
-    describe '#license' do
+    describe '#licenses' do
       def stub_license_files(license_files)
         allow(PossibleLicenseFiles).to receive(:find).with("some/node/package/path").and_return(license_files)
       end
@@ -35,11 +35,25 @@ module LicenseFinder
       let(:misdeclared_node_module) { {"licenses" => {"type" => "MIT"}} }
 
       it 'finds the license for both license structures' do
-        expect(NpmPackage.new(node_module1).license.name).to eq("MIT")
-        expect(NpmPackage.new(node_module2).license.name).to eq("BSD")
-        expect(NpmPackage.new(node_module3).license.name).to eq("Python Software Foundation License")
-        expect(NpmPackage.new(node_module4).license.name).to eq("MIT")
-        expect(NpmPackage.new(misdeclared_node_module).license.name).to eq("MIT")
+        package = NpmPackage.new(node_module1)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("MIT")
+
+        package = NpmPackage.new(node_module2)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("BSD")
+
+        package = NpmPackage.new(node_module3)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("Python Software Foundation License")
+
+        package = NpmPackage.new(node_module4)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("MIT")
+
+        package = NpmPackage.new(misdeclared_node_module)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("MIT")
       end
 
       context "regardless of whether there are licenses in files" do
@@ -49,12 +63,14 @@ module LicenseFinder
 
         it "returns the license from the spec if there is only one unique license" do
           package = NpmPackage.new({ "licenses" => ["MIT", "Expat"], "path" => "/path/to/thing" })
-          expect(package.license.name).to eq("MIT")
+          expect(package.licenses.length).to eq 1
+          expect(package.licenses.first.name).to eq("MIT")
         end
 
         it "returns 'multiple licenses' if there's more than one license" do
           package = NpmPackage.new({ "licenses" => ["MIT", "BSD"], "path" => "/some/path" })
-          expect(package.license.name).to eq("multiple licenses: MIT, BSD")
+          expect(package.licenses.length).to eq 2
+          expect(package.licenses.map(&:name)).to eq %w(MIT BSD)
         end
       end
 
@@ -65,13 +81,15 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Expat'))
           ])
 
-          expect(subject.license.name).to eq("MIT")
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "MIT"
         end
 
         it "returns 'other' if there are no licenses in files" do
           stub_license_files []
 
-          expect(subject.license.name).to eq("other")
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "other"
         end
 
         it "returns 'other' if there are many licenses in files" do
@@ -80,7 +98,8 @@ module LicenseFinder
             double(:second_file, license: License.find_by_name('Second Detected License'))
           ])
 
-          expect(subject.license.name).to eq("multiple licenses: First Detected License, Second Detected License")
+          expect(subject.licenses.length).to eq 2
+          expect(subject.licenses.map(&:name)).to eq ["First Detected License", "Second Detected License"]
         end
       end
     end

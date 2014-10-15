@@ -18,50 +18,34 @@ module LicenseFinder
       end
     end
 
-    def license
-      @license ||= determine_license
+    def licenses
+      @licenses ||= determine_license
     end
 
     private
 
     def determine_license
       if licenses_from_spec.any?
-        choose_license_from licenses_from_spec
+        licenses_from_spec
       elsif licenses_from_files.any?
-        choose_license_from licenses_from_files
+        licenses_from_files
       else
-        default_license
-      end
-    end
-
-    def choose_license_from licenses
-      if ( licenses.uniq.size > 1 )
-        License.find_by_name "multiple licenses: #{(licenses).map(&:name).uniq.join(', ')}"
-      else
-        licenses.first
+        [default_license].to_set
       end
     end
 
     def licenses_from_spec
       license_names_from_spec.map do |name|
         License.find_by_name(name)
-      end
+      end.to_set
     end
 
     def licenses_from_files
-      license_files.map(&:license).compact
+      license_files.map(&:license).compact.to_set
     end
 
     def license_files
       PossibleLicenseFiles.find(install_path)
-    end
-
-    def multiple_licenses
-      if ( licenses_from_spec.uniq.size > 1 )
-        License.find_by_name "multiple licenses: #{(licenses_from_spec).map(&:name).uniq.join(', ')}"
-      else 
-        License.find_by_name "multiple licenses: #{(licenses_from_files).map(&:name).uniq.join(', ')}"
-      end
     end
 
     def default_license

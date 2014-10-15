@@ -22,9 +22,10 @@ module LicenseFinder
     its(:version) { should == "4.11" }
     its(:description) { should == "" }
 
-    describe "#license" do
+    describe "#licenses" do
       it "returns the license if found" do
-        expect(subject.license.name).to eq("Common Public License Version 1.0")
+        expect(subject.licenses.length).to eq 1
+        expect(subject.licenses.first.name).to eq "Common Public License Version 1.0"
       end
 
       context "when there are multiple licenses" do
@@ -46,7 +47,8 @@ module LicenseFinder
         end
 
         it "returns 'multiple licenses'" do
-          expect(subject.license.name).to eq('multiple licenses: Common Public License Version 1.0, Apache 2')
+          expect(subject.licenses.length).to eq 2
+          expect(subject.licenses.map(&:name)).to eq ['Common Public License Version 1.0', 'Apache 2']
         end
       end
 
@@ -62,7 +64,8 @@ module LicenseFinder
         end
 
         it "returns 'other' otherwise" do
-          expect(subject.license.name).to eq("other")
+          expect(subject.licenses.length).to eq 1
+          expect(subject.licenses.first.name).to eq "other"
         end
       end
     end

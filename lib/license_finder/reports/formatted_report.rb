@@ -7,7 +7,7 @@ module LicenseFinder
 
     def grouped_dependencies
       find_name = lambda do |dep|
-        dep.license.name
+        dep.licenses.map(&:name).sort.join ', '
       end
 
       dependencies.group_by(&find_name).sort_by { |_, group| group.size }.reverse
