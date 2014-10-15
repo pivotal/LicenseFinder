@@ -5,7 +5,7 @@ module LicenseFinder
     let(:package) do
       double(
         :package,
-        licenses: [License.find_by_name('license')],
+        licenses: [License.find_by_name('license')].to_set,
         children: ['child'],
         groups: [:group],
         summary: 'summary',
@@ -69,22 +69,12 @@ module LicenseFinder
           # See note in PackageSaver#save
 
           first_run = described_class.find_or_create_by_name(package)
-          # Can't set this expectation, because rspec method expectations
-          # have no way to allow the real save to happen.
-          # expect(first_run.dependency).to receive(:save)
+          expect(first_run.dependency).to receive(:save).and_call_original
           first_run.save
 
           second_run = described_class.find_or_create_by_name(package)
           expect(second_run.dependency).to_not receive(:save)
           second_run.save
-        end
-
-        it "saves new dependencies" do
-          # Just a sanity check that the above test is testing what we think it
-          # is testing.
-          saver = described_class.find_or_create_by_name(package)
-          expect(saver.dependency).to receive(:save)
-          saver.save
         end
       end
     end

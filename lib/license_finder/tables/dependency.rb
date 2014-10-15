@@ -7,10 +7,10 @@ module LicenseFinder
     composition :licenses,
       composer: ->(d) do
         if d.license_names.nil?
-          [License.find_by_name(nil)]
+          [License.find_by_name(nil)].to_set
         else
           names = JSON.parse(d.license_names)
-          names.map { |n| License.find_by_name(n) }
+          names.map { |n| License.find_by_name(n) }.to_set
         end
       end,
       decomposer: ->(d) { self.license_names = licenses.map(&:name).to_json }
@@ -76,7 +76,7 @@ module LicenseFinder
 
     def set_licenses(other_licenses)
       return if license_assigned_manually?
-      if licenses.map(&:name).to_set != other_licenses.map(&:name).to_set
+      if licenses != other_licenses
         self.licenses = other_licenses
       end
     end

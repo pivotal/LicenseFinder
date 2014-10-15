@@ -15,7 +15,7 @@ module LicenseFinder
         that_ignored = Dependency.create(name: "that ignored dependency", version: '0.0.1')
         approved.approve!
         whitelisted = Dependency.create(name: "approved dependency", version: '0.0.1')
-        whitelisted.licenses = [License.find_by_name('MIT')]
+        whitelisted.licenses = [License.find_by_name('MIT')].to_set
         whitelisted.save
 
         unapproved = Dependency.unapproved
@@ -72,12 +72,12 @@ module LicenseFinder
 
       it "is true if its license is whitelisted" do
         fake_license = double(:license, whitelisted?: true)
-        allow(not_approved_manually).to receive(:licenses).and_return [fake_license]
+        allow(not_approved_manually).to receive(:licenses).and_return [fake_license].to_set
         expect(not_approved_manually).to be_approved
       end
 
       it "is true if one of its licenses is whitelisted" do
-        fake_licenses = [double(:license, whitelisted?: false), double(:license, whitelisted?: true)]
+        fake_licenses = [double(:license, whitelisted?: false), double(:license, whitelisted?: true)].to_set
         allow(not_approved_manually).to receive(:licenses).and_return fake_licenses
         expect(not_approved_manually).to be_approved
       end
@@ -145,49 +145,49 @@ module LicenseFinder
 
       it "keeps a manually assigned license" do
         dependency.set_license_manually! License.find_by_name("manual")
-        dependency.set_licenses [License.find_by_name("new")]
+        dependency.set_licenses [License.find_by_name("new")].to_set
         expect(dependency.licenses.first.name).to eq "manual"
       end
 
       it "saves a new license" do
-        dependency.set_licenses [License.find_by_name("new license")]
+        dependency.set_licenses [License.find_by_name("new license")].to_set
         expect(dependency.licenses.first.name).to eq "new license"
       end
 
       it "updates the license's name" do
-        dependency.licenses = [License.find_by_name("old")]
+        dependency.licenses = [License.find_by_name("old")].to_set
 
-        dependency.set_licenses [License.find_by_name("new license")]
+        dependency.set_licenses [License.find_by_name("new license")].to_set
         expect(dependency.licenses.first.name).to eq "new license"
       end
 
       it "won't update the database if the license isn't changing" do
         # See note in PackageSaver#save
-        dependency.licenses = [License.find_by_name("same")]
+        dependency.licenses = [License.find_by_name("same")].to_set
         expect(dependency).to be_modified
         dependency.save
         expect(dependency).not_to be_modified
 
-        dependency.set_licenses [License.find_by_name("same")]
+        dependency.set_licenses [License.find_by_name("same")].to_set
         expect(dependency).not_to be_modified
       end
 
       it "updates the database if an additional license is added" do
         # See note in PackageSaver#save
-        dependency.licenses = [License.find_by_name("first")]
+        dependency.licenses = [License.find_by_name("first")].to_set
         expect(dependency).to be_modified
         dependency.save
         expect(dependency).not_to be_modified
 
-        dependency.set_licenses [License.find_by_name("first"), License.find_by_name("second")]
+        dependency.set_licenses [License.find_by_name("first"), License.find_by_name("second")].to_set
         expect(dependency).to be_modified
       end
 
       it "does not change the approval" do
-        dependency.licenses = [License.find_by_name("old")]
+        dependency.licenses = [License.find_by_name("old")].to_set
         dependency.approve!
 
-        dependency.set_licenses [License.find_by_name("new license")]
+        dependency.set_licenses [License.find_by_name("new license")].to_set
         expect(dependency).to be_approved
       end
     end

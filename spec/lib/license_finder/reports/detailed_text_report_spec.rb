@@ -9,7 +9,7 @@ module LicenseFinder
           'version' => '1.0',
           'summary' => 'Summary',
           'description' => 'Description',
-          'licenses' => [License.find_by_name('MIT')]
+          'licenses' => [License.find_by_name('MIT')].to_set
         )
       end
 
@@ -19,7 +19,7 @@ module LicenseFinder
           'version' => '1.0',
           'summary' => 'Summary',
           'description' => 'Description',
-          'licenses' => [License.find_by_name('MIT')]
+          'licenses' => [License.find_by_name('MIT')].to_set
         )
       end
 

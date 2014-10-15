@@ -77,7 +77,7 @@ module LicenseFinder
     describe ".approve!" do
       it "approves the dependency" do
         dep = Dependency.named("current dependency")
-        dep.licenses = [License.find_by_name('not approved')]
+        dep.licenses = [License.find_by_name('not approved')].to_set
         dep.save
         expect(dep.reload).not_to be_approved
         described_class.approve!("current dependency")

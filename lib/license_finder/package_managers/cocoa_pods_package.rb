@@ -13,7 +13,7 @@ module LicenseFinder
     def children; []; end
 
     def licenses
-      [License.find_by_text(@license_text.to_s) || default_license]
+      [License.find_by_text(@license_text.to_s) || default_license].to_set
     end
   end
 end
