@@ -76,13 +76,14 @@ module LicenseFinder
 
     def set_licenses(other_licenses)
       return if license_assigned_manually?
+      other_licenses = other_licenses.to_set
       if licenses != other_licenses
         self.licenses = other_licenses
       end
     end
 
     def set_license_manually!(license)
-      self.licenses = [license]
+      self.licenses = [license].to_set
       self.license_assigned_manually = true
       save
     end

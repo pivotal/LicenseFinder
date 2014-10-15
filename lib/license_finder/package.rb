@@ -19,7 +19,7 @@ module LicenseFinder
     end
 
     def licenses
-      @licenses ||= determine_license
+      @licenses ||= determine_license.to_set
     end
 
     private

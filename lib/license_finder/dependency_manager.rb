@@ -15,7 +15,7 @@ module LicenseFinder
 
       modifying {
         dependency = Dependency.new(added_manually: true, name: name, version: version)
-        dependency.licenses = [License.find_by_name(license)]
+        dependency.licenses = [License.find_by_name(license)].to_set
         dependency.save
       }
     end

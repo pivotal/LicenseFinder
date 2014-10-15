@@ -31,7 +31,7 @@ module LicenseFinder
     private
 
     def licenses_from_files
-      []
+      Set.new
     end
 
     def license_names_from_spec
