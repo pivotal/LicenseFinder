@@ -3,6 +3,8 @@
 * Features
 
   * Adding support for CocoaPods >= 0.34. (#118)
+  * For dependencies with multiple licenses, the name of each license is
+    listed, and if any are whitelisted, the dependency is whitelisted
 
 === 1.1.1 / 2014-07-29
 
