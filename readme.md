@@ -18,11 +18,19 @@ With bundler and other dependency management tools, it's easy for your project t
 
 ## Installation
 
-Add license_finder to your project's Gemfile and `bundle`:
+The easiest way to use license_finder is to install it as a command line tool, like brew, awk, gem or bundler:
+
+```sh
+$ gem install license_finder
+```
+
+Though it's less preferrable, if you are using bundler in a Ruby project, you can add license_finder to your Gemfile:
 
 ```ruby
-gem 'license_finder'
+gem 'license_finder', :group => :development
 ```
+
+This approach helps you remember to install license_finder, but can pull in unwanted dependencies, including `bundler`. To mitigate this problem, see ignored_groups in [Configuration](#configuration).
 
 ## Usage
 
@@ -33,11 +41,17 @@ license_finder will generate reports of action items - i.e., dependencies that d
 $ license_finder
 ```
 
+Or, if you installed with bundler:
+
+```sh
+$ bundle exec license_finder
+```
+
 (Note) If you wish to run license_finder without the progress spinner use the --quiet option.
 
 license_finder will include packages for all supported languages, as long as that language has a Gemfile/requirements.txt/package.json in the project directory.
 
-On a brand new Rails project, you could expect license_finder to output something like the following
+On a Rails project, you could expect license_finder to output something like the following
 (assuming you whitelisted the MIT license -- see [Configuration](#configuration)):
 
 ```
@@ -80,7 +94,7 @@ Whenever you have a dependency that falls outside of your whitelist, license_fin
 If your business decides that this is an acceptable risk, you can manually approve the dependency by using the
 `license_finder approve` command.
 
-For example, lets assume you've only
+For example, let's assume you've only
 whitelisted the "MIT" license in your `config/license_finder.yml`. You then add the `awesome_gpl_gem` to your Gemfile,
 which we'll assume is licensed with the `GPL` license. You then run `license_finder` and see
 the gem listed in the output:
