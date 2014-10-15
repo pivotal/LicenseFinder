@@ -225,7 +225,7 @@ module DSL
 
     def bundle_install
       ::Bundler.with_clean_env do
-        shell_out("bundle install --gemfile=#{app_path.join("Gemfile")} --path=#{sandbox_path.join("bundle")}")
+        shell_out("cd #{app_path} && bundle check || bundle install")
       end
     end
 
@@ -291,7 +291,7 @@ Command failed: `%s`
 output: %s
 exit: %d
 EOM
-        message = sprintf message_format, command, stdout.chomp, stderr.chomp, status.exitstatus
+        message = sprintf message_format, command, output.chomp, status.exitstatus
         raise RuntimeError.new(message)
       end
 
