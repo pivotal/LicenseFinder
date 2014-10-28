@@ -3,24 +3,14 @@ require 'httparty'
 
 module LicenseFinder
   class Pip
-    GET_DEPENDENCIES_PY = <<-PYTHON.gsub(/\n+/, ";")
-from pip.util import get_installed_distributions
-
-dists = [(x.project_name, x.version, x.location) for x in get_installed_distributions()]
-dists = ["[\\\"{0}\\\", \\\"{1}\\\", \\\"{2}\\\"]".format(*dist) for dist in dists]
-
-print "[" + ",".join(dists) + "]"
-    PYTHON
-
     def self.current_packages
-      output = `python -c '#{GET_DEPENDENCIES_PY}'`
-
-      JSON(output).map do |(name, version, install_dir)|
+      output = `python #{LicenseFinder::BIN_PATH.join("license_finder_pip.py")}`
+      JSON(output).map do |package|
         PipPackage.new(
-          name,
-          version,
-          File.join(install_dir, name),
-          pypi_def(name, version)
+          package["name"],
+          package["version"],
+          File.join(package["location"], package["name"]),
+          pypi_def(package["name"], package["version"])
         )
       end
     end

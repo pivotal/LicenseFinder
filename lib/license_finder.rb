@@ -4,6 +4,7 @@ require 'erb'
 
 module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname
+  BIN_PATH = ROOT_PATH.join("../bin")
 
   Error = Class.new(StandardError)
 
