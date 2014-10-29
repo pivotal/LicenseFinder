@@ -4,7 +4,7 @@ require 'httparty'
 module LicenseFinder
   class Pip
     def self.current_packages
-      output = `python #{LicenseFinder::BIN_PATH.join("license_finder_pip.py")}`
+      output = `#{LicenseFinder::BIN_PATH.join("license_finder_pip.py")}`
       JSON(output).map do |package|
         PipPackage.new(
           package["name"],
