@@ -11,11 +11,9 @@ module LicenseFinder
 
       private
 
-      def sync_with_spinner
+      def sync_with_package_managers
         die_on_error {
-          spinner {
-            DependencyManager.new.sync_with_package_managers
-          }
+          DependencyManager.new.sync_with_package_managers
         }
       end
 
@@ -24,29 +22,6 @@ module LicenseFinder
       rescue LicenseFinder::Error => e
         say e.message, :red
         exit 1
-      end
-
-      def spinner
-        if options[:quiet]
-          yield
-        else
-          begin
-            thread = Thread.new {
-              wheel = '\|/-'
-              i = 0
-              while true do
-                print "\r ---------- #{wheel[i]} ----------"
-                i = (i + 1) % 4
-              end
-            }
-            yield
-          ensure
-            if thread
-              thread.kill
-              puts "\r" + " "*24
-            end
-          end
-        end
       end
     end
 
@@ -106,7 +81,7 @@ module LicenseFinder
           yield
 
           LicenseFinder.config.save
-          sync_with_spinner
+          sync_with_package_managers
         }
       end
     end
@@ -219,7 +194,7 @@ module LicenseFinder
       method_option :quiet, type: :boolean, desc: "silences loading output"
       desc "rescan", "Find new dependencies. (Default action)"
       def rescan
-        sync_with_spinner
+        sync_with_package_managers
         show_results
       end
 
