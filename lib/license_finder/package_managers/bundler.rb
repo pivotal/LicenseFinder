@@ -5,14 +5,11 @@ module LicenseFinder
     def initialize options={}
       @ignore_groups = options[:ignore_groups] # dependency injection for tests
       @definition    = options[:definition]    # dependency injection for tests
+      @gemfile_path  = options[:gemfile_path]  # dependency injection for tests
     end
 
     def active?
       gemfile_path.exist?
-    end
-
-    def gemfile_path
-      Pathname.new("Gemfile").expand_path
     end
 
     def current_packages
@@ -45,6 +42,10 @@ module LicenseFinder
 
     def bundler_defs
       @bundler_defs ||= definition.dependencies
+    end
+
+    def gemfile_path
+      @gemfile_path ||= Pathname.new("Gemfile").expand_path
     end
 
     def included_groups
