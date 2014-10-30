@@ -62,7 +62,7 @@ module LicenseFinder
     end
 
     def package_managers
-      [Bundler.new, NPM.new, Pip.new, Bower.new, Maven.new, Gradle, CocoaPods]
+      [Bundler.new, NPM.new, Pip.new, Bower.new, Maven.new, Gradle.new, CocoaPods]
     end
 
     def find_by_name(name, scope = Dependency)

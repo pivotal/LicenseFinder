@@ -2,7 +2,7 @@ require "xmlsimple"
 
 module LicenseFinder
   class Gradle
-    def self.current_packages
+    def current_packages
       `#{LicenseFinder.config.gradle_command} downloadLicenses`
 
       xml = license_report.read
@@ -16,17 +16,17 @@ module LicenseFinder
       end
     end
 
-    def self.active?
+    def active?
       package_path.exist?
     end
 
     private
 
-    def self.license_report
+    def license_report
       Pathname.new('build/reports/license/dependency-license.xml')
     end
 
-    def self.package_path
+    def package_path
       Pathname.new('build.gradle')
     end
   end
