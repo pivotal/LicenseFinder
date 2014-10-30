@@ -1,7 +1,7 @@
 require "xmlsimple"
 
 module LicenseFinder
-  class Maven
+  class Maven < PackageManager
     def current_packages
       `mvn license:download-licenses`
 
@@ -16,10 +16,6 @@ module LicenseFinder
       dependencies.map do |dep|
         MavenPackage.new(dep)
       end
-    end
-
-    def active?
-      package_path.exist?
     end
 
     private

@@ -1,7 +1,7 @@
 require 'json'
 
 module LicenseFinder
-  class NPM
+  class NPM < PackageManager
     DEPENDENCY_GROUPS = ["dependencies", "devDependencies", "bundleDependencies", "bundledDependencies"]
 
     def current_packages
@@ -11,10 +11,6 @@ module LicenseFinder
       dependencies.map do |node_module|
         NpmPackage.new(node_module)
       end
-    end
-
-    def active?
-      package_path.exist?
     end
 
     private

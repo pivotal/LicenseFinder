@@ -1,7 +1,7 @@
 require 'json'
 
 module LicenseFinder
-  class Bower
+  class Bower < PackageManager
     def current_packages
       output = `bower list --json`
 
@@ -10,10 +10,6 @@ module LicenseFinder
       json.fetch("dependencies",[]).map do |package|
         BowerPackage.new(package[1])
       end
-    end
-
-    def active?
-      package_path.exist?
     end
 
     private

@@ -1,7 +1,7 @@
 require "json"
 
 module LicenseFinder
-  class CocoaPods
+  class CocoaPods < PackageManager
     def current_packages
       podfile = YAML.load_file(lockfile_path)
 
@@ -14,10 +14,6 @@ module LicenseFinder
         pod_acknowledgment = acknowledgements.detect { |hash| hash["Title"] == pod_name } || {}
         CocoaPodsPackage.new(pod_name, pod_version, pod_acknowledgment["FooterText"])
       end
-    end
-
-    def active?
-      package_path.exist?
     end
 
     private

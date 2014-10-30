@@ -60,19 +60,16 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:package) { double(:package_file) }
-
-      before do
-        allow(cocoa_pods).to receive_messages(package_path: package)
-      end
+      let(:package_path) { double(:package_file) }
+      let(:cocoa_pods) { CocoaPods.new package_path: package_path }
 
       it 'is true with a Podfile file' do
-        allow(package).to receive_messages(:exist? => true)
+        allow(package_path).to receive_messages(:exist? => true)
         expect(cocoa_pods).to be_active
       end
 
       it 'is false without a Podfile file' do
-        allow(package).to receive_messages(:exist? => false)
+        allow(package_path).to receive_messages(:exist? => false)
         expect(cocoa_pods).to_not be_active
       end
     end

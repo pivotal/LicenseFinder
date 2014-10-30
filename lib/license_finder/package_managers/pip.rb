@@ -2,7 +2,7 @@ require 'json'
 require 'httparty'
 
 module LicenseFinder
-  class Pip
+  class Pip < PackageManager
     def current_packages
       output = `#{LicenseFinder::BIN_PATH.join("license_finder_pip.py")}`
       JSON(output).map do |package|
@@ -15,13 +15,9 @@ module LicenseFinder
       end
     end
 
-    def active?
-      requirements_path.exist?
-    end
-
     private
 
-    def requirements_path
+    def package_path
       Pathname.new('requirements.txt')
     end
 

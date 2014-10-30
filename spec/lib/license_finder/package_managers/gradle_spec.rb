@@ -78,19 +78,16 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:package) { double(:package_file) }
-
-      before do
-        allow(gradle).to receive_messages(package_path: package)
-      end
+      let(:package_path) { double(:package_file) }
+      let(:gradle) { Gradle.new package_path: package_path }
 
       it 'is true with a build.gradle file' do
-        allow(package).to receive_messages(:exist? => true)
+        allow(package_path).to receive_messages(:exist? => true)
         expect(gradle).to be_active
       end
 
       it 'is false without a build.gradle file' do
-        allow(package).to receive_messages(:exist? => false)
+        allow(package_path).to receive_messages(:exist? => false)
         expect(gradle).to_not be_active
       end
     end

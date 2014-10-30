@@ -1,15 +1,11 @@
 require "bundler"
 
 module LicenseFinder
-  class Bundler
+  class Bundler < PackageManager
     def initialize options={}
+      super
       @ignore_groups = options[:ignore_groups] # dependency injection for tests
       @definition    = options[:definition]    # dependency injection for tests
-      @gemfile_path  = options[:gemfile_path]  # dependency injection for tests
-    end
-
-    def active?
-      gemfile_path.exist?
     end
 
     def current_packages
@@ -23,7 +19,7 @@ module LicenseFinder
 
     def definition
       # DI
-      @definition ||= ::Bundler::Definition.build(gemfile_path, lockfile_path, nil)
+      @definition ||= ::Bundler::Definition.build(package_path, lockfile_path, nil)
     end
 
     def ignore_groups
@@ -31,9 +27,8 @@ module LicenseFinder
       @ignore_groups ||= LicenseFinder.config.ignore_groups
     end
 
-    def gemfile_path
-      # DI
-      @gemfile_path ||= Pathname.new("Gemfile").expand_path
+    def package_path
+      Pathname.new("Gemfile")
     end
 
     def bundler_defs
@@ -46,7 +41,7 @@ module LicenseFinder
     end
 
     def lockfile_path
-      gemfile_path.dirname.join('Gemfile.lock')
+      package_path.dirname.join('Gemfile.lock')
     end
 
     def format_name(gem)

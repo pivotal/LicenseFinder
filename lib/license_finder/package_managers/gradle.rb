@@ -1,7 +1,7 @@
 require "xmlsimple"
 
 module LicenseFinder
-  class Gradle
+  class Gradle < PackageManager
     def current_packages
       `#{LicenseFinder.config.gradle_command} downloadLicenses`
 
@@ -14,10 +14,6 @@ module LicenseFinder
         d["license"].reject! { |l| l["name"] == "No license found" }
         GradlePackage.new(d)
       end
-    end
-
-    def active?
-      package_path.exist?
     end
 
     private

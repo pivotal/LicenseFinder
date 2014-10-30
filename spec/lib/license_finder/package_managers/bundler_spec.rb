@@ -52,16 +52,16 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:gemfile_path) { double(:gemfile_file) }
-      let(:bundler) { Bundler.new gemfile_path: gemfile_path }
+      let(:package_path) { double(:gemfile_file) }
+      let(:bundler) { Bundler.new package_path: package_path }
 
       it 'is true with a Gemfile file' do
-        allow(gemfile_path).to receive_messages(:exist? => true)
+        allow(package_path).to receive_messages(:exist? => true)
         expect(bundler).to be_active
       end
 
       it 'is false without a Gemfile file' do
-        allow(gemfile_path).to receive_messages(:exist? => false)
+        allow(package_path).to receive_messages(:exist? => false)
         expect(bundler).to_not be_active
       end
     end

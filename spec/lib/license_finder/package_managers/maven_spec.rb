@@ -95,19 +95,16 @@ module LicenseFinder
     end
 
     describe '.active?' do
-      let(:package) { double(:package_file) }
-
-      before do
-        allow(maven).to receive(:package_path).and_return(package)
-      end
+      let(:package_path) { double(:package_file) }
+      let(:maven) { Maven.new package_path: package_path }
 
       it 'is true with a pom.xml file' do
-        allow(package).to receive(:exist?).and_return(true)
+        allow(package_path).to receive(:exist?).and_return(true)
         expect(maven.active?).to eq(true)
       end
 
       it 'is false without a pom.xml file' do
-        allow(package).to receive(:exist?).and_return(false)
+        allow(package_path).to receive(:exist?).and_return(false)
         expect(maven.active?).to eq(false)
       end
     end

@@ -9,6 +9,7 @@ module LicenseFinder
   Error = Class.new(StandardError)
 
   autoload :CLI,                  'license_finder/cli'
+  autoload :PackageManager,       'license_finder/package_manager'
   autoload :DependencyManager,    'license_finder/dependency_manager'
   autoload :PackageSaver,         'license_finder/package_saver'
   autoload :License,              'license_finder/license'
