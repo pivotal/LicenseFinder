@@ -2,6 +2,9 @@ require 'spec_helper'
 
 module LicenseFinder
   describe CocoaPods do
+    let!(:cocoa_pods) { CocoaPods.new }
+    before { allow(CocoaPods).to receive(:new) { cocoa_pods } }
+
     def stub_acknowledgments(hash = {})
       plist = {
         "PreferenceSpecifiers" => [
@@ -12,7 +15,7 @@ module LicenseFinder
         ]
       }
 
-      expect(described_class).to receive(:read_plist).and_return(plist)
+      expect(cocoa_pods).to receive(:read_plist).and_return(plist)
     end
 
     def stub_lockfile(pods)
@@ -32,7 +35,7 @@ module LicenseFinder
         expect(CocoaPodsPackage).to receive(:new).with("JSONKit", "1.5pre", anything)
         expect(CocoaPodsPackage).to receive(:new).with("OpenUDID", "1.0.0", anything)
 
-        current_packages = CocoaPods.current_packages
+        current_packages = cocoa_pods.current_packages
 
         expect(current_packages.size).to eq(3)
       end
@@ -43,7 +46,7 @@ module LicenseFinder
 
         expect(CocoaPodsPackage).to receive(:new).with("Dependency Name", "1.0", "License Text")
 
-        CocoaPods.current_packages
+        cocoa_pods.current_packages
       end
 
       it "handles no licenses" do
@@ -52,7 +55,7 @@ module LicenseFinder
 
         expect(CocoaPodsPackage).to receive(:new).with("Dependency Name", "1.0", nil)
 
-        CocoaPods.current_packages
+        cocoa_pods.current_packages
       end
     end
 
@@ -60,17 +63,17 @@ module LicenseFinder
       let(:package) { double(:package_file) }
 
       before do
-        allow(CocoaPods).to receive_messages(package_path: package)
+        allow(cocoa_pods).to receive_messages(package_path: package)
       end
 
       it 'is true with a Podfile file' do
         allow(package).to receive_messages(:exist? => true)
-        expect(CocoaPods).to be_active
+        expect(cocoa_pods).to be_active
       end
 
       it 'is false without a Podfile file' do
         allow(package).to receive_messages(:exist? => false)
-        expect(CocoaPods).to_not be_active
+        expect(cocoa_pods).to_not be_active
       end
     end
   end

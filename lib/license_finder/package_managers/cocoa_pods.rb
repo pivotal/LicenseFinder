@@ -2,8 +2,7 @@ require "json"
 
 module LicenseFinder
   class CocoaPods
-
-    def self.current_packages
+    def current_packages
       podfile = YAML.load_file(lockfile_path)
 
       acknowledgements = read_plist(acknowledgements_path)["PreferenceSpecifiers"]
@@ -17,21 +16,21 @@ module LicenseFinder
       end
     end
 
-    def self.active?
+    def active?
       package_path.exist?
     end
 
     private
 
-    def self.package_path
+    def package_path
       Pathname.new("Podfile")
     end
 
-    def self.lockfile_path
+    def lockfile_path
       Pathname.new("Podfile.lock")
     end
 
-    def self.acknowledgements_path
+    def acknowledgements_path
       filename = 'Pods-acknowledgements.plist'
       directories = [
         'Pods',                          # cocoapods < 0.34
@@ -41,7 +40,7 @@ module LicenseFinder
       directories.map { |dir| Pathname.new(File.join(dir, filename)) }.find(&:exist?)
     end
 
-    def self.read_plist pathname
+    def read_plist pathname
       JSON.parse(`plutil -convert json -o - '#{pathname.expand_path}'`)
     end
   end
