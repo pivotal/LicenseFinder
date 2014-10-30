@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module LicenseFinder
   describe CocoaPods do
-    let!(:cocoa_pods) { CocoaPods.new }
-    before { allow(CocoaPods).to receive(:new) { cocoa_pods } }
+    let(:cocoa_pods) { CocoaPods.new }
+    it_behaves_like "a subclass of PackageManager"
 
     def stub_acknowledgments(hash = {})
       plist = {

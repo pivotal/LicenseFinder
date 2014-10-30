@@ -2,7 +2,13 @@ require 'digest'
 
 module LicenseFinder
   class DependencyManager
-    def sync_with_package_managers
+    attr_reader :logger
+
+    def initialize options={}
+      @logger = options[:logger] || LicenseFinder::Logger::Default.new
+    end
+
+    def sync_with_package_managers options={}
       modifying {
         current_dependencies = PackageSaver.save_all(current_packages)
 
@@ -59,7 +65,7 @@ module LicenseFinder
 
     def current_packages
       package_managers.
-        map(&:new).
+        map { |pm| pm.new(logger: logger) }.
         select(&:active?).
         map(&:current_packages).
         flatten

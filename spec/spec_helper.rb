@@ -40,4 +40,16 @@ module LicenseFinder
     it { expect { subject.children }.to_not raise_error }
     it { expect { subject.licenses }.to_not raise_error }
   end
+
+  shared_examples "a subclass of PackageManager" do
+    it { expect(described_class.ancestors).to include PackageManager }
+
+    it "logs when it checks for active-ness" do
+      logger = double(:logger)
+      expect(logger).to receive(:active)
+
+      subject = described_class.new logger: logger
+      subject.active?
+    end
+  end
 end

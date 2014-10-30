@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Bower do
-    let!(:bower) { Bower.new }
-    before { allow(Bower).to receive(:new) { bower } }
+    let(:bower) { Bower.new }
+    it_behaves_like "a subclass of PackageManager"
 
     describe '.current_packages' do
       it 'lists all the current packages' do

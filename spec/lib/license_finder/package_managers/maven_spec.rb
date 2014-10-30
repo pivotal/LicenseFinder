@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Maven do
-    let!(:maven) { Maven.new }
-    before { allow(Maven).to receive(:new) { maven } }
+    let(:maven) { Maven.new }
+    it_behaves_like "a subclass of PackageManager"
 
     def license_xml(xml)
       <<-resp

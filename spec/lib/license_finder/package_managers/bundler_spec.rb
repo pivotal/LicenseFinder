@@ -2,6 +2,8 @@ require "spec_helper"
 
 module LicenseFinder
   describe Bundler do
+    it_behaves_like "a subclass of PackageManager"
+
     let(:definition) do
       double('definition', {
         :dependencies => [],

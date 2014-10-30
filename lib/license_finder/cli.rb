@@ -11,9 +11,10 @@ module LicenseFinder
 
       private
 
-      def sync_with_package_managers
+      def sync_with_package_managers options={}
         die_on_error {
-          DependencyManager.new.sync_with_package_managers
+          logger = LicenseFinder::Logger.new options
+          DependencyManager.new(logger: logger).sync_with_package_managers
         }
       end
 
@@ -192,9 +193,10 @@ module LicenseFinder
 
     class Main < Base
       method_option :quiet, type: :boolean, desc: "silences loading output"
+      method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
       desc "rescan", "Find new dependencies. (Default action)"
       def rescan
-        sync_with_package_managers
+        sync_with_package_managers options
         show_results
       end
 

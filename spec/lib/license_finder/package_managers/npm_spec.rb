@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module LicenseFinder
   describe NPM do
-    let!(:npm) { NPM.new }
-    before { allow(NPM).to receive(:new) { npm } }
+    let(:npm) { NPM.new }
+    it_behaves_like "a subclass of PackageManager"
 
     describe '.current_packages' do
       before { NPM.instance_variable_set(:@modules, nil) }
