@@ -2,26 +2,20 @@ require "bundler"
 
 module LicenseFinder
   class Bundler
-    class << self
-      def current_packages(ignore_groups = LicenseFinder.config.ignore_groups, bundler_definition=nil)
-        new(ignore_groups, bundler_definition).packages
-      end
-
-      def active?
-        gemfile_path.exist?
-      end
-
-      def gemfile_path
-        Pathname.new("Gemfile").expand_path
-      end
+    def initialize options={}
+      @ignore_groups = options[:ignore_groups] # dependency injection for tests
+      @definition    = options[:definition]    # dependency injection for tests
     end
 
-    def initialize(ignore_groups, bundler_definition=nil)
-      @definition = bundler_definition || ::Bundler::Definition.build(self.class.gemfile_path, lockfile_path, nil)
-      @ignore_groups = ignore_groups
+    def active?
+      gemfile_path.exist?
     end
 
-    def packages
+    def gemfile_path
+      Pathname.new("Gemfile").expand_path
+    end
+
+    def current_packages
       top_level_gems = Set.new
 
       packages = definition.specs_for(included_groups).map do |gem_def|
@@ -40,7 +34,14 @@ module LicenseFinder
     end
 
     private
-    attr_reader :definition, :ignore_groups
+
+    def definition
+      @definition ||= ::Bundler::Definition.build(gemfile_path, lockfile_path, nil)
+    end
+
+    def ignore_groups
+      @ignore_groups ||= LicenseFinder.config.ignore_groups
+    end
 
     def bundler_defs
       @bundler_defs ||= definition.dependencies
@@ -51,7 +52,7 @@ module LicenseFinder
     end
 
     def lockfile_path
-      self.class.gemfile_path.dirname.join('Gemfile.lock')
+      gemfile_path.dirname.join('Gemfile.lock')
     end
 
     def children_for(gem, top_level_gems)

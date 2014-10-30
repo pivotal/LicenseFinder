@@ -28,7 +28,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       subject do
-        Bundler.current_packages(['dev', 'test'], definition)
+        Bundler.new(ignore_groups: ['dev', 'test'], definition: definition).current_packages
       end
 
       it "should have 2 dependencies" do
@@ -59,19 +59,20 @@ module LicenseFinder
 
     describe '.active?' do
       let(:gemfile) { double(:gemfile_file) }
+      let(:bundler) { Bundler.new }
 
       before do
-        allow(Bundler).to receive_messages(gemfile_path: gemfile)
+        allow(bundler).to receive_messages(gemfile_path: gemfile)
       end
 
       it 'is true with a Gemfile file' do
         allow(gemfile).to receive_messages(:exist? => true)
-        expect(Bundler).to be_active
+        expect(bundler).to be_active
       end
 
       it 'is false without a Gemfile file' do
         allow(gemfile).to receive_messages(:exist? => false)
-        expect(Bundler).to_not be_active
+        expect(bundler).to_not be_active
       end
     end
   end

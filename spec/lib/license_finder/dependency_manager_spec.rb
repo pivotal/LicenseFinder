@@ -13,6 +13,9 @@ module LicenseFinder
     describe "#sync" do
       let(:gem1) { double(:package) }
       let(:gem2) { double(:package) }
+      let!(:bundler) { Bundler.new }
+
+      before { allow(Bundler).to receive(:new) { bundler } }
 
       it "destroys every dependency except for the ones Bundler reports as 'current' or are marked as 'added_manually'" do
         cur1 = Dependency.create(name: "current dependency 1")
@@ -22,7 +25,7 @@ module LicenseFinder
         Dependency.create(name: "old dependency 2")
 
         current_packages = [gem1, gem2]
-        allow(Bundler).to receive(:current_packages) { current_packages }
+        allow(bundler).to receive(:current_packages) { current_packages }
         expect(PackageSaver).to receive(:save_all).with(current_packages).and_return([cur1, cur2])
 
         dependency_manager.sync_with_package_managers
