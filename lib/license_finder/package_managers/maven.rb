@@ -2,7 +2,7 @@ require "xmlsimple"
 
 module LicenseFinder
   class Maven
-    def self.current_packages
+    def current_packages
       `mvn license:download-licenses`
 
       xml = license_report.read
@@ -18,17 +18,17 @@ module LicenseFinder
       end
     end
 
-    def self.active?
+    def active?
       package_path.exist?
     end
 
     private
 
-    def self.license_report
+    def license_report
       Pathname.new('target/generated-resources/licenses.xml')
     end
 
-    def self.package_path
+    def package_path
       Pathname.new('pom.xml')
     end
   end
