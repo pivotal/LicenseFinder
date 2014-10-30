@@ -13,7 +13,7 @@ module LicenseFinder
 
     class Base
       def active package_manager, is_active
-        log package_manager, sprintf("%s active\n", (is_active ? "is" : "not"))
+        log package_manager, sprintf("%s active", (is_active ? "is" : "not"))
       end
 
       def log prefix, string
@@ -34,7 +34,7 @@ module LicenseFinder
 
     class Verbose < Base
       def log prefix, string
-        STDOUT.printf("%s: %s", prefix, string)
+        STDOUT.printf("%s: %s\n", prefix, string)
       end
     end
 
