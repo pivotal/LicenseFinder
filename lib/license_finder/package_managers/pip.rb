@@ -3,7 +3,7 @@ require 'httparty'
 
 module LicenseFinder
   class Pip
-    def self.current_packages
+    def current_packages
       output = `#{LicenseFinder::BIN_PATH.join("license_finder_pip.py")}`
       JSON(output).map do |package|
         PipPackage.new(
@@ -15,17 +15,17 @@ module LicenseFinder
       end
     end
 
-    def self.active?
+    def active?
       requirements_path.exist?
     end
 
     private
 
-    def self.requirements_path
+    def requirements_path
       Pathname.new('requirements.txt')
     end
 
-    def self.pypi_def(name, version)
+    def pypi_def(name, version)
       response = HTTParty.get("https://pypi.python.org/pypi/#{name}/#{version}/json")
       if response.code == 200
         JSON.parse(response.body).fetch("info", {})
