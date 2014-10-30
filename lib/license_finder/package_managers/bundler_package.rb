@@ -4,12 +4,10 @@ module LicenseFinder
     def_delegators :gem_def, :summary, :description, :name, :homepage
 
     attr_reader :gem_def
-    attr_accessor :children
 
     def initialize(gem_def, bundler_def)
       @gem_def = gem_def
       @bundler_def = bundler_def
-      @children = []
     end
 
     def groups
@@ -18,6 +16,10 @@ module LicenseFinder
 
     def version
       gem_def.version.to_s
+    end
+
+    def children
+      gem_def.dependencies.map(&:name)
     end
 
     private

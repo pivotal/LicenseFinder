@@ -24,7 +24,7 @@ module LicenseFinder
     its(:description) { should == "description" }
     its(:homepage) { should == "homepage" }
     its(:groups) { should == [] }
-    its(:children) { should == [] }
+    its(:children) { should == ['foo'] }
 
     describe "#licenses" do
       def stub_license_files(license_files)

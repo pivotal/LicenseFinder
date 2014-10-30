@@ -48,12 +48,6 @@ module LicenseFinder
 
           expect(gem1.children).to eq(["gem2"])
         end
-
-        it "should only include the children which are project dependencies" do
-          gem2 = subject[1]
-
-          expect(gem2.children).to eq([])
-        end
       end
     end
 

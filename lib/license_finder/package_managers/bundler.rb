@@ -13,21 +13,10 @@ module LicenseFinder
     end
 
     def current_packages
-      top_level_gems = Set.new
-
-      packages = definition.specs_for(included_groups).map do |gem_def|
+      definition.specs_for(included_groups).map do |gem_def|
         bundler_def = bundler_defs.detect { |bundler_def| bundler_def.name == gem_def.name }
-
-        top_level_gems << format_name(gem_def)
-
         BundlerPackage.new(gem_def, bundler_def)
       end
-
-      packages.each do |package|
-        package.children = children_for(package, top_level_gems)
-      end
-
-      packages
     end
 
     private
@@ -58,10 +47,6 @@ module LicenseFinder
 
     def lockfile_path
       gemfile_path.dirname.join('Gemfile.lock')
-    end
-
-    def children_for(package, top_level_gems)
-      package.gem_def.dependencies.map(&:name).select { |name| top_level_gems.include? name }
     end
 
     def format_name(gem)
