@@ -58,11 +58,15 @@ module LicenseFinder
     end
 
     def current_packages
-      package_managers.select(&:active?).map(&:current_packages).flatten
+      package_managers.
+        map(&:new).
+        select(&:active?).
+        map(&:current_packages).
+        flatten
     end
 
     def package_managers
-      [Bundler.new, NPM.new, Pip.new, Bower.new, Maven.new, Gradle.new, CocoaPods.new]
+      [Bundler, NPM, Pip, Bower, Maven, Gradle, CocoaPods]
     end
 
     def find_by_name(name, scope = Dependency)
