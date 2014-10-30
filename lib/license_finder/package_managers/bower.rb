@@ -2,8 +2,7 @@ require 'json'
 
 module LicenseFinder
   class Bower
-
-    def self.current_packages
+    def current_packages
       output = `bower list --json`
 
       json = JSON(output)
@@ -13,13 +12,13 @@ module LicenseFinder
       end
     end
 
-    def self.active?
+    def active?
       package_path.exist?
     end
 
     private
 
-    def self.package_path
+    def package_path
       Pathname.new('bower.json')
     end
   end
