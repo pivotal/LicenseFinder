@@ -4,7 +4,7 @@ module LicenseFinder
   class NPM
     DEPENDENCY_GROUPS = ["dependencies", "devDependencies", "bundleDependencies", "bundledDependencies"]
 
-    def self.current_packages
+    def current_packages
       json = npm_json
       dependencies = DEPENDENCY_GROUPS.map { |g| (json[g] || {}).values }.flatten(1).reject{ |d| d.is_a?(String) }
 
@@ -13,13 +13,13 @@ module LicenseFinder
       end
     end
 
-    def self.active?
+    def active?
       package_path.exist?
     end
 
     private
 
-    def self.npm_json
+    def npm_json
       command = "npm list --json --long"
       output, success = capture(command)
       if success
@@ -35,11 +35,11 @@ module LicenseFinder
       json
     end
 
-    def self.capture(command)
+    def capture(command)
       [`#{command}`, $?.success?]
     end
 
-    def self.package_path
+    def package_path
       Pathname.new('package.json')
     end
   end

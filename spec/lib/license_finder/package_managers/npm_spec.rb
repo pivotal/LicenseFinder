@@ -2,6 +2,9 @@ require 'spec_helper'
 
 module LicenseFinder
   describe NPM do
+    let!(:npm) { NPM.new }
+    before { allow(NPM).to receive(:new) { npm } }
+
     describe '.current_packages' do
       before { NPM.instance_variable_set(:@modules, nil) }
 
@@ -62,9 +65,9 @@ module LicenseFinder
             }
           }
         JSON
-        allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
+        allow(npm).to receive(:capture).with(/npm/).and_return([json, true])
 
-        current_packages = NPM.current_packages
+        current_packages = npm.current_packages
 
         expect(current_packages.map(&:name)).to eq(["depjs", "dep2js", "dep3js", "dep5js", "dep4js"])
         expect(current_packages.first).to be_a(Package)
@@ -79,21 +82,21 @@ module LicenseFinder
             }
           }
         JSON
-        allow(NPM).to receive(:capture).with(/npm/).and_return([json, true])
+        allow(npm).to receive(:capture).with(/npm/).and_return([json, true])
 
-        current_packages = NPM.current_packages
+        current_packages = npm.current_packages
 
         expect(current_packages.map(&:name)).to eq([])
       end
 
       it "fails when command fails" do
-        allow(NPM).to receive(:capture).with(/npm/).and_return('Some error', false).once
-        expect { NPM.current_packages }.to raise_error(RuntimeError)
+        allow(npm).to receive(:capture).with(/npm/).and_return('Some error', false).once
+        expect { npm.current_packages }.to raise_error(RuntimeError)
       end
 
       it "does not fail when command fails but produces output" do
-        allow(NPM).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
-        NPM.current_packages
+        allow(npm).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
+        npm.current_packages
       end
     end
 
@@ -101,17 +104,17 @@ module LicenseFinder
       let(:package) { double(:package_file) }
 
       before do
-        allow(NPM).to receive_messages(package_path: package)
+        allow(npm).to receive_messages(package_path: package)
       end
 
       it 'is true with a package.json file' do
         allow(package).to receive_messages(:exist? => true)
-        expect(NPM).to be_active
+        expect(npm).to be_active
       end
 
       it 'is false without a package.json file' do
         allow(package).to receive_messages(:exist? => false)
-        expect(NPM).to_not be_active
+        expect(npm).to_not be_active
       end
     end
   end
