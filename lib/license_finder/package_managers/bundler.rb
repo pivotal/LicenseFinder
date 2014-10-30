@@ -9,6 +9,7 @@ module LicenseFinder
     end
 
     def current_packages
+      
       definition.specs_for(included_groups).map do |gem_def|
         bundler_def = bundler_defs.detect { |bundler_def| bundler_def.name == gem_def.name }
         BundlerPackage.new(gem_def, bundler_def)
@@ -42,10 +43,6 @@ module LicenseFinder
 
     def lockfile_path
       package_path.dirname.join('Gemfile.lock')
-    end
-
-    def format_name(gem)
-      gem.name.split(" ")[0]
     end
   end
 end
