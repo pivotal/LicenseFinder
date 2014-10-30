@@ -15,6 +15,10 @@ module LicenseFinder
       @text ||= @file_path.send(@file_path.respond_to?(:binread) ? :binread : :read)
     end
 
+    def path
+      File.join(@install_path, file_path)
+    end
+
     def license
       License.find_by_text(text)
     end
