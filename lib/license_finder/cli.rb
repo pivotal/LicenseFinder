@@ -14,7 +14,7 @@ module LicenseFinder
       def sync_with_spinner
         die_on_error {
           spinner {
-            DependencyManager.sync_with_package_managers
+            DependencyManager.new.sync_with_package_managers
           }
         }
       end
@@ -76,8 +76,10 @@ module LicenseFinder
       desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
       def add(license, name, version = nil)
         die_on_error {
-          DependencyManager.manually_add(license, name, version)
-          DependencyManager.approve!(name, options[:approver], options[:message]) if options[:approve]
+          DependencyManager.new.tap do |dependency_manager|
+            dependency_manager.manually_add(license, name, version)
+            dependency_manager.approve!(name, options[:approver], options[:message]) if options[:approve]
+          end
         }
         if options[:approve]
           say "The #{name} dependency has been added and approved!", :green
@@ -89,7 +91,7 @@ module LicenseFinder
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
       def remove(name)
         die_on_error {
-          DependencyManager.manually_remove(name)
+          DependencyManager.new.manually_remove(name)
         }
 
         say "The #{name} dependency has been removed.", :green
@@ -235,7 +237,7 @@ module LicenseFinder
       def approve(name, *other_names)
         names = other_names.unshift name
         die_on_error {
-          names.each { |name| DependencyManager.approve!(name, options[:approver], options[:message]) }
+          names.each { |name| DependencyManager.new.approve!(name, options[:approver], options[:message]) }
         }
 
         say "The #{names.join(", ")} dependency has been approved!", :green
@@ -244,7 +246,7 @@ module LicenseFinder
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
         die_on_error {
-          DependencyManager.license!(name, license)
+          DependencyManager.new.license!(name, license)
         }
 
         say "The #{name} dependency has been marked as using #{license} license!", :green

@@ -3,6 +3,7 @@ require 'spec_helper'
 module LicenseFinder
   describe DependencyManager do
     let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
+    let(:dependency_manager) { DependencyManager.new }
 
     before do
       allow(LicenseFinder).to receive(:config).and_return config
@@ -24,7 +25,7 @@ module LicenseFinder
         allow(Bundler).to receive(:current_packages) { current_packages }
         expect(PackageSaver).to receive(:save_all).with(current_packages).and_return([cur1, cur2])
 
-        described_class.sync_with_package_managers
+        dependency_manager.sync_with_package_managers
         expect(Dependency.all.map(&:name)).to match_array([cur1, cur2, man1].map(&:name))
       end
     end
@@ -32,17 +33,17 @@ module LicenseFinder
     describe ".manually_add" do
       it "should add a Dependency" do
         expect do
-          described_class.manually_add("MIT", "js_dep", "0.0.0")
+          dependency_manager.manually_add("MIT", "js_dep", "0.0.0")
         end.to change(Dependency, :count).by(1)
       end
 
       it "should mark the dependency as manual" do
-        expect(described_class.manually_add("MIT", "js_dep", "0.0.0"))
+        expect(dependency_manager.manually_add("MIT", "js_dep", "0.0.0"))
           .to be_added_manually
       end
 
       it "should set the appropriate values" do
-        dep = described_class.manually_add("GPL", "js_dep", "0.0.0")
+        dep = dependency_manager.manually_add("GPL", "js_dep", "0.0.0")
         expect(dep.name).to eq("js_dep")
         expect(dep.version).to eq("0.0.0")
         expect(dep.licenses.first.name).to eq("GPL")
@@ -51,16 +52,16 @@ module LicenseFinder
 
       it "should complain if the dependency already exists" do
         Dependency.create(name: "current dependency 1")
-        expect { described_class.manually_add("GPL", "current dependency 1", "0.0.0") }
+        expect { dependency_manager.manually_add("GPL", "current dependency 1", "0.0.0") }
           .to raise_error(Error)
       end
     end
 
     describe ".manually_remove" do
       it "should remove a manually managed Dependency" do
-        described_class.manually_add("GPL", "a manually managed dep", nil)
+        dependency_manager.manually_add("GPL", "a manually managed dep", nil)
         expect do
-          described_class.manually_remove("a manually managed dep")
+          dependency_manager.manually_remove("a manually managed dep")
         end.to change(Dependency, :count).by(-1)
       end
 
@@ -68,7 +69,7 @@ module LicenseFinder
         Dependency.create(name: "a bundler dep")
         expect do
           expect do
-            described_class.manually_remove("a bundler dep")
+            dependency_manager.manually_remove("a bundler dep")
           end.to raise_error(Error)
         end.to_not change(Dependency, :count)
       end
@@ -80,20 +81,20 @@ module LicenseFinder
         dep.licenses = [License.find_by_name('not approved')].to_set
         dep.save
         expect(dep.reload).not_to be_approved
-        described_class.approve!("current dependency")
+        dependency_manager.approve!("current dependency")
         expect(dep.reload).to be_approved
       end
 
       it "optionally adds approver and approval notes" do
         dep = Dependency.named("current dependency")
-        described_class.approve!("current dependency", "Julian", "We really need this")
+        dependency_manager.approve!("current dependency", "Julian", "We really need this")
         approval = dep.reload.manual_approval
         expect(approval.approver).to eq "Julian"
         expect(approval.notes).to eq "We really need this"
       end
 
       it "should raise an error if it can't find the dependency" do
-        expect { described_class.approve!("non-existent dependency") }
+        expect { dependency_manager.approve!("non-existent dependency") }
           .to raise_error(Error)
       end
     end
@@ -102,13 +103,13 @@ module LicenseFinder
       let(:dependency) { double(:dependency) }
 
       it "adds a license for the dependency" do
-        allow(DependencyManager).to receive(:find_by_name).with("dependency").and_return(dependency)
+        allow(dependency_manager).to receive(:find_by_name).with("dependency").and_return(dependency)
         expect(dependency).to receive(:set_license_manually!).with(License.find_by_name "MIT")
-        described_class.license!("dependency", "MIT")
+        dependency_manager.license!("dependency", "MIT")
       end
 
       it "should raise an error if it can't find the dependency" do
-        expect { described_class.license!("non-existent dependency", "a license") }
+        expect { dependency_manager.license!("non-existent dependency", "a license") }
           .to raise_error(Error)
       end
     end
@@ -124,7 +125,7 @@ module LicenseFinder
 
         it "writes reports" do
           expect(Reporter).to receive(:write_reports)
-          DependencyManager.modifying {}
+          dependency_manager.modifying {}
         end
       end
 
@@ -141,7 +142,7 @@ module LicenseFinder
 
           it "writes reports" do
             expect(Reporter).to receive(:write_reports)
-            DependencyManager.modifying {}
+            dependency_manager.modifying {}
           end
         end
 
@@ -159,7 +160,7 @@ module LicenseFinder
 
             it "writes reports" do
               expect(Reporter).to receive(:write_reports)
-              DependencyManager.modifying {}
+              dependency_manager.modifying {}
             end
           end
 
@@ -173,7 +174,7 @@ module LicenseFinder
               let(:artifacts_last_update) { 1 }
               it "writes reports" do
                 expect(Reporter).to receive(:write_reports)
-                DependencyManager.modifying {}
+                dependency_manager.modifying {}
               end
             end
 
@@ -183,7 +184,7 @@ module LicenseFinder
 
               it "does not write reports" do
                 expect(Reporter).not_to receive(:write_reports)
-                DependencyManager.modifying {}
+                dependency_manager.modifying {}
               end
             end
           end
