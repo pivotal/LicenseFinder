@@ -33,19 +33,23 @@ module LicenseFinder
     private
 
     def definition
+      # DI
       @definition ||= ::Bundler::Definition.build(gemfile_path, lockfile_path, nil)
     end
 
     def ignore_groups
+      # DI
       @ignore_groups ||= LicenseFinder.config.ignore_groups
     end
 
-    def bundler_defs
-      @bundler_defs ||= definition.dependencies
+    def gemfile_path
+      # DI
+      @gemfile_path ||= Pathname.new("Gemfile").expand_path
     end
 
-    def gemfile_path
-      @gemfile_path ||= Pathname.new("Gemfile").expand_path
+    def bundler_defs
+      # memoized
+      @bundler_defs ||= definition.dependencies
     end
 
     def included_groups
