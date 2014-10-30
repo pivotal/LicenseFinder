@@ -25,13 +25,13 @@ module LicenseFinder
     private
 
     def determine_license
-      if licenses_from_spec.any?
-        licenses_from_spec
-      elsif licenses_from_files.any?
-        licenses_from_files
-      else
-        [default_license].to_set
-      end
+      lfs = licenses_from_spec
+      return lfs if lfs.any?
+
+      lff = licenses_from_files
+      return lff if lff.any?
+
+      [default_license].to_set
     end
 
     def licenses_from_spec
