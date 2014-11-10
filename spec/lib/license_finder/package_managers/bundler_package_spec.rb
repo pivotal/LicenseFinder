@@ -4,7 +4,7 @@ module LicenseFinder
   describe BundlerPackage do
     subject { described_class.new(gemspec, nil) }
 
-    it_behaves_like "a subclass of Package"
+    it_behaves_like "a Package"
 
     let(:gemspec) do
       Gem::Specification.new do |s|

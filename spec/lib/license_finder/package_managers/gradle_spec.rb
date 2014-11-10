@@ -3,7 +3,7 @@ require 'spec_helper'
 module LicenseFinder
   describe Gradle do
     let(:gradle) { Gradle.new }
-    it_behaves_like "a subclass of PackageManager"
+    it_behaves_like "a PackageManager"
 
     def license_xml(xml)
       <<-resp

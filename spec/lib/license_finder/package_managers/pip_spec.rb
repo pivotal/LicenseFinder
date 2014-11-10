@@ -3,7 +3,7 @@ require 'spec_helper'
 module LicenseFinder
   describe Pip do
     let(:pip) { Pip.new }
-    it_behaves_like "a subclass of PackageManager"
+    it_behaves_like "a PackageManager"
 
     describe '.current_packages' do
       def stub_pip(stdout)

@@ -4,7 +4,7 @@ module LicenseFinder
   describe PipPackage do
     subject { make_package({}) }
 
-    it_behaves_like "a subclass of Package"
+    it_behaves_like "a Package"
 
     def make_package(pypi_def)
       described_class.new('jasmine', '1.3.1', "jasmine/install/path", pypi_def)

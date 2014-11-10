@@ -16,7 +16,7 @@ module LicenseFinder
       )
     end
 
-    it_behaves_like "a subclass of Package"
+    it_behaves_like "a Package"
 
     its(:name) { should == "dependency-library" }
     its(:version) { should == "1.3.3.7" }

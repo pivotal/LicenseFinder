@@ -13,7 +13,7 @@ module LicenseFinder
       )
     end
 
-    it_behaves_like "a subclass of Package"
+    it_behaves_like "a Package"
 
     its(:name) { should == "jasmine-node" }
     its(:version) { should == "1.3.1" }

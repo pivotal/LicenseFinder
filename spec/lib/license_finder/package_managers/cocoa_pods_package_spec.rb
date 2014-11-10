@@ -7,7 +7,7 @@ module LicenseFinder
     end
     let(:license_text) { nil }
 
-    it_behaves_like "a subclass of Package"
+    it_behaves_like "a Package"
 
     its(:name) { should == "Name" }
     its(:version) { should == "1.0.0" }
