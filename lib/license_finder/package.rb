@@ -57,5 +57,9 @@ module LicenseFinder
     def default_license
       License.find_by_name nil
     end
+
+    def install_path
+      nil
+    end
   end
 end
