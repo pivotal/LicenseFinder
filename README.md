@@ -9,20 +9,22 @@ against a user-defined whitelist, and give you an actionable exception
 report.
 
 * code: https://github.com/pivotal/LicenseFinder
-* support: license-finder@googlegroups.com / https://groups.google.com/forum/#!forum/license-finder
+* support:
+  * license-finder@googlegroups.com
+  * https://groups.google.com/forum/#!forum/license-finder
 * backlog: https://www.pivotaltracker.com/s/projects/234851
 
 ### Supported project types
 
-* Ruby Gems (via bundler)
-* Python Eggs (via pip)
-* Node.js (via npm)
+* Ruby Gems (via `bundler`)
+* Python Eggs (via `pip`)
+* Node.js (via `npm`)
 * Bower
 
 ### Experimental project types 
 
-* Java (via maven)
-* Java (via gradle)
+* Java (via `maven`)
+* Java (via `gradle`)
 * Objective-C (+ CocoaPods)
 
 
