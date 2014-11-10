@@ -2,7 +2,8 @@ module LicenseFinder
   class GradlePackage < Package
     attr_reader :name, :version
 
-    def initialize(gradle_dependency)
+    def initialize(gradle_dependency, options={})
+      super options
       @gradle_dependency = gradle_dependency
       @name = @gradle_dependency["name"].split(":")[1]
       @version = @gradle_dependency["name"].split(":")[2]

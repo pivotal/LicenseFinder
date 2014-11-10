@@ -14,7 +14,7 @@ module LicenseFinder
       dependencies = XmlSimple.xml_in(xml, options)["dependencies"]
 
       dependencies.map do |dep|
-        MavenPackage.new(dep)
+        MavenPackage.new(dep, logger: logger)
       end
     end
 

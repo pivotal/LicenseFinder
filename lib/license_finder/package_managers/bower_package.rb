@@ -1,6 +1,7 @@
 module LicenseFinder
   class BowerPackage < Package
-    def initialize(bower_module)
+    def initialize(bower_module, options={})
+      super options
       @bower_module = bower_module
       @module_metadata = bower_module.fetch("pkgMeta", Hash.new)
     end

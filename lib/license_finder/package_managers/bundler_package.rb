@@ -5,7 +5,8 @@ module LicenseFinder
 
     attr_reader :gem_def
 
-    def initialize(gem_def, bundler_def)
+    def initialize(gem_def, bundler_def, options={})
+      super options
       @gem_def = gem_def
       @bundler_def = bundler_def
     end

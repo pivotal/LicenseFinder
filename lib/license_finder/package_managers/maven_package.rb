@@ -1,6 +1,7 @@
 module LicenseFinder
   class MavenPackage < Package
-    def initialize(mvn_dependency)
+    def initialize(mvn_dependency, options={})
+      super options
       @mvn_dependency = mvn_dependency
     end
 

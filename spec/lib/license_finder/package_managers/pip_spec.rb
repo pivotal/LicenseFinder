@@ -33,7 +33,7 @@ module LicenseFinder
         stub_pip [{"name" => "jasmine", "version" => "1.3.1", "location" => "jasmine/path"}].to_json
         stub_pypi("jasmine", "1.3.1", status: 200, body: JSON.generate(info: {summary: "A summary"}))
 
-        expect(PipPackage).to receive(:new).with("jasmine", "1.3.1", "jasmine/path/jasmine", "summary" => "A summary")
+        expect(PipPackage).to receive(:new).with("jasmine", "1.3.1", "jasmine/path/jasmine", {"summary" => "A summary"}, anything)
         pip.current_packages
       end
 
@@ -41,7 +41,7 @@ module LicenseFinder
         stub_pip [{"name" => "jasmine", "version" => "1.3.1", "location" => "jasmine/path"}].to_json
         stub_pypi("jasmine", "1.3.1", status: 404, body: '')
 
-        expect(PipPackage).to receive(:new).with("jasmine", "1.3.1", "jasmine/path/jasmine", {})
+        expect(PipPackage).to receive(:new).with("jasmine", "1.3.1", "jasmine/path/jasmine", {}, anything)
         pip.current_packages
       end
     end

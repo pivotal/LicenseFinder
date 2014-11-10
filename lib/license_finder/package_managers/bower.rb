@@ -8,7 +8,7 @@ module LicenseFinder
       json = JSON(output)
 
       json.fetch("dependencies",[]).map do |package|
-        BowerPackage.new(package[1])
+        BowerPackage.new(package[1], logger: logger)
       end
     end
 

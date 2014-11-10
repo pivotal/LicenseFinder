@@ -1,6 +1,7 @@
 module LicenseFinder
   class PipPackage < Package
-    def initialize(name, version, install_path, pypi_def)
+    def initialize(name, version, install_path, pypi_def, options={})
+      super options
       @name = name
       @version = version
       @install_path = install_path

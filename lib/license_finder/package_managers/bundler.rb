@@ -12,7 +12,7 @@ module LicenseFinder
       
       definition.specs_for(included_groups).map do |gem_def|
         bundler_def = bundler_defs.detect { |bundler_def| bundler_def.name == gem_def.name }
-        BundlerPackage.new(gem_def, bundler_def)
+        BundlerPackage.new(gem_def, bundler_def, logger: logger)
       end
     end
 

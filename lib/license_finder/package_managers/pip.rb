@@ -10,7 +10,8 @@ module LicenseFinder
           package["name"],
           package["version"],
           File.join(package["location"], package["name"]),
-          pypi_def(package["name"], package["version"])
+          pypi_def(package["name"], package["version"]),
+          logger: logger
         )
       end
     end

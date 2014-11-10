@@ -9,7 +9,7 @@ module LicenseFinder
       dependencies = DEPENDENCY_GROUPS.map { |g| (json[g] || {}).values }.flatten(1).reject{ |d| d.is_a?(String) }
 
       dependencies.map do |node_module|
-        NpmPackage.new(node_module)
+        NpmPackage.new(node_module, logger: logger)
       end
     end
 

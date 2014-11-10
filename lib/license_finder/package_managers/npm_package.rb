@@ -1,6 +1,7 @@
 module LicenseFinder
   class NpmPackage < Package
-    def initialize(node_module)
+    def initialize(node_module, options={})
+      super options
       @node_module = node_module
     end
 

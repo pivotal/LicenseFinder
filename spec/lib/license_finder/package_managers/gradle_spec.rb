@@ -50,7 +50,7 @@ module LicenseFinder
         fake_file = double(:license_report, read: license_xml)
         allow(gradle).to receive(:license_report).and_return(fake_file)
 
-        expect(GradlePackage).to receive(:new).with("license" => [{"name" => "License 1"}, {"name" => "License 2"}])
+        expect(GradlePackage).to receive(:new).with({"license" => [{"name" => "License 1"}, {"name" => "License 2"}]}, anything)
         gradle.current_packages
       end
 
@@ -64,7 +64,7 @@ module LicenseFinder
         fake_file = double(:license_report, read: license_xml)
         allow(gradle).to receive(:license_report).and_return(fake_file)
 
-        expect(GradlePackage).to receive(:new).with("license" => [])
+        expect(GradlePackage).to receive(:new).with({"license" => []}, anything)
         gradle.current_packages
       end
 

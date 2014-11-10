@@ -6,6 +6,8 @@ module LicenseFinder
   #     it_behaves_like "it conforms to interface required by PackageSaver"
   # and see BundlerPackage, PipPackage and NpmPackage
   class Package
+    attr_reader :logger
+
     def self.license_names_from_standard_spec(spec)
       licenses = spec["licenses"] || [spec["license"]].compact
       licenses = [licenses] unless licenses.is_a?(Array)
@@ -16,6 +18,10 @@ module LicenseFinder
           license
         end
       end
+    end
+
+    def initialize options={}
+      @logger = options[:logger] || LicenseFinder::Logger::Default.new
     end
 
     def licenses
