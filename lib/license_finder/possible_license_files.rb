@@ -8,7 +8,7 @@ module LicenseFinder
     end
 
     def initialize(install_path)
-      @install_path = Pathname(install_path)
+      @install_path = install_path ? Pathname(install_path) : nil
     end
 
     def find
@@ -28,6 +28,7 @@ module LicenseFinder
     end
 
     def candidate_files_and_dirs
+      return [] if install_path.nil?
       Pathname.glob(install_path.join('**', CANDIDATE_PATH_WILDCARD))
     end
 
