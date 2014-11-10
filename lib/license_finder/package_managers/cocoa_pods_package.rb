@@ -3,7 +3,8 @@ module LicenseFinder
     attr_reader :name, :version
     attr_reader :summary, :description, :homepage
 
-    def initialize(name, version, license_text)
+    def initialize(name, version, license_text, options={})
+      super options
       @name = name
       @version = version
       @license_text = license_text

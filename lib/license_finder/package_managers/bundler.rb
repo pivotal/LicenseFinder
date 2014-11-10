@@ -1,48 +1,41 @@
 require "bundler"
 
 module LicenseFinder
-  class Bundler
-    class << self
-      def current_packages(ignore_groups = LicenseFinder.config.ignore_groups, bundler_definition=nil)
-        new(ignore_groups, bundler_definition).packages
-      end
-
-      def active?
-        gemfile_path.exist?
-      end
-
-      def gemfile_path
-        Pathname.new("Gemfile").expand_path
-      end
+  class Bundler < PackageManager
+    def initialize options={}
+      super
+      @ignore_groups = options[:ignore_groups] # dependency injection for tests
+      @definition    = options[:definition]    # dependency injection for tests
     end
 
-    def initialize(ignore_groups, bundler_definition=nil)
-      @definition = bundler_definition || ::Bundler::Definition.build(self.class.gemfile_path, lockfile_path, nil)
-      @ignore_groups = ignore_groups
-    end
-
-    def packages
-      top_level_gems = Set.new
-
-      packages = definition.specs_for(included_groups).map do |gem_def|
+    def current_packages
+      logger.log self.class, "including groups #{included_groups.inspect}"
+      definition.specs_for(included_groups).map do |gem_def|
         bundler_def = bundler_defs.detect { |bundler_def| bundler_def.name == gem_def.name }
-
-        top_level_gems << format_name(gem_def)
-
-        BundlerPackage.new(gem_def, bundler_def)
+        BundlerPackage.new(gem_def, bundler_def, logger: logger).tap do |package|
+          logger.package self.class, package
+        end
       end
-
-      packages.each do |gem|
-        gem.children = children_for(gem, top_level_gems)
-      end
-
-      packages
     end
 
     private
-    attr_reader :definition, :ignore_groups
+
+    def definition
+      # DI
+      @definition ||= ::Bundler::Definition.build(package_path, lockfile_path, nil)
+    end
+
+    def ignore_groups
+      # DI
+      @ignore_groups ||= LicenseFinder.config.ignore_groups
+    end
+
+    def package_path
+      Pathname.new("Gemfile")
+    end
 
     def bundler_defs
+      # memoized
       @bundler_defs ||= definition.dependencies
     end
 
@@ -51,15 +44,7 @@ module LicenseFinder
     end
 
     def lockfile_path
-      self.class.gemfile_path.dirname.join('Gemfile.lock')
-    end
-
-    def children_for(gem, top_level_gems)
-      gem.gem_def.dependencies.map(&:name).select { |name| top_level_gems.include? name }
-    end
-
-    def format_name(gem)
-      gem.name.split(" ")[0]
+      package_path.dirname.join('Gemfile.lock')
     end
   end
 end

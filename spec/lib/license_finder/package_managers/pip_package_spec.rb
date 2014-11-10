@@ -4,7 +4,7 @@ module LicenseFinder
   describe PipPackage do
     subject { make_package({}) }
 
-    it_behaves_like "it conforms to interface required by PackageSaver"
+    it_behaves_like "a Package"
 
     def make_package(pypi_def)
       described_class.new('jasmine', '1.3.1', "jasmine/install/path", pypi_def)
@@ -100,7 +100,7 @@ module LicenseFinder
         end
 
         it 'returns license from file' do
-          stub_license_files [double(:license_file, license: License.find_by_name('License from file'))]
+          stub_license_files [double(:license_file, license: License.find_by_name('License from file'), path: "/")]
           expect(subject.licenses.length).to eq 1
           expect(subject.licenses.first.name).to eq('License from file')
         end

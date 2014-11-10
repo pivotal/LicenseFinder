@@ -16,7 +16,7 @@ module LicenseFinder
       )
     end
 
-    it_behaves_like "it conforms to interface required by PackageSaver"
+    it_behaves_like "a Package"
 
     its(:name) { should == "dependency-library" }
     its(:version) { should == "1.3.3.7" }
@@ -57,7 +57,7 @@ module LicenseFinder
 
       context "regardless of whether there are licenses in files" do
         before do
-          stub_license_files [double(:file, license: License.find_by_name('Detected License'))]
+          stub_license_files [double(:file, license: License.find_by_name('Detected License'), path: "/")]
         end
 
         it "returns the license from the spec if there is only one unique license" do
@@ -76,8 +76,8 @@ module LicenseFinder
       context "when there is nothing in the spec" do
         it "returns a license in a file if only one unique license detected" do
           stub_license_files([
-            double(:first_file, license: License.find_by_name('MIT')),
-            double(:second_file, license: License.find_by_name('Expat'))
+            double(:first_file, license: License.find_by_name('MIT'), path: "/"),
+            double(:second_file, license: License.find_by_name('Expat'), path: "/")
           ])
 
           expect(subject.licenses.length).to eq 1
@@ -93,8 +93,8 @@ module LicenseFinder
 
         it "returns 'other' if there are many licenses in files" do
           stub_license_files([
-            double(:first_file, license: License.find_by_name('First Detected License')),
-            double(:second_file, license: License.find_by_name('Second Detected License'))
+            double(:first_file, license: License.find_by_name('First Detected License'), path: "/"),
+            double(:second_file, license: License.find_by_name('Second Detected License'), path: "/")
           ])
 
           expect(subject.licenses.length).to eq 2

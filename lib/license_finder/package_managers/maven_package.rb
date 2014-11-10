@@ -1,6 +1,9 @@
 module LicenseFinder
   class MavenPackage < Package
-    def initialize(mvn_dependency)
+    attr_reader :mvn_dependency
+
+    def initialize(mvn_dependency, options={})
+      super options
       @mvn_dependency = mvn_dependency
     end
 
@@ -30,13 +33,6 @@ module LicenseFinder
 
     def children
       []
-    end
-
-    private
-    attr_reader :mvn_dependency
-
-    def licenses_from_files
-      Set.new
     end
 
     def license_names_from_spec

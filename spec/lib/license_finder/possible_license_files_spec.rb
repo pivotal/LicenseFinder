@@ -7,6 +7,11 @@ module LicenseFinder
     end
 
     describe "#find" do
+      it "is empty if passed a nil install path" do
+        subject = described_class.new nil
+        expect(subject.find).to eq([])
+      end
+
       it "is empty if there aren't any license files" do
         subject = described_class.new('/not/a/dir')
         expect(subject.find).to eq([])

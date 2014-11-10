@@ -14,7 +14,7 @@ module LicenseFinder
       )
     end
 
-    it_behaves_like "it conforms to interface required by PackageSaver"
+    it_behaves_like "a Package"
 
     its(:name) { should == "logback-classic" }
     its(:version) { should == "1.1.1" }

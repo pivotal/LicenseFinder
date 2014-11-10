@@ -11,11 +11,10 @@ module LicenseFinder
 
       private
 
-      def sync_with_spinner
+      def sync_with_package_managers options={}
         die_on_error {
-          spinner {
-            DependencyManager.sync_with_package_managers
-          }
+          logger = LicenseFinder::Logger.new options
+          DependencyManager.new(logger: logger).sync_with_package_managers
         }
       end
 
@@ -24,29 +23,6 @@ module LicenseFinder
       rescue LicenseFinder::Error => e
         say e.message, :red
         exit 1
-      end
-
-      def spinner
-        if options[:quiet]
-          yield
-        else
-          begin
-            thread = Thread.new {
-              wheel = '\|/-'
-              i = 0
-              while true do
-                print "\r ---------- #{wheel[i]} ----------"
-                i = (i + 1) % 4
-              end
-            }
-            yield
-          ensure
-            if thread
-              thread.kill
-              puts "\r" + " "*24
-            end
-          end
-        end
       end
     end
 
@@ -76,8 +52,10 @@ module LicenseFinder
       desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
       def add(license, name, version = nil)
         die_on_error {
-          DependencyManager.manually_add(license, name, version)
-          DependencyManager.approve!(name, options[:approver], options[:message]) if options[:approve]
+          DependencyManager.new.tap do |dependency_manager|
+            dependency_manager.manually_add(license, name, version)
+            dependency_manager.approve!(name, options[:approver], options[:message]) if options[:approve]
+          end
         }
         if options[:approve]
           say "The #{name} dependency has been added and approved!", :green
@@ -89,7 +67,7 @@ module LicenseFinder
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
       def remove(name)
         die_on_error {
-          DependencyManager.manually_remove(name)
+          DependencyManager.new.manually_remove(name)
         }
 
         say "The #{name} dependency has been removed.", :green
@@ -104,7 +82,7 @@ module LicenseFinder
           yield
 
           LicenseFinder.config.save
-          sync_with_spinner
+          sync_with_package_managers
         }
       end
     end
@@ -215,9 +193,10 @@ module LicenseFinder
 
     class Main < Base
       method_option :quiet, type: :boolean, desc: "silences loading output"
+      method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
       desc "rescan", "Find new dependencies. (Default action)"
       def rescan
-        sync_with_spinner
+        sync_with_package_managers options
         show_results
       end
 
@@ -235,7 +214,7 @@ module LicenseFinder
       def approve(name, *other_names)
         names = other_names.unshift name
         die_on_error {
-          names.each { |name| DependencyManager.approve!(name, options[:approver], options[:message]) }
+          names.each { |name| DependencyManager.new.approve!(name, options[:approver], options[:message]) }
         }
 
         say "The #{names.join(", ")} dependency has been approved!", :green
@@ -244,7 +223,7 @@ module LicenseFinder
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
         die_on_error {
-          DependencyManager.license!(name, license)
+          DependencyManager.new.license!(name, license)
         }
 
         say "The #{name} dependency has been marked as using #{license} license!", :green

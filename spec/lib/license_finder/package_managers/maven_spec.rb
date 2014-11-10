@@ -2,6 +2,9 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Maven do
+    let(:maven) { Maven.new }
+    it_behaves_like "a PackageManager"
+
     def license_xml(xml)
       <<-resp
         <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -15,7 +18,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       before do
-        expect(described_class).to receive(:`).with(/mvn/)
+        expect(maven).to receive('`').with(/mvn/)
       end
 
       it 'lists all the current packages' do
@@ -45,9 +48,9 @@ module LicenseFinder
            </dependency>
         """)
         fake_file = double(:license_report, read: license_xml)
-        allow(Maven).to receive(:license_report).and_return(fake_file)
+        allow(maven).to receive(:license_report).and_return(fake_file)
 
-        current_packages = Maven.current_packages
+        current_packages = maven.current_packages
 
         expect(current_packages.size).to eq(2)
         expect(current_packages.first).to be_a(Package)
@@ -68,10 +71,10 @@ module LicenseFinder
         """)
 
         fake_file = double(:license_report, read: license_xml)
-        allow(Maven).to receive(:license_report).and_return(fake_file)
+        allow(maven).to receive(:license_report).and_return(fake_file)
 
-        expect(MavenPackage).to receive(:new).with("licenses" => [{"name" => "License 1"}, {"name" => "License 2"}])
-        Maven.current_packages
+        expect(MavenPackage).to receive(:new).with({"licenses" => [{"name" => "License 1"}, {"name" => "License 2"}]}, anything)
+        maven.current_packages
       end
 
       it "handles no licenses" do
@@ -84,28 +87,25 @@ module LicenseFinder
         """)
 
         fake_file = double(:license_report, read: license_xml)
-        allow(Maven).to receive(:license_report).and_return(fake_file)
+        allow(maven).to receive(:license_report).and_return(fake_file)
 
-        expect(MavenPackage).to receive(:new).with("licenses" => {})
-        Maven.current_packages
+        expect(MavenPackage).to receive(:new).with({"licenses" => {}}, anything)
+        maven.current_packages
       end
     end
 
     describe '.active?' do
-      let(:package) { double(:package_file) }
-
-      before do
-        allow(Maven).to receive(:package_path).and_return(package)
-      end
+      let(:package_path) { double(:package_file) }
+      let(:maven) { Maven.new package_path: package_path }
 
       it 'is true with a pom.xml file' do
-        allow(package).to receive(:exist?).and_return(true)
-        expect(Maven.active?).to eq(true)
+        allow(package_path).to receive(:exist?).and_return(true)
+        expect(maven.active?).to eq(true)
       end
 
       it 'is false without a pom.xml file' do
-        allow(package).to receive(:exist?).and_return(false)
-        expect(Maven.active?).to eq(false)
+        allow(package_path).to receive(:exist?).and_return(false)
+        expect(maven.active?).to eq(false)
       end
     end
   end

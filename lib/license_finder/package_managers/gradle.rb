@@ -1,8 +1,8 @@
 require "xmlsimple"
 
 module LicenseFinder
-  class Gradle
-    def self.current_packages
+  class Gradle < PackageManager
+    def current_packages
       `#{LicenseFinder.config.gradle_command} downloadLicenses`
 
       xml = license_report.read
@@ -10,23 +10,19 @@ module LicenseFinder
       options = {
         'GroupTags' => { 'dependencies' => 'dependency' }
       }
-      XmlSimple.xml_in(xml, options).fetch('dependency', []).map do |d|
-        d["license"].reject! { |l| l["name"] == "No license found" }
-        GradlePackage.new(d)
+      XmlSimple.xml_in(xml, options).fetch('dependency', []).map do |dep|
+        dep["license"].reject! { |l| l["name"] == "No license found" }
+        GradlePackage.new(dep, logger: logger)
       end
-    end
-
-    def self.active?
-      package_path.exist?
     end
 
     private
 
-    def self.license_report
+    def license_report
       Pathname.new('build/reports/license/dependency-license.xml')
     end
 
-    def self.package_path
+    def package_path
       Pathname.new('build.gradle')
     end
   end

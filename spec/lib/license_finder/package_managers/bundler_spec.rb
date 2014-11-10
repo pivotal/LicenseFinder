@@ -2,6 +2,8 @@ require "spec_helper"
 
 module LicenseFinder
   describe Bundler do
+    it_behaves_like "a PackageManager"
+
     let(:definition) do
       double('definition', {
         :dependencies => [],
@@ -28,7 +30,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       subject do
-        Bundler.current_packages(['dev', 'test'], definition)
+        Bundler.new(ignore_groups: ['dev', 'test'], definition: definition).current_packages
       end
 
       it "should have 2 dependencies" do
@@ -48,30 +50,21 @@ module LicenseFinder
 
           expect(gem1.children).to eq(["gem2"])
         end
-
-        it "should only include the children which are project dependencies" do
-          gem2 = subject[1]
-
-          expect(gem2.children).to eq([])
-        end
       end
     end
 
     describe '.active?' do
-      let(:gemfile) { double(:gemfile_file) }
-
-      before do
-        allow(Bundler).to receive_messages(gemfile_path: gemfile)
-      end
+      let(:package_path) { double(:gemfile_file) }
+      let(:bundler) { Bundler.new package_path: package_path }
 
       it 'is true with a Gemfile file' do
-        allow(gemfile).to receive_messages(:exist? => true)
-        expect(Bundler).to be_active
+        allow(package_path).to receive_messages(:exist? => true)
+        expect(bundler).to be_active
       end
 
       it 'is false without a Gemfile file' do
-        allow(gemfile).to receive_messages(:exist? => false)
-        expect(Bundler).to_not be_active
+        allow(package_path).to receive_messages(:exist? => false)
+        expect(bundler).to_not be_active
       end
     end
   end
