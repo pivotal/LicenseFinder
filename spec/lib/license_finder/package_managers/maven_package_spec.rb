@@ -16,7 +16,7 @@ module LicenseFinder
       )
     end
 
-    it_behaves_like "it conforms to interface required by PackageSaver"
+    it_behaves_like "a subclass of Package"
 
     its(:name) { should == "hamcrest-core" }
     its(:version) { should == "4.11" }
