@@ -3,7 +3,7 @@ require './lib/license_finder/platform'
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.name        = "license_finder"
-  s.version     = "1.1.1"
+  s.version     = "1.2"
 
   s.authors = [
     "Jacob Maine",
