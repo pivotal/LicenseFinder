@@ -9,10 +9,12 @@ module LicenseFinder
     end
 
     def current_packages
-      
+      logger.log self.class, "including groups #{included_groups.inspect}"
       definition.specs_for(included_groups).map do |gem_def|
         bundler_def = bundler_defs.detect { |bundler_def| bundler_def.name == gem_def.name }
-        BundlerPackage.new(gem_def, bundler_def, logger: logger)
+        BundlerPackage.new(gem_def, bundler_def, logger: logger).tap do |package|
+          logger.package self.class, package
+        end
       end
     end
 

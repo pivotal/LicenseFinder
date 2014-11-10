@@ -28,8 +28,6 @@ module LicenseFinder
       @licenses ||= determine_license.to_set
     end
 
-    private
-
     def determine_license
       lfs = licenses_from_spec
       return lfs if lfs.any?
@@ -42,12 +40,18 @@ module LicenseFinder
 
     def licenses_from_spec
       license_names_from_spec.map do |name|
-        License.find_by_name(name)
-      end.to_set
+        License.find_by_name(name).tap do |license|
+          logger.license self.class, self.name, license.name, "from spec" if license
+        end
+      end.compact.to_set
     end
 
     def licenses_from_files
-      license_files.map(&:license).compact.to_set
+      license_files.map do |license_file|
+        license_file.license.tap do |license|
+          logger.license self.class, self.name, license.name, "from file '#{license_file.path}'" if license
+        end
+      end.compact.to_set
     end
 
     def license_files

@@ -1,5 +1,7 @@
 module LicenseFinder
   class MavenPackage < Package
+    attr_reader :mvn_dependency
+
     def initialize(mvn_dependency, options={})
       super options
       @mvn_dependency = mvn_dependency
@@ -32,9 +34,6 @@ module LicenseFinder
     def children
       []
     end
-
-    private
-    attr_reader :mvn_dependency
 
     def license_names_from_spec
       mvn_dependency["licenses"].map { |l| l["name"] }

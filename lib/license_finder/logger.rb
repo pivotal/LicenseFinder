@@ -16,6 +16,22 @@ module LicenseFinder
         log package_manager, sprintf("%s active", (is_active ? "is" : "not"))
       end
 
+      def package package_manager, package
+        dependencies = package.children
+        if dependencies.empty?
+          log package_manager, sprintf("package '%s' has no dependencies", package.name)
+        else
+          log package_manager, sprintf("package '%s' has dependencies:", package.name)
+          dependencies.each do |dep|
+            log package_manager, sprintf("- %s", dep)
+          end
+        end
+      end
+
+      def license package, package_name, license, how
+        log package, sprintf("package %s: found license '%s' %s", package_name, license, how)
+      end
+
       def log prefix, string
         raise NotImplementedError, "#log must be implemented"
       end

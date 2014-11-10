@@ -33,7 +33,7 @@ module LicenseFinder
 
       context "regardless of whether there are licenses in files" do
         before do
-          stub_license_files [double(:file, license: License.find_by_name('Detected License'))]
+          stub_license_files [double(:file, license: License.find_by_name('Detected License'), path: "/")]
         end
 
         context 'if the gemspec provides two synonymous licenses' do
@@ -58,8 +58,8 @@ module LicenseFinder
       context "when there is nothing in the spec" do
         it "returns a license in a file if there is only one unique license detected" do
           stub_license_files([
-            double(:first_file, license: License.find_by_name('MIT')),
-            double(:second_file, license: License.find_by_name('Expat'))
+            double(:first_file, license: License.find_by_name('MIT'), path: "/"),
+            double(:second_file, license: License.find_by_name('Expat'), path: "/")
           ])
 
           expect(subject.licenses.length).to eq 1
@@ -75,8 +75,8 @@ module LicenseFinder
 
         it "returns 'multiple licenses' if there are many licenses in files" do
           stub_license_files([
-            double(:first_file, license: License.find_by_name('First Detected License')),
-            double(:second_file, license: License.find_by_name('Second Detected License'))
+            double(:first_file, license: License.find_by_name('First Detected License'), path: "/"),
+            double(:second_file, license: License.find_by_name('Second Detected License'), path: "/")
           ])
 
           expect(subject.licenses.length).to eq 2

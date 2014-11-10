@@ -100,7 +100,7 @@ module LicenseFinder
         end
 
         it 'returns license from file' do
-          stub_license_files [double(:license_file, license: License.find_by_name('License from file'))]
+          stub_license_files [double(:license_file, license: License.find_by_name('License from file'), path: "/")]
           expect(subject.licenses.length).to eq 1
           expect(subject.licenses.first.name).to eq('License from file')
         end
