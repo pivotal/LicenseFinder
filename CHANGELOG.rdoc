@@ -1,10 +1,12 @@
-=== 1.1.2 / unreleased
+=== 1.2 / 2014-11-10
 
 * Features
 
   * Adding support for CocoaPods >= 0.34. (#118)
   * For dependencies with multiple licenses, the name of each license is
     listed, and if any are whitelisted, the dependency is whitelisted
+  * Added `--debug` option when scanning, to provide details on
+    packages, dependencies and where each license was discovered.
 
 === 1.1.1 / 2014-07-29
 
