@@ -3,8 +3,17 @@ module LicenseFinder
   # systems (gems, npm, pip, etc.) to a common interface.
   #
   # For guidance on adding a new system use the shared behavior
-  #     it_behaves_like "it conforms to interface required by PackageSaver"
-  # and see BundlerPackage, PipPackage and NpmPackage
+  #
+  #     it_behaves_like "a Package"
+  #
+  # Additional guidelines are:
+  #
+  # - if you're going to use Package#licenses ...
+  #   - implement #licenses_names_from_spec
+  #   - implement #install_path
+  # - else
+  #   - implement #licenses
+  #
   class Package
     attr_reader :logger
 
