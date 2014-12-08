@@ -48,7 +48,7 @@ module LicenseFinder
 
         it "returns 'multiple licenses'" do
           expect(subject.licenses.length).to eq 2
-          expect(subject.licenses.map(&:name)).to eq ['Common Public License Version 1.0', 'Apache 2']
+          expect(subject.licenses.map(&:name)).to eq ['Common Public License Version 1.0', 'Apache 2.0']
         end
       end
 
