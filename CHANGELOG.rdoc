@@ -1,3 +1,9 @@
+=== 1.2.1 / unreleased
+
+* Features
+
+  * Can list dependencies that were added manually
+
 === 1.2 / 2014-11-10
 
 * Features

@@ -45,6 +45,13 @@ module LicenseFinder
             end
           end
         end
+
+        describe "list" do
+          it "lists manually added dependencies" do
+            allow(Dependency).to receive(:added_manually) { [double(:dependency, name: 'custom')] }
+            expect(capture_stdout { subject.list }).to match /custom/
+          end
+        end
       end
 
       describe Whitelist do

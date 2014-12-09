@@ -72,6 +72,20 @@ module LicenseFinder
 
         say "The #{name} dependency has been removed.", :green
       end
+
+      desc "list", "List manually added dependencies"
+      def list
+        dependencies = DependencyManager.new.added_manually
+
+        say "Manually Added Dependencies:", :blue
+        if dependencies.any?
+          dependencies.each do |dependency|
+            say dependency.name
+          end
+        else
+          say '(none)'
+        end
+      end
     end
 
     class ConfigSubcommand < Subcommand
