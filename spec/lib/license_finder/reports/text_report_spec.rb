@@ -19,10 +19,18 @@ module LicenseFinder
         )
       end
 
-      subject { TextReport.new([dep2, dep1]).to_s }
+      let(:dep3) do
+        Dependency.new(
+          'name' => 'gem_c',
+          'version' => '2.0',
+          'licenses' => [License.find_by_name('MIT'), License.find_by_name("BSD")].to_set
+        )
+      end
+
+      subject { TextReport.new([dep3, dep2, dep1]).to_s }
 
       it 'should generate a text report with the name, version and license of each dependency, sorted by name' do
-        is_expected.to eq("gem_a, 1.0, MIT\ngem_b, 1.0, MIT")
+        is_expected.to eq("gem_a, 1.0, MIT\ngem_b, 1.0, MIT\ngem_c, 2.0, \"MIT, BSD\"\n")
       end
     end
   end
