@@ -1,9 +1,13 @@
 require 'json'
+require 'open3'
 
 module LicenseFinder
   class Bower < PackageManager
     def current_packages
-      output = `bower list --json`
+      output = nil
+      Open3.popen3('bower list --json') do |i, o, e, w|
+        output = o.read
+      end
 
       json = JSON(output)
 

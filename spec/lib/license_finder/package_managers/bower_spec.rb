@@ -31,7 +31,9 @@ module LicenseFinder
             }
           }
         JSON
-        allow(bower).to receive("`").with(/bower/).and_return(json)
+        bower_stdout = double(:stdout, read: json)
+
+        allow(Open3).to receive(:popen3).with('bower list --json').and_yield('input', bower_stdout, 'err', 'something')
 
         current_packages = bower.current_packages
 
