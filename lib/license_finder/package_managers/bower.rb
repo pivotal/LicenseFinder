@@ -3,7 +3,7 @@ require 'json'
 module LicenseFinder
   class Bower < PackageManager
     def current_packages
-      output = `bower list --json`
+      output = `bower list --json -l action`
 
       json = JSON(output)
 
