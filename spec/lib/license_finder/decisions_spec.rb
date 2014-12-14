@@ -148,5 +148,91 @@ module LicenseFinder
         expect(decisions).to be_ignored_group("development")
       end
     end
+
+    describe "persistence" do
+      def roundtrip(decisions)
+        described_class.restore(decisions.persist)
+      end
+
+      it "can restore added packages" do
+        decisions = roundtrip(
+          subject.
+          add_package("dep", "0.2.0")
+        )
+        packages = decisions.packages
+        expect(packages.size).to eq 1
+        expect(packages.first.name).to eq "dep"
+      end
+
+      it "can restore removed packages" do
+        decisions = roundtrip(
+          subject.
+          add_package("dep").
+          remove_package("dep")
+        )
+        expect(decisions.packages.size).to eq 0
+      end
+
+      it "can restore licenses" do
+        license = roundtrip(
+          subject.license("dep", "MIT")
+        ).license_of("dep")
+        expect(license).to eq License.find_by_name("MIT")
+      end
+
+      it "can restore approvals" do
+        decisions = roundtrip(subject.approve("dep"))
+        expect(decisions).to be_approved("dep")
+      end
+
+      it "can restore whitelists" do
+        decisions = roundtrip(
+          subject.
+          add_package("dep", "MIT").
+          whitelist("MIT")
+        )
+        expect(decisions).to be_approved_license("MIT")
+      end
+
+      it "can restore un-whitelists" do
+        decisions = roundtrip(
+          subject.
+          whitelist("MIT").
+          unwhitelist("MIT")
+        )
+        expect(decisions).not_to be_approved_license("MIT")
+      end
+
+      it "can restore ignorals" do
+        decisions = roundtrip(subject.ignore("dep"))
+        expect(decisions).to be_ignored("dep")
+      end
+
+      it "can restore heeds" do
+        decisions = roundtrip(
+          subject.
+          ignore("dep").
+          heed("dep")
+        )
+        expect(decisions).not_to be_ignored("dep")
+      end
+
+      it "can restore ignored groups" do
+        decisions = roundtrip(
+          subject.
+          ignore_group("development")
+        )
+        expect(decisions).to be_ignored_group("development")
+      end
+
+      it "can restore heeded groups" do
+        decisions = roundtrip(
+          subject.
+          ignore_group("development").
+          heed_group("development")
+        )
+        expect(decisions).not_to be_ignored_group("development")
+      end
+    end
   end
 end

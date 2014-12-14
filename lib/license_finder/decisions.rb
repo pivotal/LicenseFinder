@@ -1,6 +1,33 @@
+require 'csv'
+
 module LicenseFinder
   class Decisions
+    #########
+    # PERSIST
+    #########
+
+    def self.restore(persisted)
+      result = new
+      CSV.parse(persisted).each do |action, *args|
+        result.send(action, *args)
+      end
+      result
+    end
+
+    def persist
+      CSV.generate do |csv|
+        @decisions.each do |decision|
+          csv << decision
+        end
+      end
+    end
+
+    #######
+    # WRITE
+    #######
+
     def initialize
+      @decisions = []
       @packages = {} # could be a Set if ManualPackage's were equal based on name/version
       @licenses = {}
       @approved = Set.new
@@ -9,66 +36,80 @@ module LicenseFinder
       @ignored_groups = Set.new
     end
 
-    def packages
-      @packages.values
-    end
-
     def add_package(name, version = nil)
-      @packages[name.to_s] = ManualPackage.new(name, version)
+      @decisions << [:add_package, name, version]
+      @packages[name] = ManualPackage.new(name, version)
       self
     end
 
     def remove_package(name)
-      @packages.delete(name.to_s)
+      @decisions << [:remove_package, name]
+      @packages.delete(name)
       self
     end
 
     def license(name, lic)
-      @licenses[name.to_s] = License.find_by_name(lic)
+      @decisions << [:license, name, lic]
+      @licenses[name] = License.find_by_name(lic)
       self
     end
 
     def approve(name)
-      @approved << name.to_s
+      @decisions << [:approve, name]
+      @approved << name
       self
     end
 
     def whitelist(lic)
+      @decisions << [:whitelist, lic]
       @whitelisted << License.find_by_name(lic)
       self
     end
 
     def unwhitelist(lic)
+      @decisions << [:unwhitelist, lic]
       @whitelisted.delete(License.find_by_name(lic))
       self
     end
 
     def ignore(name)
-      @ignored << name.to_s
+      @decisions << [:ignore, name]
+      @ignored << name
       self
     end
 
     def heed(name)
-      @ignored.delete(name.to_s)
+      @decisions << [:heed, name]
+      @ignored.delete(name)
       self
     end
 
     def ignore_group(name)
-      @ignored_groups << name.to_s
+      @decisions << [:ignore_group, name]
+      @ignored_groups << name
       self
     end
 
     def heed_group(name)
-      @ignored_groups.delete(name.to_s)
+      @decisions << [:heed_group, name]
+      @ignored_groups.delete(name)
       self
     end
 
+    ######
+    # READ
+    ######
+
+    def packages
+      @packages.values
+    end
+
     def license_of(name)
-      @licenses[name.to_s]
+      @licenses[name]
     end
 
     def approved?(name)
-      @approved.include?(name.to_s)
+      @approved.include?(name)
     end
 
     def approved_license?(lic)
@@ -76,11 +117,11 @@ module LicenseFinder
     end
 
     def ignored?(name)
-      @ignored.include?(name.to_s)
+      @ignored.include?(name)
     end
 
     def ignored_group?(name)
-      @ignored_groups.include?(name.to_s)
+      @ignored_groups.include?(name)
     end
   end
 end
