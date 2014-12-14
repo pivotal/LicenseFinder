@@ -2,8 +2,6 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Decisions do
-    let(:mit) { License.find_by_name("MIT") }
-
     describe ".add_package" do
       it "adds to list of packages" do
         packages = subject.add_package("dep").packages
@@ -37,9 +35,16 @@ module LicenseFinder
     describe ".license" do
       it "will report license for a dependency" do
         license = subject.
-          license("dep", mit).
+          license("dep", "MIT").
           license_of("dep")
-        expect(license).to eq mit
+        expect(license).to eq License.find_by_name("MIT")
+      end
+
+      it "adapts names" do
+        license = subject.
+          license("dep", "Expat").
+          license_of("dep")
+        expect(license).to eq License.find_by_name("MIT")
       end
     end
 
@@ -57,27 +62,42 @@ module LicenseFinder
     describe ".whitelist" do
       it "will report the given license as approved" do
         decisions = subject.
-          add_package("dep", mit).
-          whitelist(mit)
-        expect(decisions).to be_approved_license(mit)
+          add_package("dep", "MIT").
+          whitelist("MIT")
+        expect(decisions).to be_approved_license("MIT")
+      end
+
+      it "adapts names" do
+        decisions = subject.
+          add_package("dep", "MIT").
+          whitelist("Expat")
+        expect(decisions).to be_approved_license("MIT")
       end
     end
 
     describe ".unwhitelist" do
       it "will not report the given license as approved" do
         decisions = subject.
-          whitelist(mit).
-          unwhitelist(mit)
-        expect(decisions).not_to be_approved_license(mit)
+          whitelist("MIT").
+          unwhitelist("MIT")
+        expect(decisions).not_to be_approved_license("MIT")
       end
 
       it "is cumulative" do
         decisions = subject.
-          whitelist(mit).
-          unwhitelist(mit).
-          whitelist(mit)
-        expect(decisions).to be_approved_license(mit)
+          whitelist("MIT").
+          unwhitelist("MIT").
+          whitelist("MIT")
+        expect(decisions).to be_approved_license("MIT")
       end
+
+      it "adapts names" do
+        decisions = subject.
+          whitelist("MIT").
+          unwhitelist("Expat")
+        expect(decisions).not_to be_approved_license("MIT")
+      end
+
     end
 
     describe ".ignore" do

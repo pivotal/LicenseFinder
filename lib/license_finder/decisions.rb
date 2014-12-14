@@ -24,7 +24,7 @@ module LicenseFinder
     end
 
     def license(name, lic)
-      @licenses[name.to_s] = lic
+      @licenses[name.to_s] = License.find_by_name(lic)
       self
     end
 
@@ -34,12 +34,12 @@ module LicenseFinder
     end
 
     def whitelist(lic)
-      @whitelisted << lic
+      @whitelisted << License.find_by_name(lic)
       self
     end
 
     def unwhitelist(lic)
-      @whitelisted.delete(lic)
+      @whitelisted.delete(License.find_by_name(lic))
       self
     end
 
@@ -72,7 +72,7 @@ module LicenseFinder
     end
 
     def approved_license?(lic)
-      @whitelisted.include?(lic)
+      @whitelisted.include?(License.find_by_name(lic))
     end
 
     def ignored?(name)
