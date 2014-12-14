@@ -10,6 +10,7 @@ module LicenseFinder
 
   autoload :Logger,               'license_finder/logger'
   autoload :CLI,                  'license_finder/cli'
+  autoload :Decisions,            'license_finder/decisions'
   autoload :PackageManager,       'license_finder/package_manager'
   autoload :DependencyManager,    'license_finder/dependency_manager'
   autoload :PackageSaver,         'license_finder/package_saver'
@@ -27,6 +28,7 @@ module LicenseFinder
   autoload :Maven,                'license_finder/package_managers/maven'
   autoload :CocoaPods,            'license_finder/package_managers/cocoa_pods'
   autoload :Gradle,               'license_finder/package_managers/gradle'
+  autoload :ManualPackage,        'license_finder/package_managers/manual_package'
   autoload :BowerPackage,         'license_finder/package_managers/bower_package'
   autoload :BundlerPackage,       'license_finder/package_managers/bundler_package'
   autoload :PipPackage,           'license_finder/package_managers/pip_package'
@@ -34,7 +36,6 @@ module LicenseFinder
   autoload :MavenPackage,         'license_finder/package_managers/maven_package'
   autoload :GradlePackage,        'license_finder/package_managers/gradle_package'
   autoload :CocoaPodsPackage,     'license_finder/package_managers/cocoa_pods_package'
-
 
   autoload :BundlerGroup,         'license_finder/tables/bundler_group'
   autoload :Dependency,           'license_finder/tables/dependency'
