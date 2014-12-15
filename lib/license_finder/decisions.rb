@@ -28,7 +28,7 @@ module LicenseFinder
 
     def initialize
       @decisions = []
-      @packages = {} # could be a Set if ManualPackage's were equal based on name/version
+      @packages = Set.new
       @licenses = {}
       @approved = Set.new
       @whitelisted = Set.new
@@ -38,13 +38,13 @@ module LicenseFinder
 
     def add_package(name, version = nil)
       @decisions << [:add_package, name, version]
-      @packages[name] = ManualPackage.new(name, version)
+      @packages << ManualPackage.new(name, version)
       self
     end
 
     def remove_package(name)
       @decisions << [:remove_package, name]
-      @packages.delete(name)
+      @packages.delete(ManualPackage.new(name))
       self
     end
 
@@ -101,7 +101,7 @@ module LicenseFinder
     ######
 
     def packages
-      @packages.values
+      @packages
     end
 
     def license_of(name)
