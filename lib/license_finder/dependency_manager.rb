@@ -42,11 +42,13 @@ module LicenseFinder
     end
 
     def license!(name, license_name)
+      @decisions = decisions.license(name, license_name)
       license = License.find_by_name(license_name)
       modifying { find_by_name(name).set_license_manually!(license) }
     end
 
     def approve!(name, approver = nil, notes = nil)
+      @decisions = decisions.approve(name)
       modifying { find_by_name(name).approve!(approver, notes)  }
     end
 

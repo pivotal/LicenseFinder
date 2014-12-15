@@ -119,6 +119,13 @@ module LicenseFinder
         expect { dependency_manager.approve!("non-existent dependency") }
           .to raise_error(Error)
       end
+
+      it "should add decisions" do
+        dep = Dependency.named("current dependency")
+        dependency_manager.approve!("current dependency")
+        decisions = dependency_manager.decisions
+        expect(decisions).to be_approved("current dependency")
+      end
     end
 
     describe ".license!" do
@@ -133,6 +140,13 @@ module LicenseFinder
       it "should raise an error if it can't find the dependency" do
         expect { dependency_manager.license!("non-existent dependency", "a license") }
           .to raise_error(Error)
+      end
+
+      it "should add decisions" do
+        dep = Dependency.named("dependency")
+        dependency_manager.license!("dependency", "MIT")
+        decisions = dependency_manager.decisions
+        expect(decisions.license_of("dependency")).to eq License.find_by_name("MIT")
       end
     end
 
