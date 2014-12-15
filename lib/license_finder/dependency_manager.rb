@@ -6,7 +6,7 @@ module LicenseFinder
 
     def initialize options={}
       @logger = options[:logger] || LicenseFinder::Logger::Default.new
-      @decisions = options[:decisions]
+      @decisions = options[:decisions] || Decisions.saved!
     end
 
     def sync_with_package_managers options={}
@@ -55,6 +55,7 @@ module LicenseFinder
     def modifying
       checksum_before = checksum
       result = DB.transaction { yield }
+      @decisions.save!
       checksum_after = checksum
 
       database_changed = checksum_before != checksum_after

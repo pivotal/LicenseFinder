@@ -77,6 +77,10 @@ module LicenseFinder
         join("dependencies.db")
       end
 
+      def decisions_file
+        join("dependency_decisions.csv")
+      end
+
       def text_file
         join("dependencies.csv")
       end

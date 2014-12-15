@@ -3,7 +3,11 @@ require 'spec_helper'
 module LicenseFinder
   describe DependencyManager do
     let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
-    let(:decisions) { Decisions.new }
+    let(:decisions) do
+      result = Decisions.new
+      allow(result).to receive(:save!) { true }
+      result
+    end
     let(:dependency_manager) { DependencyManager.new(decisions: decisions) }
 
     before do
@@ -86,7 +90,11 @@ module LicenseFinder
       end
 
       context "with a previous decision to manually add a dependency" do
-        let(:decisions) { Decisions.new.add_package("a manually managed dep") }
+        let(:decisions) do
+          result = Decisions.new.add_package("a manually managed dep")
+          allow(result).to receive(:save!) { true }
+          result
+        end
 
         it "should add decisions" do
           dependency_manager.manually_add("GPL", "a manually managed dep", nil)

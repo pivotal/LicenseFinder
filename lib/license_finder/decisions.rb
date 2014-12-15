@@ -22,6 +22,29 @@ module LicenseFinder
       end
     end
 
+    def self.saved!
+      restore(read)
+    end
+
+    def save!
+      write(persist)
+    end
+
+    def write(value)
+      LicenseFinder.config.artifacts.decisions_file.open('w+') do |f|
+        f.puts value
+      end
+    end
+
+    def self.read
+      file = LicenseFinder.config.artifacts.decisions_file
+      if file.exist?
+        file.read
+      else
+        ""
+      end
+    end
+
     #######
     # WRITE
     #######
