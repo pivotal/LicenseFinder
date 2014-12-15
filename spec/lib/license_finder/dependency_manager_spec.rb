@@ -3,7 +3,8 @@ require 'spec_helper'
 module LicenseFinder
   describe DependencyManager do
     let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
-    let(:dependency_manager) { DependencyManager.new }
+    let(:decisions) { Decisions.new }
+    let(:dependency_manager) { DependencyManager.new(decisions: decisions) }
 
     before do
       allow(LicenseFinder).to receive(:config).and_return config
@@ -58,6 +59,13 @@ module LicenseFinder
         expect { dependency_manager.manually_add("GPL", "current dependency 1", "0.0.0") }
           .to raise_error(Error)
       end
+
+      it "should add decisions" do
+        dependency_manager.manually_add("MIT", "js_dep", "0.0.0")
+        decisions = dependency_manager.decisions
+        expect(decisions.packages).to eq Set.new([ManualPackage.new("js_dep", "0.0.0")])
+        expect(decisions.license_of("js_dep")).to eq License.find_by_name("MIT")
+      end
     end
 
     describe ".manually_remove" do
@@ -75,6 +83,17 @@ module LicenseFinder
             dependency_manager.manually_remove("a bundler dep")
           end.to raise_error(Error)
         end.to_not change(Dependency, :count)
+      end
+
+      context "with a previous decision to manually add a dependency" do
+        let(:decisions) { Decisions.new.add_package("a manually managed dep") }
+
+        it "should add decisions" do
+          dependency_manager.manually_add("GPL", "a manually managed dep", nil)
+          dependency_manager.manually_remove("a manually managed dep")
+          decisions = dependency_manager.decisions
+          expect(decisions.packages).to be_empty
+        end
       end
     end
 

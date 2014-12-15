@@ -2,10 +2,11 @@ require 'digest'
 
 module LicenseFinder
   class DependencyManager
-    attr_reader :logger
+    attr_reader :logger, :decisions
 
     def initialize options={}
       @logger = options[:logger] || LicenseFinder::Logger::Default.new
+      @decisions = options[:decisions]
     end
 
     def sync_with_package_managers options={}
@@ -19,6 +20,10 @@ module LicenseFinder
     def manually_add(license, name, version)
       raise Error.new("#{name} dependency already exists") unless Dependency.where(name: name).empty?
 
+      @decisions = decisions.
+        add_package(name, version).
+        license(name, license)
+
       modifying {
         dependency = Dependency.new(added_manually: true, name: name, version: version)
         dependency.licenses = [License.find_by_name(license)].to_set
@@ -27,6 +32,8 @@ module LicenseFinder
     end
 
     def manually_remove(name)
+      @decisions = decisions.remove_package(name)
+
       modifying { find_by_name(name, Dependency.added_manually).destroy }
     end
 
