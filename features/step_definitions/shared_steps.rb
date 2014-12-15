@@ -117,10 +117,8 @@ module DSL
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
-      config_path.mkpath
-      config_file.open("w") do |f|
-        f.write({'whitelist' => whitelisted_licenses}.to_yaml)
-      end
+      whitelist = whitelisted_licenses.map(&:inspect).join(' ')
+      execute_command("license_finder whitelist add #{whitelist}")
     end
 
     def execute_command(command)

@@ -37,7 +37,14 @@ module LicenseFinder
       @licenses ||= determine_license.to_set
     end
 
+    def decide_on_license(license)
+      @decided_license = license
+    end
+
     def determine_license
+      dl = @decided_license
+      return [dl].to_set if dl
+
       lfs = licenses_from_spec
       return lfs if lfs.any?
 

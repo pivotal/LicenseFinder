@@ -8,7 +8,7 @@ module LicenseFinder
 
     def self.restore(persisted)
       result = new
-      CSV.parse(persisted).each do |action, *args|
+      CSV.parse(persisted.chomp).each do |action, *args|
         result.send(action, *args)
       end
       result

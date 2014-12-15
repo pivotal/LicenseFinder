@@ -2,11 +2,15 @@ require 'digest'
 
 module LicenseFinder
   class DependencyManager
-    attr_reader :logger, :decisions
+    attr_reader :logger
 
     def initialize options={}
       @logger = options[:logger] || LicenseFinder::Logger::Default.new
-      @decisions = options[:decisions] || Decisions.saved!
+      @decisions = options[:decisions]
+    end
+
+    def decisions
+      @decisions ||= Decisions.saved!
     end
 
     def sync_with_package_managers options={}
@@ -52,10 +56,25 @@ module LicenseFinder
       modifying { find_by_name(name).approve!(approver, notes)  }
     end
 
+    def unapproved
+      acknowledged.
+        reject { |package| decisions.approved?(package.name) }.
+        reject { |package| package.licenses.any? { |license| decisions.approved_license?(license) } }
+    end
+
+    def acknowledged
+      # needs to be used in Reporter
+      base_packages = decisions.packages + current_packages
+      base_packages.
+        map    { |package| with_decided_license(package) }.
+        reject { |package| decisions.ignored?(package.name) }.
+        reject { |package| package.groups.any? { |group| decisions.ignored_group?(group) } }
+    end
+
     def modifying
       checksum_before = checksum
       result = DB.transaction { yield }
-      @decisions.save!
+      decisions.save!
       checksum_after = checksum
 
       database_changed = checksum_before != checksum_after
@@ -101,6 +120,14 @@ module LicenseFinder
         Digest::SHA2.file(database_file).hexdigest
       end
     end
+
+    def with_decided_license(package)
+      if license = decisions.license_of(package.name)
+        package.decide_on_license license
+      end
+      package
+    end
+
   end
 end
 

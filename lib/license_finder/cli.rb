@@ -263,7 +263,7 @@ module LicenseFinder
 
       desc "action_items", "List unapproved dependencies"
       def action_items
-        unapproved = Dependency.unapproved
+        unapproved = DependencyManager.new.unapproved
 
         if unapproved.empty?
           say "All dependencies are approved for use", :green

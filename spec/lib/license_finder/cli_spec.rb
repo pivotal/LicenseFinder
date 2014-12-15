@@ -227,21 +227,14 @@ module LicenseFinder
       describe Main do
         describe "default" do
           it "checks for action items" do
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-            allow(Dependency).to receive(:unapproved) { [] }
-            silence_stdout do
-              described_class.start([])
+            allow(Decisions).to receive(:saved!) do
+              Decisions.new.add_package("a dependency")
             end
-          end
-        end
 
-        describe "#rescan" do
-          it "resyncs with Gemfile" do
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-            allow(Dependency).to receive(:unapproved) { [] }
+            allow(dependency_manager).to receive(:current_packages) { [] }
 
             silence_stdout do
-              subject.rescan
+              expect { described_class.start([]) }.to raise_error(SystemExit)
             end
           end
         end
@@ -292,8 +285,14 @@ module LicenseFinder
         end
 
         describe "#action_items" do
+          before do
+            allow(Decisions).to receive(:saved!) do
+              Decisions.new
+            end
+          end
+
           it "reports unapproved dependencies" do
-            allow(Dependency).to receive(:unapproved) { ['one dependency'] }
+            allow(dependency_manager).to receive(:current_packages) { [ManualPackage.new('one dependency')] }
             allow(TextReport).to receive(:new) { double(:report, to_s: "a report!") }
             silence_stdout do
               allow(subject).to receive(:say)
@@ -303,7 +302,7 @@ module LicenseFinder
           end
 
           it "reports that all dependencies are approved" do
-            allow(Dependency).to receive(:unapproved) { [] }
+            allow(dependency_manager).to receive(:current_packages) { [] }
             silence_stdout do
               expect(subject).to receive(:say).with(/approved/i, :green)
               expect { subject.action_items }.to_not raise_error

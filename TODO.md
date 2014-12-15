@@ -30,68 +30,15 @@
 # immutable db
 
 action_items
-  include manually added dependencies
-  read system dependencies
-  apply manual licenses
-  filter ignored dependencies
-  filter ignored groups
   mark approved dependencies
   mark dependencies with whitelisted licenses
   output --format
-  return deps.size
 
 dependencies list
-  include manually added dependencies
-  apply manual licenses
   output --format
-
-ignored_groups list
-x  list decisions
-
-ignored_dependencies list
-x  list decisions
-
-whitelist list
-x  list decisions
 
 rescan
   remove
 
 show_results
   remove
-
-# DECISIONS
-
-dm
-xapprove
-x  add decision
-
-dm
-xdependencies add
-x  add decision (dependency)
-x  add decision (license)
-xdependencies remove
-x  add decision
-
-config
-xignored_groups add
-x  add decision
-xignored_groups remove
-x  add decision
-
-config
-xignored_dependencies add
-x  add decision
-xignored_dependencies remove
-x  add decision
-
-dm
-xlicense
-x  add decision
-
-config
-xwhitelist add
-x  add decision
-xwhitelist remove
-x  add decision
-
