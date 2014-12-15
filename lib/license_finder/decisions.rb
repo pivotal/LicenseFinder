@@ -123,9 +123,7 @@ module LicenseFinder
     # READ
     ######
 
-    def packages
-      @packages
-    end
+    attr_reader :packages, :whitelisted, :ignored, :ignored_groups
 
     def license_of(name)
       @licenses[name]

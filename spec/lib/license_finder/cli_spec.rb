@@ -49,6 +49,9 @@ module LicenseFinder
         describe "list" do
           it "lists manually added dependencies" do
             allow(Dependency).to receive(:added_manually) { [double(:dependency, name: 'custom')] }
+            allow(Decisions).to receive(:saved!) do
+              Decisions.new.add_package("custom")
+            end
             expect(capture_stdout { subject.list }).to match /custom/
           end
         end
@@ -59,11 +62,12 @@ module LicenseFinder
 
         describe "list" do
           it "shows the whitelist of licenses" do
-            expect(config).to receive(:whitelist).and_return([])
-
-            silence_stdout do
-              subject.list
+            expect(config).to receive(:whitelist).and_return(["MIT"])
+            allow(Decisions).to receive(:saved!) do
+              Decisions.new.whitelist("MIT")
             end
+
+            expect(capture_stdout { subject.list }).to match /MIT/
           end
         end
 
@@ -140,6 +144,10 @@ module LicenseFinder
           it "shows the ignored groups in the standard output" do
             expect(config).to receive(:ignore_groups).and_return(['development'])
 
+            allow(Decisions).to receive(:saved!) do
+              Decisions.new.ignore_group("development")
+            end
+
             expect(capture_stdout { subject.list }).to match /development/
           end
         end
@@ -176,6 +184,9 @@ module LicenseFinder
           context "when there is at least one ignored dependency" do
             it "shows the ignored dependencies" do
               expect(config).to receive(:ignore_dependencies).and_return(['bundler'])
+              allow(Decisions).to receive(:saved!) do
+                Decisions.new.ignore("bundler")
+              end
               expect(capture_stdout { subject.list }).to match /bundler/
             end
           end

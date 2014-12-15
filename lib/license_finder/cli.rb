@@ -75,12 +75,12 @@ module LicenseFinder
 
       desc "list", "List manually added dependencies"
       def list
-        dependencies = DependencyManager.new.added_manually
+        packages = Decisions.saved!.packages
 
         say "Manually Added Dependencies:", :blue
-        if dependencies.any?
-          dependencies.each do |dependency|
-            say dependency.name
+        if packages.any?
+          packages.each do |package|
+            say package.name
           end
         else
           say '(none)'
@@ -104,33 +104,39 @@ module LicenseFinder
     class Whitelist < ConfigSubcommand
       desc "list", "List all the whitelisted licenses"
       def list
-        whitelist = LicenseFinder.config.whitelist
+        whitelist = Decisions.saved!.whitelisted
 
         say "Whitelisted Licenses:", :blue
         whitelist.each do |license|
-          say license
+          say license.name
         end
       end
 
       desc "add LICENSE...", "Add one or more licenses to the whitelist"
       def add(license, *other_licenses)
         licenses = other_licenses.unshift license
+        decisions = Decisions.saved!
         modifying {
           licenses.each do |license|
             LicenseFinder.config.whitelist.push(license)
+            decisions.whitelist(license)
           end
         }
+        decisions.save!
         say "Added #{licenses.join(", ")} to the license whitelist"
       end
 
       desc "remove LICENSE...", "Remove one or more licenses from the whitelist"
       def remove(license, *other_licenses)
         licenses = other_licenses.unshift license
+        decisions = Decisions.saved!
         modifying {
           licenses.each do |license|
             LicenseFinder.config.whitelist.delete(license)
+            decisions.unwhitelist(license)
           end
         }
+        decisions.save!
         say "Removed #{licenses.join(", ")} from the license whitelist"
       end
     end
@@ -149,6 +155,7 @@ module LicenseFinder
       desc "list", "List all the ignored bundler groups"
       def list
         ignored = LicenseFinder.config.ignore_groups
+        ignored = Decisions.saved!.ignored_groups
 
         say "Ignored Bundler Groups:", :blue
         ignored.each do |group|
@@ -160,6 +167,7 @@ module LicenseFinder
       def add(group)
         modifying {
           LicenseFinder.config.ignore_groups.push(group)
+          Decisions.saved!.ignore_group(group).save!
         }
         say "Added #{group} to the ignored bundler groups"
       end
@@ -168,6 +176,7 @@ module LicenseFinder
       def remove(group)
         modifying {
           LicenseFinder.config.ignore_groups.delete(group)
+          Decisions.saved!.heed_group(group).save!
         }
         say "Removed #{group} from the ignored bundler groups"
       end
@@ -177,11 +186,12 @@ module LicenseFinder
       desc "list", "List all the ignored dependencies"
       def list
         ignored = LicenseFinder.config.ignore_dependencies
+        ignored = Decisions.saved!.ignored
 
         say "Ignored Dependencies:", :blue
         if ignored.any?
-          ignored.each do |group|
-            say group
+          ignored.each do |name|
+            say name
           end
         else
           say '(none)'
@@ -189,19 +199,21 @@ module LicenseFinder
       end
 
       desc "add DEPENDENCY", "Add a dependency to be ignored"
-      def add(group)
+      def add(dep)
         modifying {
-          LicenseFinder.config.ignore_dependencies.push(group)
+          LicenseFinder.config.ignore_dependencies.push(dep)
+          Decisions.saved!.ignore(dep).save!
         }
-        say "Added #{group} to the ignored dependencies"
+        say "Added #{dep} to the ignored dependencies"
       end
 
       desc "remove DEPENDENCY", "Remove a dependency from the ignored dependencies"
-      def remove(group)
+      def remove(dep)
         modifying {
-          LicenseFinder.config.ignore_dependencies.delete(group)
+          LicenseFinder.config.ignore_dependencies.delete(dep)
+          Decisions.saved!.heed(dep).save!
         }
-        say "Removed #{group} from the ignored dependencies"
+        say "Removed #{dep} from the ignored dependencies"
       end
     end
 

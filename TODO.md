@@ -30,8 +30,8 @@
 # immutable db
 
 action_items
-  read system dependencies
   include manually added dependencies
+  read system dependencies
   apply manual licenses
   filter ignored dependencies
   filter ignored groups
@@ -46,10 +46,13 @@ dependencies list
   output --format
 
 ignored_groups list
-  list decisions
+x  list decisions
 
 ignored_dependencies list
-  list decisions
+x  list decisions
+
+whitelist list
+x  list decisions
 
 rescan
   remove
@@ -71,26 +74,24 @@ xdependencies remove
 x  add decision
 
 config
-ignored_groups add
-  add decision
-ignored_groups remove
-  add decision
+xignored_groups add
+x  add decision
+xignored_groups remove
+x  add decision
 
 config
-ignored_dependencies add
-  add decision
-ignored_dependencies remove
-  add decision
+xignored_dependencies add
+x  add decision
+xignored_dependencies remove
+x  add decision
 
 dm
 xlicense
 x  add decision
 
 config
-whitelist add
-  add decision
-whitelist remove
-  add decision
-whitelist list
-  list decisions
+xwhitelist add
+x  add decision
+xwhitelist remove
+x  add decision
 

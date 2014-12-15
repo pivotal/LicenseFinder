@@ -73,6 +73,11 @@ module LicenseFinder
           whitelist("Expat")
         expect(decisions).to be_approved_license(License.find_by_name("MIT"))
       end
+
+      it "adds to list" do
+        decisions = subject.whitelist("MIT")
+        expect(decisions.whitelisted).to eq(Set.new([License.find_by_name("MIT")]))
+      end
     end
 
     describe ".unwhitelist" do
