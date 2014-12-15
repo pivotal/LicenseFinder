@@ -113,7 +113,7 @@ module LicenseFinder
     end
 
     def approved_license?(lic)
-      @whitelisted.include?(License.find_by_name(lic))
+      @whitelisted.include?(lic)
     end
 
     def ignored?(name)

@@ -64,14 +64,14 @@ module LicenseFinder
         decisions = subject.
           add_package("dep", "MIT").
           whitelist("MIT")
-        expect(decisions).to be_approved_license("MIT")
+        expect(decisions).to be_approved_license(License.find_by_name("MIT"))
       end
 
       it "adapts names" do
         decisions = subject.
           add_package("dep", "MIT").
           whitelist("Expat")
-        expect(decisions).to be_approved_license("MIT")
+        expect(decisions).to be_approved_license(License.find_by_name("MIT"))
       end
     end
 
@@ -80,7 +80,7 @@ module LicenseFinder
         decisions = subject.
           whitelist("MIT").
           unwhitelist("MIT")
-        expect(decisions).not_to be_approved_license("MIT")
+        expect(decisions).not_to be_approved_license(License.find_by_name("MIT"))
       end
 
       it "is cumulative" do
@@ -88,14 +88,14 @@ module LicenseFinder
           whitelist("MIT").
           unwhitelist("MIT").
           whitelist("MIT")
-        expect(decisions).to be_approved_license("MIT")
+        expect(decisions).to be_approved_license(License.find_by_name("MIT"))
       end
 
       it "adapts names" do
         decisions = subject.
           whitelist("MIT").
           unwhitelist("Expat")
-        expect(decisions).not_to be_approved_license("MIT")
+        expect(decisions).not_to be_approved_license(License.find_by_name("MIT"))
       end
 
     end
@@ -191,7 +191,7 @@ module LicenseFinder
           add_package("dep", "MIT").
           whitelist("MIT")
         )
-        expect(decisions).to be_approved_license("MIT")
+        expect(decisions).to be_approved_license(License.find_by_name("MIT"))
       end
 
       it "can restore un-whitelists" do
@@ -200,7 +200,7 @@ module LicenseFinder
           whitelist("MIT").
           unwhitelist("MIT")
         )
-        expect(decisions).not_to be_approved_license("MIT")
+        expect(decisions).not_to be_approved_license(License.find_by_name("MIT"))
       end
 
       it "can restore ignorals" do
