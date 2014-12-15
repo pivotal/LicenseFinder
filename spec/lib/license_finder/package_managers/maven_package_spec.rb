@@ -63,9 +63,9 @@ module LicenseFinder
           )
         end
 
-        it "returns 'other' otherwise" do
+        it "returns 'unknown' otherwise" do
           expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq "other"
+          expect(subject.licenses.first.name).to eq "unknown"
         end
       end
     end

@@ -7,7 +7,7 @@ module LicenseFinder
         Dependency.new(
           'name' => 'gem_a',
           'version' => '1.0',
-          'licenses' => [License.find_by_name('other')].to_set
+          'licenses' => [License.find_by_name('unknown')].to_set
         )
       end
 
@@ -39,7 +39,7 @@ module LicenseFinder
 
       it "should display a summary" do
         is_expected.to match "## Summary"
-        is_expected.to match /\s+\* 1 other/
+        is_expected.to match /\s+\* 1 unknown/
         is_expected.to match /\s+\* 1 BSD/
       end
 

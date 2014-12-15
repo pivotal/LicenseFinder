@@ -114,10 +114,10 @@ Dependencies that need approval:
 highline, 1.6.14, ruby
 json, 1.7.5, ruby
 mime-types, 1.19, ruby
-rails, 3.2.8, other
-rdoc, 3.12, other
+rails, 3.2.8, unknown
+rdoc, 3.12, unknown
 rubyzip, 0.9.9, ruby
-xml-simple, 1.1.1, other
+xml-simple, 1.1.1, unknown
 ```
 
 ### Files and Reports
@@ -139,7 +139,7 @@ project name at the top of the report can be set in
 
 ### Setting Licenses
 
-When `license_finder` reports that a dependency's license is 'other',
+When `license_finder` reports that a dependency's license is 'unknown',
 you should manually research what the actual license is.  When you
 have established the real license, you can record it with:
 

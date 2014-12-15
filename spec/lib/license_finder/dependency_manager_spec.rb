@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module LicenseFinder
   describe DependencyManager do
-    let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
+    let(:config) { Configuration.new('whitelist' => ['MIT', 'unknown']) }
     let(:dependency_manager) { DependencyManager.new }
 
     before do

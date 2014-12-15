@@ -109,7 +109,7 @@ module LicenseFinder
         child_attrs = {
           'name' => 'child1_name',
           'version' => '0.0.1',
-          'license' => 'other'
+          'license' => 'unknown'
         }
         described_class.convert_all([legacy_attributes, child_attrs])
 

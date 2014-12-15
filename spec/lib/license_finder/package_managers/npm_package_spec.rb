@@ -85,14 +85,14 @@ module LicenseFinder
           expect(subject.licenses.first.name).to eq "MIT"
         end
 
-        it "returns 'other' if there are no licenses in files" do
+        it "returns 'unknown' if there are no licenses in files" do
           stub_license_files []
 
           expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq "other"
+          expect(subject.licenses.first.name).to eq "unknown"
         end
 
-        it "returns 'other' if there are many licenses in files" do
+        it "returns 'unknown' if there are many licenses in files" do
           stub_license_files([
             double(:first_file, license: License.find_by_name('First Detected License'), path: "/"),
             double(:second_file, license: License.find_by_name('Second Detected License'), path: "/")

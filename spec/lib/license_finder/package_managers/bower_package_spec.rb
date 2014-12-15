@@ -26,15 +26,35 @@ module LicenseFinder
     its(:groups) { should == [] }
     its(:children) { should == [] }
 
+    let(:package1) { { "pkgMeta" => { "name" => "pkga", "license" => "MIT", "version" => "1.0"}, "canonicalDir" => "/some/path"} }
+    let(:package2) { { "pkgMeta" => { "name" => "pkgb", "licenses" => [{"type" => "BSD", "url" => "github.github/github"}]}, "canonicalDir" => "/some/path" } }
+    let(:package3) { { "pkgMeta" => { "name" => "pkgc", "license" => {"type" => "PSF", "url" => "github.github/github"}}, "canonicalDir" => "/some/path" } }
+    let(:package4) { { "pkgMeta" => { "name" => "pkgd", "licenses" => ["MIT"]}, "canonicalDir" => "/some/path" } }
+    let(:package5) { { "missing" => true, "endpoint" => {"name" => "some_package_that_is_not_installed", "target" => ">=3.0"}} }
+
+    describe '#name and #version' do
+
+      context "when package is NOT installed" do
+        it "shows the name and version from the endpoint block" do
+          package = BowerPackage.new(package5)
+          expect(package.name).to eq("some_package_that_is_not_installed")
+          expect(package.version).to eq(">=3.0")
+        end
+      end
+
+      context "when package IS installed" do
+        it "shows the name and version from the metadata block" do
+          package = BowerPackage.new(package1)
+          expect(package.name).to eq("pkga")
+          expect(package.version).to eq("1.0")
+        end
+      end
+    end
+
     describe '#licenses' do
       def stub_license_files(license_files)
         allow(PossibleLicenseFiles).to receive(:find).with("/path/to/thing").and_return(license_files)
       end
-
-      let(:package1) { { "pkgMeta" => {"license" => "MIT"}, "canonicalDir" => "/some/path" } }
-      let(:package2) { { "pkgMeta" => {"licenses" => [{"type" => "BSD", "url" => "github.github/github"}]}, "canonicalDir" => "/some/path" } }
-      let(:package3) { { "pkgMeta" => {"license" => {"type" => "PSF", "url" => "github.github/github"}}, "canonicalDir" => "/some/path" } }
-      let(:package4) { { "pkgMeta" => {"licenses" => ["MIT"]}, "canonicalDir" => "/some/path" } }
 
       it 'finds the license for both license  structures' do
         package = BowerPackage.new(package1)
@@ -52,6 +72,13 @@ module LicenseFinder
         package = BowerPackage.new(package4)
         expect(package.licenses.length).to eq 1
         expect(package.licenses.first.name).to eq("MIT")
+      end
+
+      it 'handles packages which have not been installed' do
+        package = BowerPackage.new(package5)
+        expect(package.licenses.length).to eq 1
+        expect(package.licenses.first.name).to eq("unknown")
+        expect(package.missing).to eq(true)
       end
 
 
@@ -84,14 +111,14 @@ module LicenseFinder
           expect(subject.licenses.first.name).to eq "MIT"
         end
 
-        it "returns 'other' if there are no licenses in files" do
+        it "returns 'unknown' if there are no licenses in files" do
           stub_license_files []
 
           expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq "other"
+          expect(subject.licenses.first.name).to eq "unknown"
         end
 
-        it "returns 'other' if there are many licenses in files" do
+        it "returns multiple licenses if there are many licenses in files" do
           stub_license_files([
             double(:first_file, license: License.find_by_name('First Detected License'), path: "/"),
             double(:second_file, license: License.find_by_name('Second Detected License'), path: "/")

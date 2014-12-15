@@ -29,17 +29,17 @@ module LicenseFinder
           expect(subject.licenses.first.name).to eq "LicenseName"
         end
 
-        it "returns other if the license can't be found by text" do
+        it "returns unknown if the license can't be found by text" do
           allow(License).to receive(:find_by_text).with(license_text).and_return(nil)
 
           expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq "other"
+          expect(subject.licenses.first.name).to eq "unknown"
         end
       end
 
-      it "returns other when there's no license" do
+      it "returns unknown when there's no license" do
         expect(subject.licenses.length).to eq 1
-        expect(subject.licenses.first.name).to eq "other"
+        expect(subject.licenses.first.name).to eq "unknown"
       end
     end
   end

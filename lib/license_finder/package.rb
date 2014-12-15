@@ -74,5 +74,10 @@ module LicenseFinder
     def install_path
       nil
     end
+
+    def missing
+      false
+    end
+
   end
 end

@@ -1,8 +1,8 @@
 Given(/^I have an app that depends on a few gems without known licenses$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
-  @user.create_and_depend_on_gem 'other_gem', version: '1.0', license: 'other'
-  @user.create_and_depend_on_gem 'control_gem', version: '1.0', license: 'other'
+  @user.create_and_depend_on_gem 'other_gem', version: '1.0', license: 'unknown'
+  @user.create_and_depend_on_gem 'control_gem', version: '1.0', license: 'unknown'
 end
 
 When(/^I set one gem's license to MIT from the command line$/) do
@@ -16,7 +16,7 @@ Then(/^I should see that gem's license set to MIT$/) do
 end
 
 Then(/^I should see other gems have not changed their licenses$/) do
-  expect(@user).to be_seeing 'control_gem, 1.0, other'
+  expect(@user).to be_seeing 'control_gem, 1.0, unknown'
 end
 
 Given(/^I have an app that depends on a manually licensed gem$/) do
