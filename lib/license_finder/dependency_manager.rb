@@ -52,7 +52,7 @@ module LicenseFinder
     end
 
     def approve!(name, approver = nil, notes = nil)
-      @decisions = decisions.approve(name)
+      @decisions = decisions.approve(name, who: approver, why: notes)
       modifying { find_by_name(name).approve!(approver, notes)  }
     end
 

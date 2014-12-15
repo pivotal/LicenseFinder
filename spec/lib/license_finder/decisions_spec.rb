@@ -4,7 +4,7 @@ module LicenseFinder
   describe Decisions do
     describe ".add_package" do
       it "adds to list of packages" do
-        packages = subject.add_package("dep").packages
+        packages = subject.add_package("dep", nil).packages
         expect(packages.size).to eq 1
         expect(packages.first.name).to eq "dep"
       end
@@ -18,7 +18,7 @@ module LicenseFinder
     describe ".remove_package" do
       it "drops a package" do
         packages = subject.
-          add_package("dep").
+          add_package("dep", nil).
           remove_package("dep").
           packages
         expect(packages.size).to eq 0
@@ -61,16 +61,12 @@ module LicenseFinder
 
     describe ".whitelist" do
       it "will report the given license as approved" do
-        decisions = subject.
-          add_package("dep", "MIT").
-          whitelist("MIT")
+        decisions = subject.whitelist("MIT")
         expect(decisions).to be_approved_license(License.find_by_name("MIT"))
       end
 
       it "adapts names" do
-        decisions = subject.
-          add_package("dep", "MIT").
-          whitelist("Expat")
+        decisions = subject.whitelist("Expat")
         expect(decisions).to be_approved_license(License.find_by_name("MIT"))
       end
 
@@ -172,7 +168,7 @@ module LicenseFinder
       it "can restore removed packages" do
         decisions = roundtrip(
           subject.
-          add_package("dep").
+          add_package("dep", nil).
           remove_package("dep")
         )
         expect(decisions.packages.size).to eq 0
@@ -186,15 +182,16 @@ module LicenseFinder
       end
 
       it "can restore approvals" do
-        decisions = roundtrip(subject.approve("dep"))
+        decisions = roundtrip(subject.approve("dep", who: "Somebody", why: "Some reason"))
         expect(decisions).to be_approved("dep")
+        approval = decisions.approval_of("dep")
+        expect(approval[:who]).to eq "Somebody"
+        expect(approval[:why]).to eq "Some reason"
       end
 
       it "can restore whitelists" do
         decisions = roundtrip(
-          subject.
-          add_package("dep", "MIT").
-          whitelist("MIT")
+          subject.whitelist("MIT")
         )
         expect(decisions).to be_approved_license(License.find_by_name("MIT"))
       end

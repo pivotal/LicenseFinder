@@ -78,7 +78,7 @@ module LicenseFinder
       end
 
       def decisions_file
-        join("dependency_decisions.csv")
+        join("dependency_decisions.yml")
       end
 
       def text_file

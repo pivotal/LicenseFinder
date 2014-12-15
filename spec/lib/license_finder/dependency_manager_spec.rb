@@ -91,7 +91,7 @@ module LicenseFinder
 
       context "with a previous decision to manually add a dependency" do
         let(:decisions) do
-          result = Decisions.new.add_package("a manually managed dep")
+          result = Decisions.new.add_package("a manually managed dep", nil)
           allow(result).to receive(:save!) { true }
           result
         end

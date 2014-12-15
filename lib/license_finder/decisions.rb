@@ -1,4 +1,4 @@
-require 'csv'
+require 'yaml'
 
 module LicenseFinder
   class Decisions
@@ -8,18 +8,16 @@ module LicenseFinder
 
     def self.restore(persisted)
       result = new
-      CSV.parse(persisted.chomp).each do |action, *args|
-        result.send(action, *args)
+      if persisted
+        YAML.load(persisted).each do |action, *args|
+          result.send(action, *args)
+        end
       end
       result
     end
 
     def persist
-      CSV.generate do |csv|
-        @decisions.each do |decision|
-          csv << decision
-        end
-      end
+      YAML.dump(@decisions)
     end
 
     def self.saved!
@@ -38,11 +36,7 @@ module LicenseFinder
 
     def self.read
       file = LicenseFinder.config.artifacts.decisions_file
-      if file.exist?
-        file.read
-      else
-        ""
-      end
+      file.read if file.exist?
     end
 
     #######
@@ -53,13 +47,13 @@ module LicenseFinder
       @decisions = []
       @packages = Set.new
       @licenses = {}
-      @approved = Set.new
+      @approvals = {}
       @whitelisted = Set.new
       @ignored = Set.new
       @ignored_groups = Set.new
     end
 
-    def add_package(name, version = nil)
+    def add_package(name, version)
       @decisions << [:add_package, name, version]
       @packages << ManualPackage.new(name, version)
       self
@@ -77,9 +71,9 @@ module LicenseFinder
       self
     end
 
-    def approve(name)
-      @decisions << [:approve, name]
-      @approved << name
+    def approve(name, txn = {})
+      @decisions << [:approve, name, txn]
+      @approvals[name] = txn
       self
     end
 
@@ -129,8 +123,12 @@ module LicenseFinder
       @licenses[name]
     end
 
+    def approval_of(name)
+      @approvals[name]
+    end
+
     def approved?(name)
-      @approved.include?(name)
+      @approvals.has_key?(name)
     end
 
     def approved_license?(lic)

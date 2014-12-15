@@ -50,7 +50,7 @@ module LicenseFinder
           it "lists manually added dependencies" do
             allow(Dependency).to receive(:added_manually) { [double(:dependency, name: 'custom')] }
             allow(Decisions).to receive(:saved!) do
-              Decisions.new.add_package("custom")
+              Decisions.new.add_package("custom", nil)
             end
             expect(capture_stdout { subject.list }).to match /custom/
           end
@@ -228,7 +228,7 @@ module LicenseFinder
         describe "default" do
           it "checks for action items" do
             allow(Decisions).to receive(:saved!) do
-              Decisions.new.add_package("a dependency")
+              Decisions.new.add_package("a dependency", nil)
             end
 
             allow(dependency_manager).to receive(:current_packages) { [] }
