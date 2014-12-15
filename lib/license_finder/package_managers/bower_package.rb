@@ -4,14 +4,23 @@ module LicenseFinder
       super options
       @bower_module = bower_module
       @module_metadata = bower_module.fetch("pkgMeta", Hash.new)
+      @module_endpoint = bower_module.fetch("endpoint", Hash.new)
     end
 
     def name
-      module_metadata.fetch("name", nil)
+      if module_metadata.empty?
+        module_endpoint.fetch("name", nil)
+      else
+        module_metadata.fetch("name", nil)
+      end
     end
 
     def version
-      module_metadata.fetch("version", nil)
+      if module_metadata.empty?
+        module_endpoint.fetch("target", nil)
+      else
+        module_metadata.fetch("version", nil)
+      end
     end
 
     def summary
@@ -26,6 +35,10 @@ module LicenseFinder
       module_metadata.fetch("homepage", nil)
     end
 
+    def missing
+      bower_module.fetch("missing", nil)
+    end
+
     def children
       [] # no way to determine child deps from bower (maybe?)
     end
@@ -38,6 +51,7 @@ module LicenseFinder
 
     attr_reader :bower_module
     attr_reader :module_metadata
+    attr_reader :module_endpoint
 
     def install_path
       bower_module["canonicalDir"]

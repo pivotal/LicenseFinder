@@ -12,7 +12,8 @@ module LicenseFinder
         description: 'description',
         name: 'spec_name',
         version: '1.2.3',
-        homepage: 'http://example.com'
+        homepage: 'http://example.com',
+        missing: false,
       )
     end
 

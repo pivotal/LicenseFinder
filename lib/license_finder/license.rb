@@ -6,7 +6,7 @@ module LicenseFinder
       end
 
       def find_by_name(name)
-        name ||= "other"
+        name ||= "unknown"
         all.detect { |l| l.matches_name? name } || Definitions.build_unrecognized(name, LicenseFinder.config.whitelist)
       end
 

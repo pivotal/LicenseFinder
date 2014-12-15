@@ -105,10 +105,10 @@ module LicenseFinder
           expect(subject.licenses.first.name).to eq('License from file')
         end
 
-        it 'returns other if no license can be found' do
+        it 'returns unknown if no license can be found' do
           stub_license_files []
           expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq('other')
+          expect(subject.licenses.first.name).to eq('unknown')
         end
       end
     end
