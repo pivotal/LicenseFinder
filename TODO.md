@@ -59,28 +59,34 @@ show_results
 
 # DECISIONS
 
-approve
-  add decision
+dm
+xapprove
+x  add decision
 
-dependencies add
-  add decision (dependency)
-  add decision (license)
-dependencies remove
-  add decision
+dm
+xdependencies add
+x  add decision (dependency)
+x  add decision (license)
+xdependencies remove
+x  add decision
 
+config
 ignored_groups add
   add decision
 ignored_groups remove
   add decision
 
+config
 ignored_dependencies add
   add decision
 ignored_dependencies remove
   add decision
 
-license
-  add decision
+dm
+xlicense
+x  add decision
 
+config
 whitelist add
   add decision
 whitelist remove
