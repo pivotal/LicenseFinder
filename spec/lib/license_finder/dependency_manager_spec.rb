@@ -43,7 +43,7 @@ module LicenseFinder
 
     describe ".approve!" do
       it "should add decisions" do
-        dep = Dependency.named("current dependency")
+        dependency_manager.manually_add("MIT", "current dependency", nil)
         dependency_manager.approve!("current dependency")
         decisions = dependency_manager.decisions
         expect(decisions).to be_approved("current dependency")
@@ -54,7 +54,6 @@ module LicenseFinder
       let(:dependency) { double(:dependency) }
 
       it "should add decisions" do
-        dep = Dependency.named("dependency")
         dependency_manager.license!("dependency", "MIT")
         decisions = dependency_manager.decisions
         expect(decisions.license_of("dependency")).to eq License.find_by_name("MIT")

@@ -37,11 +37,6 @@ module LicenseFinder
   autoload :GradlePackage,        'license_finder/package_managers/gradle_package'
   autoload :CocoaPodsPackage,     'license_finder/package_managers/cocoa_pods_package'
 
-  autoload :BundlerGroup,         'license_finder/tables/bundler_group'
-  autoload :Dependency,           'license_finder/tables/dependency'
-  autoload :ManualApproval,       'license_finder/tables/manual_approval'
-  autoload :YmlToSql,             'license_finder/yml_to_sql'
-
   autoload :DependencyReport,     'license_finder/reports/dependency_report'
   autoload :FormattedReport,      'license_finder/reports/formatted_report'
   autoload :HtmlReport,           'license_finder/reports/html_report'
@@ -53,9 +48,4 @@ module LicenseFinder
   def self.config
     @config ||= Configuration.ensure_default
   end
-end
-
-unless defined?(LicenseAudit)
-  require 'license_finder/tables'
-  LicenseFinder::YmlToSql.convert_if_required
 end

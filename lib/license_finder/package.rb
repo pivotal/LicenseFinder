@@ -33,6 +33,7 @@ module LicenseFinder
       @logger = options[:logger] || LicenseFinder::Logger::Default.new
       @whitelisted = false
       @parents = Set.new
+      @decided_licenses = Set.new
     end
 
     attr_reader :parents, :manual_approval
@@ -42,7 +43,7 @@ module LicenseFinder
     end
 
     def decide_on_license(license)
-      @decided_license = license
+      @decided_licenses << license
     end
 
     def approved_manually!(approval)
@@ -66,8 +67,8 @@ module LicenseFinder
     end
 
     def determine_license
-      dl = @decided_license
-      return [dl].to_set if dl
+      dl = @decided_licenses
+      return dl if dl.any?
 
       lfs = licenses_from_spec
       return lfs if lfs.any?

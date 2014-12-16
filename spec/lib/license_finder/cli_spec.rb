@@ -48,7 +48,6 @@ module LicenseFinder
 
         describe "list" do
           it "lists manually added dependencies" do
-            allow(Dependency).to receive(:added_manually) { [double(:dependency, name: 'custom')] }
             allow(Decisions).to receive(:saved!) do
               Decisions.new.add_package("custom", nil)
             end
