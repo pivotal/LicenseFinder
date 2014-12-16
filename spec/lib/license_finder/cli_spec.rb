@@ -6,10 +6,10 @@ module LicenseFinder
       let!(:dependency_manager) do
         DependencyManager.new(
           decisions: decisions,
-          current_packages: current_packages
+          packages: packages
         )
       end
-      let(:current_packages) { [] }
+      let(:packages) { [] }
       let!(:decisions) { Decisions.new }
 
       before do
@@ -258,7 +258,7 @@ module LicenseFinder
         end
 
         describe "#report" do
-          let(:current_packages) { [ManualPackage.new('one dependency')] }
+          let(:packages) { [ManualPackage.new('one dependency')] }
 
           it "reports acknowleged dependencies" do
             result = capture_stdout do
@@ -278,7 +278,7 @@ module LicenseFinder
 
         describe "#action_items" do
           context "with unapproved dependencies" do
-            let(:current_packages) { [ManualPackage.new('one dependency')] }
+            let(:packages) { [ManualPackage.new('one dependency')] }
 
             it "reports unapproved dependencies" do
               result = capture_stdout do

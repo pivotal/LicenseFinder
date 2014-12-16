@@ -6,7 +6,7 @@ module LicenseFinder
 
     def initialize options={}
       @decisions = options.fetch(:decisions)
-      @current_packages = options.fetch(:current_packages)
+      @packages = options.fetch(:packages)
     end
 
     def unapproved
@@ -14,7 +14,7 @@ module LicenseFinder
     end
 
     def acknowledged
-      base_packages = decisions.packages + current_packages
+      base_packages = decisions.packages + packages
       base_packages.
         map    { |package| with_decided_license(package) }.
         reject { |package| ignored?(package) }.
@@ -24,7 +24,7 @@ module LicenseFinder
 
     private
 
-    attr_reader :current_packages
+    attr_reader :packages
 
     def with_decided_license(package)
       if license = decisions.license_of(package.name)

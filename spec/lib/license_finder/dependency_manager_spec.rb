@@ -7,7 +7,7 @@ module LicenseFinder
         decisions = Decisions.new.add_package("manual", nil)
         dependency_manager = described_class.new(
           decisions: decisions,
-          current_packages: [ManualPackage.new("system", nil)]
+          packages: [ManualPackage.new("system", nil)]
         )
         expect(dependency_manager.acknowledged.map(&:name)).to match_array ["manual", "system"]
       end
@@ -16,7 +16,7 @@ module LicenseFinder
         decisions = Decisions.new.
           add_package("manual", nil).
           license("manual", "MIT")
-        dependency_manager = described_class.new(decisions: decisions, current_packages: [])
+        dependency_manager = described_class.new(decisions: decisions, packages: [])
         expect(dependency_manager.acknowledged.last.licenses).to eq Set.new([License.find_by_name("MIT")])
       end
 
@@ -24,7 +24,7 @@ module LicenseFinder
         decisions = Decisions.new.
           add_package("manual", nil).
           ignore("manual")
-        dependency_manager = described_class.new(decisions: decisions, current_packages: [])
+        dependency_manager = described_class.new(decisions: decisions, packages: [])
         expect(dependency_manager.acknowledged).to be_empty
       end
 
@@ -35,7 +35,7 @@ module LicenseFinder
         allow(dev_dep).to receive(:groups) { ["development"] }
         dependency_manager = described_class.new(
           decisions: decisions,
-          current_packages: [dev_dep]
+          packages: [dev_dep]
         )
         expect(dependency_manager.acknowledged).to be_empty
       end
@@ -44,7 +44,7 @@ module LicenseFinder
         decisions = Decisions.new.
           add_package("manual", nil).
           approve("manual", who: "Approver", why: "Because")
-        dependency_manager = described_class.new(decisions: decisions, current_packages: [])
+        dependency_manager = described_class.new(decisions: decisions, packages: [])
         dep = dependency_manager.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_approved_manually
@@ -57,7 +57,7 @@ module LicenseFinder
           add_package("manual", nil).
           license("manual", "MIT").
           whitelist("MIT")
-        dependency_manager = described_class.new(decisions: decisions, current_packages: [])
+        dependency_manager = described_class.new(decisions: decisions, packages: [])
         dep = dependency_manager.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_whitelisted
@@ -72,7 +72,7 @@ module LicenseFinder
         allow(parent).to receive(:children) { ["child"] }
         dependency_manager = described_class.new(
           decisions: decisions,
-          current_packages: [grandparent, parent, child]
+          packages: [grandparent, parent, child]
         )
         expect(dependency_manager.acknowledged.map(&:parents)).to eq([
           [].to_set,

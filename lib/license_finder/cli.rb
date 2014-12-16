@@ -58,7 +58,7 @@ module LicenseFinder
         logger = override_logger || Logger.new(options)
         @dependency_manager ||= DependencyManager.new(
           decisions: decisions,
-          current_packages: PackageManager.current_packages(logger)
+          packages: PackageManager.current_packages(logger)
         )
       end
 
