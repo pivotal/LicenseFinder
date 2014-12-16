@@ -30,5 +30,4 @@
 # immutable db
 
 readme
-review test setup everywhere
 upgrade path
