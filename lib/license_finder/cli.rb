@@ -117,10 +117,8 @@ module LicenseFinder
     class Whitelist < Subcommand
       desc "list", "List all the whitelisted licenses"
       def list
-        whitelist = decisions.whitelisted
-
         say "Whitelisted Licenses:", :blue
-        whitelist.each do |license|
+        decisions.whitelisted.each do |license|
           say license.name
         end
       end
@@ -173,10 +171,8 @@ module LicenseFinder
     class IgnoredGroups < Subcommand
       desc "list", "List all the ignored groups"
       def list
-        ignored = decisions.ignored_groups
-
         say "Ignored Groups:", :blue
-        ignored.each do |group|
+        decisions.ignored_groups.each do |group|
           say group
         end
       end
