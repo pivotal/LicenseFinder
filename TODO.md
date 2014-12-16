@@ -29,7 +29,6 @@
 
 # immutable db
 
-move decision modification out of dependency manager
 dependencies list --format
 --who
 --why

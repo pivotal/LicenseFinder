@@ -218,7 +218,7 @@ module LicenseFinder
     class Main < Base
       desc "action_items", "List unapproved dependencies"
       def action_items
-        unapproved = DependencyManager.new.unapproved
+        unapproved = DependencyManager.new(decisions: decisions).unapproved
 
         if unapproved.empty?
           say "All dependencies are approved for use", :green
@@ -236,8 +236,13 @@ module LicenseFinder
       desc "approve DEPENDENCY_NAME... [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
       def approve(name, *other_names)
         names = other_names.unshift name
-        die_on_error {
-          names.each { |name| DependencyManager.new.approve!(name, options[:approver], options[:message]) }
+        txn = {
+          who: options[:approver],
+          why: options[:message],
+          when: Time.now.getutc
+        }
+        modifying { |decisions|
+          names.each { |name| decisions.approve(name, txn) }
         }
 
         say "The #{names.join(", ")} dependency has been approved!", :green
@@ -267,7 +272,7 @@ module LicenseFinder
           say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
           exit 1
         end
-        say formatter.of(DependencyManager.new.acknowledged)
+        say formatter.of(DependencyManager.new(decisions: decisions).acknowledged)
       end
 
       subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"

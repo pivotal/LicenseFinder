@@ -2,26 +2,11 @@ require 'digest'
 
 module LicenseFinder
   class DependencyManager
-    attr_reader :logger
+    attr_reader :logger, :decisions
 
     def initialize options={}
       @logger = options[:logger] || LicenseFinder::Logger::Default.new
       @decisions = options[:decisions]
-    end
-
-    def decisions
-      @decisions ||= Decisions.saved!
-    end
-
-    def approve!(name, approver = nil, notes = nil)
-      txn = {
-        who: approver,
-        why: notes,
-        when: Time.now.getutc
-      }
-      modifying do
-        @decisions = decisions.approve(name, txn)
-      end
     end
 
     def unapproved
@@ -35,11 +20,6 @@ module LicenseFinder
         reject { |package| ignored?(package) }.
         map    { |package| with_approvals(package) }.
         tap    { |packages| invert_children(packages) }
-    end
-
-    def modifying
-      yield
-      decisions.save!
     end
 
     private

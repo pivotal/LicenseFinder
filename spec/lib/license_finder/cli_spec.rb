@@ -3,7 +3,7 @@ require "spec_helper"
 module LicenseFinder
   module CLI
     context do
-      let!(:dependency_manager) { DependencyManager.new }
+      let!(:dependency_manager) { DependencyManager.new(decisions: decisions) }
       let!(:decisions) { Decisions.new }
 
       before do
@@ -220,32 +220,28 @@ module LicenseFinder
 
         describe "#approve" do
           it "approves the requested gem" do
-            expect(dependency_manager).to receive(:approve!).with("foo", nil, nil)
-
             silence_stdout do
               subject.approve 'foo'
             end
+            expect(subject.decisions).to be_approved "foo"
           end
 
           it "approves multiple gem" do
-            expect(dependency_manager).to receive(:approve!).with("foo", nil, nil)
-            expect(dependency_manager).to receive(:approve!).with("bar", nil, nil)
-
             silence_stdout do
               subject.approve 'foo', 'bar'
             end
+            expect(subject.decisions).to be_approved "foo"
+            expect(subject.decisions).to be_approved "bar"
           end
 
           it "raises a warning if no gem was specified" do
-            expect(dependency_manager).not_to receive(:approve!)
-
             silence_stdout do
               expect { subject.approve }.to raise_error(ArgumentError)
             end
           end
 
           it "sets approver and approval message" do
-            expect(dependency_manager).to receive(:approve!).with("foo", "Julian", "We really need this")
+            expect(decisions).to receive(:approve).with("foo", hash_including(who: "Julian", why:  "We really need this"))
 
             silence_stdout do
               Main.start(["approve", "--approver", "Julian", "--message", "We really need this", "foo"])

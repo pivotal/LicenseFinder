@@ -14,14 +14,6 @@ module LicenseFinder
       allow(LicenseFinder).to receive(:config).and_return config
     end
 
-    describe ".approve!" do
-      it "should add decisions" do
-        dependency_manager.approve!("current dependency")
-        decisions = dependency_manager.decisions
-        expect(decisions).to be_approved("current dependency")
-      end
-    end
-
     describe ".acknowledged" do
       it "combines manual and system packages" do
         decisions = Decisions.new.add_package("manual", nil)
