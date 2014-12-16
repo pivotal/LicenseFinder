@@ -35,11 +35,9 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.add_dependency "bundler"
-  s.add_dependency "sequel"
   s.add_dependency "thor"
   s.add_dependency "httparty"
   s.add_dependency "xml-simple"
-  s.add_dependency LicenseFinder::Platform.sqlite_gem
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec-its"
