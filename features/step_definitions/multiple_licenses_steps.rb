@@ -9,6 +9,6 @@ When(/^I whitelist the GPL-2 license$/) do
 end
 
 Then(/^I should not see a BSD and GPL-2 licensed gem unapproved$/) do
-  @user.execute_command 'license_finder --quiet'
+  @user.run_license_finder
   expect(@user).to_not be_seeing 'bsd_and_gpl2_gem'
 end

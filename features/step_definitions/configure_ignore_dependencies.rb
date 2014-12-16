@@ -26,10 +26,8 @@ Then(/^the bundler dependency is not listed as an action item$/) do
 end
 
 Then(/^I should not see 'bundler' in the dependency docs$/)do
-  @user.execute_command('license_finder')
-  dependencies_csv_path =  @user.app_path.join('doc', 'dependencies.csv')
-  dependencies_csv = File.open(dependencies_csv_path, 'r')
-
-  expect(dependencies_csv.read).not_to match /bundler_faker/
+  @user.run_license_finder
+  @user.execute_command('license_finder report')
+  expect(@user).not_to be_seeing 'bundler_faker'
 end
 

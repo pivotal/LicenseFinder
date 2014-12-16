@@ -7,13 +7,6 @@ module LicenseFinder
       prepare(Persistence.get)
     end
 
-    def self.move!
-      config = prepare(Persistence.get.merge('dependencies_file_dir' => './doc/'))
-      config.save
-
-      FileUtils.mv(Dir["dependencies*"], config.artifacts.dir)
-    end
-
     # It's nice to keep destructive file system manipulation out of the
     # initializer.  That reduces test polution, but is slightly inconvenient
     # for methods like Configuration.ensure_default and Configuration.move!,
