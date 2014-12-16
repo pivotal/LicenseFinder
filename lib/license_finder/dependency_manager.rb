@@ -2,11 +2,11 @@ require 'digest'
 
 module LicenseFinder
   class DependencyManager
-    attr_reader :logger, :decisions
+    attr_reader :decisions
 
     def initialize options={}
-      @logger = options[:logger] || LicenseFinder::Logger::Default.new
-      @decisions = options[:decisions]
+      @decisions = options.fetch(:decisions)
+      @current_packages = options.fetch(:current_packages)
     end
 
     def unapproved
@@ -24,17 +24,7 @@ module LicenseFinder
 
     private
 
-    def current_packages
-      package_managers.
-        map { |pm| pm.new(logger: logger) }.
-        select(&:active?).
-        map(&:current_packages).
-        flatten
-    end
-
-    def package_managers
-      [Bundler, NPM, Pip, Bower, Maven, Gradle, CocoaPods]
-    end
+    attr_reader :current_packages
 
     def with_decided_license(package)
       if license = decisions.license_of(package.name)

@@ -5,8 +5,10 @@ module LicenseFinder
     describe ".acknowledged" do
       it "combines manual and system packages" do
         decisions = Decisions.new.add_package("manual", nil)
-        dependency_manager = described_class.new(decisions: decisions)
-        allow(dependency_manager).to receive(:current_packages) { [ManualPackage.new("system", nil)] }
+        dependency_manager = described_class.new(
+          decisions: decisions,
+          current_packages: [ManualPackage.new("system", nil)]
+        )
         expect(dependency_manager.acknowledged.map(&:name)).to match_array ["manual", "system"]
       end
 
@@ -14,8 +16,7 @@ module LicenseFinder
         decisions = Decisions.new.
           add_package("manual", nil).
           license("manual", "MIT")
-        dependency_manager = described_class.new(decisions: decisions)
-        allow(dependency_manager).to receive(:current_packages) { [] }
+        dependency_manager = described_class.new(decisions: decisions, current_packages: [])
         expect(dependency_manager.acknowledged.last.licenses).to eq Set.new([License.find_by_name("MIT")])
       end
 
@@ -23,18 +24,19 @@ module LicenseFinder
         decisions = Decisions.new.
           add_package("manual", nil).
           ignore("manual")
-        dependency_manager = described_class.new(decisions: decisions)
-        allow(dependency_manager).to receive(:current_packages) { [] }
+        dependency_manager = described_class.new(decisions: decisions, current_packages: [])
         expect(dependency_manager.acknowledged).to be_empty
       end
 
       it "ignores packages in certain groups" do
         decisions = Decisions.new.
           ignore_group("development")
-        dependency_manager = described_class.new(decisions: decisions)
         dev_dep = ManualPackage.new("dep", nil)
         allow(dev_dep).to receive(:groups) { ["development"] }
-        allow(dependency_manager).to receive(:current_packages) { [dev_dep] }
+        dependency_manager = described_class.new(
+          decisions: decisions,
+          current_packages: [dev_dep]
+        )
         expect(dependency_manager.acknowledged).to be_empty
       end
 
@@ -42,8 +44,7 @@ module LicenseFinder
         decisions = Decisions.new.
           add_package("manual", nil).
           approve("manual", who: "Approver", why: "Because")
-        dependency_manager = described_class.new(decisions: decisions)
-        allow(dependency_manager).to receive(:current_packages) { [] }
+        dependency_manager = described_class.new(decisions: decisions, current_packages: [])
         dep = dependency_manager.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_approved_manually
@@ -56,8 +57,7 @@ module LicenseFinder
           add_package("manual", nil).
           license("manual", "MIT").
           whitelist("MIT")
-        dependency_manager = described_class.new(decisions: decisions)
-        allow(dependency_manager).to receive(:current_packages) { [] }
+        dependency_manager = described_class.new(decisions: decisions, current_packages: [])
         dep = dependency_manager.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_whitelisted
@@ -70,8 +70,10 @@ module LicenseFinder
         child = ManualPackage.new("child", nil)
         allow(grandparent).to receive(:children) { ["parent"] }
         allow(parent).to receive(:children) { ["child"] }
-        dependency_manager = described_class.new(decisions: decisions)
-        allow(dependency_manager).to receive(:current_packages) { [grandparent, parent, child] }
+        dependency_manager = described_class.new(
+          decisions: decisions,
+          current_packages: [grandparent, parent, child]
+        )
         expect(dependency_manager.acknowledged.map(&:parents)).to eq([
           [].to_set,
           [grandparent].to_set,

@@ -3,7 +3,13 @@ require "spec_helper"
 module LicenseFinder
   module CLI
     context do
-      let!(:dependency_manager) { DependencyManager.new(decisions: decisions) }
+      let!(:dependency_manager) do
+        DependencyManager.new(
+          decisions: decisions,
+          current_packages: current_packages
+        )
+      end
+      let(:current_packages) { [] }
       let!(:decisions) { Decisions.new }
 
       before do
@@ -206,7 +212,7 @@ module LicenseFinder
             decisions.add_package("a dependency", nil)
 
             silence_stdout do
-              expect { described_class.start([]) }.to raise_error(SystemExit)
+              expect { described_class.start(["--quiet"]) }.to raise_error(SystemExit)
             end
           end
         end
@@ -252,9 +258,7 @@ module LicenseFinder
         end
 
         describe "#report" do
-          before do
-            allow(dependency_manager).to receive(:current_packages) { [ManualPackage.new('one dependency')] }
-          end
+          let(:current_packages) { [ManualPackage.new('one dependency')] }
 
           it "reports acknowleged dependencies" do
             result = capture_stdout do
@@ -273,22 +277,27 @@ module LicenseFinder
         end
 
         describe "#action_items" do
-          it "reports unapproved dependencies" do
-            allow(dependency_manager).to receive(:current_packages) { [ManualPackage.new('one dependency')] }
-            allow(TextReport).to receive(:new) { double(:report, to_s: "a report!") }
-            silence_stdout do
-              allow(subject).to receive(:say)
-              expect(subject).to receive(:say).with(/dependencies/i, :red)
-              expect { subject.action_items }.to raise_error(SystemExit)
+          context "with unapproved dependencies" do
+            let(:current_packages) { [ManualPackage.new('one dependency')] }
+
+            it "reports unapproved dependencies" do
+              result = capture_stdout do
+                expect do
+                  Main.start(["action_items", "--quiet"])
+                end.to raise_error(SystemExit)
+              end
+              expect(result).to match /dependencies/i
+              expect(result).to match /one dependency/
             end
           end
 
           it "reports that all dependencies are approved" do
-            allow(dependency_manager).to receive(:current_packages) { [] }
-            silence_stdout do
-              expect(subject).to receive(:say).with(/approved/i, :green)
-              expect { subject.action_items }.to_not raise_error
+            result = capture_stdout do
+              expect do
+                Main.start(["action_items", "--quiet"])
+              end.not_to raise_error
             end
+            expect(result).to match /approved/i
           end
         end
       end
