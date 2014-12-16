@@ -9,8 +9,8 @@ module LicenseFinder
 
     # It's nice to keep destructive file system manipulation out of the
     # initializer.  That reduces test polution, but is slightly inconvenient
-    # for methods like Configuration.ensure_default and Configuration.move!,
-    # which need a working artifacts directory. This helper is a compromise.
+    # for methods like Configuration.ensure_default, which need a working
+    # artifacts directory. This helper is a compromise.
     def self.prepare(config)
       result = new(config)
       result.artifacts.init
@@ -22,19 +22,6 @@ module LicenseFinder
     def initialize(config)
       @artifacts     = Artifacts.new(Pathname(config['dependencies_file_dir'] || './doc/'))
       @gradle_command = config['gradle_command'] || 'gradle'
-    end
-
-    def save
-      Persistence.set(to_hash)
-    end
-
-    private
-
-    def to_hash
-      {
-        'dependencies_file_dir' => artifacts.dir.to_s,
-        'gradle_command' => gradle_command
-      }
     end
 
     class Artifacts < SimpleDelegator
@@ -62,10 +49,6 @@ module LicenseFinder
         return {} unless inited?
 
         YAML.load(file.read)
-      end
-
-      def set(hash)
-        file.open('w') { |f| f.write(YAML.dump(hash)) }
       end
 
       private

@@ -31,6 +31,5 @@
 
 txn everywhere
 readme
-move project name to decisions, remove config persistence
 review test setup everywhere
 upgrade path

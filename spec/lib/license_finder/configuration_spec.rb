@@ -46,20 +46,6 @@ module LicenseFinder
         expect(artifacts.decisions_file).to eq(Pathname('./elsewhere/dependency_decisions.yml'))
       end
     end
-
-    describe "#save" do
-      def attributes # can't be a let... the caching causes polution
-        {
-          'dependencies_file_dir' => "./deps",
-          'gradle_command' => './gradle'
-        }
-      end
-
-      it "persists the configuration attributes" do
-        expect(Configuration::Persistence).to receive(:set).with(attributes)
-        described_class.new(attributes).save
-      end
-    end
   end
 
   describe Configuration::Persistence do
@@ -79,21 +65,6 @@ module LicenseFinder
 
         expect(file).not_to receive(:read)
         expect(described_class.get).to eq({})
-      end
-    end
-
-    describe ".set" do
-      let(:tmp_yml) { '.tmp.configuration_spec.yml' }
-
-      after do
-        File.delete(tmp_yml)
-      end
-
-      it "writes the configuration attributes to the yaml file" do
-        allow(described_class).to receive(:file).and_return(Pathname.new(tmp_yml))
-
-        described_class.set('some' => 'config')
-        expect(described_class.get).to eq({'some' => 'config'})
       end
     end
 
