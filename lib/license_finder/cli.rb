@@ -49,7 +49,7 @@ module LicenseFinder
       end
 
       def modifying
-        yield decisions
+        yield
         decisions.save!
       end
     end
@@ -78,7 +78,6 @@ module LicenseFinder
 
       def modifying
         yield
-
         LicenseFinder.config.save
       end
     end
@@ -89,7 +88,7 @@ module LicenseFinder
       method_option :why, desc: "The reason for the approval"
       desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--who APPROVER_NAME] [--why APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
       def add(license, name, version = nil)
-        modifying { |decisions|
+        modifying {
           decisions.
             add_package(name, version).
             license(name, license)
@@ -104,7 +103,7 @@ module LicenseFinder
 
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
       def remove(name)
-        modifying { |decisions|
+        modifying {
           decisions.remove_package(name)
         }
 
@@ -140,7 +139,7 @@ module LicenseFinder
       desc "add LICENSE...", "Add one or more licenses to the whitelist"
       def add(license, *other_licenses)
         licenses = other_licenses.unshift license
-        modifying { |decisions|
+        modifying {
           licenses.each do |license|
             decisions.whitelist(license)
           end
@@ -151,7 +150,7 @@ module LicenseFinder
       desc "remove LICENSE...", "Remove one or more licenses from the whitelist"
       def remove(license, *other_licenses)
         licenses = other_licenses.unshift license
-        modifying { |decisions|
+        modifying {
           licenses.each do |license|
             decisions.unwhitelist(license)
           end
@@ -163,7 +162,7 @@ module LicenseFinder
     class ProjectName < ConfigSubcommand
       desc "set NAME", "Set the project name"
       def set(name)
-        modifying { |decisions|
+        modifying {
           LicenseFinder.config.project_name = name
         }
         say "Set the project name to #{name}", :green
@@ -183,7 +182,7 @@ module LicenseFinder
 
       desc "add GROUP", "Add a bundler group to be ignored"
       def add(group)
-        modifying { |decisions|
+        modifying {
           decisions.ignore_group(group)
         }
         say "Added #{group} to the ignored bundler groups"
@@ -191,7 +190,7 @@ module LicenseFinder
 
       desc "remove GROUP", "Remove a bundler group from the ignored bundler groups"
       def remove(group)
-        modifying { |decisions|
+        modifying {
           decisions.heed_group(group)
         }
         say "Removed #{group} from the ignored bundler groups"
@@ -215,7 +214,7 @@ module LicenseFinder
 
       desc "add DEPENDENCY", "Add a dependency to be ignored"
       def add(dep)
-        modifying { |decisions|
+        modifying {
           decisions.ignore(dep)
         }
         say "Added #{dep} to the ignored dependencies"
@@ -223,7 +222,7 @@ module LicenseFinder
 
       desc "remove DEPENDENCY", "Remove a dependency from the ignored dependencies"
       def remove(dep)
-        modifying { |decisions|
+        modifying {
           decisions.heed(dep)
         }
         say "Removed #{dep} from the ignored dependencies"
@@ -254,7 +253,7 @@ module LicenseFinder
       desc "approve DEPENDENCY_NAME... [--who APPROVER_NAME] [--why APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
       def approve(name, *other_names)
         names = other_names.unshift name
-        modifying { |decisions|
+        modifying {
           names.each { |name| decisions.approve(name, txn) }
         }
 
@@ -263,7 +262,7 @@ module LicenseFinder
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
-        modifying { |decisions|
+        modifying {
           decisions.license(name, license)
         }
 

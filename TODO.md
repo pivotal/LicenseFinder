@@ -31,3 +31,7 @@
 
 txn everywhere
 readme
+remove stubs of saved! and save! if possible
+move project name to decisions, remove config persistence
+review test setup everywhere
+upgrade path

@@ -2,18 +2,6 @@ require 'spec_helper'
 
 module LicenseFinder
   describe DependencyManager do
-    let(:config) { Configuration.new('whitelist' => ['MIT', 'other']) }
-    let(:decisions) do
-      result = Decisions.new
-      allow(result).to receive(:save!) { true }
-      result
-    end
-    let(:dependency_manager) { described_class.new(decisions: decisions) }
-
-    before do
-      allow(LicenseFinder).to receive(:config).and_return config
-    end
-
     describe ".acknowledged" do
       it "combines manual and system packages" do
         decisions = Decisions.new.add_package("manual", nil)
