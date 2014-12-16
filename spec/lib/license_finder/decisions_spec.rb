@@ -251,6 +251,23 @@ module LicenseFinder
         )
         expect(decisions).not_to be_ignored_group("development")
       end
+
+      it "can restore project names" do
+        decisions = roundtrip(
+          subject.
+          name_project("an-app")
+        )
+        expect(decisions.project_name).to eq "an-app"
+      end
+
+      it "can restore project unnames" do
+        decisions = roundtrip(
+          subject.
+          name_project("an-app").
+          unname_project
+        )
+        expect(decisions.project_name).to be_nil
+      end
     end
   end
 end
