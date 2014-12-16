@@ -2,6 +2,13 @@ require 'thor'
 
 module LicenseFinder
   module CLI
+    FORMATS = {
+      'text' => TextReport,
+      'detailed_text' => DetailedTextReport,
+      'html' => HtmlReport,
+      'markdown' => MarkdownReport
+    }
+
     class Base < Thor
       def self.subcommand(namespace, klass, namespace_description)
         description = "#{namespace} [#{(klass.tasks.keys - ["help"]).join("|")}]"
@@ -16,6 +23,15 @@ module LicenseFinder
       end
 
       private
+
+      def report_of(content)
+        report = FORMATS[options[:format]]
+        if !report
+          say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
+          exit 1
+        end
+        report.of(content)
+      end
 
       def txn
         @txn ||= {
@@ -228,6 +244,7 @@ module LicenseFinder
     class Main < Base
       method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
+      method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
       desc "action_items", "List unapproved dependencies"
       def action_items
         unapproved = dependency_manager.unapproved
@@ -236,7 +253,7 @@ module LicenseFinder
           say "All dependencies are approved for use", :green
         else
           say "Dependencies that need approval:", :red
-          say TextReport.new(unapproved)
+          say report_of(unapproved)
           exit 1
         end
       end
@@ -264,23 +281,11 @@ module LicenseFinder
         say "The #{name} dependency has been marked as using #{license} license!", :green
       end
 
-      FORMATS = {
-        'text' => TextReport,
-        'detailed_text' => DetailedTextReport,
-        'html' => HtmlReport,
-        'markdown' => MarkdownReport
-      }
-
-      method_option :format, desc: "The desired output format: #{FORMATS.keys.inspect}", default: 'text'
+      method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
       desc "report", "Print a report of the project's dependencies to stdout"
       def report
-        report = FORMATS[options[:format]]
-        if !report
-          say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
-          exit 1
-        end
         dependencies = dependency_manager(Logger.new(quiet: true))
-        say report.of(dependencies.acknowledged)
+        say report_of(dependencies.acknowledged)
       end
 
       subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"

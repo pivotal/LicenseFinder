@@ -29,8 +29,5 @@
 
 # immutable db
 
-dependencies list --format
---who
---why
---when
+txn everywhere
 readme
