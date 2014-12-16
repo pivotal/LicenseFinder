@@ -13,20 +13,6 @@ module LicenseFinder
       @decisions ||= Decisions.saved!
     end
 
-    def manually_add(license, name, version)
-      modifying do
-        @decisions = decisions.
-          add_package(name, version).
-          license(name, license)
-      end
-    end
-
-    def manually_remove(name)
-      modifying do
-        @decisions = decisions.remove_package(name)
-      end
-    end
-
     def license!(name, license_name)
       modifying do
         @decisions = decisions.license(name, license_name)

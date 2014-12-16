@@ -67,8 +67,9 @@ module LicenseFinder
       end
 
       context "when the gem has many relationships" do
+        let(:decisions) { Decisions.new }
         let(:dependency_manager) do
-          result = DependencyManager.new(decisions: Decisions.new)
+          result = DependencyManager.new(decisions: decisions)
           allow(result).to receive(:current_packages) { [] }
           result
         end
@@ -78,10 +79,10 @@ module LicenseFinder
         end
 
         before do
-          dependency_manager.manually_add("MIT", "foo grandparent", nil)
-          dependency_manager.manually_add("MIT", "foo parent", nil)
-          dependency_manager.manually_add("MIT", "foo child", nil)
-          grandparent, parent = dependency_manager.decisions.packages.to_a
+          decisions.add_package("foo grandparent", nil)
+          decisions.add_package("foo parent", nil)
+          decisions.add_package("foo child", nil)
+          grandparent, parent = decisions.packages.to_a
           allow(grandparent).to receive(:children) { ["foo parent"] }
           allow(parent).to receive(:children) { ["foo child"] }
         end

@@ -14,35 +14,8 @@ module LicenseFinder
       allow(LicenseFinder).to receive(:config).and_return config
     end
 
-    describe ".manually_add" do
-      it "should add decisions" do
-        dependency_manager.manually_add("MIT", "js_dep", "0.0.0")
-        decisions = dependency_manager.decisions
-        expect(decisions.packages).to eq Set.new([ManualPackage.new("js_dep", "0.0.0")])
-        expect(decisions.license_of("js_dep")).to eq License.find_by_name("MIT")
-      end
-    end
-
-    describe ".manually_remove" do
-      context "with a previous decision to manually add a dependency" do
-        let(:decisions) do
-          result = Decisions.new.add_package("a manually managed dep", nil)
-          allow(result).to receive(:save!) { true }
-          result
-        end
-
-        it "should add decisions" do
-          dependency_manager.manually_add("GPL", "a manually managed dep", nil)
-          dependency_manager.manually_remove("a manually managed dep")
-          decisions = dependency_manager.decisions
-          expect(decisions.packages).to be_empty
-        end
-      end
-    end
-
     describe ".approve!" do
       it "should add decisions" do
-        dependency_manager.manually_add("MIT", "current dependency", nil)
         dependency_manager.approve!("current dependency")
         decisions = dependency_manager.decisions
         expect(decisions).to be_approved("current dependency")

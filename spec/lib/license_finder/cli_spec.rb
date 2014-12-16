@@ -4,34 +4,37 @@ module LicenseFinder
   module CLI
     context do
       let!(:dependency_manager) { DependencyManager.new }
+      let!(:decisions) { Decisions.new }
 
       before do
-        allow(Decisions).to receive(:saved!) { Decisions.new }
+        allow(Decisions).to receive(:saved!) { decisions }
         allow(DependencyManager).to receive(:new) { dependency_manager }
       end
 
       describe Dependencies do
         describe "add" do
           it "adds a dependency" do
-            expect(dependency_manager).to receive(:manually_add).with("MIT", "js_dep", "1.2.3")
-
             silence_stdout do
               subject.add("MIT", "js_dep", "1.2.3")
             end
+
+            expect(subject.decisions.packages.size).to eq 1
+            package = subject.decisions.packages.first
+            expect(package.name).to eq "js_dep"
+            expect(package.version).to eq "1.2.3"
+            expect(subject.decisions.license_of("js_dep")).to eq License.find_by_name("MIT")
           end
 
           it "does not require a version" do
-            expect(dependency_manager).to receive(:manually_add).with("MIT", "js_dep", nil)
-
             silence_stdout do
               subject.add("MIT", "js_dep")
             end
+            package = subject.decisions.packages.first
+            expect(package.version).to be_nil
           end
 
           it "has an --approve option to approve the added dependency" do
-            expect(dependency_manager).to receive(:manually_add).with("MIT", "js_dep", "1.2.3")
-            expect(dependency_manager).to receive(:approve!).with("js_dep", "Julian", "We really need this")
-
+            expect(decisions).to receive(:approve).with("js_dep", hash_including(who: "Julian", why:  "We really need this"))
             silence_stdout do
               Main.start(["dependencies", "add", "--approve", "--approver", "Julian", "--message", "We really need this", "MIT", "js_dep", "1.2.3"])
             end
@@ -40,10 +43,11 @@ module LicenseFinder
 
         describe "remove" do
           it "removes a dependency" do
-            expect(dependency_manager).to receive(:manually_remove).with("js_dep")
             silence_stdout do
+              subject.add("MIT", "js_dep")
               subject.remove("js_dep")
             end
+            expect(subject.decisions.packages).to be_empty
           end
         end
 

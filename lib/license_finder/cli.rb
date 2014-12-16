@@ -44,49 +44,6 @@ module LicenseFinder
       end
     end
 
-    class Dependencies < Subcommand
-      method_option :approve, type: :boolean, desc: "Approve the added dependency"
-      method_option :approver, desc: "The person granting the approval"
-      method_option :message, desc: "The reason for the approval"
-      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
-      def add(license, name, version = nil)
-        die_on_error {
-          DependencyManager.new.tap do |dependency_manager|
-            dependency_manager.manually_add(license, name, version)
-            dependency_manager.approve!(name, options[:approver], options[:message]) if options[:approve]
-          end
-        }
-        if options[:approve]
-          say "The #{name} dependency has been added and approved!", :green
-        else
-          say "The #{name} dependency has been added!", :green
-        end
-      end
-
-      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
-      def remove(name)
-        die_on_error {
-          DependencyManager.new.manually_remove(name)
-        }
-
-        say "The #{name} dependency has been removed.", :green
-      end
-
-      desc "list", "List manually added dependencies"
-      def list
-        packages = decisions.packages
-
-        say "Manually Added Dependencies:", :blue
-        if packages.any?
-          packages.each do |package|
-            say package.name
-          end
-        else
-          say '(none)'
-        end
-      end
-    end
-
     class DecisionSubcommand < Subcommand
       private
 
@@ -107,6 +64,54 @@ module LicenseFinder
 
           LicenseFinder.config.save
         }
+      end
+    end
+
+    class Dependencies < DecisionSubcommand
+      method_option :approve, type: :boolean, desc: "Approve the added dependency"
+      method_option :approver, desc: "The person granting the approval"
+      method_option :message, desc: "The reason for the approval"
+      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
+      def add(license, name, version = nil)
+        modifying { |decisions|
+          txn = {
+            who: options[:approver],
+            why: options[:message],
+            when: Time.now.getutc
+          }
+          decisions.
+            add_package(name, version).
+            license(name, license)
+          decisions.approve(name, txn) if options[:approve]
+        }
+        if options[:approve]
+          say "The #{name} dependency has been added and approved!", :green
+        else
+          say "The #{name} dependency has been added!", :green
+        end
+      end
+
+      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
+      def remove(name)
+        modifying { |decisions|
+          decisions.remove_package(name)
+        }
+
+        say "The #{name} dependency has been removed.", :green
+      end
+
+      desc "list", "List manually added dependencies"
+      def list
+        packages = decisions.packages
+
+        say "Manually Added Dependencies:", :blue
+        if packages.any?
+          packages.each do |package|
+            say package.name
+          end
+        else
+          say '(none)'
+        end
       end
     end
 
