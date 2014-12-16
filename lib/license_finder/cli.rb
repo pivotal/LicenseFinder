@@ -103,9 +103,7 @@ module LicenseFinder
 
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
       def remove(name)
-        modifying {
-          decisions.remove_package(name)
-        }
+        modifying { decisions.remove_package(name) }
 
         say "The #{name} dependency has been removed.", :green
       end
@@ -169,31 +167,29 @@ module LicenseFinder
       end
     end
 
-    class IgnoredBundlerGroups < Subcommand
-      desc "list", "List all the ignored bundler groups"
+    class IgnoredGroups < Subcommand
+      desc "list", "List all the ignored groups"
       def list
         ignored = decisions.ignored_groups
 
-        say "Ignored Bundler Groups:", :blue
+        say "Ignored Groups:", :blue
         ignored.each do |group|
           say group
         end
       end
 
-      desc "add GROUP", "Add a bundler group to be ignored"
+      desc "add GROUP", "Add a group to be ignored"
       def add(group)
-        modifying {
-          decisions.ignore_group(group)
-        }
-        say "Added #{group} to the ignored bundler groups"
+        modifying { decisions.ignore_group(group) }
+
+        say "Added #{group} to the ignored groups"
       end
 
-      desc "remove GROUP", "Remove a bundler group from the ignored bundler groups"
+      desc "remove GROUP", "Remove a group from the ignored groups"
       def remove(group)
-        modifying {
-          decisions.heed_group(group)
-        }
-        say "Removed #{group} from the ignored bundler groups"
+        modifying { decisions.heed_group(group) }
+
+        say "Removed #{group} from the ignored groups"
       end
     end
 
@@ -214,17 +210,15 @@ module LicenseFinder
 
       desc "add DEPENDENCY", "Add a dependency to be ignored"
       def add(dep)
-        modifying {
-          decisions.ignore(dep)
-        }
+        modifying { decisions.ignore(dep) }
+
         say "Added #{dep} to the ignored dependencies"
       end
 
       desc "remove DEPENDENCY", "Remove a dependency from the ignored dependencies"
       def remove(dep)
-        modifying {
-          decisions.heed(dep)
-        }
+        modifying { decisions.heed(dep) }
+
         say "Removed #{dep} from the ignored dependencies"
       end
     end
@@ -253,18 +247,14 @@ module LicenseFinder
       desc "approve DEPENDENCY_NAME... [--who APPROVER_NAME] [--why APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
       def approve(name, *other_names)
         names = other_names.unshift name
-        modifying {
-          names.each { |name| decisions.approve(name, txn) }
-        }
+        modifying { names.each { |name| decisions.approve(name, txn) } }
 
         say "The #{names.join(", ")} dependency has been approved!", :green
       end
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
-        modifying {
-          decisions.license(name, license)
-        }
+        modifying { decisions.license(name, license) }
 
         say "The #{name} dependency has been marked as using #{license} license!", :green
       end
@@ -277,11 +267,10 @@ module LicenseFinder
       end
 
       subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"
-      subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "Manage ignored Bundler groups"
+      subcommand "ignored_groups", IgnoredGroups, "Manage ignored groups"
       subcommand "ignored_dependencies", IgnoredDependencies, "Manage ignored dependencies"
       subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
       subcommand "project_name", ProjectName, "Manage the project name"
-
     end
   end
 end

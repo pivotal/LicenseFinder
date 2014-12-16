@@ -13,7 +13,7 @@ Given(/^I have an app with an unapproved dependency$/) do
 end
 
 When(/^I run license_finder help on a specific command$/) do
-  @user.execute_command "license_finder ignored_bundler_groups help add"
+  @user.execute_command "license_finder ignored_groups help add"
 end
 
 When(/^I run license_finder help$/) do
@@ -39,7 +39,7 @@ Then(/^I should see all dependencies approved for use$/) do
 end
 
 Then(/^I should see the correct subcommand usage instructions$/) do
-  expect(@user).to be_seeing 'license_finder ignored_bundler_groups add GROUP'
+  expect(@user).to be_seeing 'license_finder ignored_groups add GROUP'
 end
 
 Then(/^I should see the default usage instructions$/) do

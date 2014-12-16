@@ -1,4 +1,4 @@
-Given(/^I have an app that depends on a gem in the test bundler group$/) do
+Given(/^I have an app that depends on a gem in the test group$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
   @user.create_gem 'gpl_gem', license: 'GPL'
@@ -6,15 +6,15 @@ Given(/^I have an app that depends on a gem in the test bundler group$/) do
 end
 
 When(/^I ignore the test group$/) do
-  @user.execute_command('license_finder ignored_bundler_group add test')
+  @user.execute_command('license_finder ignored_groups add test')
 end
 
 When(/^I stop ignoring the test group$/) do
-  @user.execute_command('license_finder ignored_bundler_group remove test')
+  @user.execute_command('license_finder ignored_groups remove test')
 end
 
 When(/^I get the ignored groups$/) do
-  @user.execute_command('license_finder ignored_bundler_group list')
+  @user.execute_command('license_finder ignored_groups list')
 end
 
 Then(/^I should not see the test gem in the output$/) do

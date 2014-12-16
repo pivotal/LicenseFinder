@@ -127,7 +127,7 @@ module LicenseFinder
         end
       end
 
-      describe IgnoredBundlerGroups do
+      describe IgnoredGroups do
         describe "list" do
           it "shows the ignored groups in the standard output" do
             allow(Decisions).to receive(:saved!) do

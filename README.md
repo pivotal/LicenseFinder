@@ -256,7 +256,7 @@ By modifying this file, you can configure `license_finder`'s behavior:
 * See below for explanation of "gradle_command".
 
 You can also configure `license_finder` through the command line.  See
-`license_finder whitelist help`, `license_finder ignored_bundler_groups help`
+`license_finder whitelist help`, `license_finder ignored_groups help`
 and `license_finder project_name help` for more details.
 
 
