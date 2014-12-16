@@ -30,12 +30,7 @@
 # immutable db
 
 report --format
-
-dependencies list
-  output --format
-
-rescan
-  remove
-
-show_results
-  remove
+dependencies list --format
+--who
+--why
+--when

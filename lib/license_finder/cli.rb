@@ -218,21 +218,20 @@ module LicenseFinder
     end
 
     class Main < Base
-      method_option :quiet, type: :boolean, desc: "silences loading output"
-      method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
-      desc "rescan", "Find new dependencies. (Default action)"
-      def rescan
-        sync_with_package_managers options
-        show_results
+      desc "action_items", "List unapproved dependencies"
+      def action_items
+        unapproved = DependencyManager.new.unapproved
+
+        if unapproved.empty?
+          say "All dependencies are approved for use", :green
+        else
+          say "Dependencies that need approval:", :red
+          say TextReport.new(unapproved)
+          exit 1
+        end
       end
 
-      desc "show_results", "Display ignored dependencies and action items"
-      def show_results
-        IgnoredDependencies.new.list
-        action_items
-      end
-
-      default_task :rescan
+      default_task :action_items
 
       method_option :approver, desc: "The person granting the approval"
       method_option :message, desc: "The reason for the approval"
@@ -259,19 +258,6 @@ module LicenseFinder
       def move
         Configuration.move!
         say "Congratulations, you have cleaned up your root directory!'", :green
-      end
-
-      desc "action_items", "List unapproved dependencies"
-      def action_items
-        unapproved = DependencyManager.new.unapproved
-
-        if unapproved.empty?
-          say "All dependencies are approved for use", :green
-        else
-          say "Dependencies that need approval:", :red
-          say TextReport.new(unapproved)
-          exit 1
-        end
       end
 
       subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"
