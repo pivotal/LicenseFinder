@@ -27,7 +27,7 @@ module LicenseFinder
 
     def ignore_groups
       # DI
-      @ignore_groups ||= LicenseFinder.config.ignore_groups
+      @ignore_groups ||= Decisions.saved!.ignored_groups
     end
 
     def package_path

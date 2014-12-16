@@ -3,7 +3,7 @@ module LicenseFinder
     module Definitions
       extend self
 
-      def all(whitelist)
+      def all
         [
           apache2,
           bsd,
@@ -15,26 +15,18 @@ module LicenseFinder
           python,
           ruby,
           simplifiedbsd
-        ].map { |license|
-          whitelist_if_necessary(license, whitelist)
-        }
+        ]
       end
 
-      def build_unrecognized(name, whitelist)
-        result = License.new(
+      def build_unrecognized(name)
+        License.new(
           short_name: name,
           url: nil,
           matcher: NoneMatcher.new
         )
-        whitelist_if_necessary(result, whitelist)
       end
 
       private
-
-      def whitelist_if_necessary(license, whitelist)
-        whitelisted = whitelist.any? { |name| license.matches_name? name }
-        whitelisted ? license.whitelist : license
-      end
 
       def apache2
         License.new(

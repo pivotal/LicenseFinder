@@ -9,14 +9,13 @@ module LicenseFinder
         super namespace, klass
       end
 
-      private
-
-      def sync_with_package_managers options={}
-        die_on_error {
-          logger = LicenseFinder::Logger.new options
-          DependencyManager.new(logger: logger).sync_with_package_managers
-        }
+      no_commands do
+        def decisions
+          @decisions ||= Decisions.saved!
+        end
       end
+
+      private
 
       def die_on_error
         yield
@@ -75,7 +74,7 @@ module LicenseFinder
 
       desc "list", "List manually added dependencies"
       def list
-        packages = Decisions.saved!.packages
+        packages = decisions.packages
 
         say "Manually Added Dependencies:", :blue
         if packages.any?
@@ -88,6 +87,17 @@ module LicenseFinder
       end
     end
 
+    class DecisionSubcommand < Subcommand
+      private
+
+      def modifying
+        die_on_error {
+          yield decisions
+          decisions.save!
+        }
+      end
+    end
+
     class ConfigSubcommand < Subcommand
       private
 
@@ -96,15 +106,14 @@ module LicenseFinder
           yield
 
           LicenseFinder.config.save
-          sync_with_package_managers
         }
       end
     end
 
-    class Whitelist < ConfigSubcommand
+    class Whitelist < DecisionSubcommand
       desc "list", "List all the whitelisted licenses"
       def list
-        whitelist = Decisions.saved!.whitelisted
+        whitelist = decisions.whitelisted
 
         say "Whitelisted Licenses:", :blue
         whitelist.each do |license|
@@ -115,28 +124,22 @@ module LicenseFinder
       desc "add LICENSE...", "Add one or more licenses to the whitelist"
       def add(license, *other_licenses)
         licenses = other_licenses.unshift license
-        decisions = Decisions.saved!
-        modifying {
+        modifying { |decisions|
           licenses.each do |license|
-            LicenseFinder.config.whitelist.push(license)
             decisions.whitelist(license)
           end
         }
-        decisions.save!
         say "Added #{licenses.join(", ")} to the license whitelist"
       end
 
       desc "remove LICENSE...", "Remove one or more licenses from the whitelist"
       def remove(license, *other_licenses)
         licenses = other_licenses.unshift license
-        decisions = Decisions.saved!
-        modifying {
+        modifying { |decisions|
           licenses.each do |license|
-            LicenseFinder.config.whitelist.delete(license)
             decisions.unwhitelist(license)
           end
         }
-        decisions.save!
         say "Removed #{licenses.join(", ")} from the license whitelist"
       end
     end
@@ -144,18 +147,17 @@ module LicenseFinder
     class ProjectName < ConfigSubcommand
       desc "set NAME", "Set the project name"
       def set(name)
-        modifying {
+        modifying { |decisions|
           LicenseFinder.config.project_name = name
         }
         say "Set the project name to #{name}", :green
       end
     end
 
-    class IgnoredBundlerGroups < ConfigSubcommand
+    class IgnoredBundlerGroups < DecisionSubcommand
       desc "list", "List all the ignored bundler groups"
       def list
-        ignored = LicenseFinder.config.ignore_groups
-        ignored = Decisions.saved!.ignored_groups
+        ignored = decisions.ignored_groups
 
         say "Ignored Bundler Groups:", :blue
         ignored.each do |group|
@@ -165,28 +167,25 @@ module LicenseFinder
 
       desc "add GROUP", "Add a bundler group to be ignored"
       def add(group)
-        modifying {
-          LicenseFinder.config.ignore_groups.push(group)
-          Decisions.saved!.ignore_group(group).save!
+        modifying { |decisions|
+          decisions.ignore_group(group)
         }
         say "Added #{group} to the ignored bundler groups"
       end
 
       desc "remove GROUP", "Remove a bundler group from the ignored bundler groups"
       def remove(group)
-        modifying {
-          LicenseFinder.config.ignore_groups.delete(group)
-          Decisions.saved!.heed_group(group).save!
+        modifying { |decisions|
+          decisions.heed_group(group)
         }
         say "Removed #{group} from the ignored bundler groups"
       end
     end
 
-    class IgnoredDependencies < ConfigSubcommand
+    class IgnoredDependencies < DecisionSubcommand
       desc "list", "List all the ignored dependencies"
       def list
-        ignored = LicenseFinder.config.ignore_dependencies
-        ignored = Decisions.saved!.ignored
+        ignored = decisions.ignored
 
         say "Ignored Dependencies:", :blue
         if ignored.any?
@@ -200,18 +199,16 @@ module LicenseFinder
 
       desc "add DEPENDENCY", "Add a dependency to be ignored"
       def add(dep)
-        modifying {
-          LicenseFinder.config.ignore_dependencies.push(dep)
-          Decisions.saved!.ignore(dep).save!
+        modifying { |decisions|
+          decisions.ignore(dep)
         }
         say "Added #{dep} to the ignored dependencies"
       end
 
       desc "remove DEPENDENCY", "Remove a dependency from the ignored dependencies"
       def remove(dep)
-        modifying {
-          LicenseFinder.config.ignore_dependencies.delete(dep)
-          Decisions.saved!.heed(dep).save!
+        modifying { |decisions|
+          decisions.heed(dep)
         }
         say "Removed #{dep} from the ignored dependencies"
       end
@@ -252,12 +249,6 @@ module LicenseFinder
         }
 
         say "The #{name} dependency has been marked as using #{license} license!", :green
-      end
-
-      desc "move", "Move dependency.* files from root directory to doc/"
-      def move
-        Configuration.move!
-        say "Congratulations, you have cleaned up your root directory!'", :green
       end
 
       FORMATS = {

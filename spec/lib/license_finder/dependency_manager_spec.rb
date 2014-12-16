@@ -12,7 +12,6 @@ module LicenseFinder
 
     before do
       allow(LicenseFinder).to receive(:config).and_return config
-      allow(Reporter).to receive(:write_reports)
     end
 
     describe ".manually_add" do

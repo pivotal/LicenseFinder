@@ -6,6 +6,7 @@ module LicenseFinder
       let!(:dependency_manager) { DependencyManager.new }
 
       before do
+        allow(Decisions).to receive(:saved!) { Decisions.new }
         allow(DependencyManager).to receive(:new) { dependency_manager }
       end
 
@@ -57,11 +58,8 @@ module LicenseFinder
       end
 
       describe Whitelist do
-        let(:config) { LicenseFinder.config }
-
         describe "list" do
           it "shows the whitelist of licenses" do
-            expect(config).to receive(:whitelist).and_return(["MIT"])
             allow(Decisions).to receive(:saved!) do
               Decisions.new.whitelist("MIT")
             end
@@ -72,48 +70,38 @@ module LicenseFinder
 
         describe "add" do
           it "adds the specified license to the whitelist" do
-            expect(config.whitelist).to receive(:push).with("test")
-            expect(config).to receive(:save)
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-
             silence_stdout do
               subject.add("test")
             end
+            expect(subject.decisions.whitelisted).to eq [License.find_by_name("test")].to_set
           end
 
           it "adds multiple licenses to the whitelist" do
-            expect(config.whitelist).to receive(:push).with("test")
-            expect(config.whitelist).to receive(:push).with("rest")
-            expect(config).to receive(:save)
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-
             silence_stdout do
               subject.add("test", "rest")
             end
+            expect(subject.decisions.whitelisted).to eq [
+              License.find_by_name("test"),
+              License.find_by_name("rest")
+            ].to_set
           end
         end
 
         describe "remove" do
           it "removes the specified license from the whitelist" do
-            expect(config).to receive(:save)
-            expect(config.whitelist).to receive(:delete).with("test")
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-
             silence_stdout do
-
+              subject.add("test")
               subject.remove("test")
             end
+            expect(subject.decisions.whitelisted).to be_empty
           end
 
           it "removes multiple licenses from the whitelist" do
-            expect(config).to receive(:save)
-            expect(config.whitelist).to receive(:delete).with("test")
-            expect(config.whitelist).to receive(:delete).with("rest")
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-
             silence_stdout do
+              subject.add("test", "rest")
               subject.remove("test", "rest")
             end
+            expect(subject.decisions.whitelisted).to be_empty
           end
         end
       end
@@ -125,7 +113,6 @@ module LicenseFinder
           it "sets the project name" do
             expect(config).to receive(:save)
             expect(config.project_name).not_to eq("new_project_name")
-            expect(dependency_manager).to receive(:sync_with_package_managers)
 
             silence_stdout do
               subject.set("new_project_name")
@@ -137,12 +124,8 @@ module LicenseFinder
       end
 
       describe IgnoredBundlerGroups do
-        let(:config) { LicenseFinder.config }
-
         describe "list" do
           it "shows the ignored groups in the standard output" do
-            expect(config).to receive(:ignore_groups).and_return(['development'])
-
             allow(Decisions).to receive(:saved!) do
               Decisions.new.ignore_group("development")
             end
@@ -153,36 +136,28 @@ module LicenseFinder
 
         describe "add" do
           it "adds the specified group to the ignored groups list" do
-            expect(config.ignore_groups).to receive(:push).with("test")
-            expect(config).to receive(:save)
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-
             silence_stdout do
               subject.add("test")
             end
+            expect(subject.decisions.ignored_groups).to eq ["test"].to_set
           end
         end
 
         describe "remove" do
           it "removes the specified group from the ignored groups list" do
-            expect(config.ignore_groups).to receive(:delete).with("test")
-            expect(config).to receive(:save)
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-
             silence_stdout do
+              subject.add("test")
               subject.remove("test")
             end
+            expect(subject.decisions.ignored_groups).to be_empty
           end
         end
       end
 
       describe IgnoredDependencies do
-        let(:config) { LicenseFinder.config }
-
         describe "list" do
           context "when there is at least one ignored dependency" do
             it "shows the ignored dependencies" do
-              expect(config).to receive(:ignore_dependencies).and_return(['bundler'])
               allow(Decisions).to receive(:saved!) do
                 Decisions.new.ignore("bundler")
               end
@@ -192,7 +167,6 @@ module LicenseFinder
 
           context "when there are no ignored dependencies" do
             it "prints '(none)'" do
-              expect(config).to receive(:ignore_dependencies).and_return([])
               expect(capture_stdout { subject.list }).to match /\(none\)/
             end
           end
@@ -200,25 +174,20 @@ module LicenseFinder
 
         describe "add" do
           it "adds the specified group to the ignored groups list" do
-            expect(config.ignore_dependencies).to receive(:push).with("test")
-            expect(config).to receive(:save)
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-
             silence_stdout do
               subject.add("test")
             end
+            expect(subject.decisions.ignored).to eq ["test"].to_set
           end
         end
 
         describe "remove" do
           it "removes the specified group from the ignored groups list" do
-            expect(config.ignore_dependencies).to receive(:delete).with("test")
-            expect(config).to receive(:save)
-            expect(dependency_manager).to receive(:sync_with_package_managers)
-
             silence_stdout do
+              subject.add("test")
               subject.remove("test")
             end
+            expect(subject.decisions.ignored).to be_empty
           end
         end
       end
@@ -230,8 +199,6 @@ module LicenseFinder
               Decisions.new.add_package("a dependency", nil)
             end
 
-            allow(dependency_manager).to receive(:current_packages) { [] }
-
             silence_stdout do
               expect { described_class.start([]) }.to raise_error(SystemExit)
             end
@@ -241,7 +208,6 @@ module LicenseFinder
         describe "#license" do
           it "updates the license on the requested gem" do
             expect(dependency_manager).to receive(:license!).with("foo_gem", "foo")
-
             silence_stdout do
               subject.license 'foo', 'foo_gem'
             end
@@ -285,9 +251,6 @@ module LicenseFinder
 
         describe "#report" do
           before do
-            allow(Decisions).to receive(:saved!) do
-              Decisions.new
-            end
             allow(dependency_manager).to receive(:current_packages) { [ManualPackage.new('one dependency')] }
           end
 
@@ -308,12 +271,6 @@ module LicenseFinder
         end
 
         describe "#action_items" do
-          before do
-            allow(Decisions).to receive(:saved!) do
-              Decisions.new
-            end
-          end
-
           it "reports unapproved dependencies" do
             allow(dependency_manager).to receive(:current_packages) { [ManualPackage.new('one dependency')] }
             allow(TextReport).to receive(:new) { double(:report, to_s: "a report!") }

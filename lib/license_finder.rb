@@ -41,7 +41,6 @@ module LicenseFinder
   autoload :FormattedReport,      'license_finder/reports/formatted_report'
   autoload :HtmlReport,           'license_finder/reports/html_report'
   autoload :MarkdownReport,       'license_finder/reports/markdown_report'
-  autoload :Reporter,             'license_finder/reports/reporter'
   autoload :TextReport,           'license_finder/reports/text_report'
   autoload :DetailedTextReport,   'license_finder/reports/detailed_text_report'
 
