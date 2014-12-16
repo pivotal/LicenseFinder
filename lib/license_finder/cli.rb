@@ -27,6 +27,16 @@ module LicenseFinder
 
       private
 
+      def say_each(coll)
+        if coll.any?
+          coll.each do |item|
+            say(block_given? ? yield(item) : item)
+          end
+        else
+          say '(none)'
+        end
+      end
+
       def report_of(content)
         report = FORMATS[options[:format]]
         if !report
@@ -102,16 +112,8 @@ module LicenseFinder
 
       desc "list", "List manually added dependencies"
       def list
-        packages = decisions.packages
-
         say "Manually Added Dependencies:", :blue
-        if packages.any?
-          packages.each do |package|
-            say package.name
-          end
-        else
-          say '(none)'
-        end
+        say_each(decisions.packages) { |package| package.name }
       end
     end
 
@@ -119,9 +121,7 @@ module LicenseFinder
       desc "list", "List all the whitelisted licenses"
       def list
         say "Whitelisted Licenses:", :blue
-        decisions.whitelisted.each do |license|
-          say license.name
-        end
+        say_each(decisions.whitelisted) { |license| license.name }
       end
 
       desc "add LICENSE...", "Add one or more licenses to the whitelist"
@@ -173,9 +173,7 @@ module LicenseFinder
       desc "list", "List all the ignored groups"
       def list
         say "Ignored Groups:", :blue
-        decisions.ignored_groups.each do |group|
-          say group
-        end
+        say_each(decisions.ignored_groups)
       end
 
       desc "add GROUP", "Add a group to be ignored"
@@ -196,16 +194,8 @@ module LicenseFinder
     class IgnoredDependencies < Subcommand
       desc "list", "List all the ignored dependencies"
       def list
-        ignored = decisions.ignored
-
         say "Ignored Dependencies:", :blue
-        if ignored.any?
-          ignored.each do |name|
-            say name
-          end
-        else
-          say '(none)'
-        end
+        say_each(decisions.ignored)
       end
 
       desc "add DEPENDENCY", "Add a dependency to be ignored"
