@@ -260,6 +260,24 @@ module LicenseFinder
         say "Congratulations, you have cleaned up your root directory!'", :green
       end
 
+      FORMATS = {
+        'text' => TextReport,
+        'detailed_text' => DetailedTextReport,
+        'html' => HtmlReport,
+        'markdown' => MarkdownReport
+      }
+
+      method_option :format, desc: "The desired output format: #{FORMATS.keys.inspect}", default: 'text'
+      desc "report", "Print a report of the project's dependencies to stdout"
+      def report
+        formatter = FORMATS[options[:format]]
+        if !formatter
+          say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
+          exit 1
+        end
+        say formatter.of(DependencyManager.new.acknowledged)
+      end
+
       subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"
       subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "Manage ignored Bundler groups"
       subcommand "ignored_dependencies", IgnoredDependencies, "Manage ignored dependencies"

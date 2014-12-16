@@ -284,6 +284,30 @@ module LicenseFinder
           end
         end
 
+        describe "#report" do
+          before do
+            allow(Decisions).to receive(:saved!) do
+              Decisions.new
+            end
+            allow(dependency_manager).to receive(:current_packages) { [ManualPackage.new('one dependency')] }
+          end
+
+          it "reports acknowleged dependencies" do
+            result = capture_stdout do
+              Main.start(["report"])
+            end
+            expect(result).to eq "\"one dependency\", , other\n"
+          end
+
+          it "will output a specific format" do
+            result = capture_stdout do
+              Main.start(["report", "--format", "detailed_text"])
+            end
+
+            expect(result).to eq "one dependency,,other,\"\",\"\"\n"
+          end
+        end
+
         describe "#action_items" do
           before do
             allow(Decisions).to receive(:saved!) do

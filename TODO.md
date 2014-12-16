@@ -29,7 +29,6 @@
 
 # immutable db
 
-report --format
 dependencies list --format
 --who
 --why
