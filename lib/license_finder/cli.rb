@@ -13,20 +13,16 @@ module LicenseFinder
         def decisions
           @decisions ||= Decisions.saved!
         end
-
-        def logger
-          @logger ||= Logger.new options
-        end
-
-        def dependency_manager(override_logger = nil)
-          @dependency_manager ||= DependencyManager.new(
-            decisions: decisions,
-            logger: override_logger || logger
-          )
-        end
       end
 
       private
+
+      def dependency_manager(override_logger = nil)
+        @dependency_manager ||= DependencyManager.new(
+          decisions: decisions,
+          logger: override_logger || Logger.new(options)
+        )
+      end
 
       def die_on_error
         yield
