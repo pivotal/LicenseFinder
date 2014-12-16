@@ -22,16 +22,6 @@ module LicenseFinder
       end
     end
 
-    describe ".license!" do
-      let(:dependency) { double(:dependency) }
-
-      it "should add decisions" do
-        dependency_manager.license!("dependency", "MIT")
-        decisions = dependency_manager.decisions
-        expect(decisions.license_of("dependency")).to eq License.find_by_name("MIT")
-      end
-    end
-
     describe ".acknowledged" do
       it "combines manual and system packages" do
         decisions = Decisions.new.add_package("manual", nil)

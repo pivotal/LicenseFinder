@@ -13,12 +13,6 @@ module LicenseFinder
       @decisions ||= Decisions.saved!
     end
 
-    def license!(name, license_name)
-      modifying do
-        @decisions = decisions.license(name, license_name)
-      end
-    end
-
     def approve!(name, approver = nil, notes = nil)
       txn = {
         who: approver,

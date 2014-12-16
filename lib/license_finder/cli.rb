@@ -23,6 +23,13 @@ module LicenseFinder
         say e.message, :red
         exit 1
       end
+
+      def modifying
+        die_on_error {
+          yield decisions
+          decisions.save!
+        }
+      end
     end
 
     # Thor fix for `license_finder <subcommand> help <action>`
@@ -44,17 +51,6 @@ module LicenseFinder
       end
     end
 
-    class DecisionSubcommand < Subcommand
-      private
-
-      def modifying
-        die_on_error {
-          yield decisions
-          decisions.save!
-        }
-      end
-    end
-
     class ConfigSubcommand < Subcommand
       private
 
@@ -67,7 +63,7 @@ module LicenseFinder
       end
     end
 
-    class Dependencies < DecisionSubcommand
+    class Dependencies < Subcommand
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
       method_option :approver, desc: "The person granting the approval"
       method_option :message, desc: "The reason for the approval"
@@ -115,7 +111,7 @@ module LicenseFinder
       end
     end
 
-    class Whitelist < DecisionSubcommand
+    class Whitelist < Subcommand
       desc "list", "List all the whitelisted licenses"
       def list
         whitelist = decisions.whitelisted
@@ -159,7 +155,7 @@ module LicenseFinder
       end
     end
 
-    class IgnoredBundlerGroups < DecisionSubcommand
+    class IgnoredBundlerGroups < Subcommand
       desc "list", "List all the ignored bundler groups"
       def list
         ignored = decisions.ignored_groups
@@ -187,7 +183,7 @@ module LicenseFinder
       end
     end
 
-    class IgnoredDependencies < DecisionSubcommand
+    class IgnoredDependencies < Subcommand
       desc "list", "List all the ignored dependencies"
       def list
         ignored = decisions.ignored
@@ -249,8 +245,8 @@ module LicenseFinder
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
-        die_on_error {
-          DependencyManager.new.license!(name, license)
+        modifying { |decisions|
+          decisions.license(name, license)
         }
 
         say "The #{name} dependency has been marked as using #{license} license!", :green

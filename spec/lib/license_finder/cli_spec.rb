@@ -211,10 +211,10 @@ module LicenseFinder
 
         describe "#license" do
           it "updates the license on the requested gem" do
-            expect(dependency_manager).to receive(:license!).with("foo_gem", "foo")
             silence_stdout do
               subject.license 'foo', 'foo_gem'
             end
+            expect(subject.decisions.license_of("foo_gem").name).to eq "foo"
           end
         end
 
