@@ -106,7 +106,7 @@
         <% if dependency.children.any? -%>
           <dl>
             <dt><%=dependency.name%> relies on:</dt>
-            <dd><%= dependency.children.map(&:name).join(", ") -%></dd>
+            <dd><%= dependency.children.join(", ") -%></dd>
           </dl>
         <% end -%>
       </div>

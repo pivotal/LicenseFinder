@@ -3,11 +3,9 @@ require 'spec_helper'
 module LicenseFinder
   describe Reporter do
     describe "#write_reports" do
-      subject { Reporter.write_reports }
+      subject { Reporter.write_reports(double(:dep)) }
 
       before do
-        allow(Dependency).to receive(:acknowledged) { [double(:dep)] }
-
         allow(MarkdownReport).to receive(:of) { 'markdown report' }
         allow(DetailedTextReport).to receive(:of) { 'detailed csv report' }
         allow(TextReport).to receive(:of) { 'csv report' }

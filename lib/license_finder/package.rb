@@ -31,7 +31,11 @@ module LicenseFinder
 
     def initialize options={}
       @logger = options[:logger] || LicenseFinder::Logger::Default.new
+      @whitelisted = false
+      @parents = Set.new
     end
+
+    attr_reader :parents, :manual_approval
 
     def licenses
       @licenses ||= determine_license.to_set
@@ -39,6 +43,26 @@ module LicenseFinder
 
     def decide_on_license(license)
       @decided_license = license
+    end
+
+    def approved_manually!(approval)
+      @manual_approval = approval
+    end
+
+    def whitelisted!
+      @whitelisted = true
+    end
+
+    def approved?
+      approved_manually? || whitelisted?
+    end
+
+    def approved_manually?
+      !@manual_approval.nil?
+    end
+
+    def whitelisted?
+      @whitelisted
     end
 
     def determine_license

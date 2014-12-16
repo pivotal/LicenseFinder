@@ -29,10 +29,7 @@
 
 # immutable db
 
-action_items
-  mark approved dependencies
-  mark dependencies with whitelisted licenses
-  output --format
+report --format
 
 dependencies list
   output --format

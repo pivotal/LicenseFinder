@@ -5,16 +5,21 @@ module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
       let(:dependency_name) { "the-name" }
+      let(:time) { Time.now.utc }
       let(:dependency) do
-        dep = Dependency.create name: dependency_name
-        dep.set_licenses [License.find_by_name("MIT")].to_set
+        dep = ManualPackage.new(dependency_name)
+        dep.decide_on_license License.find_by_name("MIT")
         dep
       end
 
-      subject { Capybara.string(HtmlReport.new([dependency]).to_s) }
+      let(:dependencies) do
+        [dependency]
+      end
+
+      subject { Capybara.string(HtmlReport.new(dependencies).to_s) }
 
       context "when the dependency is manually approved" do
-        before { dependency.approve! "the-approver", "the-approval-note" }
+        before { dependency.approved_manually!(Decisions::Approval.new("the-approver", "the-approval-note", time)) }
 
         it "should show approved dependencies without action items" do
           is_expected.to have_selector ".approved"
@@ -31,7 +36,7 @@ module LicenseFinder
       end
 
       context "when the dependency is whitelisted" do
-        before { allow(dependency).to receive_messages(whitelisted?: true) }
+        before { dependency.whitelisted! }
 
         it "should show approved dependencies without action items" do
           is_expected.to have_selector ".approved"
@@ -45,29 +50,46 @@ module LicenseFinder
       end
 
       context "when the dependency is not approved" do
-        before {
-          dependency.licenses = [License.find_by_name('GPL')].to_set
-          dependency.manual_approval = nil
-        }
-
         it "should show unapproved dependencies with action items" do
           is_expected.to have_selector ".unapproved"
           is_expected.to have_selector ".action-items li"
         end
       end
 
-      context "when the gem has many relationships" do
+      context "when the gem has a group" do
         before do
-          allow(dependency).to receive_messages(bundler_groups: [double(name: "foo group")],
-                          parents: [double(name: "foo parent")],
-                          children: [double(name: "foo child")])
+          allow(dependency).to receive(:groups) { ["foo group"] }
+        end
+
+        it "should show the group" do
+          is_expected.to have_text "(foo group)"
+        end
+      end
+
+      context "when the gem has many relationships" do
+        let(:dependency_manager) do
+          result = DependencyManager.new(decisions: Decisions.new)
+          allow(result).to receive(:current_packages) { [] }
+          result
+        end
+
+        let(:dependencies) do
+          dependency_manager.acknowledged
+        end
+
+        before do
+          dependency_manager.manually_add("MIT", "foo grandparent", nil)
+          dependency_manager.manually_add("MIT", "foo parent", nil)
+          dependency_manager.manually_add("MIT", "foo child", nil)
+          grandparent, parent = dependency_manager.decisions.packages.to_a
+          allow(grandparent).to receive(:children) { ["foo parent"] }
+          allow(parent).to receive(:children) { ["foo child"] }
         end
 
         it "should show the relationships" do
-          is_expected.to have_text "(foo group)"
-          is_expected.to have_text "#{dependency_name} is required by:"
-          is_expected.to have_text "foo parent"
-          is_expected.to have_text "#{dependency_name} relies on:"
+          is_expected.to have_text "foo parent is required by:"
+          is_expected.to have_text "foo grandparent"
+          is_expected.to have_text "foo parent relies on:"
           is_expected.to have_text "foo child"
         end
       end

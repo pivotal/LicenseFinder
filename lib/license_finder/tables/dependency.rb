@@ -88,6 +88,10 @@ module LicenseFinder
       save
     end
 
+    def groups
+      bundler_groups.map(&:name)
+    end
+
     private
 
     def update_association_collection(association_name, names)

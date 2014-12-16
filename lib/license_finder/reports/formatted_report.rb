@@ -31,8 +31,8 @@ module LicenseFinder
 
     def version_groups(dependency)
       result = "v#{dependency.version}"
-      if dependency.bundler_groups.any?
-        result += " (#{dependency.bundler_groups.map(&:name).join(", ")})"
+      if dependency.groups.any?
+        result += " (#{dependency.groups.join(", ")})"
       end
       result
     end

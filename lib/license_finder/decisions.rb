@@ -43,6 +43,13 @@ module LicenseFinder
     # WRITE
     #######
 
+    # Temporary... Txns should be formal, and the rest of the code should use them
+    Approval = Struct.new(:approver, :notes, :safe_created_at) do
+      def self.from_txn(txn)
+        new(txn[:who], txn[:why], txn[:when])
+      end
+    end
+
     def initialize
       @decisions = []
       @packages = Set.new
@@ -73,7 +80,7 @@ module LicenseFinder
 
     def approve(name, txn = {})
       @decisions << [:approve, name, txn]
-      @approvals[name] = txn
+      @approvals[name] = Approval.from_txn(txn)
       self
     end
 

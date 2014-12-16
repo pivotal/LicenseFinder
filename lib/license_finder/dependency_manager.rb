@@ -52,23 +52,26 @@ module LicenseFinder
     end
 
     def approve!(name, approver = nil, notes = nil)
-      @decisions = decisions.approve(name, who: approver, why: notes)
+      txn = {
+        who: approver,
+        why: notes,
+        when: Time.now.getutc
+      }
+      @decisions = decisions.approve(name, txn)
       modifying { find_by_name(name).approve!(approver, notes)  }
     end
 
     def unapproved
-      acknowledged.
-        reject { |package| decisions.approved?(package.name) }.
-        reject { |package| package.licenses.any? { |license| decisions.approved_license?(license) } }
+      acknowledged.reject(&:approved?)
     end
 
     def acknowledged
-      # needs to be used in Reporter
       base_packages = decisions.packages + current_packages
       base_packages.
         map    { |package| with_decided_license(package) }.
-        reject { |package| decisions.ignored?(package.name) }.
-        reject { |package| package.groups.any? { |group| decisions.ignored_group?(group) } }
+        reject { |package| ignored?(package) }.
+        map    { |package| with_approvals(package) }.
+        tap    { |packages| invert_children(packages) }
     end
 
     def modifying
@@ -80,7 +83,7 @@ module LicenseFinder
       database_changed = checksum_before != checksum_after
 
       if database_changed || reports_do_not_exist || reports_are_stale
-        Reporter.write_reports
+        Reporter.write_reports(acknowledged)
       end
 
       result
@@ -128,6 +131,29 @@ module LicenseFinder
       package
     end
 
+    def ignored?(package)
+      decisions.ignored?(package.name) ||
+        package.groups.any? { |group| decisions.ignored_group?(group) }
+    end
+
+    def with_approvals(package)
+      if decisions.approved?(package.name)
+        package.approved_manually!(decisions.approval_of(package.name))
+      elsif package.licenses.any? { |license| decisions.approved_license?(license) }
+        package.whitelisted!
+      end
+      package
+    end
+
+    def invert_children(packages)
+      packages.each do |parent|
+        parent.children.each do |child_name|
+          child = packages.detect { |child| child.name == child_name }
+          child.parents << parent if child
+        end
+      end
+      packages
+    end
   end
 end
 
