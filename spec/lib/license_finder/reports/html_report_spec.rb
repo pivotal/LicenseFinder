@@ -6,16 +6,14 @@ module LicenseFinder
     describe "#to_s" do
       let(:dependency_name) { "the-name" }
       let(:time) { Time.now.utc }
+      let(:project_name) { "given project name" }
+
       let(:dependency) do
         dep = ManualPackage.new(dependency_name)
         dep.decide_on_license License.find_by_name("MIT")
         dep
       end
-      let(:project_name) { "given project name" }
-
-      let(:dependencies) do
-        [dependency]
-      end
+      let(:dependencies) { [dependency] }
 
       subject { Capybara.string(HtmlReport.new(dependencies, project_name).to_s) }
 

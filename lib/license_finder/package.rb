@@ -39,7 +39,7 @@ module LicenseFinder
     attr_reader :parents, :manual_approval
 
     def licenses
-      @licenses ||= determine_license.to_set
+      @licenses ||= determine_licenses.to_set
     end
 
     def decide_on_license(license)
@@ -66,7 +66,7 @@ module LicenseFinder
       @whitelisted
     end
 
-    def determine_license
+    def determine_licenses
       dl = @decided_licenses
       return dl if dl.any?
 
