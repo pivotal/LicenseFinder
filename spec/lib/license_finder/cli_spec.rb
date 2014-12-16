@@ -53,9 +53,7 @@ module LicenseFinder
 
         describe "list" do
           it "lists manually added dependencies" do
-            allow(Decisions).to receive(:saved!) do
-              Decisions.new.add_package("custom", nil)
-            end
+            decisions.add_package("custom", nil)
             expect(capture_stdout { subject.list }).to match /custom/
           end
         end
@@ -64,9 +62,7 @@ module LicenseFinder
       describe Whitelist do
         describe "list" do
           it "shows the whitelist of licenses" do
-            allow(Decisions).to receive(:saved!) do
-              Decisions.new.whitelist("MIT")
-            end
+            decisions.whitelist("MIT")
 
             expect(capture_stdout { subject.list }).to match /MIT/
           end
@@ -130,9 +126,7 @@ module LicenseFinder
       describe IgnoredGroups do
         describe "list" do
           it "shows the ignored groups in the standard output" do
-            allow(Decisions).to receive(:saved!) do
-              Decisions.new.ignore_group("development")
-            end
+            decisions.ignore_group("development")
 
             expect(capture_stdout { subject.list }).to match /development/
           end
@@ -162,9 +156,7 @@ module LicenseFinder
         describe "list" do
           context "when there is at least one ignored dependency" do
             it "shows the ignored dependencies" do
-              allow(Decisions).to receive(:saved!) do
-                Decisions.new.ignore("bundler")
-              end
+              decisions.ignore("bundler")
               expect(capture_stdout { subject.list }).to match /bundler/
             end
           end
@@ -199,9 +191,7 @@ module LicenseFinder
       describe Main do
         describe "default" do
           it "checks for action items" do
-            allow(Decisions).to receive(:saved!) do
-              Decisions.new.add_package("a dependency", nil)
-            end
+            decisions.add_package("a dependency", nil)
 
             silence_stdout do
               expect { described_class.start([]) }.to raise_error(SystemExit)
