@@ -2,41 +2,34 @@ require 'yaml'
 
 module LicenseFinder
   class Decisions
-    #########
-    # PERSIST
-    #########
+    ######
+    # READ
+    ######
 
-    def self.restore(persisted)
-      result = new
-      if persisted
-        YAML.load(persisted).each do |action, *args|
-          result.send(action, *args)
-        end
-      end
-      result
+    attr_reader :packages, :whitelisted, :ignored, :ignored_groups, :project_name
+
+    def license_of(name)
+      @licenses[name]
     end
 
-    def persist
-      YAML.dump(@decisions)
+    def approval_of(name)
+      @approvals[name]
     end
 
-    def self.saved!
-      restore(read)
+    def approved?(name)
+      @approvals.has_key?(name)
     end
 
-    def save!
-      write(persist)
+    def approved_license?(lic)
+      @whitelisted.include?(lic)
     end
 
-    def write(value)
-      LicenseFinder.config.artifacts.decisions_file.open('w+') do |f|
-        f.puts value
-      end
+    def ignored?(name)
+      @ignored.include?(name)
     end
 
-    def self.read
-      file = LicenseFinder.config.artifacts.decisions_file
-      file.read if file.exist?
+    def ignored_group?(name)
+      @ignored_groups.include?(name)
     end
 
     #######
@@ -139,34 +132,41 @@ module LicenseFinder
       self
     end
 
-    ######
-    # READ
-    ######
+    #########
+    # PERSIST
+    #########
 
-    attr_reader :packages, :whitelisted, :ignored, :ignored_groups, :project_name
-
-    def license_of(name)
-      @licenses[name]
+    def self.restore(persisted)
+      result = new
+      if persisted
+        YAML.load(persisted).each do |action, *args|
+          result.send(action, *args)
+        end
+      end
+      result
     end
 
-    def approval_of(name)
-      @approvals[name]
+    def persist
+      YAML.dump(@decisions)
     end
 
-    def approved?(name)
-      @approvals.has_key?(name)
+    def self.saved!
+      restore(read)
     end
 
-    def approved_license?(lic)
-      @whitelisted.include?(lic)
+    def save!
+      write(persist)
     end
 
-    def ignored?(name)
-      @ignored.include?(name)
+    def write(value)
+      LicenseFinder.config.artifacts.decisions_file.open('w+') do |f|
+        f.puts value
+      end
     end
 
-    def ignored_group?(name)
-      @ignored_groups.include?(name)
+    def self.read
+      file = LicenseFinder.config.artifacts.decisions_file
+      file.read if file.exist?
     end
   end
 end
