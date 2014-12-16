@@ -44,7 +44,7 @@ module LicenseFinder
     #######
 
     TXN = Struct.new(:who, :why, :unsafe_when) do
-      def self.from_txn(txn)
+      def self.from_hash(txn)
         new(txn[:who], txn[:why], txn[:when])
       end
 
@@ -67,74 +67,74 @@ module LicenseFinder
       @ignored_groups = Set.new
     end
 
-    def add_package(name, version)
-      @decisions << [:add_package, name, version]
+    def add_package(name, version, txn = {})
+      @decisions << [:add_package, name, version, txn]
       @packages << ManualPackage.new(name, version)
       self
     end
 
-    def remove_package(name)
-      @decisions << [:remove_package, name]
+    def remove_package(name, txn = {})
+      @decisions << [:remove_package, name, txn]
       @packages.delete(ManualPackage.new(name))
       self
     end
 
-    def license(name, lic)
-      @decisions << [:license, name, lic]
+    def license(name, lic, txn = {})
+      @decisions << [:license, name, lic, txn]
       @licenses[name] = License.find_by_name(lic)
       self
     end
 
     def approve(name, txn = {})
       @decisions << [:approve, name, txn]
-      @approvals[name] = TXN.from_txn(txn)
+      @approvals[name] = TXN.from_hash(txn)
       self
     end
 
-    def whitelist(lic)
-      @decisions << [:whitelist, lic]
+    def whitelist(lic, txn = {})
+      @decisions << [:whitelist, lic, txn]
       @whitelisted << License.find_by_name(lic)
       self
     end
 
-    def unwhitelist(lic)
-      @decisions << [:unwhitelist, lic]
+    def unwhitelist(lic, txn = {})
+      @decisions << [:unwhitelist, lic, txn]
       @whitelisted.delete(License.find_by_name(lic))
       self
     end
 
-    def ignore(name)
-      @decisions << [:ignore, name]
+    def ignore(name, txn = {})
+      @decisions << [:ignore, name, txn]
       @ignored << name
       self
     end
 
-    def heed(name)
-      @decisions << [:heed, name]
+    def heed(name, txn = {})
+      @decisions << [:heed, name, txn]
       @ignored.delete(name)
       self
     end
 
-    def ignore_group(name)
-      @decisions << [:ignore_group, name]
+    def ignore_group(name, txn = {})
+      @decisions << [:ignore_group, name, txn]
       @ignored_groups << name
       self
     end
 
-    def heed_group(name)
-      @decisions << [:heed_group, name]
+    def heed_group(name, txn = {})
+      @decisions << [:heed_group, name, txn]
       @ignored_groups.delete(name)
       self
     end
 
-    def name_project(name)
-      @decisions << [:name_project, name]
+    def name_project(name, txn = {})
+      @decisions << [:name_project, name, txn]
       @project_name = name
       self
     end
 
-    def unname_project
-      @decisions << [:unname_project]
+    def unname_project(txn = {})
+      @decisions << [:unname_project, txn]
       @project_name = nil
       self
     end

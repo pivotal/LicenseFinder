@@ -16,6 +16,9 @@ module LicenseFinder
         super namespace, klass
       end
 
+      class_option :who, desc: "The person making this decision"
+      class_option :why, desc: "The reason for making this decision"
+
       no_commands do
         def decisions
           @decisions ||= Decisions.saved!
@@ -75,14 +78,12 @@ module LicenseFinder
 
     class Dependencies < Subcommand
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
-      method_option :who, desc: "The person granting the approval"
-      method_option :why, desc: "The reason for the approval"
-      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--who APPROVER_NAME] [--why APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
+      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by a package manager, optionally approving it at the same time"
       def add(license, name, version = nil)
         modifying {
           decisions.
-            add_package(name, version).
-            license(name, license)
+            add_package(name, version, txn).
+            license(name, license, txn)
           decisions.approve(name, txn) if options[:approve]
         }
         if options[:approve]
@@ -94,7 +95,7 @@ module LicenseFinder
 
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
       def remove(name)
-        modifying { decisions.remove_package(name) }
+        modifying { decisions.remove_package(name, txn) }
 
         say "The #{name} dependency has been removed.", :green
       end
@@ -128,7 +129,7 @@ module LicenseFinder
         licenses = other_licenses.unshift license
         modifying {
           licenses.each do |license|
-            decisions.whitelist(license)
+            decisions.whitelist(license, txn)
           end
         }
         say "Added #{licenses.join(", ")} to the license whitelist"
@@ -139,7 +140,7 @@ module LicenseFinder
         licenses = other_licenses.unshift license
         modifying {
           licenses.each do |license|
-            decisions.unwhitelist(license)
+            decisions.unwhitelist(license, txn)
           end
         }
         say "Removed #{licenses.join(", ")} from the license whitelist"
@@ -155,14 +156,14 @@ module LicenseFinder
 
       desc "add NAME", "Set the project name"
       def add(name)
-        modifying { decisions.name_project(name) }
+        modifying { decisions.name_project(name, txn) }
 
         say "Set the project name to #{name}", :green
       end
 
       desc "remove", "Remove the project name"
       def remove
-        modifying { decisions.unname_project }
+        modifying { decisions.unname_project(txn) }
 
         say "Removed the project name"
       end
@@ -179,14 +180,14 @@ module LicenseFinder
 
       desc "add GROUP", "Add a group to be ignored"
       def add(group)
-        modifying { decisions.ignore_group(group) }
+        modifying { decisions.ignore_group(group, txn) }
 
         say "Added #{group} to the ignored groups"
       end
 
       desc "remove GROUP", "Remove a group from the ignored groups"
       def remove(group)
-        modifying { decisions.heed_group(group) }
+        modifying { decisions.heed_group(group, txn) }
 
         say "Removed #{group} from the ignored groups"
       end
@@ -209,14 +210,14 @@ module LicenseFinder
 
       desc "add DEPENDENCY", "Add a dependency to be ignored"
       def add(dep)
-        modifying { decisions.ignore(dep) }
+        modifying { decisions.ignore(dep, txn) }
 
         say "Added #{dep} to the ignored dependencies"
       end
 
       desc "remove DEPENDENCY", "Remove a dependency from the ignored dependencies"
       def remove(dep)
-        modifying { decisions.heed(dep) }
+        modifying { decisions.heed(dep, txn) }
 
         say "Removed #{dep} from the ignored dependencies"
       end
@@ -241,9 +242,7 @@ module LicenseFinder
 
       default_task :action_items
 
-      method_option :who, desc: "The person granting the approval"
-      method_option :why, desc: "The reason for the approval"
-      desc "approve DEPENDENCY_NAME... [--who APPROVER_NAME] [--why APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
+      desc "approve DEPENDENCY_NAME...", "Approve one or more dependencies by name"
       def approve(name, *other_names)
         names = other_names.unshift name
         modifying { names.each { |name| decisions.approve(name, txn) } }

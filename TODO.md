@@ -29,7 +29,6 @@
 
 # immutable db
 
-txn everywhere
 readme
 review test setup everywhere
 upgrade path
