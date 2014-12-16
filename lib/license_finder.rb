@@ -10,7 +10,7 @@ module LicenseFinder
   autoload :CLI,                  'license_finder/cli'
   autoload :Decisions,            'license_finder/decisions'
   autoload :PackageManager,       'license_finder/package_manager'
-  autoload :DependencyManager,    'license_finder/dependency_manager'
+  autoload :DecisionApplier,      'license_finder/decision_applier'
   autoload :PackageSaver,         'license_finder/package_saver'
   autoload :License,              'license_finder/license'
   autoload :PossibleLicenseFile,  'license_finder/possible_license_file'

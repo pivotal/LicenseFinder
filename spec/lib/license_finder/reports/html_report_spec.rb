@@ -67,12 +67,12 @@ module LicenseFinder
 
       context "when the gem has many relationships" do
         let(:decisions) { Decisions.new }
-        let(:dependency_manager) do
-          DependencyManager.new(decisions: decisions, packages: [])
+        let(:decision_applier) do
+          DecisionApplier.new(decisions: decisions, packages: [])
         end
 
         let(:dependencies) do
-          dependency_manager.acknowledged
+          decision_applier.acknowledged
         end
 
         before do

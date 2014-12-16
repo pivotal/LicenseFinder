@@ -3,8 +3,8 @@ require "spec_helper"
 module LicenseFinder
   module CLI
     context do
-      let!(:dependency_manager) do
-        DependencyManager.new(
+      let!(:decision_applier) do
+        DecisionApplier.new(
           decisions: decisions,
           packages: packages
         )
@@ -14,7 +14,7 @@ module LicenseFinder
 
       before do
         allow(Decisions).to receive(:saved!) { decisions }
-        allow(DependencyManager).to receive(:new) { dependency_manager }
+        allow(DecisionApplier).to receive(:new) { decision_applier }
       end
 
       describe Dependencies do

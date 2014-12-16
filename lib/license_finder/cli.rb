@@ -54,9 +54,9 @@ module LicenseFinder
         }
       end
 
-      def dependency_manager(override_logger = nil)
+      def decision_applier(override_logger = nil)
         logger = override_logger || Logger.new(options)
-        @dependency_manager ||= DependencyManager.new(
+        @decision_applier ||= DecisionApplier.new(
           decisions: decisions,
           packages: PackageManager.current_packages(logger)
         )
@@ -220,7 +220,7 @@ module LicenseFinder
       method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
       desc "action_items", "List unapproved dependencies"
       def action_items
-        unapproved = dependency_manager.unapproved
+        unapproved = decision_applier.unapproved
 
         if unapproved.empty?
           say "All dependencies are approved for use", :green
@@ -251,7 +251,7 @@ module LicenseFinder
       method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
       desc "report", "Print a report of the project's dependencies to stdout"
       def report
-        dependencies = dependency_manager(Logger.new(quiet: true))
+        dependencies = decision_applier(Logger.new(quiet: true))
         say report_of(dependencies.acknowledged)
       end
 

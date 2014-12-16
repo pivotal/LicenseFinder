@@ -1,7 +1,7 @@
 require 'digest'
 
 module LicenseFinder
-  class DependencyManager
+  class DecisionApplier
     attr_reader :decisions
 
     def initialize options={}
