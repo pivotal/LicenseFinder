@@ -11,12 +11,13 @@ module LicenseFinder
         dep.decide_on_license License.find_by_name("MIT")
         dep
       end
+      let(:project_name) { "given project name" }
 
       let(:dependencies) do
         [dependency]
       end
 
-      subject { Capybara.string(HtmlReport.new(dependencies).to_s) }
+      subject { Capybara.string(HtmlReport.new(dependencies, project_name).to_s) }
 
       context "when the dependency is manually approved" do
         before { dependency.approved_manually!(Decisions::TXN.new("the-approver", "the-approval-note", time)) }
@@ -100,6 +101,23 @@ module LicenseFinder
           is_expected.not_to have_text "()"
           is_expected.not_to have_text "#{dependency_name} is required by:"
           is_expected.not_to have_text "#{dependency_name} relies on:"
+        end
+      end
+
+      context "when the project has a name" do
+        it "should show the project name" do
+          title = subject.find "h1"
+          expect(title).to have_text "given project name"
+        end
+      end
+
+      context "when the project has no name" do
+        let(:project_name) { nil }
+
+        it "should default to the directory name" do
+          allow(Dir).to receive(:getwd).and_return("/path/to/a_project")
+          title = subject.find "h1"
+          expect(title).to have_text "a_project"
         end
       end
     end

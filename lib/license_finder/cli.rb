@@ -30,7 +30,7 @@ module LicenseFinder
           say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
           exit 1
         end
-        report.of(content)
+        report.of(content, decisions.project_name)
       end
 
       def txn
@@ -70,15 +70,6 @@ module LicenseFinder
         underscored.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
         underscored.tr!("-", "_")
         underscored.downcase
-      end
-    end
-
-    class ConfigSubcommand < Subcommand
-      private
-
-      def modifying
-        yield
-        LicenseFinder.config.save
       end
     end
 
@@ -157,13 +148,25 @@ module LicenseFinder
       end
     end
 
-    class ProjectName < ConfigSubcommand
-      desc "set NAME", "Set the project name"
-      def set(name)
-        modifying {
-          LicenseFinder.config.project_name = name
-        }
+    class ProjectName < Subcommand
+      desc "show", "Show the project name"
+      def show
+        say "Project Name:", :blue
+        say decisions.project_name
+      end
+
+      desc "add NAME", "Set the project name"
+      def add(name)
+        modifying { decisions.name_project(name) }
+
         say "Set the project name to #{name}", :green
+      end
+
+      desc "remove", "Remove the project name"
+      def remove
+        modifying { decisions.unname_project }
+
+        say "Removed the project name"
       end
     end
 
@@ -270,7 +273,7 @@ module LicenseFinder
       subcommand "ignored_groups", IgnoredGroups, "Manage ignored groups"
       subcommand "ignored_dependencies", IgnoredDependencies, "Manage ignored dependencies"
       subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
-      subcommand "project_name", ProjectName, "Manage the project name"
+      subcommand "project_name", ProjectName, "Manage the project name, for display in reports"
     end
   end
 end

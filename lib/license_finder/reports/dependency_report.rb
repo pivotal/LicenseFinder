@@ -10,12 +10,13 @@ module LicenseFinder
       end
     end
 
-    def self.of(dependencies)
-      new(dependencies).to_s
+    def self.of(dependencies, project_name)
+      new(dependencies, project_name).to_s
     end
 
-    def initialize(dependencies=[])
-      @dependencies = Array dependencies
+    def initialize(dependencies=[], project_name=nil)
+      @dependencies = Array(dependencies)
+      @project_name = project_name || determine_project_name
     end
 
     def to_s
@@ -25,10 +26,14 @@ module LicenseFinder
     end
 
     private
-    attr_reader :dependencies
+    attr_reader :dependencies, :project_name
 
     def sorted_dependencies
       dependencies.sort_by(&:name)
+    end
+
+    def determine_project_name
+      Pathname.pwd.basename.to_s
     end
   end
 end

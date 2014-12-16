@@ -1,4 +1,3 @@
 ---
 dependencies_file_dir: './doc/'
-project_name: # project name
 gradle_command: # only meaningful if used with a Java/gradle project. Defaults to "gradle".

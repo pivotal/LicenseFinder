@@ -150,6 +150,22 @@ module LicenseFinder
       end
     end
 
+    describe ".name_project" do
+      it "reports project name" do
+        decisions = subject.name_project("proj")
+        expect(decisions.project_name).to eq "proj"
+      end
+    end
+
+    describe ".unname_project" do
+      it "reports project name" do
+        decisions = subject.
+          name_project("proj").
+          unname_project
+        expect(decisions.project_name).to be_nil
+      end
+    end
+
     describe "persistence" do
       def roundtrip(decisions)
         described_class.restore(decisions.persist)

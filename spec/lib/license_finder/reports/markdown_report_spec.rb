@@ -16,10 +16,9 @@ module LicenseFinder
         result
       end
 
-      subject { MarkdownReport.new([dep2, dep1]).to_s }
+      subject { MarkdownReport.new([dep2, dep1], "new_project_name").to_s }
 
       it 'should have the correct header' do
-        LicenseFinder.config.project_name = "new_project_name"
         is_expected.to match "# new_project_name"
       end
 

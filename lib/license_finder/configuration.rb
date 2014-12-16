@@ -17,11 +17,10 @@ module LicenseFinder
       result
     end
 
-    attr_accessor :artifacts, :project_name, :gradle_command
+    attr_accessor :artifacts, :gradle_command
 
     def initialize(config)
       @artifacts     = Artifacts.new(Pathname(config['dependencies_file_dir'] || './doc/'))
-      @project_name  = config['project_name'] || determine_project_name
       @gradle_command = config['gradle_command'] || 'gradle'
     end
 
@@ -34,13 +33,8 @@ module LicenseFinder
     def to_hash
       {
         'dependencies_file_dir' => artifacts.dir.to_s,
-        'project_name' => project_name,
         'gradle_command' => gradle_command
       }
-    end
-
-    def determine_project_name
-      Pathname.pwd.basename.to_s
     end
 
     class Artifacts < SimpleDelegator

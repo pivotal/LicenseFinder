@@ -5,9 +5,9 @@ module LicenseFinder
     describe ".ensure_default" do
       it "should init and use saved config" do
         expect(Configuration::Persistence).to receive(:init)
-        allow(Configuration::Persistence).to receive(:get).and_return('project_name' => 'Saved Project Name')
+        allow(Configuration::Persistence).to receive(:get).and_return('gradle_command' => 'saved-gradle-command')
 
-        expect(described_class.ensure_default.project_name).to eq('Saved Project Name')
+        expect(described_class.ensure_default.gradle_command).to eq('saved-gradle-command')
       end
     end
 
@@ -21,24 +21,20 @@ module LicenseFinder
       it "should default missing attributes even if they are saved as nils in the YAML file" do
         attributes = {
           "dependencies_file_dir" => nil,
-          "project_name" => nil,
           "gradle_command" => nil
         }
         subject = described_class.new(attributes)
         expect(subject.artifacts.dir).to eq(Pathname('./doc/'))
-        expect(subject.project_name).not_to be_nil
         expect(subject.gradle_command).to eq('gradle')
       end
 
       it "should set the all of the attributes on the instance" do
         attributes = {
           "dependencies_file_dir" => "some/path",
-          "project_name" => "my_app",
           "gradle_command" => "./gradlew"
         }
         subject = described_class.new(attributes)
         expect(subject.artifacts.dir).to eq(Pathname("some/path"))
-        expect(subject.project_name).to eq("my_app")
         expect(subject.gradle_command).to eq("./gradlew")
       end
     end
@@ -51,17 +47,9 @@ module LicenseFinder
       end
     end
 
-    describe "#project_name" do
-      it "should default to the directory name" do
-        allow(Dir).to receive(:getwd).and_return("/path/to/a_project")
-        expect(described_class.new({}).project_name).to eq("a_project")
-      end
-    end
-
     describe "#save" do
       def attributes # can't be a let... the caching causes polution
         {
-          'project_name' => "New Project Name",
           'dependencies_file_dir' => "./deps",
           'gradle_command' => './gradle'
         }

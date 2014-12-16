@@ -127,11 +127,23 @@ module LicenseFinder
       self
     end
 
+    def name_project(name)
+      @decisions << [:name_project, name]
+      @project_name = name
+      self
+    end
+
+    def unname_project
+      @decisions << [:unname_project]
+      @project_name = nil
+      self
+    end
+
     ######
     # READ
     ######
 
-    attr_reader :packages, :whitelisted, :ignored, :ignored_groups
+    attr_reader :packages, :whitelisted, :ignored, :ignored_groups, :project_name
 
     def license_of(name)
       @licenses[name]
