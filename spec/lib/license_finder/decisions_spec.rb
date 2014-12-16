@@ -185,8 +185,8 @@ module LicenseFinder
         decisions = roundtrip(subject.approve("dep", who: "Somebody", why: "Some reason"))
         expect(decisions).to be_approved("dep")
         approval = decisions.approval_of("dep")
-        expect(approval.approver).to eq "Somebody"
-        expect(approval.notes).to eq "Some reason"
+        expect(approval.who).to eq "Somebody"
+        expect(approval.why).to eq "Some reason"
       end
 
       it "can restore whitelists" do

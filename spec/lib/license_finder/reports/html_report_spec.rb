@@ -19,7 +19,7 @@ module LicenseFinder
       subject { Capybara.string(HtmlReport.new(dependencies).to_s) }
 
       context "when the dependency is manually approved" do
-        before { dependency.approved_manually!(Decisions::Approval.new("the-approver", "the-approval-note", time)) }
+        before { dependency.approved_manually!(Decisions::TXN.new("the-approver", "the-approval-note", time)) }
 
         it "should show approved dependencies without action items" do
           is_expected.to have_selector ".approved"

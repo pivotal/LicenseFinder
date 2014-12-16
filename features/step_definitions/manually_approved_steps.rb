@@ -7,7 +7,7 @@ end
 When(/^I approve that gem$/) do
   @user.run_license_finder
   expect(@user).to be_seeing "gpl_gem"
-  @user.execute_command "license_finder approve gpl_gem --approver 'Julian' --message 'We really need this'"
+  @user.execute_command "license_finder approve gpl_gem --who 'Julian' --why 'We really need this'"
   @user.run_license_finder
 end
 

@@ -59,8 +59,8 @@ module LicenseFinder
         dep = dependency_manager.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_approved_manually
-        expect(dep.manual_approval.approver).to eq "Approver"
-        expect(dep.manual_approval.notes).to eq "Because"
+        expect(dep.manual_approval.who).to eq "Approver"
+        expect(dep.manual_approval.why).to eq "Because"
       end
 
       it "adds whitelist approvals to packages" do

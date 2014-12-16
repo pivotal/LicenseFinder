@@ -70,12 +70,12 @@
               manually approved
               <span class="badge badge-success">&#x2713;</span>
             </p>
-            <p><%= dependency.manual_approval.notes %></p>
+            <p><%= dependency.manual_approval.why %></p>
             <small>
-              <% if dependency.manual_approval.approver -%>
-                <%= dependency.manual_approval.approver %>,
+              <% if dependency.manual_approval.who -%>
+                <%= dependency.manual_approval.who %>,
               <% end -%>
-              <time datetime="<%= dependency.manual_approval.safe_created_at.utc.iso8601 %>"><%= dependency.manual_approval.safe_created_at.to_date %></time>
+              <time datetime="<%= dependency.manual_approval.safe_when.utc.iso8601 %>"><%= dependency.manual_approval.safe_when.to_date %></time>
             </small>
           <% elsif dependency.whitelisted? -%>
             <p>

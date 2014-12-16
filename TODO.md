@@ -33,3 +33,4 @@ dependencies list --format
 --who
 --why
 --when
+readme

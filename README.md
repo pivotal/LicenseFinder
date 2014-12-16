@@ -181,7 +181,7 @@ If you rerun `license_finder`, you should no longer see
 To record who approved the dependency and why:
 
 ```sh
-$ license_finder approve awesome_gpl_gem --approver CTO --message "Go ahead"
+$ license_finder approve awesome_gpl_gem --who CTO --why "Go ahead"
 ```
 
 
@@ -204,7 +204,7 @@ $ license_finder dependencies add MIT my_js_dep 0.1.2 --approve
 To record who approved the dependency when you add it, use:
 
 ```sh
-$ license_finder dependencies add MIT my_js_dep 0.1.2 --approve --approver CTO --message "Go ahead"
+$ license_finder dependencies add MIT my_js_dep 0.1.2 --approve --who CTO --why "Go ahead"
 ```
 
 The version is optional.  Run `license_finder dependencies help` for

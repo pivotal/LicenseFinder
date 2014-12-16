@@ -36,7 +36,7 @@ module LicenseFinder
           it "has an --approve option to approve the added dependency" do
             expect(decisions).to receive(:approve).with("js_dep", hash_including(who: "Julian", why:  "We really need this"))
             silence_stdout do
-              Main.start(["dependencies", "add", "--approve", "--approver", "Julian", "--message", "We really need this", "MIT", "js_dep", "1.2.3"])
+              Main.start(["dependencies", "add", "--approve", "--who", "Julian", "--why", "We really need this", "MIT", "js_dep", "1.2.3"])
             end
           end
         end
@@ -244,7 +244,7 @@ module LicenseFinder
             expect(decisions).to receive(:approve).with("foo", hash_including(who: "Julian", why:  "We really need this"))
 
             silence_stdout do
-              Main.start(["approve", "--approver", "Julian", "--message", "We really need this", "foo"])
+              Main.start(["approve", "--who", "Julian", "--why", "We really need this", "foo"])
             end
           end
         end

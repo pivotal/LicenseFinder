@@ -17,6 +17,14 @@ module LicenseFinder
 
       private
 
+      def txn
+        @txn ||= {
+          who: options[:who],
+          why: options[:why],
+          when: Time.now.getutc
+        }
+      end
+
       def dependency_manager(override_logger = nil)
         @dependency_manager ||= DependencyManager.new(
           decisions: decisions,
@@ -72,16 +80,11 @@ module LicenseFinder
 
     class Dependencies < Subcommand
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
-      method_option :approver, desc: "The person granting the approval"
-      method_option :message, desc: "The reason for the approval"
-      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
+      method_option :who, desc: "The person granting the approval"
+      method_option :why, desc: "The reason for the approval"
+      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--who APPROVER_NAME] [--why APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
       def add(license, name, version = nil)
         modifying { |decisions|
-          txn = {
-            who: options[:approver],
-            why: options[:message],
-            when: Time.now.getutc
-          }
           decisions.
             add_package(name, version).
             license(name, license)
@@ -240,16 +243,11 @@ module LicenseFinder
 
       default_task :action_items
 
-      method_option :approver, desc: "The person granting the approval"
-      method_option :message, desc: "The reason for the approval"
-      desc "approve DEPENDENCY_NAME... [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
+      method_option :who, desc: "The person granting the approval"
+      method_option :why, desc: "The reason for the approval"
+      desc "approve DEPENDENCY_NAME... [--who APPROVER_NAME] [--why APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
       def approve(name, *other_names)
         names = other_names.unshift name
-        txn = {
-          who: options[:approver],
-          why: options[:message],
-          when: Time.now.getutc
-        }
         modifying { |decisions|
           names.each { |name| decisions.approve(name, txn) }
         }
