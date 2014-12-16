@@ -34,7 +34,7 @@ end
 module DSL
   class User
     def run_license_finder
-      execute_command "license_finder"
+      execute_command "license_finder --quiet"
     end
 
     def create_python_app

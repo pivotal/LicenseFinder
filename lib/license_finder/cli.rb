@@ -13,6 +13,17 @@ module LicenseFinder
         def decisions
           @decisions ||= Decisions.saved!
         end
+
+        def logger
+          @logger ||= Logger.new options
+        end
+
+        def dependency_manager(override_logger = nil)
+          @dependency_manager ||= DependencyManager.new(
+            decisions: decisions,
+            logger: override_logger || logger
+          )
+        end
       end
 
       private
@@ -216,9 +227,11 @@ module LicenseFinder
     end
 
     class Main < Base
+      method_option :quiet, type: :boolean, desc: "silences progress report"
+      method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
       desc "action_items", "List unapproved dependencies"
       def action_items
-        unapproved = DependencyManager.new(decisions: decisions).unapproved
+        unapproved = dependency_manager.unapproved
 
         if unapproved.empty?
           say "All dependencies are approved for use", :green
@@ -267,12 +280,13 @@ module LicenseFinder
       method_option :format, desc: "The desired output format: #{FORMATS.keys.inspect}", default: 'text'
       desc "report", "Print a report of the project's dependencies to stdout"
       def report
-        formatter = FORMATS[options[:format]]
-        if !formatter
+        report = FORMATS[options[:format]]
+        if !report
           say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
           exit 1
         end
-        say formatter.of(DependencyManager.new(decisions: decisions).acknowledged)
+        dependencies = dependency_manager(Logger.new(quiet: true))
+        say report.of(dependencies.acknowledged)
       end
 
       subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"
