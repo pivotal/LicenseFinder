@@ -6,8 +6,6 @@ module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname
   BIN_PATH = ROOT_PATH.join("../bin")
 
-  Error = Class.new(StandardError)
-
   autoload :Logger,               'license_finder/logger'
   autoload :CLI,                  'license_finder/cli'
   autoload :Decisions,            'license_finder/decisions'

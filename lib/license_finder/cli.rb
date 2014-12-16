@@ -48,18 +48,9 @@ module LicenseFinder
         )
       end
 
-      def die_on_error
-        yield
-      rescue LicenseFinder::Error => e
-        say e.message, :red
-        exit 1
-      end
-
       def modifying
-        die_on_error {
-          yield decisions
-          decisions.save!
-        }
+        yield decisions
+        decisions.save!
       end
     end
 
@@ -86,11 +77,9 @@ module LicenseFinder
       private
 
       def modifying
-        die_on_error {
-          yield
+        yield
 
-          LicenseFinder.config.save
-        }
+        LicenseFinder.config.save
       end
     end
 
