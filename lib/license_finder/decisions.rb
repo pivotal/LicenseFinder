@@ -160,7 +160,7 @@ module LicenseFinder
 
     def write(value)
       LicenseFinder.config.artifacts.decisions_file.open('w+') do |f|
-        f.puts value
+        f.print value
       end
     end
 
