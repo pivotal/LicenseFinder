@@ -21,7 +21,7 @@ report.
 * Node.js (via `npm`)
 * Bower
 
-### Experimental project types 
+### Experimental project types
 
 * Java (via `maven`)
 * Java (via `gradle`)
@@ -63,10 +63,10 @@ Or, if you installed with bundler:
 $ bundle exec license_finder
 ```
 
-The output will report that none of these packages have been
+The output will report that none of your packages have been
 approved.  Over time you will tell `license_finder` which packages
-are approved, so when you run this command in the future, it will 
-report current action items; i.e., packages that are new or have 
+are approved, so when you run this command in the future, it will
+report current action items; i.e., packages that are new or have
 never been approved.
 
 If you don't wish to see progressive output "dots", use the `--quiet`
@@ -109,7 +109,7 @@ the project.
 ## Approving Dependencies
 
 Whenever you have an unapproved dependency, `license_finder` will tell you.
-If your business decides that this is an acceptable risk, the easiest way 
+If your business decides that this is an acceptable risk, the easiest way
 to approve the dependency is by running `license_finder approve`.
 
 For example, let's assume you've added the `awesome_gpl_gem`
@@ -231,17 +231,17 @@ $ license_finder dependencies remove my_js_dep
 
 ### Excluding Dependencies
 
-Sometimes a project will have development or test dependencies which 
+Sometimes a project will have development or test dependencies which
 you don't want to track.  You can exclude theses dependencies by running
 `license_finder ignored_groups`.  (Currently this only works for Bundler.)
 
-On rare occasions a package manager will report an individual dependency 
+On rare occasions a package manager will report an individual dependency
 that you want to exclude from all reports, even though it is approved.
 You can exclude an individual dependency by running
-`license_finder ignored_dependencies`.  Think carefully before adding 
+`license_finder ignored_dependencies`.  Think carefully before adding
 dependencies to this list.  A likely item to exclude is `bundler`,
-since it is a common dependency whose version changes from machine to 
-machine.  Adding it to the `ignored_dependencies` would prevent it 
+since it is a common dependency whose version changes from machine to
+machine.  Adding it to the `ignored_dependencies` would prevent it
 (and its oscillating versions) from appearing in reports.
 
 ## Configuration

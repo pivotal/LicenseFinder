@@ -218,7 +218,7 @@ module LicenseFinder
       method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
       method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
-      desc "action_items", "List unapproved dependencies"
+      desc "action_items", "List unapproved dependencies (the default action for `license_finder`)"
       def action_items
         unapproved = decision_applier.unapproved
 
