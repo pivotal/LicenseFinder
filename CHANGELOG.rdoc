@@ -1,3 +1,30 @@
+=== 2.0.0 / unreleased
+
+* Features
+
+  * Stores (in an append-only YAML file) every decision that has been made
+    about a project's dependencies, even if a decision was later reverted.
+  * Stores timestamps and other metadata (who, why) about each decision.
+  * When needed, applies those decisions to the list of packages currently
+    reported by the package managers, keeping license_finder up to date without
+    touching the file system.
+  * The CLI never writes HTML or CSV reports to the file system, only to
+    STDOUT. So, users have more choice over which reports to generate, when to
+    generate them, and where to put them. See `license_finder report`.
+  * The CLI changes only the append-only YAML file. That means
+    * Most actions (the ones that don't need to scan for packages) are fast.
+    * The timing of modifications is predictable (which fixes the problem
+      where running action_items would unexpectedly modify the db or reports).
+  * Removed dependencies on sqlite and sequel.
+  * Minimized the responsibilities of the configuration YAML file. The CLI
+    never writes data back into the config file, which means less futzing with
+    the file system. Makes room for replacing configuration with command line
+    options.
+
+* Bugfixes
+
+  * `license_finder` does not write anything to the file system, #94, #114, #117
+
 === 1.2.1 / unreleased
 
 * Features
