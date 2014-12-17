@@ -19,7 +19,7 @@ module LicenseFinder
         map    { |package| with_decided_license(package) }.
         reject { |package| ignored?(package) }.
         map    { |package| with_approvals(package) }.
-        tap    { |packages| invert_children(packages) }
+        tap    { |packages| with_parents(packages) }
     end
 
     private
@@ -47,7 +47,7 @@ module LicenseFinder
       package
     end
 
-    def invert_children(packages)
+    def with_parents(packages)
       packages.each do |parent|
         parent.children.each do |child_name|
           child = packages.detect { |child| child.name == child_name }
