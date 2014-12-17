@@ -222,19 +222,7 @@ Gemfile/requirements.txt/package.json, etc.)
 $ license_finder dependencies add MIT my_js_dep 0.1.2
 ```
 
-To automatically approve an unmanaged dependency when you add it, use:
-
-```sh
-$ license_finder dependencies add MIT my_js_dep 0.1.2 --approve
-```
-
-To record who approved the dependency when you add it, use:
-
-```sh
-$ license_finder dependencies add MIT my_js_dep 0.1.2 --approve --who CTO --why "Go ahead"
-```
-
-The version is optional.  Run `license_finder dependencies help` for
+Run `license_finder dependencies help` for
 additional documentation about managing these dependencies.
 
 `license_finder` cannot automatically detect when one of these
