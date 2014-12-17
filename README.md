@@ -46,7 +46,7 @@ gem 'license_finder', :group => :development
 
 This approach helps you remember to install `license_finder`, but can
 pull in unwanted dependencies, including `bundler`. To mitigate this
-problem, see [Excluding Dependencies](#fixme).
+problem, see [Excluding Dependencies](#excluding-dependencies).
 
 
 ## Usage
