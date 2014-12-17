@@ -116,6 +116,8 @@ For example, let's assume you've added the `awesome_gpl_gem`
 to your Gemfile, which `license_finder` reports is unapproved:
 
 ```sh
+$ license_finder
+Dependencies that need approval:
 awesome_gpl_gem, 1.0.0, GPL
 ```
 
@@ -176,9 +178,10 @@ see [Configuration](#configuration)).  This file records decisions you have
 made.
 
 This file must be committed to version control.  Rarely, you will have to
-manually resolve conflicts.  In this situation, keep in mind that each decision
-has an associated timestamp, and the decisions are processed top-to-bottom,
-with later decisions overwriting or appending to earlier decisions.
+manually resolve conflicts in it.  In this situation, keep in mind that each
+decision has an associated timestamp, and the decisions are processed
+top-to-bottom, with later decisions overwriting or appending to earlier
+decisions.
 
 The `license_finder report` command will output human-readable reports that you
 could send to your non-technical business partners, lawyers, etc.  You can

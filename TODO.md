@@ -29,5 +29,4 @@
 
 # immutable db
 
-readme
 upgrade path
