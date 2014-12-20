@@ -233,7 +233,7 @@ module LicenseFinder
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
-        modifying { decisions.license(name, license) }
+        modifying { decisions.license(name, license, txn) }
 
         say "The #{name} dependency has been marked as using #{license} license!", :green
       end
