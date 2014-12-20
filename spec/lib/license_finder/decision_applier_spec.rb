@@ -61,24 +61,6 @@ module LicenseFinder
         expect(dep).to be_approved
         expect(dep).to be_whitelisted
       end
-
-      it "sets packages parents" do
-        decisions = Decisions.new
-        grandparent = ManualPackage.new("grandparent", nil)
-        parent = ManualPackage.new("parent", nil)
-        child = ManualPackage.new("child", nil)
-        allow(grandparent).to receive(:children) { ["parent"] }
-        allow(parent).to receive(:children) { ["child"] }
-        decision_applier = described_class.new(
-          decisions: decisions,
-          packages: [grandparent, parent, child]
-        )
-        expect(decision_applier.acknowledged.map(&:parents)).to eq([
-          [].to_set,
-          ["grandparent"].to_set,
-          ["parent"].to_set
-        ])
-      end
     end
   end
 end

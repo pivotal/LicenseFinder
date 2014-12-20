@@ -66,22 +66,26 @@ module LicenseFinder
       end
 
       context "when the gem has many relationships" do
-        let(:decisions) { Decisions.new }
-        let(:decision_applier) do
-          DecisionApplier.new(decisions: decisions, packages: [])
+        let(:grandparent) do
+          grandparent = ManualPackage.new("foo grandparent")
+          allow(grandparent).to receive(:children) { ["foo parent"] }
+          grandparent
+        end
+
+        let(:parent) do
+          parent = ManualPackage.new("foo parent")
+          allow(parent).to receive(:children) { ["foo child"] }
+          parent
+        end
+
+        let(:child) do
+          ManualPackage.new("foo child")
         end
 
         let(:dependencies) do
-          decision_applier.acknowledged
-        end
-
-        before do
-          decisions.add_package("foo grandparent", nil)
-          decisions.add_package("foo parent", nil)
-          decisions.add_package("foo child", nil)
-          grandparent, parent = decisions.packages.to_a
-          allow(grandparent).to receive(:children) { ["foo parent"] }
-          allow(parent).to receive(:children) { ["foo child"] }
+          pm = PackageManager.new
+          allow(pm).to receive(:current_packages) { [grandparent, parent, child] }
+          pm.current_packages_with_relations
         end
 
         it "should show the relationships" do

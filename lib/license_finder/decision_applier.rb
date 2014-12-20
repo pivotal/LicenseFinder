@@ -18,8 +18,7 @@ module LicenseFinder
       base_packages.
         map    { |package| with_decided_license(package) }.
         reject { |package| ignored?(package) }.
-        map    { |package| with_approval(package) }.
-        tap    { |packages| with_parents(packages) }
+        map    { |package| with_approval(package) }
     end
 
     private
@@ -45,16 +44,6 @@ module LicenseFinder
         package.whitelisted!
       end
       package
-    end
-
-    def with_parents(packages)
-      packages.each do |parent|
-        parent.children.each do |child_name|
-          child = packages.detect { |child| child.name == child_name }
-          child.parents << parent.name if child
-        end
-      end
-      packages
     end
   end
 end

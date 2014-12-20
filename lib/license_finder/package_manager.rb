@@ -8,7 +8,7 @@ module LicenseFinder
       package_managers.
         map { |pm| pm.new(logger: logger) }.
         select(&:active?).
-        map(&:current_packages).
+        map(&:current_packages_with_relations).
         flatten
     end
 
@@ -21,6 +21,17 @@ module LicenseFinder
 
     def active?
       injected_package_path.exist?.tap { |is_active| logger.active self.class, is_active }
+    end
+
+    def current_packages_with_relations
+      packages = current_packages
+      packages.each do |parent|
+        parent.children.each do |child_name|
+          child = packages.detect { |child| child.name == child_name }
+          child.parents << parent.name if child
+        end
+      end
+      packages
     end
 
     private
