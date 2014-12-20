@@ -56,8 +56,8 @@ module LicenseFinder
       end
 
       context "when the gem has a group" do
-        before do
-          allow(dependency).to receive(:groups) { ["foo group"] }
+        let(:dependency) do
+          ManualPackage.new(dependency_name, nil, groups: ["foo group"])
         end
 
         it "should show the group" do
@@ -66,23 +66,10 @@ module LicenseFinder
       end
 
       context "when the gem has many relationships" do
-        let(:grandparent) do
-          grandparent = ManualPackage.new("foo grandparent")
-          allow(grandparent).to receive(:children) { ["foo parent"] }
-          grandparent
-        end
-
-        let(:parent) do
-          parent = ManualPackage.new("foo parent")
-          allow(parent).to receive(:children) { ["foo child"] }
-          parent
-        end
-
-        let(:child) do
-          ManualPackage.new("foo child")
-        end
-
         let(:dependencies) do
+          grandparent = ManualPackage.new("foo grandparent", nil, children: ["foo parent"])
+          parent      = ManualPackage.new("foo parent",      nil, children: ["foo child"])
+          child       = ManualPackage.new("foo child")
           pm = PackageManager.new
           allow(pm).to receive(:current_packages) { [grandparent, parent, child] }
           pm.current_packages_with_relations

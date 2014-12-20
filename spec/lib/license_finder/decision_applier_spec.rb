@@ -6,7 +6,7 @@ module LicenseFinder
       it "combines manual and system packages" do
         decision_applier = described_class.new(
           decisions: Decisions.new.add_package("manual", nil),
-          packages: [ManualPackage.new("system", nil)]
+          packages: [ManualPackage.new("system")]
         )
         expect(decision_applier.acknowledged.map(&:name)).to match_array ["manual", "system"]
       end
@@ -30,8 +30,7 @@ module LicenseFinder
       it "ignores packages in certain groups" do
         decisions = Decisions.new.
           ignore_group("development")
-        dev_dep = ManualPackage.new("dep", nil)
-        allow(dev_dep).to receive(:groups) { ["development"] }
+        dev_dep = ManualPackage.new("dep", nil, groups: ["development"])
         decision_applier = described_class.new(
           decisions: decisions,
           packages: [dev_dep]

@@ -4,17 +4,13 @@ module LicenseFinder
   describe DetailedTextReport do
     describe '#to_s' do
       let(:dep1) do
-        result = ManualPackage.new('gem_a', '1.0')
-        allow(result).to receive(:summary) { "Summary" }
-        allow(result).to receive(:description) { "Description" }
+        result = ManualPackage.new('gem_a', '1.0', summary: "Summary", description: "Description")
         result.decide_on_license(License.find_by_name('MIT'))
         result
       end
 
       let(:dep2) do
-        result = ManualPackage.new('gem_b', '1.0')
-        allow(result).to receive(:summary) { "Summary" }
-        allow(result).to receive(:description) { "Description" }
+        result = ManualPackage.new('gem_b', '1.0', summary: "Summary", description: "Description")
         result.decide_on_license(License.find_by_name('MIT'))
         result
       end
