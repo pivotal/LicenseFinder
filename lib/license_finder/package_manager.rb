@@ -1,4 +1,16 @@
 module LicenseFinder
+  # Super-class for the different package managers
+  # (Bundler, NPM, Pip, etc.)
+  #
+  # For guidance on adding a new package manager use the shared behavior
+  #
+  #     it_behaves_like "a PackageManager"
+  #
+  # Additional guidelines are:
+  #
+  # - implement #current_packages, to return a list of `Package`s this package manager is tracking
+  # - implement #package_path, a `Pathname` which, if the file exists, indicates the package manager is in use on this project
+  #
   class PackageManager
     def self.package_managers
       [Bundler, NPM, Pip, Bower, Maven, Gradle, CocoaPods]
