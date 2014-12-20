@@ -36,17 +36,9 @@ module LicenseFinder
     # WRITE
     #######
 
-    TXN = Struct.new(:who, :why, :unsafe_when) do
+    TXN = Struct.new(:who, :why, :safe_when) do
       def self.from_hash(txn)
         new(txn[:who], txn[:why], txn[:when])
-      end
-
-      def safe_when
-        if unsafe_when.is_a?(String)
-          Time.parse(unsafe_when)
-        else
-          unsafe_when
-        end
       end
     end
 
