@@ -2,13 +2,6 @@ require 'thor'
 
 module LicenseFinder
   module CLI
-    FORMATS = {
-      'text' => TextReport,
-      'detailed_text' => DetailedTextReport,
-      'html' => HtmlReport,
-      'markdown' => MarkdownReport
-    }
-
     class Base < Thor
       def self.subcommand(namespace, klass, namespace_description)
         description = "#{namespace} [#{(klass.tasks.keys - ["help"]).join("|")}]"
@@ -35,15 +28,6 @@ module LicenseFinder
         else
           say '(none)'
         end
-      end
-
-      def report_of(content)
-        report = FORMATS[options[:format]]
-        if !report
-          say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
-          exit 1
-        end
-        report.of(content, decisions.project_name)
       end
 
       def txn
@@ -214,6 +198,13 @@ module LicenseFinder
     end
 
     class Main < Base
+      FORMATS = {
+        'text' => TextReport,
+        'detailed_text' => DetailedTextReport,
+        'html' => HtmlReport,
+        'markdown' => MarkdownReport
+      }
+
       method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
       method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
@@ -259,6 +250,17 @@ module LicenseFinder
       subcommand "ignored_dependencies", IgnoredDependencies, "Manage ignored dependencies"
       subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
       subcommand "project_name", ProjectName, "Manage the project name, for display in reports"
+
+      private
+
+      def report_of(content)
+        report = FORMATS[options[:format]]
+        if !report
+          say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
+          exit 1
+        end
+        report.of(content, decisions.project_name)
+      end
     end
   end
 end
