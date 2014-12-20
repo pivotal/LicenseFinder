@@ -12,8 +12,8 @@ module LicenseFinder
     def acknowledged
       base_packages = decisions.packages + packages
       base_packages.
-        map    { |package| with_decided_license(package) }.
         reject { |package| ignored?(package) }.
+        map    { |package| with_decided_license(package) }.
         map    { |package| with_approval(package) }
     end
 
@@ -21,16 +21,16 @@ module LicenseFinder
 
     attr_reader :packages, :decisions
 
+    def ignored?(package)
+      decisions.ignored?(package.name) ||
+        package.groups.any? { |group| decisions.ignored_group?(group) }
+    end
+
     def with_decided_license(package)
       if license = decisions.license_of(package.name)
         package.decide_on_license license
       end
       package
-    end
-
-    def ignored?(package)
-      decisions.ignored?(package.name) ||
-        package.groups.any? { |group| decisions.ignored_group?(group) }
     end
 
     def with_approval(package)
