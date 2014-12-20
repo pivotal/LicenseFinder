@@ -18,7 +18,7 @@ module LicenseFinder
       base_packages.
         map    { |package| with_decided_license(package) }.
         reject { |package| ignored?(package) }.
-        map    { |package| with_approvals(package) }.
+        map    { |package| with_approval(package) }.
         tap    { |packages| with_parents(packages) }
     end
 
@@ -38,7 +38,7 @@ module LicenseFinder
         package.groups.any? { |group| decisions.ignored_group?(group) }
     end
 
-    def with_approvals(package)
+    def with_approval(package)
       if decisions.approved?(package.name)
         package.approved_manually!(decisions.approval_of(package.name))
       elsif package.licenses.any? { |license| decisions.approved_license?(license) }
@@ -51,7 +51,7 @@ module LicenseFinder
       packages.each do |parent|
         parent.children.each do |child_name|
           child = packages.detect { |child| child.name == child_name }
-          child.parents << parent if child
+          child.parents << parent.name if child
         end
       end
       packages

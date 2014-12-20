@@ -100,7 +100,7 @@
         <% if dependency.parents.any? -%>
           <dl>
             <dt><%=dependency.name%> is required by:</dt>
-            <dd><%= dependency.parents.map(&:name).join(", ") -%></dd>
+            <dd><%= dependency.parents.to_a.join(", ") -%></dd>
           </dl>
         <% end -%>
         <% if dependency.children.any? -%>

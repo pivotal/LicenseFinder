@@ -75,8 +75,8 @@ module LicenseFinder
         )
         expect(decision_applier.acknowledged.map(&:parents)).to eq([
           [].to_set,
-          [grandparent].to_set,
-          [parent].to_set
+          ["grandparent"].to_set,
+          ["parent"].to_set
         ])
       end
     end
