@@ -1,5 +1,3 @@
-require 'digest'
-
 module LicenseFinder
   class DecisionApplier
     attr_reader :decisions
