@@ -54,8 +54,7 @@ module LicenseFinder
         }
       end
 
-      def decision_applier(override_logger = nil)
-        logger = override_logger || Logger.new(options)
+      def decision_applier(logger = Logger.new(options))
         @decision_applier ||= DecisionApplier.new(
           decisions: decisions,
           packages: PackageManager.current_packages(logger)
