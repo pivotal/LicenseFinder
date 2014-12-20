@@ -1,7 +1,5 @@
 module LicenseFinder
   class DecisionApplier
-    attr_reader :decisions
-
     def initialize options={}
       @decisions = options.fetch(:decisions)
       @packages = options.fetch(:packages)
@@ -21,7 +19,7 @@ module LicenseFinder
 
     private
 
-    attr_reader :packages
+    attr_reader :packages, :decisions
 
     def with_decided_license(package)
       if license = decisions.license_of(package.name)
