@@ -246,6 +246,8 @@ module LicenseFinder
 
       private
 
+      # The core of the system. The saved decisions are applied to the current
+      # packages.
       def decision_applier(logger = Logger.new(options))
         @decision_applier ||= DecisionApplier.new(
           decisions: decisions,
