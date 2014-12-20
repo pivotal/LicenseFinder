@@ -38,13 +38,6 @@ module LicenseFinder
         }
       end
 
-      def decision_applier(logger = Logger.new(options))
-        @decision_applier ||= DecisionApplier.new(
-          decisions: decisions,
-          packages: PackageManager.current_packages(logger)
-        )
-      end
-
       def modifying
         yield
         decisions.save!
@@ -252,6 +245,13 @@ module LicenseFinder
       subcommand "project_name", ProjectName, "Manage the project name, for display in reports"
 
       private
+
+      def decision_applier(logger = Logger.new(options))
+        @decision_applier ||= DecisionApplier.new(
+          decisions: decisions,
+          packages: PackageManager.current_packages(logger)
+        )
+      end
 
       def report_of(content)
         report = FORMATS[options[:format]]
