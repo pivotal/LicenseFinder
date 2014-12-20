@@ -128,6 +128,14 @@ module LicenseFinder
     # PERSIST
     #########
 
+    def self.saved!
+      restore(read!)
+    end
+
+    def save!
+      write!(persist)
+    end
+
     def self.restore(persisted)
       result = new
       if persisted
@@ -142,23 +150,15 @@ module LicenseFinder
       YAML.dump(@decisions)
     end
 
-    def self.saved!
-      restore(read)
+    def self.read!
+      file = LicenseFinder.config.artifacts.decisions_file
+      file.read if file.exist?
     end
 
-    def save!
-      write(persist)
-    end
-
-    def write(value)
+    def write!(value)
       LicenseFinder.config.artifacts.decisions_file.open('w+') do |f|
         f.print value
       end
-    end
-
-    def self.read
-      file = LicenseFinder.config.artifacts.decisions_file
-      file.read if file.exist?
     end
   end
 end
