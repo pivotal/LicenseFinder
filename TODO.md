@@ -26,7 +26,3 @@
 # docs
 
 - [ ] specify gradle version >= 1.8
-
-# immutable db
-
-upgrade path
