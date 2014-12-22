@@ -108,3 +108,12 @@ module LicenseFinder
     end
   end
 end
+
+require 'license_finder/package_managers/manual_package'
+require 'license_finder/package_managers/bower_package'
+require 'license_finder/package_managers/bundler_package'
+require 'license_finder/package_managers/pip_package'
+require 'license_finder/package_managers/npm_package'
+require 'license_finder/package_managers/maven_package'
+require 'license_finder/package_managers/gradle_package'
+require 'license_finder/package_managers/cocoa_pods_package'
