@@ -1,3 +1,5 @@
+require 'erb'
+
 module LicenseFinder
   class FormattedReport < Report
     def to_s

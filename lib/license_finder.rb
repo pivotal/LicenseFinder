@@ -1,6 +1,5 @@
 require 'pathname'
 require 'yaml'
-require 'erb'
 
 module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname
