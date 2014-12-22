@@ -9,9 +9,7 @@ module LicenseFinder
   autoload :Logger,               'license_finder/logger'
   autoload :CLI,                  'license_finder/cli'
   autoload :Decisions,            'license_finder/decisions'
-  autoload :PackageManager,       'license_finder/package_manager'
   autoload :DecisionApplier,      'license_finder/decision_applier'
-  autoload :PackageSaver,         'license_finder/package_saver'
   autoload :License,              'license_finder/license'
   autoload :PossibleLicenseFile,  'license_finder/possible_license_file'
   autoload :PossibleLicenseFiles, 'license_finder/possible_license_files'
@@ -19,6 +17,7 @@ module LicenseFinder
   autoload :Platform,             'license_finder/platform'
 
   autoload :Package,              'license_finder/package'
+  autoload :PackageManager,       'license_finder/package_manager'
   autoload :Bower,                'license_finder/package_managers/bower'
   autoload :Bundler,              'license_finder/package_managers/bundler'
   autoload :NPM,                  'license_finder/package_managers/npm'
