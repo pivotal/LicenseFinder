@@ -1,5 +1,3 @@
-require 'csv'
-
 module LicenseFinder
   class DetailedTextReport < CsvReport
     private

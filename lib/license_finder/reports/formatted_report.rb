@@ -1,5 +1,21 @@
 module LicenseFinder
-  class FormattedReport < DependencyReport
+  class FormattedReport < Report
+    def self.underscored_name
+      @underscored_name ||= begin
+        str = name.dup
+        str.sub!(/.*::/, '')
+        str.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
+        str.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+        str.downcase!
+      end
+    end
+
+    def to_s
+      filename = ROOT_PATH.join('templates', "#{self.class.underscored_name}.erb")
+      template = ERB.new(filename.read, nil, '-')
+      template.result(binding)
+    end
+
     private
     def unapproved_dependencies
       dependencies.reject(&:approved?)

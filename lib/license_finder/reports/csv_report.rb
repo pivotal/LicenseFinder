@@ -1,7 +1,7 @@
 require 'csv'
 
 module LicenseFinder
-  class CsvReport < DependencyReport
+  class CsvReport < Report
     COMMA_SEP =  ","
 
     def to_s
