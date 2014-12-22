@@ -3,7 +3,7 @@ require 'erb'
 module LicenseFinder
   class FormattedReport < Report
     def to_s
-      filename = ROOT_PATH.join('license_finder', 'reports', 'templates', "#{self.class.template_name}.erb")
+      filename = ROOT_PATH.join('reports', 'templates', "#{self.class.template_name}.erb")
       template = ERB.new(filename.read, nil, '-')
       template.result(binding)
     end

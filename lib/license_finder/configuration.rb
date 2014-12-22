@@ -71,7 +71,7 @@ module LicenseFinder
       end
 
       def file_template
-        ROOT_PATH.join('license_finder', 'data', 'license_finder.example.yml')
+        ROOT_PATH.join('data', 'license_finder.example.yml')
       end
     end
   end
