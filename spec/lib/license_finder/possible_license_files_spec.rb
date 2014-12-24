@@ -3,7 +3,7 @@ require 'spec_helper'
 module LicenseFinder
   describe PossibleLicenseFiles do
     def fixture_path(fixture)
-      Pathname.new(File.join(File.dirname(__FILE__), '..', '..', '..', 'spec', 'fixtures', fixture)).realpath.to_s
+      Pathname.new(__FILE__).dirname.join('..', '..', 'fixtures', fixture).to_s
     end
 
     describe "#find" do
@@ -17,7 +17,7 @@ module LicenseFinder
         expect(subject.find).to eq([])
       end
 
-      it "includes files with names like LICENSE, License or COPYING" do
+      it "includes files with names like LICENSE, README or COPYING" do
         subject = described_class.new(fixture_path('license_names'))
 
         expect(subject.find.map(&:file_path)).to match_array(

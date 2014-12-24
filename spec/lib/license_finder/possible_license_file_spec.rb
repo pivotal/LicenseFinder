@@ -10,7 +10,6 @@ module LicenseFinder
           allow(subject).to receive(:text).and_return('file text')
         end
 
-        its(:file_path) { should == 'nested/path' }
         its(:text) { should == 'file text' } # this is a terrible test, considering the stubbing
         its(:path) { should == 'root/nested/path' }
       end
