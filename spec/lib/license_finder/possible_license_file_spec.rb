@@ -3,7 +3,7 @@ require 'spec_helper'
 module LicenseFinder
   describe PossibleLicenseFile do
     context "file parsing" do
-      subject { described_class.new('root', 'root/nested/path') }
+      subject { described_class.new('root/nested/path') }
 
       context "ignoring text" do
         before do
@@ -15,7 +15,7 @@ module LicenseFinder
       end
     end
 
-    subject { described_class.new('gem', 'gem/license/path') }
+    subject { described_class.new('gem/license/path') }
 
     context "with a known license" do
       before do

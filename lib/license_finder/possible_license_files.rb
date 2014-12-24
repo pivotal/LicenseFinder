@@ -13,7 +13,7 @@ module LicenseFinder
 
     def find
       paths_of_candidate_files.map do |path|
-        file_at_path(path)
+        PossibleLicenseFile.new(path)
       end
     end
 
@@ -30,10 +30,6 @@ module LicenseFinder
     def candidate_files_and_dirs
       return [] if install_path.nil?
       Pathname.glob(install_path.join('**', CANDIDATE_PATH_WILDCARD))
-    end
-
-    def file_at_path(path)
-      PossibleLicenseFile.new(install_path, path)
     end
   end
 end

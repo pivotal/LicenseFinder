@@ -3,39 +3,40 @@ require 'spec_helper'
 module LicenseFinder
   describe PossibleLicenseFiles do
     def fixture_path(fixture)
-      Pathname.new(__FILE__).dirname.join('..', '..', 'fixtures', fixture).to_s
+      Pathname.new(__FILE__).dirname.join('..', '..', 'fixtures', fixture)
     end
 
     describe "#find" do
+      def files_in(fixture)
+        root_path = fixture_path(fixture)
+        subject = described_class.find(root_path.to_s)
+
+        subject.map do |f|
+          Pathname(f.path).relative_path_from(root_path).to_s
+        end
+      end
+
       it "is empty if passed a nil install path" do
         subject = described_class.new nil
         expect(subject.find).to eq([])
       end
 
       it "is empty if there aren't any license files" do
-        subject = described_class.new('/not/a/dir')
-        expect(subject.find).to eq([])
+        expect(files_in('not/a/dir')).to eq([])
       end
 
       it "includes files with names like LICENSE, README or COPYING" do
-        subject = described_class.new(fixture_path('license_names'))
-
-        expect(subject.find.map(&:file_path)).to match_array(
+        expect(files_in('license_names')).to match_array(
         %w[COPYING.txt LICENSE Mit-License README.rdoc Licence.rdoc]
         )
       end
 
       it "includes files deep in the hierarchy" do
-        subject = described_class.new(fixture_path('nested_gem'))
-
-        expect(subject.find.map(&:file_path)).to match_array(%w[vendor/LICENSE])
+        expect(files_in('nested_gem')).to eq(['vendor/LICENSE'])
       end
 
-      it "includes both files nested inside LICENSE directory and top level files" do
-        subject = described_class.new(fixture_path('license_directory'))
-        found_license_files = subject.find
-
-        expect(found_license_files.map(&:file_path)).to match_array(%w[
+      it "includes files nested inside LICENSE directory" do
+        expect(files_in('license_directory')).to match_array(%w[
           LICENSE/BSD-2-Clause.txt
           LICENSE/GPL-2.0.txt
           LICENSE/MIT.txt
@@ -46,8 +47,7 @@ module LicenseFinder
       end
 
       it "handles non UTF8 encodings" do
-        subject = described_class.new(fixture_path('utf8_gem'))
-        expect { subject.find }.not_to raise_error
+        expect { files_in('utf8_gem') }.not_to raise_error
       end
     end
   end
