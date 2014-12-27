@@ -302,6 +302,12 @@ downloadLicenses {
 `license_finder` requires ruby >= 1.9, or jruby.
 
 
+## Upgrading
+
+To upgrade from `license_finder` version ~1.2 to 2.0, see
+[`license_finder_upgrade`](https://github.com/mainej/license_finder_upgrade).
+
+
 ## A Plea to Package Authors and Maintainers
 
 Please add a license to your package specs! Most packaging systems
