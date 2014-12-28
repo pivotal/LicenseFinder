@@ -37,10 +37,12 @@ module LicenseFinder
 
   autoload :DependencyReport,     'license_finder/reports/dependency_report'
   autoload :FormattedReport,      'license_finder/reports/formatted_report'
+  autoload :CsvReport,            'license_finder/reports/csv_report'
   autoload :HtmlReport,           'license_finder/reports/html_report'
   autoload :MarkdownReport,       'license_finder/reports/markdown_report'
   autoload :TextReport,           'license_finder/reports/text_report'
   autoload :DetailedTextReport,   'license_finder/reports/detailed_text_report'
+  autoload :StatusReport,         'license_finder/reports/status_report'
 
   def self.config
     @config ||= Configuration.ensure_default

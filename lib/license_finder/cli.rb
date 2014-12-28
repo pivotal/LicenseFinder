@@ -194,6 +194,7 @@ module LicenseFinder
       FORMATS = {
         'text' => TextReport,
         'detailed_text' => DetailedTextReport,
+        'status' => StatusReport,
         'html' => HtmlReport,
         'markdown' => MarkdownReport
       }
