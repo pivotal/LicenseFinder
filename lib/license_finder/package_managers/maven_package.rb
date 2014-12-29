@@ -5,7 +5,7 @@ module LicenseFinder
         spec["artifactId"],
         spec["version"],
         options.merge(
-          spec_licenses: spec["licenses"].map { |l| l["name"] }
+          spec_licenses: Array(spec["licenses"]).map { |l| l["name"] }
         )
       )
     end
