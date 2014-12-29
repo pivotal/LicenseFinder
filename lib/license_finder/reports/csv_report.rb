@@ -43,11 +43,11 @@ module LicenseFinder
     end
 
     def format_summary(dep)
-      dep.summary ? dep.summary.strip : ""
+      dep.summary.to_s.strip
     end
 
     def format_description(dep)
-      dep.description ? dep.description.strip : ""
+      dep.description.to_s.strip
     end
   end
 end
