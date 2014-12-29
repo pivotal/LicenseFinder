@@ -7,7 +7,7 @@ Feature: Whitelist licenses
     Given I have an app
     When I whitelist the Expat license
     And I view the whitelisted licenses
-    Then I should see Expat in the output
+    Then I should see MIT in the output
 
   Scenario: Depending on whitelisted licenses
     Given I have an app that depends on an BSD license
@@ -19,7 +19,7 @@ Feature: Whitelist licenses
     When I whitelist the Expat license
     And I remove Expat from the whitelist
     And I view the whitelisted licenses
-    Then I should not see Expat in the output
+    Then I should not see MIT in the output
 
   Scenario: Whitelisting license aliases
     Given I have an app that depends on an MIT license

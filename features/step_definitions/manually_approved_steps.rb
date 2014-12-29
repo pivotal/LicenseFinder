@@ -5,10 +5,10 @@ Given(/^I have an app that depends on a GPL licensed gem$/) do
 end
 
 When(/^I approve that gem$/) do
-  @user.execute_command "license_finder"
+  @user.run_license_finder
   expect(@user).to be_seeing "gpl_gem"
-  @user.execute_command "license_finder approve gpl_gem --approver 'Julian' --message 'We really need this'"
-  @user.execute_command "license_finder --quiet"
+  @user.execute_command "license_finder approve gpl_gem --who 'Julian' --why 'We really need this'"
+  @user.run_license_finder
 end
 
 Then(/^I should not see that gem in the console output$/) do

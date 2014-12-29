@@ -5,16 +5,20 @@ module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
       let(:dependency_name) { "the-name" }
+      let(:time) { Time.now.utc }
+      let(:project_name) { "given project name" }
+
       let(:dependency) do
-        dep = Dependency.create name: dependency_name
-        dep.set_licenses [License.find_by_name("MIT")].to_set
+        dep = ManualPackage.new(dependency_name)
+        dep.decide_on_license License.find_by_name("MIT")
         dep
       end
+      let(:dependencies) { [dependency] }
 
-      subject { Capybara.string(HtmlReport.new([dependency]).to_s) }
+      subject { Capybara.string(HtmlReport.new(dependencies, project_name).to_s) }
 
       context "when the dependency is manually approved" do
-        before { dependency.approve! "the-approver", "the-approval-note" }
+        before { dependency.approved_manually!(Decisions::TXN.new("the-approver", "the-approval-note", time)) }
 
         it "should show approved dependencies without action items" do
           is_expected.to have_selector ".approved"
@@ -31,7 +35,7 @@ module LicenseFinder
       end
 
       context "when the dependency is whitelisted" do
-        before { allow(dependency).to receive_messages(whitelisted?: true) }
+        before { dependency.whitelisted! }
 
         it "should show approved dependencies without action items" do
           is_expected.to have_selector ".approved"
@@ -45,29 +49,36 @@ module LicenseFinder
       end
 
       context "when the dependency is not approved" do
-        before {
-          dependency.licenses = [License.find_by_name('GPL')].to_set
-          dependency.manual_approval = nil
-        }
-
         it "should show unapproved dependencies with action items" do
           is_expected.to have_selector ".unapproved"
           is_expected.to have_selector ".action-items li"
         end
       end
 
+      context "when the gem has a group" do
+        let(:dependency) do
+          ManualPackage.new(dependency_name, nil, groups: ["foo group"])
+        end
+
+        it "should show the group" do
+          is_expected.to have_text "(foo group)"
+        end
+      end
+
       context "when the gem has many relationships" do
-        before do
-          allow(dependency).to receive_messages(bundler_groups: [double(name: "foo group")],
-                          parents: [double(name: "foo parent")],
-                          children: [double(name: "foo child")])
+        let(:dependencies) do
+          grandparent = ManualPackage.new("foo grandparent", nil, children: ["foo parent"])
+          parent      = ManualPackage.new("foo parent",      nil, children: ["foo child"])
+          child       = ManualPackage.new("foo child")
+          pm = PackageManager.new
+          allow(pm).to receive(:current_packages) { [grandparent, parent, child] }
+          pm.current_packages_with_relations
         end
 
         it "should show the relationships" do
-          is_expected.to have_text "(foo group)"
-          is_expected.to have_text "#{dependency_name} is required by:"
-          is_expected.to have_text "foo parent"
-          is_expected.to have_text "#{dependency_name} relies on:"
+          is_expected.to have_text "foo parent is required by:"
+          is_expected.to have_text "foo grandparent"
+          is_expected.to have_text "foo parent relies on:"
           is_expected.to have_text "foo child"
         end
       end
@@ -77,6 +88,23 @@ module LicenseFinder
           is_expected.not_to have_text "()"
           is_expected.not_to have_text "#{dependency_name} is required by:"
           is_expected.not_to have_text "#{dependency_name} relies on:"
+        end
+      end
+
+      context "when the project has a name" do
+        it "should show the project name" do
+          title = subject.find "h1"
+          expect(title).to have_text "given project name"
+        end
+      end
+
+      context "when the project has no name" do
+        let(:project_name) { nil }
+
+        it "should default to the directory name" do
+          allow(Dir).to receive(:getwd).and_return("/path/to/a_project")
+          title = subject.find "h1"
+          expect(title).to have_text "a_project"
         end
       end
     end

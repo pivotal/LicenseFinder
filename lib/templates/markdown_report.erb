@@ -1,4 +1,4 @@
-# <%= LicenseFinder.config.project_name %>
+# <%= project_name %>
 
 As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %>. <%= dependencies.size %> total
 
@@ -27,9 +27,9 @@ As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %>. <%= dependencies.size %> to
 <% if dependency.approved_manually? -%>
 <%= dependency.licenses.map { |l| link_to_license(l) }.join(', ') %> manually approved
 
-><%= dependency.manual_approval.notes %>
+><%= dependency.manual_approval.why %>
 
-><cite> <%= dependency.manual_approval.approver %> <%= dependency.manual_approval.safe_created_at.to_date %></cite>
+><cite> <%= dependency.manual_approval.who %> <%= dependency.manual_approval.safe_when.to_date %></cite>
 <% elsif dependency.whitelisted? -%>
 <%= dependency.licenses.map { |l| link_to_license(l) }.join(', ') %> whitelisted
 <% else -%>

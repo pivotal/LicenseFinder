@@ -22,16 +22,6 @@ module LicenseFinder
         it "does not equal other uses of the default license" do
           expect(License.find_by_name(nil)).not_to eq(License.find_by_name(nil))
         end
-
-        context "when there is a whitelist" do
-          before do
-            allow(LicenseFinder.config).to receive(:whitelist).and_return(["not empty"])
-          end
-
-          it "does not blow up" do
-            expect(License.find_by_name(nil).name).to eq("other")
-          end
-        end
       end
     end
 
@@ -51,28 +41,10 @@ module LicenseFinder
       defaults = {
         short_name: "Default Short Name",
         url: "http://example.com/license",
-        whitelisted: false,
         matcher: License::Matcher.from_text('Default Matcher')
       }
 
       License.new(defaults.merge(settings))
-    end
-
-    describe "#whitelisted?" do
-      it "is true if the settings say it is" do
-        expect(make_license).not_to be_whitelisted
-        expect(make_license(whitelisted: true)).to be_whitelisted
-      end
-
-      it "can be made true (without mutating original)" do
-        original = make_license
-        license = original.whitelist
-        expect(license).not_to eq(original)
-        expect(license).to be_whitelisted
-        expect(license.url).to eq("http://example.com/license")
-        expect(license).to be_matches_name "Default Short Name"
-        expect(license).to be_matches_text "Default Matcher"
-      end
     end
 
     describe "#matches_name?" do

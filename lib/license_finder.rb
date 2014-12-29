@@ -6,12 +6,11 @@ module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname
   BIN_PATH = ROOT_PATH.join("../bin")
 
-  Error = Class.new(StandardError)
-
   autoload :Logger,               'license_finder/logger'
   autoload :CLI,                  'license_finder/cli'
+  autoload :Decisions,            'license_finder/decisions'
   autoload :PackageManager,       'license_finder/package_manager'
-  autoload :DependencyManager,    'license_finder/dependency_manager'
+  autoload :DecisionApplier,      'license_finder/decision_applier'
   autoload :PackageSaver,         'license_finder/package_saver'
   autoload :License,              'license_finder/license'
   autoload :PossibleLicenseFile,  'license_finder/possible_license_file'
@@ -27,6 +26,7 @@ module LicenseFinder
   autoload :Maven,                'license_finder/package_managers/maven'
   autoload :CocoaPods,            'license_finder/package_managers/cocoa_pods'
   autoload :Gradle,               'license_finder/package_managers/gradle'
+  autoload :ManualPackage,        'license_finder/package_managers/manual_package'
   autoload :BowerPackage,         'license_finder/package_managers/bower_package'
   autoload :BundlerPackage,       'license_finder/package_managers/bundler_package'
   autoload :PipPackage,           'license_finder/package_managers/pip_package'
@@ -35,26 +35,16 @@ module LicenseFinder
   autoload :GradlePackage,        'license_finder/package_managers/gradle_package'
   autoload :CocoaPodsPackage,     'license_finder/package_managers/cocoa_pods_package'
 
-
-  autoload :BundlerGroup,         'license_finder/tables/bundler_group'
-  autoload :Dependency,           'license_finder/tables/dependency'
-  autoload :ManualApproval,       'license_finder/tables/manual_approval'
-  autoload :YmlToSql,             'license_finder/yml_to_sql'
-
   autoload :DependencyReport,     'license_finder/reports/dependency_report'
   autoload :FormattedReport,      'license_finder/reports/formatted_report'
+  autoload :CsvReport,            'license_finder/reports/csv_report'
   autoload :HtmlReport,           'license_finder/reports/html_report'
   autoload :MarkdownReport,       'license_finder/reports/markdown_report'
-  autoload :Reporter,             'license_finder/reports/reporter'
   autoload :TextReport,           'license_finder/reports/text_report'
   autoload :DetailedTextReport,   'license_finder/reports/detailed_text_report'
+  autoload :StatusReport,         'license_finder/reports/status_report'
 
   def self.config
     @config ||= Configuration.ensure_default
   end
-end
-
-unless defined?(LicenseAudit)
-  require 'license_finder/tables'
-  LicenseFinder::YmlToSql.convert_if_required
 end

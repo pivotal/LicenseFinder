@@ -27,19 +27,19 @@ When(/^I remove Expat from the whitelist$/) do
 end
 
 Then(/^I should not see a MIT licensed gem unapproved$/) do
-  @user.execute_command 'license_finder --quiet'
+  @user.run_license_finder
   expect(@user).to_not be_seeing 'mit_gem'
 end
 
-Then(/^I should see Expat in the output$/) do
-  expect(@user).to be_seeing 'Expat'
+Then(/^I should see MIT in the output$/) do
+  expect(@user).to be_seeing 'MIT'
 end
 
-Then(/^I should not see Expat in the output$/) do
-  expect(@user).to_not be_seeing 'Expat'
+Then(/^I should not see MIT in the output$/) do
+  expect(@user).to_not be_seeing 'MIT'
 end
 
 Then(/^I should not see a BSD licensed gem unapproved$/) do
-  @user.execute_command 'license_finder --quiet'
+  @user.run_license_finder
   expect(@user).to_not be_seeing 'bsd_gem'
 end

@@ -9,20 +9,38 @@ module LicenseFinder
         super namespace, klass
       end
 
+      class_option :who, desc: "The person making this decision"
+      class_option :why, desc: "The reason for making this decision"
+
+      no_commands do
+        def decisions
+          @decisions ||= Decisions.saved!
+        end
+      end
+
       private
 
-      def sync_with_package_managers options={}
-        die_on_error {
-          logger = LicenseFinder::Logger.new options
-          DependencyManager.new(logger: logger).sync_with_package_managers
+      def say_each(coll)
+        if coll.any?
+          coll.each do |item|
+            say(block_given? ? yield(item) : item)
+          end
+        else
+          say '(none)'
+        end
+      end
+
+      def txn
+        @txn ||= {
+          who: options[:who],
+          why: options[:why],
+          when: Time.now.getutc
         }
       end
 
-      def die_on_error
+      def modifying
         yield
-      rescue LicenseFinder::Error => e
-        say e.message, :red
-        exit 1
+        decisions.save!
       end
     end
 
@@ -47,15 +65,13 @@ module LicenseFinder
 
     class Dependencies < Subcommand
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
-      method_option :approver, desc: "The person granting the approval"
-      method_option :message, desc: "The reason for the approval"
-      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve] [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Add a dependency that is not managed by a package manager, optionally storing who approved the dependency and why"
+      desc "add LICENSE DEPENDENCY_NAME [VERSION] [--approve]", "Add a dependency that is not managed by a package manager, optionally approving it at the same time"
       def add(license, name, version = nil)
-        die_on_error {
-          DependencyManager.new.tap do |dependency_manager|
-            dependency_manager.manually_add(license, name, version)
-            dependency_manager.approve!(name, options[:approver], options[:message]) if options[:approve]
-          end
+        modifying {
+          decisions.
+            add_package(name, version, txn).
+            license(name, license, txn)
+          decisions.approve(name, txn) if options[:approve]
         }
         if options[:approve]
           say "The #{name} dependency has been added and approved!", :green
@@ -66,50 +82,23 @@ module LicenseFinder
 
       desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
       def remove(name)
-        die_on_error {
-          DependencyManager.new.manually_remove(name)
-        }
+        modifying { decisions.remove_package(name, txn) }
 
         say "The #{name} dependency has been removed.", :green
       end
 
       desc "list", "List manually added dependencies"
       def list
-        dependencies = DependencyManager.new.added_manually
-
         say "Manually Added Dependencies:", :blue
-        if dependencies.any?
-          dependencies.each do |dependency|
-            say dependency.name
-          end
-        else
-          say '(none)'
-        end
+        say_each(decisions.packages) { |package| package.name }
       end
     end
 
-    class ConfigSubcommand < Subcommand
-      private
-
-      def modifying
-        die_on_error {
-          yield
-
-          LicenseFinder.config.save
-          sync_with_package_managers
-        }
-      end
-    end
-
-    class Whitelist < ConfigSubcommand
+    class Whitelist < Subcommand
       desc "list", "List all the whitelisted licenses"
       def list
-        whitelist = LicenseFinder.config.whitelist
-
         say "Whitelisted Licenses:", :blue
-        whitelist.each do |license|
-          say license
-        end
+        say_each(decisions.whitelisted) { |license| license.name }
       end
 
       desc "add LICENSE...", "Add one or more licenses to the whitelist"
@@ -117,7 +106,7 @@ module LicenseFinder
         licenses = other_licenses.unshift license
         modifying {
           licenses.each do |license|
-            LicenseFinder.config.whitelist.push(license)
+            decisions.whitelist(license, txn)
           end
         }
         say "Added #{licenses.join(", ")} to the license whitelist"
@@ -128,146 +117,153 @@ module LicenseFinder
         licenses = other_licenses.unshift license
         modifying {
           licenses.each do |license|
-            LicenseFinder.config.whitelist.delete(license)
+            decisions.unwhitelist(license, txn)
           end
         }
         say "Removed #{licenses.join(", ")} from the license whitelist"
       end
     end
 
-    class ProjectName < ConfigSubcommand
-      desc "set NAME", "Set the project name"
-      def set(name)
-        modifying {
-          LicenseFinder.config.project_name = name
-        }
+    class ProjectName < Subcommand
+      desc "show", "Show the project name"
+      def show
+        say "Project Name:", :blue
+        say decisions.project_name
+      end
+
+      desc "add NAME", "Set the project name"
+      def add(name)
+        modifying { decisions.name_project(name, txn) }
+
         say "Set the project name to #{name}", :green
       end
+
+      desc "remove", "Remove the project name"
+      def remove
+        modifying { decisions.unname_project(txn) }
+
+        say "Removed the project name"
+      end
     end
 
-    class IgnoredBundlerGroups < ConfigSubcommand
-      desc "list", "List all the ignored bundler groups"
+    class IgnoredGroups < Subcommand
+      desc "list", "List all the ignored groups"
       def list
-        ignored = LicenseFinder.config.ignore_groups
-
-        say "Ignored Bundler Groups:", :blue
-        ignored.each do |group|
-          say group
-        end
+        say "Ignored Groups:", :blue
+        say_each(decisions.ignored_groups)
       end
 
-      desc "add GROUP", "Add a bundler group to be ignored"
+      desc "add GROUP", "Add a group to be ignored"
       def add(group)
-        modifying {
-          LicenseFinder.config.ignore_groups.push(group)
-        }
-        say "Added #{group} to the ignored bundler groups"
+        modifying { decisions.ignore_group(group, txn) }
+
+        say "Added #{group} to the ignored groups"
       end
 
-      desc "remove GROUP", "Remove a bundler group from the ignored bundler groups"
+      desc "remove GROUP", "Remove a group from the ignored groups"
       def remove(group)
-        modifying {
-          LicenseFinder.config.ignore_groups.delete(group)
-        }
-        say "Removed #{group} from the ignored bundler groups"
+        modifying { decisions.heed_group(group, txn) }
+
+        say "Removed #{group} from the ignored groups"
       end
     end
 
-    class IgnoredDependencies < ConfigSubcommand
+    class IgnoredDependencies < Subcommand
       desc "list", "List all the ignored dependencies"
       def list
-        ignored = LicenseFinder.config.ignore_dependencies
-
         say "Ignored Dependencies:", :blue
-        if ignored.any?
-          ignored.each do |group|
-            say group
-          end
-        else
-          say '(none)'
-        end
+        say_each(decisions.ignored)
       end
 
       desc "add DEPENDENCY", "Add a dependency to be ignored"
-      def add(group)
-        modifying {
-          LicenseFinder.config.ignore_dependencies.push(group)
-        }
-        say "Added #{group} to the ignored dependencies"
+      def add(dep)
+        modifying { decisions.ignore(dep, txn) }
+
+        say "Added #{dep} to the ignored dependencies"
       end
 
       desc "remove DEPENDENCY", "Remove a dependency from the ignored dependencies"
-      def remove(group)
-        modifying {
-          LicenseFinder.config.ignore_dependencies.delete(group)
-        }
-        say "Removed #{group} from the ignored dependencies"
+      def remove(dep)
+        modifying { decisions.heed(dep, txn) }
+
+        say "Removed #{dep} from the ignored dependencies"
       end
     end
 
     class Main < Base
-      method_option :quiet, type: :boolean, desc: "silences loading output"
+      FORMATS = {
+        'text' => TextReport,
+        'detailed_text' => DetailedTextReport,
+        'status' => StatusReport,
+        'html' => HtmlReport,
+        'markdown' => MarkdownReport
+      }
+
+      method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
-      desc "rescan", "Find new dependencies. (Default action)"
-      def rescan
-        sync_with_package_managers options
-        show_results
+      method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
+      desc "action_items", "List unapproved dependencies (the default action for `license_finder`)"
+      def action_items
+        unapproved = decision_applier.unapproved
+
+        if unapproved.empty?
+          say "All dependencies are approved for use", :green
+        else
+          say "Dependencies that need approval:", :red
+          say report_of(unapproved)
+          exit 1
+        end
       end
 
-      desc "show_results", "Display ignored dependencies and action items"
-      def show_results
-        IgnoredDependencies.new.list
-        action_items
-      end
+      default_task :action_items
 
-      default_task :rescan
-
-      method_option :approver, desc: "The person granting the approval"
-      method_option :message, desc: "The reason for the approval"
-      desc "approve DEPENDENCY_NAME... [--approver APPROVER_NAME] [--message APPROVAL_MESSAGE]", "Approve one or more dependencies by name, optionally storing who approved the dependency and why"
+      desc "approve DEPENDENCY_NAME...", "Approve one or more dependencies by name"
       def approve(name, *other_names)
         names = other_names.unshift name
-        die_on_error {
-          names.each { |name| DependencyManager.new.approve!(name, options[:approver], options[:message]) }
-        }
+        modifying { names.each { |name| decisions.approve(name, txn) } }
 
         say "The #{names.join(", ")} dependency has been approved!", :green
       end
 
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
-        die_on_error {
-          DependencyManager.new.license!(name, license)
-        }
+        modifying { decisions.license(name, license, txn) }
 
         say "The #{name} dependency has been marked as using #{license} license!", :green
       end
 
-      desc "move", "Move dependency.* files from root directory to doc/"
-      def move
-        Configuration.move!
-        say "Congratulations, you have cleaned up your root directory!'", :green
-      end
-
-      desc "action_items", "List unapproved dependencies"
-      def action_items
-        unapproved = Dependency.unapproved
-
-        if unapproved.empty?
-          say "All dependencies are approved for use", :green
-        else
-          say "Dependencies that need approval:", :red
-          say TextReport.new(unapproved)
-          exit 1
-        end
+      method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
+      desc "report", "Print a report of the project's dependencies to stdout"
+      def report
+        dependencies = decision_applier(Logger.new(quiet: true))
+        say report_of(dependencies.acknowledged)
       end
 
       subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"
-      subcommand "ignored_bundler_groups", IgnoredBundlerGroups, "Manage ignored Bundler groups"
+      subcommand "ignored_groups", IgnoredGroups, "Manage ignored groups"
       subcommand "ignored_dependencies", IgnoredDependencies, "Manage ignored dependencies"
       subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
-      subcommand "project_name", ProjectName, "Manage the project name"
+      subcommand "project_name", ProjectName, "Manage the project name, for display in reports"
 
+      private
+
+      # The core of the system. The saved decisions are applied to the current
+      # packages.
+      def decision_applier(logger = Logger.new(options))
+        @decision_applier ||= DecisionApplier.new(
+          decisions: decisions,
+          packages: PackageManager.current_packages(logger)
+        )
+      end
+
+      def report_of(content)
+        report = FORMATS[options[:format]]
+        if !report
+          say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
+          exit 1
+        end
+        report.of(content, decisions.project_name)
+      end
     end
   end
 end

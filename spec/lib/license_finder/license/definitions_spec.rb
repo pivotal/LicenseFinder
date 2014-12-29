@@ -2,17 +2,11 @@ require 'spec_helper'
 
 describe LicenseFinder::License::Definitions do
   it "should create unrecognized licenses" do
-    license = described_class.build_unrecognized("foo", [])
+    license = described_class.build_unrecognized("foo")
     expect(license.name).to eq("foo")
     expect(license.url).to be_nil
     expect(license).to be_matches_name("foo")
     expect(license).not_to be_matches_text("foo")
-    expect(license).not_to be_whitelisted
-  end
-
-  it "should whitelist unrecognized licenses" do
-    license = described_class.build_unrecognized("foo", ["foo"])
-    expect(license).to be_whitelisted
   end
 end
 

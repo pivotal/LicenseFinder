@@ -4,27 +4,21 @@ module LicenseFinder
   describe MarkdownReport do
     describe '#to_s' do
       let(:dep1) do
-        Dependency.new(
-          'name' => 'gem_a',
-          'version' => '1.0',
-          'licenses' => [License.find_by_name('other')].to_set
-        )
+        result = ManualPackage.new('gem_a', '1.0')
+        result.decide_on_license(License.find_by_name('other'))
+        result
       end
 
       let(:dep2) do
-        dependency = Dependency.create(
-          'name' => 'gem_b',
-          'version' => '2.3',
-          'licenses' => [License.find_by_name('BSD')].to_set
-        )
-        dependency.approve!
-        dependency
+        result = ManualPackage.new('gem_b', '2.3')
+        result.decide_on_license(License.find_by_name('BSD'))
+        result.approved_manually!(double(:approval).as_null_object)
+        result
       end
 
-      subject { MarkdownReport.new([dep2, dep1]).to_s }
+      subject { MarkdownReport.new([dep2, dep1], "new_project_name").to_s }
 
       it 'should have the correct header' do
-        LicenseFinder.config.project_name = "new_project_name"
         is_expected.to match "# new_project_name"
       end
 

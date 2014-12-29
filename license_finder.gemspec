@@ -3,7 +3,7 @@ require './lib/license_finder/platform'
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.name        = "license_finder"
-  s.version     = "1.2"
+  s.version     = "2.0.0.rc1"
 
   s.authors = [
     "Jacob Maine",
@@ -35,11 +35,9 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.add_dependency "bundler"
-  s.add_dependency "sequel"
   s.add_dependency "thor"
   s.add_dependency "httparty"
   s.add_dependency "xml-simple"
-  s.add_dependency LicenseFinder::Platform.sqlite_gem
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec-its"

@@ -31,13 +31,45 @@ module LicenseFinder
 
     def initialize options={}
       @logger = options[:logger] || LicenseFinder::Logger::Default.new
+      @whitelisted = false
+      @parents = Set.new
+      @decided_licenses = Set.new
     end
+
+    attr_reader :parents, :manual_approval
 
     def licenses
-      @licenses ||= determine_license.to_set
+      @licenses ||= determine_licenses.to_set
     end
 
-    def determine_license
+    def decide_on_license(license)
+      @decided_licenses << license
+    end
+
+    def approved_manually!(approval)
+      @manual_approval = approval
+    end
+
+    def whitelisted!
+      @whitelisted = true
+    end
+
+    def approved?
+      approved_manually? || whitelisted?
+    end
+
+    def approved_manually?
+      !@manual_approval.nil?
+    end
+
+    def whitelisted?
+      @whitelisted
+    end
+
+    def determine_licenses
+      dl = @decided_licenses
+      return dl if dl.any?
+
       lfs = licenses_from_spec
       return lfs if lfs.any?
 

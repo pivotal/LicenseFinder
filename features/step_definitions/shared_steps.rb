@@ -12,14 +12,14 @@ Given(/^I have an app$/) do
 end
 
 When(/^I run license_finder$/) do
-  @user.execute_command "license_finder --quiet"
+  @user.run_license_finder
 end
 
 When(/^I whitelist everything I can think of$/) do
   whitelist = ["MIT","other","New BSD","Apache 2.0","Ruby"]
   whitelist += ["BSD","Apache-2","Apache"] # for JRuby
   @user.configure_license_finder_whitelist whitelist
-  @user.execute_command "license_finder --quiet"
+  @user.run_license_finder
 end
 
 Then(/^I should see the project name (\w+) in the html$/) do |project_name|
@@ -33,6 +33,10 @@ end
 
 module DSL
   class User
+    def run_license_finder
+      execute_command "license_finder --quiet"
+    end
+
     def create_python_app
       reset_projects!
 
@@ -117,10 +121,8 @@ module DSL
     end
 
     def configure_license_finder_whitelist(whitelisted_licenses=[])
-      config_path.mkpath
-      config_file.open("w") do |f|
-        f.write({'whitelist' => whitelisted_licenses}.to_yaml)
-      end
+      whitelist = whitelisted_licenses.map(&:inspect).join(' ')
+      execute_command("license_finder whitelist add #{whitelist}")
     end
 
     def execute_command(command)
@@ -162,7 +164,8 @@ module DSL
     end
 
     def in_html
-      yield Capybara.string(app_path('doc/dependencies.html').read)
+      execute_command("license_finder report --format html")
+      yield Capybara.string(@output)
     end
 
     def in_gem_html(gem_name)

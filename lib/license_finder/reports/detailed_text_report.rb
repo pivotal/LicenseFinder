@@ -1,19 +1,17 @@
 require 'csv'
 
 module LicenseFinder
-  class DetailedTextReport < DependencyReport
-    def to_s
-      CSV.generate(col_sep: ",") do |csv|
-        sorted_dependencies.each do |s|
-          csv << [
-            s.name,
-            s.version,
-            s.licenses.map(&:name).join(','),
-            s.summary ? s.summary.strip : "",
-            s.description ? s.description.strip : ""
-          ]
-        end
-      end
+  class DetailedTextReport < CsvReport
+    private
+
+    def format_dependency(dep)
+      [
+        dep.name,
+        dep.version,
+        format_licenses(dep.licenses),
+        dep.summary ? dep.summary.strip : "",
+        dep.description ? dep.description.strip : ""
+      ]
     end
   end
 end

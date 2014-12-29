@@ -13,7 +13,7 @@ Given(/^I have an app with an unapproved dependency$/) do
 end
 
 When(/^I run license_finder help on a specific command$/) do
-  @user.execute_command "license_finder ignored_bundler_groups help add"
+  @user.execute_command "license_finder ignored_groups help add"
 end
 
 When(/^I run license_finder help$/) do
@@ -22,7 +22,7 @@ end
 
 Then(/^it creates a config directory with the license_finder config$/) do
   expect(@user.config_path).to be_exist
-  text = %|---\nwhitelist:\n#- MIT\n#- Apache 2.0\nignore_groups:\n#- test\n#- development\nignore_dependencies:\n#- bundler\ndependencies_file_dir: './doc/'\nproject_name: # project name\ngradle_command: # only meaningful if used with a Java/gradle project. Defaults to "gradle".\n|
+  text = %|---\ndependencies_file_dir: './doc/'\ngradle_command: # only meaningful if used with a Java/gradle project. Defaults to "gradle".\n|
   expect(@user.config_file.read).to eq(text.gsub(/^\s+/, ""))
 end
 
@@ -39,7 +39,7 @@ Then(/^I should see all dependencies approved for use$/) do
 end
 
 Then(/^I should see the correct subcommand usage instructions$/) do
-  expect(@user).to be_seeing 'license_finder ignored_bundler_groups add GROUP'
+  expect(@user).to be_seeing 'license_finder ignored_groups add GROUP'
 end
 
 Then(/^I should see the default usage instructions$/) do
