@@ -17,7 +17,7 @@ module LicenseFinder
       subject { described_class.new([dep2, dep1]).to_s }
 
       it 'generates a report with the approval status, name, version and licenses of each dependency, sorted by name' do
-        is_expected.to eq("X,gem_a,1.0,MIT\n,gem_b,2.0,other\n")
+        is_expected.to eq("Approved,gem_a,1.0,MIT\nNot approved,gem_b,2.0,other\n")
       end
     end
   end

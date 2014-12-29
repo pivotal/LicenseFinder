@@ -4,7 +4,7 @@ module LicenseFinder
 
     def format_dependency(dep)
       [
-        dep.approved? ? "X" : nil,
+        dep.approved? ? "Approved" : "Not approved",
         dep.name,
         dep.version,
         format_licenses(dep.licenses)
