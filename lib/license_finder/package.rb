@@ -34,12 +34,13 @@ module LicenseFinder
 
       @name = name
       @version = version
-      @summary = options.fetch(:summary, "")
-      @description = options.fetch(:description, "")
-      @homepage = options.fetch(:homepage, "")
-      @children = options.fetch(:children, [])
+      @summary = options[:summary] || ""
+      @description = options[:description] || ""
+      @homepage = options[:homepage] || ""
+      @children = options[:children] || []
       @parents = Set.new # will be figured out later by package manager
-      @groups = options.fetch(:groups, [])
+      @groups = options[:groups] || []
+      @license_names_from_spec = options[:spec_licenses] || []
 
       @whitelisted = false
       @decided_licenses = Set.new
@@ -48,6 +49,7 @@ module LicenseFinder
     attr_reader :name, :version,
                 :summary, :description, :homepage,
                 :children, :parents, :groups,
+                :license_names_from_spec,
                 :manual_approval
 
     def licenses

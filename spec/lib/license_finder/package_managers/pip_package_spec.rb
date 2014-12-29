@@ -12,7 +12,7 @@ module LicenseFinder
 
     its(:name) { should == "jasmine" }
     its(:version) { should == "1.3.1" }
-    its(:homepage) { should == nil }
+    its(:homepage) { should eq "" }
     its(:groups) { should == [] }
     its(:children) { should == [] }
 
@@ -45,7 +45,7 @@ module LicenseFinder
       end
 
       it "falls back to nothing" do
-        expect(subject.homepage).to be_nil
+        expect(subject.homepage).to eq ""
       end
     end
 
