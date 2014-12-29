@@ -1,12 +1,12 @@
 module LicenseFinder
   class Report
-    def self.of(dependencies, project_name)
-      new(dependencies, project_name).to_s
+    def self.of(dependencies, options)
+      new(dependencies, options).to_s
     end
 
-    def initialize(dependencies=[], project_name=nil)
+    def initialize(dependencies=[], options={})
       @dependencies = Array(dependencies)
-      @project_name = project_name || determine_project_name
+      @project_name = options[:project_name] || determine_project_name
     end
 
     private

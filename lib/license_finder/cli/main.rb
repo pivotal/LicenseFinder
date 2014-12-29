@@ -72,7 +72,7 @@ module LicenseFinder
           say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
           exit 1
         end
-        report.of(content, decisions.project_name)
+        report.of(content, project_name: decisions.project_name)
       end
     end
   end

@@ -15,7 +15,7 @@ module LicenseFinder
       end
       let(:dependencies) { [dependency] }
 
-      subject { Capybara.string(HtmlReport.new(dependencies, project_name).to_s) }
+      subject { Capybara.string(HtmlReport.new(dependencies, project_name: project_name).to_s) }
 
       context "when the dependency is manually approved" do
         before { dependency.approved_manually!(Decisions::TXN.new("the-approver", "the-approval-note", time)) }
