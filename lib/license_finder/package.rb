@@ -29,14 +29,26 @@ module LicenseFinder
       end
     end
 
-    def initialize options={}
+    def initialize(name, version = nil, options={})
       @logger = options[:logger] || LicenseFinder::Logger::Default.new
+
+      @name = name
+      @version = version
+      @summary = options.fetch(:summary, "")
+      @description = options.fetch(:description, "")
+      @homepage = options.fetch(:homepage, "")
+      @children = options.fetch(:children, [])
+      @parents = Set.new # will be figured out later by package manager
+      @groups = options.fetch(:groups, [])
+
       @whitelisted = false
-      @parents = Set.new
       @decided_licenses = Set.new
     end
 
-    attr_reader :parents, :manual_approval
+    attr_reader :name, :version,
+                :summary, :description, :homepage,
+                :children, :parents, :groups,
+                :manual_approval
 
     def licenses
       @licenses ||= determine_licenses.to_set

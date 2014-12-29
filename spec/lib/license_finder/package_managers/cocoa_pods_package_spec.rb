@@ -11,9 +11,9 @@ module LicenseFinder
 
     its(:name) { should == "Name" }
     its(:version) { should == "1.0.0" }
-    its(:summary) { should be_nil }
-    its(:description) { should be_nil }
-    its(:homepage) { should be_nil }
+    its(:summary) { should eq "" }
+    its(:description) { should eq "" }
+    its(:homepage) { should eq "" }
     its(:groups) { should == [] }
     its(:children) { should == [] }
 

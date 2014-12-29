@@ -1,18 +1,5 @@
 module LicenseFinder
   class ManualPackage < Package
-    def initialize(name, version = nil, options={})
-      super options
-      @name = name
-      @version = version
-      @summary = options.fetch(:summary, "")
-      @description = options.fetch(:description, "")
-      @homepage = options.fetch(:homepage, "")
-      @children = options.fetch(:children, [])
-      @groups = options.fetch(:groups, [])
-    end
-
-    attr_reader :name, :version, :summary, :description, :homepage, :children, :groups
-
     def ==(other)
       eql? other
     end

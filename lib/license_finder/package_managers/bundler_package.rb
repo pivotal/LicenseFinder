@@ -1,28 +1,20 @@
-require 'forwardable'
-
 module LicenseFinder
   class BundlerPackage < Package
-    extend Forwardable
-    def_delegators :gem_def, :summary, :description, :name, :homepage
-
     attr_reader :gem_def
 
     def initialize(gem_def, bundler_def, options={})
-      super options
+      super(
+        gem_def.name,
+        gem_def.version.to_s,
+        options.merge(
+          summary: gem_def.summary,
+          description: gem_def.description,
+          homepage: gem_def.homepage,
+          children: gem_def.dependencies.map(&:name),
+          groups: Array(bundler_def && bundler_def.groups)
+        )
+      )
       @gem_def = gem_def
-      @bundler_def = bundler_def
-    end
-
-    def groups
-      Array(@bundler_def && @bundler_def.groups)
-    end
-
-    def version
-      gem_def.version.to_s
-    end
-
-    def children
-      gem_def.dependencies.map(&:name)
     end
 
     private

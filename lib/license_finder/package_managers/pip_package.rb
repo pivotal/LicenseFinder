@@ -1,33 +1,17 @@
 module LicenseFinder
   class PipPackage < Package
     def initialize(name, version, install_path, pypi_def, options={})
-      super options
-      @name = name
-      @version = version
+      super(
+        name,
+        version,
+        options.merge(
+          summary: pypi_def.fetch("summary", ""),
+          description: pypi_def.fetch("description", ""),
+          homepage: pypi_def["home_page"]
+        )
+      )
       @install_path = install_path
       @pypi_def = pypi_def
-    end
-
-    attr_reader :name, :version
-
-    def summary
-      pypi_def.fetch("summary", "")
-    end
-
-    def description
-      pypi_def.fetch("description", "")
-    end
-
-    def homepage
-      pypi_def["home_page"]
-    end
-
-    def children
-      [] # no way to determine child deps from pip (maybe?)
-    end
-
-    def groups
-      [] # no concept of dev/test groups in pip (maybe?)
     end
 
     private
