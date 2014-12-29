@@ -3,6 +3,7 @@ require 'csv'
 module LicenseFinder
   class CsvReport < Report
     COMMA_SEP =  ","
+    AVAILABLE_COLUMNS = %w[name version licenses approved summary description]
 
     def initialize(dependencies, options)
       super
