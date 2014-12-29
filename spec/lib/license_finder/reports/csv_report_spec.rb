@@ -16,5 +16,11 @@ module LicenseFinder
       subject = described_class.new([dep], columns: %w[name version licenses approved summary description])
       expect(subject.to_s).to eq("gem_a,1.0,\"MIT,GPL\",Approved,A summary,A description\n")
     end
+
+    it "ignores unknown columns" do
+      dep = ManualPackage.new('gem_a', '1.0')
+      subject = described_class.new([dep], columns: %w[unknown])
+      expect(subject.to_s).to eq("\n")
+    end
   end
 end

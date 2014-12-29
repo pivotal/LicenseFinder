@@ -7,7 +7,7 @@ module LicenseFinder
 
     def initialize(dependencies, options)
       super
-      @columns = Array(options[:columns])
+      @columns = Array(options[:columns]) & AVAILABLE_COLUMNS
     end
 
     def to_s
