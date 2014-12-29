@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module LicenseFinder
   class BundlerPackage < Package
     extend Forwardable
