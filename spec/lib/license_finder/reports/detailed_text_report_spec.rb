@@ -15,7 +15,7 @@ module LicenseFinder
         result
       end
 
-      subject { DetailedTextReport.new([dep2, dep1]).to_s }
+      subject { described_class.new([dep2, dep1]).to_s }
 
       it 'should generate a text report with the name, version, license, summary and description of each dependency, sorted by name' do
         is_expected.to eq("gem_a,1.0,MIT,Summary,Description\ngem_b,1.0,MIT,Summary,Description\n")

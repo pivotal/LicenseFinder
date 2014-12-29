@@ -1,15 +1,7 @@
 module LicenseFinder
   class DetailedTextReport < CsvReport
-    private
-
-    def format_dependency(dep)
-      [
-        dep.name,
-        dep.version,
-        format_licenses(dep.licenses),
-        dep.summary ? dep.summary.strip : "",
-        dep.description ? dep.description.strip : ""
-      ]
+    def initialize(dependencies, options={})
+      super(dependencies, options.merge(columns: %w[name version licenses summary description]))
     end
   end
 end

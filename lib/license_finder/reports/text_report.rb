@@ -2,14 +2,8 @@ module LicenseFinder
   class TextReport < CsvReport
     COMMA_SEP =  ", "
 
-    private
-
-    def format_dependency(dep)
-      [
-        dep.name,
-        dep.version,
-        format_licenses(dep.licenses)
-      ]
+    def initialize(dependencies, options={})
+      super(dependencies, options.merge(columns: %w[name version licenses]))
     end
   end
 end

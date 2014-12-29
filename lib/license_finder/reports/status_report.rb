@@ -1,14 +1,7 @@
 module LicenseFinder
   class StatusReport < CsvReport
-    private
-
-    def format_dependency(dep)
-      [
-        dep.approved? ? "Approved" : "Not approved",
-        dep.name,
-        dep.version,
-        format_licenses(dep.licenses)
-      ]
+    def initialize(dependencies, options={})
+      super(dependencies, options.merge(columns: %w[approved name version licenses]))
     end
   end
 end
