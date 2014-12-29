@@ -1,25 +1,25 @@
 module LicenseFinder
   class PipPackage < Package
-    def self.find_license_names(pypi_def)
-      license = pypi_def["license"]
+    def self.license_names_from_spec(spec)
+      license = spec["license"]
 
       return [license] if license && license != "UNKNOWN"
 
-      pypi_def.
+      spec.
         fetch("classifiers", []).
         select { |c| c.start_with?("License") }.
         map { |c| c.gsub(/^License.*::\s*(.*)$/, '\1') }
     end
 
-    def initialize(name, version, install_path, pypi_def, options={})
+    def initialize(name, version, install_path, spec, options={})
       super(
         name,
         version,
         options.merge(
-          summary: pypi_def.fetch("summary", ""),
-          description: pypi_def.fetch("description", ""),
-          homepage: pypi_def["home_page"],
-          spec_licenses: self.class.find_license_names(pypi_def)
+          summary: spec["summary"],
+          description: spec["description"],
+          homepage: spec["home_page"],
+          spec_licenses: self.class.license_names_from_spec(spec)
         )
       )
       @install_path = install_path

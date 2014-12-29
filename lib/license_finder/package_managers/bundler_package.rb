@@ -2,20 +2,20 @@ module LicenseFinder
   class BundlerPackage < Package
     attr_reader :gem_def
 
-    def initialize(gem_def, bundler_def, options={})
+    def initialize(spec, bundler_def, options={})
       super(
-        gem_def.name,
-        gem_def.version.to_s,
+        spec.name,
+        spec.version.to_s,
         options.merge(
-          summary: gem_def.summary,
-          description: gem_def.description,
-          homepage: gem_def.homepage,
-          children: gem_def.dependencies.map(&:name),
+          summary: spec.summary,
+          description: spec.description,
+          homepage: spec.homepage,
+          children: spec.dependencies.map(&:name),
           groups: Array(bundler_def && bundler_def.groups),
-          spec_licenses: gem_def.licenses
+          spec_licenses: spec.licenses
         )
       )
-      @gem_def = gem_def
+      @gem_def = spec
     end
 
     private
