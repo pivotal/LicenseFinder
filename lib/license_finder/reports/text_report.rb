@@ -1,5 +1,3 @@
-require 'csv'
-
 module LicenseFinder
   class TextReport < CsvReport
     COMMA_SEP =  ", "

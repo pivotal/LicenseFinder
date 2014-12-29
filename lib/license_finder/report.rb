@@ -1,15 +1,5 @@
 module LicenseFinder
-  class DependencyReport
-    def self.underscored_name
-      @underscored_name ||= begin
-        str = name.dup
-        str.sub!(/.*::/, '')
-        str.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
-        str.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
-        str.downcase!
-      end
-    end
-
+  class Report
     def self.of(dependencies, project_name)
       new(dependencies, project_name).to_s
     end
@@ -17,12 +7,6 @@ module LicenseFinder
     def initialize(dependencies=[], project_name=nil)
       @dependencies = Array(dependencies)
       @project_name = project_name || determine_project_name
-    end
-
-    def to_s
-      filename = ROOT_PATH.join('templates', "#{self.class.underscored_name}.erb")
-      template = ERB.new(filename.read, nil, '-')
-      template.result(binding)
     end
 
     private
@@ -37,3 +21,12 @@ module LicenseFinder
     end
   end
 end
+
+require 'license_finder/reports/formatted_report'
+require 'license_finder/reports/csv_report'
+
+require 'license_finder/reports/html_report'
+require 'license_finder/reports/markdown_report'
+require 'license_finder/reports/text_report'
+require 'license_finder/reports/detailed_text_report'
+require 'license_finder/reports/status_report'

@@ -1,5 +1,13 @@
+require 'erb'
+
 module LicenseFinder
-  class FormattedReport < DependencyReport
+  class FormattedReport < Report
+    def to_s
+      filename = ROOT_PATH.join('reports', 'templates', "#{self.class.template_name}.erb")
+      template = ERB.new(filename.read, nil, '-')
+      template.result(binding)
+    end
+
     private
     def unapproved_dependencies
       dependencies.reject(&:approved?)

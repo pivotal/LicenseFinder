@@ -15,14 +15,6 @@ module LicenseFinder
       end
     end
 
-    autoload :Definitions,   "license_finder/license/definitions"
-    autoload :Text,          "license_finder/license/text"
-    autoload :Template,      "license_finder/license/template"
-    autoload :Matcher,       "license_finder/license/matcher"
-    autoload :HeaderMatcher, "license_finder/license/header_matcher"
-    autoload :AnyMatcher,    "license_finder/license/any_matcher"
-    autoload :NoneMatcher,   "license_finder/license/none_matcher"
-
     def initialize(settings)
       @short_name  = settings.fetch(:short_name)
       @pretty_name = settings.fetch(:pretty_name, short_name)
@@ -63,3 +55,11 @@ module LicenseFinder
     end
   end
 end
+
+require "license_finder/license/definitions"
+require "license_finder/license/text"
+require "license_finder/license/template"
+require "license_finder/license/matcher"
+require "license_finder/license/header_matcher"
+require "license_finder/license/any_matcher"
+require "license_finder/license/none_matcher"
