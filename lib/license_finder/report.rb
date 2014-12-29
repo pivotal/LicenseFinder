@@ -23,10 +23,8 @@ module LicenseFinder
 end
 
 require 'license_finder/reports/formatted_report'
-require 'license_finder/reports/csv_report'
 
+require 'license_finder/reports/csv_report'
+require 'license_finder/reports/text_report'
 require 'license_finder/reports/html_report'
 require 'license_finder/reports/markdown_report'
-require 'license_finder/reports/text_report'
-require 'license_finder/reports/detailed_text_report'
-require 'license_finder/reports/status_report'

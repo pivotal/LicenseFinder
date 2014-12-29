@@ -6,5 +6,5 @@ end
 
 Then(/^I should see those version and license details in the text report$/) do
   @user.execute_command('license_finder report')
-  expect(@user).to be_seeing "info_gem, 1.1.1, MIT"
+  expect(@user).to be_seeing "info_gem,1.1.1,MIT"
 end

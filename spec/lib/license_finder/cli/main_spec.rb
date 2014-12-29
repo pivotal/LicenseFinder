@@ -79,10 +79,10 @@ module LicenseFinder
 
         it "will output a specific format" do
           result = capture_stdout do
-            Main.start(%w[report --format detailed_text])
+            Main.start(%w[report --format markdown])
           end
 
-          expect(result).to eq "one dependency,1.1,other,\"\",\"\"\n"
+          expect(result).to include "## Action"
         end
 
         it "will output a custom csv" do
