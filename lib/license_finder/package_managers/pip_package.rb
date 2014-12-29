@@ -19,14 +19,10 @@ module LicenseFinder
           summary: spec["summary"],
           description: spec["description"],
           homepage: spec["home_page"],
-          spec_licenses: self.class.license_names_from_spec(spec)
+          spec_licenses: self.class.license_names_from_spec(spec),
+          install_path: install_path
         )
       )
-      @install_path = install_path
     end
-
-    private
-
-    attr_reader :install_path
   end
 end

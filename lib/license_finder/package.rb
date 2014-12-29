@@ -41,6 +41,7 @@ module LicenseFinder
       @parents = Set.new # will be figured out later by package manager
       @groups = options[:groups] || []
       @license_names_from_spec = options[:spec_licenses] || []
+      @install_path = options[:install_path]
 
       @whitelisted = false
       @decided_licenses = Set.new
@@ -110,15 +111,11 @@ module LicenseFinder
     end
 
     def license_files
-      PossibleLicenseFiles.find(install_path)
+      PossibleLicenseFiles.find(@install_path)
     end
 
     def default_license
       License.find_by_name nil
-    end
-
-    def install_path
-      nil
     end
   end
 end

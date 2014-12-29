@@ -1,7 +1,5 @@
 module LicenseFinder
   class BundlerPackage < Package
-    attr_reader :gem_def
-
     def initialize(spec, bundler_def, options={})
       super(
         spec.name,
@@ -12,16 +10,10 @@ module LicenseFinder
           homepage: spec.homepage,
           children: spec.dependencies.map(&:name),
           groups: Array(bundler_def && bundler_def.groups),
-          spec_licenses: spec.licenses
+          spec_licenses: spec.licenses,
+          install_path: spec.full_gem_path
         )
       )
-      @gem_def = spec
-    end
-
-    private
-
-    def install_path
-      gem_def.full_gem_path
     end
   end
 end
