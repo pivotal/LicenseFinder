@@ -59,6 +59,17 @@ module DSL
       npm_install
     end
 
+    def create_bower_app
+      reset_projects!
+
+      app_path.mkpath
+      shell_out("cd #{app_path} && touch bower.json")
+
+      add_bower_dependency('gmaps', '0.2.30')
+
+      bower_install
+    end
+
     def create_maven_app
       reset_projects!
 
@@ -205,17 +216,21 @@ module DSL
       line = "gem #{name.inspect}"
       line << ", " + options.inspect unless options.empty?
 
-      add_to_gemfile(line)
+      add_to_file("Gemfile", line)
     end
 
     def add_pip_dependency(dependency)
-      add_to_requirements(dependency)
+      add_to_file("requirements.txt", dependency)
     end
 
     def add_npm_dependency(dependency, version)
       line = "{\"dependencies\" : {\"#{dependency}\": \"#{version}\"}}"
+      add_to_file("package.json", line)
+    end
 
-      add_to_package(line)
+    def add_bower_dependency(dependency, version)
+      line = "{\"name\": \"my_app\", \"dependencies\" : {\"#{dependency}\": \"#{version}\"}}"
+      add_to_file('bower.json', line)
     end
 
     def add_maven_dependency
@@ -247,6 +262,10 @@ module DSL
       shell_out("cd #{app_path} && npm install 2>/dev/null")
     end
 
+    def bower_install
+      shell_out("cd #{app_path} && bower install 2>/dev/null")
+    end
+
     def mvn_install
       shell_out("cd #{app_path} && mvn install")
     end
@@ -255,16 +274,8 @@ module DSL
       shell_out("cd #{app_path} && pod install --no-integrate")
     end
 
-    def add_to_gemfile(line)
-      shell_out("echo #{line.inspect} >> #{app_path.join("Gemfile")}")
-    end
-
-    def add_to_requirements(line)
-      shell_out("echo #{line.inspect} >> #{app_path.join("requirements.txt")}")
-    end
-
-    def add_to_package(line)
-      shell_out("echo #{line.inspect} >> #{app_path.join("package.json")}")
+    def add_to_file(filename, line)
+      shell_out("echo #{line.inspect} >> #{app_path.join(filename)}")
     end
 
     def app_name

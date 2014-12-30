@@ -28,4 +28,5 @@ before_install:
   - unzip -q gradle*
   - rm gradle*.zip
   - mv gradle* ~/gradle
+  - npm install -g bower
   - cd -
