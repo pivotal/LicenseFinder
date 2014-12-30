@@ -17,14 +17,29 @@ module LicenseFinder
                 "version": "1.3.3.7",
                 "description": "description",
                 "readme": "readme",
-                "path": "/path/to/thing"
+                "path": "/path/to/thing",
+                "dependencies": {
+                  "dependency1-1.js": {
+                    "name": "dep1-1js"
+                  }
+                }
               },
               "dependency2.js": {
                 "name": "dep2js",
                 "version": "4.2",
                 "description": "description2",
                 "readme": "readme2",
-                "path": "/path/to/thing2"
+                "path": "/path/to/thing2",
+                "dependencies": {
+                  "dependency2-1.js": {
+                    "name": "dep2-1js",
+                    "dependencies": {
+                      "dependency1-1.js": {
+                        "name": "dep1-1js"
+                      }
+                    }
+                  }
+                }
               }
             },
             "devDependencies": {
@@ -51,7 +66,7 @@ module LicenseFinder
 
         current_packages = npm.current_packages
 
-        expect(current_packages.map(&:name)).to eq(["depjs", "dep2js", "dep3js"])
+        expect(current_packages.map(&:name)).to eq(["depjs", "dep1-1js", "dep2js", "dep2-1js", "dep3js"])
         expect(current_packages.first).to be_a(Package)
         expect(current_packages.first.name).to eq("depjs")
       end

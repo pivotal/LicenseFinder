@@ -9,7 +9,12 @@ module LicenseFinder
         "description" => "a description",
         "readme" => "a readme",
         "path" => "some/node/package/path",
-        "homepage" => "a homepage"
+        "homepage" => "a homepage",
+        "dependencies" => {
+          "coffee-script" => {
+            "name" => "coffee-script",
+          }
+        }
       )
     end
 
@@ -21,7 +26,7 @@ module LicenseFinder
     its(:description) { should == "a description" }
     its(:homepage) { should == "a homepage" }
     its(:groups) { should == [] } # no way to get groups from npm?
-    its(:children) { should == [] } # no way to get children from npm?
+    its(:children) { should == ["coffee-script"] }
     its(:install_path) { should eq "some/node/package/path" }
 
     describe '#license_names_from_spec' do
@@ -55,4 +60,3 @@ module LicenseFinder
     end
   end
 end
-
