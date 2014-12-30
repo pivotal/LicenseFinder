@@ -205,7 +205,7 @@ you should manually research what the actual license is.  When you
 have established the real license, you can record it with:
 
 ```sh
-$ license_finder license MIT my_unknown_dependency
+$ license_finder license my_unknown_dependency MIT
 ```
 
 This command would assign the MIT license to the dependency

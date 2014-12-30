@@ -39,8 +39,8 @@ module LicenseFinder
       end
 
       auditable
-      desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
-      def license(license, name)
+      desc "license DEPENDENCY_NAME LICENSE", "Update a dependency's license"
+      def license(name, license)
         modifying { decisions.license(name, license, txn) }
 
         say "The #{name} dependency has been marked as using #{license} license!", :green
