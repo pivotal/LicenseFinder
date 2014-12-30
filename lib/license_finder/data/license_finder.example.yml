@@ -1,3 +1,0 @@
----
-dependencies_file_dir: './doc/'
-gradle_command: # only meaningful if used with a Java/gradle project. Defaults to "gradle".

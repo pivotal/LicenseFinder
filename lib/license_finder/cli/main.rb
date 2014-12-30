@@ -10,8 +10,9 @@ module LicenseFinder
         'csv' => CsvReport
       }
 
-      class_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
+      class_option :format, desc: "The desired output format.", default: 'text', enum: FORMATS.keys
       class_option :columns, type: :array, desc: "For CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}", default: %w[name version licenses]
+      class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradle'."
 
       method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
@@ -51,16 +52,20 @@ module LicenseFinder
       def decision_applier(logger = Logger.new(options))
         @decision_applier ||= DecisionApplier.new(
           decisions: decisions,
-          packages: PackageManager.current_packages(logger)
+          packages: current_packages(logger)
+        )
+      end
+
+      def current_packages(logger)
+        PackageManager.current_packages(
+          logger: logger,
+          gradle_command: config.gradle_command,
+          ignore_groups: decisions.ignored_groups
         )
       end
 
       def report_of(content)
         report = FORMATS[options[:format]]
-        if !report
-          say "Format #{options[:format]} not recognized. Valid formats #{FORMATS.keys.inspect}", :red
-          exit 1
-        end
         report.of(content, columns: options[:columns], project_name: decisions.project_name)
       end
     end

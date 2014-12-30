@@ -25,11 +25,6 @@ Feature: License Finder command line executable
     When I run license_finder help
     Then I should see the default usage instructions
 
-  Scenario: Running without a configuration file
-    Given I have an app that has no config directory
-    When I run license_finder
-    Then it creates a config directory with the license_finder config
-
   Scenario: Viewing License Finder's own license
     Given I have an app
     When I run license_finder

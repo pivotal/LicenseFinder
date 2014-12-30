@@ -12,7 +12,6 @@ module LicenseFinder
         say "The #{names.join(", ")} dependency has been approved!", :green
       end
 
-
       auditable
       desc "remove DEPENDENCY", "Unapprove a dependency"
       def remove(dep)

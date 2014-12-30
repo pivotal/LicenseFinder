@@ -2,87 +2,64 @@ require "spec_helper"
 
 module LicenseFinder
   describe Configuration do
-    describe ".ensure_default" do
+    describe ".with_optional_saved_config" do
       it "should init and use saved config" do
-        expect(Configuration::Persistence).to receive(:init)
-        allow(Configuration::Persistence).to receive(:get).and_return('gradle_command' => 'saved-gradle-command')
+        fake_project_dir = Pathname.new(__FILE__).dirname.join('..', '..', 'fixtures')
 
-        expect(described_class.ensure_default.gradle_command).to eq('saved-gradle-command')
+        subject = described_class.with_optional_saved_config({}, fake_project_dir)
+        expect(subject.gradle_command).to eq('gradlew')
       end
     end
 
-    describe '.new' do
-      it "should default missing attributes" do
-        subject = described_class.new({})
-        expect(subject.artifacts.dir).to eq(Pathname('./doc/'))
-        expect(subject.gradle_command).to eq('gradle')
+    describe "gradle_command" do
+      it "prefers primary value" do
+        subject = described_class.new(
+          {gradle_command: "primary"},
+          {"gradle_command" => "secondary"}
+        )
+        expect(subject.gradle_command).to eq "primary"
       end
 
-      it "should default missing attributes even if they are saved as nils in the YAML file" do
-        attributes = {
-          "dependencies_file_dir" => nil,
-          "gradle_command" => nil
-        }
-        subject = described_class.new(attributes)
-        expect(subject.artifacts.dir).to eq(Pathname('./doc/'))
-        expect(subject.gradle_command).to eq('gradle')
+      it "accepts saved value" do
+        subject = described_class.new(
+          {gradle_command: nil},
+          {"gradle_command" => "secondary"}
+        )
+        expect(subject.gradle_command).to eq "secondary"
       end
 
-      it "should set the all of the attributes on the instance" do
-        attributes = {
-          "dependencies_file_dir" => "some/path",
-          "gradle_command" => "./gradlew"
-        }
-        subject = described_class.new(attributes)
-        expect(subject.artifacts.dir).to eq(Pathname("some/path"))
-        expect(subject.gradle_command).to eq("./gradlew")
+      it "has default" do
+        subject = described_class.new(
+          {gradle_command: nil},
+          {"gradle_command" => nil}
+        )
+        expect(subject.gradle_command).to eq "gradle"
       end
     end
 
-    describe "file paths" do
-      it "should be relative to artifacts dir" do
-        artifacts = described_class.new('dependencies_file_dir' => './elsewhere').artifacts
-        expect(artifacts.dir).to eq(Pathname('./elsewhere'))
-        expect(artifacts.decisions_file).to eq(Pathname('./elsewhere/dependency_decisions.yml'))
-      end
-    end
-  end
-
-  describe Configuration::Persistence do
-    describe ".get" do
-      it "should use saved configuration" do
-        file = double(:file,
-                      :exist? => true,
-                      :read => {'some' => 'config'}.to_yaml)
-        allow(described_class).to receive(:file).and_return(file)
-
-        expect(described_class.get).to eq({'some' => 'config'})
+    describe "decisions_file" do
+      it "prefers primary value" do
+        subject = described_class.new(
+          {decisions_file: "primary"},
+          {"decisions_file" => "secondary"}
+        )
+        expect(subject.decisions_file.to_s).to eq "primary"
       end
 
-      it "should not mind if config is not saved" do
-        file = double(:file, :exist? => false)
-        allow(described_class).to receive(:file).and_return(file)
-
-        expect(file).not_to receive(:read)
-        expect(described_class.get).to eq({})
-      end
-    end
-
-    describe ".init" do
-      it "initializes the config file" do
-        file = double(:file, :exist? => false)
-        allow(described_class).to receive(:file).and_return(file)
-
-        expect(FileUtils).to receive(:cp).with(described_class.send(:file_template), file)
-        described_class.init
+      it "accepts saved value" do
+        subject = described_class.new(
+          {decisions_file: nil},
+          {"decisions_file" => "secondary"}
+        )
+        expect(subject.decisions_file.to_s).to eq "secondary"
       end
 
-      it "does nothing if there is already a config file" do
-        file = double(:file, :exist? => true)
-        allow(described_class).to receive(:file).and_return(file)
-
-        expect(FileUtils).not_to receive(:cp)
-        described_class.init
+      it "has default" do
+        subject = described_class.new(
+          {decisions_file: nil},
+          {"decisions_file" => nil}
+        )
+        expect(subject.decisions_file.to_s).to eq "doc/dependency_decisions.yml"
       end
     end
   end

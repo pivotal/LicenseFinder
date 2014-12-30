@@ -3,7 +3,10 @@ require "spec_helper"
 module LicenseFinder
   module CLI
     describe Licenses do
-      let(:decisions) { Decisions.new }
+      let(:decisions) do
+        fake_file = Pathname.new("tmp/dependency_decisions.yml")
+        Decisions.new(fake_file)
+      end
 
       before do
         allow(Decisions).to receive(:saved!) { decisions }

@@ -3,7 +3,10 @@ require "spec_helper"
 module LicenseFinder
   module CLI
     describe Main do
-      let(:decisions) { Decisions.new }
+      let(:decisions) do
+        fake_file = Pathname.new("tmp/dependency_decisions.yml")
+        Decisions.new(fake_file)
+      end
       let(:packages) { [] }
       let!(:decision_applier) do
         DecisionApplier.new(

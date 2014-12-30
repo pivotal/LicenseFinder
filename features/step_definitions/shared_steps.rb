@@ -166,14 +166,6 @@ module DSL
       path
     end
 
-    def config_path
-      app_path('config')
-    end
-
-    def config_file
-      config_path.join("license_finder.yml")
-    end
-
     def in_html
       execute_command("license_finder report --format html")
       yield Capybara.string(@output)
