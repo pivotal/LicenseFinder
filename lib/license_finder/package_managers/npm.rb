@@ -2,7 +2,7 @@ require 'json'
 
 module LicenseFinder
   class NPM < PackageManager
-    DEPENDENCY_GROUPS = ["dependencies", "devDependencies", "bundleDependencies", "bundledDependencies"]
+    DEPENDENCY_GROUPS = ["dependencies", "devDependencies"]
 
     def current_packages
       json = npm_json
