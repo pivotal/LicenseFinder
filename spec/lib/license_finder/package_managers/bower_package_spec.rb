@@ -23,8 +23,8 @@ module LicenseFinder
     its(:summary) { should == "description" }
     its(:description) { should == "some readme stuff" }
     its(:homepage) { should == "homepage" }
-    its(:groups) { should == [] } # no way to get groups from bower?
-    its(:children) { should == [] } # no way to get children from bower?
+    its(:groups) { should == [] } # TODO: does `bower list` output devDependencies? If so, put them in 'dev' group?
+    its(:children) { should == [] } # TODO: get dependencies from dependencies and devDependencies, like NPM
     its(:install_path) { should eq "/path/to/thing" }
 
     describe '#license_names_from_spec' do

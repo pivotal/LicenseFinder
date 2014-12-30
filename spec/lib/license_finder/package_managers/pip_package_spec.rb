@@ -21,8 +21,8 @@ module LicenseFinder
     its(:summary) { should == "summary" }
     its(:description) { should == "description" }
     its(:homepage) { should == "homepage" }
-    its(:groups) { should == [] } # no way to get groups from pip?
-    its(:children) { should == [] } # no way to get children from pip?
+    its(:groups) { should == [] } # TODO: any way to extract install_requires and tests_require from `pip list` or `pip show`?
+    its(:children) { should == [] } # TODO: use pipdeptree or something like it
     its(:install_path) { should eq "jasmine/install/path" }
 
 

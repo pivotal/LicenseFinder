@@ -25,7 +25,7 @@ module LicenseFinder
     its(:summary) { should eq "" }
     its(:description) { should == "a description" }
     its(:homepage) { should == "a homepage" }
-    its(:groups) { should == [] } # no way to get groups from npm?
+    its(:groups) { should == [] } # TODO: put devDependencies in 'dev' group?
     its(:children) { should == ["coffee-script"] }
     its(:install_path) { should eq "some/node/package/path" }
 
