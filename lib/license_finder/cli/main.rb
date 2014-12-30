@@ -59,26 +59,9 @@ module LicenseFinder
       def current_packages(logger)
         PackageManager.current_packages(
           logger: logger,
-          gradle_command: SimpleConfig.with_overrides(options).gradle_command,
+          gradle_command: config.gradle_command,
           ignore_groups: decisions.ignored_groups
         )
-      end
-
-      class SimpleConfig
-        def self.with_overrides(cli_config, project_path = Pathname.new('.'))
-          config_file = project_path.join('config', 'license_finder.yml')
-          saved_config = config_file.exist? ? YAML.load(config_file.read) : {}
-          new(cli_config, saved_config)
-        end
-
-        def initialize(primary_config, saved_config)
-          @primary_config = primary_config
-          @saved_config = saved_config
-        end
-
-        def gradle_command
-          @primary_config[:gradle_command] || @saved_config["gradle_command"] || "gradle"
-        end
       end
 
       def report_of(content)

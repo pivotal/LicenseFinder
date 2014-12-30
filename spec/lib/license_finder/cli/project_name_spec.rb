@@ -4,7 +4,7 @@ module LicenseFinder
   module CLI
     describe ProjectName do
       let(:decisions) do
-        fake_file = double(:decisions_file, open: nil)
+        fake_file = Pathname.new("tmp/dependency_decisions.yml")
         Decisions.new(fake_file)
       end
 

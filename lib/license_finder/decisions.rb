@@ -168,6 +168,7 @@ module LicenseFinder
     end
 
     def write!(value, persist_to)
+      persist_to.dirname.mkpath
       persist_to.open('w+') do |f|
         f.print value
       end
