@@ -219,7 +219,7 @@ don't know about (JS libraries that don't appear in your
 Gemfile/requirements.txt/package.json, etc.)
 
 ```sh
-$ license_finder dependencies add MIT my_js_dep 0.1.2
+$ license_finder dependencies add my_js_dep MIT 0.1.2
 ```
 
 Run `license_finder dependencies help` for

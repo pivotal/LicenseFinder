@@ -12,7 +12,7 @@ module LicenseFinder
       describe "add" do
         it "adds a dependency" do
           silence_stdout do
-            subject.add("MIT", "js_dep", "1.2.3")
+            subject.add("js_dep", "MIT", "1.2.3")
           end
 
           expect(subject.decisions.packages.size).to eq 1
@@ -24,7 +24,7 @@ module LicenseFinder
 
         it "does not require a version" do
           silence_stdout do
-            subject.add("MIT", "js_dep")
+            subject.add("js_dep", "MIT")
           end
           package = subject.decisions.packages.first
           expect(package.version).to be_nil
@@ -33,7 +33,7 @@ module LicenseFinder
         it "has an --approve option to approve the added dependency" do
           expect(decisions).to receive(:approve).with("js_dep", hash_including(who: "Julian", why:  "We really need this"))
           silence_stdout do
-            Main.start(["dependencies", "add", "--approve", "--who", "Julian", "--why", "We really need this", "MIT", "js_dep", "1.2.3"])
+            Main.start(["dependencies", "add", "--approve", "--who", "Julian", "--why", "We really need this", "js_dep", "MIT", "1.2.3"])
           end
         end
       end
@@ -41,7 +41,7 @@ module LicenseFinder
       describe "remove" do
         it "removes a dependency" do
           silence_stdout do
-            subject.add("MIT", "js_dep")
+            subject.add("js_dep", "MIT")
             subject.remove("js_dep")
           end
           expect(subject.decisions.packages).to be_empty
