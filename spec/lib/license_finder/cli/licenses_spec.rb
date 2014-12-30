@@ -14,7 +14,16 @@ module LicenseFinder
           silence_stdout do
             subject.add 'foo_gem', 'foo_license'
           end
-          expect(subject.decisions.license_of("foo_gem").name).to eq "foo_license"
+          expect(subject.decisions.licenses_of("foo_gem").first.name).to eq "foo_license"
+        end
+
+        it "allows multiple licenses" do
+          silence_stdout do
+            subject.add 'foo_gem', 'one'
+            subject.add 'foo_gem', 'two'
+          end
+          licenses = subject.decisions.licenses_of("foo_gem")
+          expect(licenses.map(&:name)).to match_array %w[one two]
         end
       end
 
@@ -24,7 +33,7 @@ module LicenseFinder
             subject.add("test", "lic")
             subject.remove("test")
           end
-          expect(subject.decisions.license_of("test")).to be_nil
+          expect(subject.decisions.licenses_of("test")).to be_empty
         end
 
         it "is cumulative" do
@@ -33,7 +42,7 @@ module LicenseFinder
             subject.remove("test")
             subject.add("test", "lic")
           end
-          expect(subject.decisions.license_of("test").name).to eq "lic"
+          expect(subject.decisions.licenses_of("test").first.name).to eq "lic"
         end
       end
     end

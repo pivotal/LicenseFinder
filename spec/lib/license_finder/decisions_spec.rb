@@ -36,25 +36,36 @@ module LicenseFinder
       it "will report license for a dependency" do
         license = subject.
           license("dep", "MIT").
-          license_of("dep")
+          licenses_of("dep").first
         expect(license).to eq License.find_by_name("MIT")
+      end
+
+      it "will report multiple licenses" do
+        licenses = subject.
+          license("dep", "MIT").
+          license("dep", "GPL").
+          licenses_of("dep")
+        expect(licenses).to eq [
+          License.find_by_name("MIT"),
+          License.find_by_name("GPL"),
+        ].to_set
       end
 
       it "adapts names" do
         license = subject.
           license("dep", "Expat").
-          license_of("dep")
+          licenses_of("dep").first
         expect(license).to eq License.find_by_name("MIT")
       end
     end
 
     describe ".unlicense" do
       it "will not report the given dependency as licensed" do
-        license = subject.
+        licenses = subject.
           license("dep", "MIT").
           unlicense("dep").
-          license_of("dep")
-        expect(license).to be_nil
+          licenses_of("dep")
+        expect(licenses).to be_empty
       end
 
       it "is cumulative" do
@@ -62,7 +73,7 @@ module LicenseFinder
           license("dep", "MIT").
           unlicense("dep").
           license("dep", "MIT").
-          license_of("dep")
+          licenses_of("dep").first
         expect(license).to eq License.find_by_name("MIT")
       end
     end
@@ -228,7 +239,7 @@ module LicenseFinder
       it "can restore licenses" do
         license = roundtrip(
           subject.license("dep", "MIT")
-        ).license_of("dep")
+        ).licenses_of("dep").first
         expect(license).to eq License.find_by_name("MIT")
       end
 
@@ -237,7 +248,7 @@ module LicenseFinder
           subject.
           license("dep", "MIT").
           unlicense("dep")
-        ).license_of("dep")
+        ).licenses_of("dep").first
         expect(license).to be_nil
       end
 

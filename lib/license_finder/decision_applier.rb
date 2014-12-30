@@ -13,7 +13,7 @@ module LicenseFinder
       base_packages = decisions.packages + packages
       base_packages.
         reject { |package| ignored?(package) }.
-        map    { |package| with_decided_license(package) }.
+        map    { |package| with_decided_licenses(package) }.
         map    { |package| with_approval(package) }
     end
 
@@ -26,8 +26,8 @@ module LicenseFinder
         package.groups.any? { |group| decisions.ignored_group?(group) }
     end
 
-    def with_decided_license(package)
-      if license = decisions.license_of(package.name)
+    def with_decided_licenses(package)
+      decisions.licenses_of(package.name).each do |license|
         package.decide_on_license license
       end
       package

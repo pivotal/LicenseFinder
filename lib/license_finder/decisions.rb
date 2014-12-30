@@ -6,7 +6,7 @@ module LicenseFinder
 
     attr_reader :packages, :whitelisted, :ignored, :ignored_groups, :project_name
 
-    def license_of(name)
+    def licenses_of(name)
       @licenses[name]
     end
 
@@ -43,7 +43,7 @@ module LicenseFinder
     def initialize
       @decisions = []
       @packages = Set.new
-      @licenses = {}
+      @licenses = Hash.new { |h, k| h[k] = Set.new }
       @approvals = {}
       @whitelisted = Set.new
       @ignored = Set.new
@@ -64,7 +64,7 @@ module LicenseFinder
 
     def license(name, lic, txn = {})
       @decisions << [:license, name, lic, txn]
-      @licenses[name] = License.find_by_name(lic)
+      @licenses[name] << License.find_by_name(lic)
       self
     end
 

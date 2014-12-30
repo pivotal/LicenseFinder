@@ -19,7 +19,7 @@ module LicenseFinder
           package = subject.decisions.packages.first
           expect(package.name).to eq "js_dep"
           expect(package.version).to eq "1.2.3"
-          expect(subject.decisions.license_of("js_dep")).to eq License.find_by_name("MIT")
+          expect(subject.decisions.licenses_of("js_dep")).to eq [License.find_by_name("MIT")].to_set
         end
 
         it "does not require a version" do
