@@ -16,9 +16,9 @@ module LicenseFinder
       [Bundler, NPM, Pip, Bower, Maven, Gradle, CocoaPods]
     end
 
-    def self.current_packages(logger)
+    def self.current_packages(options)
       package_managers.
-        map { |pm| pm.new(logger: logger) }.
+        map { |pm| pm.new(options) }.
         select(&:active?).
         map(&:current_packages_with_relations).
         flatten

@@ -2,8 +2,13 @@ require "xmlsimple"
 
 module LicenseFinder
   class Gradle < PackageManager
+    def initialize(options={})
+      super
+      @command = options[:gradle_command] || "gradle"
+    end
+
     def current_packages
-      `#{LicenseFinder.config.gradle_command} downloadLicenses`
+      `#{@command} downloadLicenses`
 
       xml = license_report.read
 

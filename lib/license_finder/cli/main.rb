@@ -51,7 +51,14 @@ module LicenseFinder
       def decision_applier(logger = Logger.new(options))
         @decision_applier ||= DecisionApplier.new(
           decisions: decisions,
-          packages: PackageManager.current_packages(logger)
+          packages: current_packages(logger)
+        )
+      end
+
+      def current_packages(logger)
+        PackageManager.current_packages(
+          logger: logger,
+          gradle_command: LicenseFinder.config.gradle_command
         )
       end
 

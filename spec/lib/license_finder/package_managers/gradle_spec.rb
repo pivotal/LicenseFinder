@@ -13,14 +13,26 @@ module LicenseFinder
       resp
     end
 
+    def stub_license_report(dependencies, package_manager = gradle)
+      license_xml = license_xml(dependencies)
+      fake_file = double(:license_report, read: license_xml)
+      allow(package_manager).to receive(:license_report).and_return(fake_file)
+    end
+
     describe '.current_packages' do
       before do
-        allow(LicenseFinder.config).to receive(:gradle_command) { 'gradlefoo' }
+        allow(gradle).to receive('`').with(/gradle downloadLicenses/)
+      end
+
+      it "uses custom gradle command, if provided" do
+        gradle = Gradle.new(gradle_command: "gradlefoo")
+        stub_license_report("", gradle)
         expect(gradle).to receive('`').with(/gradlefoo downloadLicenses/)
+        gradle.current_packages
       end
 
       it 'lists all the current packages' do
-        license_xml = license_xml("""
+        stub_license_report("""
           <dependency name='org.springframework:spring-aop:4.0.1.RELEASE'>
             <file>spring-aop-4.0.1.RELEASE.jar</file>
             <license name='The Apache Software License, Version 2.0' url='http://www.apache.org/licenses/LICENSE-2.0.txt' />
@@ -30,8 +42,6 @@ module LicenseFinder
             <license name='The Apache Software License, Version 2.0' url='http://www.apache.org/licenses/LICENSE-2.0.txt' />
           </dependency>
         """)
-        fake_file = double(:license_report, read: license_xml)
-        allow(gradle).to receive(:license_report).and_return(fake_file)
 
         current_packages = gradle.current_packages
 
@@ -40,39 +50,31 @@ module LicenseFinder
       end
 
       it "handles multiple licenses" do
-        license_xml = license_xml("""
+        stub_license_report("""
           <dependency>
             <license name='License 1'/>
             <license name='License 2'/>
           </dependency>
         """)
 
-        fake_file = double(:license_report, read: license_xml)
-        allow(gradle).to receive(:license_report).and_return(fake_file)
-
         expect(GradlePackage).to receive(:new).with({"license" => [{"name" => "License 1"}, {"name" => "License 2"}]}, anything)
         gradle.current_packages
       end
 
       it "handles no licenses" do
-        license_xml = license_xml("""
+        stub_license_report("""
           <dependency>
             <license name='No license found' />
           </dependency>
         """)
-
-        fake_file = double(:license_report, read: license_xml)
-        allow(gradle).to receive(:license_report).and_return(fake_file)
 
         expect(GradlePackage).to receive(:new).with({"license" => []}, anything)
         gradle.current_packages
       end
 
       it "handles an empty list of licenses" do
-        license_xml = license_xml("")
+        stub_license_report("")
 
-        fake_file = double(:license_report, read: license_xml)
-        allow(gradle).to receive(:license_report).and_return(fake_file)
         gradle.current_packages
       end
     end

@@ -9,6 +9,7 @@ module LicenseFinder
     end
 
     private
+
     def unapproved_dependencies
       dependencies.reject(&:approved?)
     end
