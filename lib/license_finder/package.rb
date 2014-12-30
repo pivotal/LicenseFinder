@@ -9,8 +9,10 @@ module LicenseFinder
   # Additional guidelines are:
   #
   # - if you're going to use Package#licenses ...
-  #   - implement #licenses_names_from_spec
-  #   - implement #install_path
+  #   - and the package spec will report licenses,
+  #     pass :spec_licenses in the constructor options
+  #   - and the package's files can be searched for licenses
+  #     pass :install_path in the constructor options
   # - else
   #   - implement #licenses
   #
@@ -40,26 +42,22 @@ module LicenseFinder
       @children = options[:children] || []
       @parents = Set.new # will be figured out later by package manager
       @groups = options[:groups] || []
+
+      ## APPROVAL
+      @whitelisted = false
+      @manual_approval = nil
+
+      ## LICENSING
       @license_names_from_spec = options[:spec_licenses] || []
       @install_path = options[:install_path]
-
-      @whitelisted = false
       @decided_licenses = Set.new
     end
 
     attr_reader :name, :version,
                 :summary, :description, :homepage,
-                :children, :parents, :groups,
-                :license_names_from_spec,
-                :manual_approval
+                :children, :parents, :groups
 
-    def licenses
-      @licenses ||= determine_licenses.to_set
-    end
-
-    def decide_on_license(license)
-      @decided_licenses << license
-    end
+    ## APPROVAL
 
     def approved_manually!(approval)
       @manual_approval = approval
@@ -81,6 +79,16 @@ module LicenseFinder
       @whitelisted
     end
 
+    attr_reader :manual_approval
+
+    ## LICENSING
+
+    attr_reader :license_names_from_spec # stubbed in tests, otherwise private
+
+    def licenses
+      @licenses ||= determine_licenses.to_set
+    end
+
     def determine_licenses
       dl = @decided_licenses
       return dl if dl.any?
@@ -92,6 +100,10 @@ module LicenseFinder
       return lff if lff.any?
 
       [default_license].to_set
+    end
+
+    def decide_on_license(license)
+      @decided_licenses << license
     end
 
     def licenses_from_spec

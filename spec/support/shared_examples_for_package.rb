@@ -1,16 +1,5 @@
 module LicenseFinder
   shared_examples "a Package" do
-    context "the interface required by PackageSave" do
-      it { expect { subject.name }.to_not raise_error }
-      it { expect { subject.version }.to_not raise_error }
-      it { expect { subject.summary }.to_not raise_error }
-      it { expect { subject.description }.to_not raise_error }
-      it { expect { subject.homepage }.to_not raise_error }
-      it { expect { subject.groups }.to_not raise_error }
-      it { expect { subject.children }.to_not raise_error }
-      it { expect { subject.licenses }.to_not raise_error }
-    end
-
     context "logging" do
       let!(:logger) { Logger::Quiet.new }
       before { allow(Logger::Default).to receive(:new) { logger } }
