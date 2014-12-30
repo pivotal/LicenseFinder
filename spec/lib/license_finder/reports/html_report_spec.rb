@@ -9,7 +9,7 @@ module LicenseFinder
       let(:project_name) { "given project name" }
 
       let(:dependency) do
-        dep = ManualPackage.new(dependency_name)
+        dep = Package.new(dependency_name)
         dep.decide_on_license License.find_by_name("MIT")
         dep
       end
@@ -57,7 +57,7 @@ module LicenseFinder
 
       context "when the gem has a group" do
         let(:dependency) do
-          ManualPackage.new(dependency_name, nil, groups: ["foo group"])
+          Package.new(dependency_name, nil, groups: ["foo group"])
         end
 
         it "should show the group" do
@@ -67,9 +67,9 @@ module LicenseFinder
 
       context "when the gem has many relationships" do
         let(:dependencies) do
-          grandparent = ManualPackage.new("foo grandparent", nil, children: ["foo parent"])
-          parent      = ManualPackage.new("foo parent",      nil, children: ["foo child"])
-          child       = ManualPackage.new("foo child")
+          grandparent = Package.new("foo grandparent", nil, children: ["foo parent"])
+          parent      = Package.new("foo parent",      nil, children: ["foo child"])
+          child       = Package.new("foo child")
           pm = PackageManager.new
           allow(pm).to receive(:current_packages) { [grandparent, parent, child] }
           pm.current_packages_with_relations

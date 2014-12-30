@@ -68,7 +68,7 @@ module LicenseFinder
       end
 
       describe "#report" do
-        let(:packages) { [ManualPackage.new('one dependency', "1.1")] }
+        let(:packages) { [Package.new('one dependency', "1.1")] }
 
         it "reports acknowleged dependencies" do
           result = capture_stdout do
@@ -96,7 +96,7 @@ module LicenseFinder
 
       describe "#action_items" do
         context "with unapproved dependencies" do
-          let(:packages) { [ManualPackage.new('one dependency')] }
+          let(:packages) { [Package.new('one dependency')] }
 
           it "reports unapproved dependencies" do
             result = capture_stdout do

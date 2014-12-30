@@ -4,19 +4,19 @@ module LicenseFinder
   describe TextReport do
     describe '#to_s' do
       let(:dep1) do
-        result = ManualPackage.new('gem_a', '1.0')
+        result = Package.new('gem_a', '1.0')
         result.decide_on_license(License.find_by_name('MIT'))
         result
       end
 
       let(:dep2) do
-        result = ManualPackage.new('gem_b', '1.0')
+        result = Package.new('gem_b', '1.0')
         result.decide_on_license(License.find_by_name('MIT'))
         result
       end
 
       let(:dep3) do
-        result = ManualPackage.new('gem_c', '2.0')
+        result = Package.new('gem_c', '2.0')
         result.decide_on_license(License.find_by_name('MIT'))
         result.decide_on_license(License.find_by_name('BSD'))
         result

@@ -4,13 +4,13 @@ module LicenseFinder
   describe MarkdownReport do
     describe '#to_s' do
       let(:dep1) do
-        result = ManualPackage.new('gem_a', '1.0')
+        result = Package.new('gem_a', '1.0')
         result.decide_on_license(License.find_by_name('other'))
         result
       end
 
       let(:dep2) do
-        result = ManualPackage.new('gem_b', '2.3')
+        result = Package.new('gem_b', '2.3')
         result.decide_on_license(License.find_by_name('BSD'))
         result.approved_manually!(double(:approval).as_null_object)
         result
