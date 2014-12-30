@@ -4,7 +4,7 @@ module LicenseFinder
       extend Subcommand
 
       auditable
-      desc "add DEPENDENCY_NAME...", "Approve one or more dependencies by name"
+      desc "add DEPENDENCY...", "Approve one or more dependencies by name"
       def add(name, *other_names)
         names = other_names.unshift name
         modifying { names.each { |name| decisions.approve(name, txn) } }

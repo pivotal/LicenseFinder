@@ -5,7 +5,7 @@ module LicenseFinder
 
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
       auditable
-      desc "add DEPENDENCY_NAME LICENSE [VERSION] [--approve]", "Add a dependency that is not managed by a package manager, optionally approving it at the same time"
+      desc "add DEPENDENCY LICENSE [VERSION] [--approve]", "Add a dependency that is not managed by a package manager, optionally approving it at the same time"
       def add(name, license, version = nil)
         modifying {
           decisions.
@@ -21,7 +21,7 @@ module LicenseFinder
       end
 
       auditable
-      desc "remove DEPENDENCY_NAME", "Remove a dependency that is not managed by a package manager"
+      desc "remove DEPENDENCY", "Remove a dependency that is not managed by a package manager"
       def remove(name)
         modifying { decisions.remove_package(name, txn) }
 
