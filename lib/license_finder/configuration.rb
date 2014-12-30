@@ -19,8 +19,8 @@ module LicenseFinder
       if file_name = @primary_config[:decisions_file]
         return Pathname(file_name)
       end
-      file_dir = @saved_config["dependencies_file_dir"] || "doc"
-      Pathname(file_dir).join("dependency_decisions.yml")
+      file_dir = @saved_config["decisions_file"] || "doc/dependency_decisions.yml"
+      Pathname(file_dir)
     end
   end
 end

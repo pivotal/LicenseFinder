@@ -41,7 +41,7 @@ module LicenseFinder
       it "prefers primary value" do
         subject = described_class.new(
           {decisions_file: "primary"},
-          {"dependencies_file_dir" => "secondary"}
+          {"decisions_file" => "secondary"}
         )
         expect(subject.decisions_file.to_s).to eq "primary"
       end
@@ -49,15 +49,15 @@ module LicenseFinder
       it "accepts saved value" do
         subject = described_class.new(
           {decisions_file: nil},
-          {"dependencies_file_dir" => "secondary"}
+          {"decisions_file" => "secondary"}
         )
-        expect(subject.decisions_file.to_s).to eq "secondary/dependency_decisions.yml"
+        expect(subject.decisions_file.to_s).to eq "secondary"
       end
 
       it "has default" do
         subject = described_class.new(
           {decisions_file: nil},
-          {"dependencies_file_dir" => nil}
+          {"decisions_file" => nil}
         )
         expect(subject.decisions_file.to_s).to eq "doc/dependency_decisions.yml"
       end
