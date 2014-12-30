@@ -1,8 +1,4 @@
 = Project: Builder
-      let(:decisions) do
-        fake_file = double(:decisions_file, open: nil)
-        Decisions.new(fake_file)
-      end
 
 == Goal
 
