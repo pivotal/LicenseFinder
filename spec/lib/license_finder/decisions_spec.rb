@@ -63,15 +63,24 @@ module LicenseFinder
       it "will not report the given dependency as licensed" do
         licenses = subject.
           license("dep", "MIT").
-          unlicense("dep").
+          unlicense("dep", "MIT").
           licenses_of("dep")
         expect(licenses).to be_empty
+      end
+
+      it "will only remove the specified license" do
+        licenses = subject.
+          license("dep", "MIT").
+          license("dep", "GPL").
+          unlicense("dep", "MIT").
+          licenses_of("dep")
+        expect(licenses).to eq [License.find_by_name("GPL")].to_set
       end
 
       it "is cumulative" do
         license = subject.
           license("dep", "MIT").
-          unlicense("dep").
+          unlicense("dep", "MIT").
           license("dep", "MIT").
           licenses_of("dep").first
         expect(license).to eq License.find_by_name("MIT")
@@ -244,12 +253,13 @@ module LicenseFinder
       end
 
       it "can restore unlicenses" do
-        license = roundtrip(
+        licenses = roundtrip(
           subject.
           license("dep", "MIT").
-          unlicense("dep")
-        ).licenses_of("dep").first
-        expect(license).to be_nil
+          license("dep", "GPL").
+          unlicense("dep", "MIT")
+        ).licenses_of("dep")
+        expect(licenses).to eq [License.find_by_name("GPL")].to_set
       end
 
       it "can restore approvals" do

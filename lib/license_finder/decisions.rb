@@ -68,9 +68,9 @@ module LicenseFinder
       self
     end
 
-    def unlicense(name, txn= {})
-      @decisions << [:unlicense, name, txn]
-      @licenses.delete(name)
+    def unlicense(name, lic, txn= {})
+      @decisions << [:unlicense, name, lic, txn]
+      @licenses[name].delete(License.find_by_name(lic))
       self
     end
 

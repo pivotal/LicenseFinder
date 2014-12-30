@@ -4,7 +4,7 @@ module LicenseFinder
       extend Subcommand
 
       auditable
-      desc "license DEPENDENCY_NAME LICENSE", "Update a dependency's license"
+      desc "license DEPENDENCY_NAME LICENSE", "Set a dependency's licenses, overwriting any license_finder has found"
       def add(name, license)
         modifying { decisions.license(name, license, txn) }
 
@@ -12,9 +12,9 @@ module LicenseFinder
       end
 
       auditable
-      desc "remove DEPENDENCY", "Remove a manually set license"
-      def remove(dep)
-        modifying { decisions.unlicense(dep, txn) }
+      desc "remove DEPENDENCY LICENSE", "Remove a manually set license"
+      def remove(dep, lic)
+        modifying { decisions.unlicense(dep, lic, txn) }
 
         say "The dependency #{dep} no longer has a manual license"
       end
