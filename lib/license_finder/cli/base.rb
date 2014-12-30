@@ -1,8 +1,10 @@
 module LicenseFinder
   module CLI
-    class Base < PatchedThor
-      class_option :who, desc: "The person making this decision"
-      class_option :why, desc: "The reason for making this decision"
+    class Base < Thor
+      def self.auditable
+        method_option :who, desc: "The person making this decision"
+        method_option :why, desc: "The reason for making this decision"
+      end
 
       no_commands do
         def decisions

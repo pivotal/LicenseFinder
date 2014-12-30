@@ -9,6 +9,7 @@ module LicenseFinder
         say decisions.project_name
       end
 
+      auditable
       desc "add NAME", "Set the project name"
       def add(name)
         modifying { decisions.name_project(name, txn) }
@@ -16,6 +17,7 @@ module LicenseFinder
         say "Set the project name to #{name}", :green
       end
 
+      auditable
       desc "remove", "Remove the project name"
       def remove
         modifying { decisions.unname_project(txn) }

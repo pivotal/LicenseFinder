@@ -9,6 +9,7 @@ module LicenseFinder
         say_each(decisions.ignored)
       end
 
+      auditable
       desc "add DEPENDENCY", "Add a dependency to be ignored"
       def add(dep)
         modifying { decisions.ignore(dep, txn) }
@@ -16,6 +17,7 @@ module LicenseFinder
         say "Added #{dep} to the ignored dependencies"
       end
 
+      auditable
       desc "remove DEPENDENCY", "Remove a dependency from the ignored dependencies"
       def remove(dep)
         modifying { decisions.heed(dep, txn) }

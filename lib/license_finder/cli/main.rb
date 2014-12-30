@@ -1,6 +1,8 @@
 module LicenseFinder
   module CLI
     class Main < Base
+      extend Rootcommand
+
       FORMATS = {
         'text' => TextReport,
         'html' => HtmlReport,
@@ -27,6 +29,7 @@ module LicenseFinder
 
       default_task :action_items
 
+      auditable
       desc "approve DEPENDENCY_NAME...", "Approve one or more dependencies by name"
       def approve(name, *other_names)
         names = other_names.unshift name
@@ -35,6 +38,7 @@ module LicenseFinder
         say "The #{names.join(", ")} dependency has been approved!", :green
       end
 
+      auditable
       desc "license LICENSE DEPENDENCY_NAME", "Update a dependency's license"
       def license(license, name)
         modifying { decisions.license(name, license, txn) }
