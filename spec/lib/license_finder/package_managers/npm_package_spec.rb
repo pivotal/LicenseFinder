@@ -17,8 +17,8 @@ module LicenseFinder
 
     its(:name) { should == "jasmine-node" }
     its(:version) { should == "1.3.1" }
-    its(:summary) { should == "a description" }
-    its(:description) { should == "a readme" }
+    its(:summary) { should eq "" }
+    its(:description) { should == "a description" }
     its(:homepage) { should == "a homepage" }
     its(:groups) { should == [] } # no way to get groups from npm?
     its(:children) { should == [] } # no way to get children from npm?

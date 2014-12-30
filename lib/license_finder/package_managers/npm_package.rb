@@ -5,8 +5,7 @@ module LicenseFinder
         spec["name"],
         spec["version"],
         options.merge(
-          summary: spec["description"],
-          description: spec["readme"],
+          description: spec["description"],
           homepage: spec["homepage"],
           spec_licenses: Package.license_names_from_standard_spec(spec),
           install_path: spec["path"]
