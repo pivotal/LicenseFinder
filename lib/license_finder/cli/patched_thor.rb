@@ -3,6 +3,7 @@ require 'thor'
 module LicenseFinder
   module CLI
     class PatchedThor < Thor
+      # Helper to auto-generate the documentation for a group of commands
       def self.subcommand(namespace, klass, namespace_description)
         description = "#{namespace} [#{(klass.tasks.keys - ["help"]).join("|")}]"
         desc description, "#{namespace_description} - see `license_finder #{namespace} help` for more information"
