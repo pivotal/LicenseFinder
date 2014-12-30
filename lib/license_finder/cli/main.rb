@@ -12,6 +12,7 @@ module LicenseFinder
 
       class_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
       class_option :columns, type: :array, desc: "For CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}", default: %w[name version licenses]
+      class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradle'."
 
       method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
@@ -58,8 +59,25 @@ module LicenseFinder
       def current_packages(logger)
         PackageManager.current_packages(
           logger: logger,
-          gradle_command: LicenseFinder.config.gradle_command
+          gradle_command: SimpleConfig.with_overrides(options).gradle_command
         )
+      end
+
+      class SimpleConfig
+        def self.with_overrides(cli_config, project_path = Pathname.new('.'))
+          config_file = project_path.join('config', 'license_finder.yml')
+          saved_config = config_file.exist? ? YAML.load(config_file.read) : {}
+          new(cli_config, saved_config)
+        end
+
+        def initialize(primary_config, saved_config)
+          @primary_config = primary_config
+          @saved_config = saved_config
+        end
+
+        def gradle_command
+          @primary_config[:gradle_command] || @saved_config["gradle_command"] || "gradle"
+        end
       end
 
       def report_of(content)

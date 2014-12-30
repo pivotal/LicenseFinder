@@ -5,9 +5,9 @@ module LicenseFinder
     describe ".ensure_default" do
       it "should init and use saved config" do
         expect(Configuration::Persistence).to receive(:init)
-        allow(Configuration::Persistence).to receive(:get).and_return('gradle_command' => 'saved-gradle-command')
+        allow(Configuration::Persistence).to receive(:get).and_return('dependencies_file_dir' => 'some/path')
 
-        expect(described_class.ensure_default.gradle_command).to eq('saved-gradle-command')
+        expect(described_class.ensure_default.artifacts.dir.to_s).to eq('some/path')
       end
     end
 
@@ -15,27 +15,22 @@ module LicenseFinder
       it "should default missing attributes" do
         subject = described_class.new({})
         expect(subject.artifacts.dir).to eq(Pathname('./doc/'))
-        expect(subject.gradle_command).to eq('gradle')
       end
 
       it "should default missing attributes even if they are saved as nils in the YAML file" do
         attributes = {
-          "dependencies_file_dir" => nil,
-          "gradle_command" => nil
+          "dependencies_file_dir" => nil
         }
         subject = described_class.new(attributes)
         expect(subject.artifacts.dir).to eq(Pathname('./doc/'))
-        expect(subject.gradle_command).to eq('gradle')
       end
 
       it "should set the all of the attributes on the instance" do
         attributes = {
-          "dependencies_file_dir" => "some/path",
-          "gradle_command" => "./gradlew"
+          "dependencies_file_dir" => "some/path"
         }
         subject = described_class.new(attributes)
         expect(subject.artifacts.dir).to eq(Pathname("some/path"))
-        expect(subject.gradle_command).to eq("./gradlew")
       end
     end
 

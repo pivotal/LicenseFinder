@@ -17,11 +17,10 @@ module LicenseFinder
       result
     end
 
-    attr_accessor :artifacts, :gradle_command
+    attr_accessor :artifacts
 
     def initialize(config)
       @artifacts     = Artifacts.new(Pathname(config['dependencies_file_dir'] || './doc/'))
-      @gradle_command = config['gradle_command'] || 'gradle'
     end
 
     class Artifacts < SimpleDelegator

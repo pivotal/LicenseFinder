@@ -22,7 +22,7 @@ end
 
 Then(/^it creates a config directory with the license_finder config$/) do
   expect(@user.config_path).to be_exist
-  text = %|---\ndependencies_file_dir: './doc/'\ngradle_command: # only meaningful if used with a Java/gradle project. Defaults to "gradle".\n|
+  text = %|---\ndependencies_file_dir: './doc/'\n|
   expect(@user.config_file.read).to eq(text.gsub(/^\s+/, ""))
 end
 
