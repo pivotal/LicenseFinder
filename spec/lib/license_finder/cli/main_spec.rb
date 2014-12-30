@@ -36,37 +36,6 @@ module LicenseFinder
         end
       end
 
-      describe "#approve" do
-        it "approves the requested gem" do
-          silence_stdout do
-            subject.approve 'foo'
-          end
-          expect(subject.decisions).to be_approved "foo"
-        end
-
-        it "approves multiple gem" do
-          silence_stdout do
-            subject.approve 'foo', 'bar'
-          end
-          expect(subject.decisions).to be_approved "foo"
-          expect(subject.decisions).to be_approved "bar"
-        end
-
-        it "raises a warning if no gem was specified" do
-          silence_stdout do
-            expect { subject.approve }.to raise_error(ArgumentError)
-          end
-        end
-
-        it "sets approver and approval message" do
-          expect(decisions).to receive(:approve).with("foo", hash_including(who: "Julian", why:  "We really need this"))
-
-          silence_stdout do
-            Main.start(["approve", "--who", "Julian", "--why", "We really need this", "foo"])
-          end
-        end
-      end
-
       describe "#report" do
         let(:packages) { [Package.new('one dependency', "1.1")] }
 

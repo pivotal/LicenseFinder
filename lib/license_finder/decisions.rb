@@ -74,6 +74,12 @@ module LicenseFinder
       self
     end
 
+    def unapprove(name, txn = {})
+      @decisions << [:unapprove, name, txn]
+      @approvals.delete(name)
+      self
+    end
+
     def whitelist(lic, txn = {})
       @decisions << [:whitelist, lic, txn]
       @whitelisted << License.find_by_name(lic)

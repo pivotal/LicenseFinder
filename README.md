@@ -109,7 +109,7 @@ the project.
 
 Whenever you have an unapproved dependency, `license_finder` will tell you.
 If your business decides that this is an acceptable risk, the easiest way
-to approve the dependency is by running `license_finder approve`.
+to approve the dependency is by running `license_finder approval add`.
 
 For example, let's assume you've added the `awesome_gpl_gem`
 to your Gemfile, which `license_finder` reports is unapproved:
@@ -124,7 +124,7 @@ Your business tells you that in this case, it's acceptable to use this
 gem. You now run:
 
 ```sh
-$ license_finder approve awesome_gpl_gem
+$ license_finder approval add awesome_gpl_gem
 ```
 
 If you rerun `license_finder`, you should no longer see
@@ -133,7 +133,7 @@ If you rerun `license_finder`, you should no longer see
 To record who approved the dependency and why:
 
 ```sh
-$ license_finder approve awesome_gpl_gem --who CTO --why "Go ahead"
+$ license_finder approval add awesome_gpl_gem --who CTO --why "Go ahead"
 ```
 
 ### Whitelisting

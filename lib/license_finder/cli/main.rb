@@ -30,15 +30,6 @@ module LicenseFinder
       default_task :action_items
 
       auditable
-      desc "approve DEPENDENCY_NAME...", "Approve one or more dependencies by name"
-      def approve(name, *other_names)
-        names = other_names.unshift name
-        modifying { names.each { |name| decisions.approve(name, txn) } }
-
-        say "The #{names.join(", ")} dependency has been approved!", :green
-      end
-
-      auditable
       desc "license DEPENDENCY_NAME LICENSE", "Update a dependency's license"
       def license(name, license)
         modifying { decisions.license(name, license, txn) }
@@ -54,11 +45,12 @@ module LicenseFinder
         say report_of(dependencies.acknowledged)
       end
 
-      subcommand "dependencies", Dependencies, "Manually manage dependencies that your package managers are not aware of"
-      subcommand "ignored_groups", IgnoredGroups, "Manage ignored groups"
-      subcommand "ignored_dependencies", IgnoredDependencies, "Manage ignored dependencies"
-      subcommand "whitelist", Whitelist, "Manage whitelisted licenses"
-      subcommand "project_name", ProjectName, "Manage the project name, for display in reports"
+      subcommand "dependencies", Dependencies, "Add or remove dependencies that your package managers are not aware of"
+      subcommand "approvals", Approvals, "Manually approve dependencies, even if their licenses are not whitelisted"
+      subcommand "ignored_groups", IgnoredGroups, "Exclude test and development dependencies from action items and reports"
+      subcommand "ignored_dependencies", IgnoredDependencies, "Exclude individual dependencies from action items and reports"
+      subcommand "whitelist", Whitelist, "Automatically approve any dependency that has a whitelisted license"
+      subcommand "project_name", ProjectName, "Set the project name, for display in reports"
 
       private
 

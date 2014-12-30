@@ -59,6 +59,23 @@ module LicenseFinder
       end
     end
 
+    describe ".unapprove" do
+      it "will not report the given dependency as approved" do
+        decisions = subject.
+          approve("dep").
+          unapprove("dep")
+        expect(subject).not_to be_approved("dep")
+      end
+
+      it "is cumulative" do
+        decisions = subject.
+          approve("dep").
+          unapprove("dep").
+          approve("dep")
+        expect(subject).to be_approved("dep")
+      end
+    end
+
     describe ".whitelist" do
       it "will report the given license as approved" do
         decisions = subject.whitelist("MIT")
@@ -98,7 +115,6 @@ module LicenseFinder
           unwhitelist("Expat")
         expect(decisions).not_to be_approved_license(License.find_by_name("MIT"))
       end
-
     end
 
     describe ".ignore" do
@@ -205,6 +221,15 @@ module LicenseFinder
         expect(approval.who).to eq "Somebody"
         expect(approval.why).to eq "Some reason"
         expect(approval.safe_when).to eq time
+      end
+
+      it "can restore unapprovals" do
+        decisions = roundtrip(
+          subject.
+          approve("dep").
+          unapprove("dep")
+        )
+        expect(decisions).not_to be_approved("dep")
       end
 
       it "can restore whitelists" do
