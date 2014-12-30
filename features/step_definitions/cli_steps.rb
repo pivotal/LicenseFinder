@@ -1,11 +1,3 @@
-Given(/^I have an app that has no config directory$/) do
-  @user = ::DSL::User.new
-  @user.create_ruby_app
-  path = @user.config_path
-  path.rmtree if path.exist?
-  expect(path).to_not be_exist
-end
-
 Given(/^I have an app with an unapproved dependency$/) do
   @user = ::DSL::User.new
   @user.create_ruby_app
@@ -18,12 +10,6 @@ end
 
 When(/^I run license_finder help$/) do
   @user.execute_command "license_finder help"
-end
-
-Then(/^it creates a config directory with the license_finder config$/) do
-  expect(@user.config_path).to be_exist
-  text = %|---\ndependencies_file_dir: './doc/'\n|
-  expect(@user.config_file.read).to eq(text.gsub(/^\s+/, ""))
 end
 
 Then /^it should exit with status code (\d)$/ do |status|

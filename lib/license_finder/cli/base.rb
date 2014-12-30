@@ -27,7 +27,7 @@ module LicenseFinder
       end
 
       def config
-        @config ||= SimpleConfig.with_optional_saved_config(options)
+        @config ||= Configuration.with_optional_saved_config(options)
       end
 
       def txn

@@ -1,0 +1,3 @@
+---
+dependencies_file_dir: './some_path/'
+gradle_command: 'gradlew'
