@@ -20,12 +20,17 @@ module LicenseFinder
 
     its(:name) { should == "hamcrest-core" }
     its(:version) { should == "4.11" }
+    its(:summary) { should == "" }
     its(:description) { should == "" }
+    its(:homepage) { should == "" }
+    its(:groups) { should == [] } # no way to get groups from maven?
+    its(:children) { should == [] } # no way to get children from maven?
+    its(:install_path) { should be_nil }
 
-    describe "#licenses" do
+    describe "#license_names_from_spec" do
       it "returns the license if found" do
-        expect(subject.licenses.length).to eq 1
-        expect(subject.licenses.first.name).to eq "Common Public License Version 1.0"
+        expect(subject.license_names_from_spec.length).to eq 1
+        expect(subject.license_names_from_spec.first).to eq "Common Public License Version 1.0"
       end
 
       context "when there are multiple licenses" do
@@ -46,26 +51,9 @@ module LicenseFinder
           )
         end
 
-        it "returns 'multiple licenses'" do
-          expect(subject.licenses.length).to eq 2
-          expect(subject.licenses.map(&:name)).to eq ['Common Public License Version 1.0', 'Apache 2.0']
-        end
-      end
-
-      context "when the license is not found" do
-        subject do
-          described_class.new(
-            {
-              "groupId" => "org.hamcrest",
-              "artifactId" => "hamcrest-core",
-              "licenses" => {}
-             }
-          )
-        end
-
-        it "returns 'other' otherwise" do
-          expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq "other"
+        it "returns multiple licenses" do
+          expect(subject.license_names_from_spec.length).to eq 2
+          expect(subject.license_names_from_spec).to eq ['Common Public License Version 1.0', 'Apache 2']
         end
       end
     end

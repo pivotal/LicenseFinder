@@ -2,7 +2,13 @@ require 'spec_helper'
 
 module LicenseFinder
   describe PipPackage do
-    subject { make_package({}) }
+    subject do
+      make_package({
+        "summary" => "summary",
+        "description" => "description",
+        "home_page" => "homepage"
+      })
+    end
 
     it_behaves_like "a Package"
 
@@ -12,52 +18,23 @@ module LicenseFinder
 
     its(:name) { should == "jasmine" }
     its(:version) { should == "1.3.1" }
-    its(:homepage) { should eq "" }
-    its(:groups) { should == [] }
-    its(:children) { should == [] }
+    its(:summary) { should == "summary" }
+    its(:description) { should == "description" }
+    its(:homepage) { should == "homepage" }
+    its(:groups) { should == [] } # no way to get groups from pip?
+    its(:children) { should == [] } # no way to get children from pip?
+    its(:install_path) { should eq "jasmine/install/path" }
 
-    describe "#summary" do
-      it "delegates to pypi def" do
-        subject = make_package("summary" => "A summary")
-        expect(subject.summary).to eq("A summary")
-      end
 
-      it "falls back to nothing" do
-        expect(subject.summary).to eq("")
-      end
-    end
-
-    describe "#description" do
-      it "delegates to pypi def" do
-        subject = make_package("description" => "A description")
-        expect(subject.description).to eq("A description")
-      end
-
-      it "falls back to nothing" do
-        expect(subject.description).to eq("")
-      end
-    end
-
-    describe "#homepage" do
-      it "delegates to pypi def" do
-        subject = make_package("home_page" => "A homepage")
-        expect(subject.homepage).to eq("A homepage")
-      end
-
-      it "falls back to nothing" do
-        expect(subject.homepage).to eq ""
-      end
-    end
-
-    describe '#licenses' do
+    describe '#license_names_from_spec' do
       describe "with valid pypi license" do
         it "returns the license from 'license' preferentially" do
           data = { "license" => "MIT", "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License' ] }
 
           subject = make_package(data)
 
-          expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq('MIT')
+          expect(subject.license_names_from_spec.length).to eq 1
+          expect(subject.license_names_from_spec.first).to eq('MIT')
         end
 
         context "when there's no explicit license" do
@@ -66,8 +43,8 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.licenses.length).to eq 1
-            expect(subject.licenses.first.name).to eq('Apache 2.0 License')
+            expect(subject.license_names_from_spec.length).to eq 1
+            expect(subject.license_names_from_spec.first).to eq('Apache 2.0 License')
           end
 
           it "returns 'multiple licenses' if there are multiple licenses in 'classifiers'" do
@@ -75,8 +52,8 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.licenses.length).to eq 2
-            expect(subject.licenses.map(&:name)).to eq ['Apache 2.0 License', 'GPL']
+            expect(subject.license_names_from_spec.length).to eq 2
+            expect(subject.license_names_from_spec).to eq ['Apache 2.0 License', 'GPL']
           end
         end
 
@@ -87,28 +64,9 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.licenses.length).to eq 1
-            expect(subject.licenses.first.name).to eq('Apache 2.0 License')
+            expect(subject.license_names_from_spec.length).to eq 1
+            expect(subject.license_names_from_spec.first).to eq('Apache 2.0 License')
           end
-        end
-      end
-
-
-      describe "without pypi license" do
-        def stub_license_files(license_files)
-          allow(PossibleLicenseFiles).to receive(:find).with("jasmine/install/path").and_return(license_files)
-        end
-
-        it 'returns license from file' do
-          stub_license_files [double(:license_file, license: License.find_by_name('License from file'), path: "/")]
-          expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq('License from file')
-        end
-
-        it 'returns other if no license can be found' do
-          stub_license_files []
-          expect(subject.licenses.length).to eq 1
-          expect(subject.licenses.first.name).to eq('other')
         end
       end
     end

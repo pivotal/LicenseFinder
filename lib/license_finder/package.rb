@@ -84,6 +84,7 @@ module LicenseFinder
     ## LICENSING
 
     attr_reader :license_names_from_spec # stubbed in tests, otherwise private
+    attr_reader :install_path # checked in tests, otherwise private
 
     def licenses
       @licenses ||= determine_licenses.to_set
@@ -123,7 +124,7 @@ module LicenseFinder
     end
 
     def license_files
-      PossibleLicenseFiles.find(@install_path)
+      PossibleLicenseFiles.find(install_path)
     end
 
     def default_license
