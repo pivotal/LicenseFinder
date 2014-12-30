@@ -49,7 +49,7 @@ module LicenseFinder
           expect(subject.decisions).not_to be_approved "test"
         end
 
-        it "is cumulcative" do
+        it "is cumulative" do
           silence_stdout do
             subject.add("test")
             subject.remove("test")

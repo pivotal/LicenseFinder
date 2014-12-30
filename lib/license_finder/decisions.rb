@@ -68,6 +68,12 @@ module LicenseFinder
       self
     end
 
+    def unlicense(name, txn= {})
+      @decisions << [:unlicense, name, txn]
+      @licenses.delete(name)
+      self
+    end
+
     def approve(name, txn = {})
       @decisions << [:approve, name, txn]
       @approvals[name] = TXN.from_hash(txn)

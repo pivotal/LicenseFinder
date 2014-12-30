@@ -29,14 +29,6 @@ module LicenseFinder
 
       default_task :action_items
 
-      auditable
-      desc "license DEPENDENCY_NAME LICENSE", "Update a dependency's license"
-      def license(name, license)
-        modifying { decisions.license(name, license, txn) }
-
-        say "The #{name} dependency has been marked as using #{license} license!", :green
-      end
-
       method_option :format, desc: "The desired output format. Pick from: #{FORMATS.keys.inspect}", default: 'text'
       method_option :columns, type: :array, desc: "For CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}", default: %w[name version licenses]
       desc "report", "Print a report of the project's dependencies to stdout"
@@ -46,6 +38,7 @@ module LicenseFinder
       end
 
       subcommand "dependencies", Dependencies, "Add or remove dependencies that your package managers are not aware of"
+      subcommand "licenses", Licenses, "Set a dependency's licenses, if the licenses found by license_finder are missing or wrong"
       subcommand "approvals", Approvals, "Manually approve dependencies, even if their licenses are not whitelisted"
       subcommand "ignored_groups", IgnoredGroups, "Exclude test and development dependencies from action items and reports"
       subcommand "ignored_dependencies", IgnoredDependencies, "Exclude individual dependencies from action items and reports"

@@ -27,15 +27,6 @@ module LicenseFinder
         end
       end
 
-      describe "#license" do
-        it "updates the license on the requested gem" do
-          silence_stdout do
-            subject.license 'foo_gem', 'foo_license'
-          end
-          expect(subject.decisions.license_of("foo_gem").name).to eq "foo_license"
-        end
-      end
-
       describe "#report" do
         let(:packages) { [Package.new('one dependency', "1.1")] }
 
