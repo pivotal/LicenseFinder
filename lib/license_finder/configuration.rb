@@ -12,15 +12,18 @@ module LicenseFinder
     end
 
     def gradle_command
-      @primary_config[:gradle_command] || @saved_config["gradle_command"] || "gradle"
+      get(:gradle_command) || "gradle"
     end
 
     def decisions_file
-      if file_name = @primary_config[:decisions_file]
-        return Pathname(file_name)
-      end
-      file_dir = @saved_config["decisions_file"] || "doc/dependency_decisions.yml"
-      Pathname(file_dir)
+      file_name = get(:decisions_file) || "doc/dependency_decisions.yml"
+      Pathname(file_name)
+    end
+
+    private
+
+    def get(key)
+      @primary_config[key.to_sym] || @saved_config[key.to_s]
     end
   end
 end
