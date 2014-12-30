@@ -4,7 +4,7 @@ module LicenseFinder
       extend Subcommand
 
       auditable
-      desc "license DEPENDENCY LICENSE", "Set a dependency's licenses, overwriting any license_finder has found"
+      desc "add DEPENDENCY LICENSE", "Set a dependency's licenses, overwriting any license_finder has found"
       def add(name, license)
         modifying { decisions.license(name, license, txn) }
 

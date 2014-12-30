@@ -7,7 +7,7 @@ end
 
 When(/^I set one gem's license to MIT from the command line$/) do
   @user.run_license_finder
-  @user.execute_command 'license_finder license other_gem MIT'
+  @user.execute_command 'license_finder licenses add other_gem MIT'
   @user.run_license_finder
 end
 
@@ -24,7 +24,7 @@ Given(/^I have an app that depends on a manually licensed gem$/) do
   @user.create_ruby_app
   @user.create_and_depend_on_gem 'changed_gem', license: 'MIT'
   @user.run_license_finder
-  @user.execute_command "license_finder license changed_gem Ruby"
+  @user.execute_command "license_finder licenses add changed_gem Ruby"
   expect(@user).to be_seeing_something_like /changed_gem.*Ruby/
 end
 
