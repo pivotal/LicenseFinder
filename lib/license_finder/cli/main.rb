@@ -59,7 +59,8 @@ module LicenseFinder
       def current_packages(logger)
         PackageManager.current_packages(
           logger: logger,
-          gradle_command: SimpleConfig.with_overrides(options).gradle_command
+          gradle_command: SimpleConfig.with_overrides(options).gradle_command,
+          ignore_groups: decisions.ignored_groups
         )
       end
 

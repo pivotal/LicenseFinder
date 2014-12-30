@@ -8,7 +8,7 @@ module LicenseFinder
 
       no_commands do
         def decisions
-          @decisions ||= Decisions.saved!
+          @decisions ||= Decisions.saved!(LicenseFinder.config.artifacts.decisions_file)
         end
       end
 

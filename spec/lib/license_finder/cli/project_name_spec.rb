@@ -3,7 +3,10 @@ require "spec_helper"
 module LicenseFinder
   module CLI
     describe ProjectName do
-      let(:decisions) { Decisions.new }
+      let(:decisions) do
+        fake_file = double(:decisions_file, open: nil)
+        Decisions.new(fake_file)
+      end
 
       before do
         allow(Decisions).to receive(:saved!) { decisions }

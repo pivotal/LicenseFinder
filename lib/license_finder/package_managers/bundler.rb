@@ -4,8 +4,8 @@ module LicenseFinder
   class Bundler < PackageManager
     def initialize options={}
       super
-      @ignore_groups = options[:ignore_groups] # dependency injection for tests
-      @definition    = options[:definition]    # dependency injection for tests
+      @ignore_groups = options[:ignore_groups]
+      @definition    = options[:definition] # dependency injection for tests
     end
 
     def current_packages
@@ -20,14 +20,11 @@ module LicenseFinder
 
     private
 
+    attr_reader :ignore_groups
+
     def definition
       # DI
       @definition ||= ::Bundler::Definition.build(package_path, lockfile_path, nil)
-    end
-
-    def ignore_groups
-      # DI
-      @ignore_groups ||= Decisions.saved!.ignored_groups
     end
 
     def package_path
