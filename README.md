@@ -99,17 +99,16 @@ languages, as long as that language has a package definition in the project dire
 
 ### Continuous Integration
 
-`license_finder` will also return a non-zero exit status if there are
-unapproved dependencies. This can be useful for inclusion in a CI
-environment to alert you if someone adds an unapproved dependency to
-the project.
+`license_finder` will return a non-zero exit status if there are unapproved
+dependencies. This can be useful for inclusion in a CI environment to alert you
+if someone adds an unapproved dependency to the project.
 
 
 ## Approving Dependencies
 
-Whenever you have an unapproved dependency, `license_finder` will tell you.
-If your business decides that this is an acceptable risk, the easiest way
-to approve the dependency is by running `license_finder approval add`.
+`license_finder` will inform you whenever you have an unapproved dependency.
+If your business decides this is an acceptable risk, the easiest way to approve
+the dependency is by running `license_finder approval add`.
 
 For example, let's assume you've added the `awesome_gpl_gem`
 to your Gemfile, which `license_finder` reports is unapproved:
@@ -187,6 +186,9 @@ rubyzip, 0.9.9, ruby
 xml-simple, 1.1.1, other
 ```
 
+You can customize the format of the output in the same way that you customize
+[output from `report`](#output-from-report).
+
 ### Output from `report`
 
 The `license_finder report` command will output human-readable reports that you
@@ -242,7 +244,8 @@ $ license_finder dependencies remove my_js_dep
 
 Sometimes a project will have development or test dependencies which
 you don't want to track.  You can exclude theses dependencies by running
-`license_finder ignored_groups`.  (Currently this only works for Bundler.)
+`license_finder ignored_groups`.  (Currently this only works for packages
+managed by Bundler.)
 
 On rare occasions a package manager will report an individual dependency
 that you want to exclude from all reports, even though it is approved.
@@ -267,6 +270,8 @@ As an example, the file might look like this:
 decisions_file: './some_path/decisions.yml'
 gradle_command: './gradlew'
 ```
+
+If you set `decisions_file`, you won't have to pass it to every CLI command.
 
 Read on to learn about how `gradle_command` is used on gradle projects.
 

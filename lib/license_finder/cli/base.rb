@@ -1,7 +1,7 @@
 module LicenseFinder
   module CLI
     class Base < Thor
-      class_option :decisions_file, desc: "Where to save the decisions. Defaults to doc/dependency_decisions.yml."
+      class_option :decisions_file, desc: "Where decisions are saved. Defaults to doc/dependency_decisions.yml."
 
       def self.auditable
         method_option :who, desc: "The person making this decision"
