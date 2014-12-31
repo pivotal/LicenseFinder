@@ -27,6 +27,28 @@ module LicenseFinder
     its(:children) { should == [] } # TODO: get dependencies from dependencies and devDependencies, like NPM
     its(:install_path) { should eq "/path/to/thing" }
 
+
+    context "when package is NOT installed" do
+      subject do
+        described_class.new(
+          "missing" => true,
+          "endpoint" => {
+            "name" => "some_package_that_is_not_installed",
+            "target" => ">=3.0"
+          }
+        )
+      end
+
+      it "shows the name and version from the endpoint block" do
+        expect(subject.name).to eq("some_package_that_is_not_installed")
+        expect(subject.version).to eq(">=3.0")
+      end
+
+      it 'reports itself as missing' do
+        expect(subject).to be_missing
+      end
+    end
+
     describe '#license_names_from_spec' do
       let(:package1) { { "pkgMeta" => {"license" => "MIT"} } }
       let(:package2) { { "pkgMeta" => {"licenses" => [{"type" => "BSD"}]} } }

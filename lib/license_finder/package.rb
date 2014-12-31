@@ -50,6 +50,7 @@ module LicenseFinder
       ## LICENSING
       @license_names_from_spec = options[:spec_licenses] || []
       @install_path = options[:install_path]
+      @missing = options[:missing] || false
       @decided_licenses = Set.new
     end
 
@@ -129,6 +130,10 @@ module LicenseFinder
 
     def default_license
       License.find_by_name nil
+    end
+
+    def missing?
+      @missing
     end
   end
 end
