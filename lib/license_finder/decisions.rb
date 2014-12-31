@@ -40,8 +40,7 @@ module LicenseFinder
       end
     end
 
-    def initialize(persist_to = nil)
-      @persist_to = persist_to
+    def initialize
       @decisions = []
       @packages = Set.new
       @licenses = Hash.new { |h, k| h[k] = Set.new }
@@ -139,18 +138,16 @@ module LicenseFinder
     # PERSIST
     #########
 
-    attr_reader :persist_to
-
     def self.saved!(file)
-      restore(read!(file), file)
+      restore(read!(file))
     end
 
-    def save!
-      write!(persist, persist_to)
+    def save!(file)
+      write!(persist, file)
     end
 
-    def self.restore(persisted, persist_to = nil)
-      result = new(persist_to)
+    def self.restore(persisted)
+      result = new
       if persisted
         YAML.load(persisted).each do |action, *args|
           result.send(action, *args)
@@ -167,9 +164,9 @@ module LicenseFinder
       file.read if file.exist?
     end
 
-    def write!(value, persist_to)
-      persist_to.dirname.mkpath
-      persist_to.open('w+') do |f|
+    def write!(value, file)
+      file.dirname.mkpath
+      file.open('w+') do |f|
         f.print value
       end
     end

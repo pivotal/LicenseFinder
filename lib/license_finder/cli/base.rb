@@ -40,7 +40,7 @@ module LicenseFinder
 
       def modifying
         yield
-        decisions.save!
+        decisions.save!(config.decisions_file)
       end
     end
   end
