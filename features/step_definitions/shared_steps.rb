@@ -16,7 +16,7 @@ When(/^I run license_finder$/) do
 end
 
 When(/^I whitelist everything I can think of$/) do
-  whitelist = ["MIT","other","New BSD","Apache 2.0","Ruby"]
+  whitelist = ["MIT","unknown","New BSD","Apache 2.0","Ruby"]
   whitelist += ["BSD","Apache-2","Apache"] # for JRuby
   @user.configure_license_finder_whitelist whitelist
   @user.run_license_finder

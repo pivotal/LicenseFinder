@@ -34,7 +34,7 @@ module LicenseFinder
           result = capture_stdout do
             Main.start(["report"])
           end
-          expect(result).to eq "\"one dependency\", 1.1, other\n"
+          expect(result).to eq "\"one dependency\", 1.1, unknown\n"
         end
 
         it "will output a specific format" do

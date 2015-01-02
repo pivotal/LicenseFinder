@@ -15,8 +15,8 @@ module LicenseFinder
       end
 
       context "making the default license" do
-        it "set the name to 'other'" do
-          expect(License.find_by_name(nil).name).to eq("other")
+        it "set the name to 'unknown'" do
+          expect(License.find_by_name(nil).name).to eq("unknown")
         end
 
         it "does not equal other uses of the default license" do

@@ -4,9 +4,7 @@ module LicenseFinder
   describe MarkdownReport do
     describe '#to_s' do
       let(:dep1) do
-        result = Package.new('gem_a', '1.0')
-        result.decide_on_license(License.find_by_name('other'))
-        result
+        Package.new('gem_a', '1.0')
       end
 
       let(:dep2) do
@@ -33,7 +31,7 @@ module LicenseFinder
 
       it "should display a summary" do
         is_expected.to match "## Summary"
-        is_expected.to match /\s+\* 1 other/
+        is_expected.to match /\s+\* 1 unknown/
         is_expected.to match /\s+\* 1 BSD/
       end
 

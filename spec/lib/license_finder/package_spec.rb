@@ -38,7 +38,7 @@ module LicenseFinder
       expect(subject.children).to eq []
       expect(subject.install_path).to be_nil
       expect(subject.license_names_from_spec).to eq []
-      expect(subject.licenses.map(&:name)).to eq ['other']
+      expect(subject.licenses.map(&:name)).to eq ['unknown']
     end
 
     describe '#licenses' do
@@ -52,11 +52,11 @@ module LicenseFinder
 
       it "are not required" do
         subject = described_class.new(nil, nil)
-        expect(subject.licenses.map(&:name)).to eq ['other']
+        expect(subject.licenses.map(&:name)).to eq ['unknown']
       end
 
       describe "decided by user" do
-        it "returns all decided licenses, though in practice Decisions only reports one" do
+        it "returns all decided licenses" do
           subject = described_class.new(nil, nil)
           subject.decide_on_license(License.find_by_name("MIT"))
           subject.decide_on_license(License.find_by_name("GPL"))
