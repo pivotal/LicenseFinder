@@ -5,8 +5,7 @@ module LicenseFinder
     describe ".add_package" do
       it "adds to list of packages" do
         packages = subject.add_package("dep", nil).packages
-        expect(packages.size).to eq 1
-        expect(packages.first.name).to eq "dep"
+        expect(packages.map(&:name)).to eq ["dep"]
       end
 
       it "includes optional version" do
@@ -232,8 +231,7 @@ module LicenseFinder
           add_package("dep", "0.2.0")
         )
         packages = decisions.packages
-        expect(packages.size).to eq 1
-        expect(packages.first.name).to eq "dep"
+        expect(packages.map(&:name)).to eq ["dep"]
       end
 
       it "can restore removed packages" do

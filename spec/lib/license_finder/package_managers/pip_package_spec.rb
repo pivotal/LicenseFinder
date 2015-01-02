@@ -33,8 +33,7 @@ module LicenseFinder
 
           subject = make_package(data)
 
-          expect(subject.license_names_from_spec.length).to eq 1
-          expect(subject.license_names_from_spec.first).to eq('MIT')
+          expect(subject.license_names_from_spec).to eq ['MIT']
         end
 
         context "when there's no explicit license" do
@@ -43,8 +42,7 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license_names_from_spec.length).to eq 1
-            expect(subject.license_names_from_spec.first).to eq('Apache 2.0 License')
+            expect(subject.license_names_from_spec).to eq ['Apache 2.0 License']
           end
 
           it "returns 'multiple licenses' if there are multiple licenses in 'classifiers'" do
@@ -52,7 +50,6 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license_names_from_spec.length).to eq 2
             expect(subject.license_names_from_spec).to eq ['Apache 2.0 License', 'GPL']
           end
         end
@@ -64,8 +61,7 @@ module LicenseFinder
 
             subject = make_package(data)
 
-            expect(subject.license_names_from_spec.length).to eq 1
-            expect(subject.license_names_from_spec.first).to eq('Apache 2.0 License')
+            expect(subject.license_names_from_spec).to eq ['Apache 2.0 License']
           end
         end
       end

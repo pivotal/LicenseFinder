@@ -38,24 +38,19 @@ module LicenseFinder
 
       it 'finds the license for both license structures' do
         package = NpmPackage.new(node_module1)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("MIT")
+        expect(package.license_names_from_spec).to eq ["MIT"]
 
         package = NpmPackage.new(node_module2)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("BSD")
+        expect(package.license_names_from_spec).to eq ["BSD"]
 
         package = NpmPackage.new(node_module3)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("PSF")
+        expect(package.license_names_from_spec).to eq ["PSF"]
 
         package = NpmPackage.new(node_module4)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("MIT")
+        expect(package.license_names_from_spec).to eq ["MIT"]
 
         package = NpmPackage.new(misdeclared_node_module)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("MIT")
+        expect(package.license_names_from_spec).to eq ["MIT"]
       end
     end
   end

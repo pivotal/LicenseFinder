@@ -29,8 +29,7 @@ module LicenseFinder
 
     describe "#license_names_from_spec" do
       it "returns the license if found" do
-        expect(subject.license_names_from_spec.length).to eq 1
-        expect(subject.license_names_from_spec.first).to eq "Common Public License Version 1.0"
+        expect(subject.license_names_from_spec).to eq ["Common Public License Version 1.0"]
       end
 
       context "when there are multiple licenses" do
@@ -52,7 +51,6 @@ module LicenseFinder
         end
 
         it "returns multiple licenses" do
-          expect(subject.license_names_from_spec.length).to eq 2
           expect(subject.license_names_from_spec).to eq ['Common Public License Version 1.0', 'Apache 2']
         end
       end

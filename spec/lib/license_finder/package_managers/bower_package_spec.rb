@@ -57,20 +57,16 @@ module LicenseFinder
 
       it 'finds the license for all license structures' do
         package = BowerPackage.new(package1)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("MIT")
+        expect(package.license_names_from_spec).to eq ["MIT"]
 
         package = BowerPackage.new(package2)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("BSD")
+        expect(package.license_names_from_spec).to eq ["BSD"]
 
         package = BowerPackage.new(package3)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("PSF")
+        expect(package.license_names_from_spec).to eq ["PSF"]
 
         package = BowerPackage.new(package4)
-        expect(package.license_names_from_spec.length).to eq 1
-        expect(package.license_names_from_spec.first).to eq("MIT")
+        expect(package.license_names_from_spec).to eq ["MIT"]
       end
     end
   end
