@@ -2,7 +2,7 @@ module LicenseFinder
   class License
     class Template
       def self.named(name)
-        path = ROOT_PATH.join("data", "licenses", "#{name}.txt")
+        path = ROOT_PATH.join("license", "templates", "#{name}.txt")
         new(path.read)
       end
 
