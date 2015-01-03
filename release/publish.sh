@@ -9,24 +9,10 @@ then
   exit
 fi
 
-function perform {
-  printf "\n> $1\n"
-  $1
-}
+set -x
 
-printf "\nBuilding jruby gem"
-perform "rvm use jruby"
 perform "gem build *.gemspec"
-
-printf "\nBuilding ruby gem"
-perform "rvm use ruby"
-perform "gem build *.gemspec"
-
-for file in *.gem
-do
-    perform "gem push $file"
-done
-
+perform "gem push *gem"
 perform "rm *.gem"
 
 printf "\nRelease finished."
