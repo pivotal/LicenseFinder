@@ -16,7 +16,7 @@ module LicenseFinder
 
     def grouped_dependencies
       dependencies
-        .group_by { |dep| dep.licenses.map(&:name).sort.join ', ' }
+        .group_by { |dep| license_names(dep) }
         .sort_by { |_, group| -group.size }
     end
 
@@ -30,16 +30,28 @@ module LicenseFinder
 
     def link_to_maybe(text, link)
       if link && !link.empty?
-        %{<a href="#{link}">#{text}</a>}
+        link_to(text, link)
       else
         text
       end
     end
 
+    def link_to(text, link = "##{text}")
+      %{<a href="#{link}">#{text}</a>}
+    end
+
+    def license_names(dependency)
+      dependency.licenses.map(&:name).sort.join ', '
+    end
+
+    def license_links(dependency)
+      dependency.licenses.map { |l| link_to_license(l) }.join(', ')
+    end
+
     def version_groups(dependency)
       result = "v#{dependency.version}"
       if dependency.groups.any?
-        result += " (#{dependency.groups.join(", ")})"
+        result << " (#{dependency.groups.join(", ")})"
       end
       result
     end

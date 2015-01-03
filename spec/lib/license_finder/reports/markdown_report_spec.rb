@@ -26,7 +26,7 @@ module LicenseFinder
       end
 
       it "should list the unapproved dependency" do
-        is_expected.to match "href='#gem_a'"
+        is_expected.to match 'href="#gem_a"'
       end
 
       it "should display a summary" do
