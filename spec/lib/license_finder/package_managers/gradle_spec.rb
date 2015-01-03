@@ -61,19 +61,12 @@ module LicenseFinder
         gradle.current_packages
       end
 
-      it "handles no licenses" do
+      it "handles an empty list of licenses" do
         stub_license_report("""
           <dependency>
-            <license name='No license found' />
           </dependency>
         """)
-
-        expect(GradlePackage).to receive(:new).with({"license" => []}, anything)
-        gradle.current_packages
-      end
-
-      it "handles an empty list of licenses" do
-        stub_license_report("")
+        expect(GradlePackage).to receive(:new).with({}, anything)
 
         gradle.current_packages
       end

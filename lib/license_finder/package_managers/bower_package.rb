@@ -2,9 +2,9 @@ module LicenseFinder
   class BowerPackage < Package
     def initialize(bower_module, options={})
       spec = bower_module.fetch("pkgMeta", Hash.new)
-      endpoint = bower_module.fetch("endpoint", Hash.new)
 
       if spec.empty?
+        endpoint = bower_module.fetch("endpoint", Hash.new)
         name = endpoint["name"]
         version = endpoint["target"]
       else

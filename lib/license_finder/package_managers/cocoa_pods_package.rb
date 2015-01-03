@@ -1,7 +1,7 @@
 module LicenseFinder
   class CocoaPodsPackage < Package
-    def initialize(name, version, license_text, options={})
-      super(name, version, options)
+    def initialize(name, version, license_text)
+      super(name, version)
       @license_text = license_text
     end
 

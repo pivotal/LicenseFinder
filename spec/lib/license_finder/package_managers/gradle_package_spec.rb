@@ -4,13 +4,8 @@ module LicenseFinder
   describe GradlePackage do
     subject do
       described_class.new(
-        {
-          "name" => "ch.qos.logback:logback-classic:1.1.1",
-          "file" => ["logback-classic-1.1.1.jar"],
-          "license" => [
-            { "name" => "Eclipse Public License - v 1.0", "url"=>"http://www.eclipse.org/legal/epl-v10.html"}
-          ]
-        }
+        "name" => "ch.qos.logback:logback-classic:1.1.1",
+        "license" => [ { "name" => "MIT" } ]
       )
     end
 
@@ -26,26 +21,41 @@ module LicenseFinder
     its(:install_path) { should be_nil }
 
     describe "#license_names_from_spec" do
-      it "returns the license if found" do
-        expect(subject.license_names_from_spec).to eq ["Eclipse Public License - v 1.0"]
+      it "returns the license" do
+        expect(subject.license_names_from_spec).to eq ["MIT"]
+      end
+
+      context "when there are no licenses" do
+        subject { described_class.new("name" => "a:b:c") }
+
+        it "is empty" do
+          expect(subject.license_names_from_spec).to be_empty
+        end
+      end
+
+      context "when there are no real licenses" do
+        subject do
+          described_class.new(
+            "name" => "a:b:c",
+            "license" => [ { "name" => "No license found"} ]
+          )
+        end
+
+        it "is empty" do
+          expect(subject.license_names_from_spec).to be_empty
+        end
       end
 
       context "when there are multiple licenses" do
         subject do
           described_class.new(
-            {
-              "name" => "ch.qos.logback:logback-classic:1.1.1",
-              "file" => ["logback-classic-1.1.1.jar"],
-              "license" => [
-                { "name" => "Eclipse Public License - v 1.0", "url"=>"http://www.eclipse.org/legal/epl-v10.html"},
-                { "name"=>"GNU Lesser General Public License", "url"=>"http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html"}
-              ]
-            }
+            "name" => "a:b:c",
+            "license" => [ { "name" => "1" }, { "name" => "2" } ]
           )
         end
 
         it "returns multiple licenses" do
-          expect(subject.license_names_from_spec).to eq ['Eclipse Public License - v 1.0', 'GNU Lesser General Public License']
+          expect(subject.license_names_from_spec).to eq ['1', '2']
         end
       end
     end
