@@ -22,11 +22,7 @@ When(/^I whitelist everything I can think of$/) do
 end
 
 Then(/^I should see the project name (\w+) in the html$/) do |project_name|
-  @user.in_html do |page|
-    title = page.find("h1")
-
-    expect(title).to have_content project_name
-  end
+  expect(@user.html_title).to have_content project_name
 end
 
 
@@ -174,6 +170,10 @@ module DSL
       in_html do |page|
         yield page.find("##{gem_name}")
       end
+    end
+
+    def html_title
+      in_html { |page| page.find("h1") }
     end
 
     private

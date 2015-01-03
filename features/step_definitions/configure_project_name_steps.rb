@@ -15,9 +15,5 @@ Then(/^I should see the project name (\w+) in the output$/) do |project_name|
 end
 
 Then(/^I should not see the project name (\w+) in the html$/) do |project_name|
-  @user.in_html do |page|
-    title = page.find("h1")
-
-    expect(title).not_to have_content project_name
-  end
+  expect(@user.html_title).not_to have_content project_name
 end
