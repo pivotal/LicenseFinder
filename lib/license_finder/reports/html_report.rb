@@ -1,6 +1,8 @@
 module LicenseFinder
-  class HtmlReport < FormattedReport
-    def self.template_name
+  class HtmlReport < ErbReport
+    private
+
+    def template_name
       "html_report"
     end
   end

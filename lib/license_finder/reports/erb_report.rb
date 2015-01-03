@@ -1,9 +1,9 @@
 require 'erb'
 
 module LicenseFinder
-  class FormattedReport < Report
+  class ErbReport < Report
     def to_s
-      filename = ROOT_PATH.join('reports', 'templates', "#{self.class.template_name}.erb")
+      filename = ROOT_PATH.join('reports', 'templates', "#{template_name}.erb")
       template = ERB.new(filename.read, nil, '-')
       template.result(binding)
     end
@@ -15,11 +15,9 @@ module LicenseFinder
     end
 
     def grouped_dependencies
-      find_name = lambda do |dep|
-        dep.licenses.map(&:name).sort.join ', '
-      end
-
-      dependencies.group_by(&find_name).sort_by { |_, group| group.size }.reverse
+      dependencies
+        .group_by { |dep| dep.licenses.map(&:name).sort.join ', ' }
+        .sort_by { |_, group| -group.size }
     end
 
     def link_to_license(license)

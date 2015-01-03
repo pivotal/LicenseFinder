@@ -18,7 +18,7 @@ module LicenseFinder
   end
 end
 
-require 'license_finder/reports/formatted_report'
+require 'license_finder/reports/erb_report'
 
 require 'license_finder/reports/csv_report'
 require 'license_finder/reports/text_report'
