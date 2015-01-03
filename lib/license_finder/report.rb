@@ -6,7 +6,7 @@ module LicenseFinder
 
     def initialize(dependencies=[], options={})
       @dependencies = Array(dependencies)
-      @project_name = options[:project_name] || determine_project_name
+      @project_name = options[:project_name]
     end
 
     private
@@ -14,10 +14,6 @@ module LicenseFinder
 
     def sorted_dependencies
       dependencies.sort_by(&:name)
-    end
-
-    def determine_project_name
-      Pathname.pwd.basename.to_s
     end
   end
 end

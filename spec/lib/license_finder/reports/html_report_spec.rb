@@ -4,21 +4,22 @@ require "capybara"
 module LicenseFinder
   describe HtmlReport do
     describe "#to_s" do
-      let(:dependency_name) { "the-name" }
-      let(:time) { Time.now.utc }
-      let(:project_name) { "given project name" }
-
       let(:dependency) do
-        dep = Package.new(dependency_name)
+        dep = Package.new("the-dep")
         dep.decide_on_license License.find_by_name("MIT")
         dep
       end
       let(:dependencies) { [dependency] }
 
-      subject { Capybara.string(HtmlReport.new(dependencies, project_name: project_name).to_s) }
+      subject { Capybara.string(HtmlReport.new(dependencies, project_name: "project name").to_s) }
+
+      it "should show the project name" do
+        title = subject.find "h1"
+        expect(title).to have_text "project name"
+      end
 
       context "when the dependency is manually approved" do
-        before { dependency.approved_manually!(Decisions::TXN.new("the-approver", "the-approval-note", time)) }
+        before { dependency.approved_manually!(Decisions::TXN.new("the-approver", "the-approval-note", Time.now.utc)) }
 
         it "should show approved dependencies without action items" do
           is_expected.to have_selector ".approved"
@@ -57,7 +58,7 @@ module LicenseFinder
 
       context "when the gem has a group" do
         let(:dependency) do
-          Package.new(dependency_name, nil, groups: ["foo group"])
+          Package.new(nil, nil, groups: ["foo group"])
         end
 
         it "should show the group" do
@@ -91,25 +92,8 @@ module LicenseFinder
 
       context "when the gem has no relationships" do
         it "should not show any relationships" do
-          is_expected.not_to have_text "#{dependency_name} is required by:"
-          is_expected.not_to have_text "#{dependency_name} relies on:"
-        end
-      end
-
-      context "when the project has a name" do
-        it "should show the project name" do
-          title = subject.find "h1"
-          expect(title).to have_text "given project name"
-        end
-      end
-
-      context "when the project has no name" do
-        let(:project_name) { nil }
-
-        it "should default to the directory name" do
-          allow(Dir).to receive(:getwd).and_return("/path/to/a_project")
-          title = subject.find "h1"
-          expect(title).to have_text "a_project"
+          is_expected.not_to have_text "is required by:"
+          is_expected.not_to have_text "relies on:"
         end
       end
     end

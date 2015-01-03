@@ -50,7 +50,7 @@ module LicenseFinder
       # The core of the system. The saved decisions are applied to the current
       # packages.
       def decision_applier(logger = Logger.new(options))
-        @decision_applier ||= DecisionApplier.new(
+        DecisionApplier.new(
           decisions: decisions,
           packages: current_packages(logger)
         )
@@ -66,7 +66,11 @@ module LicenseFinder
 
       def report_of(content)
         report = FORMATS[options[:format]]
-        report.of(content, columns: options[:columns], project_name: decisions.project_name)
+        report.of(content, columns: options[:columns], project_name: project_name)
+      end
+
+      def project_name
+        decisions.project_name || Pathname.pwd.basename.to_s
       end
     end
   end

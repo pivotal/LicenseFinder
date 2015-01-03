@@ -1,23 +1,16 @@
 module StdoutHelpers
-  def silence_stdout
-    orig_stdout = $stdout
-    $stdout = File.open("/dev/null", "w")
-    yield
-  ensure
-    $stdout = orig_stdout
-  end
-
   def capture_stdout
     orig_stdout = $stdout
-    stdout_reader, $stdout = IO.pipe
+    $stdout = StringIO.new
 
     yield
 
-    $stdout.close
-    stdout_reader.read
+    $stdout.string
   ensure
     $stdout = orig_stdout
   end
+
+  alias silence_stdout capture_stdout
 end
 
 RSpec.configure do |c|

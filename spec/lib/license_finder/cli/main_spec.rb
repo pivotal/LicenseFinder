@@ -52,6 +52,33 @@ module LicenseFinder
 
           expect(result).to eq "one dependency,1.1\n"
         end
+
+        context "in html reports" do
+          subject do
+            result = capture_stdout do
+              Main.start(%w[report --format html])
+            end
+
+            html = Capybara.string(result)
+            html.find "h1"
+          end
+
+          context "when the project has a name" do
+            before { decisions.name_project("given project name") }
+
+            it "should show the project name" do
+              is_expected.to have_text "given project name"
+            end
+          end
+
+          context "when the project has no name" do
+            before { allow(Dir).to receive(:getwd).and_return("/path/to/a_project") }
+
+            it "should default to the directory name" do
+              is_expected.to have_text "a_project"
+            end
+          end
+        end
       end
 
       describe "#action_items" do
