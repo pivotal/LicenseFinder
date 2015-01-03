@@ -65,6 +65,12 @@ module LicenseFinder
         end
       end
 
+      context "when the gem does not have a group" do
+        it "should not show the group" do
+          is_expected.not_to have_text "()"
+        end
+      end
+
       context "when the gem has many relationships" do
         let(:dependencies) do
           grandparent = Package.new("foo grandparent", nil, children: ["foo parent"])
@@ -85,7 +91,6 @@ module LicenseFinder
 
       context "when the gem has no relationships" do
         it "should not show any relationships" do
-          is_expected.not_to have_text "()"
           is_expected.not_to have_text "#{dependency_name} is required by:"
           is_expected.not_to have_text "#{dependency_name} relies on:"
         end
