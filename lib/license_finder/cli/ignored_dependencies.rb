@@ -2,6 +2,7 @@ module LicenseFinder
   module CLI
     class IgnoredDependencies < Base
       extend Subcommand
+      include MakesDecisions
 
       desc "list", "List all the ignored dependencies"
       def list

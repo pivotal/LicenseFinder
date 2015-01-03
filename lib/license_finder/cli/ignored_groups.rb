@@ -2,6 +2,7 @@ module LicenseFinder
   module CLI
     class IgnoredGroups < Base
       extend Subcommand
+      include MakesDecisions
 
       desc "list", "List all the ignored groups"
       def list

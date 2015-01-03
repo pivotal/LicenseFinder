@@ -6,6 +6,7 @@ end
 require 'license_finder/cli/patched_thor'
 
 require 'license_finder/cli/base'
+require 'license_finder/cli/makes_decisions'
 
 require 'license_finder/cli/whitelist'
 require 'license_finder/cli/dependencies'

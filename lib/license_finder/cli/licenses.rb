@@ -2,6 +2,7 @@ module LicenseFinder
   module CLI
     class Licenses < Base
       extend Subcommand
+      include MakesDecisions
 
       auditable
       desc "add DEPENDENCY LICENSE", "Set a dependency's licenses, overwriting any license_finder has found"

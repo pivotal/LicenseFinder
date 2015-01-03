@@ -2,6 +2,7 @@ module LicenseFinder
   module CLI
     class Dependencies < Base
       extend Subcommand
+      include MakesDecisions
 
       method_option :approve, type: :boolean, desc: "Approve the added dependency"
       auditable

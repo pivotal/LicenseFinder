@@ -2,6 +2,7 @@ module LicenseFinder
   module CLI
     class ProjectName < Base
       extend Subcommand
+      include MakesDecisions
 
       desc "show", "Show the project name"
       def show
