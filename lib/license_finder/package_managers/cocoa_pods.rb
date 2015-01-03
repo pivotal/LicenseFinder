@@ -33,7 +33,7 @@ module LicenseFinder
         'Pods/Target Support Files/Pods' # cocoapods >= 0.34
       ]
 
-      directories.map { |dir| Pathname.new(File.join(dir, filename)) }.find(&:exist?)
+      directories.map { |dir| Pathname.new(dir).join(filename) }.find(&:exist?)
     end
 
     def read_plist pathname
