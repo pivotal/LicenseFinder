@@ -66,10 +66,10 @@ module LicenseFinder
 
       def report_of(content)
         report = FORMATS[options[:format]]
-        report.of(content, columns: options[:columns], project_name: project_name)
+        report.of(content, columns: options[:columns], project_name: fetch_project_name)
       end
 
-      def project_name
+      def fetch_project_name
         decisions.project_name || Pathname.pwd.basename.to_s
       end
     end
