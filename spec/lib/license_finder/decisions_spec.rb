@@ -117,12 +117,12 @@ module LicenseFinder
     describe ".whitelist" do
       it "will report the given license as approved" do
         decisions = subject.whitelist("MIT")
-        expect(decisions).to be_approved_license(License.find_by_name("MIT"))
+        expect(decisions).to be_whitelisted(License.find_by_name("MIT"))
       end
 
       it "adapts names" do
         decisions = subject.whitelist("Expat")
-        expect(decisions).to be_approved_license(License.find_by_name("MIT"))
+        expect(decisions).to be_whitelisted(License.find_by_name("MIT"))
       end
 
       it "adds to list" do
@@ -136,7 +136,7 @@ module LicenseFinder
         decisions = subject.
           whitelist("MIT").
           unwhitelist("MIT")
-        expect(decisions).not_to be_approved_license(License.find_by_name("MIT"))
+        expect(decisions).not_to be_whitelisted(License.find_by_name("MIT"))
       end
 
       it "is cumulative" do
@@ -144,14 +144,14 @@ module LicenseFinder
           whitelist("MIT").
           unwhitelist("MIT").
           whitelist("MIT")
-        expect(decisions).to be_approved_license(License.find_by_name("MIT"))
+        expect(decisions).to be_whitelisted(License.find_by_name("MIT"))
       end
 
       it "adapts names" do
         decisions = subject.
           whitelist("MIT").
           unwhitelist("Expat")
-        expect(decisions).not_to be_approved_license(License.find_by_name("MIT"))
+        expect(decisions).not_to be_whitelisted(License.find_by_name("MIT"))
       end
     end
 
@@ -283,7 +283,7 @@ module LicenseFinder
         decisions = roundtrip(
           subject.whitelist("MIT")
         )
-        expect(decisions).to be_approved_license(License.find_by_name("MIT"))
+        expect(decisions).to be_whitelisted(License.find_by_name("MIT"))
       end
 
       it "can restore un-whitelists" do
@@ -292,7 +292,7 @@ module LicenseFinder
           whitelist("MIT").
           unwhitelist("MIT")
         )
-        expect(decisions).not_to be_approved_license(License.find_by_name("MIT"))
+        expect(decisions).not_to be_whitelisted(License.find_by_name("MIT"))
       end
 
       it "can restore ignorals" do

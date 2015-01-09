@@ -18,7 +18,7 @@ module LicenseFinder
       @approvals.has_key?(name)
     end
 
-    def approved_license?(lic)
+    def whitelisted?(lic)
       @whitelisted.include?(lic)
     end
 

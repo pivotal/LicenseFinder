@@ -36,7 +36,7 @@ module LicenseFinder
     def with_approval(package)
       if decisions.approved?(package.name)
         package.approved_manually!(decisions.approval_of(package.name))
-      elsif package.licenses.any? { |license| decisions.approved_license?(license) }
+      elsif package.licenses.any? { |license| decisions.whitelisted?(license) }
         package.whitelisted!
       end
       package
