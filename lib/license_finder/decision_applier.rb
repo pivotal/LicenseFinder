@@ -1,6 +1,6 @@
 module LicenseFinder
   class DecisionApplier
-    def initialize options={}
+    def initialize(options)
       @decisions = options.fetch(:decisions)
       @packages = options.fetch(:packages)
     end

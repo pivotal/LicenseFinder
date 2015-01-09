@@ -4,8 +4,8 @@ module LicenseFinder
       new(dependencies, options).to_s
     end
 
-    def initialize(dependencies=[], options={})
-      @dependencies = Array(dependencies)
+    def initialize(dependencies, options)
+      @dependencies = dependencies
       @project_name = options[:project_name]
     end
 
