@@ -1,5 +1,5 @@
 Given(/^I have an app with an unapproved dependency$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_ruby_app
   @user.create_and_depend_on_gem 'unapproved_gem', license: 'MIT'
 end

@@ -1,5 +1,5 @@
 Given(/^I have an app that depends on a gem with license and version details$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_ruby_app
   @user.create_and_depend_on_gem('info_gem', license: 'MIT', version: '1.1.1')
 end

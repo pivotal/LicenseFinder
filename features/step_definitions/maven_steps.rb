@@ -1,5 +1,5 @@
 Given(/^A pom file with dependencies$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_maven_app
 end
 

@@ -1,5 +1,5 @@
 Given(/^A Podfile with dependencies$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_cocoapods_app
 end
 

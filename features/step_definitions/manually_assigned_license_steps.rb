@@ -1,5 +1,5 @@
 Given(/^I have an app that depends on a few gems without known licenses$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_ruby_app
   @user.create_and_depend_on_gem 'other_gem', version: '1.0', license: 'other'
   @user.create_and_depend_on_gem 'control_gem', version: '1.0', license: 'other'
@@ -20,7 +20,7 @@ Then(/^I should see other gems have not changed their licenses$/) do
 end
 
 Given(/^I have an app that depends on a manually licensed gem$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_ruby_app
   @user.create_and_depend_on_gem 'changed_gem', license: 'MIT'
   @user.run_license_finder

@@ -1,5 +1,5 @@
 Given(/^A requirements file with dependencies$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_python_app
 end
 

@@ -1,5 +1,5 @@
 Given(/^I have an app that depends on a GPL licensed gem$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_ruby_app
   @user.create_and_depend_on_gem "gpl_gem", license: "GPL"
 end

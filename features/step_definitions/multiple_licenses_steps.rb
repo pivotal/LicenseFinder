@@ -1,5 +1,5 @@
 Given(/^I have an app that depends on BSD and GPL-2 licenses$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_ruby_app
   @user.create_and_depend_on_gem 'bsd_and_gpl2_gem', licenses: %w(BSD GPL-2)
 end

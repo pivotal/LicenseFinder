@@ -1,5 +1,5 @@
 Given(/^A build.gradle file with dependencies$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_gradle_app
 end
 

@@ -1,5 +1,5 @@
 Given(/^I have an app that depends on bundler$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_ruby_app
   @user.create_gem 'bundler_faker', license: 'Whatever'
   @user.depend_on_local_gem 'bundler_faker', groups: ['test', 'development', 'production']

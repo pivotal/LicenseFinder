@@ -1,5 +1,5 @@
 Given(/^I have an app that depends on a gem in the test group$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_ruby_app
   @user.create_gem 'gpl_gem', license: 'GPL'
   @user.depend_on_local_gem 'gpl_gem', groups: ['test']

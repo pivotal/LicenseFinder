@@ -1,5 +1,5 @@
 Given(/^A bower.json file with dependencies$/) do
-  @user = ::DSL::User.new
+  @user = LicenseFinder::TestingDSL::User.new
   @user.create_bower_app
 end
 
