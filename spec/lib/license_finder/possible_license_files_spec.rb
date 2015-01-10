@@ -37,12 +37,8 @@ module LicenseFinder
 
       it "includes files nested inside LICENSE directory" do
         expect(files_in('license_directory')).to match_array(%w[
-          LICENSE/BSD-2-Clause.txt
-          LICENSE/GPL-2.0.txt
-          LICENSE/MIT.txt
-          LICENSE/RUBY.txt
           COPYING
-          LICENSE/LICENSE
+          LICENSE/Apache.txt
         ])
       end
 
