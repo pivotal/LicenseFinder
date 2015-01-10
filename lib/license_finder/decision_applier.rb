@@ -37,7 +37,9 @@ module LicenseFinder
     end
 
     def with_approval(package)
-      if decisions.approved?(package.name)
+      if package.licenses.all? { |license| decisions.blacklisted?(license) }
+        # do not approve; could mark package.blacklisted! if needed for reports
+      elsif decisions.approved?(package.name)
         package.approved_manually!(decisions.approval_of(package.name))
       elsif package.licenses.any? { |license| decisions.whitelisted?(license) }
         package.whitelisted!

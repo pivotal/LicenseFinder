@@ -60,6 +60,42 @@ module LicenseFinder
         expect(dep).to be_approved
         expect(dep).to be_whitelisted
       end
+
+      it "forbids approval of packages with only blacklisted license" do
+        decisions = Decisions.new.
+          add_package("manual", nil).
+          license("manual", "ABC").
+          whitelist("ABC").
+          approve("manual").
+          blacklist("ABC")
+        decision_applier = described_class.new(decisions: decisions, packages: [])
+        dep = decision_applier.acknowledged.last
+        expect(dep).not_to be_approved
+      end
+
+      it "allows approval of packages if not all licenses are blacklisted" do
+        decisions = Decisions.new.
+          add_package("manual", nil).
+          license("manual", "ABC").
+          license("manual", "DEF").
+          whitelist("ABC").
+          blacklist("DEF")
+        decision_applier = described_class.new(decisions: decisions, packages: [])
+        dep = decision_applier.acknowledged.last
+        expect(dep).to be_approved
+        expect(dep).to be_whitelisted
+
+        decisions = Decisions.new.
+          add_package("manual", nil).
+          license("manual", "ABC").
+          license("manual", "DEF").
+          approve("manual").
+          blacklist("DEF")
+        decision_applier = described_class.new(decisions: decisions, packages: [])
+        dep = decision_applier.acknowledged.last
+        expect(dep).to be_approved
+        expect(dep).to be_approved_manually
+      end
     end
   end
 end
