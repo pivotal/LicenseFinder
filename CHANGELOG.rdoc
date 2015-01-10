@@ -1,3 +1,9 @@
+=== 2.0.5
+
+* Features
+  * Licenses can be blacklisted.  Dependencies which only have licenses in the
+    blacklist will not be approved, even if someone tries.
+
 === 2.0.4 / 2015-04-16
 
 * Features

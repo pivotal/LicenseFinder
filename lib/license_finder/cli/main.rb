@@ -63,6 +63,7 @@ module LicenseFinder
       subcommand "ignored_groups", IgnoredGroups, "Exclude test and development dependencies from action items and reports"
       subcommand "ignored_dependencies", IgnoredDependencies, "Exclude individual dependencies from action items and reports"
       subcommand "whitelist", Whitelist, "Automatically approve any dependency that has a whitelisted license"
+      subcommand "blacklist", Blacklist, "Forbid approval of any dependency whose licenses are all blacklisted"
       subcommand "project_name", ProjectName, "Set the project name, for display in reports"
 
       private
