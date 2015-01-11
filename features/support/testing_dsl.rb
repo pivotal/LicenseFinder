@@ -1,6 +1,4 @@
-require 'bundler'
 require 'delegate'
-require 'forwardable'
 
 module LicenseFinder::TestingDSL
   class User
@@ -46,6 +44,7 @@ module LicenseFinder::TestingDSL
     end
   end
 
+  require 'forwardable'
   class Project
     extend Forwardable
     def_delegators :project_dir, :shell_out, :add_to_file, :install_fixture
@@ -134,6 +133,7 @@ module LicenseFinder::TestingDSL
     end
   end
 
+  require 'bundler'
   class BundlerProject < Project
     def initialize
       Paths.reset_projects!
@@ -283,16 +283,17 @@ module LicenseFinder::TestingDSL
   end
 
   module Shell
-    def self.run(command, allow_failures = false)
-      output = `#{command} 2>&1`
-      status = $?
-      unless status.success? || allow_failures
-        message_format = <<EOM
+    ERROR_MESSAGE_FORMAT = <<EOM
 Command failed: `%s`
 output: %s
 exit: %d
 EOM
-        message = sprintf message_format, command, output.chomp, status.exitstatus
+
+    def self.run(command, allow_failures = false)
+      output = `#{command} 2>&1`
+      status = $?
+      unless status.success? || allow_failures
+        message = sprintf ERROR_MESSAGE_FORMAT, command, output.chomp, status.exitstatus
         raise RuntimeError.new(message)
       end
 
