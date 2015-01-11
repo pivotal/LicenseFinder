@@ -1,7 +1,6 @@
-require 'spec_helper'
-require './features/step_definitions/testing_dsl'
+require 'feature_helper'
 
-describe "CocoaPods Dependencies" do
+describe "CocoaPods Dependencies", ios: true do
   # As a Mac developer
   # I want to be able to manage CocoaPods dependencies
 

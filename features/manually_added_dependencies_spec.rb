@@ -1,5 +1,4 @@
-require 'spec_helper'
-require './features/step_definitions/testing_dsl'
+require 'feature_helper'
 
 describe "Manually Added Dependencies" do
   # As a developer

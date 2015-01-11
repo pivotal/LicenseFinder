@@ -1,5 +1,4 @@
-require 'spec_helper'
-require './features/step_definitions/testing_dsl'
+require 'feature_helper'
 
 describe "Project name" do
   # As a developer
