@@ -18,8 +18,8 @@ describe "Whitelisted licenses" do
   end
 
   specify "approve dependencies with any of those licenses" do
-    user.execute_command 'license_finder dependencies add dep_with_many_licenses MIT'
-    user.execute_command 'license_finder licenses add dep_with_many_licenses GPL'
+    user.execute_command 'license_finder dependencies add dep_with_many_licenses GPL'
+    user.execute_command 'license_finder licenses add dep_with_many_licenses MIT'
     user.execute_command 'license_finder whitelist add GPL'
 
     user.run_license_finder
