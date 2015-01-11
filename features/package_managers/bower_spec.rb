@@ -7,7 +7,7 @@ describe "Bower Dependencies" do
   let(:user) { LicenseFinder::TestingDSL::User.new }
 
   specify "are shown in reports" do
-    user.create_bower_app
+    LicenseFinder::TestingDSL::BowerProject.create
     user.run_license_finder
     expect(user).to be_seeing_line "gmaps, 0.2.30, MIT"
   end

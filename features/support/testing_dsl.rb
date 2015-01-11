@@ -247,32 +247,8 @@ EOM
       EmptyProject.create
     end
 
-    def create_python_app
-      PythonProject.create
-    end
-
-    def create_node_app
-      NodeProject.create
-    end
-
-    def create_bower_app
-      BowerProject.create
-    end
-
-    def create_maven_app
-      MavenProject.create
-    end
-
-    def create_gradle_app
-      GradleProject.create
-    end
-
     def create_ruby_app
       RubyProject.create
-    end
-
-    def create_cocoapods_app
-      CocoaPodsProject.create
     end
 
     def execute_command(command)

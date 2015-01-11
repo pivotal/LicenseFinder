@@ -7,7 +7,7 @@ describe "CocoaPods Dependencies", ios: true do
   let(:user) { LicenseFinder::TestingDSL::User.new }
 
   specify "are shown in reports" do
-    user.create_cocoapods_app
+    LicenseFinder::TestingDSL::CocoaPodsProject.create
     user.run_license_finder
     expect(user).to be_seeing_line "ABTest, 0.0.5, MIT"
   end

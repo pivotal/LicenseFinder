@@ -7,7 +7,7 @@ describe "Python Dependencies" do
   let(:user) { LicenseFinder::TestingDSL::User.new }
 
   specify "are shown in reports" do
-    user.create_python_app
+    LicenseFinder::TestingDSL::PythonProject.create
     user.run_license_finder
     expect(user).to be_seeing_line 'argparse, 1.2.1, "Python Software Foundation License"'
   end

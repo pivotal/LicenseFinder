@@ -7,7 +7,7 @@ describe "Node Dependencies" do
   let(:user) { LicenseFinder::TestingDSL::User.new }
 
   specify "are shown in reports" do
-    user.create_node_app
+    LicenseFinder::TestingDSL::NodeProject.create
     user.run_license_finder
     expect(user).to be_seeing_line "http-server, 0.6.1, MIT"
   end
