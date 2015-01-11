@@ -9,7 +9,8 @@ describe "Ignored Groups" do
 
   specify "are excluded from reports" do
     project = user.create_ruby_app
-    project.create_and_depend_on 'dev_gem', { license: 'GPL' }, { groups: ['dev'] }
+    gem = user.create_gem 'dev_gem', license: 'GPL'
+    project.depend_on gem, groups: ['dev']
     user.execute_command 'license_finder ignored_group add dev'
 
     user.run_license_finder

@@ -19,7 +19,8 @@ describe "HTML report" do
     }
 
     project = user.create_ruby_app
-    project.create_and_depend_on gem_name, gem_attributes, { groups: [gem_group] }
+    gem = user.create_gem gem_name, gem_attributes
+    project.depend_on gem, groups: [gem_group]
 
     user.execute_command 'license_finder report --format html'
 

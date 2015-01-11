@@ -16,6 +16,10 @@ module LicenseFinder::TestingDSL
       RubyProject.create
     end
 
+    def create_gem(name, options)
+      GemProject.create(name, options)
+    end
+
     def execute_command(command)
       ::Bundler.with_clean_env do
         @output, @last_command_exit_status = Paths.project.shell_out("bundle exec #{command}", true)
@@ -43,25 +47,7 @@ module LicenseFinder::TestingDSL
     end
   end
 
-  module Shell
-    def self.run(command, allow_failures = false)
-      output = `#{command} 2>&1`
-      status = $?
-      unless status.success? || allow_failures
-        message_format = <<EOM
-Command failed: `%s`
-output: %s
-exit: %d
-EOM
-        message = sprintf message_format, command, output.chomp, status.exitstatus
-        raise RuntimeError.new(message)
-      end
-
-      return [output, status]
-    end
-  end
-
-  class ProjectDir < SimpleDelegator
+  class ProjectDir < SimpleDelegator # delegates to a Pathname
     def shell_out(command, allow_failures = false)
       Shell.run("cd #{self} && #{command} 2>&1", allow_failures)
     end
@@ -74,34 +60,14 @@ EOM
       join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
     end
 
+    def write_file(filename, content)
+      join(filename).open('w') do |file|
+        file.write content
+      end
+    end
+
     def make
       mkpath
-    end
-  end
-
-  require 'pathname'
-  module Paths
-    extend self
-
-    def project
-      ProjectDir.new(projects.join("my_app").cleanpath)
-    end
-
-    def projects
-      root.join("tmp").join("projects")
-    end
-
-    def root
-      Pathname.new(__FILE__).dirname.join("..", "..").realpath
-    end
-
-    def reset_projects!
-      projects.rmtree
-      projects.mkpath
-    end
-
-    def fixtures
-      root.join("spec", "fixtures")
     end
   end
 
@@ -196,7 +162,7 @@ EOM
   class RubyProject < Project
     def initialize
       Paths.reset_projects!
-      Shell.run("cd #{Paths.projects} && bundle gem my_app")
+      Shell.run("cd #{Paths.projects} && bundle gem my_app") # let Bundler set up the project directory
     end
 
     def add_dep
@@ -209,33 +175,43 @@ EOM
       end
     end
 
-    def create_and_depend_on(gem_name, gem_spec_options = {}, bundler_options = {})
-      create_gem(gem_name, gem_spec_options)
-      depend_on_local_gem(gem_name, bundler_options)
+    def depend_on(gem, bundler_options = {})
+      add_to_bundler(gem.name, bundler_options.merge(path: gem.project_dir.to_s))
+      install
     end
 
     private
 
-    def create_gem(gem_name, options)
-      # TODO: should a local gem be a Project?
-      gem_dir = Paths.projects.join(gem_name)
-      gem_dir.mkpath
+    def add_to_bundler(gem_name, options)
+      add_to_file("Gemfile", "gem #{gem_name.inspect}, #{options.inspect}")
+    end
+  end
 
-      gem_dir.join("#{gem_name}.gemspec").open('w') do |file|
-        file.write gemspec_string(gem_name, options)
-      end
+  class GemProject
+    def self.create(name, options)
+      result = new(name)
+      result.define(options)
+      result
     end
 
-    def depend_on_local_gem(gem_name, options)
-      gem_dir = Paths.projects.join(gem_name)
-      options[:path] = gem_dir.to_s
-
-      add_to_bundler(gem_name, options)
-
-      install
+    def initialize(name)
+      @name = name
+      project_dir.make
     end
 
-    def gemspec_string(gem_name, options)
+    def define(options)
+      project_dir.write_file("#{name}.gemspec", gemspec_string(options))
+    end
+
+    attr_reader :name
+
+    def project_dir
+      Paths.project(name)
+    end
+
+    private
+
+    def gemspec_string(options)
       if options.has_key?(:license) && options.has_key?(:licenses)
         raise "Can't specify both `license` and `licenses`"
       end
@@ -249,7 +225,7 @@ EOM
 
       <<-GEMSPEC
       Gem::Specification.new do |s|
-        s.name = "#{gem_name}"
+        s.name = "#{name}"
         s.version = "#{version}"
         s.author = "Cucumber"
         s.summary = "#{summary}"
@@ -258,12 +234,6 @@ EOM
         s.homepage = "#{homepage}"
       end
       GEMSPEC
-    end
-
-    def add_to_bundler(name, options)
-      line = "gem #{name.inspect}, #{options.inspect}"
-
-      add_to_file("Gemfile", line)
     end
   end
 
@@ -295,6 +265,50 @@ EOM
 
     def classes_of(dep_name)
       in_dep(dep_name)[:class].split(' ')
+    end
+  end
+
+  require 'pathname'
+  module Paths
+    extend self
+
+    def project(name = "my_app")
+      ProjectDir.new(projects.join(name).cleanpath)
+    end
+
+    def projects
+      root.join("tmp").join("projects")
+    end
+
+    def root
+      Pathname.new(__FILE__).dirname.join("..", "..").realpath
+    end
+
+    def reset_projects!
+      projects.rmtree
+      projects.mkpath
+    end
+
+    def fixtures
+      root.join("spec", "fixtures")
+    end
+  end
+
+  module Shell
+    def self.run(command, allow_failures = false)
+      output = `#{command} 2>&1`
+      status = $?
+      unless status.success? || allow_failures
+        message_format = <<EOM
+Command failed: `%s`
+output: %s
+exit: %d
+EOM
+        message = sprintf message_format, command, output.chomp, status.exitstatus
+        raise RuntimeError.new(message)
+      end
+
+      return [output, status]
     end
   end
 end
