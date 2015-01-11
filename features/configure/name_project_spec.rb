@@ -10,15 +10,16 @@ describe "Project name" do
   before { user.create_empty_project }
 
   specify "appears in the HTML report" do
-    user.execute_command 'license_finder project_name add my_proj'
+    user.execute_command 'license_finder project_name add changed_name'
 
     user.execute_command 'license_finder report --format html'
-    expect(user.html_title).to have_content 'my_proj'
+    expect(user.view_html).to be_has_title 'changed_name'
   end
 
   specify "defaults to the directory name" do
     user.execute_command 'license_finder report --format html'
-    expect(user.html_title).to have_content 'my_app'
+
+    expect(user.view_html).to be_has_title 'my_app'
   end
 
   specify "appears in the CLI" do

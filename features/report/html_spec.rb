@@ -23,7 +23,7 @@ describe "HTML report" do
 
     user.execute_command 'license_finder report --format html'
 
-    user.in_dep_html(gem_name) do |section|
+    user.view_html.in_dep(gem_name) do |section|
       expect(section.find("a[href='#{gem_attributes[:homepage]}']", text: gem_name)).to be
       expect(section).to have_content gem_attributes[:license]
       expect(section).to have_content gem_attributes[:summary]
@@ -41,14 +41,13 @@ describe "HTML report" do
 
     user.execute_command 'license_finder report --format html'
 
-    expect(user.html_formatting_of('gpl_dep')).to include "unapproved"
-    expect(user.html_formatting_of('mit_dep')).to include "approved"
+    html = user.view_html
+    expect(html).to be_unapproved 'gpl_dep'
+    expect(html).to be_approved 'mit_dep'
 
-    user.in_html do |page|
-      expect(page).to have_content '1 GPL'
-      action_items = page.find('.action-items')
-      expect(action_items).to have_content '(GPL)'
-      expect(action_items).not_to have_content 'MIT'
-    end
+    expect(html).to have_content '1 GPL'
+    action_items = html.find('.action-items')
+    expect(action_items).to have_content '(GPL)'
+    expect(action_items).not_to have_content 'MIT'
   end
 end

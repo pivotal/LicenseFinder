@@ -1,7 +1,4 @@
-require 'fileutils'
-require 'pathname'
 require 'bundler'
-require 'capybara'
 
 module LicenseFinder::TestingDSL
   module Shell
@@ -23,6 +20,49 @@ EOM
     end
   end
 
+  class User
+    include Shell
+
+    def run_license_finder
+      execute_command "license_finder --quiet"
+    end
+
+    def create_empty_project
+      EmptyProject.create
+    end
+
+    def create_ruby_app
+      RubyProject.create
+    end
+
+    def execute_command(command)
+      ::Bundler.with_clean_env do
+        @output = shell_out("cd #{Paths.app} && bundle exec #{command}", true)
+      end
+    end
+
+    def seeing?(content)
+      @output.include? content
+    end
+
+    def seeing_line?(content)
+      seeing_something_like? /^#{Regexp.escape content}$/
+    end
+
+    def seeing_something_like?(regex)
+      @output =~ regex
+    end
+
+    def receiving_exit_code?(code)
+      @last_command_exit_status.exitstatus == code
+    end
+
+    def view_html
+      HtmlReport.new(@output)
+    end
+  end
+
+  require 'pathname'
   module Paths
     include Shell
     extend self
@@ -235,62 +275,35 @@ EOM
     end
   end
 
-
-  class User
-    include Shell
-
-    def run_license_finder
-      execute_command "license_finder --quiet"
+  require 'capybara'
+  require 'delegate'
+  class HtmlReport < SimpleDelegator
+    def initialize(str)
+      super(Capybara.string(str))
     end
 
-    def create_empty_project
-      EmptyProject.create
+    def in_dep(dep_name)
+      result = find("##{dep_name}")
+      yield result if block_given?
+      result
     end
 
-    def create_ruby_app
-      RubyProject.create
+    def approved?(dep_name)
+      classes_of(dep_name).include? "approved"
     end
 
-    def execute_command(command)
-      ::Bundler.with_clean_env do
-        @output = shell_out("cd #{Paths.app} && bundle exec #{command}", true)
-      end
+    def unapproved?(dep_name)
+      classes_of(dep_name).include? "unapproved"
     end
 
-    def seeing?(content)
-      @output.include? content
+    def has_title?(title)
+      find("h1").has_content? title
     end
 
-    def seeing_line?(content)
-      seeing_something_like? /^#{Regexp.escape content}$/
-    end
+    private
 
-    def seeing_something_like?(regex)
-      @output =~ regex
-    end
-
-    def receiving_exit_code?(code)
-      @last_command_exit_status.exitstatus == code
-    end
-
-    def in_html
-      yield Capybara.string(@output)
-    end
-
-    def in_dep_html(dep_name)
-      in_html do |page|
-        yield page.find("##{dep_name}")
-      end
-    end
-
-    def html_formatting_of(dep_name)
-      in_dep_html(dep_name) do |dep|
-        dep[:class].split(' ')
-      end
-    end
-
-    def html_title
-      in_html { |page| page.find("h1") }
+    def classes_of(dep_name)
+      in_dep(dep_name)[:class].split(' ')
     end
   end
 end
