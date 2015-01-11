@@ -19,7 +19,7 @@ task :features do
     t.fail_on_error = true
     t.pattern = "./features/**/*_spec.rb"
     opts = %w[--color --format d]
-    opts += LicenseFinder::Platform.darwin? ? [] : %w[--tags ~ios]
+    opts += LicenseFinder::Platform.darwin? ? [] : %w[--tag ~ios]
     t.rspec_opts = opts
   end
 end
