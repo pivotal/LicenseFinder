@@ -27,7 +27,8 @@ task :check_dependencies do
     "mvn" => "Maven",
     "npm" => "node.js",
     "pip" => "Python",
-    "gradle" => "Gradle"
+    "gradle" => "Gradle",
+    "bower" => "Bower"
   }
   dependencies["pod"] = "Cocoapods" if LicenseFinder::Platform.darwin?
   satisfied = true
