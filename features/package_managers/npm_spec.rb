@@ -2,7 +2,7 @@ require 'feature_helper'
 
 describe "Node Dependencies" do
   # As a Node developer
-  # I want to be able to manage Node dependencies
+  # I want to be able to manage NPM dependencies
 
   let(:user) { LicenseFinder::TestingDSL::User.new }
 

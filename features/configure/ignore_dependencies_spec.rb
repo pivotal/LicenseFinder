@@ -3,7 +3,7 @@ require 'feature_helper'
 describe "Ignored Dependencies" do
   # As a developer
   # I want to ignore certain dependencies
-  # To avoid noisy doc changes when there are safe dependencies with high version churn
+  # To avoid frequently changing reports about dependencies I know will always be approved
 
   let(:user) { LicenseFinder::TestingDSL::User.new }
 

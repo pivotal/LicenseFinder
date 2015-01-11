@@ -2,7 +2,7 @@ require 'feature_helper'
 
 describe "Python Dependencies" do
   # As a Python developer
-  # I want to be able to manage Python dependencies
+  # I want to be able to manage Pip dependencies
 
   let(:user) { LicenseFinder::TestingDSL::User.new }
 
