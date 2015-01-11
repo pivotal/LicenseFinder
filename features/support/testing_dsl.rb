@@ -1,34 +1,9 @@
 require 'bundler'
+require 'delegate'
+require 'forwardable'
 
 module LicenseFinder::TestingDSL
-  module Shell
-    def shell_out(command, allow_failures = false)
-      output = `#{command} 2>&1`
-      status = $?
-      unless status.success? || allow_failures
-        message_format = <<EOM
-Command failed: `%s`
-output: %s
-exit: %d
-EOM
-        message = sprintf message_format, command, output.chomp, status.exitstatus
-        raise RuntimeError.new(message)
-      end
-
-      @last_command_exit_status = status
-      output
-    end
-
-    private
-
-    def shell_out_in_project(command, allow_failures = false)
-      shell_out("cd #{Paths.app} && #{command}", allow_failures)
-    end
-  end
-
   class User
-    include Shell
-
     def run_license_finder
       execute_command "license_finder --quiet"
     end
@@ -43,7 +18,7 @@ EOM
 
     def execute_command(command)
       ::Bundler.with_clean_env do
-        @output = shell_out_in_project("bundle exec #{command}", true)
+        @output, @last_command_exit_status = Paths.project.shell_out("bundle exec #{command}", true)
       end
     end
 
@@ -68,13 +43,48 @@ EOM
     end
   end
 
+  module Shell
+    def self.run(command, allow_failures = false)
+      output = `#{command} 2>&1`
+      status = $?
+      unless status.success? || allow_failures
+        message_format = <<EOM
+Command failed: `%s`
+output: %s
+exit: %d
+EOM
+        message = sprintf message_format, command, output.chomp, status.exitstatus
+        raise RuntimeError.new(message)
+      end
+
+      return [output, status]
+    end
+  end
+
+  class ProjectDir < SimpleDelegator
+    def shell_out(command, allow_failures = false)
+      Shell.run("cd #{self} && #{command} 2>&1", allow_failures)
+    end
+
+    def add_to_file(filename, line)
+      shell_out("echo #{line.inspect} >> #{join(filename)}")
+    end
+
+    def install_fixture(fixture_name)
+      join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
+    end
+
+    def make
+      mkpath
+    end
+  end
+
   require 'pathname'
   module Paths
-    include Shell
     extend self
 
-    def app
-      projects.join("my_app").cleanpath
+    def project
+      ProjectDir.new(projects.join("my_app").cleanpath)
     end
 
     def projects
@@ -85,20 +95,10 @@ EOM
       Pathname.new(__FILE__).dirname.join("..", "..").realpath
     end
 
-    def add_to_file(filename, line)
-      shell_out("echo #{line.inspect} >> #{app.join(filename)}")
-    end
-
-    def install_fixture(fixture_name)
-      app.join(fixture_name).make_symlink fixtures.join(fixture_name)
-    end
-
     def reset_projects!
       projects.rmtree
       projects.mkpath
     end
-
-    private
 
     def fixtures
       root.join("spec", "fixtures")
@@ -106,7 +106,8 @@ EOM
   end
 
   class Project
-    include Shell
+    extend Forwardable
+    def_delegators :project_dir, :shell_out, :add_to_file, :install_fixture
 
     def self.create
       project = new
@@ -117,13 +118,19 @@ EOM
 
     def initialize
       Paths.reset_projects!
-      Paths.app.mkpath
+      project_dir.make
     end
 
     def add_dep
     end
 
     def install
+    end
+
+    private
+
+    def project_dir
+      Paths.project
     end
   end
 
@@ -132,64 +139,64 @@ EOM
 
   class PythonProject < Project
     def add_dep
-      Paths.add_to_file("requirements.txt", 'argparse==1.2.1')
+      add_to_file("requirements.txt", 'argparse==1.2.1')
     end
 
     def install
-      shell_out_in_project("pip install -r requirements.txt")
+      shell_out("pip install -r requirements.txt")
     end
   end
 
   class NodeProject < Project
     def add_dep
-      Paths.add_to_file("package.json", '{"dependencies" : {"http-server": "0.6.1"}}')
+      add_to_file("package.json", '{"dependencies" : {"http-server": "0.6.1"}}')
     end
 
     def install
-      shell_out_in_project("npm install 2>/dev/null")
+      shell_out("npm install 2>/dev/null")
     end
   end
 
   class BowerProject < Project
     def add_dep
-      Paths.add_to_file('bower.json', '{"name": "my_app", "dependencies" : {"gmaps": "0.2.30"}}')
+      add_to_file('bower.json', '{"name": "my_app", "dependencies" : {"gmaps": "0.2.30"}}')
     end
 
     def install
-      shell_out_in_project("bower install 2>/dev/null")
+      shell_out("bower install 2>/dev/null")
     end
   end
 
   class MavenProject < Project
     def add_dep
-      Paths.install_fixture("pom.xml")
+      install_fixture("pom.xml")
     end
 
     def install
-      shell_out_in_project("mvn install")
+      shell_out("mvn install")
     end
   end
 
   class GradleProject < Project
     def add_dep
-      Paths.install_fixture("build.gradle")
+      install_fixture("build.gradle")
     end
   end
 
   class CocoaPodsProject < Project
     def add_dep
-      Paths.install_fixture("Podfile")
+      install_fixture("Podfile")
     end
 
     def install
-      shell_out_in_project("pod install --no-integrate")
+      shell_out("pod install --no-integrate")
     end
   end
 
   class RubyProject < Project
     def initialize
       Paths.reset_projects!
-      shell_out_in_project("bundle gem my_app")
+      Shell.run("cd #{Paths.projects} && bundle gem my_app")
     end
 
     def add_dep
@@ -198,7 +205,7 @@ EOM
 
     def install
       ::Bundler.with_clean_env do
-        shell_out_in_project("bundle check || bundle install")
+        shell_out("bundle check || bundle install")
       end
     end
 
@@ -210,9 +217,10 @@ EOM
     private
 
     def create_gem(gem_name, options)
+      # TODO: should a local gem be a Project?
       gem_dir = Paths.projects.join(gem_name)
-
       gem_dir.mkpath
+
       gem_dir.join("#{gem_name}.gemspec").open('w') do |file|
         file.write gemspec_string(gem_name, options)
       end
@@ -255,12 +263,11 @@ EOM
     def add_to_bundler(name, options)
       line = "gem #{name.inspect}, #{options.inspect}"
 
-      Paths.add_to_file("Gemfile", line)
+      add_to_file("Gemfile", line)
     end
   end
 
   require 'capybara'
-  require 'delegate'
   class HtmlReport < SimpleDelegator
     def initialize(str)
       super(Capybara.string(str))
