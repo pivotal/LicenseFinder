@@ -47,30 +47,6 @@ module LicenseFinder::TestingDSL
     end
   end
 
-  class ProjectDir < SimpleDelegator # delegates to a Pathname
-    def shell_out(command, allow_failures = false)
-      Shell.run("cd #{self} && #{command} 2>&1", allow_failures)
-    end
-
-    def add_to_file(filename, line)
-      shell_out("echo #{line.inspect} >> #{join(filename)}")
-    end
-
-    def install_fixture(fixture_name)
-      join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
-    end
-
-    def write_file(filename, content)
-      join(filename).open('w') do |file|
-        file.write content
-      end
-    end
-
-    def make
-      mkpath
-    end
-  end
-
   class Project
     extend Forwardable
     def_delegators :project_dir, :shell_out, :add_to_file, :install_fixture
@@ -187,7 +163,7 @@ module LicenseFinder::TestingDSL
     end
   end
 
-  class GemProject
+  class GemProject # different lifecycle from other 'Project's, so doesn't inherit
     def self.create(name, options)
       result = new(name)
       result.define(options)
@@ -238,7 +214,7 @@ module LicenseFinder::TestingDSL
   end
 
   require 'capybara'
-  class HtmlReport < SimpleDelegator
+  class HtmlReport < SimpleDelegator # delegates to the parsed html (will fail if `license_finder report --format html` is not run first)
     def initialize(str)
       super(Capybara.string(str))
     end
@@ -265,6 +241,30 @@ module LicenseFinder::TestingDSL
 
     def classes_of(dep_name)
       in_dep(dep_name)[:class].split(' ')
+    end
+  end
+
+  class ProjectDir < SimpleDelegator # delegates to a Pathname
+    def shell_out(command, allow_failures = false)
+      Shell.run("cd #{self} && #{command}", allow_failures)
+    end
+
+    def add_to_file(filename, line)
+      shell_out("echo #{line.inspect} >> #{join(filename)}")
+    end
+
+    def install_fixture(fixture_name)
+      join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
+    end
+
+    def write_file(filename, content)
+      join(filename).open('w') do |file|
+        file.write content
+      end
+    end
+
+    def make
+      mkpath
     end
   end
 
