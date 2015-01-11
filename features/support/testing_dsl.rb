@@ -77,11 +77,6 @@ module LicenseFinder::TestingDSL
       pod_install
     end
 
-    def create_and_depend_on_gem(gem_name, options)
-      create_gem(gem_name, options)
-      depend_on_local_gem(gem_name)
-    end
-
     def create_gem(gem_name, options)
       gem_dir = projects_path.join(gem_name)
 
@@ -98,11 +93,6 @@ module LicenseFinder::TestingDSL
       add_gem_dependency(gem_name, options)
 
       bundle_install
-    end
-
-    def configure_license_finder_whitelist(whitelisted_licenses=[])
-      whitelist = whitelisted_licenses.map(&:inspect).join(' ')
-      execute_command("license_finder whitelist add #{whitelist}")
     end
 
     def execute_command(command)
@@ -127,20 +117,7 @@ module LicenseFinder::TestingDSL
       @last_command_exit_status.exitstatus == code
     end
 
-    def app_path(sub_directory = nil)
-      path = base_path = projects_path.join(app_name).cleanpath
-
-      if sub_directory
-        path = base_path.join(sub_directory).cleanpath
-
-        raise "#{sub_directory} is outside of the app" unless path.to_s =~ %r{^#{base_path}/}
-      end
-
-      path
-    end
-
     def in_html
-      execute_command("license_finder report --format html")
       yield Capybara.string(@output)
     end
 
@@ -251,6 +228,18 @@ module LicenseFinder::TestingDSL
       "my_app"
     end
 
+    def app_path(sub_directory = nil)
+      path = base_path = projects_path.join(app_name).cleanpath
+
+      if sub_directory
+        path = base_path.join(sub_directory).cleanpath
+
+        raise "#{sub_directory} is outside of the app" unless path.to_s =~ %r{^#{base_path}/}
+      end
+
+      path
+    end
+
     def sandbox_path
       root_path.join("tmp")
     end
@@ -285,7 +274,7 @@ EOM
         raise RuntimeError.new(message)
       end
 
-      @last_command_exit_status = $last_command_exit_status = status
+      @last_command_exit_status = status
       output
     end
   end

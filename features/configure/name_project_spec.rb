@@ -12,6 +12,7 @@ describe "Project name" do
   specify "appears in the HTML report" do
     user.execute_command 'license_finder project_name add my_proj'
 
+    user.execute_command 'license_finder report --format html'
     expect(user.html_title).to have_content 'my_proj'
   end
 

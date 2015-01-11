@@ -19,6 +19,8 @@ describe "Manually Approved Dependencies" do
   end
 
   specify "include approval detail in reports" do
+    user.execute_command 'license_finder report --format html'
+
     user.in_dep_html("manual_dep") do |manual_dep|
       expect(manual_dep[:class].split(' ')).to include "approved"
       expect(manual_dep).to have_content "Julian"

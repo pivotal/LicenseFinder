@@ -22,6 +22,8 @@ describe "HTML report" do
     user.create_gem(gem_name, gem_attributes)
     user.depend_on_local_gem(gem_name, groups: [gem_group])
 
+    user.execute_command 'license_finder report --format html'
+
     user.in_dep_html(gem_name) do |section|
       expect(section.find("a[href='#{gem_attributes[:homepage]}']", text: gem_name)).to be
       expect(section).to have_content gem_attributes[:license]
@@ -34,6 +36,8 @@ describe "HTML report" do
 
   specify "shows project name" do
     user.create_empty_project
+
+    user.execute_command 'license_finder report --format html'
     expect(user.html_title).to have_content 'my_app'
   end
 
@@ -43,7 +47,7 @@ describe "HTML report" do
     user.execute_command 'license_finder dependencies add mit_dep MIT'
     user.execute_command 'license_finder whitelist add MIT'
 
-    # TODO: Could we run `license_finder report` only once in this test?
+    user.execute_command 'license_finder report --format html'
 
     user.in_dep_html('gpl_dep') do |dep|
       expect(dep[:class].split(' ')).to include "unapproved"

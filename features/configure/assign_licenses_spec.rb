@@ -9,7 +9,8 @@ describe "Manually Assigned Licenses" do
 
   specify "are shown in reports" do
     user.create_ruby_app
-    user.create_and_depend_on_gem 'mislicensed_dep', license: 'Unknown'
+    user.create_gem 'mislicensed_dep', license: 'Unknown'
+    user.depend_on_local_gem('mislicensed_dep')
     user.execute_command 'license_finder licenses add mislicensed_dep Known'
 
     user.run_license_finder
