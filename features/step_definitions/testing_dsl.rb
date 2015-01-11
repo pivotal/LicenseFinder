@@ -123,6 +123,10 @@ module LicenseFinder::TestingDSL
       @output =~ regex
     end
 
+    def receiving_exit_code?(code)
+      @last_command_exit_status.exitstatus == code
+    end
+
     def app_path(sub_directory = nil)
       path = base_path = projects_path.join(app_name).cleanpath
 
@@ -281,7 +285,7 @@ EOM
         raise RuntimeError.new(message)
       end
 
-      $last_command_exit_status = status
+      @last_command_exit_status = $last_command_exit_status = status
       output
     end
   end
