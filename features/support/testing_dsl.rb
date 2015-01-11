@@ -277,7 +277,7 @@ module LicenseFinder::TestingDSL
 
     def reset_projects!
       # only destroyed when a test starts, so you can poke around after a failure
-      projects.rmtree
+      projects.rmtree if projects.exist?
       projects.mkpath
     end
   end
