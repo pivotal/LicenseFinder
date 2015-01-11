@@ -22,7 +22,7 @@ module LicenseFinder::TestingDSL
 
     def execute_command(command)
       ::Bundler.with_clean_env do
-        @output, @last_command_exit_status = Paths.project.shell_out("bundle exec #{command}", true)
+        @output, @exit_status = Paths.project.shell_out("bundle exec #{command}", true)
       end
     end
 
@@ -39,7 +39,7 @@ module LicenseFinder::TestingDSL
     end
 
     def receiving_exit_code?(code)
-      @last_command_exit_status.exitstatus == code
+      @exit_status.exitstatus == code
     end
 
     def view_html
@@ -163,7 +163,7 @@ module LicenseFinder::TestingDSL
     end
   end
 
-  class GemProject # different lifecycle from other 'Project's, so doesn't inherit
+  class GemProject # lives adjacent to a RubyProject, so has a different lifecycle from other Projects and doesn't inherit
     def self.create(name, options)
       result = new(name)
       result.define(options)
@@ -188,26 +188,15 @@ module LicenseFinder::TestingDSL
     private
 
     def gemspec_string(options)
-      if options.has_key?(:license) && options.has_key?(:licenses)
-        raise "Can't specify both `license` and `licenses`"
-      end
-
-      license_key = ([:license, :licenses] & options.keys).first
-      license_value = options.fetch(license_key)
-      summary = options.fetch(:summary, "")
-      description = options.fetch(:description, "")
-      version = options[:version] || "0.0.0"
-      homepage = options[:homepage]
-
       <<-GEMSPEC
       Gem::Specification.new do |s|
         s.name = "#{name}"
-        s.version = "#{version}"
-        s.author = "Cucumber"
-        s.summary = "#{summary}"
-        s.#{license_key} = #{license_value.inspect}
-        s.description = "#{description}"
-        s.homepage = "#{homepage}"
+        s.version = "#{options[:version] || "0.0.0"}"
+        s.license = "#{options.fetch(:license)}"
+        s.author = "license_finder tests"
+        s.summary = "#{options[:summary]}"
+        s.description = "#{options[:description]}"
+        s.homepage = "#{options[:homepage]}"
       end
       GEMSPEC
     end
@@ -249,18 +238,16 @@ module LicenseFinder::TestingDSL
       Shell.run("cd #{self} && #{command}", allow_failures)
     end
 
-    def add_to_file(filename, line)
-      shell_out("echo #{line.inspect} >> #{join(filename)}")
+    def add_to_file(filename, content)
+      join(filename).open('a') { |file| file.puts content }
+    end
+
+    def write_file(filename, content)
+      join(filename).open('w') { |file| file.write content }
     end
 
     def install_fixture(fixture_name)
       join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
-    end
-
-    def write_file(filename, content)
-      join(filename).open('w') do |file|
-        file.write content
-      end
     end
 
     def make
