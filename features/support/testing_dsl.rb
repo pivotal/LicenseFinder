@@ -259,25 +259,27 @@ module LicenseFinder::TestingDSL
   module Paths
     extend self
 
+    def root
+      # where license_finder is installed
+      Pathname.new(__FILE__).dirname.join("..", "..").realpath
+    end
+
+    def fixtures
+      root.join("features", "fixtures")
+    end
+
+    def projects
+      root.join("tmp", "projects")
+    end
+
     def project(name = "my_app")
       ProjectDir.new(projects.join(name).cleanpath)
     end
 
-    def projects
-      root.join("tmp").join("projects")
-    end
-
-    def root
-      Pathname.new(__FILE__).dirname.join("..", "..").realpath
-    end
-
     def reset_projects!
+      # only destroyed when a test starts, so you can poke around after a failure
       projects.rmtree
       projects.mkpath
-    end
-
-    def fixtures
-      root.join("spec", "fixtures")
     end
   end
 
