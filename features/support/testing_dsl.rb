@@ -2,7 +2,6 @@ require 'fileutils'
 require 'pathname'
 require 'bundler'
 require 'capybara'
-require 'open3'
 
 module LicenseFinder::TestingDSL
   class User

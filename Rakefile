@@ -26,8 +26,6 @@ end
 
 desc "Check for non-Ruby development dependencies."
 task :check_dependencies do
-  require "open3"
-
   dependencies = {
     "mvn" => "Maven",
     "npm" => "node.js",
