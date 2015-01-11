@@ -17,7 +17,7 @@ describe "Manually Added Dependencies" do
   end
 
   specify "can be simultaneously approved" do
-    user.execute_command 'license_finder dependencies add --approve manual Whatever 1.2.3'
+    user.execute_command 'license_finder dependencies add --approve manual Whatever'
 
     user.run_license_finder
     expect(user).not_to be_seeing 'manual_dep'
