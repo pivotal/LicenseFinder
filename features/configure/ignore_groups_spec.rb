@@ -7,7 +7,7 @@ describe "Ignored Groups" do
 
   let(:user) { LicenseFinder::TestingDSL::User.new }
 
-  specify "are automatically approved" do
+  specify "are excluded from reports" do
     project = user.create_ruby_app
     project.create_and_depend_on 'dev_gem', { license: 'GPL' }, { groups: ['dev'] }
     user.execute_command 'license_finder ignored_group add dev'
