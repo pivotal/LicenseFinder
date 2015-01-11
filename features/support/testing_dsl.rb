@@ -22,7 +22,7 @@ module LicenseFinder::TestingDSL
 
     def execute_command(command)
       ::Bundler.with_clean_env do
-        @output, @exit_status = Paths.project.shell_out("bundle exec #{command}", true)
+        @output, @exit_code = Paths.project.shell_out("bundle exec #{command}", true)
       end
     end
 
@@ -39,7 +39,7 @@ module LicenseFinder::TestingDSL
     end
 
     def receiving_exit_code?(code)
-      @exit_status.exitstatus == code
+      @exit_code == code
     end
 
     def view_html
@@ -295,7 +295,7 @@ EOM
         raise RuntimeError.new(message)
       end
 
-      return [output, status]
+      return [output, status.exitstatus]
     end
   end
 end
