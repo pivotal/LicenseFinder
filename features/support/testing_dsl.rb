@@ -169,7 +169,7 @@ EOM
     end
 
     def add_dep
-      add_gem_dependency('license_finder', path: Paths.root.to_s)
+      add_to_bundler('license_finder', path: Paths.root.to_s)
     end
 
     def install
@@ -178,14 +178,12 @@ EOM
       end
     end
 
-    def depend_on_local_gem(gem_name, options={})
-      gem_dir = Paths.projects.join(gem_name)
-      options[:path] = gem_dir.to_s
-
-      add_gem_dependency(gem_name, options)
-
-      install
+    def create_and_depend_on(gem_name, gem_spec_options = {}, bundler_options = {})
+      create_gem(gem_name, gem_spec_options)
+      depend_on_local_gem(gem_name, bundler_options)
     end
+
+    private
 
     def create_gem(gem_name, options)
       gem_dir = Paths.projects.join(gem_name)
@@ -196,7 +194,14 @@ EOM
       end
     end
 
-    private
+    def depend_on_local_gem(gem_name, options={})
+      gem_dir = Paths.projects.join(gem_name)
+      options[:path] = gem_dir.to_s
+
+      add_to_bundler(gem_name, options)
+
+      install
+    end
 
     def gemspec_string(gem_name, options)
       if options.has_key?(:license) && options.has_key?(:licenses)
@@ -223,9 +228,8 @@ EOM
       GEMSPEC
     end
 
-    def add_gem_dependency(name, options = {})
-      line = "gem #{name.inspect}"
-      line << ", " + options.inspect unless options.empty?
+    def add_to_bundler(name, options = {})
+      line = "gem #{name.inspect}, #{options.inspect}"
 
       Paths.add_to_file("Gemfile", line)
     end

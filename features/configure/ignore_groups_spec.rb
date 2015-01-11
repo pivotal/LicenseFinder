@@ -9,8 +9,7 @@ describe "Ignored Groups" do
 
   specify "are automatically approved" do
     project = user.create_ruby_app
-    project.create_gem 'dev_gem', license: 'GPL'
-    project.depend_on_local_gem 'dev_gem', groups: ['dev']
+    project.create_and_depend_on 'dev_gem', { license: 'GPL' }, { groups: ['dev'] }
     user.execute_command 'license_finder ignored_group add dev'
 
     user.run_license_finder
