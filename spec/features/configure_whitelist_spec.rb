@@ -1,7 +1,7 @@
 require 'spec_helper'
 require './features/step_definitions/testing_dsl'
 
-describe "Whitelisting licenses" do
+describe "Whitelisted licenses" do
   # As a developer
   # I want to whitelist certain OSS licenses that my business has pre-approved
   # So that any dependencies with those licenses do not show up as action items
@@ -10,7 +10,7 @@ describe "Whitelisting licenses" do
 
   before { user.create_empty_project }
 
-  specify "Approves dependencies with those licenses" do
+  specify "approve dependencies with those licenses" do
     user.execute_command 'license_finder dependencies add bsd_gem BSD'
     user.execute_command 'license_finder whitelist add BSD'
 
@@ -18,7 +18,16 @@ describe "Whitelisting licenses" do
     expect(user).to_not be_seeing 'bsd_gem'
   end
 
-  specify "Shows the developer the whitelist" do
+  specify "approve dependencies with any of those licenses" do
+    user.execute_command 'license_finder dependencies add dep_with_many_licenses MIT'
+    user.execute_command 'license_finder licenses add dep_with_many_licenses GPL'
+    user.execute_command 'license_finder whitelist add GPL'
+
+    user.run_license_finder
+    expect(user).not_to be_seeing 'dep_with_many_licenses'
+  end
+
+  specify "are shown in the CLI" do
     user.execute_command 'license_finder whitelist add Expat'
     expect(user).to be_seeing 'Expat'
     user.execute_command 'license_finder whitelist list'
