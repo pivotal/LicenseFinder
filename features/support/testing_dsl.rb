@@ -103,7 +103,6 @@ EOM
 
     def self.create
       project = new
-      project.activate
       project.add_dep
       project.install
       project
@@ -113,13 +112,16 @@ EOM
       Paths.create_empty_project
     end
 
-    def activate
-    end
-
     def add_dep
     end
 
     def install
+    end
+
+    private
+
+    def shell_out_in_project(command)
+      shell_out("cd #{Paths.app} && #{command}")
     end
   end
 
@@ -127,46 +129,32 @@ EOM
   end
 
   class PythonProject < Project
-    def activate
-      shell_out("cd #{Paths.app} && touch requirements.txt")
-    end
-
     def add_dep
       Paths.add_to_file("requirements.txt", 'argparse==1.2.1')
     end
 
     def install
-      shell_out("cd #{Paths.app} && pip install -r requirements.txt")
+      shell_out_in_project("pip install -r requirements.txt")
     end
   end
 
   class NodeProject < Project
-    def activate
-      shell_out("cd #{Paths.app} && touch package.json")
-    end
-
     def add_dep
-      line = "{\"dependencies\" : {\"http-server\": \"0.6.1\"}}"
-      Paths.add_to_file("package.json", line)
+      Paths.add_to_file("package.json", '{"dependencies" : {"http-server": "0.6.1"}}')
     end
 
     def install
-      shell_out("cd #{Paths.app} && npm install 2>/dev/null")
+      shell_out_in_project("npm install 2>/dev/null")
     end
   end
 
   class BowerProject < Project
-    def activate
-      shell_out("cd #{Paths.app} && touch bower.json")
-    end
-
     def add_dep
-      line = "{\"name\": \"my_app\", \"dependencies\" : {\"gmaps\": \"0.2.30\"}}"
-      Paths.add_to_file('bower.json', line)
+      Paths.add_to_file('bower.json', '{"name": "my_app", "dependencies" : {"gmaps": "0.2.30"}}')
     end
 
     def install
-      shell_out("cd #{Paths.app} && bower install 2>/dev/null")
+      shell_out_in_project("bower install 2>/dev/null")
     end
   end
 
@@ -177,14 +165,14 @@ EOM
     end
 
     def install
-      shell_out("cd #{Paths.app} && mvn install")
+      shell_out_in_project("mvn install")
     end
   end
 
   class GradleProject < Project
     def add_dep
       path = Paths.fixtures.join("build.gradle")
-      shell_out("cd #{Paths.app} && cp #{path} .")
+      shell_out_in_project("cp #{path} .")
     end
   end
 
@@ -195,17 +183,14 @@ EOM
     end
 
     def install
-      shell_out("cd #{Paths.app} && pod install --no-integrate")
+      shell_out_in_project("pod install --no-integrate")
     end
   end
 
   class RubyProject < Project
     def initialize
       Paths.reset_projects!
-    end
-
-    def activate
-      shell_out("cd #{Paths.projects} && bundle gem my_app")
+      shell_out_in_project("bundle gem my_app")
     end
 
     def add_dep
@@ -214,7 +199,7 @@ EOM
 
     def install
       ::Bundler.with_clean_env do
-        shell_out("cd #{Paths.app} && bundle check || bundle install")
+        shell_out_in_project("bundle check || bundle install")
       end
     end
 
