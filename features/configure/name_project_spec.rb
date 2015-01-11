@@ -12,11 +12,11 @@ describe "Project name" do
   specify "appears in the HTML report" do
     user.execute_command 'license_finder project_name add changed_name'
 
-    expect(user.view_html).to be_has_title 'changed_name'
+    expect(user.view_html).to be_titled 'changed_name'
   end
 
   specify "defaults to the directory name" do
-    expect(user.view_html).to be_has_title 'my_app'
+    expect(user.view_html).to be_titled 'my_app'
   end
 
   specify "appears in the CLI" do

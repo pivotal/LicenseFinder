@@ -221,7 +221,7 @@ module LicenseFinder::TestingDSL
       classes_of(dep_name).include? "unapproved"
     end
 
-    def has_title?(title)
+    def titled?(title)
       find("h1").has_content? title
     end
 
