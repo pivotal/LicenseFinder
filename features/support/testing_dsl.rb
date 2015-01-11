@@ -18,6 +18,12 @@ EOM
       @last_command_exit_status = status
       output
     end
+
+    private
+
+    def shell_out_in_project(command, allow_failures = false)
+      shell_out("cd #{Paths.app} && #{command}", allow_failures)
+    end
   end
 
   class User
@@ -37,7 +43,7 @@ EOM
 
     def execute_command(command)
       ::Bundler.with_clean_env do
-        @output = shell_out("cd #{Paths.app} && bundle exec #{command}", true)
+        @output = shell_out_in_project("bundle exec #{command}", true)
       end
     end
 
@@ -75,10 +81,6 @@ EOM
       root.join("tmp").join("projects")
     end
 
-    def fixtures
-      root.join("spec", "fixtures")
-    end
-
     def root
       Pathname.new(__FILE__).dirname.join("..", "..").realpath
     end
@@ -87,14 +89,19 @@ EOM
       shell_out("echo #{line.inspect} >> #{app.join(filename)}")
     end
 
+    def install_fixture(fixture_name)
+      app.join(fixture_name).make_symlink fixtures.join(fixture_name)
+    end
+
     def reset_projects!
-      shell_out("rm -rf #{projects}")
+      projects.rmtree
       projects.mkpath
     end
 
-    def create_empty_project
-      reset_projects!
-      app.mkpath
+    private
+
+    def fixtures
+      root.join("spec", "fixtures")
     end
   end
 
@@ -109,19 +116,14 @@ EOM
     end
 
     def initialize
-      Paths.create_empty_project
+      Paths.reset_projects!
+      Paths.app.mkpath
     end
 
     def add_dep
     end
 
     def install
-    end
-
-    private
-
-    def shell_out_in_project(command)
-      shell_out("cd #{Paths.app} && #{command}")
     end
   end
 
@@ -160,8 +162,7 @@ EOM
 
   class MavenProject < Project
     def add_dep
-      path = Paths.fixtures.join("pom.xml")
-      shell_out("cp #{path} #{Paths.app}")
+      Paths.install_fixture("pom.xml")
     end
 
     def install
@@ -171,15 +172,13 @@ EOM
 
   class GradleProject < Project
     def add_dep
-      path = Paths.fixtures.join("build.gradle")
-      shell_out_in_project("cp #{path} .")
+      Paths.install_fixture("build.gradle")
     end
   end
 
   class CocoaPodsProject < Project
     def add_dep
-      path = Paths.fixtures.join("Podfile")
-      shell_out("cp #{path} #{Paths.app}")
+      Paths.install_fixture("Podfile")
     end
 
     def install
@@ -219,7 +218,7 @@ EOM
       end
     end
 
-    def depend_on_local_gem(gem_name, options={})
+    def depend_on_local_gem(gem_name, options)
       gem_dir = Paths.projects.join(gem_name)
       options[:path] = gem_dir.to_s
 
@@ -253,7 +252,7 @@ EOM
       GEMSPEC
     end
 
-    def add_to_bundler(name, options = {})
+    def add_to_bundler(name, options)
       line = "gem #{name.inspect}, #{options.inspect}"
 
       Paths.add_to_file("Gemfile", line)
