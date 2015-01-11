@@ -18,9 +18,9 @@ describe "HTML report" do
       homepage:    "http://a_gem.github.com"
     }
 
-    user.create_ruby_app
-    user.create_gem(gem_name, gem_attributes)
-    user.depend_on_local_gem(gem_name, groups: [gem_group])
+    project = user.create_ruby_app
+    project.create_gem(gem_name, gem_attributes)
+    project.depend_on_local_gem(gem_name, groups: [gem_group])
 
     user.execute_command 'license_finder report --format html'
 

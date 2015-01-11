@@ -8,9 +8,9 @@ describe "Ignored Groups" do
   let(:user) { LicenseFinder::TestingDSL::User.new }
 
   specify "are automatically approved" do
-    user.create_ruby_app
-    user.create_gem 'dev_gem', license: 'GPL'
-    user.depend_on_local_gem 'dev_gem', groups: ['dev']
+    project = user.create_ruby_app
+    project.create_gem 'dev_gem', license: 'GPL'
+    project.depend_on_local_gem 'dev_gem', groups: ['dev']
     user.execute_command 'license_finder ignored_group add dev'
 
     user.run_license_finder
