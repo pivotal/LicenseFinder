@@ -3,8 +3,6 @@ Given(/^I have an app that depends on bundler$/) do
   @user.create_ruby_app
   @user.create_gem 'bundler_faker', license: 'Whatever'
   @user.depend_on_local_gem 'bundler_faker', groups: ['test', 'development', 'production']
-  @user.create_gem 'gpl_gem', license: 'GPL'
-  @user.depend_on_local_gem 'gpl_gem', groups: ['test']
 end
 
 Given(/^I ignore the bundler dependency$/) do
@@ -26,7 +24,6 @@ Then(/^the bundler dependency is not listed as an action item$/) do
 end
 
 Then(/^I should not see 'bundler' in the dependency docs$/)do
-  @user.run_license_finder
   @user.execute_command('license_finder report')
   expect(@user).not_to be_seeing 'bundler_faker'
 end
