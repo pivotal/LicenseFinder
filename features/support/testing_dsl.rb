@@ -133,21 +133,13 @@ module LicenseFinder::TestingDSL
     end
   end
 
-  require 'bundler'
   class BundlerProject < Project
-    def initialize
-      Paths.reset_projects!
-      Shell.run("cd #{Paths.projects} && bundle gem my_app") # let Bundler set up the project directory
-    end
-
     def add_dep
       add_to_bundler('license_finder', path: Paths.root.to_s)
     end
 
     def install
-      ::Bundler.with_clean_env do
-        shell_out("bundle check || bundle install")
-      end
+      shell_out("bundle install")
     end
 
     def depend_on(gem, bundler_options = {})
