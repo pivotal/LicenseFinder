@@ -272,7 +272,7 @@ module LicenseFinder::TestingDSL
     end
 
     def project(name = "my_app")
-      ProjectDir.new(projects.join(name).cleanpath)
+      ProjectDir.new(projects.join(name))
     end
 
     def reset_projects!
