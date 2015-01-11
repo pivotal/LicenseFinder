@@ -21,9 +21,7 @@ module LicenseFinder::TestingDSL
     end
 
     def execute_command(command)
-      ::Bundler.with_clean_env do
-        @output, @exit_code = Paths.project.shell_out("bundle exec #{command}", true)
-      end
+      @output, @exit_code = Paths.project.shell_out(command, true)
     end
 
     def seeing?(content)
