@@ -29,7 +29,7 @@ When(/^I whitelist the MIT license$/) do
 end
 
 Then(/^I should see my specific gem details listed in the html$/) do
-  @user.in_gem_html(@gem_name) do |section|
+  @user.in_dep_html(@gem_name) do |section|
     expect(section.find("a[href='#{@gem_homepage}']", text: @gem_name)).to be
     @table.values.each do |property_value|
       expect(section).to have_content property_value
@@ -54,7 +54,7 @@ Then(/^I should see only see GPL liceneses as unapproved in the html$/) do
 end
 
 def is_html_status?(gem, approval)
-  @user.in_gem_html(gem) do |gpl_gem|
+  @user.in_dep_html(gem) do |gpl_gem|
     expect(gpl_gem[:class].split(' ')).to include approval
   end
 end

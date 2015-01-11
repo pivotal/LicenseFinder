@@ -16,7 +16,7 @@ Then(/^I should not see that gem in the console output$/) do
 end
 
 Then(/^I should see that gem approved in dependencies\.html$/) do
-  @user.in_gem_html("gpl_gem") do |gpl_gem|
+  @user.in_dep_html("gpl_gem") do |gpl_gem|
     expect(gpl_gem[:class].split(' ')).to include "approved"
     expect(gpl_gem).to have_content "Julian"
     expect(gpl_gem).to have_content "We really need this"

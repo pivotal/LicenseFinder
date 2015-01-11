@@ -144,9 +144,9 @@ module LicenseFinder::TestingDSL
       yield Capybara.string(@output)
     end
 
-    def in_gem_html(gem_name)
+    def in_dep_html(dep_name)
       in_html do |page|
-        yield page.find("##{gem_name}")
+        yield page.find("##{dep_name}")
       end
     end
 
