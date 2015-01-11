@@ -22,8 +22,6 @@ describe "HTML report" do
     gem = user.create_gem gem_name, gem_attributes
     project.depend_on gem, groups: [gem_group]
 
-    user.execute_command 'license_finder report --format html'
-
     user.view_html.in_dep(gem_name) do |section|
       expect(section.find("a[href='#{gem_attributes[:homepage]}']", text: gem_name)).to be
       expect(section).to have_content gem_attributes[:license]
@@ -39,8 +37,6 @@ describe "HTML report" do
     user.execute_command 'license_finder dependencies add gpl_dep GPL'
     user.execute_command 'license_finder dependencies add mit_dep MIT'
     user.execute_command 'license_finder whitelist add MIT'
-
-    user.execute_command 'license_finder report --format html'
 
     html = user.view_html
     expect(html).to be_unapproved 'gpl_dep'

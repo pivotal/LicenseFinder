@@ -41,7 +41,8 @@ module LicenseFinder::TestingDSL
     end
 
     def view_html
-      HtmlReport.new(@output)
+      execute_command 'license_finder report --format html'
+      HtmlReport.from_string(@output)
     end
   end
 
@@ -201,9 +202,9 @@ module LicenseFinder::TestingDSL
   end
 
   require 'capybara'
-  class HtmlReport < SimpleDelegator # delegates to the parsed html (will fail if `license_finder report --format html` is not run first)
-    def initialize(str)
-      super(Capybara.string(str))
+  class HtmlReport < SimpleDelegator # delegates to the parsed html
+    def self.from_string(str)
+      new(Capybara.string(str))
     end
 
     def in_dep(dep_name)

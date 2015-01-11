@@ -19,8 +19,6 @@ describe "Manually Approved Dependencies" do
   end
 
   specify "include approval detail in reports" do
-    user.execute_command 'license_finder report --format html'
-
     html = user.view_html
     expect(html).to be_approved 'manual_dep'
 
