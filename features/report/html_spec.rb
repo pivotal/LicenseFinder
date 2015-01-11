@@ -34,13 +34,6 @@ describe "HTML report" do
     end
   end
 
-  specify "shows project name" do
-    user.create_empty_project
-
-    user.execute_command 'license_finder report --format html'
-    expect(user.html_title).to have_content 'my_app'
-  end
-
   specify "shows approval status of dependencies" do
     user.create_empty_project
     user.execute_command 'license_finder dependencies add gpl_dep GPL'
@@ -49,13 +42,8 @@ describe "HTML report" do
 
     user.execute_command 'license_finder report --format html'
 
-    user.in_dep_html('gpl_dep') do |dep|
-      expect(dep[:class].split(' ')).to include "unapproved"
-    end
-
-    user.in_dep_html('mit_dep') do |dep|
-      expect(dep[:class].split(' ')).to include "approved"
-    end
+    expect(user.html_formatting_of('gpl_dep')).to include "unapproved"
+    expect(user.html_formatting_of('mit_dep')).to include "approved"
 
     user.in_html do |page|
       expect(page).to have_content '1 GPL'

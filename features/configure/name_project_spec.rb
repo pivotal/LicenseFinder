@@ -16,6 +16,11 @@ describe "Project name" do
     expect(user.html_title).to have_content 'my_proj'
   end
 
+  specify "defaults to the directory name" do
+    user.execute_command 'license_finder report --format html'
+    expect(user.html_title).to have_content 'my_app'
+  end
+
   specify "appears in the CLI" do
     user.execute_command 'license_finder project_name add my_proj'
     expect(user).to be_seeing 'my_proj'

@@ -126,6 +126,12 @@ module LicenseFinder::TestingDSL
       end
     end
 
+    def html_formatting_of(dep_name)
+      in_dep_html(dep_name) do |dep|
+        dep[:class].split(' ')
+      end
+    end
+
     def html_title
       in_html { |page| page.find("h1") }
     end
