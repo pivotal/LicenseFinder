@@ -13,7 +13,7 @@ module LicenseFinder::TestingDSL
     end
 
     def create_ruby_app
-      RubyProject.create
+      BundlerProject.create
     end
 
     def create_gem(name, options)
@@ -78,7 +78,7 @@ module LicenseFinder::TestingDSL
   class EmptyProject < Project
   end
 
-  class PythonProject < Project
+  class PipProject < Project
     def add_dep
       add_to_file("requirements.txt", 'argparse==1.2.1')
     end
@@ -88,7 +88,7 @@ module LicenseFinder::TestingDSL
     end
   end
 
-  class NodeProject < Project
+  class NpmProject < Project
     def add_dep
       add_to_file("package.json", '{"dependencies" : {"http-server": "0.6.1"}}')
     end
@@ -134,7 +134,7 @@ module LicenseFinder::TestingDSL
     end
   end
 
-  class RubyProject < Project
+  class BundlerProject < Project
     def initialize
       Paths.reset_projects!
       Shell.run("cd #{Paths.projects} && bundle gem my_app") # let Bundler set up the project directory
@@ -162,7 +162,7 @@ module LicenseFinder::TestingDSL
     end
   end
 
-  class GemProject # lives adjacent to a RubyProject, so has a different lifecycle from other Projects and doesn't inherit
+  class GemProject # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
     def self.create(name, options)
       result = new(name)
       result.define(options)
