@@ -37,6 +37,11 @@ module LicenseFinder
         say report_of(dependencies.acknowledged)
       end
 
+      desc "version", "Print the version of LicenseFinder"
+      def version
+        puts LicenseFinder::VERSION
+      end
+
       subcommand "dependencies", Dependencies, "Add or remove dependencies that your package managers are not aware of"
       subcommand "licenses", Licenses, "Set a dependency's licenses, if the licenses found by license_finder are missing or wrong"
       subcommand "approvals", Approvals, "Manually approve dependencies, even if their licenses are not whitelisted"

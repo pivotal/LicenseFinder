@@ -7,6 +7,7 @@ module LicenseFinder
 end
 
 require 'license_finder/platform'
+require 'license_finder/version'
 require 'license_finder/logger'
 require 'license_finder/configuration'
 
