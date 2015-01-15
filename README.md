@@ -306,8 +306,11 @@ downloadLicenses {
 
 ## Upgrading
 
-To upgrade from `license_finder` version ~1.2 to 2.0, see
+To upgrade from `license_finder` version 1.2 to 2.0, see
 [`license_finder_upgrade`](https://github.com/mainej/license_finder_upgrade).
+To upgrade to 2.0 from a version lower than 1.2, first upgrade to 1.2, and run
+`license_finder` at least once.  This will ensure that the `license_finder`
+database is in a state which `license_finder_upgrade` understands.
 
 
 ## A Plea to Package Authors and Maintainers

@@ -11,9 +11,9 @@
 
 ## Development Dependencies
 
-To successfully run the test suite, you will need node.js, python, pip
-and gradle installed. If you run `rake check_dependencies`, you'll see
-exactly what you're missing.
+To successfully run the test suite, you will need npm, maven, pip, gradle and
+bower installed. If you run `rake check_dependencies`, you'll see exactly what
+you're missing.
 
 ### Python
 
