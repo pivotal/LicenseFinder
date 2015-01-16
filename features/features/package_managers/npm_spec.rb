@@ -4,11 +4,11 @@ describe "NPM Dependencies" do
   # As a Node developer
   # I want to be able to manage NPM dependencies
 
-  let(:user) { LicenseFinder::TestingDSL::User.new }
+  let(:node_developer) { LicenseFinder::TestingDSL::User.new }
 
   specify "are shown in reports" do
     LicenseFinder::TestingDSL::NpmProject.create
-    user.run_license_finder
-    expect(user).to be_seeing_line "http-server, 0.6.1, MIT"
+    node_developer.run_license_finder
+    expect(node_developer).to be_seeing_line "http-server, 0.6.1, MIT"
   end
 end

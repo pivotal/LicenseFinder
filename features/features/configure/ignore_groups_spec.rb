@@ -5,27 +5,27 @@ describe "Ignored Groups" do
   # I want to ignore certain groups
   # So that any gems I use in development, or for testing, are automatically approved for use
 
-  let(:user) { LicenseFinder::TestingDSL::User.new }
+  let(:developer) { LicenseFinder::TestingDSL::User.new }
 
   specify "are excluded from reports" do
-    project = user.create_ruby_app
-    gem = user.create_gem 'dev_gem', license: 'GPL'
+    project = developer.create_ruby_app
+    gem = developer.create_gem 'dev_gem', license: 'GPL'
     project.depend_on gem, groups: ['dev']
-    user.execute_command 'license_finder ignored_group add dev'
+    developer.execute_command 'license_finder ignored_group add dev'
 
-    user.run_license_finder
-    expect(user).to_not be_seeing 'dev_gem'
+    developer.run_license_finder
+    expect(developer).to_not be_seeing 'dev_gem'
   end
 
   specify "appear in the CLI" do
-    user.create_empty_project
-    user.execute_command 'license_finder ignored_group add dev'
-    expect(user).to be_seeing 'dev'
-    user.execute_command 'license_finder ignored_group list'
-    expect(user).to be_seeing 'dev'
+    developer.create_empty_project
+    developer.execute_command 'license_finder ignored_group add dev'
+    expect(developer).to be_seeing 'dev'
+    developer.execute_command 'license_finder ignored_group list'
+    expect(developer).to be_seeing 'dev'
 
-    user.execute_command 'license_finder ignored_group remove dev'
-    user.execute_command 'license_finder ignored_group list'
-    expect(user).to_not be_seeing 'dev'
+    developer.execute_command 'license_finder ignored_group remove dev'
+    developer.execute_command 'license_finder ignored_group list'
+    expect(developer).to_not be_seeing 'dev'
   end
 end
