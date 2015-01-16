@@ -2,18 +2,24 @@
 
 * Features
 
-  * Stores (in an append-only YAML file) every decision that has been made
-    about a project's dependencies, even if a decision was later reverted.
-  * Stores timestamps and other metadata (who, why) about each decision.
+  * Stores every decision that has been made about a project's dependencies,
+    even if a decision was later reverted.  These decisions are kept in an
+    append-only YAML file which can be considered an audit log.
+  * Stores timestamps and other optional transactional metadata (who, why)
+    about every kind of decision.
   * When needed, applies those decisions to the list of packages currently
     reported by the package managers.
+  * Removed dependencies on sqlite and sequel.
   * The CLI never writes HTML or CSV reports to the file system, only to
     STDOUT. So, users have more choice over which reports to generate, when to
-    generate them, and where to put them. See `license_finder report`.
-  * Removed dependencies on sqlite and sequel.
-  * Minimized the responsibilities of the configuration YAML file. The CLI
-    never updates the config file, which means less futzing with the file
-    system. Makes room for replacing the config file with command line options.
+    generate them, and where to put them. See `license_finder report`.  If you
+    would like to update reports automatically (e.g., in a rake task or git
+    hook) see this gist: https://gist.github.com/mainej/1a4d61a92234c5cebeab.
+  * The configuration YAML file is no longer required, though it can still be
+    useful.  Most of its functionality has been moved into the decisions
+    infrastructure, and the remaining bits can be passed as arguments to the
+    CLI.  Most users will not need these arguments.  If the file is present, the
+    CLI arguments can be omitted.  The CLI no longer updates this file.
 
 * Bugfixes
 
