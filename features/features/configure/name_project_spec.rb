@@ -3,7 +3,7 @@ require 'feature_helper'
 describe "Project name" do
   # As a developer
   # I want to assign a name for my project
-  # So that the reports show it
+  # So that product owners see it in the reports
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }
   let(:product_owner) { LicenseFinder::TestingDSL::User.new }

@@ -2,8 +2,8 @@ require 'feature_helper'
 
 describe "Manually Approved Dependencies" do
   # As a developer
-  # I want to approve dependencies that do not have whitelisted licenses
-  # So that I can track the dependencies which my business has approved
+  # I want to approve dependencies without whitelisting their licenses
+  # So that my business can track individual dependencies which it has approved
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }
   let(:product_owner) { LicenseFinder::TestingDSL::User.new }

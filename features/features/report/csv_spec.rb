@@ -1,9 +1,9 @@
 require 'feature_helper'
 
 describe "CSV report" do
-  # As a non-technical application product owner
-  # I want license finder to generate a csv report
-  # So that I can easily review my application dependencies and licenses
+  # As a non-technical product owner
+  # I want a csv report
+  # So that I can easily review my application's dependencies and licenses
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }
   let(:product_owner) { LicenseFinder::TestingDSL::User.new }

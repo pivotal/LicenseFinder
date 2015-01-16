@@ -3,7 +3,7 @@ require 'feature_helper'
 describe "Manually Added Dependencies" do
   # As a developer
   # I want to be able to manually add dependencies
-  # So that I can track dependencies not managed by Bundler, NPM, etc.
+  # So that I can track dependencies not managed by any official package manager
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }
 

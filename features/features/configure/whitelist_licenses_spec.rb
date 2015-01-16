@@ -2,7 +2,7 @@ require 'feature_helper'
 
 describe "Whitelisted licenses" do
   # As a developer
-  # I want to whitelist certain OSS licenses that my business has pre-approved
+  # I want to whitelist certain licenses that my business has pre-approved
   # So that any dependencies with those licenses do not show up as action items
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }

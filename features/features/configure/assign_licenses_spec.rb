@@ -2,7 +2,7 @@ require 'feature_helper'
 
 describe "Manually Assigned Licenses" do
   # As a developer
-  # I want to be able to override the licenses license_finder finds
+  # I want to be able to override the licenses which license_finder finds
   # So that my dependencies all have the correct licenses
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }

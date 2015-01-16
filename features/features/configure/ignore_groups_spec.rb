@@ -3,7 +3,7 @@ require 'feature_helper'
 describe "Ignored Groups" do
   # As a developer
   # I want to ignore certain groups
-  # So that any gems I use in development, or for testing, are automatically approved for use
+  # So that license_finder skips any gems I use in development, or for testing
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }
 
