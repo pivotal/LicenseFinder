@@ -1,9 +1,10 @@
 module LicenseFinder
   class License
     class Template
+      TEMPLATE_PATH = ROOT_PATH.join("license", "templates")
+
       def self.named(name)
-        path = ROOT_PATH.join("license", "templates", "#{name}.txt")
-        new(path.read)
+        new TEMPLATE_PATH.join("#{name}.txt").read
       end
 
       attr_reader :content
