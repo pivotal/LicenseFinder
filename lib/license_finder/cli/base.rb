@@ -1,3 +1,5 @@
+require 'thor'
+
 module LicenseFinder
   module CLI
     class Base < Thor

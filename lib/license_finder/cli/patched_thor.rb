@@ -1,5 +1,3 @@
-require 'thor'
-
 module LicenseFinder
   module CLI
     module Rootcommand
