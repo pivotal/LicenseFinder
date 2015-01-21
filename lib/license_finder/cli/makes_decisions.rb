@@ -38,9 +38,10 @@ module LicenseFinder
         decisions.save!(config.decisions_file)
       end
 
-      def modify_each(*things)
-        modifying { things.each { |thing| yield thing } }
-        things
+      def assert_some(things)
+        unless things.any?
+          raise ArgumentError, "wrong number of arguments (0 for 1+)", caller
+        end
       end
     end
   end

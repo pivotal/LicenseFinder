@@ -6,10 +6,9 @@ module LicenseFinder
 
       auditable
       desc "add DEPENDENCY...", "Approve one or more dependencies by name"
-      def add(name, *other_names)
-        names = modify_each(name, *other_names) do |name|
-          decisions.approve(name, txn)
-        end
+      def add(*names)
+        assert_some names
+        modifying { names.each { |name| decisions.approve(name, txn) } }
 
         say "The #{names.join(", ")} dependency has been approved!", :green
       end

@@ -12,19 +12,17 @@ module LicenseFinder
 
       auditable
       desc "add LICENSE...", "Add one or more licenses to the whitelist"
-      def add(license, *other_licenses)
-        licenses = modify_each(license, *other_licenses) do |l|
-          decisions.whitelist(l, txn)
-        end
+      def add(*licenses)
+        assert_some licenses
+        modifying { licenses.each { |l| decisions.whitelist(l, txn) } }
         say "Added #{licenses.join(", ")} to the license whitelist"
       end
 
       auditable
       desc "remove LICENSE...", "Remove one or more licenses from the whitelist"
-      def remove(license, *other_licenses)
-        licenses = modify_each(license, *other_licenses) do |l|
-          decisions.unwhitelist(l, txn)
-        end
+      def remove(*licenses)
+        assert_some licenses
+        modifying { licenses.each { |l| decisions.unwhitelist(l, txn) } }
         say "Removed #{licenses.join(", ")} from the license whitelist"
       end
     end
