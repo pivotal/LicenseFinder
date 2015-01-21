@@ -1,4 +1,5 @@
 require "spec_helper"
+require 'capybara'
 
 module LicenseFinder
   module CLI

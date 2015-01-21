@@ -21,6 +21,8 @@ require 'license_finder/package_manager'
 require 'license_finder/decisions'
 require 'license_finder/decision_applier'
 
+require 'license_finder/core'
+
 require 'license_finder/report'
 
 require 'license_finder/cli'

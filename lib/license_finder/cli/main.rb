@@ -18,7 +18,7 @@ module LicenseFinder
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
       desc "action_items", "List unapproved dependencies (the default action for `license_finder`)"
       def action_items
-        unapproved = decision_applier.unapproved
+        unapproved = license_finder.unapproved
 
         if unapproved.empty?
           say "All dependencies are approved for use", :green
@@ -33,8 +33,8 @@ module LicenseFinder
 
       desc "report", "Print a report of the project's dependencies to stdout"
       def report
-        dependencies = decision_applier(Logger.new(quiet: true))
-        say report_of(dependencies.acknowledged)
+        logger_config[:quiet] = true
+        say report_of(license_finder.acknowledged)
       end
 
       desc "version", "Print the version of LicenseFinder"
@@ -52,30 +52,9 @@ module LicenseFinder
 
       private
 
-      # The core of the system. The saved decisions are applied to the current
-      # packages.
-      def decision_applier(logger = Logger.new(options))
-        DecisionApplier.new(
-          decisions: decisions,
-          packages: current_packages(logger)
-        )
-      end
-
-      def current_packages(logger)
-        PackageManager.current_packages(
-          logger: logger,
-          gradle_command: config.gradle_command,
-          ignore_groups: decisions.ignored_groups
-        )
-      end
-
       def report_of(content)
         report = FORMATS[options[:format]]
-        report.of(content, columns: options[:columns], project_name: fetch_project_name)
-      end
-
-      def fetch_project_name
-        decisions.project_name || Pathname.pwd.basename.to_s
+        report.of(content, columns: options[:columns], project_name: license_finder.project_name)
       end
     end
   end

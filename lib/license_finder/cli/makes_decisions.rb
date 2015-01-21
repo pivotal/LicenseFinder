@@ -14,16 +14,6 @@ module LicenseFinder
 
       private
 
-      def say_each(coll)
-        if coll.any?
-          coll.each do |item|
-            say(block_given? ? yield(item) : item)
-          end
-        else
-          say '(none)'
-        end
-      end
-
       def txn
         @txn ||= {
           who: options[:who],
@@ -32,18 +22,9 @@ module LicenseFinder
         }
       end
 
-      def modifying
-        # decisions = Decisions.saved! # is part of Base
-        yield
-        decisions.save!(config.decisions_file)
-      end
-
-      def assert_some(things)
-        unless things.any?
-          raise ArgumentError, "wrong number of arguments (0 for 1+)", caller
-        end
+      def modifying(&block)
+        license_finder.modifying(&block)
       end
     end
   end
 end
-
