@@ -2,7 +2,7 @@
 # immediate
 
 - gradle and maven are broken
-  - [x] let's refactor `PossibleLicenseFiles` to accept a nil install_path
+  - [x] let's refactor `LicenseFiles` to accept a nil install_path
   - [x] then remove `#licenses_from_files` from `{maven,gradle}_package.rb`
   - [x] update docs in package.rb to reflect what our expectations are.
 - [x] commit the rest of the WIP

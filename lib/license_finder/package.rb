@@ -111,21 +111,21 @@ module LicenseFinder
     def licenses_from_spec
       license_names_from_spec.map do |name|
         License.find_by_name(name).tap do |license|
-          logger.license self.class, self.name, license.name, "from spec" if license
+          logger.license self.class, self.name, license.name, "from spec"
         end
-      end.compact.to_set
+      end.to_set
     end
 
     def licenses_from_files
       license_files.map do |license_file|
         license_file.license.tap do |license|
-          logger.license self.class, self.name, license.name, "from file '#{license_file.path}'" if license
+          logger.license self.class, self.name, license.name, "from file '#{license_file.path}'"
         end
-      end.compact.to_set
+      end.to_set
     end
 
     def license_files
-      PossibleLicenseFiles.find(install_path)
+      LicenseFiles.find(install_path)
     end
 
     def default_license

@@ -14,7 +14,7 @@ require 'license_finder/configuration'
 require 'license_finder/license'
 
 require 'license_finder/possible_license_file'
-require 'license_finder/possible_license_files'
+require 'license_finder/license_files'
 require 'license_finder/package'
 require 'license_finder/package_manager'
 

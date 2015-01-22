@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module LicenseFinder
-  describe PossibleLicenseFiles do
+  describe LicenseFiles do
     def fixture_path(fixture)
       Pathname.new(__FILE__).dirname.join('..', '..', 'fixtures', fixture)
     end
@@ -38,7 +38,7 @@ module LicenseFinder
       it "includes files nested inside LICENSE directory" do
         expect(files_in('license_directory')).to match_array(%w[
           COPYING
-          LICENSE/Apache.txt
+          LICENSE/MIT.txt
         ])
       end
 

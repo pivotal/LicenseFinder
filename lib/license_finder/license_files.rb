@@ -1,5 +1,5 @@
 module LicenseFinder
-  class PossibleLicenseFiles
+  class LicenseFiles
     CANDIDATE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
     CANDIDATE_PATH_WILDCARD = "*{#{CANDIDATE_FILE_NAMES.join(',')}}*"
 
@@ -12,9 +12,9 @@ module LicenseFinder
     end
 
     def find
-      paths_of_candidate_files.map do |path|
-        PossibleLicenseFile.new(path)
-      end
+      paths_of_candidate_files
+        .map { |path| PossibleLicenseFile.new(path) }
+        .reject { |file| file.license.nil? }
     end
 
     private

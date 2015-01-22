@@ -46,7 +46,7 @@ module LicenseFinder
         license_files = license_names.map do |license_name|
           double(:file, license: License.find_by_name(license_name), path: "some/path")
         end
-        allow(PossibleLicenseFiles).to receive(:find).
+        allow(LicenseFiles).to receive(:find).
           with("some/package/path").and_return(license_files)
       end
 
