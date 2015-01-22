@@ -36,7 +36,7 @@ module LicenseFinder
     end
 
     def package_path
-      Pathname.new('package.json')
+      project_path.join('package.json')
     end
 
     # node_module can be empty hash if it is included elsewhere

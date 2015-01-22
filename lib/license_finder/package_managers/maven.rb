@@ -21,11 +21,11 @@ module LicenseFinder
     private
 
     def license_report
-      Pathname.new('target/generated-resources/licenses.xml')
+      project_path.join('target/generated-resources/licenses.xml')
     end
 
     def package_path
-      Pathname.new('pom.xml')
+      project_path.join('pom.xml')
     end
   end
 end

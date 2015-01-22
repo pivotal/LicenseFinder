@@ -45,20 +45,5 @@ module LicenseFinder
         pip.current_packages
       end
     end
-
-    describe '.active?' do
-      let(:package_path) { double(:requirements_file) }
-      let(:pip) { Pip.new package_path: package_path }
-
-      it 'is true with a requirements.txt file' do
-        allow(package_path).to receive_messages(:exist? => true)
-        expect(pip).to be_active
-      end
-
-      it 'is false without a requirements.txt file' do
-        allow(package_path).to receive_messages(:exist? => false)
-        expect(pip).to_not be_active
-      end
-    end
   end
 end

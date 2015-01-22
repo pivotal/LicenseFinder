@@ -24,4 +24,6 @@ RSpec.configure do |config|
       FileUtils.rm_rf(tmp_dir)
     end
   end
+
+  config.include LicenseFinder::TestFixtures
 end

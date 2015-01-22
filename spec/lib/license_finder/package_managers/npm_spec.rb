@@ -96,20 +96,5 @@ module LicenseFinder
         npm.current_packages
       end
     end
-
-    describe '.active?' do
-      let(:package_path) { double(:package_file) }
-      let(:npm) { NPM.new package_path: package_path }
-
-      it 'is true with a package.json file' do
-        allow(package_path).to receive_messages(:exist? => true)
-        expect(npm).to be_active
-      end
-
-      it 'is false without a package.json file' do
-        allow(package_path).to receive_messages(:exist? => false)
-        expect(npm).to_not be_active
-      end
-    end
   end
 end

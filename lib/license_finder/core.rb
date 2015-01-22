@@ -5,14 +5,16 @@ module LicenseFinder
   # {
   #   logger: { quiet: true, debug: false },
   #   gradle_command: "gradlew",
-  #   decisions_file: "./some/path.yml"
+  #   decisions_file: "./some/path.yml",
+  #   project_path: "./some/project/path/"
   # }
   class Core
     extend Forwardable
 
     def initialize(options)
       @logger = Logger.new(options.fetch(:logger))
-      @config = Configuration.with_optional_saved_config(options)
+      @project_path = Pathname(options.fetch(:project_path))
+      @config = Configuration.with_optional_saved_config(options, project_path)
       @decisions = Decisions.saved!(config.decisions_file)
     end
 
@@ -25,12 +27,12 @@ module LicenseFinder
     def_delegators :decision_applier, :acknowledged, :unapproved
 
     def project_name
-      decisions.project_name || Pathname.pwd.basename.to_s
+      decisions.project_name || project_path.basename.to_s
     end
 
     private
 
-    attr_reader :config, :logger
+    attr_reader :config, :logger, :project_path
 
     # The core of the system. The saved decisions are applied to the current
     # packages.
@@ -43,6 +45,7 @@ module LicenseFinder
       # lazy, do not move to `initialize`
       PackageManager.current_packages(
         logger: logger,
+        project_path: project_path,
         gradle_command: config.gradle_command,
         ignore_groups: decisions.ignored_groups
       )

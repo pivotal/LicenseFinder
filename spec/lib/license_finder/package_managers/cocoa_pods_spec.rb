@@ -2,7 +2,8 @@ require 'spec_helper'
 
 module LicenseFinder
   describe CocoaPods do
-    let(:cocoa_pods) { CocoaPods.new }
+    let(:project_path) { fixture_path("all_pms") }
+    let(:cocoa_pods) { CocoaPods.new(project_path: project_path) }
     it_behaves_like "a PackageManager"
 
     def stub_acknowledgments(hash = {})
@@ -19,7 +20,9 @@ module LicenseFinder
     end
 
     def stub_lockfile(pods)
-      allow(YAML).to receive(:load_file).with(Pathname.new("Podfile.lock")).and_return("PODS" => pods)
+      allow(YAML).to receive(:load_file)
+        .with(project_path.join("Podfile.lock"))
+        .and_return("PODS" => pods)
     end
 
     describe '.current_packages' do
@@ -56,21 +59,6 @@ module LicenseFinder
         expect(CocoaPodsPackage).to receive(:new).with("Dependency Name", "1.0", nil)
 
         cocoa_pods.current_packages
-      end
-    end
-
-    describe '.active?' do
-      let(:package_path) { double(:package_file) }
-      let(:cocoa_pods) { CocoaPods.new package_path: package_path }
-
-      it 'is true with a Podfile file' do
-        allow(package_path).to receive_messages(:exist? => true)
-        expect(cocoa_pods).to be_active
-      end
-
-      it 'is false without a Podfile file' do
-        allow(package_path).to receive_messages(:exist? => false)
-        expect(cocoa_pods).to_not be_active
       end
     end
   end

@@ -20,6 +20,7 @@ module LicenseFinder
       def license_finder_config
         result = extract_options(:decisions_file, :gradle_command)
         result[:logger] = logger_config
+        result[:project_path] = Pathname.pwd
         result
       end
 

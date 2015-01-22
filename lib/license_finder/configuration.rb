@@ -1,6 +1,6 @@
 module LicenseFinder
   class Configuration
-    def self.with_optional_saved_config(primary_config, project_path = Pathname.new('.'))
+    def self.with_optional_saved_config(primary_config, project_path)
       config_file = project_path.join('config', 'license_finder.yml')
       saved_config = config_file.exist? ? YAML.load(config_file.read) : {}
       new(primary_config, saved_config)

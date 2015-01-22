@@ -28,7 +28,7 @@ module LicenseFinder
     end
 
     def package_path
-      Pathname.new("Gemfile")
+      project_path.join("Gemfile")
     end
 
     def bundler_defs

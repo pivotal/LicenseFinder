@@ -24,15 +24,15 @@ module LicenseFinder
         flatten
     end
 
-    attr_reader :logger
+    attr_reader :logger, :project_path
 
     def initialize options={}
       @logger       = options[:logger] || LicenseFinder::Logger::Default.new
-      @package_path = options[:package_path] # dependency injection for tests
+      @project_path = options[:project_path]
     end
 
     def active?
-      injected_package_path.exist?.tap { |is_active| logger.active self.class, is_active }
+      package_path.exist?.tap { |is_active| logger.active self.class, is_active }
     end
 
     def current_packages_with_relations
@@ -44,12 +44,6 @@ module LicenseFinder
         end
       end
       packages
-    end
-
-    private
-
-    def injected_package_path
-      @package_path || package_path
     end
   end
 end

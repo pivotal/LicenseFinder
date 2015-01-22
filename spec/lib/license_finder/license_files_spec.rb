@@ -2,10 +2,6 @@ require 'spec_helper'
 
 module LicenseFinder
   describe LicenseFiles do
-    def fixture_path(fixture)
-      Pathname.new(__FILE__).dirname.join('..', '..', 'fixtures', fixture)
-    end
-
     describe "#find" do
       def files_in(fixture)
         root_path = fixture_path(fixture)

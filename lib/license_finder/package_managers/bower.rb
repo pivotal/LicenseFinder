@@ -15,7 +15,7 @@ module LicenseFinder
     private
 
     def package_path
-      Pathname.new('bower.json')
+      project_path.join('bower.json')
     end
   end
 end

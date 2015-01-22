@@ -39,20 +39,5 @@ module LicenseFinder
         expect(current_packages.first).to be_a(Package)
       end
     end
-
-    describe '.active?' do
-      let(:package_path) { double(:package_file) }
-      let(:bower) { Bower.new package_path: package_path }
-
-      it 'is true with a bower.json file' do
-        allow(package_path).to receive_messages(:exist? => true)
-        expect(bower).to be_active
-      end
-
-      it 'is false without a bower.json file' do
-        allow(package_path).to receive_messages(:exist? => false)
-        expect(bower).to_not be_active
-      end
-    end
   end
 end

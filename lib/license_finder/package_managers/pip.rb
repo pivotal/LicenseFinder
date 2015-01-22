@@ -19,7 +19,7 @@ module LicenseFinder
     private
 
     def package_path
-      Pathname.new('requirements.txt')
+      project_path.join('requirements.txt')
     end
 
     def pypi_def(name, version)

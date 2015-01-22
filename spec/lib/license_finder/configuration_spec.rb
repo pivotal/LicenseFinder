@@ -4,9 +4,7 @@ module LicenseFinder
   describe Configuration do
     describe ".with_optional_saved_config" do
       it "should init and use saved config" do
-        fake_project_dir = Pathname.new(__FILE__).dirname.join('..', '..', 'fixtures')
-
-        subject = described_class.with_optional_saved_config({}, fake_project_dir)
+        subject = described_class.with_optional_saved_config({}, fixture_path("."))
         expect(subject.gradle_command).to eq('gradlew')
       end
     end

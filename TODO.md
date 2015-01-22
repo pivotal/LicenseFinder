@@ -2,9 +2,6 @@
 - Packages should log which licenses came from decisions. Maybe have
   Activations, which store a license and a source, which can be logged or
   otherwise manipulated.
-- To make the core of LicenseFinder completely path independent, pass
-  `project_path` to Core (for `project_name`) and from there to Configuration
-  (for `saved_config`) and to PackageManagers (for `package_path`).
 
 # architecture
 

@@ -23,11 +23,11 @@ module LicenseFinder
     private
 
     def license_report
-      Pathname.new('build/reports/license/dependency-license.xml')
+      project_path.join('build/reports/license/dependency-license.xml')
     end
 
     def package_path
-      Pathname.new('build.gradle')
+      project_path.join('build.gradle')
     end
   end
 end

@@ -19,11 +19,11 @@ module LicenseFinder
     private
 
     def package_path
-      Pathname.new("Podfile")
+      project_path.join("Podfile")
     end
 
     def lockfile_path
-      Pathname.new("Podfile.lock")
+      project_path.join("Podfile.lock")
     end
 
     def acknowledgements_path
@@ -33,7 +33,7 @@ module LicenseFinder
         'Pods/Target Support Files/Pods' # cocoapods >= 0.34
       ]
 
-      directories.map { |dir| Pathname.new(dir).join(filename) }.find(&:exist?)
+      directories.map { |dir| project_path.join(dir, filename) }.find(&:exist?)
     end
 
     def read_plist pathname
