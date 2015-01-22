@@ -18,21 +18,13 @@ module LicenseFinder
       end
 
       def license_finder_config
-        result = { logger: logger_config }
-        result[:decisions_file] = options["decisions_file"] if options.has_key? "decisions_file"
-        result[:gradle_command] = options["gradle_command"] if options.has_key? "gradle_command"
+        result = extract_options(:decisions_file, :gradle_command)
+        result[:logger] = logger_config
         result
       end
 
       def logger_config
-        @logger_config ||= logger_config_from_options
-      end
-
-      def logger_config_from_options
-        result = {}
-        result[:quiet] = options["quiet"] if options.has_key? "quiet"
-        result[:debug] = options["debug"] if options.has_key? "debug"
-        result
+        @logger_config ||= extract_options(:quiet, :debug)
       end
 
       def say_each(coll)
@@ -49,6 +41,14 @@ module LicenseFinder
         unless things.any?
           raise ArgumentError, "wrong number of arguments (0 for 1+)", caller
         end
+      end
+
+      def extract_options(*keys)
+        result = {}
+        keys.each do |key|
+          result[key.to_sym] = options[key.to_s] if options.has_key? key.to_s
+        end
+        result
       end
     end
   end
