@@ -1,5 +1,12 @@
 require 'forwardable'
 module LicenseFinder
+  # Coordinates setup
+  # +options+ look like:
+  # {
+  #   logger: { quiet: true, debug: false },
+  #   gradle_command: "gradlew",
+  #   decisions_file: "./some/path.yml"
+  # }
   class Core
     extend Forwardable
 
