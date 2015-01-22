@@ -22,9 +22,10 @@ module LicenseFinder
     attr_reader :install_path
 
     def paths_of_candidate_files
-      candidate_files_and_dirs.map do |path|
-        path.directory? ? path.children : path
-      end.flatten.uniq
+      candidate_files_and_dirs
+        .map { |path| path.directory? ? path.children : path }
+        .flatten
+        .uniq
     end
 
     def candidate_files_and_dirs
