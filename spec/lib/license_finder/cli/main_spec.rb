@@ -1,5 +1,4 @@
 require "spec_helper"
-require 'capybara'
 
 module LicenseFinder
   module CLI
@@ -52,18 +51,15 @@ module LicenseFinder
         end
 
         context "in html reports" do
-          def report
+          before do
             subject.options = { format: 'html' }
-            result = capture_stdout { subject.report }
-            html = Capybara.string(result)
-            html.find "h1"
           end
 
           context "when the project has a name" do
             before { decisions.name_project("given project name") }
 
             it "should show the project name" do
-              expect(report).to have_text "given project name"
+              expect(report).to include "given project name"
             end
           end
 
@@ -71,7 +67,7 @@ module LicenseFinder
             before { allow(Dir).to receive(:getwd).and_return("/path/to/a_project") }
 
             it "should default to the directory name" do
-              expect(report).to have_text "a_project"
+              expect(report).to include "a_project"
             end
           end
         end
