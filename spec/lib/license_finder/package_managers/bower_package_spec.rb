@@ -9,7 +9,6 @@ module LicenseFinder
           "name" => "dependency-library",
           "description" => "description",
           "version" => "1.3.3.7",
-          "main" => "normalize.css",
           "readme" => "some readme stuff",
           "homepage" => "homepage"
         }
