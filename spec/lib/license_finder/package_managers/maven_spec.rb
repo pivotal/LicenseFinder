@@ -21,8 +21,13 @@ module LicenseFinder
         allow(maven).to receive('`').with(/mvn/)
       end
 
+      def stub_license_report(deps)
+        fake_file = double(:license_report, read: license_xml(deps))
+        allow(maven).to receive(:license_report).and_return(fake_file)
+      end
+
       it 'lists all the current packages' do
-        license_xml = license_xml("
+        stub_license_report("
           <dependency>
             <artifactId>junit</artifactId>
             <version>4.11</version>
@@ -32,8 +37,6 @@ module LicenseFinder
             <version>1.3</version>
            </dependency>
         ")
-        fake_file = double(:license_report, read: license_xml)
-        allow(maven).to receive(:license_report).and_return(fake_file)
 
         expect(maven.current_packages.map { |p| [p.name, p.version] }).to eq [
           ["junit", "4.11"],
@@ -42,7 +45,7 @@ module LicenseFinder
       end
 
       it "handles multiple licenses" do
-        license_xml = license_xml("
+        stub_license_report("
           <dependency>
             <licenses>
               <license>
@@ -55,20 +58,14 @@ module LicenseFinder
           </dependency>
         ")
 
-        fake_file = double(:license_report, read: license_xml)
-        allow(maven).to receive(:license_report).and_return(fake_file)
-
         expect(maven.current_packages.first.licenses.map(&:name)).to eq ['License 1', 'License 2']
       end
 
       it "handles no licenses" do
-        license_xml = license_xml("
+        stub_license_report("
           <dependency>
           </dependency>
         ")
-
-        fake_file = double(:license_report, read: license_xml)
-        allow(maven).to receive(:license_report).and_return(fake_file)
 
         expect(maven.current_packages.first.licenses.map(&:name)).to eq ['unknown']
       end
