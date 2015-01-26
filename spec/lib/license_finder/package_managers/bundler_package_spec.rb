@@ -4,8 +4,6 @@ module LicenseFinder
   describe BundlerPackage do
     subject { described_class.new(gemspec, bundler_dependency) }
 
-    it_behaves_like "a Package"
-
     let(:gemspec) do
       Gem::Specification.new do |s|
         s.name = 'spec_name'

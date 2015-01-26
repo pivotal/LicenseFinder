@@ -28,10 +28,6 @@ module LicenseFinder
         end
       end
 
-      def license package, package_name, license, how
-        log package, sprintf("package %s: found license '%s' %s", package_name, license, how)
-      end
-
       def log prefix, string
         raise NotImplementedError, "#log must be implemented"
       end
@@ -44,13 +40,13 @@ module LicenseFinder
 
     class Progress < Base
       def log prefix, string
-        STDOUT.print(".") && STDOUT.flush
+        print(".") && $stdout.flush
       end
     end
 
     class Verbose < Base
       def log prefix, string
-        STDOUT.printf("%s: %s\n", prefix, string)
+        printf("%s: %s\n", prefix, string)
       end
     end
 

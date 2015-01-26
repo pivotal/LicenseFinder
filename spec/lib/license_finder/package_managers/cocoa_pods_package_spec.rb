@@ -7,8 +7,6 @@ module LicenseFinder
     end
     let(:license_text) { nil }
 
-    it_behaves_like "a Package"
-
     its(:name) { should == "Name" }
     its(:version) { should == "1.0.0" }
     its(:summary) { should eq "" }
@@ -37,6 +35,11 @@ module LicenseFinder
 
       it "returns unknown when there's no license" do
         expect(subject.licenses.map(&:name)).to eq ["unknown"]
+      end
+
+      it "respects license decisions" do
+        subject.decide_on_license(License.find_by_name("A"))
+        expect(subject.licenses.map(&:name)).to eq ["A"]
       end
     end
   end

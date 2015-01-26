@@ -2,20 +2,18 @@ module LicenseFinder
   # Super-class that adapts data from different package management
   # systems (gems, npm, pip, etc.) to a common interface.
   #
-  # For guidance on adding a new system use the shared behavior
+  # Guidance on adding a new system
   #
-  #     it_behaves_like "a Package"
-  #
-  # Additional guidelines are:
-  #
-  # - if you're going to use Package#licenses ...
-  #   - and the package spec will report licenses,
-  #     pass :spec_licenses in the constructor options
-  #   - and the package's files can be searched for licenses
-  #     pass :install_path in the constructor options
-  # - else
-  #   - implement #licenses
-  #
+  # - subclass Package, and initialize based on the data you receive from the
+  #   package manager
+  # - if the package specs will report license names, pass :spec_licenses in the
+  #   constructor options
+  # - if the package's files can be searched for licenses pass :install_path in
+  #   the constructor options
+  # - otherwise, override #licenses_from_spec, #license_files,
+  #   #activations_from_spec or #activations_from_files
+  #   - but do not override #activations, to maintain the decisions and
+  #     defaulting behavior
   class Package
     attr_reader :logger
 
@@ -92,36 +90,47 @@ module LicenseFinder
     end
 
     def determine_licenses
-      dl = @decided_licenses
-      return dl if dl.any?
+      activations.each { |activation| activation.log(logger) }
+      activations.map(&:license)
+    end
 
-      lfs = licenses_from_spec
-      return lfs if lfs.any?
+    def activations
+      afd = activations_from_decisions
+      return afd if afd.any?
 
-      lff = licenses_from_files
-      return lff if lff.any?
+      afs = activations_from_spec
+      return afs if afs.any?
 
-      [default_license].to_set
+      aff = activations_from_files
+      return aff if aff.any?
+
+      [Activation::None.new(self, default_license)]
     end
 
     def decide_on_license(license)
       @decided_licenses << license
     end
 
-    def licenses_from_spec
-      license_names_from_spec.map do |name|
-        License.find_by_name(name).tap do |license|
-          logger.license self.class, self.name, license.name, "from spec"
-        end
-      end.to_set
+    def activations_from_decisions
+      @decided_licenses
+        .map { |license| Activation::FromDecision.new(self, license) }
     end
 
-    def licenses_from_files
-      license_files.map do |license_file|
-        license_file.license.tap do |license|
-          logger.license self.class, self.name, license.name, "from file '#{license_file.path}'"
-        end
-      end.to_set
+    def activations_from_spec
+      licenses_from_spec
+        .map { |license| Activation::FromSpec.new(self, license) }
+    end
+
+    def licenses_from_spec
+      license_names_from_spec
+        .map { |name| License.find_by_name(name) }
+        .to_set
+    end
+
+    def activations_from_files
+      license_files
+        .group_by(&:license)
+        .map { |license, files| Activation::FromFiles.new(self, license, files) }
     end
 
     def license_files

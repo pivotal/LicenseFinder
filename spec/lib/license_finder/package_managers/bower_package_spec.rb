@@ -16,8 +16,6 @@ module LicenseFinder
       )
     end
 
-    it_behaves_like "a Package"
-
     its(:name) { should == "dependency-library" }
     its(:version) { should == "1.3.3.7" }
     its(:summary) { should == "description" }
@@ -26,7 +24,6 @@ module LicenseFinder
     its(:groups) { should == [] } # TODO: does `bower list` output devDependencies? If so, put them in 'dev' group?
     its(:children) { should == [] } # TODO: get dependencies from dependencies and devDependencies, like NPM
     its(:install_path) { should eq "/path/to/thing" }
-
 
     context "when package is NOT installed" do
       subject do
