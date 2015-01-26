@@ -31,10 +31,13 @@ module LicenseFinder
         end
 
         it "has an --approve option to approve the added dependency" do
-          expect(decisions).to receive(:approve).with("js_dep", hash_including(who: "Julian", why:  "We really need this"))
+          subject.options = { approve: true, who: "Julian", why: "We really need this" }
           silence_stdout do
-            Main.start(["dependencies", "add", "--approve", "--who", "Julian", "--why", "We really need this", "js_dep", "MIT", "1.2.3"])
+            subject.add("js_dep", "MIT")
           end
+          approval = subject.decisions.approval_of("js_dep")
+          expect(approval.who).to eq "Julian"
+          expect(approval.why).to eq "We really need this"
         end
       end
 

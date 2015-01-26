@@ -32,11 +32,17 @@ module LicenseFinder
         end
 
         it "sets approver and approval message" do
-          expect(decisions).to receive(:approve).with("foo", hash_including(who: "Julian", why:  "We really need this"))
-
+          subject.options = {
+            who: "Julian",
+            why: "We really need this"
+          }
           silence_stdout do
-            Main.start(["approval", "add", "--who", "Julian", "--why", "We really need this", "foo"])
+            subject.add("foo")
           end
+
+          approval = subject.decisions.approval_of("foo")
+          expect(approval.who).to eq "Julian"
+          expect(approval.why).to eq "We really need this"
         end
       end
 

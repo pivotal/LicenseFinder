@@ -31,35 +31,30 @@ module LicenseFinder
       describe "#report" do
         let(:packages) { [Package.new('one dependency', "1.1")] }
 
+        def report
+          capture_stdout { subject.report }
+        end
+
         it "reports acknowleged dependencies" do
-          result = capture_stdout do
-            Main.start(["report"])
-          end
-          expect(result).to eq "\"one dependency\", 1.1, unknown\n"
+          expect(report).to eq "\"one dependency\", 1.1, unknown\n"
         end
 
         it "will output a specific format" do
-          result = capture_stdout do
-            Main.start(%w[report --format markdown])
-          end
+          subject.options = { format: 'markdown' }
 
-          expect(result).to include "## Action"
+          expect(report).to include "## Action"
         end
 
         it "will output a custom csv" do
-          result = capture_stdout do
-            Main.start(%w[report --format csv --columns name version])
-          end
+          subject.options = { format: 'csv', columns: ['name', 'version'] }
 
-          expect(result).to eq "one dependency,1.1\n"
+          expect(report).to eq "one dependency,1.1\n"
         end
 
         context "in html reports" do
-          subject do
-            result = capture_stdout do
-              Main.start(%w[report --format html])
-            end
-
+          def report
+            subject.options = { format: 'html' }
+            result = capture_stdout { subject.report }
             html = Capybara.string(result)
             html.find "h1"
           end
@@ -68,7 +63,7 @@ module LicenseFinder
             before { decisions.name_project("given project name") }
 
             it "should show the project name" do
-              is_expected.to have_text "given project name"
+              expect(report).to have_text "given project name"
             end
           end
 
@@ -76,21 +71,24 @@ module LicenseFinder
             before { allow(Dir).to receive(:getwd).and_return("/path/to/a_project") }
 
             it "should default to the directory name" do
-              is_expected.to have_text "a_project"
+              expect(report).to have_text "a_project"
             end
           end
         end
       end
 
       describe "#action_items" do
+        def action_items
+          subject.options = { quiet: true, format: 'text' }
+          subject.action_items
+        end
+
         context "with unapproved dependencies" do
           let(:packages) { [Package.new('one dependency')] }
 
           it "reports unapproved dependencies" do
             result = capture_stdout do
-              expect do
-                Main.start(%w[action_items --quiet])
-              end.to raise_error(SystemExit)
+              expect { action_items }.to raise_error(SystemExit)
             end
             expect(result).to match /dependencies/i
             expect(result).to match /one dependency/
@@ -99,9 +97,7 @@ module LicenseFinder
 
         it "reports that all dependencies are approved" do
           result = capture_stdout do
-            expect do
-              Main.start(%w[action_items --quiet])
-            end.not_to raise_error
+            expect { action_items }.not_to raise_error
           end
           expect(result).to match /approved/i
         end
