@@ -10,20 +10,19 @@ require 'license_finder/decision_applier'
 require 'forwardable'
 module LicenseFinder
   # Coordinates setup
-  # +options+ look like:
-  # {
-  #   logger: { quiet: true, debug: false },
-  #   gradle_command: "gradlew",
-  #   decisions_file: "./some/path.yml",
-  #   project_path: "./some/project/path/"
-  # }
   class Core
-    extend Forwardable
-
     def self.default_logger
-      LicenseFinder::Logger::Default.new
+      Logger::Default.new
     end
 
+    # +options+ look like:
+    # {
+    #   logger: { quiet: true, debug: false },
+    #   project_path: "./some/project/path/"
+    #   gradle_command: "gradlew",
+    #   decisions_file: "./some/path.yml",
+    # }
+    # +gradle_command+ and +decisions_file+ are optional, see Configuration
     def initialize(options)
       @logger = Logger.new(options.fetch(:logger))
       @project_path = Pathname(options.fetch(:project_path))
@@ -36,8 +35,9 @@ module LicenseFinder
       decisions.save!(config.decisions_file)
     end
 
-    attr_reader :decisions
+    extend Forwardable
     def_delegators :decision_applier, :acknowledged, :unapproved
+    attr_reader :decisions
 
     def project_name
       decisions.project_name || project_path.basename.to_s
