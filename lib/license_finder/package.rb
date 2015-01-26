@@ -1,3 +1,6 @@
+require 'license_finder/packages/licensing'
+require 'license_finder/packages/license_files'
+
 module LicenseFinder
   # Super-class that adapts data from different package management
   # systems (gems, npm, pip, etc.) to a common interface.
@@ -113,7 +116,7 @@ module LicenseFinder
   end
 end
 
-require 'license_finder/package_managers/manual_package'
+require 'license_finder/packages/manual_package'
 require 'license_finder/package_managers/bower_package'
 require 'license_finder/package_managers/bundler_package'
 require 'license_finder/package_managers/pip_package'

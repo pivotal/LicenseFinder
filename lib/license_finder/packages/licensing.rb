@@ -1,3 +1,5 @@
+require 'license_finder/packages/activation'
+
 module LicenseFinder
   # Licensing implements the algorithm for choosing the right set of licenses
   # from among the various sources of licenses we know about.  In order of

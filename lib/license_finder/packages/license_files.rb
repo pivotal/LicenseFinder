@@ -1,3 +1,5 @@
+require 'license_finder/packages/possible_license_file'
+
 module LicenseFinder
   class LicenseFiles
     CANDIDATE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)

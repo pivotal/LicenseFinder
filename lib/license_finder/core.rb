@@ -1,3 +1,12 @@
+require 'license_finder/logger'
+
+require 'license_finder/license'
+
+require 'license_finder/configuration'
+require 'license_finder/package_manager'
+require 'license_finder/decisions'
+require 'license_finder/decision_applier'
+
 require 'forwardable'
 module LicenseFinder
   # Coordinates setup

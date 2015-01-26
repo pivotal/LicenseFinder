@@ -1,3 +1,13 @@
+require "license_finder/license/text"
+require "license_finder/license/template"
+
+require "license_finder/license/matcher"
+require "license_finder/license/header_matcher"
+require "license_finder/license/any_matcher"
+require "license_finder/license/none_matcher"
+
+require "license_finder/license/definitions"
+
 module LicenseFinder
   class License
     class << self
@@ -55,13 +65,3 @@ module LicenseFinder
     end
   end
 end
-
-require "license_finder/license/text"
-require "license_finder/license/template"
-
-require "license_finder/license/matcher"
-require "license_finder/license/header_matcher"
-require "license_finder/license/any_matcher"
-require "license_finder/license/none_matcher"
-
-require "license_finder/license/definitions"

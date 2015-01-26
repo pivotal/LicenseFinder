@@ -1,3 +1,6 @@
+require 'license_finder/report'
+require 'license_finder/version'
+
 module LicenseFinder
   module CLI
     class Main < Base

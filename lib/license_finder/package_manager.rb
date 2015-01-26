@@ -55,3 +55,5 @@ require 'license_finder/package_managers/pip'
 require 'license_finder/package_managers/maven'
 require 'license_finder/package_managers/cocoa_pods'
 require 'license_finder/package_managers/gradle'
+
+require 'license_finder/package'
