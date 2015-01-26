@@ -1,5 +1,7 @@
 module LicenseFinder
   class PipPackage < Package
+    LICENSE_FORMAT = /^License.*::\s*(.*)$/
+
     def self.license_names_from_spec(spec)
       license = spec["license"]
 
@@ -7,8 +9,8 @@ module LicenseFinder
 
       spec.
         fetch("classifiers", []).
-        select { |c| c.start_with?("License") }.
-        map { |c| c.gsub(/^License.*::\s*(.*)$/, '\1') }
+        select { |c| c =~ LICENSE_FORMAT }.
+        map { |c| c.gsub(LICENSE_FORMAT, '\1') }
     end
 
     def initialize(name, version, install_path, spec, options={})
