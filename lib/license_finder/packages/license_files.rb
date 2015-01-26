@@ -25,8 +25,7 @@ module LicenseFinder
 
     def paths_of_candidate_files
       candidate_files_and_dirs
-        .map { |path| path.directory? ? path.children : path }
-        .flatten
+        .flat_map { |path| path.directory? ? path.children : path }
         .uniq
     end
 

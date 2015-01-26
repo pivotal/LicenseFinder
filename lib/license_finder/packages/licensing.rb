@@ -1,10 +1,11 @@
 require 'license_finder/packages/activation'
 
 module LicenseFinder
-  # Licensing implements the algorithm for choosing the right set of licenses
-  # from among the various sources of licenses we know about.  In order of
-  # priority, licenses come from decisions, package specs, or package files.
   Licensing = Struct.new(:package, :decided_licenses, :licenses_from_spec, :license_files) do
+
+    # Implements the algorithm for choosing the right set of licenses from
+    # among the various sources of licenses we know about.  In order of
+    # priority, licenses come from decisions, package specs, or package files.
     def activations
       afd = activations_from_decisions
       return afd if afd.any?
