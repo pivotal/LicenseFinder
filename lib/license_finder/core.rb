@@ -20,6 +20,10 @@ module LicenseFinder
   class Core
     extend Forwardable
 
+    def self.default_logger
+      LicenseFinder::Logger::Default.new
+    end
+
     def initialize(options)
       @logger = Logger.new(options.fetch(:logger))
       @project_path = Pathname(options.fetch(:project_path))

@@ -30,7 +30,7 @@ module LicenseFinder
     end
 
     def initialize(name, version = nil, options={})
-      @logger = options[:logger] || LicenseFinder::Logger::Default.new
+      @logger = options[:logger] || Core.default_logger
 
       @name = name
       @version = version

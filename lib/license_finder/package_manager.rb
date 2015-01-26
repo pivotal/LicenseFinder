@@ -27,7 +27,7 @@ module LicenseFinder
     attr_reader :logger, :project_path
 
     def initialize options={}
-      @logger       = options[:logger] || LicenseFinder::Logger::Default.new
+      @logger       = options[:logger] || Core.default_logger
       @project_path = options[:project_path]
     end
 
