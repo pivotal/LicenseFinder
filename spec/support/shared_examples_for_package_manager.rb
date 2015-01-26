@@ -1,6 +1,7 @@
 module LicenseFinder
   shared_examples "a PackageManager" do
     let(:all_pms) { fixture_path("all_pms") }
+
     it { expect(described_class.ancestors).to include PackageManager }
     it { expect(PackageManager.package_managers).to include described_class }
 

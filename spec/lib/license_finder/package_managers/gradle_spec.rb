@@ -34,41 +34,32 @@ module LicenseFinder
       it 'lists all the current packages' do
         stub_license_report("""
           <dependency name='org.springframework:spring-aop:4.0.1.RELEASE'>
-            <file>spring-aop-4.0.1.RELEASE.jar</file>
-            <license name='The Apache Software License, Version 2.0' url='http://www.apache.org/licenses/LICENSE-2.0.txt' />
           </dependency>
           <dependency name='org.springframework:spring-core:4.0.1.RELEASE'>
-            <file>spring-core-4.0.1.RELEASE.jar</file>
-            <license name='The Apache Software License, Version 2.0' url='http://www.apache.org/licenses/LICENSE-2.0.txt' />
           </dependency>
         """)
 
-        current_packages = gradle.current_packages
-
-        expect(current_packages.size).to eq(2)
-        expect(current_packages.first).to be_a(Package)
+        expect(gradle.current_packages.map(&:name)).to eq ['spring-aop', 'spring-core']
       end
 
       it "handles multiple licenses" do
         stub_license_report("""
-          <dependency>
+          <dependency name=''>
             <license name='License 1'/>
             <license name='License 2'/>
           </dependency>
         """)
 
-        expect(GradlePackage).to receive(:new).with({"license" => [{"name" => "License 1"}, {"name" => "License 2"}]}, anything)
-        gradle.current_packages
+        expect(gradle.current_packages.first.licenses.map(&:name)).to eq ["License 1", "License 2"]
       end
 
       it "handles an empty list of licenses" do
         stub_license_report("""
-          <dependency>
+          <dependency name=''>
           </dependency>
         """)
-        expect(GradlePackage).to receive(:new).with({}, anything)
 
-        gradle.current_packages
+        expect(gradle.current_packages.first.licenses.map(&:name)).to eq ['unknown']
       end
     end
   end

@@ -18,7 +18,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       before do
-        expect(maven).to receive('`').with(/mvn/)
+        allow(maven).to receive('`').with(/mvn/)
       end
 
       it 'lists all the current packages' do
@@ -73,8 +73,7 @@ module LicenseFinder
         fake_file = double(:license_report, read: license_xml)
         allow(maven).to receive(:license_report).and_return(fake_file)
 
-        expect(MavenPackage).to receive(:new).with({"licenses" => [{"name" => "License 1"}, {"name" => "License 2"}]}, anything)
-        maven.current_packages
+        expect(maven.current_packages.first.licenses.map(&:name)).to eq ['License 1', 'License 2']
       end
 
       it "handles no licenses" do
@@ -89,8 +88,7 @@ module LicenseFinder
         fake_file = double(:license_report, read: license_xml)
         allow(maven).to receive(:license_report).and_return(fake_file)
 
-        expect(MavenPackage).to receive(:new).with({"licenses" => {}}, anything)
-        maven.current_packages
+        expect(maven.current_packages.first.licenses.map(&:name)).to eq ['unknown']
       end
     end
   end

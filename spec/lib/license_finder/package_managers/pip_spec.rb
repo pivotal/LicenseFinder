@@ -23,26 +23,24 @@ module LicenseFinder
         stub_pypi("jasmine", "1.3.1", status: 200, body: '{}')
         stub_pypi("jasmine-core", "1.3.1", status: 200, body: '{}')
 
-        current_packages = pip.current_packages
-
-        expect(current_packages.size).to eq(2)
-        expect(current_packages.first).to be_a(Package)
+        expect(pip.current_packages.map { |p| [p.name, p.version, p.install_path] }).to eq [
+          ["jasmine", "1.3.1", "jasmine/path/jasmine"],
+          ["jasmine-core", "1.3.1", "jasmine-core/path/jasmine-core"]
+        ]
       end
 
       it "fetches data from pypi" do
         stub_pip [{"name" => "jasmine", "version" => "1.3.1", "location" => "jasmine/path"}].to_json
         stub_pypi("jasmine", "1.3.1", status: 200, body: JSON.generate(info: {summary: "A summary"}))
 
-        expect(PipPackage).to receive(:new).with("jasmine", "1.3.1", "jasmine/path/jasmine", {"summary" => "A summary"}, anything)
-        pip.current_packages
+        expect(pip.current_packages.first.summary).to eq "A summary"
       end
 
       it "ignores pypi if it can't find useful info" do
         stub_pip [{"name" => "jasmine", "version" => "1.3.1", "location" => "jasmine/path"}].to_json
         stub_pypi("jasmine", "1.3.1", status: 404, body: '')
 
-        expect(PipPackage).to receive(:new).with("jasmine", "1.3.1", "jasmine/path/jasmine", {}, anything)
-        pip.current_packages
+        expect(pip.current_packages.first.summary).to eq ""
       end
     end
   end

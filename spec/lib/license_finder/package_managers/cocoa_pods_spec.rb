@@ -34,31 +34,25 @@ module LicenseFinder
         ])
         stub_acknowledgments
 
-        expect(CocoaPodsPackage).to receive(:new).with("ABTest", "0.0.5", anything)
-        expect(CocoaPodsPackage).to receive(:new).with("JSONKit", "1.5pre", anything)
-        expect(CocoaPodsPackage).to receive(:new).with("OpenUDID", "1.0.0", anything)
-
-        current_packages = cocoa_pods.current_packages
-
-        expect(current_packages.size).to eq(3)
+        expect(cocoa_pods.current_packages.map { |p| [p.name, p.version ] }).to eq [
+          ["ABTest", "0.0.5"],
+          ["JSONKit", "1.5pre"],
+          ["OpenUDID", "1.0.0"]
+        ]
       end
 
       it "passes the license text to the package" do
         stub_lockfile(["Dependency Name (1.0)"])
-        stub_acknowledgments({name: "Dependency Name", license: "License Text"})
+        stub_acknowledgments({name: "Dependency Name", license: "The MIT License"})
 
-        expect(CocoaPodsPackage).to receive(:new).with("Dependency Name", "1.0", "License Text")
-
-        cocoa_pods.current_packages
+        expect(cocoa_pods.current_packages.first.licenses.map(&:name)).to eq ['MIT']
       end
 
       it "handles no licenses" do
         stub_lockfile(["Dependency Name (1.0)"])
         stub_acknowledgments
 
-        expect(CocoaPodsPackage).to receive(:new).with("Dependency Name", "1.0", nil)
-
-        cocoa_pods.current_packages
+        expect(cocoa_pods.current_packages.first.licenses.map(&:name)).to eq ['unknown']
       end
     end
   end
