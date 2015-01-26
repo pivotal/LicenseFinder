@@ -13,19 +13,13 @@ module LicenseFinder
               "dependency-library": {
                 "canonicalDir": "/path/to/thing",
                 "pkgMeta": {
-                  "name": "dependency-library",
-                  "description": "description",
-                  "version": "1.3.3.7",
-                  "main": "normalize.css"
+                  "name": "dependency-library"
                 }
               },
               "another-dependency": {
                 "canonicalDir": "/path/to/thing2",
                 "pkgMeta": {
-                  "name": "another-dependency",
-                  "description": "description2",
-                  "version": "4.2",
-                  "main": "denormalize.css"
+                  "name": "another-dependency"
                 }
               }
             }
@@ -33,10 +27,10 @@ module LicenseFinder
         JSON
         allow(bower).to receive("`").with(/bower/).and_return(json)
 
-        current_packages = bower.current_packages
-
-        expect(current_packages.size).to eq(2)
-        expect(current_packages.first).to be_a(Package)
+        expect(bower.current_packages.map { |p| [p.name, p.install_path] }).to eq [
+          ["dependency-library", "/path/to/thing"],
+          ["another-dependency", "/path/to/thing2"]
+        ]
       end
     end
   end

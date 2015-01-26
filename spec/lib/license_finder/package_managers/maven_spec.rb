@@ -24,36 +24,21 @@ module LicenseFinder
       it 'lists all the current packages' do
         license_xml = license_xml("
           <dependency>
-            <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
-            <licenses>
-              <license>
-                <name>Common Public License Version 1.0</name>
-                <url>http://www.opensource.org/licenses/cpl1.0.txt</url>
-              </license>
-            </licenses>
           </dependency>
           <dependency>
-            <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <version>1.3</version>
-            <licenses>
-              <license>
-                <name>New BSD License</name>
-                <url>http://www.opensource.org/licenses/bsd-license.php</url>
-                <distribution>repo</distribution>
-              </license>
-            </licenses>
            </dependency>
         ")
         fake_file = double(:license_report, read: license_xml)
         allow(maven).to receive(:license_report).and_return(fake_file)
 
-        current_packages = maven.current_packages
-
-        expect(current_packages.size).to eq(2)
-        expect(current_packages.first).to be_a(Package)
+        expect(maven.current_packages.map { |p| [p.name, p.version] }).to eq [
+          ["junit", "4.11"],
+          ["hamcrest-core", "1.3"]
+        ]
       end
 
       it "handles multiple licenses" do
@@ -79,9 +64,6 @@ module LicenseFinder
       it "handles no licenses" do
         license_xml = license_xml("
           <dependency>
-            <licenses>
-            <!-- comment -->
-            </licenses>
           </dependency>
         ")
 

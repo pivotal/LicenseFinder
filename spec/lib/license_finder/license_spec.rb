@@ -4,18 +4,17 @@ module LicenseFinder
   describe License do
     describe ".find_by_name" do
       it "should find a registered license" do
-        expect(License.find_by_name("Apache2")).to be_a License
+        license = License.find_by_name("Expat")
+        expect(license.name).to eq "MIT"
       end
 
       it "should make an unrecognized license" do
         license = License.find_by_name("not a known license")
-
-        expect(license).to be_a License
         expect(license.name).to eq "not a known license"
       end
 
       context "making the default license" do
-        it "set the name to 'unknown'" do
+        it "sets the name to 'unknown'" do
           expect(License.find_by_name(nil).name).to eq("unknown")
         end
 
@@ -27,7 +26,8 @@ module LicenseFinder
 
     describe ".find_by_text" do
       it "should find a registered license" do
-        expect(License.find_by_text('This gem is released under the MIT license')).to be_a License
+        license = License.find_by_text('This gem is released under the MIT license')
+        expect(license.name).to eq "MIT"
       end
 
       it "returns nil if not found" do

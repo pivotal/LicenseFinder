@@ -67,8 +67,6 @@ module LicenseFinder
         current_packages = npm.current_packages
 
         expect(current_packages.map(&:name)).to eq(["depjs", "dep1-1js", "dep2js", "dep2-1js", "dep3js"])
-        expect(current_packages.first).to be_a(Package)
-        expect(current_packages.first.name).to eq("depjs")
       end
 
       it "does not support name version string" do
