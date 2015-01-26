@@ -10,10 +10,7 @@ module LicenseFinder
   #   constructor options
   # - if the package's files can be searched for licenses pass :install_path in
   #   the constructor options
-  # - otherwise, override #licenses_from_spec, #license_files,
-  #   #activations_from_spec or #activations_from_files
-  #   - but do not override #activations, to maintain the decisions and
-  #     defaulting behavior
+  # - otherwise, override #licenses_from_spec or #license_files
   class Package
     attr_reader :logger
 
@@ -86,39 +83,18 @@ module LicenseFinder
     attr_reader :install_path # checked in tests, otherwise private
 
     def licenses
-      @licenses ||= determine_licenses.to_set
-    end
-
-    def determine_licenses
-      activations.each { |activation| activation.log(logger) }
-      activations.map(&:license)
+      @licenses ||= activations.map(&:license).to_set
     end
 
     def activations
-      afd = activations_from_decisions
-      return afd if afd.any?
-
-      afs = activations_from_spec
-      return afs if afs.any?
-
-      aff = activations_from_files
-      return aff if aff.any?
-
-      [Activation::None.new(self, default_license)]
+      licensing = Licensing.new(self, @decided_licenses, licenses_from_spec, license_files)
+      licensing.activations.tap do |activations|
+        activations.each { |activation| activation.log(logger) }
+      end
     end
 
     def decide_on_license(license)
       @decided_licenses << license
-    end
-
-    def activations_from_decisions
-      @decided_licenses
-        .map { |license| Activation::FromDecision.new(self, license) }
-    end
-
-    def activations_from_spec
-      licenses_from_spec
-        .map { |license| Activation::FromSpec.new(self, license) }
     end
 
     def licenses_from_spec
@@ -127,18 +103,8 @@ module LicenseFinder
         .to_set
     end
 
-    def activations_from_files
-      license_files
-        .group_by(&:license)
-        .map { |license, files| Activation::FromFiles.new(self, license, files) }
-    end
-
     def license_files
       LicenseFiles.find(install_path)
-    end
-
-    def default_license
-      License.find_by_name nil
     end
 
     def missing?

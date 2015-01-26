@@ -13,6 +13,7 @@ require 'license_finder/configuration'
 
 require 'license_finder/license'
 
+require 'license_finder/licensing'
 require 'license_finder/activation'
 require 'license_finder/possible_license_file'
 require 'license_finder/license_files'

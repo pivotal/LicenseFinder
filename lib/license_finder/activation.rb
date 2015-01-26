@@ -1,5 +1,7 @@
 module LicenseFinder
   module Activation
+    # An Activation reports that a license has been activated for a package, and
+    # tracks how that information was established
     Basic = Struct.new(:package, :license) do
       def log(logger)
         sources.each do |source|
