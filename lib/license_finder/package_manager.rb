@@ -20,11 +20,8 @@ module LicenseFinder
       package_managers.
         map { |pm| pm.new(options) }.
         select(&:active?).
-        map(&:current_packages_with_relations).
-        flatten
+        flat_map(&:current_packages_with_relations)
     end
-
-    attr_reader :logger, :project_path
 
     def initialize options={}
       @logger       = options[:logger] || Core.default_logger
@@ -32,7 +29,8 @@ module LicenseFinder
     end
 
     def active?
-      package_path.exist?.tap { |is_active| logger.active self.class, is_active }
+      package_path.exist?
+        .tap { |is_active| logger.active self.class, is_active }
     end
 
     def current_packages_with_relations
@@ -45,6 +43,10 @@ module LicenseFinder
       end
       packages
     end
+
+    private
+
+    attr_reader :logger, :project_path
   end
 end
 
