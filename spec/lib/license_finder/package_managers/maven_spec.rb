@@ -22,7 +22,7 @@ module LicenseFinder
       end
 
       it 'lists all the current packages' do
-        license_xml = license_xml("""
+        license_xml = license_xml("
           <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -46,7 +46,7 @@ module LicenseFinder
               </license>
             </licenses>
            </dependency>
-        """)
+        ")
         fake_file = double(:license_report, read: license_xml)
         allow(maven).to receive(:license_report).and_return(fake_file)
 
@@ -57,7 +57,7 @@ module LicenseFinder
       end
 
       it "handles multiple licenses" do
-        license_xml = license_xml("""
+        license_xml = license_xml("
           <dependency>
             <licenses>
               <license>
@@ -68,7 +68,7 @@ module LicenseFinder
               </license>
             </licenses>
           </dependency>
-        """)
+        ")
 
         fake_file = double(:license_report, read: license_xml)
         allow(maven).to receive(:license_report).and_return(fake_file)
@@ -77,13 +77,13 @@ module LicenseFinder
       end
 
       it "handles no licenses" do
-        license_xml = license_xml("""
+        license_xml = license_xml("
           <dependency>
             <licenses>
             <!-- comment -->
             </licenses>
           </dependency>
-        """)
+        ")
 
         fake_file = double(:license_report, read: license_xml)
         allow(maven).to receive(:license_report).and_return(fake_file)

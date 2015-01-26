@@ -32,32 +32,32 @@ module LicenseFinder
       end
 
       it 'lists all the current packages' do
-        stub_license_report("""
+        stub_license_report("
           <dependency name='org.springframework:spring-aop:4.0.1.RELEASE'>
           </dependency>
           <dependency name='org.springframework:spring-core:4.0.1.RELEASE'>
           </dependency>
-        """)
+        ")
 
         expect(gradle.current_packages.map(&:name)).to eq ['spring-aop', 'spring-core']
       end
 
       it "handles multiple licenses" do
-        stub_license_report("""
+        stub_license_report("
           <dependency name=''>
             <license name='License 1'/>
             <license name='License 2'/>
           </dependency>
-        """)
+        ")
 
         expect(gradle.current_packages.first.licenses.map(&:name)).to eq ["License 1", "License 2"]
       end
 
       it "handles an empty list of licenses" do
-        stub_license_report("""
+        stub_license_report("
           <dependency name=''>
           </dependency>
-        """)
+        ")
 
         expect(gradle.current_packages.first.licenses.map(&:name)).to eq ['unknown']
       end
