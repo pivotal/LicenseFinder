@@ -19,9 +19,9 @@ module LicenseFinder
 
     def packages
       result = decisions.packages + system_packages
-      result.
-        map { |package| with_decided_licenses(package) }.
-        map { |package| with_approval(package) }
+      result
+        .map { |package| with_decided_licenses(package) }
+        .map { |package| with_approval(package) }
     end
 
     def ignored?(package)

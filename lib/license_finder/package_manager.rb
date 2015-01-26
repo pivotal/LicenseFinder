@@ -17,10 +17,10 @@ module LicenseFinder
     end
 
     def self.current_packages(options)
-      package_managers.
-        map { |pm| pm.new(options) }.
-        select(&:active?).
-        flat_map(&:current_packages_with_relations)
+      package_managers
+        .map { |pm| pm.new(options) }
+        .select(&:active?)
+        .flat_map(&:current_packages_with_relations)
     end
 
     def initialize options={}

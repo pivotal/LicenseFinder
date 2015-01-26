@@ -16,34 +16,35 @@ module LicenseFinder
 
     describe ".remove_package" do
       it "drops a package" do
-        packages = subject.
-          add_package("dep", nil).
-          remove_package("dep").
-          packages
+        packages = subject
+          .add_package("dep", nil)
+          .remove_package("dep")
+          .packages
         expect(packages.size).to eq 0
       end
 
       it "does nothing if package was never added" do
-        packages = subject.
-          remove_package("dep").
-          packages
+        packages = subject
+          .remove_package("dep")
+          .packages
         expect(packages.size).to eq 0
       end
     end
 
     describe ".license" do
       it "will report license for a dependency" do
-        license = subject.
-          license("dep", "MIT").
-          licenses_of("dep").first
+        license = subject
+          .license("dep", "MIT")
+          .licenses_of("dep")
+          .first
         expect(license).to eq License.find_by_name("MIT")
       end
 
       it "will report multiple licenses" do
-        licenses = subject.
-          license("dep", "MIT").
-          license("dep", "GPL").
-          licenses_of("dep")
+        licenses = subject
+          .license("dep", "MIT")
+          .license("dep", "GPL")
+          .licenses_of("dep")
         expect(licenses).to eq [
           License.find_by_name("MIT"),
           License.find_by_name("GPL"),
@@ -51,37 +52,39 @@ module LicenseFinder
       end
 
       it "adapts names" do
-        license = subject.
-          license("dep", "Expat").
-          licenses_of("dep").first
+        license = subject
+          .license("dep", "Expat")
+          .licenses_of("dep")
+          .first
         expect(license).to eq License.find_by_name("MIT")
       end
     end
 
     describe ".unlicense" do
       it "will not report the given dependency as licensed" do
-        licenses = subject.
-          license("dep", "MIT").
-          unlicense("dep", "MIT").
-          licenses_of("dep")
+        licenses = subject
+          .license("dep", "MIT")
+          .unlicense("dep", "MIT")
+          .licenses_of("dep")
         expect(licenses).to be_empty
       end
 
       it "will only remove the specified license" do
-        licenses = subject.
-          license("dep", "MIT").
-          license("dep", "GPL").
-          unlicense("dep", "MIT").
-          licenses_of("dep")
+        licenses = subject
+          .license("dep", "MIT")
+          .license("dep", "GPL")
+          .unlicense("dep", "MIT")
+          .licenses_of("dep")
         expect(licenses).to eq [License.find_by_name("GPL")].to_set
       end
 
       it "is cumulative" do
-        license = subject.
-          license("dep", "MIT").
-          unlicense("dep", "MIT").
-          license("dep", "MIT").
-          licenses_of("dep").first
+        license = subject
+          .license("dep", "MIT")
+          .unlicense("dep", "MIT")
+          .license("dep", "MIT")
+          .licenses_of("dep")
+          .first
         expect(license).to eq License.find_by_name("MIT")
       end
     end
@@ -99,17 +102,17 @@ module LicenseFinder
 
     describe ".unapprove" do
       it "will not report the given dependency as approved" do
-        decisions = subject.
-          approve("dep").
-          unapprove("dep")
+        decisions = subject
+          .approve("dep")
+          .unapprove("dep")
         expect(subject).not_to be_approved("dep")
       end
 
       it "is cumulative" do
-        decisions = subject.
-          approve("dep").
-          unapprove("dep").
-          approve("dep")
+        decisions = subject
+          .approve("dep")
+          .unapprove("dep")
+          .approve("dep")
         expect(subject).to be_approved("dep")
       end
     end
@@ -133,24 +136,24 @@ module LicenseFinder
 
     describe ".unwhitelist" do
       it "will not report the given license as approved" do
-        decisions = subject.
-          whitelist("MIT").
-          unwhitelist("MIT")
+        decisions = subject
+          .whitelist("MIT")
+          .unwhitelist("MIT")
         expect(decisions).not_to be_whitelisted(License.find_by_name("MIT"))
       end
 
       it "is cumulative" do
-        decisions = subject.
-          whitelist("MIT").
-          unwhitelist("MIT").
-          whitelist("MIT")
+        decisions = subject
+          .whitelist("MIT")
+          .unwhitelist("MIT")
+          .whitelist("MIT")
         expect(decisions).to be_whitelisted(License.find_by_name("MIT"))
       end
 
       it "adapts names" do
-        decisions = subject.
-          whitelist("MIT").
-          unwhitelist("Expat")
+        decisions = subject
+          .whitelist("MIT")
+          .unwhitelist("Expat")
         expect(decisions).not_to be_whitelisted(License.find_by_name("MIT"))
       end
     end
@@ -164,42 +167,41 @@ module LicenseFinder
 
     describe ".heed" do
       it "will not report heeded dependencies" do
-        decisions = subject.
-          ignore("dep").
-          heed("dep")
+        decisions = subject
+          .ignore("dep")
+          .heed("dep")
         expect(decisions).not_to be_ignored("dep")
       end
 
       it "is cumulative" do
-        decisions = subject.
-          ignore("dep").
-          heed("dep").
-          ignore("dep")
+        decisions = subject
+          .ignore("dep")
+          .heed("dep")
+          .ignore("dep")
         expect(decisions).to be_ignored("dep")
       end
     end
 
     describe ".ignore_group" do
       it "will report ignored groups" do
-        decisions = subject.
-          ignore_group("development")
+        decisions = subject.ignore_group("development")
         expect(decisions).to be_ignored_group("development")
       end
     end
 
     describe ".heed_group" do
       it "will not report heeded groups" do
-        decisions = subject.
-          ignore_group("development").
-          heed_group("development")
+        decisions = subject
+          .ignore_group("development")
+          .heed_group("development")
         expect(decisions).not_to be_ignored_group("development")
       end
 
       it "is cumulative" do
-        decisions = subject.
-          ignore_group("development").
-          heed_group("development").
-          ignore_group("development")
+        decisions = subject
+          .ignore_group("development")
+          .heed_group("development")
+          .ignore_group("development")
         expect(decisions).to be_ignored_group("development")
       end
     end
@@ -213,9 +215,9 @@ module LicenseFinder
 
     describe ".unname_project" do
       it "reports project name" do
-        decisions = subject.
-          name_project("proj").
-          unname_project
+        decisions = subject
+          .name_project("proj")
+          .unname_project
         expect(decisions.project_name).to be_nil
       end
     end
@@ -227,8 +229,7 @@ module LicenseFinder
 
       it "can restore added packages" do
         decisions = roundtrip(
-          subject.
-          add_package("dep", "0.2.0")
+          subject.add_package("dep", "0.2.0")
         )
         packages = decisions.packages
         expect(packages.map(&:name)).to eq ["dep"]
@@ -236,9 +237,9 @@ module LicenseFinder
 
       it "can restore removed packages" do
         decisions = roundtrip(
-          subject.
-          add_package("dep", nil).
-          remove_package("dep")
+          subject
+            .add_package("dep", nil)
+            .remove_package("dep")
         )
         expect(decisions.packages.size).to eq 0
       end
@@ -252,10 +253,10 @@ module LicenseFinder
 
       it "can restore unlicenses" do
         licenses = roundtrip(
-          subject.
-          license("dep", "MIT").
-          license("dep", "GPL").
-          unlicense("dep", "MIT")
+          subject
+            .license("dep", "MIT")
+            .license("dep", "GPL")
+            .unlicense("dep", "MIT")
         ).licenses_of("dep")
         expect(licenses).to eq [License.find_by_name("GPL")].to_set
       end
@@ -272,9 +273,9 @@ module LicenseFinder
 
       it "can restore unapprovals" do
         decisions = roundtrip(
-          subject.
-          approve("dep").
-          unapprove("dep")
+          subject
+            .approve("dep")
+            .unapprove("dep")
         )
         expect(decisions).not_to be_approved("dep")
       end
@@ -288,9 +289,9 @@ module LicenseFinder
 
       it "can restore un-whitelists" do
         decisions = roundtrip(
-          subject.
-          whitelist("MIT").
-          unwhitelist("MIT")
+          subject
+            .whitelist("MIT")
+            .unwhitelist("MIT")
         )
         expect(decisions).not_to be_whitelisted(License.find_by_name("MIT"))
       end
@@ -302,43 +303,41 @@ module LicenseFinder
 
       it "can restore heeds" do
         decisions = roundtrip(
-          subject.
-          ignore("dep").
-          heed("dep")
+          subject
+            .ignore("dep")
+            .heed("dep")
         )
         expect(decisions).not_to be_ignored("dep")
       end
 
       it "can restore ignored groups" do
         decisions = roundtrip(
-          subject.
-          ignore_group("development")
+          subject.ignore_group("development")
         )
         expect(decisions).to be_ignored_group("development")
       end
 
       it "can restore heeded groups" do
         decisions = roundtrip(
-          subject.
-          ignore_group("development").
-          heed_group("development")
+          subject
+            .ignore_group("development")
+            .heed_group("development")
         )
         expect(decisions).not_to be_ignored_group("development")
       end
 
       it "can restore project names" do
         decisions = roundtrip(
-          subject.
-          name_project("an-app")
+          subject.name_project("an-app")
         )
         expect(decisions.project_name).to eq "an-app"
       end
 
       it "can restore project unnames" do
         decisions = roundtrip(
-          subject.
-          name_project("an-app").
-          unname_project
+          subject
+            .name_project("an-app")
+            .unname_project
         )
         expect(decisions.project_name).to be_nil
       end

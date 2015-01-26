@@ -7,10 +7,10 @@ module LicenseFinder
 
       return [license] if license && license != "UNKNOWN"
 
-      spec.
-        fetch("classifiers", []).
-        select { |c| c =~ LICENSE_FORMAT }.
-        map { |c| c.gsub(LICENSE_FORMAT, '\1') }
+      spec
+        .fetch("classifiers", [])
+        .select { |c| c =~ LICENSE_FORMAT }
+        .map { |c| c.gsub(LICENSE_FORMAT, '\1') }
     end
 
     def initialize(name, version, install_path, spec, options={})

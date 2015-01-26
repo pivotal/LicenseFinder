@@ -11,8 +11,8 @@ module LicenseFinder
       end
 
       def stub_pypi(name, version, response)
-        stub_request(:get, "https://pypi.python.org/pypi/#{name}/#{version}/json").
-          to_return(response)
+        stub_request(:get, "https://pypi.python.org/pypi/#{name}/#{version}/json")
+          .to_return(response)
       end
 
       it 'fetches data from pip' do

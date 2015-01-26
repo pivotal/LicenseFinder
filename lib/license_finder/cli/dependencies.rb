@@ -9,9 +9,9 @@ module LicenseFinder
       desc "add DEPENDENCY LICENSE [VERSION] [--approve]", "Add a dependency that is not managed by a package manager, optionally approving it at the same time"
       def add(name, license, version = nil)
         modifying {
-          decisions.
-            add_package(name, version, txn).
-            license(name, license, txn)
+          decisions
+            .add_package(name, version, txn)
+            .license(name, license, txn)
           decisions.approve(name, txn) if options[:approve]
         }
         if options[:approve]

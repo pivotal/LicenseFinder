@@ -44,8 +44,8 @@ module LicenseFinder
         license_files = license_names.map do |license_name|
           double(:file, license: License.find_by_name(license_name), path: "some/path")
         end
-        allow(LicenseFiles).to receive(:find).
-          with("some/package/path").and_return(license_files)
+        allow(LicenseFiles).to receive(:find).with("some/package/path")
+          .and_return(license_files)
       end
 
       it "are not required" do

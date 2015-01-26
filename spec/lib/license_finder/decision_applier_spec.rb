@@ -12,24 +12,24 @@ module LicenseFinder
       end
 
       it "applies decided licenses" do
-        decisions = Decisions.new.
-          add_package("manual", nil).
-          license("manual", "MIT")
+        decisions = Decisions.new
+          .add_package("manual", nil)
+          .license("manual", "MIT")
         decision_applier = described_class.new(decisions: decisions, packages: [])
         expect(decision_applier.acknowledged.last.licenses).to eq Set.new([License.find_by_name("MIT")])
       end
 
       it "ignores specific packages" do
-        decisions = Decisions.new.
-          add_package("manual", nil).
-          ignore("manual")
+        decisions = Decisions.new
+          .add_package("manual", nil)
+          .ignore("manual")
         decision_applier = described_class.new(decisions: decisions, packages: [])
         expect(decision_applier.acknowledged).to be_empty
       end
 
       it "ignores packages in certain groups" do
-        decisions = Decisions.new.
-          ignore_group("development")
+        decisions = Decisions.new
+          .ignore_group("development")
         dev_dep = Package.new("dep", nil, groups: ["development"])
         decision_applier = described_class.new(
           decisions: decisions,
@@ -39,9 +39,9 @@ module LicenseFinder
       end
 
       it "adds manual approvals to packages" do
-        decisions = Decisions.new.
-          add_package("manual", nil).
-          approve("manual", who: "Approver", why: "Because")
+        decisions = Decisions.new
+          .add_package("manual", nil)
+          .approve("manual", who: "Approver", why: "Because")
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
@@ -51,10 +51,10 @@ module LicenseFinder
       end
 
       it "adds whitelist approvals to packages" do
-        decisions = Decisions.new.
-          add_package("manual", nil).
-          license("manual", "MIT").
-          whitelist("MIT")
+        decisions = Decisions.new
+          .add_package("manual", nil)
+          .license("manual", "MIT")
+          .whitelist("MIT")
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
