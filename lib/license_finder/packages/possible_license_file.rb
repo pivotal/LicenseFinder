@@ -12,8 +12,6 @@ module LicenseFinder
       License.find_by_text(text)
     end
 
-    private
-
     def text
       @text ||= (@path.respond_to?(:binread) ? @path.binread : @path.read)
     end
