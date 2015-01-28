@@ -90,10 +90,13 @@ module LicenseFinder
     end
 
     def activations
-      licensing = Licensing.new(self, @decided_licenses, licenses_from_spec, license_files)
       licensing.activations.tap do |activations|
         activations.each { |activation| activation.log(logger) }
       end
+    end
+
+    def licensing
+      Licensing.new(self, @decided_licenses, licenses_from_spec, license_files)
     end
 
     def decide_on_license(license)
