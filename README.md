@@ -25,6 +25,7 @@ report.
 
 * Java (via `maven`)
 * Java (via `gradle`)
+* Erlang (via `rebar`)
 * Objective-C (+ CocoaPods)
 
 
@@ -95,6 +96,7 @@ languages, as long as that language has a package definition in the project dire
 * `build.gradle` (for `gradle`)
 * `bower.json` (for `bower`)
 * `Podfile` (for CocoaPods)
+* `rebar.config` (for `rebar`)
 
 
 ### Continuous Integration

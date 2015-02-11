@@ -29,4 +29,5 @@ before_install:
   - rm gradle*.zip
   - mv gradle* ~/gradle
   - npm install -g bower
+  - source $HOME/otp/R16B03/activate
   - cd -
