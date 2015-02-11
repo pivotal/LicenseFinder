@@ -6,6 +6,9 @@ rvm:
   - ruby-head
   - jruby-head
 
+otp_release:
+  - R16B03
+
 matrix:
   allow_failures:
     - rvm: ruby-head
