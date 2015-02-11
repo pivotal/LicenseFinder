@@ -12,7 +12,7 @@ matrix:
     - rvm: jruby-head
 
 env:
-  - PATH=$PATH:$HOME/gradle/bin
+  - PATH=$PATH:$HOME/gradle/bin:$HOME/rebar
 
 notifications:
   email:
@@ -25,8 +25,12 @@ notifications:
 before_install:
   - cd /tmp
   - wget http://services.gradle.org/distributions/gradle-1.11-all.zip
+  - wget https://raw.github.com/wiki/rebar/rebar/rebar
   - unzip -q gradle*
   - rm gradle*.zip
   - mv gradle* ~/gradle
+  - mkdir ~/rebar
+  - mv rebar ~/rebar/
+  - chmod u+x ~/rebar/rebar
   - npm install -g bower
   - cd -

@@ -25,6 +25,7 @@ report.
 
 * Java (via `maven`)
 * Java (via `gradle`)
+* Erlang (via `rebar`)
 * Objective-C (+ CocoaPods)
 
 
@@ -95,6 +96,7 @@ languages, as long as that language has a package definition in the project dire
 * `build.gradle` (for `gradle`)
 * `bower.json` (for `bower`)
 * `Podfile` (for CocoaPods)
+* `rebar.config` (for `rebar`)
 
 
 ### Continuous Integration
@@ -269,6 +271,8 @@ As an example, the file might look like this:
 ---
 decisions_file: './some_path/decisions.yml'
 gradle_command: './gradlew'
+rebar_command: './rebarw'
+rebar_deps_dir: './rebar_deps'
 ```
 
 If you set `decisions_file`, you won't have to pass it to every CLI command.
