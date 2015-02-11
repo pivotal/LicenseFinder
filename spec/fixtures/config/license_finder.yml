@@ -1,3 +1,5 @@
 ---
 decisions_file: './some_path/'
 gradle_command: 'gradlew'
+rebar_command: 'rebar_new'
+rebar_deps_dir: 'some_dir'

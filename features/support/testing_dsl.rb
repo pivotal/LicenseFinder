@@ -132,6 +132,16 @@ module LicenseFinder::TestingDSL
       shell_out("pod install --no-integrate")
     end
   end
+  
+  class RebarProject < Project
+    def add_dep
+      install_fixture("rebar.config")
+    end
+
+    def install
+      shell_out("rebar get-deps")
+    end
+  end
 
   class BundlerProject < Project
     def add_dep
