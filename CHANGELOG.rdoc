@@ -20,6 +20,7 @@
     infrastructure, and the remaining bits can be passed as arguments to the
     CLI.  Most users will not need these arguments.  If the file is present, the
     CLI arguments can be omitted.  The CLI no longer updates this file.
+  * Requires pip >= 6.0
 
 * Bugfixes
 

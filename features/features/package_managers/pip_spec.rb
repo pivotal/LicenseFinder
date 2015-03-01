@@ -9,6 +9,6 @@ describe "Pip Dependencies" do
   specify "are shown in reports" do
     LicenseFinder::TestingDSL::PipProject.create
     python_developer.run_license_finder
-    expect(python_developer).to be_seeing_line 'argparse, 1.2.1, "Python Software Foundation License"'
+    expect(python_developer).to be_seeing_line 'psutil, 2.2.1, BSD'
   end
 end

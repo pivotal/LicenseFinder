@@ -1,7 +1,7 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 import json
-from pip.util import get_installed_distributions
+from pip.utils import get_installed_distributions
 
 packages = []
 
