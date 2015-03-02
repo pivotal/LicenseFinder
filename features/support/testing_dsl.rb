@@ -58,7 +58,7 @@ module LicenseFinder::TestingDSL
 
     def initialize
       Paths.reset_projects!
-      project_dir.make
+      make_project
     end
 
     def add_dep
@@ -72,6 +72,10 @@ module LicenseFinder::TestingDSL
     def project_dir
       Paths.project
     end
+
+    def make_project
+      project_dir.make
+    end
   end
 
   class EmptyProject < Project
@@ -84,6 +88,10 @@ module LicenseFinder::TestingDSL
 
     def install
       shell_out("pip install -r requirements.txt")
+    end
+
+    def make_project
+      Shell.run("cd #{Paths.projects} && virtualenv my_app")
     end
   end
 
