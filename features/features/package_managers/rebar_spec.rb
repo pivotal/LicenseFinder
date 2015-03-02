@@ -1,7 +1,7 @@
 require 'feature_helper'
 
 describe "Rebar Dependencies" do
-  # As a Erlang developer
+  # As an Erlang developer
   # I want to be able to manage rebar dependencies
 
   let(:erlang_developer) { LicenseFinder::TestingDSL::User.new }
