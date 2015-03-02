@@ -133,6 +133,16 @@ module LicenseFinder::TestingDSL
     end
   end
 
+  class RebarProject < Project
+    def add_dep
+      install_fixture("rebar.config")
+    end
+
+    def install
+      shell_out("rebar get-deps")
+    end
+  end
+
   class BundlerProject < Project
     def add_dep
       add_to_bundler('license_finder', path: Paths.root.to_s)

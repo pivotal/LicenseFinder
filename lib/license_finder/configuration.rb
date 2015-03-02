@@ -15,6 +15,14 @@ module LicenseFinder
       get(:gradle_command) || "gradle"
     end
 
+    def rebar_command
+      get(:rebar_command) || "rebar"
+    end
+
+    def rebar_deps_dir
+      get(:rebar_deps_dir) || "deps"
+    end
+
     def decisions_file
       file_name = get(:decisions_file) || "doc/dependency_decisions.yml"
       Pathname(file_name)
