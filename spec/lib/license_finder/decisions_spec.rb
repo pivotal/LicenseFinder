@@ -177,24 +177,24 @@ module LicenseFinder
 
     describe ".unblacklist" do
       it "will not report the given license as blacklisted" do
-        decisions = subject.
-          blacklist("MIT").
-          unblacklist("MIT")
+        decisions = subject
+          .blacklist("MIT")
+          .unblacklist("MIT")
         expect(decisions).not_to be_blacklisted(License.find_by_name("MIT"))
       end
 
       it "is cumulative" do
-        decisions = subject.
-          blacklist("MIT").
-          unblacklist("MIT").
-          blacklist("MIT")
+        decisions = subject
+          .blacklist("MIT")
+          .unblacklist("MIT")
+          .blacklist("MIT")
         expect(decisions).to be_blacklisted(License.find_by_name("MIT"))
       end
 
       it "adapts names" do
-        decisions = subject.
-          blacklist("MIT").
-          unblacklist("Expat")
+        decisions = subject
+          .blacklist("MIT")
+          .unblacklist("Expat")
         expect(decisions).not_to be_blacklisted(License.find_by_name("MIT"))
       end
     end
@@ -346,9 +346,9 @@ module LicenseFinder
 
       it "can restore un-blacklists" do
         decisions = roundtrip(
-          subject.
-          blacklist("MIT").
-          unblacklist("MIT")
+          subject
+            .blacklist("MIT")
+            .unblacklist("MIT")
         )
         expect(decisions).not_to be_blacklisted(License.find_by_name("MIT"))
       end
