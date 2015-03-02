@@ -79,13 +79,11 @@ module LicenseFinder::TestingDSL
 
   class PipProject < Project
     def add_dep
-      # Flag this as a Pip project.
-      add_to_file("requirements.txt", '')
+      add_to_file("requirements.txt", 'rsa==3.1.4')
     end
 
     def install
-      # But don't install anything - we don't have permissions on Travis.
-      # shell_out("pip install -r requirements.txt")
+      shell_out("pip install -r requirements.txt")
     end
   end
 

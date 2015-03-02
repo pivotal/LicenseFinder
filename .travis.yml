@@ -26,3 +26,7 @@ before_install:
   - .travis/install_gradle.sh
   - .travis/install_rebar.sh
   - .travis/install_bower.sh
+  - .travis/install_virtualenv.sh
+
+before_script:
+  - source ~/Virtualenvs/lf/bin/activate
