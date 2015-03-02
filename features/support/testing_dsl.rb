@@ -90,6 +90,8 @@ module LicenseFinder::TestingDSL
       shell_out("pip install -r requirements.txt")
     end
 
+    private
+
     def make_project
       Shell.run("cd #{Paths.projects} && virtualenv my_app")
     end
