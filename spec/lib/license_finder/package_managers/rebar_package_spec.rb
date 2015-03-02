@@ -6,10 +6,8 @@ module LicenseFinder
       described_class.new(
         "uuid",
         "TAG: v1.3.2",
-        "deps/uuid",
-        {
-          "homepage" => "git://github.com/okeuday/uuid.git"
-        }
+        install_path: "deps/uuid",
+        homepage: "git://github.com/okeuday/uuid.git"
       )
     end
 
@@ -18,7 +16,7 @@ module LicenseFinder
     its(:summary) { should eq "" }
     its(:description) { should == "" }
     its(:homepage) { should == "git://github.com/okeuday/uuid.git" }
-    its(:groups) { should == [] } # TODO: put devDependencies in 'dev' group?
+    its(:groups) { should == [] }
     its(:children) { should == [] }
     its(:install_path) { should eq "deps/uuid" }
   end

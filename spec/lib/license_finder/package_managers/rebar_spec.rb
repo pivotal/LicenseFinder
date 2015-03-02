@@ -6,8 +6,9 @@ module LicenseFinder
     it_behaves_like "a PackageManager"
 
     output = <<-CMDOUTPUT
-      uuid TAG v1.3.2 git://github.com/okeuday/uuid.git
-      jiffy TAG 0.9.0 https://github.com/davisp/jiffy.git
+== Sample comment
+uuid TAG v1.3.2 git://github.com/okeuday/uuid.git
+jiffy TAG 0.9.0 https://github.com/davisp/jiffy.git
     CMDOUTPUT
 
     describe '.current_packages' do
@@ -19,6 +20,7 @@ module LicenseFinder
         expect(current_packages.map(&:name)).to eq(["uuid", "jiffy"])
         expect(current_packages.map(&:install_path)).to eq([Pathname("deps/uuid"), Pathname("deps/jiffy")])
       end
+
       it "fails when command fails" do
         allow(rebar).to receive(:capture).with(/rebar/).and_return('Some error', false).once
         expect { rebar.current_packages }.to raise_error(RuntimeError)

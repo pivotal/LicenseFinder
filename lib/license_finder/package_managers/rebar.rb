@@ -7,40 +7,28 @@ module LicenseFinder
     end
 
     def current_packages
-      rebarDeps = rebar_deps
-      rebarDeps.values.map do |dep|
+      rebar_ouput.map do |name, version_type, version_value, homepage|
         RebarPackage.new(
-          dep["name"],
-          dep["version"],
-          @deps_path.join(dep["name"]),
-          dep
+          name,
+          "#{version_type}: #{version_value}",
+          install_path: @deps_path.join(name),
+          homepage: homepage,
+          logger: logger
         )
       end
     end
 
     private
 
-    def rebar_deps
-
+    def rebar_ouput
       command = "#{@command} list-deps"
       output, success = capture(command)
-      dependencies = {}
-      if success
-        lines = output.split("\n")
-        lines.each do |i|
-          if !i.start_with?("=")
-            dependency = i.split(" ")
-            dependencies[dependency[0]] = {
-              "name" => dependency[0],
-              "version" => "#{dependency[1]}: #{dependency[2]}",
-              "homepage" => dependency[3]
-            }
-          end
-        end
-      else
-        raise "Command #{command} failed to execute: #{output}"
-      end
-      dependencies
+      raise "Command #{command} failed to execute: #{output}" unless success
+
+      output
+        .each_line
+        .reject { |line| line.start_with?("=") }
+        .map { |line| line.split(" ") }
     end
 
     def capture(command)
