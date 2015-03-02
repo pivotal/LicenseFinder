@@ -79,7 +79,7 @@ module LicenseFinder::TestingDSL
 
   class PipProject < Project
     def add_dep
-      add_to_file("requirements.txt", 'psutil==2.2.1')
+      add_to_file("requirements.txt", 'rsa==3.1.4')
     end
 
     def install
