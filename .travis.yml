@@ -25,7 +25,6 @@ notifications:
 before_install:
   - python --version
   - pip --version
-  - ls ~/virtualenv/
   - cd /tmp
   - wget http://services.gradle.org/distributions/gradle-1.11-all.zip
   - unzip -q gradle*
