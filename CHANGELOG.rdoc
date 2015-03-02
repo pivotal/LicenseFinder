@@ -1,3 +1,9 @@
+=== 2.0.1 / unreleased
+
+* Features
+
+  * Support for rebar projects
+
 === 2.0.0 / unreleased
 
 * Features
