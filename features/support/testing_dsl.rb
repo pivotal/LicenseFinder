@@ -58,7 +58,7 @@ module LicenseFinder::TestingDSL
 
     def initialize
       Paths.reset_projects!
-      make_project
+      project_dir.make
     end
 
     def add_dep
@@ -71,10 +71,6 @@ module LicenseFinder::TestingDSL
 
     def project_dir
       Paths.project
-    end
-
-    def make_project
-      project_dir.make
     end
   end
 
@@ -92,8 +88,16 @@ module LicenseFinder::TestingDSL
 
     private
 
-    def make_project
-      Shell.run("cd #{Paths.projects} && virtualenv my_app")
+    def shell_out(command, allow_failures = false)
+      Shell.run("cd #{project_dir} && if [ -f #{travis_virtualenv} ]; then source #{travis_virtualenv}; fi && #{command}", allow_failures)
+    end
+
+    def travis_virtualenv
+      "~/virtualenv/#{python_version}/bin/activate"
+    end
+
+    def python_version
+      "2.7"
     end
   end
 
