@@ -9,6 +9,6 @@ describe "Pip Dependencies" do
   specify "are shown in reports" do
     LicenseFinder::TestingDSL::PipProject.create
     python_developer.run_license_finder
-    expect(python_developer).to be_seeing_line 'requests, 2.5.1, "Apache 2.0"'
+    expect(python_developer).to be_seeing_line 'setuptools, 12.0.5, "PSF or ZPL"'
   end
 end
