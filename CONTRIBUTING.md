@@ -9,6 +9,26 @@
 * Send a pull request.
 
 
+## Adding Package Managers
+
+There are a few steps to adding a new package manager.
+[Here](https://github.com/pivotal/LicenseFinder/compare/v2.0.0...v2.0.1) is how
+support was added for `rebar`, an `erlang` package manager.
+
+
+## Adding Licenses
+
+Add new licenses to `lib/license_finder/license/definitions.rb`.  There are
+existing tools for matching licenses; see, for example, the MIT license, which
+can be detected in many different ways.
+
+
+## Adding Reports
+
+If you need `license_finder` to output additional data, consider adding new
+columns to `lib/license_finder/reports/csv_report.rb`.
+
+
 ## Development Dependencies
 
 To successfully run the test suite, you will need npm, maven, pip, gradle and
@@ -23,6 +43,7 @@ this [post on virtualenv][].
 
   [post on virtualenv]: http://hackercodex.com/guide/python-development-environment-on-mac-osx/#virtualenv
 
+You'll need a pip version >= 6.0.
 
 ### JRuby
 
