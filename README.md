@@ -158,11 +158,8 @@ any other decision about your project.
 
 ### Decisions file
 
-Any decisions you make about approvals will be recorded in a YAML file.  Be
-default, `license_finder` expects it to be named
-`doc/dependency_decisions.yml`.  All commands can be passed `--decisions_file`
-to override this location.  See [Configuration](#configuration) for other
-options.
+Any decisions you make about approvals will be recorded in a YAML file named
+`doc/dependency_decisions.yml`.
 
 This file must be committed to version control.  Rarely, you will have to
 manually resolve conflicts in it.  In this situation, keep in mind that each
@@ -261,6 +258,23 @@ machine.  Adding it to the `ignored_dependencies` would prevent it
 
 ## Configuration
 
+Be default, `license_finder` expects the decisions file to be stored at
+`doc/dependency_decisions.yml`.  All commands can be passed `--decisions_file`
+to override this location.
+
+### Of Package Managers
+
+If you have a gradle project, you can invoke gradle with a custom script by
+passing (for example) `--gradle_command gradlew` to `license_finder` or
+`license_finder report`.
+
+
+Similarly you can invoke a custom rebar script with `--rebar_command rebar2`.
+If you store rebar dependencies in a custom directory (by setting `deps_dir` in
+`rebar.config`), set `--rebar_deps_dir`.
+
+### Saving Configuration
+
 It may be difficult to remember to pass command line options to every command.
 In some of these cases you can store default values in a YAML formatted config
 file. `license_finder` looks for this file in `config/license_finder.yml`.
@@ -275,19 +289,10 @@ rebar_command: './rebarw'
 rebar_deps_dir: './rebar_deps'
 ```
 
-If you set `decisions_file`, you won't have to pass it to every CLI command.
-
-Read on to learn about how `gradle_command` is used on gradle projects.
-
 ### Gradle Projects
 
 You need to install the license gradle plugin:
 [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
-
-LicenseFinder assumes that gradle is in your shell's command path and can be
-invoked by just calling `gradle`.  If you must invoke gradle some other way
-(e.g., with a custom `gradlew` script), pass `--gradle_command` to
-`license_finder` or `license_finder report`.
 
 By default, `license_finder` will report on gradle's "runtime" dependencies. If
 you want to generate a report for some other dependency configuration (e.g.
