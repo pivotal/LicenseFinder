@@ -85,20 +85,6 @@ module LicenseFinder::TestingDSL
     def install
       shell_out("pip install -r requirements.txt")
     end
-
-    private
-
-    def shell_out(command, allow_failures = false)
-      Shell.run("cd #{project_dir} && if [ -f #{travis_virtualenv} ]; then source #{travis_virtualenv}; fi && #{command}", allow_failures)
-    end
-
-    def travis_virtualenv
-      "~/virtualenv/#{python_version}/bin/activate"
-    end
-
-    def python_version
-      "2.7"
-    end
   end
 
   class NpmProject < Project
