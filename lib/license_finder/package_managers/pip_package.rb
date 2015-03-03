@@ -1,11 +1,12 @@
 module LicenseFinder
   class PipPackage < Package
     LICENSE_FORMAT = /^License.*::\s*(.*)$/
+    INVALID_LICENSES = ["", "UNKNOWN"].to_set
 
     def self.license_names_from_spec(spec)
       license = spec["license"]
 
-      return [license] if license && license != "UNKNOWN"
+      return [license] if license && !INVALID_LICENSES.include?(license.strip)
 
       spec
         .fetch("classifiers", [])

@@ -60,6 +60,16 @@ module LicenseFinder
           end
         end
 
+        context "with blank license" do
+          it "returns the license from the classifier if it exists" do
+            data = { "license" => "", "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License' ] }
+
+            subject = make_package(data)
+
+            expect(subject.license_names_from_spec).to eq ['Apache 2.0 License']
+          end
+        end
+
         context "with UNKNOWN license" do
           it "returns the license from the classifier if it exists" do
             data = { "license" => "UNKNOWN", "classifiers" => [ 'License :: OSI Approved :: Apache 2.0 License' ] }
