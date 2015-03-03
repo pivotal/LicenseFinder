@@ -4,9 +4,9 @@ module LicenseFinder
     INVALID_LICENSES = ["", "UNKNOWN"].to_set
 
     def self.license_names_from_spec(spec)
-      license = spec["license"]
+      license = spec["license"].to_s.strip
 
-      return [license] if license && !INVALID_LICENSES.include?(license.strip)
+      return [license] unless INVALID_LICENSES.include?(license)
 
       spec
         .fetch("classifiers", [])
