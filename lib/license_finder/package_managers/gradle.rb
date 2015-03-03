@@ -15,7 +15,9 @@ module LicenseFinder
       options = {
         'GroupTags' => { 'dependencies' => 'dependency' }
       }
-      XmlSimple.xml_in(xml, options).fetch('dependency', []).map do |dep|
+      dependencies = XmlSimple.xml_in(xml, options).fetch('dependency', [])
+
+      dependencies.map do |dep|
         GradlePackage.new(dep, logger: logger)
       end
     end

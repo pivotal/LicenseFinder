@@ -6,7 +6,10 @@ module LicenseFinder
 
     def current_packages
       json = npm_json
-      dependencies = DEPENDENCY_GROUPS.map { |g| (json[g] || {}).values }.flatten(1).reject{ |d| d.is_a?(String) }
+      dependencies = DEPENDENCY_GROUPS
+        .map { |g| (json[g] || {}).values }
+        .flatten(1)
+        .reject{ |d| d.is_a?(String) }
 
       pkgs = {} # name => spec
       dependencies.each { |d| recursive_dependencies(d, pkgs) }

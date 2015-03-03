@@ -5,18 +5,15 @@ module LicenseFinder
     def current_packages
       podfile = YAML.load_file(lockfile_path)
 
-      acknowledgements = read_plist(acknowledgements_path)["PreferenceSpecifiers"]
-
       podfile["PODS"].map do |pod|
         pod = pod.keys.first if pod.is_a?(Hash)
 
         name, version = pod.scan(/(.*)\s\((.*)\)/).flatten
-        acknowledgment = acknowledgements.detect { |hash| hash["Title"] == name } || {}
 
         CocoaPodsPackage.new(
           name,
           version,
-          acknowledgment["FooterText"],
+          license_texts[name],
           logger: logger
         )
       end
@@ -32,6 +29,12 @@ module LicenseFinder
       project_path.join("Podfile.lock")
     end
 
+    def license_texts
+      # package name => license text
+      @license_texts ||= read_plist(acknowledgements_path)["PreferenceSpecifiers"]
+        .each_with_object({}) { |hash, memo| memo[hash["Title"]] = hash["FooterText"] }
+    end
+
     def acknowledgements_path
       filename = 'Pods-acknowledgements.plist'
       directories = [
@@ -39,7 +42,9 @@ module LicenseFinder
         'Pods/Target Support Files/Pods' # cocoapods >= 0.34
       ]
 
-      directories.map { |dir| project_path.join(dir, filename) }.find(&:exist?)
+      directories
+        .map { |dir| project_path.join(dir, filename) }
+        .find(&:exist?)
     end
 
     def read_plist pathname
