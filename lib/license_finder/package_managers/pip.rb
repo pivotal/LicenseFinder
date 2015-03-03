@@ -9,10 +9,10 @@ module LicenseFinder
         PipPackage.new(
           package["name"],
           package["version"],
-          File.join(package["location"], package["name"]),
           pypi_def(package["name"], package["version"]),
           logger: logger,
-          children: package["dependencies"]
+          children: package["dependencies"],
+          install_path: Pathname(package["location"]).join(package["name"]),
         )
       end
     end

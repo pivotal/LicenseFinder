@@ -11,7 +11,7 @@ module LicenseFinder
     end
 
     def make_package(pypi_def)
-      described_class.new('jasmine', '1.3.1', "jasmine/install/path", pypi_def)
+      described_class.new('jasmine', '1.3.1', pypi_def, install_path: "jasmine/install/path", children: ["achild"])
     end
 
     its(:name) { should == "jasmine" }
@@ -20,7 +20,7 @@ module LicenseFinder
     its(:description) { should == "description" }
     its(:homepage) { should == "homepage" }
     its(:groups) { should == [] } # TODO: any way to extract install_requires and tests_require from `pip list` or `pip show`?
-    its(:children) { should == [] } # TODO: use pipdeptree or something like it
+    its(:children) { should == ["achild"] }
     its(:install_path) { should eq "jasmine/install/path" }
 
 

@@ -17,29 +17,15 @@ module LicenseFinder
 
       it 'fetches data from pip' do
         stub_pip [
-          {"name" => "jasmine", "version" => "1.3.1", "location" => "jasmine/path"},
-          {"name" => "jasmine-core", "version" => "1.3.1", "location" => "jasmine-core/path"}
-        ].to_json
-        stub_pypi("jasmine", "1.3.1", status: 200, body: '{}')
-        stub_pypi("jasmine-core", "1.3.1", status: 200, body: '{}')
-
-        expect(pip.current_packages.map { |p| [p.name, p.version, p.install_path] }).to eq [
-          ["jasmine", "1.3.1", "jasmine/path/jasmine"],
-          ["jasmine-core", "1.3.1", "jasmine-core/path/jasmine-core"]
-        ]
-      end
-
-      it "assigns children reported by pip" do
-        stub_pip [
           {"name" => "jasmine", "version" => "1.3.1", "location" => "jasmine/path", "dependencies" => ["jasmine-core"]},
           {"name" => "jasmine-core", "version" => "1.3.1", "location" => "jasmine-core/path"}
         ].to_json
         stub_pypi("jasmine", "1.3.1", status: 200, body: '{}')
         stub_pypi("jasmine-core", "1.3.1", status: 200, body: '{}')
 
-        expect(pip.current_packages.map(&:children)).to eq [
-          ["jasmine-core"],
-          []
+        expect(pip.current_packages.map { |p| [p.name, p.version, p.install_path.to_s, p.children] }).to eq [
+          ["jasmine", "1.3.1", "jasmine/path/jasmine", ["jasmine-core"]],
+          ["jasmine-core", "1.3.1", "jasmine-core/path/jasmine-core", []]
         ]
       end
 
