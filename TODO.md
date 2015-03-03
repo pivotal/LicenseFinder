@@ -1,7 +1,4 @@
 # immediate
-- Packages should log which licenses came from decisions. Maybe have
-  Activations, which store a license and a source, which can be logged or
-  otherwise manipulated.
 
 # architecture
 
