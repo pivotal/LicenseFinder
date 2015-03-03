@@ -10,9 +10,15 @@ module LicenseFinder
       podfile["PODS"].map do |pod|
         pod = pod.keys.first if pod.is_a?(Hash)
 
-        pod_name, pod_version = pod.scan(/(.*)\s\((.*)\)/).flatten
-        pod_acknowledgment = acknowledgements.detect { |hash| hash["Title"] == pod_name } || {}
-        CocoaPodsPackage.new(pod_name, pod_version, pod_acknowledgment["FooterText"])
+        name, version = pod.scan(/(.*)\s\((.*)\)/).flatten
+        acknowledgment = acknowledgements.detect { |hash| hash["Title"] == name } || {}
+
+        CocoaPodsPackage.new(
+          name,
+          version,
+          acknowledgment["FooterText"],
+          logger: logger
+        )
       end
     end
 
