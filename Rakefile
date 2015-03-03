@@ -28,8 +28,8 @@ desc "Check for non-Ruby development dependencies."
 task :check_dependencies do
   dependencies = {
     "mvn" => "Maven",
-    "npm" => "node.js",
-    "pip" => "Python",
+    "npm" => "NPM",
+    "pip" => "Pip",
     "gradle" => "Gradle",
     "bower" => "Bower",
     "rebar" => "Rebar"

@@ -23,16 +23,10 @@ notifications:
     on_start: true
 
 before_install:
-  - python --version
-  - pip --version
-  - cd /tmp
-  - wget http://services.gradle.org/distributions/gradle-1.11-all.zip
-  - wget https://raw.github.com/wiki/rebar/rebar/rebar
-  - unzip -q gradle*
-  - rm gradle*.zip
-  - mv gradle* ~/gradle
-  - mkdir ~/rebar
-  - mv rebar ~/rebar/
-  - chmod u+x ~/rebar/rebar
-  - npm install -g bower
-  - cd -
+  - .travis/install_gradle.sh
+  - .travis/install_rebar.sh
+  - .travis/install_bower.sh
+  - .travis/install_virtualenv.sh
+
+before_script:
+  - source ~/Virtualenvs/lf/bin/activate
