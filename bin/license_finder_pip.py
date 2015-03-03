@@ -1,18 +1,22 @@
 #!/usr/bin/env python
 
 import json
-from pip.utils import get_installed_distributions
+from pip.req import parse_requirements
+from pip.download import PipSession
+from pip._vendor import pkg_resources
 
-packages = []
+requirements = [req.req for req
+                in parse_requirements('requirements.txt', session=PipSession())]
 
-for dist in get_installed_distributions():
-    packages.append(
-        {
-            "name": dist.project_name,
-            "version": dist.version,
-            "location": dist.location,
-            "dependencies": map(lambda dependency: dependency.project_name, dist.requires())
+transform = lambda dist: {
+        'name': dist.project_name,
+        'version': dist.version,
+        'location': dist.location,
+        'dependencies': map(lambda dependency: dependency.project_name,
+                            dist.requires()),
         }
-    )
+
+packages = [transform(dist) for dist
+            in pkg_resources.working_set.resolve(requirements)]
 
 print json.dumps(packages)
