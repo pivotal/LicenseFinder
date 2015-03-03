@@ -29,6 +29,20 @@ module LicenseFinder
         ]
       end
 
+      it "assigns children reported by pip" do
+        stub_pip [
+          {"name" => "jasmine", "version" => "1.3.1", "location" => "jasmine/path", "dependencies" => ["jasmine-core"]},
+          {"name" => "jasmine-core", "version" => "1.3.1", "location" => "jasmine-core/path"}
+        ].to_json
+        stub_pypi("jasmine", "1.3.1", status: 200, body: '{}')
+        stub_pypi("jasmine-core", "1.3.1", status: 200, body: '{}')
+
+        expect(pip.current_packages.map(&:children)).to eq [
+          ["jasmine-core"],
+          []
+        ]
+      end
+
       it "fetches data from pypi" do
         stub_pip [{"name" => "jasmine", "version" => "1.3.1", "location" => "jasmine/path"}].to_json
         stub_pypi("jasmine", "1.3.1", status: 200, body: JSON.generate(info: {summary: "A summary"}))

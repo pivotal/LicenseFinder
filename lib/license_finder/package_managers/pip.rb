@@ -11,7 +11,8 @@ module LicenseFinder
           package["version"],
           File.join(package["location"], package["name"]),
           pypi_def(package["name"], package["version"]),
-          logger: logger
+          logger: logger,
+          children: package["dependencies"]
         )
       end
     end
