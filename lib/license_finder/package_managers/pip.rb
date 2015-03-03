@@ -6,13 +6,14 @@ module LicenseFinder
     def current_packages
       output = `#{LicenseFinder::BIN_PATH.join("license_finder_pip.py")}`
       JSON(output).map do |package|
+        name, version, children, location = package.values_at(*%w[name version dependencies location])
         PipPackage.new(
-          package["name"],
-          package["version"],
-          pypi_def(package["name"], package["version"]),
+          name,
+          version,
+          pypi_def(name, version),
           logger: logger,
-          children: package["dependencies"],
-          install_path: Pathname(package["location"]).join(package["name"]),
+          children: children,
+          install_path: Pathname(location).join(name),
         )
       end
     end
