@@ -4,9 +4,7 @@ require 'httparty'
 module LicenseFinder
   class Pip < PackageManager
     def current_packages
-      output = `#{LicenseFinder::BIN_PATH.join("license_finder_pip.py")}`
-      JSON(output).map do |package|
-        name, version, children, location = package.values_at(*%w[name version dependencies location])
+      pip_output.map do |name, version, children, location|
         PipPackage.new(
           name,
           version,
@@ -22,6 +20,13 @@ module LicenseFinder
 
     def package_path
       project_path.join('requirements.txt')
+    end
+
+    def pip_output
+      output = `#{LicenseFinder::BIN_PATH.join("license_finder_pip.py")}`
+      JSON(output).map do |package|
+        package.values_at(*%w[name version dependencies location])
+      end
     end
 
     def pypi_def(name, version)
