@@ -1,6 +1,11 @@
 === 2.0.2 / unreleased
 
+* Bugfixes
+
   * Show requires/required-by relationships for pip projects
+  * For pip projects, limit output to the distributions mentioned in
+    requirements.txt, or their dependencies, instead of all installed
+    distributions, which may include distributions from other projects. #119
 
 === 2.0.1 / 2015-03-02
 
