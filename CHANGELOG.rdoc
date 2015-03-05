@@ -1,6 +1,12 @@
 === 2.0.2 / unreleased
 
+* Features
+
   * Show requires/required-by relationships for pip projects
+
+* Bugfixes
+
+  * license_finder works with Python 3; #140
 
 === 2.0.1 / 2015-03-02
 
