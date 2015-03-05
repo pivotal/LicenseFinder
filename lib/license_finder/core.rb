@@ -19,8 +19,10 @@ module LicenseFinder
     # {
     #   logger: { quiet: true, debug: false },
     #   project_path: "./some/project/path/"
-    #   gradle_command: "gradlew",
     #   decisions_file: "./some/path.yml",
+    #   gradle_command: "gradlew",
+    #   rebar_command: "rebar2",
+    #   rebar_deps_dir: "./some/rebar/path",
     # }
     # +gradle_command+ and +decisions_file+ are optional, see Configuration
     def initialize(options)
