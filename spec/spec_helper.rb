@@ -1,12 +1,11 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'license_finder'
 
 require 'pry'
-require 'license_finder'
 require 'rspec'
 require 'webmock/rspec'
 require 'rspec/its'
-require 'fileutils'
 
 ENV['test_run'] = true.to_s
 
@@ -21,7 +20,7 @@ end
 RSpec.configure do |config|
   config.after(:suite) do
     ["./doc", "./elsewhere", "./test path", "./config"].each do |tmp_dir|
-      FileUtils.rm_rf(tmp_dir)
+      Pathname(tmp_dir).rmtree
     end
   end
 
