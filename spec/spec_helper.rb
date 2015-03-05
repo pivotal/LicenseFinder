@@ -19,7 +19,7 @@ end
 
 RSpec.configure do |config|
   config.after(:suite) do
-    ["./doc", "./elsewhere", "./test path", "./config"].each do |tmp_dir|
+    ["./doc"].each do |tmp_dir|
       Pathname(tmp_dir).rmtree
     end
   end
