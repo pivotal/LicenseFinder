@@ -158,6 +158,47 @@ module LicenseFinder
       end
     end
 
+    describe ".blacklist" do
+      it "will report the given license as blacklisted" do
+        decisions = subject.blacklist("MIT")
+        expect(decisions).to be_blacklisted(License.find_by_name("MIT"))
+      end
+
+      it "adapts names" do
+        decisions = subject.blacklist("Expat")
+        expect(decisions).to be_blacklisted(License.find_by_name("MIT"))
+      end
+
+      it "adds to list" do
+        decisions = subject.blacklist("MIT")
+        expect(decisions.blacklisted).to eq(Set.new([License.find_by_name("MIT")]))
+      end
+    end
+
+    describe ".unblacklist" do
+      it "will not report the given license as blacklisted" do
+        decisions = subject
+          .blacklist("MIT")
+          .unblacklist("MIT")
+        expect(decisions).not_to be_blacklisted(License.find_by_name("MIT"))
+      end
+
+      it "is cumulative" do
+        decisions = subject
+          .blacklist("MIT")
+          .unblacklist("MIT")
+          .blacklist("MIT")
+        expect(decisions).to be_blacklisted(License.find_by_name("MIT"))
+      end
+
+      it "adapts names" do
+        decisions = subject
+          .blacklist("MIT")
+          .unblacklist("Expat")
+        expect(decisions).not_to be_blacklisted(License.find_by_name("MIT"))
+      end
+    end
+
     describe ".ignore" do
       it "will report ignored dependencies" do
         decisions = subject.ignore("dep")
@@ -294,6 +335,22 @@ module LicenseFinder
             .unwhitelist("MIT")
         )
         expect(decisions).not_to be_whitelisted(License.find_by_name("MIT"))
+      end
+
+      it "can restore blacklists" do
+        decisions = roundtrip(
+          subject.blacklist("MIT")
+        )
+        expect(decisions).to be_blacklisted(License.find_by_name("MIT"))
+      end
+
+      it "can restore un-blacklists" do
+        decisions = roundtrip(
+          subject
+            .blacklist("MIT")
+            .unblacklist("MIT")
+        )
+        expect(decisions).not_to be_blacklisted(License.find_by_name("MIT"))
       end
 
       it "can restore ignorals" do

@@ -3,6 +3,8 @@
 * Features
 
   * Show requires/required-by relationships for pip projects
+  * Licenses can be blacklisted.  Dependencies which only have licenses in the
+    blacklist will not be approved, even if someone tries.
 
 * Bugfixes
 

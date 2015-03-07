@@ -4,7 +4,7 @@ module LicenseFinder
     # READ
     ######
 
-    attr_reader :packages, :whitelisted, :ignored, :ignored_groups, :project_name
+    attr_reader :packages, :whitelisted, :blacklisted, :ignored, :ignored_groups, :project_name
 
     def licenses_of(name)
       @licenses[name]
@@ -20,6 +20,10 @@ module LicenseFinder
 
     def whitelisted?(lic)
       @whitelisted.include?(lic)
+    end
+
+    def blacklisted?(lic)
+      @blacklisted.include?(lic)
     end
 
     def ignored?(name)
@@ -46,6 +50,7 @@ module LicenseFinder
       @licenses = Hash.new { |h, k| h[k] = Set.new }
       @approvals = {}
       @whitelisted = Set.new
+      @blacklisted = Set.new
       @ignored = Set.new
       @ignored_groups = Set.new
     end
@@ -95,6 +100,18 @@ module LicenseFinder
     def unwhitelist(lic, txn = {})
       @decisions << [:unwhitelist, lic, txn]
       @whitelisted.delete(License.find_by_name(lic))
+      self
+    end
+
+    def blacklist(lic, txn = {})
+      @decisions << [:blacklist, lic, txn]
+      @blacklisted << License.find_by_name(lic)
+      self
+    end
+
+    def unblacklist(lic, txn = {})
+      @decisions << [:unblacklist, lic, txn]
+      @blacklisted.delete(License.find_by_name(lic))
       self
     end
 

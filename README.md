@@ -255,6 +255,15 @@ since it is a common dependency whose version changes from machine to
 machine.  Adding it to the `ignored_dependencies` would prevent it
 (and its oscillating versions) from appearing in reports.
 
+### Blacklisting Licenses
+
+Some projects will have a list of licenses that cannot be used.  You can add
+these licenses to the blacklist `license_finder blacklist add`.  Any dependency
+that has exclusively blacklisted licenses will always appear in the action
+items, even if someone attempts to manually approve or whitelist it.  However,
+if a dependency has even one license outside of the blacklist, it can still be
+manually approved or whitelisted.
+
 
 ## Configuration
 
