@@ -3,6 +3,7 @@
 * Features
 
   * Show requires/required-by relationships for pip projects
+  * Expose homepage in CSV reports
 
 * Bugfixes
 
