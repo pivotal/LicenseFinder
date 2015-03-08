@@ -9,12 +9,12 @@ module LicenseFinder
     end
 
     it "understands many columns" do
-      dep = Package.new('gem_a', '1.0', description: "A description", summary: "A summary")
+      dep = Package.new('gem_a', '1.0', description: "A description", summary: "A summary", homepage: "http://homepage.example.com")
       dep.decide_on_license(License.find_by_name("MIT"))
       dep.decide_on_license(License.find_by_name("GPL"))
       dep.whitelisted!
-      subject = described_class.new([dep], columns: %w[name version licenses approved summary description])
-      expect(subject.to_s).to eq("gem_a,1.0,\"MIT,GPL\",Approved,A summary,A description\n")
+      subject = described_class.new([dep], columns: %w[name version licenses approved summary description homepage])
+      expect(subject.to_s).to eq("gem_a,1.0,\"MIT,GPL\",Approved,A summary,A description,http://homepage.example.com\n")
     end
 
     it "ignores unknown columns" do
