@@ -8,6 +8,7 @@ module LicenseFinder
           apache2,
           bsd,
           gplv2,
+          gplv3,
           isc,
           lgpl,
           mit,
@@ -60,6 +61,14 @@ module LicenseFinder
           short_name:  "GPLv2",
           other_names: ["GPL V2", "gpl-v2", "GNU GENERAL PUBLIC LICENSE Version 2"],
           url:         "http://www.gnu.org/licenses/gpl-2.0.txt"
+        )
+      end
+
+      def gplv3
+        License.new(
+          short_name:  "GPLv3",
+          other_names: ["GPL V3", "gpl-v3", "GNU GENERAL PUBLIC LICENSE Version 3"],
+          url:         "http://www.gnu.org/licenses/gpl-3.0.txt"
         )
       end
 

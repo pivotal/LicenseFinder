@@ -28,6 +28,12 @@ describe LicenseFinder::License, "GPLv2" do
   end
 end
 
+describe LicenseFinder::License, "GPLv3" do
+  it "should be recognized" do
+    expect(described_class.find_by_name("GPLv3").url).to be
+  end
+end
+
 describe LicenseFinder::License, "ISC" do
   it "should be recognized" do
     expect(described_class.find_by_name("ISC").url).to be
