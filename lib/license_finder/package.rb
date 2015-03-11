@@ -91,7 +91,7 @@ module LicenseFinder
 
     def activations
       licensing.activations.tap do |activations|
-        activations.each { |activation| activation.log(logger) }
+        activations.each { |activation| logger.activation(activation) }
       end
     end
 

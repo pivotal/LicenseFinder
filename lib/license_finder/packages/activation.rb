@@ -2,19 +2,7 @@ module LicenseFinder
   module Activation
     # An Activation reports that a license has been activated for a package, and
     # tracks the source of that information
-    Basic = Struct.new(:package, :license) do
-      def log(logger)
-        sources.each do |source|
-          log_package(logger, "found license '#{license.name}' #{source}")
-        end
-      end
-
-      private
-
-      def log_package(logger, text)
-        logger.log(package.class, "package #{package.name}: #{text}")
-      end
-    end
+    Basic = Struct.new(:package, :license)
 
     class FromDecision < Basic
       def sources
@@ -44,10 +32,6 @@ module LicenseFinder
     class None < Basic
       def sources
         []
-      end
-
-      def log(logger)
-        log_package(logger, "no licenses found")
       end
     end
   end

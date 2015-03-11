@@ -28,6 +28,17 @@ module LicenseFinder
         end
       end
 
+      def activation activation
+        preamble = sprintf("package %s:", activation.package.name)
+        if activation.sources.empty?
+          log activation.package.class, sprintf("%s no licenses found", preamble)
+        else
+          activation.sources.each do |source|
+            log activation.package.class, sprintf("%s found license '%s' %s", preamble, activation.license.name, source)
+          end
+        end
+      end
+
       def log prefix, string
         raise NotImplementedError, "#log must be implemented"
       end

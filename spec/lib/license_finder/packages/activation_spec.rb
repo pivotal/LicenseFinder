@@ -4,6 +4,7 @@ module LicenseFinder
   describe Activation do
     let(:package) { Package.new("p", nil) }
     let(:license) { License.find_by_name("l") }
+    let(:activation) { described_class.new(package, license) }
 
     it "reports that a license has been activated for a package" do
       subject = Activation::Basic.new(package, license)
@@ -12,35 +13,28 @@ module LicenseFinder
     end
 
     describe Activation::FromDecision do
-      it "logs that it came from a decision" do
-        activation = described_class.new(package, license)
-        subject = capture_stdout { activation.log(Logger::Verbose.new) }
-        expect(subject).to eq "LicenseFinder::Package: package p: found license 'l' from decision\n"
+      it "reports that it came from a decision" do
+        expect(activation.sources).to eq ["from decision"]
       end
     end
 
     describe Activation::FromSpec do
-      it "logs that it came from a spec" do
-        activation = described_class.new(package, license)
-        subject = capture_stdout { activation.log(Logger::Verbose.new) }
-        expect(subject).to eq "LicenseFinder::Package: package p: found license 'l' from spec\n"
+      it "reports that it came from a spec" do
+        expect(activation.sources).to eq ["from spec"]
       end
     end
 
     describe Activation::FromFiles do
-      it "logs that it came from some files" do
+      it "reports that it came from some files" do
         files = [double(:file, path: "x"), double(:file, path: "y")]
         activation = described_class.new(package, license, files)
-        subject = capture_stdout { activation.log(Logger::Verbose.new) }
-        expect(subject).to eq "LicenseFinder::Package: package p: found license 'l' from file 'x'\nLicenseFinder::Package: package p: found license 'l' from file 'y'\n"
+        expect(activation.sources).to eq ["from file 'x'", "from file 'y'"]
       end
     end
 
     describe Activation::None do
-      it "logs that no licenses could be found" do
-        activation = described_class.new(package, license)
-        subject = capture_stdout { activation.log(Logger::Verbose.new) }
-        expect(subject).to eq "LicenseFinder::Package: package p: no licenses found\n"
+      it "reports that has no source" do
+        expect(activation.sources).to eq []
       end
     end
   end
