@@ -4,6 +4,7 @@
 
   * Show requires/required-by relationships for pip projects
   * Expose homepage in CSV reports
+  * Support GPLv3
 
 * Bugfixes
 
