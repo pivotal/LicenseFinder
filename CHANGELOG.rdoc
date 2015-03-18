@@ -1,3 +1,10 @@
+=== 2.0.3 / 2015-03-18
+
+* Bugfixes
+
+  * Ignoring subdirectories of a LICENSE directory. (#143) (Thanks, @pmeskers and @yuki24!)
+
+
 === 2.0.2 / 2015-03-14
 
 * Features
