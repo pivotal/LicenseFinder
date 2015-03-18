@@ -1,0 +1,2 @@
+* DO NOT DELETE THIS FILE *
+This is not a license, just some random nested lib.
