@@ -24,9 +24,10 @@ module LicenseFinder
     attr_reader :install_path
 
     def paths_of_candidate_files
-      candidate_files_and_dirs
-        .flat_map { |path| path.directory? ? path.children : path }
-        .uniq
+      candidate_files_and_dirs.
+        flat_map { |path| path.directory? ? path.children : path }.
+        reject { |path| path.directory? }.
+        uniq
     end
 
     def candidate_files_and_dirs
