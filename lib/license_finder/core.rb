@@ -15,19 +15,18 @@ module LicenseFinder
       Logger::Default.new
     end
 
-    # +options+ look like:
+    # Default +options+:
     # {
-    #   logger: { quiet: true, debug: false },
-    #   project_path: "./some/project/path/"
-    #   decisions_file: "./some/path.yml",
-    #   gradle_command: "gradlew",
-    #   rebar_command: "rebar2",
-    #   rebar_deps_dir: "./some/rebar/path",
+    #   project_path: Pathname.pwd
+    #   logger: { quiet: true },
+    #   decisions_file: "doc/dependency_decisions.yml",
+    #   gradle_command: "gradle",
+    #   rebar_command: "rebar",
+    #   rebar_deps_dir: "deps",
     # }
-    # +gradle_command+ and +decisions_file+ are optional, see Configuration
-    def initialize(options)
-      @logger = Logger.new(options.fetch(:logger))
-      @project_path = Pathname(options.fetch(:project_path))
+    def initialize(options = {})
+      @logger = Logger.new(options.fetch(:logger, {}))
+      @project_path = Pathname(options.fetch(:project_path, Pathname.pwd))
       @config = Configuration.with_optional_saved_config(options, project_path)
       @decisions = Decisions.saved!(config.decisions_file)
     end
