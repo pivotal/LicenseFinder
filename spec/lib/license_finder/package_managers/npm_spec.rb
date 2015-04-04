@@ -91,7 +91,7 @@ module LicenseFinder
 
       it "does not fail when command fails but produces output" do
         allow(npm).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
-        npm.current_packages
+        silence_stderr { npm.current_packages }
       end
     end
   end

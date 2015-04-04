@@ -24,9 +24,13 @@ module LicenseFinder
       if success
         json = JSON(output)
       else
-        json = JSON(output) rescue nil
+        json = begin
+                 JSON(output)
+               rescue JSON::ParserError
+                 nil
+               end
         if json
-          $stderr.puts "Command #{command} returned error but parsing succeeded." unless ENV['test_run']
+          $stderr.puts "Command #{command} returned error but parsing succeeded."
         else
           raise "Command #{command} failed to execute: #{output}"
         end

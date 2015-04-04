@@ -7,8 +7,6 @@ require 'rspec'
 require 'webmock/rspec'
 require 'rspec/its'
 
-ENV['test_run'] = true.to_s
-
 Dir[File.join(File.dirname(__FILE__), 'support', '**', '*.rb')].each do |file|
   require file
 end

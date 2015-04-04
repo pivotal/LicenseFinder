@@ -1,4 +1,17 @@
 module StdoutHelpers
+  def capture_stderr
+    orig_stderr = $stderr
+    $stderr = StringIO.new
+
+    yield
+
+    $stderr.string
+  ensure
+    $stderr = orig_stderr
+  end
+
+  alias silence_stderr capture_stderr
+
   def capture_stdout
     orig_stdout = $stdout
     $stdout = StringIO.new
