@@ -4,8 +4,7 @@ module LicenseFinder
   class ErbReport < Report
     TEMPLATE_PATH = ROOT_PATH.join('reports', 'templates')
 
-    def to_s
-      filename = TEMPLATE_PATH.join("#{template_name}.erb")
+    def to_s(filename = TEMPLATE_PATH.join("#{template_name}.erb"))
       template = ERB.new(filename.read, nil, '-')
       template.result(binding)
     end
