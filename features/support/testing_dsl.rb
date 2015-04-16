@@ -19,7 +19,11 @@ module LicenseFinder::TestingDSL
     end
 
     def execute_command(command)
-      @output, @exit_code = Paths.project.shell_out(command, true)
+      execute_command_in_path(command, Paths.project)
+    end
+
+    def execute_command_outside_project(command)
+      execute_command_in_path(command, Paths.root)
     end
 
     def seeing?(content)
@@ -41,6 +45,12 @@ module LicenseFinder::TestingDSL
     def view_html
       execute_command 'license_finder report --format html'
       HtmlReport.from_string(@output)
+    end
+
+    private
+
+    def execute_command_in_path(command, path)
+      @output, @exit_code = path.shell_out(command, true)
     end
   end
 
@@ -66,8 +76,6 @@ module LicenseFinder::TestingDSL
 
     def install
     end
-
-    private
 
     def project_dir
       Paths.project
@@ -262,7 +270,7 @@ module LicenseFinder::TestingDSL
 
     def root
       # where license_finder is installed
-      Pathname.new(__FILE__).dirname.join("..", "..").realpath
+      ProjectDir.new(Pathname.new(__FILE__).dirname.join("..", "..").realpath)
     end
 
     def fixtures

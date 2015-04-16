@@ -1,3 +1,9 @@
+=== 2.1.0 / unreleased
+
+* Features
+
+  * Allow project path to be set in a command line option
+
 === 2.0.3 / 2015-03-18
 
 * Bugfixes
