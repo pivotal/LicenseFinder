@@ -202,6 +202,9 @@ all of your project's dependencies and includes information about which need to
 be approved. The project name at the top of the report can be set with
 `license_finder project_name add`.
 
+See [CONTRIBUTING.md](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md)
+for advice about adding and customizing reports.
+
 
 ## Manual Intervention
 
