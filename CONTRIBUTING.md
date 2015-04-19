@@ -29,8 +29,9 @@ If you need `license_finder` to output additional package data, consider
 submitting a pull request which adds new columns to
 `lib/license_finder/reports/csv_report.rb`.
 
-It is also possible to generate a [custom report](https://gist.github.com/mainej/b190d2f138c2b9e2e20a)
-from an ERB template.  These reports will have access to the helpers in
+It is also possible to generate a custom report from an ERB template.  Use this
+[example](https://gist.github.com/mainej/b190d2f138c2b9e2e20a) as a starting
+point.  These reports will have access to the helpers in
 [`LicenseFinder::ErbReport`](https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/reports/erb_report.rb).
 
 If you need a report with more detailed data or in a different format, we
