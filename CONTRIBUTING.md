@@ -39,8 +39,8 @@ recommend writing a custom ruby script.  This
 [example](https://gist.github.com/mainej/48ac616844505d50f510) will get you
 started.
 
-If you come up with something useful, consider posting it to the
-[Google Group](license-finder@googlegroups.com).
+If you come up with something useful, consider posting it to the Google Group
+[license-finder@googlegroups.com](license-finder@googlegroups.com).
 
 
 ## Development Dependencies
