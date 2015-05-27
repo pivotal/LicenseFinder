@@ -17,14 +17,14 @@ module LicenseFinder
       end
     end
 
-    let(:bundler_dependency) { double(:dependency, groups: [1, 2, 3]) }
+    let(:bundler_dependency) { double(:dependency, groups: %i[staging assets]) }
 
     its(:name) { should == 'spec_name' }
     its(:version) { should == '2.1.3' }
     its(:summary) { should == "summary" }
     its(:description) { should == "description" }
     its(:homepage) { should == "homepage" }
-    its(:groups) { should == [1, 2, 3] }
+    its(:groups) { should == %w[staging assets] }
     its(:children) { should == ['foo'] }
     its(:license_names_from_spec) { should eq ['MIT', 'GPL'] }
     its(:install_path) { should =~ /spec_name-2\.1\.3\z/ }

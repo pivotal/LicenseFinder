@@ -8,7 +8,7 @@ module LicenseFinder
       double('definition', {
         :dependencies => [],
         :groups => [:dev, :production],
-        :specs_for => [
+        :specs => [
           build_gemspec('gem1', '1.2.3'),
           build_gemspec('gem2', '0.4.2')
         ]
@@ -30,7 +30,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       subject do
-        Bundler.new(ignore_groups: ['dev', 'test'], definition: definition).current_packages
+        Bundler.new(definition: definition).current_packages
       end
 
       it "should have 2 dependencies" do
@@ -39,7 +39,7 @@ module LicenseFinder
 
       context "when initialized with a parent and child gem" do
         before do
-          allow(definition).to receive(:specs_for).with([:production]).and_return([
+          allow(definition).to receive(:specs).and_return([
             build_gemspec('gem1', '1.2.3', 'gem2'),
             build_gemspec('gem2', '0.4.2', 'gem3')
           ])

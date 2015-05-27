@@ -60,7 +60,6 @@ module LicenseFinder
       PackageManager.current_packages(
         logger: logger,
         project_path: project_path,
-        ignore_groups: decisions.ignored_groups,
         gradle_command: config.gradle_command,
         rebar_command: config.rebar_command,
         rebar_deps_dir: config.rebar_deps_dir,
