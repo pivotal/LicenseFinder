@@ -7,15 +7,14 @@ module LicenseFinder
     let(:definition) do
       double('definition', {
         :dependencies => [],
-        :groups => [:dev, :production],
         :specs => [
-          build_gemspec('gem1', '1.2.3'),
-          build_gemspec('gem2', '0.4.2')
+          build_gemspec('gem1', '1.2.3', 'gem2'),
+          build_gemspec('gem2', '0.4.2', 'gem3')
         ]
       })
     end
 
-    def build_gemspec(name, version, dependency=nil)
+    def build_gemspec(name, version, dependency)
       Gem::Specification.new do |s|
         s.name = name
         s.version = version
@@ -37,19 +36,10 @@ module LicenseFinder
         expect(subject.size).to eq(2)
       end
 
-      context "when initialized with a parent and child gem" do
-        before do
-          allow(definition).to receive(:specs).and_return([
-            build_gemspec('gem1', '1.2.3', 'gem2'),
-            build_gemspec('gem2', '0.4.2', 'gem3')
-          ])
-        end
+      it "should update the child dependency with its parent data" do
+        gem1 = subject.first
 
-        it "should update the child dependency with its parent data" do
-          gem1 = subject.first
-
-          expect(gem1.children).to eq(["gem2"])
-        end
+        expect(gem1.children).to eq(["gem2"])
       end
     end
   end
