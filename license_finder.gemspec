@@ -1,5 +1,8 @@
-require './lib/license_finder/platform'
-require './lib/license_finder/version'
+lib = File.expand_path('../lib/', __FILE__)
+$:.unshift lib unless $:.include?(lib)
+
+require 'license_finder/platform'
+require 'license_finder/version'
 
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
