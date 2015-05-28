@@ -4,12 +4,14 @@ module LicenseFinder
   class Bundler < PackageManager
     def initialize options={}
       super
-      @definition = options[:definition] # dependency injection for tests
+      @ignore_groups = options[:ignore_groups]
+      @definition    = options[:definition] # dependency injection for tests
     end
 
     def current_packages
-      details.map do |gem_detail, bundler_detail|
-        BundlerPackage.new(gem_detail, bundler_detail, logger: logger).tap do |package|
+      logger.log self.class, "including groups #{included_groups.inspect}"
+      details.map do |gem_detail, bundle_detail|
+        BundlerPackage.new(gem_detail, bundle_detail, logger: logger).tap do |package|
           logger.package self.class, package
         end
       end
@@ -17,24 +19,30 @@ module LicenseFinder
 
     private
 
+    attr_reader :ignore_groups
+
     def definition
       # DI
       @definition ||= ::Bundler::Definition.build(package_path, lockfile_path, nil)
+    end
+
+    def details
+      gem_details.map do |gem_detail|
+        bundle_detail = bundler_details.detect { |bundle_detail| bundle_detail.name == gem_detail.name }
+        [gem_detail, bundle_detail]
+      end
+    end
+
+    def gem_details
+      @gem_details ||= definition.specs_for(included_groups)
     end
 
     def bundler_details
       @bundler_details ||= definition.dependencies
     end
 
-    def gem_details
-      @gem_details ||= definition.specs
-    end
-
-    def details
-      gem_details.map do |gem_detail|
-        bundler_detail = bundler_details.detect { |bundler_detail| bundler_detail.name == gem_detail.name }
-        [gem_detail, bundler_detail]
-      end
+    def included_groups
+      definition.groups - ignore_groups.map(&:to_sym)
     end
 
     def package_path

@@ -197,6 +197,10 @@ module LicenseFinder::TestingDSL
     private
 
     def gemspec_string(options)
+      dependencies = Array(options[:dependencies]).map do |dep|
+        %[s.add_dependency "#{dep}"]
+      end.join("\n")
+
       <<-GEMSPEC
       Gem::Specification.new do |s|
         s.name = "#{name}"
@@ -206,6 +210,7 @@ module LicenseFinder::TestingDSL
         s.summary = "#{options[:summary]}"
         s.description = "#{options[:description]}"
         s.homepage = "#{options[:homepage]}"
+        #{dependencies}
       end
       GEMSPEC
     end
