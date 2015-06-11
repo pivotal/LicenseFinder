@@ -148,7 +148,7 @@ module LicenseFinder
 
     def self.restore(persisted)
       result = new
-      if persisted
+      if persisted && YAML.load(persisted)
         YAML.load(persisted).each do |action, *args|
           result.send(action, *args)
         end
