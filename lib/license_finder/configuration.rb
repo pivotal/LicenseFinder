@@ -29,7 +29,7 @@ module LicenseFinder
     end
 
     private
-
+    attr_reader :saved_config
     def get(key)
       @primary_config[key.to_sym] || @saved_config[key.to_s]
     end

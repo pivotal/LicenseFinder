@@ -7,6 +7,11 @@ module LicenseFinder
         subject = described_class.with_optional_saved_config({}, fixture_path("."))
         expect(subject.gradle_command).to eq('gradlew')
       end
+
+      it "prepends the project_path to the config file path" do
+        subject = described_class.with_optional_saved_config({}, fixture_path("nonexistent_directory"))
+        expect(subject.send(:saved_config)).to eq({})
+      end
     end
 
     describe "gradle_command" do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module LicenseFinder
   describe DecisionApplier do
-    describe ".acknowledged" do
+    describe "#acknowledged" do
       it "combines manual and system packages" do
         decision_applier = described_class.new(
           decisions: Decisions.new.add_package("manual", nil),
@@ -59,6 +59,19 @@ module LicenseFinder
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_whitelisted
+      end
+    end
+
+    describe "#unapproved" do
+      it "returns all acknowledged packages that are not approved" do
+        manual_package = double(:manual, name: 'manual', approved?: true )
+        whitelist_package = double(:whitelist, name: 'whitelist', approved?: true)
+        bad_package = double(:not_approved, name: 'not_approved', approved?: false)
+        decisions = double(:decisions)
+
+        decision_applier = described_class.new(decisions: decisions, packages: [])
+        allow(decision_applier).to receive(:acknowledged).and_return([manual_package, whitelist_package, bad_package])
+        expect(decision_applier.unapproved).to include(bad_package)
       end
     end
   end

@@ -11,6 +11,9 @@ module LicenseFinder
           packages: packages
         )
       end
+      let(:license_finder_instance) { double(:license_finder, unapproved: [unapproved_dependency], project_name: 'taco stand') }
+      let(:license) { double(:license, name: "thing") }
+      let(:unapproved_dependency) { double(:dependency, name: "a dependency", version: "2.4.1", missing?: false, licenses: [license]) }
 
       before do
         allow(Decisions).to receive(:saved!) { decisions }
@@ -20,9 +23,47 @@ module LicenseFinder
       describe "default" do
         it "checks for action items" do
           decisions.add_package("a dependency", nil)
-
+          expect_any_instance_of(LicenseFinder::Core).to receive(:unapproved).and_return([unapproved_dependency])
           silence_stdout do
             expect { described_class.start(["--quiet"]) }.to raise_error(SystemExit)
+          end
+        end
+      end
+
+      describe "cli options" do
+        let(:config_options) { [
+          "--decisions_file=whatever.yml",
+          "--project_path=../other_project",
+          "--gradle_command=do_things",
+          "--rebar_command=do_other_things",
+          "--rebar_deps_dir=rebar_dir"
+        ] }
+        let(:logger_options) {
+          [
+            '--quiet',
+            '--debug'
+          ]
+        }
+        let(:parsed_config) { {
+          decisions_file: 'whatever.yml',
+          project_path: '../other_project',
+          gradle_command: 'do_things',
+          rebar_command: 'do_other_things',
+          rebar_deps_dir: 'rebar_dir',
+          logger: {}
+        } }
+
+        it "passes the config options to the new LicenseFinder::Core instance" do
+          expect(LicenseFinder::Core).to receive(:new).with(parsed_config).and_return(license_finder_instance)
+          silence_stdout do
+            expect { described_class.start(config_options) }.to raise_error(SystemExit)
+          end
+        end
+
+        it "passes the logger options to the new LicenseFinder::Core instance" do
+          expect(LicenseFinder::Core).to receive(:new).with({logger: {debug: true, quiet: true}}).and_return(license_finder_instance)
+          silence_stdout do
+            expect { described_class.start(logger_options) }.to raise_error(SystemExit)
           end
         end
       end
@@ -39,20 +80,20 @@ module LicenseFinder
         end
 
         it "will output a specific format" do
-          subject.options = { format: 'markdown' }
+          subject.options = {format: 'markdown'}
 
           expect(report).to include "## Action"
         end
 
         it "will output a custom csv" do
-          subject.options = { format: 'csv', columns: ['name', 'version'] }
+          subject.options = {format: 'csv', columns: ['name', 'version']}
 
           expect(report).to eq "one dependency,1.1\n"
         end
 
         context "in html reports" do
           before do
-            subject.options = { format: 'html' }
+            subject.options = {format: 'html'}
           end
 
           context "when the project has a name" do
@@ -75,7 +116,7 @@ module LicenseFinder
 
       describe "#action_items" do
         def action_items
-          subject.options = { quiet: true, format: 'text' }
+          subject.options = {quiet: true, format: 'text'}
           subject.action_items
         end
 
