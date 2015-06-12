@@ -17,7 +17,7 @@ module LicenseFinder
       end
     end
 
-    let(:bundler_dependency) { double(:dependency, groups: %i[staging assets]) }
+    let(:bundler_dependency) { double(:dependency, groups: [:staging, :assets]) }
 
     its(:name) { should == 'spec_name' }
     its(:version) { should == '2.1.3' }
