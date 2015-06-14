@@ -15,7 +15,11 @@ module LicenseFinder
     end
 
     def current_packages
-      dependencies
+      dependencies.reduce({}) do |memo, dep|
+        memo[dep.name] ||= NugetPackage.new(dep.name, dep.version)
+        memo[dep.name].groups << dep.assembly if !memo[dep.name].groups.include? dep.assembly
+        memo
+      end.values
     end
 
     def dependencies

@@ -26,6 +26,7 @@ module LicenseFinder
     end
 
     describe "#current_packages" do
+      include FakeFS::SpecHelpers
       before do
         FileUtils.mkdir_p "app/packages"
         FileUtils.mkdir_p "app/Assembly1/"
