@@ -15,6 +15,7 @@ module LicenseFinder
 
       class_option :format, desc: "The desired output format.", default: 'text', enum: FORMATS.keys
       class_option :columns, type: :array, desc: "For CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}", default: %w[name version licenses]
+      class_option :save, type: :boolean, desc: "Save report to a file. Default: 'license_report.csv' in project root."
       class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradle'."
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
@@ -22,6 +23,7 @@ module LicenseFinder
       method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
       desc "action_items", "List unapproved dependencies (the default action for `license_finder`)"
+
       def action_items
         unapproved = license_finder.unapproved
 
@@ -37,12 +39,22 @@ module LicenseFinder
       default_task :action_items
 
       desc "report", "Print a report of the project's dependencies to stdout"
+
       def report
         logger_config[:quiet] = true
-        say report_of(license_finder.acknowledged)
+        if options[:save]
+          file_name = 'license_report.' + file_extension
+          content = report_of(license_finder.acknowledged)
+          save_report(content, file_name)
+        else
+          say report_of(license_finder.acknowledged)
+        end
       end
 
+
+
       desc "version", "Print the version of LicenseFinder"
+
       def version
         puts LicenseFinder::VERSION
       end
@@ -56,10 +68,31 @@ module LicenseFinder
       subcommand "project_name", ProjectName, "Set the project name, for display in reports"
 
       private
+      def save_report(content, file_name)
+        File.open(file_name, 'w') do |f|
+          f.write(content)
+        end
+      end
+
 
       def report_of(content)
         report = FORMATS[options[:format]]
         report.of(content, columns: options[:columns], project_name: license_finder.project_name)
+      end
+
+      def file_extension
+        case options[:format]
+          when "text"
+            "txt"
+          when "html"
+            "html"
+          when "csv"
+            "csv"
+          when "markdown"
+            "md"
+          else
+            "txt"
+        end
       end
     end
   end

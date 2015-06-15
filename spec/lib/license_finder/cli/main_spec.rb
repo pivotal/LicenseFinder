@@ -36,7 +36,8 @@ module LicenseFinder
           "--project_path=../other_project",
           "--gradle_command=do_things",
           "--rebar_command=do_other_things",
-          "--rebar_deps_dir=rebar_dir"
+          "--rebar_deps_dir=rebar_dir",
+          "--save"
         ] }
         let(:logger_options) {
           [
@@ -50,6 +51,7 @@ module LicenseFinder
           gradle_command: 'do_things',
           rebar_command: 'do_other_things',
           rebar_deps_dir: 'rebar_dir',
+          save: true,
           logger: {}
         } }
 
@@ -89,6 +91,24 @@ module LicenseFinder
           subject.options = {format: 'csv', columns: ['name', 'version']}
 
           expect(report).to eq "one dependency,1.1\n"
+        end
+
+        context "when the --save option is passed" do
+          it "calls report method and responds to save flag" do
+            subject.options = {save: "--save", format: 'text'}
+            expect(subject).to receive(:report).and_call_original
+            expect(subject).to receive(:save_report)
+
+            subject.report
+          end
+
+          it "saves the output to license_report file in project root" do
+            mock_file = double(:file)
+            expect(File).to receive(:open).with("license_report.txt", "w").and_yield(mock_file)
+            expect(mock_file).to receive(:write).with("content of file")
+
+            subject.send(:save_report, "content of file", "license_report.txt")
+          end
         end
 
         context "in html reports" do

@@ -24,7 +24,8 @@ module LicenseFinder
           :decisions_file,
           :gradle_command,
           :rebar_command,
-          :rebar_deps_dir
+          :rebar_deps_dir,
+          :save
         ).merge(
           logger: logger_config
         )
