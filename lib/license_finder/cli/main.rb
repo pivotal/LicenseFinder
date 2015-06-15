@@ -15,7 +15,7 @@ module LicenseFinder
 
       class_option :format, desc: "The desired output format.", default: 'text', enum: FORMATS.keys
       class_option :columns, type: :array, desc: "For CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}", default: %w[name version licenses]
-      class_option :save, type: :boolean, desc: "Save report to a file. Default: 'license_report.csv' in project root."
+      class_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: "license_report"
       class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradle'."
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
@@ -43,7 +43,7 @@ module LicenseFinder
       def report
         logger_config[:quiet] = true
         if options[:save]
-          file_name = 'license_report.' + file_extension
+          file_name = options[:save]+ '.' + file_extension
           content = report_of(license_finder.acknowledged)
           save_report(content, file_name)
         else

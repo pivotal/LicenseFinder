@@ -51,7 +51,7 @@ module LicenseFinder
           gradle_command: 'do_things',
           rebar_command: 'do_other_things',
           rebar_deps_dir: 'rebar_dir',
-          save: true,
+          save: 'license_report',
           logger: {}
         } }
 
@@ -93,24 +93,6 @@ module LicenseFinder
           expect(report).to eq "one dependency,1.1\n"
         end
 
-        context "when the --save option is passed" do
-          it "calls report method and responds to save flag" do
-            subject.options = {save: "--save", format: 'text'}
-            expect(subject).to receive(:report).and_call_original
-            expect(subject).to receive(:save_report)
-
-            subject.report
-          end
-
-          it "saves the output to license_report file in project root" do
-            mock_file = double(:file)
-            expect(File).to receive(:open).with("license_report.txt", "w").and_yield(mock_file)
-            expect(mock_file).to receive(:write).with("content of file")
-
-            subject.send(:save_report, "content of file", "license_report.txt")
-          end
-        end
-
         context "in html reports" do
           before do
             subject.options = {format: 'html'}
@@ -130,6 +112,56 @@ module LicenseFinder
             it "should default to the directory name" do
               expect(report).to include "a_project"
             end
+          end
+        end
+
+        context "when the --save option is passed" do
+          it "calls report method and calls save_report" do
+            subject.options = {save: "license_report", format: 'text'}
+            expect(subject).to receive(:report).and_call_original
+            expect(subject).to receive(:save_report)
+
+            subject.report
+          end
+
+          context "when file name is not specified (--save)" do
+            it "creates report that is called the default file name" do
+              provided_by_thor_as_default_name = "license_report" #####FIX ME
+              subject.options = {save: provided_by_thor_as_default_name, format: 'text'}
+              expect(subject).to receive(:report).and_call_original
+              expect(subject).to receive(:save_report).with(instance_of(String), "license_report.txt")
+
+              subject.report
+            end
+
+            it "saves the output report to default file ('license_report.txt') in project root" do
+              mock_file = double(:file)
+              expect(File).to receive(:open).with("license_report.txt", "w").and_yield(mock_file)
+              expect(mock_file).to receive(:write).with("content of file")
+
+              subject.send(:save_report, "content of file", "license_report.txt")
+            end
+          end
+
+          context "when file name is specified (--save='FILENAME')" do
+            it "saves with a specified file name" do
+              subject.options = {save: 'my_report' , format: 'text'}
+              expect(subject).to receive(:report).and_call_original
+              expect(subject).to receive(:save_report).with(instance_of(String), "my_report.txt")
+
+              subject.report
+            end
+          end
+        end
+
+        context "when the --save option is not passed" do
+          it "calls report method and does not call save_report" do
+            subject.options = {format: 'text'}
+            expect(subject).to receive(:report).and_call_original
+            expect(subject).not_to receive(:save_report)
+            expect(subject).to receive(:report_of)
+
+            subject.report
           end
         end
       end
