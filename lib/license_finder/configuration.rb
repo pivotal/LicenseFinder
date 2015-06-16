@@ -23,8 +23,8 @@ module LicenseFinder
       get(:rebar_deps_dir) || "deps"
     end
 
-    def decisions_file
-      file_name = get(:decisions_file) || "doc/dependency_decisions.yml"
+    def decisions_file_path
+      file_name = get(:decisions_file) || path_prefix + "doc/dependency_decisions.yml"
       Pathname(file_name)
     end
 
@@ -32,6 +32,14 @@ module LicenseFinder
     attr_reader :saved_config
     def get(key)
       @primary_config[key.to_sym] || @saved_config[key.to_s]
+    end
+
+    def path_prefix
+      if get(:project_path)
+        get(:project_path) + "/"
+      else
+        ""
+      end
     end
   end
 end

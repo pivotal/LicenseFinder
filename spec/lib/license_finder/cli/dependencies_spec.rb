@@ -6,7 +6,7 @@ module LicenseFinder
       let(:decisions) { Decisions.new }
 
       before do
-        allow(Decisions).to receive(:saved!) { decisions }
+        allow(Decisions).to receive(:fetch_saved) { decisions }
       end
 
       describe "add" do

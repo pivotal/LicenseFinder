@@ -46,7 +46,7 @@ module LicenseFinder
           {decisions_file: "primary"},
           {"decisions_file" => "secondary"}
         )
-        expect(subject.decisions_file.to_s).to eq "primary"
+        expect(subject.decisions_file_path.to_s).to eq "primary"
       end
 
       it "accepts saved value" do
@@ -54,7 +54,7 @@ module LicenseFinder
           {decisions_file: nil},
           {"decisions_file" => "secondary"}
         )
-        expect(subject.decisions_file.to_s).to eq "secondary"
+        expect(subject.decisions_file_path.to_s).to eq "secondary"
       end
 
       it "has default" do
@@ -62,7 +62,12 @@ module LicenseFinder
           {decisions_file: nil},
           {"decisions_file" => nil}
         )
-        expect(subject.decisions_file.to_s).to eq "doc/dependency_decisions.yml"
+        expect(subject.decisions_file_path.to_s).to eq "doc/dependency_decisions.yml"
+      end
+
+      it "prepends project path to default path if project_path option is set" do
+        subject = described_class.new({project_path: "magic_path"}, {})
+        expect(subject.decisions_file_path.to_s).to eq "magic_path/doc/dependency_decisions.yml"
       end
     end
   end

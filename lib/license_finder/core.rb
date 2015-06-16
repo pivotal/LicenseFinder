@@ -28,20 +28,22 @@ module LicenseFinder
       @logger = Logger.new(options.fetch(:logger, {}))
       @project_path = Pathname(options.fetch(:project_path, Pathname.pwd))
       @config = Configuration.with_optional_saved_config(options, project_path)
-      @decisions = Decisions.saved!(config.decisions_file)
     end
 
     def modifying
       yield
-      decisions.save!(config.decisions_file)
+      decisions.save!(config.decisions_file_path)
     end
 
     extend Forwardable
     def_delegators :decision_applier, :acknowledged, :unapproved
-    attr_reader :decisions
 
     def project_name
       decisions.project_name || project_path.basename.to_s
+    end
+
+    def decisions
+      Decisions.fetch_saved(config.decisions_file_path)
     end
 
     private

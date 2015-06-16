@@ -138,7 +138,7 @@ module LicenseFinder
     # PERSIST
     #########
 
-    def self.saved!(file)
+    def self.fetch_saved(file)
       restore(read!(file))
     end
 

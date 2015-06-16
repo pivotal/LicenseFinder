@@ -16,7 +16,7 @@ module LicenseFinder
       let(:unapproved_dependency) { double(:dependency, name: "a dependency", version: "2.4.1", missing?: false, licenses: [license]) }
 
       before do
-        allow(Decisions).to receive(:saved!) { decisions }
+        allow(Decisions).to receive(:fetch_saved) { decisions }
         allow(DecisionApplier).to receive(:new) { decision_applier }
       end
 
