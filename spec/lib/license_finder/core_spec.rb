@@ -6,11 +6,10 @@ module LicenseFinder
     let(:license_finder) { described_class.new(options) }
     let(:logger) { Logger.new(options[:logger]) }
     let(:configuration) { LicenseFinder::Configuration.new(options, {})}
-    let(:pathname) { Pathname.pwd + Pathname.new(options[:project_path]) }
+    let(:pathname) { Pathname.pwd + Pathname(options[:project_path]) }
 
     before do
       allow(Logger).to receive(:new).and_return(logger)
-      allow(Pathname).to receive(:new).and_return(pathname)
     end
 
     describe "#unapproved" do
