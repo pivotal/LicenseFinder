@@ -42,7 +42,7 @@ module LicenseFinder
     end
 
     def decisions
-      Decisions.fetch_saved(config.decisions_file_path)
+      @decisions ||= Decisions.fetch_saved(config.decisions_file_path)
     end
 
     private
