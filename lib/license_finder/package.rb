@@ -121,6 +121,7 @@ end
 
 require 'license_finder/packages/manual_package'
 require 'license_finder/package_managers/bower_package'
+require 'license_finder/package_managers/godep_package'
 require 'license_finder/package_managers/bundler_package'
 require 'license_finder/package_managers/pip_package'
 require 'license_finder/package_managers/npm_package'
