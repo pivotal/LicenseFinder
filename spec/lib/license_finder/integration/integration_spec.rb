@@ -16,13 +16,13 @@ module LicenseFinder
     end
 
     it "does not return dependencies that have been approved" do
-      main_class.start(['approvals','add', 'fakefs'])
+      silence_stdout{ main_class.start(['approvals','add', 'fakefs']) }
       unapproved = capture_stdout do
-        main_class.start(command_line_options)
+        expect{ main_class.start(command_line_options) }.to raise_error(SystemExit)
       end
       expect(unapproved).to include('license_finder')
       expect(unapproved).to_not include('fakefs')
-      main_class.start(['approvals','remove', 'fakefs'])
+      silence_stdout{ main_class.start(['approvals','remove', 'fakefs']) }
     end
 
     context 'with command line options' do
