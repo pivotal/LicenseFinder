@@ -1,7 +1,8 @@
 module LicenseFinder
   class Configuration
-    def self.with_optional_saved_config(primary_config, project_path)
-      config_file = project_path.join('config', 'license_finder.yml')
+    def self.with_optional_saved_config(primary_config)
+      project_path = Pathname(primary_config.fetch(:project_path, Pathname.pwd))
+      config_file =  project_path.join('config', 'license_finder.yml')
       saved_config = config_file.exist? ? YAML.load(config_file.read) : {}
       new(primary_config, saved_config)
     end
@@ -20,12 +21,24 @@ module LicenseFinder
     end
 
     def rebar_deps_dir
-      get(:rebar_deps_dir) || "deps"
+      if get(:rebar_deps_dir)
+        path_prefix + get(:rebar_deps_dir)
+      else
+        path_prefix + "deps"
+      end
     end
 
     def decisions_file_path
-      file_name = get(:decisions_file) || path_prefix + "doc/dependency_decisions.yml"
+      if get(:decisions_file)
+        file_name = path_prefix + get(:decisions_file)
+      else
+        file_name = path_prefix + "doc/dependency_decisions.yml"
+      end
       Pathname(file_name)
+    end
+
+    def project_path
+      Pathname.pwd + Pathname(path_prefix)
     end
 
     private

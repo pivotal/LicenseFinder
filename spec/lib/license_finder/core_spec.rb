@@ -5,7 +5,7 @@ module LicenseFinder
     let(:options) { {} }
     let(:license_finder) { described_class.new(options) }
     let(:logger) { Logger.new(options[:logger]) }
-    let(:pathname) { Pathname.new(options[:project_path])}
+    let(:pathname) { Pathname.pwd + Pathname.new(options[:project_path]) }
 
     before do
       allow(Logger).to receive(:new).and_return(logger)
@@ -29,7 +29,7 @@ module LicenseFinder
           ignore_groups: Set.new,
           gradle_command: options[:gradle_command],
           rebar_command: options[:rebar_command],
-          rebar_deps_dir: options[:rebar_deps_dir]
+          rebar_deps_dir: options[:project_path] + "/" + options[:rebar_deps_dir]
         }
       }
 
