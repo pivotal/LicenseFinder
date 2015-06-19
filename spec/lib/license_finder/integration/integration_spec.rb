@@ -8,7 +8,7 @@ module LicenseFinder
 
     it "returns all dependencies when none have been approved" do
       unapproved = capture_stdout do
-        main_class.start(command_line_options)
+        expect{ main_class.start(command_line_options) }.to raise_error(SystemExit)
       end
       expect(unapproved).to include('license_finder')
       expect(unapproved).to include('fakefs')
@@ -25,21 +25,19 @@ module LicenseFinder
       silence_stdout{ main_class.start(['approvals','remove', 'fakefs']) }
     end
 
-    context 'with command line options' do
-      let(:command_line_options) { [
-          "--decisions_file=whatever.yml",
-          "--project_path=../other_project",
-          "--gradle_command=do_things",
-          "--rebar_command=do_other_things",
-          "--rebar_deps_dir=rebar_dir",
-          "--save"
-      ] }
-      let(:logger_options) {
-        [
-            '--quiet',
-            '--debug'
-        ]
-      }
+    context 'with command line options' do # duplicate of set_project_path_spec
+
+      describe "running the default command against another directory" do
+        let(:command_line_options) { ["--project_path=spec/dummy_app"] }
+
+        it "only reports dependencies for the project in the specified directory" do
+          unapproved = capture_stdout do
+            expect{ main_class.start(command_line_options) }.to raise_error(SystemExit)
+          end
+          expect(unapproved).to include('httparty')
+          expect(unapproved).not_to include('license_finder')
+        end
+      end
     end
   end
 end

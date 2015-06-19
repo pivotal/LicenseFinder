@@ -1,4 +1,5 @@
-require 'feature_helper'
+require_relative '../../support/feature_helper'
+require_relative '../../support/testing_dsl'
 
 describe "NPM Dependencies" do
   # As a Node developer

@@ -1,4 +1,5 @@
-require 'feature_helper'
+require_relative '../../support/feature_helper'
+require_relative '../../support/testing_dsl'
 
 describe "Bower Dependencies" do
   # As a JS developer

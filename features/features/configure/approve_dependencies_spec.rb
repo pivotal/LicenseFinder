@@ -1,4 +1,5 @@
-require 'feature_helper'
+require_relative '../../support/feature_helper'
+require_relative '../../support/testing_dsl'
 
 describe "Manually Approved Dependencies" do
   # As a developer
@@ -27,5 +28,35 @@ describe "Manually Approved Dependencies" do
       expect(section).to have_content "Julian"
       expect(section).to have_content "We really need this"
     end
+  end
+
+  specify "reports unapproved dependencies" do
+    developer.create_empty_project
+    developer.execute_command("license_finder dependencies add test_gem Random_License 0.0.1")
+    developer.execute_command("license_finder approvals add test_gem")
+
+    developer.run_license_finder
+
+    expect(developer).to be_receiving_exit_code(0)
+    expect(developer).not_to be_seeing 'test_gem'
+
+    developer.execute_command("license_finder approvals remove test_gem")
+
+    developer.run_license_finder
+
+    expect(developer).to be_receiving_exit_code(1)
+    expect(developer).to be_seeing 'test_gem'
+  end
+
+  specify "reports only unapproved dependencies, no approved dependencies" do
+    developer.create_empty_project
+    developer.execute_command("license_finder dependencies add unapproved_gem Random_License 0.0.1")
+    developer.execute_command("license_finder dependencies add approved_gem Random_License 0.0.1")
+    developer.execute_command("license_finder approvals add approved_gem")
+
+    developer.run_license_finder
+    expect(developer).to be_receiving_exit_code(1)
+    expect(developer).to be_seeing 'unapproved_gem'
+    expect(developer).not_to be_seeing 'approved_gem '
   end
 end

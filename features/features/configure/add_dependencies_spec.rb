@@ -1,4 +1,5 @@
-require 'feature_helper'
+require_relative '../../support/feature_helper'
+require_relative '../../support/testing_dsl'
 
 describe "Manually Added Dependencies" do
   # As a developer
@@ -33,5 +34,22 @@ describe "Manually Added Dependencies" do
     developer.execute_command 'license_finder dependencies remove manual_dep'
     developer.execute_command 'license_finder dependencies list'
     expect(developer).to_not be_seeing 'manual_dep'
+  end
+
+  specify "does not report dependencies that are manually removed" do
+    developer.create_empty_project
+    developer.execute_command("license_finder dependencies add test_gem Random_License 0.0.1")
+
+    developer.run_license_finder
+
+    expect(developer).to be_receiving_exit_code(1)
+    expect(developer).to be_seeing 'test_gem'
+
+    developer.execute_command("license_finder dependencies remove test_gem")
+
+    developer.run_license_finder
+
+    expect(developer).to be_receiving_exit_code(0)
+    expect(developer).not_to be_seeing 'test_gem'
   end
 end

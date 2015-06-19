@@ -1,4 +1,5 @@
-require 'feature_helper'
+require_relative '../../support/feature_helper'
+require_relative '../../support/testing_dsl'
 
 describe "Whitelisted licenses" do
   # As a developer
@@ -28,12 +29,10 @@ describe "Whitelisted licenses" do
 
   specify "are shown in the CLI" do
     developer.execute_command 'license_finder whitelist add Expat'
-    expect(developer).to be_seeing 'Expat'
     developer.execute_command 'license_finder whitelist list'
     expect(developer).to be_seeing 'MIT'
 
     developer.execute_command 'license_finder whitelist remove Expat'
-    expect(developer).to be_seeing 'Expat'
     developer.execute_command 'license_finder whitelist list'
     expect(developer).to_not be_seeing 'MIT'
   end

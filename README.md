@@ -294,7 +294,7 @@ rebar_deps_dir: './rebar_deps'
 
 ### Gradle Projects
 
-You need to install the license gradle plugin:
+You need to have Java 1.8 or above installed and you need to install the license gradle plugin:
 [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
 
 By default, `license_finder` will report on gradle's "runtime" dependencies. If
@@ -309,7 +309,9 @@ downloadLicenses {
   dependencyConfiguration "compile"
 }
 ```
+### Maven Projects
 
+You need to have Java 1.8 or above.
 
 ## Requirements
 
