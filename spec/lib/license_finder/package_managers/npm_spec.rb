@@ -61,6 +61,9 @@ module LicenseFinder
                 "dependencies": {
                   "dependency1-1.js": {
                     "name": "dependency1-1.js"
+                  },
+                 "dependency3-1.js": {
+                    "name": "dependency3-1.js"
                   }
                 }
               }
@@ -90,7 +93,7 @@ module LicenseFinder
       it 'fetches data from npm' do
         current_packages = npm.current_packages
 
-        expect(current_packages.map(&:name)).to eq(["dependency.js", "dependency1-1.js", "dependency2.js", "dependency2-1.js", "dependency3.js"])
+        expect(current_packages.map(&:name)).to eq(["dependency.js", "dependency1-1.js", "dependency2.js", "dependency2-1.js", "dependency3.js",  "dependency3-1.js"])
       end
 
       it "finds the groups for dependencies" do
@@ -100,6 +103,7 @@ module LicenseFinder
         expect(current_packages.find { |p| p.name == "dependency2.js" }.groups).to eq(["dependencies"])
         expect(current_packages.find { |p| p.name == "dependency2-1.js" }.groups).to eq(["dependencies"])
         expect(current_packages.find { |p| p.name == "dependency3.js" }.groups).to eq(["devDependencies"])
+        expect(current_packages.find { |p| p.name == "dependency3-1.js" }.groups).to eq(["devDependencies"])
       end
 
       it "does not support name version string" do
