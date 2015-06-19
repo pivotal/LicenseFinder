@@ -26,7 +26,7 @@ module LicenseFinder
 
     def ignored?(package)
       decisions.ignored?(package.name) ||
-        package.groups.any? { |group| decisions.ignored_group?(group) }
+        (package.groups.any? && package.groups.all? { |group| decisions.ignored_group?(group) })
     end
 
     def with_decided_licenses(package)
