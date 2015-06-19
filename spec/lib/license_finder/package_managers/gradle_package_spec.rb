@@ -18,6 +18,34 @@ module LicenseFinder
     its(:children) { should == [] } # no way to get children from gradle?
     its(:install_path) { should be_nil }
 
+    describe '#eql?' do
+      it 'returns true when the name version are equal' do
+        package1 = GradlePackage.new('name' => 'unused:foo:1.0')
+        package2 = GradlePackage.new('name' => 'unused:foo:1.0')
+
+        expect(package1.eql?package2).to eq(true)
+      end
+
+      it 'returns false when the name and version are not equal' do
+        package1 = GradlePackage.new('name' => 'unused:foo:1.0')
+        package2 = GradlePackage.new('name' => 'unused:foo:2.0')
+        package3 = GradlePackage.new('name' => 'unused:bar:1.0')
+
+        expect(package1.eql?package2).not_to eq(true)
+        expect(package1.eql?package3).not_to eq(true)
+        expect(package2.eql?package3).not_to eq(true)
+      end
+    end
+
+    describe '#hash' do
+      it 'returns equal hash values the attributes are equal' do
+        package1 = GradlePackage.new('name' => 'unused:foo:1.0')
+        package2 = GradlePackage.new('name' => 'unused:foo:1.0')
+
+        expect(package1.hash).to eq(package2.hash)
+      end
+    end
+
     describe "#license_names_from_spec" do
       it "returns the license" do
         expect(subject.license_names_from_spec).to eq ["MIT"]

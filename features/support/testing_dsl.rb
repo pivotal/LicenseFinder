@@ -3,8 +3,12 @@ require 'delegate'
 module LicenseFinder
   module TestingDSL
     class User
-      def run_license_finder
-        execute_command "license_finder --quiet"
+      def run_license_finder(path = nil)
+        if path
+          execute_command_in_path('license_finder --quiet', Paths.project("my_app/#{path}"))
+        else
+          execute_command 'license_finder --quiet'
+        end
       end
 
       def create_empty_project
@@ -81,6 +85,11 @@ module LicenseFinder
       def project_dir
         Paths.project
       end
+
+      def clone(fixture_name)
+        FileUtils.mkpath(Paths.my_app.join(fixture_name))
+        FileUtils.cp_r(Paths.fixtures.join(fixture_name), Paths.my_app)
+      end
     end
 
     class EmptyProject < Project
@@ -128,7 +137,13 @@ module LicenseFinder
 
     class GradleProject < Project
       def add_dep
-        install_fixture("build.gradle")
+        clone('single-module-gradle')
+      end
+    end
+
+    class MultiModuleGradleProject < Project
+      def add_dep
+        clone('multi-module-gradle')
       end
     end
 
@@ -285,6 +300,10 @@ module LicenseFinder
 
       def projects
         root.join("tmp", "projects")
+      end
+
+      def my_app
+        root.join("tmp", "projects", "my_app")
       end
 
       def project(name = "my_app")
