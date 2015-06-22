@@ -1,6 +1,5 @@
 require_relative '../../support/feature_helper'
 require_relative '../../support/testing_dsl'
-require 'bundler'
 
 describe "Ignored Groups" do
   # As a developer
@@ -19,7 +18,7 @@ describe "Ignored Groups" do
     expect(developer).to_not be_seeing 'dev_gem'
   end
 
-  specify "and their dependencies are excluded from reports" do
+  xspecify "and their dependencies are excluded from reports" do
     project = developer.create_ruby_app
     gem = developer.create_gem 'dev_gem', license: 'GPL', dependencies: 'jwt'
     project.depend_on gem, groups: ['dev']

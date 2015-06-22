@@ -26,8 +26,8 @@ before_install:
   - .travis/install_gradle.sh
   - .travis/install_rebar.sh
   - .travis/install_bower.sh
-  - .travis/install_virtualenv.sh
-  - .travis/compile_install_local_gem.sh
 
-before_script:
-  - source ~/Virtualenvs/lf/bin/activate
+script:
+  - rake install
+  - rake features
+  - rake spec
