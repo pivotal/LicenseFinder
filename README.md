@@ -31,6 +31,19 @@ report.
 
 ## Installation
 
+License Finder requires Ruby 1.9.3 or greater to run. If you have an older
+version of Ruby installed, you can update via Homebrew:
+
+```sh
+$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+then:
+
+```sh
+$ brew install ruby
+```
+
 The easiest way to use `license_finder` is to install it as a command
 line tool, like brew, awk, gem or bundler:
 
