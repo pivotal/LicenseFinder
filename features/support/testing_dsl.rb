@@ -141,6 +141,12 @@ module LicenseFinder
       end
     end
 
+    class GoProject < Project
+      def add_dep
+        clone('gopath')
+      end
+    end
+
     class MultiModuleGradleProject < Project
       def add_dep
         clone('multi-module-gradle')
