@@ -2,15 +2,14 @@ require 'spec_helper'
 
 module LicenseFinder
   describe GodepPackage do
-    before do
-      ENV['GOPATH'] = '/fake/gopath'
-    end
-
     subject do
       GodepPackage.new(
         {
           'ImportPath' => 'github.com/cloudfoundry-incubator/candiedyaml',
           'Rev' => '5f3b3579b3dc360c8ad3f86fe9e59e58c5652d10'
+        },
+        {
+          install_prefix: '/fake/gopath/src'
         }
       )
     end
