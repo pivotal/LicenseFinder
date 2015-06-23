@@ -32,7 +32,8 @@ task :check_dependencies do
     "pip" => "Pip",
     "gradle" => "Gradle",
     "bower" => "Bower",
-    "rebar" => "Rebar"
+    "rebar" => "Rebar",
+    "godep" => "Go"
   }
   dependencies["pod"] = "Cocoapods" if LicenseFinder::Platform.darwin?
   satisfied = true

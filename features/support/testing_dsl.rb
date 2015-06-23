@@ -145,6 +145,14 @@ module LicenseFinder
       def add_dep
         clone('gopath')
       end
+
+      def install
+        shell_out("GOPATH=#{project_dir}/gopath godep restore")
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath', 'src', 'github.com', 'pivotal', 'foo')).shell_out(command)
+      end
     end
 
     class MultiModuleGradleProject < Project

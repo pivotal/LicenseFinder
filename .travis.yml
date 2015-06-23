@@ -12,7 +12,7 @@ matrix:
     - rvm: jruby-head
 
 env:
-  - PATH=$PATH:$HOME/gradle/bin:$HOME/rebar
+  - PATH=$PATH:$HOME/gradle/bin:$HOME/rebar:$HOME/go/bin GOPATH=$HOME/go
 
 notifications:
   email:
@@ -26,6 +26,7 @@ before_install:
   - .travis/install_gradle.sh
   - .travis/install_rebar.sh
   - .travis/install_bower.sh
+  - .travis/install_godep.sh
 
 script:
   - rake install
