@@ -38,6 +38,29 @@ module LicenseFinder
         expect(decision_applier.acknowledged).to be_empty
       end
 
+      it "does not ignore packages if some of their groups are not ignored" do
+        decisions = Decisions.new
+                      .ignore_group("development")
+        dev_and_prod_dep = Package.new("dev_and_prod_dep", nil, groups: ["development", "production"])
+        decision_applier = described_class.new(
+          decisions: decisions,
+          packages: [dev_and_prod_dep]
+        )
+        expect(decision_applier.acknowledged).to eq [dev_and_prod_dep]
+      end
+
+      it "does not ignore packages if they have no groups" do
+        decisions = Decisions.new
+                      .ignore_group("development")
+        dep_with_no_group = Package.new("dep_with_no_group", nil, groups: [])
+        decision_applier = described_class.new(
+          decisions: decisions,
+          packages: [dep_with_no_group]
+        )
+        expect(decision_applier.acknowledged).to eq [dep_with_no_group]
+      end
+
+
       it "adds manual approvals to packages" do
         decisions = Decisions.new
           .add_package("manual", nil)
