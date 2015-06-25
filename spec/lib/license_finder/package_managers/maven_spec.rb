@@ -2,7 +2,8 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Maven do
-    let(:maven) { Maven.new }
+    subject { Maven.new(project_path: Pathname('/fake/path')) }
+
     it_behaves_like "a PackageManager"
 
     def license_xml(xml)
@@ -18,12 +19,12 @@ module LicenseFinder
 
     describe '.current_packages' do
       before do
-        allow(maven).to receive('`').with(/mvn/)
+        allow(subject).to receive('`').with('cd /fake/path; mvn license:download-licenses')
       end
 
       def stub_license_report(deps)
         fake_file = double(:license_report, read: license_xml(deps))
-        allow(maven).to receive(:license_report).and_return(fake_file)
+        allow(subject).to receive(:license_report).and_return(fake_file)
       end
 
       it 'lists all the current packages' do
@@ -38,7 +39,7 @@ module LicenseFinder
            </dependency>
         ")
 
-        expect(maven.current_packages.map { |p| [p.name, p.version] }).to eq [
+        expect(subject.current_packages.map { |p| [p.name, p.version] }).to eq [
           ["junit", "4.11"],
           ["hamcrest-core", "1.3"]
         ]
@@ -58,7 +59,7 @@ module LicenseFinder
           </dependency>
         ")
 
-        expect(maven.current_packages.first.licenses.map(&:name)).to eq ['License 1', 'License 2']
+        expect(subject.current_packages.first.licenses.map(&:name)).to eq ['License 1', 'License 2']
       end
 
       it "handles no licenses" do
@@ -67,7 +68,7 @@ module LicenseFinder
           </dependency>
         ")
 
-        expect(maven.current_packages.first.licenses.map(&:name)).to eq ['unknown']
+        expect(subject.current_packages.first.licenses.map(&:name)).to eq ['unknown']
       end
     end
   end

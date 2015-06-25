@@ -5,6 +5,7 @@ module LicenseFinder
   describe NPM do
     let(:root) { "/fake-node-project" }
     let(:npm) { NPM.new project_path: Pathname.new(root) }
+
     it_behaves_like "a PackageManager"
 
     let(:package_json) do
@@ -114,7 +115,7 @@ module LicenseFinder
             }
           }
         JSON
-        allow(npm).to receive(:capture).with(/npm/).and_return([json, true])
+        allow(npm).to receive(:capture).with('cd /fake-node-project; npm list --json --long').and_return([json, true])
 
         current_packages = npm.current_packages
 

@@ -1,9 +1,8 @@
 require 'spec_helper'
-require 'fakefs/safe'
 
 module LicenseFinder
   describe Godep do
-    subject { Godep.new }
+    subject { Godep.new(project_path: Pathname('/fake/path')) }
 
     it_behaves_like 'a PackageManager'
 
@@ -26,7 +25,7 @@ module LicenseFinder
       end
 
       before do
-        allow(IO).to receive(:read).with('Godeps/Godeps.json').and_return(content.to_s)
+        allow(IO).to receive(:read).with(Pathname('/fake/path/Godeps/Godeps.json')).and_return(content.to_s)
       end
 
       it 'should return an array of required packages' do
@@ -36,19 +35,19 @@ module LicenseFinder
 
       context 'when dependencies are vendored' do
         before do
-          allow(File).to receive(:exist?).with('Godeps/_workspace').and_return(true)
+          allow(File).to receive(:exist?).with(Pathname('/fake/path/Godeps/_workspace')).and_return(true)
         end
 
         it 'should set the install_path to the vendored directory' do
           packages = subject.current_packages
-          expect(packages[0].install_path).to eq('Godeps/_workspace/src/github.com/pivotal/foo')
-          expect(packages[1].install_path).to eq('Godeps/_workspace/src/github.com/pivotal/bar')
+          expect(packages[0].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/foo')
+          expect(packages[1].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/bar')
         end
       end
 
       context 'when dependencies are not vendored' do
         before do
-          ENV['GOPATH'] = '/fake/path'
+          ENV['GOPATH'] = '/fake/go/path'
         end
 
         after do
@@ -57,8 +56,8 @@ module LicenseFinder
 
         it 'should set the install_path to the GOPATH' do
           packages = subject.current_packages
-          expect(packages[0].install_path).to eq('/fake/path/src/github.com/pivotal/foo')
-          expect(packages[1].install_path).to eq('/fake/path/src/github.com/pivotal/bar')
+          expect(packages[0].install_path).to eq('/fake/go/path/src/github.com/pivotal/foo')
+          expect(packages[1].install_path).to eq('/fake/go/path/src/github.com/pivotal/bar')
         end
       end
     end

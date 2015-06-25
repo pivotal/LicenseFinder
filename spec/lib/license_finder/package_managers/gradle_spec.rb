@@ -2,23 +2,29 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Gradle do
-    let(:gradle) { Gradle.new }
+    subject { Gradle.new(project_path: Pathname('/fake/path')) }
+    
     let(:content) { [] }
 
     it_behaves_like 'a PackageManager'
 
     describe '#current_packages' do
       before do
-        allow(gradle).to receive('`').with(/gradle downloadLicenses/)
-
-        dependencies = double(:gradle_dependency_file, dependencies: content)
+        allow(subject).to receive('`').with('cd /fake/path; gradle downloadLicenses')
+        dependencies = double(:subject_dependency_file, dependencies: content)
         expect(GradleDependencyFinder).to receive(:new).and_return(dependencies)
       end
 
-      it 'uses custom gradle command, if provided' do
-        gradle = Gradle.new(gradle_command: "gradlefoo")
-        expect(gradle).to receive('`').with(/gradlefoo downloadLicenses/)
-        gradle.current_packages
+      it 'uses custom subject command, if provided' do
+        subject = Gradle.new(gradle_command: 'subjectfoo', project_path: '/fake/path')
+        expect(subject).to receive('`').with('cd /fake/path; subjectfoo downloadLicenses')
+        subject.current_packages
+      end
+
+      it 'sets the working directory to project_path, if provided' do
+        subject = Gradle.new(project_path: '/Users/foo/bar')
+        expect(subject).to receive('`').with('cd /Users/foo/bar; gradle downloadLicenses')
+        subject.current_packages
       end
 
       context 'when dependencies are found' do
@@ -32,7 +38,7 @@ module LicenseFinder
         end
 
         it 'lists all dependencies' do
-          expect(gradle.current_packages.map(&:name)).to eq ['spring-aop', 'spring-core']
+          expect(subject.current_packages.map(&:name)).to eq ['spring-aop', 'spring-core']
         end
       end
 
@@ -49,7 +55,7 @@ module LicenseFinder
         end
 
         it 'lists all dependencies' do
-          expect(gradle.current_packages.first.licenses.map(&:name)).to eq ['License 1', 'License 2']
+          expect(subject.current_packages.first.licenses.map(&:name)).to eq ['License 1', 'License 2']
         end
       end
 
@@ -63,7 +69,7 @@ module LicenseFinder
         end
 
         it 'returns unknown' do
-          expect(gradle.current_packages.first.licenses.map(&:name)).to eq ['unknown']
+          expect(subject.current_packages.first.licenses.map(&:name)).to eq ['unknown']
         end
       end
 
@@ -80,7 +86,7 @@ module LicenseFinder
         end
 
         it 'lists all dependencies' do
-          expect(gradle.current_packages.map(&:name)).to eq ['junit', 'mockito-core']
+          expect(subject.current_packages.map(&:name)).to eq ['junit', 'mockito-core']
         end
 
         context 'and there are duplicate dependencies' do
@@ -99,7 +105,7 @@ module LicenseFinder
           end
 
           it 'removes duplicates' do
-            expect(gradle.current_packages.map(&:name)).to eq ['junit', 'mockito-core']
+            expect(subject.current_packages.map(&:name)).to eq ['junit', 'mockito-core']
           end
         end
       end

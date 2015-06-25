@@ -2,7 +2,8 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Rebar do
-    let(:rebar) { Rebar.new }
+    subject { Rebar.new(project_path: Pathname('/fake/path')) }
+
     it_behaves_like "a PackageManager"
 
     output = <<-CMDOUTPUT
@@ -13,17 +14,17 @@ jiffy TAG 0.9.0 https://github.com/davisp/jiffy.git
 
     describe '.current_packages' do
       it 'lists all the current packages' do
-        allow(rebar).to receive(:capture).with(/rebar/).and_return([output, true])
+        allow(subject).to receive(:capture).with('cd /fake/path; rebar list-deps').and_return([output, true])
 
-        current_packages = rebar.current_packages
+        current_packages = subject.current_packages
 
         expect(current_packages.map(&:name)).to eq(["uuid", "jiffy"])
         expect(current_packages.map(&:install_path)).to eq([Pathname("deps/uuid"), Pathname("deps/jiffy")])
       end
 
       it "fails when command fails" do
-        allow(rebar).to receive(:capture).with(/rebar/).and_return('Some error', false).once
-        expect { rebar.current_packages }.to raise_error(RuntimeError)
+        allow(subject).to receive(:capture).with(/rebar/).and_return('Some error', false).once
+        expect { subject.current_packages }.to raise_error(RuntimeError)
       end
 
       it "uses custom rebar command, if provided" do

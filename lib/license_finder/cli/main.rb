@@ -51,8 +51,6 @@ module LicenseFinder
         end
       end
 
-
-
       desc "version", "Print the version of LicenseFinder"
 
       def version
@@ -68,12 +66,12 @@ module LicenseFinder
       subcommand "project_name", ProjectName, "Set the project name, for display in reports"
 
       private
+
       def save_report(content, file_name)
         File.open(file_name, 'w') do |f|
           f.write(content)
         end
       end
-
 
       def report_of(content)
         report = FORMATS[options[:format]]

@@ -46,7 +46,7 @@ module LicenseFinder
           {decisions_file: "primary"},
           {"decisions_file" => "secondary"}
         )
-        expect(subject.decisions_file_path.to_s).to eq "primary"
+        expect(subject.decisions_file_path.to_s).to end_with "primary"
       end
 
       it "accepts saved value" do
@@ -54,7 +54,7 @@ module LicenseFinder
           {decisions_file: nil},
           {"decisions_file" => "secondary"}
         )
-        expect(subject.decisions_file_path.to_s).to eq "secondary"
+        expect(subject.decisions_file_path.to_s).to end_with "secondary"
       end
 
       it "has default" do
@@ -62,21 +62,20 @@ module LicenseFinder
           {decisions_file: nil},
           {"decisions_file" => nil}
         )
-        expect(subject.decisions_file_path.to_s).to eq "doc/dependency_decisions.yml"
+        expect(subject.decisions_file_path.to_s).to end_with "doc/dependency_decisions.yml"
       end
 
       it "prepends project path to default path if project_path option is set" do
         subject = described_class.new({project_path: "magic_path"}, {})
-        expect(subject.decisions_file_path.to_s).to eq "magic_path/doc/dependency_decisions.yml"
+        expect(subject.decisions_file_path.to_s).to end_with "magic_path/doc/dependency_decisions.yml"
       end
 
       it "prepends project path to provided value" do
-        subject = described_class.new(
-            {decisions_file: "primary",
+        subject = described_class.new({decisions_file: "primary",
             project_path: "magic_path"},
             {"decisions_file" => "secondary"}
         )
-        expect(subject.decisions_file_path.to_s).to eq "magic_path/primary"
+        expect(subject.decisions_file_path.to_s).to end_with "magic_path/primary"
       end
     end
 
@@ -86,12 +85,12 @@ module LicenseFinder
             {rebar_deps_dir: nil},
             {"rebar_deps_dir" => nil}
         )
-        expect(subject.rebar_deps_dir).to eq "deps"
+        expect(subject.rebar_deps_dir.to_s).to end_with "deps"
       end
 
       it "prepends project path to default path if project_path option is set" do
         subject = described_class.new({project_path: "magic_path"}, {})
-        expect(subject.rebar_deps_dir).to eq "magic_path/deps"
+        expect(subject.rebar_deps_dir.to_s).to end_with "magic_path/deps"
       end
 
       it "prepends project path to provided value" do
@@ -100,7 +99,7 @@ module LicenseFinder
              project_path: "magic_path"},
             {"rebar_deps_dir" => "secondary"}
         )
-        expect(subject.rebar_deps_dir).to eq "magic_path/primary"
+        expect(subject.rebar_deps_dir.to_s).to end_with "magic_path/primary"
       end
     end
   end

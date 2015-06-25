@@ -2,8 +2,9 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Bower do
-    let(:bower) { Bower.new }
-    it_behaves_like "a PackageManager"
+    subject { Bower.new(project_path: Pathname('/fake/path')) }
+
+    it_behaves_like 'a PackageManager'
 
     describe '.current_packages' do
       it 'lists all the current packages' do
@@ -25,11 +26,10 @@ module LicenseFinder
             }
           }
         JSON
-        allow(bower).to receive("`").with(/bower/).and_return(json)
+        allow(subject).to receive('`').with('cd /fake/path; bower list --json -l action').and_return(json)
 
-        expect(bower.current_packages.map { |p| [p.name, p.install_path] }).to eq [
-          ["dependency-library", "/path/to/thing"],
-          ["another-dependency", "/path/to/thing2"]
+        expect(subject.current_packages.map { |p| [p.name, p.install_path] }).to eq [
+          %w(dependency-library /path/to/thing), %w(another-dependency /path/to/thing2)
         ]
       end
     end

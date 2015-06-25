@@ -42,7 +42,7 @@ module LicenseFinder
     end
 
     def npm_json
-      command = "npm list --json --long"
+      command = "cd #{project_path}; npm list --json --long"
       output, success = capture(command)
       if success
         json = JSON(output)

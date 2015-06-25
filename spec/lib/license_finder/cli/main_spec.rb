@@ -107,7 +107,7 @@ module LicenseFinder
           end
 
           context "when the project has no name" do
-            before { allow(Dir).to receive(:getwd).and_return("/path/to/a_project") }
+            before { allow_any_instance_of(Pathname).to receive(:basename).and_return("a_project") }
 
             it "should default to the directory name" do
               expect(report).to include "a_project"

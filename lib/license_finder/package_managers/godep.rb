@@ -2,22 +2,24 @@ require 'json'
 
 module LicenseFinder
   class Godep < PackageManager
-    GODEP_WORKSPACE = 'Godeps/_workspace'
-    GODEP_DEPENDENCIES = 'Godeps/Godeps.json'
 
     def current_packages
-      json = JSON.parse(IO.read(GODEP_DEPENDENCIES))
+      json = JSON.parse(IO.read(package_path))
       json['Deps'].map { |dep| GodepPackage.new(dep, install_prefix: "#{install_prefix}/src") }
     end
 
     def package_path
-      project_path.join(GODEP_DEPENDENCIES)
+      project_path.join('Godeps/Godeps.json')
     end
 
     private
 
+    def workspace_dir
+      project_path.join('Godeps/_workspace')
+    end
+
     def install_prefix
-      File.exist?(GODEP_WORKSPACE) ? GODEP_WORKSPACE : ENV['GOPATH']
+      File.exist?(workspace_dir) ? workspace_dir : ENV['GOPATH']
     end
   end
 end

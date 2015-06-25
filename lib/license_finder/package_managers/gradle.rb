@@ -9,7 +9,7 @@ module LicenseFinder
     end
 
     def current_packages
-      `#{@command} downloadLicenses`
+      `cd #{project_path}; #{@command} downloadLicenses`
 
       packages = []
       dependencies = GradleDependencyFinder.new(project_path).dependencies

@@ -1,12 +1,12 @@
 module LicenseFinder
   class GradleDependencyFinder
-    def initialize(path)
-      @path = path
+    def initialize(project_path)
+      @project_path = project_path
     end
 
     def dependencies
       [].tap do |files|
-        Dir.glob("#{@path}/**/dependency-license.xml") do |file|
+        Dir.glob("#{@project_path}/**/dependency-license.xml") do |file|
           files << File.open(file).read
         end
       end
