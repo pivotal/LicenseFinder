@@ -307,10 +307,11 @@ rebar_deps_dir: './rebar_deps'
 
 ### Gradle Projects
 
-You need to have Java 1.8 or above installed and you need to install the license gradle plugin:
+`license_finder` supports both Gradle 1.x and Gradle 2.x. You need to have installed
+the license-gradle-plugin in your project:
 [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
 
-By default, `license_finder` will report on gradle's "runtime" dependencies. If
+By default, `license_finder` will report on Gradle's "runtime" dependencies. If
 you want to generate a report for some other dependency configuration (e.g.
 Android projects will sometimes specify their meaningful dependencies in the
 "compile" group), you can specify it in your project's `build.gradle`:
@@ -322,9 +323,12 @@ downloadLicenses {
   dependencyConfiguration "compile"
 }
 ```
+
+
 ### Maven Projects
 
-You need to have Java 1.8 or above.
+`license_finder` supports Maven.
+
 
 ## Requirements
 
