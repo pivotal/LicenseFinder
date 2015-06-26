@@ -8,15 +8,24 @@ module LicenseFinder
     it_behaves_like 'a PackageManager'
 
     describe '#current_packages' do
+      let(:content) {
+        'github.com/cloudfoundry/loggregator/src/bitbucket.org/kardianos/osext
+        github.com/cloudfoundry/loggregator/src/deaagent
+        github.com/cloudfoundry/loggregator/src/deaagent/deaagent
+        github.com/cloudfoundry/loggregator/src/deaagent/domain
+        github.com/cloudfoundry/loggregator/src/doppler
+        github.com/cloudfoundry/loggregator/src/doppler/config'
+      }
 
-      it 'should log an error message' do
-        expect(logger).to receive(:log)
-        subject.current_packages
+      before do
+        allow_any_instance_of(Kernel).to receive('`').with('cd /fake/path; go list -f "{{.ImportPath}} " ./...').and_return(content.to_s)
       end
 
-      it 'should return an empty array of packages' do
-        allow(logger).to receive(:log)
-        expect(subject.current_packages).to be_empty
+      describe 'should return an array of go packages' do
+        it 'provides package names' do
+          packages = subject.current_packages
+          expect(packages.map(&:name)).to include('kardianos-osext', 'deaagent', 'deaagent-deaagent', 'deaagent-domain', 'doppler', 'doppler-config')
+        end
       end
     end
 
