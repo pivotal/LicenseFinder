@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 module LicenseFinder
-  describe GodepPackage do
+  describe GoPackage do
     subject do
-      GodepPackage.new(
+      GoPackage.new(
         {
           'ImportPath' => 'github.com/cloudfoundry-incubator/candiedyaml',
           'Rev' => '5f3b3579b3dc360c8ad3f86fe9e59e58c5652d10'

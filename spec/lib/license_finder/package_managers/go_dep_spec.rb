@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 module LicenseFinder
-  describe Godep do
-    subject { Godep.new(project_path: Pathname('/fake/path')) }
+  describe GoDep do
+    subject { GoDep.new(project_path: Pathname('/fake/path')) }
 
     it_behaves_like 'a PackageManager'
 
@@ -35,6 +35,7 @@ module LicenseFinder
 
       context 'when dependencies are vendored' do
         before do
+          allow(File).to receive(:exist?).with(Pathname('/fake/path/.envrc')).and_return(false)
           allow(File).to receive(:exist?).with(Pathname('/fake/path/Godeps/_workspace')).and_return(true)
         end
 
