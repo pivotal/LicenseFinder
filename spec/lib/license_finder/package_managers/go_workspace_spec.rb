@@ -9,12 +9,15 @@ module LicenseFinder
 
     describe '#current_packages' do
       let(:content) {
-        'github.com/cloudfoundry/loggregator/src/bitbucket.org/kardianos/osext
-        github.com/cloudfoundry/loggregator/src/deaagent
-        github.com/cloudfoundry/loggregator/src/deaagent/deaagent
-        github.com/cloudfoundry/loggregator/src/deaagent/domain
-        github.com/cloudfoundry/loggregator/src/doppler
-        github.com/cloudfoundry/loggregator/src/doppler/config'
+        '_/Users/pivotal/workspace/loggregator/src/bitbucket.org/kardianos/osext
+          _/Users/pivotal/workspace/loggregator/src/deaagent
+          _/Users/pivotal/workspace/loggregator/src/deaagent/deaagent
+          _/Users/pivotal/workspace/loggregator/src/deaagent/domain
+          _/Users/pivotal/workspace/loggregator/src/doppler
+          _/Users/pivotal/workspace/loggregator/src/doppler/config
+          _/Users/pivotal/workspace/loggregator/src/doppler/groupedsinks
+          _/Users/pivotal/workspace/loggregator/src/doppler/groupedsinks/firehose_group
+          _/Users/pivotal/workspace/loggregator/src/doppler/groupedsinks/sink_wrapper'
       }
 
       before do
@@ -24,7 +27,10 @@ module LicenseFinder
       describe 'should return an array of go packages' do
         it 'provides package names' do
           packages = subject.current_packages
-          expect(packages.map(&:name)).to include('kardianos-osext', 'deaagent', 'deaagent-deaagent', 'deaagent-domain', 'doppler', 'doppler-config')
+          first_package = packages[0]
+          expect(first_package.name).to include('osext')
+          expect(first_package.version).to eq 'unknown'
+          expect(first_package.install_path).to eq '/Users/pivotal/workspace/loggregator/src/bitbucket.org/kardianos/osext'
         end
       end
     end
