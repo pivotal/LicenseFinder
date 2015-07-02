@@ -11,7 +11,7 @@ module LicenseFinder
           packages: packages
         )
       end
-      let(:license_finder_instance) { double(:license_finder, unapproved: [unapproved_dependency], project_name: 'taco stand') }
+      let(:license_finder_instance) { double(:license_finder, unapproved: [unapproved_dependency], blacklisted: [], project_name: 'taco stand') }
       let(:license) { double(:license, name: "thing") }
       let(:unapproved_dependency) { double(:dependency, name: "a dependency", version: "2.4.1", missing?: false, licenses: [license]) }
 
@@ -181,6 +181,18 @@ module LicenseFinder
             end
             expect(result).to match /dependencies/i
             expect(result).to match /one dependency/
+          end
+        end
+
+        context "with blacklisted dependencies" do
+          let(:decisions) { Decisions.new.blacklist('GPLv3')}
+          let(:packages)  { [Package.new('blacklisted', '1.0', spec_licenses: ['GPLv3'])] }
+
+          it "reports blacklisted dependencies" do
+            result = capture_stdout do
+              expect { action_items }.to raise_error(SystemExit)
+            end
+            expect(result).to include "Blacklisted dependencies:\nblacklisted, 1.0, GPLv3"
           end
         end
 

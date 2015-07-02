@@ -26,12 +26,21 @@ module LicenseFinder
 
       def action_items
         unapproved = license_finder.unapproved
+        blacklisted = license_finder.blacklisted
 
-        if unapproved.empty?
+        if unapproved.empty? && blacklisted.empty?
           say "All dependencies are approved for use", :green
         else
-          say "Dependencies that need approval:", :red
-          say report_of(unapproved)
+          unless blacklisted.empty?
+            say "Blacklisted dependencies:", :red
+            say report_of(blacklisted)
+          end
+
+          unless unapproved.empty?
+            say "Dependencies that need approval:", :yellow
+            say report_of(unapproved)
+          end
+
           exit 1
         end
       end

@@ -114,6 +114,38 @@ module LicenseFinder
         end
       end
     end
+
+    describe '#blacklisted?' do
+      it 'defaults to false' do
+        expect(subject.blacklisted?).to eq(false)
+      end
+
+      it 'can be set by blacklisted!' do
+        subject.blacklisted!
+        expect(subject.blacklisted?).to eq(true)
+      end
+    end
+
+    describe '#approved?' do
+      it 'returns false by default' do
+        expect(subject.approved?).to eq(false)
+      end
+
+      it 'returns true when approved manually' do
+        subject.approved_manually!('I approve of this dependency')
+        expect(subject.approved?).to eq(true)
+      end
+
+      it 'returns true when whitelisted' do
+        subject.whitelisted!
+        expect(subject.approved?).to eq(true)
+      end
+
+      it 'returns false when blacklisted' do
+        subject.blacklisted!
+        expect(subject.approved?).to eq(false)
+      end
+    end
   end
 end
 

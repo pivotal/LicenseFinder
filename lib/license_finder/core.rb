@@ -35,7 +35,7 @@ module LicenseFinder
     end
 
     extend Forwardable
-    def_delegators :decision_applier, :acknowledged, :unapproved
+    def_delegators :decision_applier, :acknowledged, :unapproved, :blacklisted
 
     def project_name
       decisions.project_name || config.project_path.basename.to_s

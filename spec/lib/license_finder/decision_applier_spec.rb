@@ -121,16 +121,29 @@ module LicenseFinder
       end
     end
 
-    describe "#unapproved" do
-      it "returns all acknowledged packages that are not approved" do
-        manual_package = double(:manual, name: 'manual', approved?: true )
-        whitelist_package = double(:whitelist, name: 'whitelist', approved?: true)
-        bad_package = double(:not_approved, name: 'not_approved', approved?: false)
-        decisions = double(:decisions)
+    describe '#unapproved' do
+      it 'returns all acknowledged packages that are not approved' do
+        decision_applier = described_class.new(
+          decisions: Decisions.new.add_package('baz', '0.0.1').whitelist('whitelist', nil).blacklist('blacklist', nil),
+          packages: [
+            Package.new('foo', '0.0.1', spec_licenses: ['whitelist']),
+            Package.new('bar', '0.0.1', spec_licenses: ['blacklist'])
+          ]
+        )
 
-        decision_applier = described_class.new(decisions: decisions, packages: [])
-        allow(decision_applier).to receive(:acknowledged).and_return([manual_package, whitelist_package, bad_package])
-        expect(decision_applier.unapproved).to include(bad_package)
+        expect(decision_applier.unapproved.map(&:name)).to include('baz')
+        expect(decision_applier.unapproved.map(&:name)).not_to include('foo')
+      end
+    end
+
+    describe '#blacklisted' do
+      it 'returns all packages that have blacklisted licenses' do
+        decision_applier = described_class.new(
+          decisions: Decisions.new.blacklist('GPLv3', nil),
+          packages: [Package.new('foo', '1.0', spec_licenses: ['GPLv3'])]
+        )
+
+        expect(decision_applier.blacklisted.map(&:name)).to eq(['foo'])
       end
     end
   end

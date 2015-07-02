@@ -43,6 +43,7 @@ module LicenseFinder
 
       ## APPROVAL
       @whitelisted = false
+      @blacklisted = false
       @manual_approval = nil
 
       ## LICENSING
@@ -62,20 +63,28 @@ module LicenseFinder
       @manual_approval = approval
     end
 
-    def whitelisted!
-      @whitelisted = true
-    end
-
-    def approved?
-      approved_manually? || whitelisted?
-    end
-
     def approved_manually?
       !@manual_approval.nil?
     end
 
+    def approved?
+      approved_manually? || whitelisted? && !blacklisted?
+    end
+
+    def whitelisted!
+      @whitelisted = true
+    end
+
     def whitelisted?
       @whitelisted
+    end
+
+    def blacklisted!
+      @blacklisted = true
+    end
+
+    def blacklisted?
+      @blacklisted
     end
 
     attr_reader :manual_approval
@@ -116,6 +125,8 @@ module LicenseFinder
     def missing?
       @missing
     end
+
+
   end
 end
 

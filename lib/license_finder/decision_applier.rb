@@ -6,7 +6,11 @@ module LicenseFinder
     end
 
     def unapproved
-      acknowledged.reject(&:approved?)
+      acknowledged.select { |p| !p.approved? && !p.blacklisted? }
+    end
+
+    def blacklisted
+      packages.select { |p| p.blacklisted? }
     end
 
     def acknowledged
@@ -38,7 +42,7 @@ module LicenseFinder
 
     def with_approval(package)
       if package.licenses.all? { |license| decisions.blacklisted?(license) }
-        # do not approve; could mark package.blacklisted! if needed for reports
+        package.blacklisted!
       elsif decisions.approved?(package.name)
         package.approved_manually!(decisions.approval_of(package.name))
       elsif package.licenses.any? { |license| decisions.whitelisted?(license) }
