@@ -4,7 +4,8 @@ module LicenseFinder
   class GoWorkspace < PackageManager
     def current_packages
       go_output.map do |package|
-        GoPackage.new(package, logger:logger)
+        package_name = package['ImportPath'].gsub(project_path.to_s, '')[1..-1]
+        GoPackage.new(package, logger: logger, package_name: package_name, workspace_root: project_path)
       end
     end
 
@@ -19,14 +20,10 @@ module LicenseFinder
       paths = cmd_text.gsub(/\s{2,}/, ",").split(",")
       paths.map do |path|
         {
-          'ImportPath' => format_path(path),
+          'ImportPath' => path[1..-1],
           'Rev' => 'unknown'
         }
       end
-    end
-
-    def format_path(path)
-      path[2..-1]
     end
   end
 end
