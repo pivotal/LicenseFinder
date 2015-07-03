@@ -28,7 +28,7 @@ module LicenseFinder
         unapproved = license_finder.unapproved
         blacklisted = license_finder.blacklisted
 
-        if unapproved.empty? && blacklisted.empty?
+        if unapproved.empty?
           say "All dependencies are approved for use", :green
         else
           unless blacklisted.empty?
@@ -36,9 +36,10 @@ module LicenseFinder
             say report_of(blacklisted)
           end
 
-          unless unapproved.empty?
+          other_unapproved = unapproved - blacklisted
+          unless other_unapproved.empty?
             say "Dependencies that need approval:", :yellow
-            say report_of(unapproved)
+            say report_of(other_unapproved)
           end
 
           exit 1

@@ -6,11 +6,11 @@ module LicenseFinder
     end
 
     def unapproved
-      acknowledged.select { |p| !p.approved? && !p.blacklisted? }
+      acknowledged.reject(&:approved?)
     end
 
     def blacklisted
-      packages.select { |p| p.blacklisted? }
+      packages.select(&:blacklisted?)
     end
 
     def acknowledged

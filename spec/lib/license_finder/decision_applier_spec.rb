@@ -123,15 +123,18 @@ module LicenseFinder
 
     describe '#unapproved' do
       it 'returns all acknowledged packages that are not approved' do
-        decision_applier = described_class.new(
-          decisions: Decisions.new.add_package('baz', '0.0.1').whitelist('whitelist', nil).blacklist('blacklist', nil),
-          packages: [
-            Package.new('foo', '0.0.1', spec_licenses: ['whitelist']),
-            Package.new('bar', '0.0.1', spec_licenses: ['blacklist'])
-          ]
-        )
+        packages = [
+          Package.new('foo', '0.0.1', spec_licenses: ['whitelist']),
+          Package.new('bar', '0.0.1', spec_licenses: ['blacklist'])
+        ]
+        decisions = Decisions.new
+          .add_package('baz', '0.0.1')
+          .whitelist('whitelist', nil)
+          .blacklist('blacklist', nil)
+        decision_applier = described_class.new(decisions: decisions, packages: packages)
 
         expect(decision_applier.unapproved.map(&:name)).to include('baz')
+        expect(decision_applier.unapproved.map(&:name)).to include('bar')
         expect(decision_applier.unapproved.map(&:name)).not_to include('foo')
       end
     end
