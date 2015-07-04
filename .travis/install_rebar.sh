@@ -9,8 +9,7 @@ mkdir -p ~/rebar
 mv rebar ~/rebar/
 chmod u+x ~/rebar/rebar
 
-export PATH=$HOME/rebar:$PATH
-rebar --version
 erl -version
+PATH=$HOME/rebar:$PATH rebar --version
 
 popd
