@@ -398,6 +398,11 @@ module LicenseFinder
         )
         expect(decisions.project_name).to be_nil
       end
+
+      it "ignores empty or missing persisted decisions" do
+        described_class.restore('')
+        described_class.restore(nil)
+      end
     end
   end
 end
