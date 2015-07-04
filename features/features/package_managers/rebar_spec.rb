@@ -7,7 +7,7 @@ describe "Rebar Dependencies" do
 
   let(:erlang_developer) { LicenseFinder::TestingDSL::User.new }
 
-  xspecify "are shown in reports" do
+  specify "are shown in reports" do
     LicenseFinder::TestingDSL::RebarProject.create
     erlang_developer.run_license_finder
     expect(erlang_developer).to be_seeing_line "envy, \"BRANCH: master\", \"Apache 2.0\""
