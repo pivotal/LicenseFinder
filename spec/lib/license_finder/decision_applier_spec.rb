@@ -129,8 +129,8 @@ module LicenseFinder
         ]
         decisions = Decisions.new
           .add_package('baz', '0.0.1')
-          .whitelist('whitelist', nil)
-          .blacklist('blacklist', nil)
+          .whitelist('whitelist')
+          .blacklist('blacklist')
         decision_applier = described_class.new(decisions: decisions, packages: packages)
 
         expect(decision_applier.unapproved.map(&:name)).to include('baz')
@@ -142,11 +142,23 @@ module LicenseFinder
     describe '#blacklisted' do
       it 'returns all packages that have blacklisted licenses' do
         decision_applier = described_class.new(
-          decisions: Decisions.new.blacklist('GPLv3', nil),
+          decisions: Decisions.new.blacklist('GPLv3'),
           packages: [Package.new('foo', '1.0', spec_licenses: ['GPLv3'])]
         )
 
         expect(decision_applier.blacklisted.map(&:name)).to eq(['foo'])
+      end
+
+      it 'does not report ignored packages' do
+        dev_dep = Package.new("dev_dep", nil, spec_licenses: ['GPLv3'], groups: ["development"])
+        decisions = Decisions.new
+          .ignore_group("development")
+          .add_package("manual", nil)
+          .ignore("manual")
+          .blacklist('GPLv3')
+        decision_applier = described_class.new(decisions: decisions, packages: [dev_dep])
+
+        expect(decision_applier.blacklisted).to be_empty
       end
     end
   end

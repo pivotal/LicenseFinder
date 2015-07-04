@@ -68,7 +68,7 @@ module LicenseFinder
     end
 
     def approved?
-      approved_manually? || whitelisted? && !blacklisted?
+      (approved_manually? || whitelisted?) && !blacklisted?
     end
 
     def whitelisted!
@@ -125,8 +125,6 @@ module LicenseFinder
     def missing?
       @missing
     end
-
-
   end
 end
 
