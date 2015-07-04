@@ -4,10 +4,9 @@ set -x
 
 pushd /tmp
 
-wget https://github.com/rebar/rebar/wiki/rebar
-mkdir -p ~/rebar
-mv rebar ~/rebar/
-chmod u+x ~/rebar/rebar
+git clone --depth 1 git://github.com/rebar/rebar.git
+cd rebar
+./bootstrap
 
 erl -version
 PATH=$HOME/rebar:$PATH rebar --version
