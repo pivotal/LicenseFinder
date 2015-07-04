@@ -183,7 +183,8 @@ module LicenseFinder
 
     class BundlerProject < Project
       def add_dep
-        add_to_bundler('license_finder', path: Paths.root.to_s)
+        add_to_gemfile("source 'https://rubygems.org'")
+        add_gem_to_gemfile('license_finder', path: Paths.root.to_s)
       end
 
       def install
@@ -191,14 +192,18 @@ module LicenseFinder
       end
 
       def depend_on(gem, bundler_options = {})
-        add_to_bundler(gem.name, bundler_options.merge(path: gem.project_dir.to_s))
+        add_gem_to_gemfile(gem.name, bundler_options.merge(path: gem.project_dir.to_s))
         install
       end
 
       private
 
-      def add_to_bundler(gem_name, options)
-        add_to_file("Gemfile", "gem #{gem_name.inspect}, #{options.inspect}")
+      def add_gem_to_gemfile(gem_name, options)
+        add_to_gemfile("gem #{gem_name.inspect}, #{options.inspect}")
+      end
+
+      def add_to_gemfile(content)
+        add_to_file("Gemfile", content)
       end
     end
 
