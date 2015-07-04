@@ -53,7 +53,7 @@ module LicenseFinder
     # packages.
     def decision_applier
       # lazy, do not move to `initialize`
-      DecisionApplier.new(decisions: decisions, packages: current_packages)
+      @applier ||= DecisionApplier.new(decisions: decisions, packages: current_packages)
     end
 
     def current_packages
