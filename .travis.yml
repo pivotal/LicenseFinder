@@ -30,5 +30,5 @@ before_install:
 
 script:
   - rake install
-  - rake features
   - rake spec
+  - rake features

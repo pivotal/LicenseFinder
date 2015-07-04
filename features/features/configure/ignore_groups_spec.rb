@@ -22,12 +22,12 @@ describe "Ignored Groups" do
   specify "and their dependencies are excluded from reports" do
     project = developer.create_ruby_app
     gem = developer.create_gem 'dev_gem', license: 'GPL', dependencies: 'jwt'
-    project.depend_on gem, groups: ['dev']
-    developer.execute_command 'license_finder ignored_group add dev'
 
     # with_clean_env allows jwt to be installed, despite the fact
     # that it isn't one of license_finder's own dependencies
     ::Bundler.with_clean_env do
+      project.depend_on gem, groups: ['dev']
+      developer.execute_command 'license_finder ignored_group add dev'
       developer.run_license_finder
       expect(developer).to_not be_seeing 'jwt'
     end
