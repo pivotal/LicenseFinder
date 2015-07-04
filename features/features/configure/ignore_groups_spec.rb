@@ -1,5 +1,6 @@
 require_relative '../../support/feature_helper'
 require_relative '../../support/testing_dsl'
+require 'bundler'
 
 describe "Ignored Groups" do
   # As a developer
@@ -26,7 +27,7 @@ describe "Ignored Groups" do
 
     # with_clean_env allows jwt to be installed, despite the fact
     # that it isn't one of license_finder's own dependencies
-    Bundler.with_clean_env do
+    ::Bundler.with_clean_env do
       developer.run_license_finder
       expect(developer).to_not be_seeing 'jwt'
     end
