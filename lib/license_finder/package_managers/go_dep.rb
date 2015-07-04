@@ -3,8 +3,8 @@ require 'json'
 module LicenseFinder
   class GoDep < PackageManager
     def current_packages
-      json = JSON.parse(IO.read(package_path))
-      json['Deps'].map { |dep| GoPackage.new(dep, install_prefix: "#{install_prefix}/src") }
+      json = JSON.parse(package_path.read)
+      json['Deps'].map { |dep| GoPackage.new(dep, logger: logger, install_prefix: install_prefix) }
     end
 
     def package_path
@@ -14,7 +14,8 @@ module LicenseFinder
     private
 
     def install_prefix
-      File.exist?(workspace_dir) ? workspace_dir : ENV['GOPATH']
+      go_path = workspace_dir.exist? ? workspace_dir : Pathname(ENV['GOPATH'])
+      go_path.join("src")
     end
 
     def workspace_dir

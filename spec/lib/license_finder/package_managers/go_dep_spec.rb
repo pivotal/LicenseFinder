@@ -25,7 +25,7 @@ module LicenseFinder
       end
 
       before do
-        allow(IO).to receive(:read).with(Pathname('/fake/path/Godeps/Godeps.json')).and_return(content.to_s)
+        allow(IO).to receive(:read).with('/fake/path/Godeps/Godeps.json').and_return(content.to_s)
       end
 
       it 'should return an array of required packages' do
@@ -35,8 +35,7 @@ module LicenseFinder
 
       context 'when dependencies are vendored' do
         before do
-          allow(File).to receive(:exist?).with(Pathname('/fake/path/.envrc')).and_return(false)
-          allow(File).to receive(:exist?).with(Pathname('/fake/path/Godeps/_workspace')).and_return(true)
+          allow(FileTest).to receive(:exist?).with('/fake/path/Godeps/_workspace').and_return(true)
         end
 
         it 'should set the install_path to the vendored directory' do
