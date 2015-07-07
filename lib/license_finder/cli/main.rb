@@ -53,7 +53,7 @@ module LicenseFinder
       def report
         logger_config[:quiet] = true
         if options[:save]
-          file_name = options[:save]+ '.' + file_extension
+          file_name = options[:save]
           content = report_of(license_finder.acknowledged)
           save_report(content, file_name)
         else
@@ -87,21 +87,6 @@ module LicenseFinder
       def report_of(content)
         report = FORMATS[options[:format]]
         report.of(content, columns: options[:columns], project_name: license_finder.project_name)
-      end
-
-      def file_extension
-        case options[:format]
-          when "text"
-            "txt"
-          when "html"
-            "html"
-          when "csv"
-            "csv"
-          when "markdown"
-            "md"
-          else
-            "txt"
-        end
       end
     end
   end

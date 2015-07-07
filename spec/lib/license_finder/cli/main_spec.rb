@@ -129,7 +129,7 @@ module LicenseFinder
               provided_by_thor_as_default_name = "license_report" #####FIX ME
               subject.options = {save: provided_by_thor_as_default_name, format: 'text'}
               expect(subject).to receive(:report).and_call_original
-              expect(subject).to receive(:save_report).with(instance_of(String), "license_report.txt")
+              expect(subject).to receive(:save_report).with(instance_of(String), "license_report")
 
               subject.report
             end
@@ -147,7 +147,7 @@ module LicenseFinder
             it "saves with a specified file name" do
               subject.options = {save: 'my_report' , format: 'text'}
               expect(subject).to receive(:report).and_call_original
-              expect(subject).to receive(:save_report).with(instance_of(String), "my_report.txt")
+              expect(subject).to receive(:save_report).with(instance_of(String), "my_report")
 
               subject.report
             end
