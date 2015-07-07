@@ -14,7 +14,7 @@ module LicenseFinder
     end
 
     def active?
-      active = package_path.exist? && IO.read(package_path).include?('GOPATH=')
+      active = package_path.exist? && IO.read(package_path).include?('GOPATH')
       active.tap { |is_active| logger.active self.class, is_active }
     end
 
