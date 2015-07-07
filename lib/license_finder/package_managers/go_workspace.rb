@@ -4,7 +4,7 @@ module LicenseFinder
   class GoWorkspace < PackageManager
     def current_packages
       go_output.map do |package|
-        package_name = package['ImportPath'].gsub(project_path.to_s, '')[1..-1]
+        package_name = package['ImportPath'].gsub(project_path.join('src').to_s, '')[1..-1]
         GoPackage.new(package, logger: logger, package_name: package_name, workspace_root: project_path)
       end
     end

@@ -28,7 +28,7 @@ module LicenseFinder
         it 'provides package names' do
           packages = subject.current_packages
           first_package = packages.first
-          expect(first_package.name).to eq 'src/bitbucket.org/kardianos/osext'
+          expect(first_package.name).to eq 'bitbucket.org/kardianos/osext'
           expect(first_package.version).to eq 'unknown'
           expect(first_package.install_path).to eq '/Users/pivotal/workspace/loggregator/src/bitbucket.org/kardianos/osext'
         end
