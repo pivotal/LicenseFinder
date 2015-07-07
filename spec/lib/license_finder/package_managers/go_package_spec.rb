@@ -16,7 +16,7 @@ module LicenseFinder
 
     describe '#initialize' do
       it 'sets the package name' do
-        expect(subject.name).to eq('candiedyaml')
+        expect(subject.name).to eq('github.com/cloudfoundry-incubator/candiedyaml')
       end
 
       it 'sets the package version' do

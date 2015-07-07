@@ -30,7 +30,7 @@ module LicenseFinder
 
       it 'should return an array of required packages' do
         packages = subject.current_packages
-        expect(packages.map(&:name)).to include('foo', 'bar')
+        expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
       end
 
       context 'when dependencies are vendored' do
