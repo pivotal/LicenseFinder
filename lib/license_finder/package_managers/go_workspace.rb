@@ -13,6 +13,11 @@ module LicenseFinder
       project_path.join('.envrc')
     end
 
+    def active?
+      active = package_path.exist? && IO.read(package_path).include?('GOPATH=')
+      active.tap { |is_active| logger.active self.class, is_active }
+    end
+
     private
 
     def go_output
