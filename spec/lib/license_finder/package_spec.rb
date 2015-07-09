@@ -25,7 +25,7 @@ module LicenseFinder
     its(:children) { should == %w[child-1 child2] }
     its(:install_path) { should eq "some/package/path" }
 
-    it "has defaults" do
+    it 'has defaults' do
       subject = described_class.new(nil, nil)
       expect(subject.name).to be_nil
       expect(subject.version).to be_nil
@@ -146,6 +146,33 @@ module LicenseFinder
         expect(subject.approved?).to eq(false)
       end
     end
+
+    describe '#eql?' do
+      it 'it returns true if package name, version, and licenses match' do
+        p1 = Package.new('package', '0.0.1')
+        p2 = Package.new('package', '0.0.1')
+        p3 = Package.new('foo', 'foo')
+
+        expect(p1.eql?(p2)).to be true
+        expect(p1.eql?(p3)).to be false
+
+        expect(p1.hash).to eq p2.hash
+      end
+    end
+
+    describe '#diff' do
+      it 'is false by default' do
+        expect(subject.status).to be false
+      end
+
+      it 'can be set by to string' do
+        subject.status = 'added'
+        expect(subject.status).to eq 'added'
+        subject.status = 'unchanged'
+        expect(subject.status).to eq 'unchanged'
+        subject.status = 'removed'
+        expect(subject.status).to eq 'removed'
+      end
+    end
   end
 end
-

@@ -8,13 +8,5 @@ module LicenseFinder
 
       super(name, version, options.merge(spec_licenses: licenses))
     end
-
-    def eql?(other)
-      name == other.name && version == other.version
-    end
-
-    def hash
-      name.hash + version.hash
-    end
   end
 end

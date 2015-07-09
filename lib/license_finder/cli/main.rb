@@ -1,5 +1,6 @@
 require 'license_finder/report'
 require 'license_finder/version'
+require 'license_finder/diff'
 
 module LicenseFinder
   module CLI
@@ -67,6 +68,15 @@ module LicenseFinder
         puts LicenseFinder::VERSION
       end
 
+      desc "diff OLDFILE NEWFILE", "Command to view the differences between two generated reports (csv)."
+
+      def diff(file1, file2)
+        f1 = IO.read(file1)
+        f2 = IO.read(file2)
+        content = DiffReport.new(Diff.compare(f1, f2))
+        save? ? save_report(content, options[:save]) : say(content)
+      end
+
       subcommand "dependencies", Dependencies, "Add or remove dependencies that your package managers are not aware of"
       subcommand "licenses", Licenses, "Set a dependency's licenses, if the licenses found by license_finder are missing or wrong"
       subcommand "approvals", Approvals, "Manually approve dependencies, even if their licenses are not whitelisted"
@@ -87,6 +97,10 @@ module LicenseFinder
       def report_of(content)
         report = FORMATS[options[:format]]
         report.of(content, columns: options[:columns], project_name: license_finder.project_name)
+      end
+
+      def save?
+        !! options[:save]
       end
     end
   end
