@@ -17,7 +17,7 @@ module LicenseFinder
 
         it 'should create and set packages with added diff state' do
           rspec = find_package('rspec')
-          expect(rspec.status).to eq 'added'
+          expect(rspec.status).to eq :added
         end
       end
 
@@ -27,7 +27,7 @@ module LicenseFinder
 
         it 'should create and set packages with removed diff state' do
           rspec = find_package('rspec')
-          expect(rspec.status).to eq 'removed'
+          expect(rspec.status).to eq :removed
         end
       end
 
@@ -37,7 +37,7 @@ module LicenseFinder
 
         it 'should create and set packages with unchanged diff state' do
           nokogiri = find_package('nokogiri')
-          expect(nokogiri.status).to eq 'unchanged'
+          expect(nokogiri.status).to eq :unchanged
         end
       end
 
@@ -46,9 +46,9 @@ module LicenseFinder
         let(:file2_content) { "nokogiri, 1.6.6.2, MIT\nminitest, 5.7.0, MIT\nfakefs, 0.6.7, BSD" }
 
         it 'should create and set packages diff states' do
-          expect(find_package('minitest').status).to eq 'added'
-          expect(find_package('rspec').status).to eq 'removed'
-          expect(find_package('nokogiri').status).to eq 'unchanged'
+          expect(find_package('minitest').status).to eq :added
+          expect(find_package('rspec').status).to eq :removed
+          expect(find_package('nokogiri').status).to eq :unchanged
         end
       end
 
@@ -59,7 +59,7 @@ module LicenseFinder
         it 'should set the state to unchanged and record the version change' do
           rspec = find_package('rspec')
 
-          expect(rspec.status).to eq('unchanged')
+          expect(rspec.status).to eq(:unchanged)
           expect(rspec.current_version).to eq('3.3.0')
           expect(rspec.previous_version).to eq('3.2.0')
         end
@@ -73,11 +73,11 @@ module LicenseFinder
           rspec_old = diff.find {|p| p.previous_version == '3.2.0'}
           rspec_new = diff.find {|p| p.current_version == '3.3.0'}
 
-          expect(rspec_old.status).to eq('removed')
+          expect(rspec_old.status).to eq(:removed)
           expect(rspec_old.current_version).to eq(nil)
           expect(rspec_old.previous_version).to eq('3.2.0')
 
-          expect(rspec_new.status).to eq('added')
+          expect(rspec_new.status).to eq(:added)
           expect(rspec_new.current_version).to eq('3.3.0')
           expect(rspec_new.previous_version).to eq(nil)
         end

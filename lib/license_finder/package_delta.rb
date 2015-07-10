@@ -1,5 +1,7 @@
 module LicenseFinder
   class PackageDelta
+    STATUSES = [:added, :removed, :unchanged]
+
     def initialize(status, current_package, previous_package)
       @status = status
       @current_package = current_package
@@ -19,7 +21,15 @@ module LicenseFinder
     end
 
     def status
-      @status.to_s
+      @status
+    end
+
+    def licenses
+      @current_package ? @current_package.licenses : @previous_package.licenses
+    end
+
+    def method_missing(method_name)
+      nil
     end
 
     def self.added(package)
@@ -34,12 +44,8 @@ module LicenseFinder
       new(:unchanged, current_package, previous_package)
     end
 
-    def method_missing(method_name)
-      nil
-    end
-
-    def licenses
-      @current_package ? @current_package.licenses : @previous_package.licenses
+    def <=>(other)
+      STATUSES.index(status) <=> STATUSES.index(other.status)
     end
   end
 end

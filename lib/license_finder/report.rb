@@ -13,7 +13,7 @@ module LicenseFinder
     attr_reader :dependencies, :project_name
 
     def sorted_dependencies
-      dependencies.sort_by(&:name)
+      dependencies.sort
     end
   end
 end

@@ -87,6 +87,10 @@ module LicenseFinder
       @blacklisted
     end
 
+    def <=>(other)
+      name <=> other.name
+    end
+
     def eql?(other)
       name == other.name
     end

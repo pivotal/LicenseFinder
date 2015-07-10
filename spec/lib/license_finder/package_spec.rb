@@ -148,7 +148,7 @@ module LicenseFinder
     end
 
     describe '#eql?' do
-      it 'it returns true if package name, version, and licenses match' do
+      it 'returns true if package name, version, and licenses match' do
         p1 = Package.new('package', '0.0.1')
         p2 = Package.new('package', '0.0.1')
         p3 = Package.new('foo', 'foo')
@@ -157,6 +157,16 @@ module LicenseFinder
         expect(p1.eql?(p3)).to be false
 
         expect(p1.hash).to eq p2.hash
+      end
+    end
+
+    describe '#<=>' do
+      it 'sorts by name' do
+        p1 = Package.new('bob')
+        p2 = Package.new('jim')
+        p3 = Package.new('dan')
+
+        expect([p2, p1, p3].sort).to eq([p1, p3, p2])
       end
     end
   end
