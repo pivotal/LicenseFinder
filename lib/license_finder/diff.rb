@@ -10,9 +10,15 @@ module LicenseFinder
 
       [].tap do |packages|
         unchanged.each do |package|
-          package_previous = p1.find {|p| p.name == package.name}
-          package_current = p2.find {|p| p.name == package.name}
-          packages << PackageDelta.unchanged(package_current, package_previous)
+          package_previous = package_with_name(p1, package)
+          package_current = package_with_name(p2, package)
+
+          if package_current.licenses == package_previous.licenses
+            packages << PackageDelta.unchanged(package_current, package_previous)
+          else
+            packages << PackageDelta.removed(package_previous)
+            packages << PackageDelta.added(package_current)
+          end
         end
 
         added.each    { |package| packages << PackageDelta.added(package) }
@@ -27,6 +33,10 @@ module LicenseFinder
         dep.map!(&:strip)
         Package.new(dep[0], dep[1], spec_licenses: [dep[2]])
       end
+    end
+
+    def self.package_with_name(set, package)
+      set.find { |p| p.name == package.name }
     end
   end
 end
