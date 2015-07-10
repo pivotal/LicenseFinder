@@ -44,7 +44,6 @@ module LicenseFinder
       ## APPROVAL
       @whitelisted = false
       @blacklisted = false
-      @status = false
       @manual_approval = nil
 
       ## LICENSING
@@ -56,7 +55,7 @@ module LicenseFinder
 
     attr_reader :name, :version,
                 :summary, :description, :homepage,
-                :children, :parents, :groups, :status
+                :children, :parents, :groups
 
     ## APPROVAL
 
@@ -88,16 +87,12 @@ module LicenseFinder
       @blacklisted
     end
 
-    def status=(status)
-      @status = status
-    end
-
     def eql?(other)
-      name == other.name && version == other.version
+      name == other.name
     end
 
     def hash
-      [name, version].hash
+      [name].hash
     end
 
     attr_reader :manual_approval

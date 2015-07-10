@@ -4,6 +4,12 @@ module LicenseFinder
   describe Diff do
     subject { Diff }
 
+    let(:diff) { subject.compare(file1_content, file2_content) }
+
+    def find_package(name)
+      diff.find { |d| d.name == name }
+    end
+
     describe '#compare' do
       context 'when a dependency is added' do
         let(:file1_content) do
@@ -20,9 +26,7 @@ module LicenseFinder
         end
 
         it 'should create and set packages with added diff state' do
-          diffed_deps = subject.compare(file1_content, file2_content)
-
-          rspec = diffed_deps.find {|dep| dep.name == 'rspec' }
+          rspec = find_package('rspec')
           expect(rspec.status).to eq 'added'
         end
       end
@@ -42,9 +46,7 @@ module LicenseFinder
         end
 
         it 'should create and set packages with removed diff state' do
-          diffed_deps = subject.compare(file1_content, file2_content)
-
-          rspec = diffed_deps.find {|dep| dep.name == 'rspec' }
+          rspec = find_package('rspec')
           expect(rspec.status).to eq 'removed'
         end
       end
@@ -63,9 +65,7 @@ module LicenseFinder
         end
 
         it 'should create and set packages with unchanged diff state' do
-          diffed_deps = subject.compare(file1_content, file2_content)
-
-          nokogiri = diffed_deps.find {|dep| dep.name == 'nokogiri' }
+          nokogiri = find_package('nokogiri')
           expect(nokogiri.status).to eq 'unchanged'
         end
       end
@@ -88,43 +88,31 @@ module LicenseFinder
         end
 
         it 'should create and set packages diff states' do
-          diffed_deps = subject.compare(file1_content, file2_content)
-
-          minitest = diffed_deps.find {|dep| dep.name == 'minitest' }
-          expect(minitest.status).to eq 'added'
-          rspec = diffed_deps.find {|dep| dep.name == 'rspec' }
-          expect(rspec.status).to eq 'removed'
-          nokogiri = diffed_deps.find {|dep| dep.name == 'nokogiri' }
-          expect(nokogiri.status).to eq 'unchanged'
+          expect(find_package('minitest').status).to eq 'added'
+          expect(find_package('rspec').status).to eq 'removed'
+          expect(find_package('nokogiri').status).to eq 'unchanged'
         end
-        end
+      end
 
-      context 'when there are all types of changes' do
+      context 'when the version changes' do
         let(:file1_content) do
           <<-CSV
           rspec, 3.2.0, MIT
-          nokogiri, 1.6.6.2, BSD
-          fakefs, 0.6.7, MIT
           CSV
         end
 
         let(:file2_content) do
           <<-CSV
-          nokogiri, 1.6.6.2, MIT
-          minitest, 5.7.0, MIT
-          fakefs, 0.6.7, BSD
+          rspec, 3.3.0, MIT
           CSV
         end
 
-        it 'should create and set packages diff states' do
-          diffed_deps = subject.compare(file1_content, file2_content)
+        it 'should set the state to unchanged and record the version change' do
+          rspec = find_package('rspec')
 
-          minitest = diffed_deps.find {|dep| dep.name == 'minitest' }
-          expect(minitest.status).to eq 'added'
-          rspec = diffed_deps.find {|dep| dep.name == 'rspec' }
-          expect(rspec.status).to eq 'removed'
-          nokogiri = diffed_deps.find {|dep| dep.name == 'nokogiri' }
-          expect(nokogiri.status).to eq 'unchanged'
+          expect(rspec.status).to eq('unchanged')
+          expect(rspec.current_version).to eq('3.3.0')
+          expect(rspec.previous_version).to eq('3.2.0')
         end
       end
     end

@@ -8,11 +8,16 @@ module LicenseFinder
       removed = p1.difference(p2).to_a
       unchanged = p1.intersection(p2).to_a
 
-      set_diff_states('added', added)
-      set_diff_states('removed', removed)
-      set_diff_states('unchanged', unchanged)
+      [].tap do |packages|
+        unchanged.each do |package|
+          package_previous = p1.find {|p| p.name == package.name}
+          package_current = p2.find {|p| p.name == package.name}
+          packages << PackageDelta.unchanged(package_current, package_previous)
+        end
 
-      unchanged.concat(added).concat(removed)
+        added.each    { |package| packages << PackageDelta.added(package) }
+        removed.each  { |package| packages << PackageDelta.removed(package) }
+      end
     end
 
     private
@@ -21,12 +26,6 @@ module LicenseFinder
       CSV.parse(content).map do |dep|
         dep.map!(&:strip)
         Package.new(dep[0], dep[1], spec_licenses: [dep[2]])
-      end
-    end
-
-    def self.set_diff_states(state, packages)
-      packages.each do |package|
-        package.status = state
       end
     end
   end

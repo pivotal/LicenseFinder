@@ -22,12 +22,5 @@ module LicenseFinder
       subject = described_class.new([dep], columns: %w[unknown])
       expect(subject.to_s).to eq("\n")
     end
-
-    it 'includes diff' do
-      diff_deps = Package.new('gem', '1.0.0')
-      expect(diff_deps.status).to be false
-      diff_deps.status = 'added'
-      expect(diff_deps.status).to eq 'added'
-    end
   end
 end

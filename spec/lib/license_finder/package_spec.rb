@@ -159,20 +159,5 @@ module LicenseFinder
         expect(p1.hash).to eq p2.hash
       end
     end
-
-    describe '#diff' do
-      it 'is false by default' do
-        expect(subject.status).to be false
-      end
-
-      it 'can be set by to string' do
-        subject.status = 'added'
-        expect(subject.status).to eq 'added'
-        subject.status = 'unchanged'
-        expect(subject.status).to eq 'unchanged'
-        subject.status = 'removed'
-        expect(subject.status).to eq 'removed'
-      end
-    end
   end
 end

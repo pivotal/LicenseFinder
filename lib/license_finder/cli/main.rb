@@ -1,6 +1,7 @@
 require 'license_finder/report'
 require 'license_finder/version'
 require 'license_finder/diff'
+require 'license_finder/package_delta'
 
 module LicenseFinder
   module CLI
