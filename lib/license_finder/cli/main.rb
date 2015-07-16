@@ -2,6 +2,7 @@ require 'license_finder/report'
 require 'license_finder/version'
 require 'license_finder/diff'
 require 'license_finder/package_delta'
+require 'license_finder/license_aggregator'
 
 module LicenseFinder
   module CLI
@@ -21,6 +22,7 @@ module LicenseFinder
       class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradle'."
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
+      class_option :subprojects, type: :array, desc: "Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2'"
 
       method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
@@ -54,13 +56,13 @@ module LicenseFinder
 
       def report
         logger_config[:quiet] = true
-        if options[:save]
-          file_name = options[:save]
-          content = report_of(license_finder.acknowledged)
-          save_report(content, file_name)
+        if subprojects?
+          finder = LicenseAggregator.new(license_finder_config, options[:subprojects])
+          report = MergedReport.new(finder.dependencies)
         else
-          say report_of(license_finder.acknowledged)
+          report = report_of(license_finder.acknowledged)
         end
+        save? ? save_report(report, options[:save]) : say(report)
       end
 
       desc "version", "Print the version of LicenseFinder"
@@ -74,8 +76,8 @@ module LicenseFinder
       def diff(file1, file2)
         f1 = IO.read(file1)
         f2 = IO.read(file2)
-        content = DiffReport.new(Diff.compare(f1, f2))
-        save? ? save_report(content, options[:save]) : say(content)
+        report = DiffReport.new(Diff.compare(f1, f2))
+        save? ? save_report(report, options[:save]) : say(report)
       end
 
       subcommand "dependencies", Dependencies, "Add or remove dependencies that your package managers are not aware of"
@@ -101,7 +103,11 @@ module LicenseFinder
       end
 
       def save?
-        !! options[:save]
+        !!options[:save]
+      end
+
+      def subprojects?
+        !!options[:subprojects]
       end
     end
   end

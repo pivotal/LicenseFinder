@@ -11,12 +11,12 @@ module LicenseFinder
         end
       end
 
-      def create_empty_project
-        EmptyProject.create
+      def create_empty_project(name = "my_app")
+        EmptyProject.create(name)
       end
 
-      def create_ruby_app
-        BundlerProject.create
+      def create_ruby_app(name = "my_app")
+        BundlerProject.create(name)
       end
 
       def create_gem(name, options)
@@ -64,15 +64,17 @@ module LicenseFinder
       extend Forwardable
       def_delegators :project_dir, :shell_out, :add_to_file, :install_fixture
 
-      def self.create
-        project = new
+      attr_reader :name
+
+      def self.create(name = "my_app")
+        project = new(name)
         project.add_dep
         project.install
         project
       end
 
-      def initialize
-        Paths.reset_projects!
+      def initialize(name = "my_app")
+        @name = name
         project_dir.make
       end
 
@@ -83,7 +85,7 @@ module LicenseFinder
       end
 
       def project_dir
-        Paths.project
+        Paths.project(name)
       end
 
       def clone(fixture_name)
