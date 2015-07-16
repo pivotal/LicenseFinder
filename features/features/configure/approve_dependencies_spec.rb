@@ -1,5 +1,4 @@
 require_relative '../../support/feature_helper'
-require_relative '../../support/testing_dsl'
 
 describe "Manually Approved Dependencies" do
   # As a developer

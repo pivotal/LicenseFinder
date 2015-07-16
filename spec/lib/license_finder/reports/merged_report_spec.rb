@@ -2,7 +2,6 @@ require 'spec_helper'
 
 module LicenseFinder
   describe MergedReport do
-
     describe '#to_s' do
       it 'displays the path to the dependency' do
         foo = Package.new('foo', '1.0.0', spec_licenses: ['MIT'])

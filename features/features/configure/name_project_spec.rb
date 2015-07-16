@@ -1,5 +1,4 @@
 require_relative '../../support/feature_helper'
-require_relative '../../support/testing_dsl'
 
 describe "Project name" do
   # As a developer

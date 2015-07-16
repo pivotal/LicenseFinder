@@ -1,5 +1,4 @@
 require_relative '../../support/feature_helper'
-require_relative '../../support/testing_dsl'
 
 describe "HTML report" do
   # As a non-technical product owner

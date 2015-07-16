@@ -1,5 +1,4 @@
 require_relative '../../support/feature_helper'
-require_relative '../../support/testing_dsl'
 
 describe "CocoaPods Dependencies", ios: true do
   # As a Cocoa developer
