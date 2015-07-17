@@ -23,6 +23,10 @@ module LicenseFinder
         GemProject.create(name, options)
       end
 
+      def create_gem_in_path(name, path, options)
+        GemProject.create_in_path(name, path, options)
+      end
+
       def execute_command(command)
         execute_command_in_path(command, Paths.project)
       end
@@ -33,6 +37,10 @@ module LicenseFinder
 
       def seeing?(content)
         @output.include? content
+      end
+
+      def seeing_once?(content)
+        @output.scan(/#{Regexp.escape content}/).size == 1
       end
 
       def seeing_line?(content)
@@ -216,8 +224,15 @@ module LicenseFinder
         result
       end
 
-      def initialize(name)
+      def self.create_in_path(name, path, options)
+        result = new(name, path)
+        result.define(options)
+        result
+      end
+
+      def initialize(name, path = nil)
         @name = name
+        @path = path
         project_dir.make
       end
 
@@ -225,10 +240,14 @@ module LicenseFinder
         project_dir.write_file("#{name}.gemspec", gemspec_string(options))
       end
 
-      attr_reader :name
+      attr_reader :name, :path
 
       def project_dir
-        Paths.project(name)
+        if path
+          Paths.project(path + '/' + name)
+        else
+          Paths.project(name)
+        end
       end
 
       private

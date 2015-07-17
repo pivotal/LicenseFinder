@@ -1,8 +1,11 @@
 module LicenseFinder
   class MergedPackage
-    def initialize(dependency, subproject_path)
+
+    attr_reader :dependency
+
+    def initialize(dependency, subproject_paths)
       @dependency = dependency
-      @subproject_path = subproject_path
+      @subproject_paths = subproject_paths.map { |p| Pathname(p) }
     end
 
     def name
@@ -17,8 +20,8 @@ module LicenseFinder
       @dependency.licenses
     end
 
-    def subproject_path
-      @subproject_path
+    def subproject_paths
+      @subproject_paths.map { |p| p.expand_path.to_s }
     end
 
     def <=>(other)
