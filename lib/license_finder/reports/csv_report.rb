@@ -3,12 +3,12 @@ require 'csv'
 module LicenseFinder
   class CsvReport < Report
     COMMA_SEP =  ","
-    AVAILABLE_COLUMNS = %w[status name version current_version previous_version licenses approved summary description homepage subproject_path]
+    AVAILABLE_COLUMNS = %w[name version licenses approved summary description homepage]
     MISSING_DEPENDENCY_TEXT = "This package is not installed. Please install to determine licenses."
 
     def initialize(dependencies, options)
       super
-      @columns = Array(options[:columns]) & AVAILABLE_COLUMNS
+      @columns = Array(options[:columns]) & self.class::AVAILABLE_COLUMNS
     end
 
     def to_s
@@ -35,14 +35,6 @@ module LicenseFinder
       dep.version
     end
 
-    def format_current_version(dep)
-      dep.current_version
-      end
-
-    def format_previous_version(dep)
-      dep.previous_version
-    end
-
     def format_homepage(dep)
       dep.homepage
     end
@@ -65,14 +57,6 @@ module LicenseFinder
 
     def format_description(dep)
       dep.description.to_s.strip
-    end
-
-    def format_status(dep)
-      dep.status
-    end
-
-    def format_subproject_path(merged_dep)
-      merged_dep.subproject_path
     end
   end
 end
