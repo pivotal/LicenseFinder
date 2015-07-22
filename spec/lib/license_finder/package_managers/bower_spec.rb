@@ -26,7 +26,7 @@ module LicenseFinder
             }
           }
         JSON
-        allow(subject).to receive('`').with('cd /fake/path; bower list --json -l action').and_return(json)
+        allow(subject).to receive('`').with('cd /fake/path && bower list --json -l action').and_return(json)
 
         expect(subject.current_packages.map { |p| [p.name, p.install_path] }).to eq [
           %w(dependency-library /path/to/thing), %w(another-dependency /path/to/thing2)

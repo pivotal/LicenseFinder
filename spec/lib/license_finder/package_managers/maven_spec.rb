@@ -19,7 +19,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       before do
-        allow(subject).to receive('`').with('cd /fake/path; mvn license:download-licenses')
+        allow(subject).to receive('`').with('cd /fake/path && mvn license:download-licenses')
       end
 
       def stub_license_report(deps)
