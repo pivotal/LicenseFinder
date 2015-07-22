@@ -9,15 +9,15 @@ module LicenseFinder
     end
 
     def name
-      @dependency.name
+      dependency.name
     end
 
     def version
-      @dependency.version
+      dependency.version
     end
 
     def licenses
-      @dependency.licenses
+      dependency.licenses
     end
 
     def subproject_paths
@@ -25,7 +25,15 @@ module LicenseFinder
     end
 
     def <=>(other)
-      name <=> other.name
+      dependency <=> other.dependency
+    end
+
+    def eql?(other)
+      dependency.eql?(other.dependency)
+    end
+
+    def hash
+      dependency.hash
     end
 
     def method_missing(method_name)

@@ -23,5 +23,30 @@ module LicenseFinder
       expect(subject.subproject_paths.length).to eq(1)
       expect(subject.subproject_paths[0]).to end_with(subproject_paths)
     end
+
+    describe '#eql?' do
+      it 'returns true when the package names are equal' do
+        p1 = MergedPackage.new(Package.new('foo', '1.0.0'), ['/path/to/package1'])
+        p2 = MergedPackage.new(Package.new('foo', '2.0.0'), ['/path/to/package2'])
+        p3 = MergedPackage.new(Package.new('bar', '1.0.0'), ['/path/to/package3'])
+        expect(p1.eql?(p2)).to eq(true)
+        expect(p1.eql?(p3)).not_to eq(true)
+      end
+
+      it 'can handle merged packages that contain other merged packages' do
+        p1 = MergedPackage.new(Package.new('foo', '1.0.0'), ['/path/to/package1'])
+        p2 = MergedPackage.new(Package.new('foo', '2.0.0'), ['/path/to/package2'])
+        p3 = MergedPackage.new(p2, ['/path/to/package3', '/path/to/package2'])
+        expect(p1.eql?(p3)).to eq(true)
+      end
+    end
+
+    describe 'hash' do
+      it 'returns equal hash codes for packages that are equal' do
+        p1 = MergedPackage.new(Package.new('foo', '1.0.0'), ['/path/to/package1'])
+        p2 = MergedPackage.new(Package.new('foo', '2.0.0'), ['/path/to/package2'])
+        expect(p1.hash).to eq(p2.hash)
+      end
+    end
   end
 end

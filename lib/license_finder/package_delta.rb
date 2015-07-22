@@ -9,7 +9,7 @@ module LicenseFinder
     end
 
     def name
-      @previous_package ? @previous_package.name : @current_package.name
+      pick_package.name
     end
 
     def current_version
@@ -20,12 +20,20 @@ module LicenseFinder
       @previous_package ? @previous_package.version : nil
     end
 
+    def subproject_paths
+      pick_package.subproject_paths
+    end
+
     def status
       @status
     end
 
     def licenses
-      @current_package ? @current_package.licenses : @previous_package.licenses
+      pick_package.licenses
+    end
+
+    def merged_package?
+      pick_package.class == MergedPackage
     end
 
     def method_missing(method_name)
@@ -46,6 +54,12 @@ module LicenseFinder
 
     def <=>(other)
       STATUSES.index(status) <=> STATUSES.index(other.status)
+    end
+
+    private
+
+    def pick_package
+      @current_package ? @current_package : @previous_package
     end
   end
 end

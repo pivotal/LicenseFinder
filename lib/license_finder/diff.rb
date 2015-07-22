@@ -29,9 +29,14 @@ module LicenseFinder
     private
 
     def self.build_packages(content)
-      CSV.parse(content).map do |dep|
-        dep.map!(&:strip)
-        Package.new(dep[0], dep[1], spec_licenses: [dep[2]])
+      CSV.parse(content).map do |row|
+        row.map!(&:strip)
+        package = Package.new(row[0], row[1], spec_licenses: [row[2]])
+        if row.count == 4
+          MergedPackage.new(package, row[3].split(','))
+        else
+          package
+        end
       end
     end
 
