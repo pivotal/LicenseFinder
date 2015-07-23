@@ -27,6 +27,7 @@ report.
 * Java (via `gradle`)
 * Erlang (via `rebar`)
 * Objective-C (+ CocoaPods)
+* Nuget (without license discovery)
 
 
 ## Installation
@@ -110,6 +111,7 @@ languages, as long as that language has a package definition in the project dire
 * `bower.json` (for `bower`)
 * `Podfile` (for CocoaPods)
 * `rebar.config` (for `rebar`)
+* `packages/` directory (for `Nuget`)
 
 
 ### Continuous Integration

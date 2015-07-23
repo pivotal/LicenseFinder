@@ -3,6 +3,7 @@
 * Features
   * Licenses can be blacklisted.  Dependencies which only have licenses in the
     blacklist will not be approved, even if someone tries.
+  * Initial support for the Nuget package manager for .NET projects
 
 === 2.0.4 / 2015-04-16
 

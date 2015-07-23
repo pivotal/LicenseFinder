@@ -191,6 +191,12 @@ module LicenseFinder
       end
     end
 
+    class NugetProject < Project
+      def add_dep
+        clone('nuget')
+      end
+    end
+
     class BundlerProject < Project
       def add_dep
         add_to_gemfile("source 'https://rubygems.org'")
