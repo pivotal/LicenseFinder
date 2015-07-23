@@ -3,6 +3,7 @@ require 'license_finder/version'
 require 'license_finder/diff'
 require 'license_finder/package_delta'
 require 'license_finder/license_aggregator'
+require 'license_finder/project_finder'
 
 module LicenseFinder
   module CLI
@@ -23,6 +24,7 @@ module LicenseFinder
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
       class_option :subprojects, type: :array, desc: "Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2'"
+      class_option :recursive, desc: "Recursively runs License Finder on all sub-projects."
 
       method_option :quiet, type: :boolean, desc: "silences progress report"
       method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
@@ -56,8 +58,12 @@ module LicenseFinder
 
       def report
         logger_config[:quiet] = true
-        if subprojects?
-          finder = LicenseAggregator.new(license_finder_config, options[:subprojects])
+
+        subproject_paths = options[:subprojects] if subprojects?
+        subproject_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if recursive?
+
+        if subproject_paths && !subproject_paths.empty?
+          finder = LicenseAggregator.new(license_finder_config, subproject_paths)
           report = MergedReport.new(finder.dependencies)
         else
           report = report_of(license_finder.acknowledged)
@@ -104,6 +110,10 @@ module LicenseFinder
 
       def save?
         !!options[:save]
+      end
+
+      def recursive?
+        !!options[:recursive]
       end
 
       def subprojects?

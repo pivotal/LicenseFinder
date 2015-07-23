@@ -165,6 +165,13 @@ module LicenseFinder
       end
     end
 
+    class CompositeProject < Project
+      def add_dep
+        clone('single-module-gradle')
+        clone('multi-module-gradle')
+      end
+    end
+
     class MultiModuleGradleProject < Project
       def add_dep
         clone('multi-module-gradle')
