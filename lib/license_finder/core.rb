@@ -11,6 +11,8 @@ require 'forwardable'
 module LicenseFinder
   # Coordinates setup
   class Core
+    attr_reader :config
+
     def self.default_logger
       Logger::Default.new
     end
@@ -47,7 +49,7 @@ module LicenseFinder
 
     private
 
-    attr_reader :config, :logger
+    attr_reader :logger
 
     # The core of the system. The saved decisions are applied to the current
     # packages.

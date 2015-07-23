@@ -16,6 +16,12 @@ module LicenseFinder
 
       def license_finder
         @lf ||= LicenseFinder::Core.new(license_finder_config)
+        fail "Project path '#{@lf.config.project_path}' does not exist!" unless @lf.config.valid_project_path?
+        @lf
+      end
+
+      def fail(message)
+        say message and exit 1
       end
 
       def license_finder_config

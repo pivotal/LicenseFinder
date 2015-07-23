@@ -38,4 +38,12 @@ describe "License Finder command line executable" do
     expect(developer).to be_receiving_exit_code(0)
     expect(developer).to be_seeing 'All dependencies are approved for use'
   end
+
+  specify "displays an error if project_path does not exist" do
+    developer.create_empty_project
+
+    developer.execute_command('license_finder report --project-path=/path/that/does/not/exist')
+    expect(developer).to be_seeing("Project path '/path/that/does/not/exist' does not exist!")
+    expect(developer).to be_receiving_exit_code(1)
+  end
 end

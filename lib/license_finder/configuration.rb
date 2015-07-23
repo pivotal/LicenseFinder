@@ -12,6 +12,13 @@ module LicenseFinder
       @saved_config = saved_config
     end
 
+    def valid_project_path?
+       if get(:project_path)
+         return project_path.exist?
+       end
+      true
+    end
+
     def gradle_command
       get(:gradle_command) || "gradle"
     end

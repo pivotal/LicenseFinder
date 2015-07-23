@@ -14,6 +14,23 @@ module LicenseFinder
       end
     end
 
+    describe "#valid_project_path?" do
+      it "returns false when the path does not exist" do
+        subject = described_class.with_optional_saved_config({project_path: '/path/that/does/not/exist'})
+        expect(subject.valid_project_path?).to be(false)
+      end
+
+      it "returns true when the path exists" do
+        subject = described_class.with_optional_saved_config({project_path: '/'})
+        expect(subject.valid_project_path?).to be(true)
+      end
+
+      it "returns true if the path is not provided" do
+        subject = described_class.with_optional_saved_config({})
+        expect(subject.valid_project_path?).to be(true)
+      end
+    end
+
     describe "gradle_command" do
       it "prefers primary value" do
         subject = described_class.new(

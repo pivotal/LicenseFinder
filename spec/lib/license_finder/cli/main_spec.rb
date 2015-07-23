@@ -11,7 +11,8 @@ module LicenseFinder
           packages: packages
         )
       end
-      let(:license_finder_instance) { double(:license_finder, unapproved: [unapproved_dependency], blacklisted: [], project_name: 'taco stand') }
+      let(:configuration) { double(:configuration, valid_project_path?: true) }
+      let(:license_finder_instance) { double(:license_finder, unapproved: [unapproved_dependency], blacklisted: [], project_name: 'taco stand', config: configuration) }
       let(:license) { double(:license, name: "thing") }
       let(:unapproved_dependency) { double(:dependency, name: "a dependency", version: "2.4.1", missing?: false, licenses: [license]) }
 
