@@ -7,7 +7,7 @@ describe 'Composite project' do
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }
 
-  specify 'shows dependencies in all active projects in a subdirectory' do
+  specify 'shows dependencies for all active projects' do
     LicenseFinder::TestingDSL::CompositeProject.create
     developer.execute_command('license_finder report --recursive')
     expect(developer).to be_seeing('junit,4.11,Common Public License Version 1.0')
