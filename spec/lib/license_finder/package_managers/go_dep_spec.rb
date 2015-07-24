@@ -28,14 +28,15 @@ module LicenseFinder
         allow(IO).to receive(:read).with('/fake/path/Godeps/Godeps.json').and_return(content.to_s)
       end
 
-      it 'should return an array of required packages' do
-        packages = subject.current_packages
-        expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
-      end
-
       context 'when dependencies are vendored' do
         before do
           allow(FileTest).to receive(:exist?).with('/fake/path/Godeps/_workspace').and_return(true)
+        end
+
+        it 'should return an array of packages' do
+          packages = subject.current_packages
+          expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
+          expect(packages.map(&:version)).to include('61164e4', '3245708')
         end
 
         it 'should set the install_path to the vendored directory' do
@@ -52,6 +53,12 @@ module LicenseFinder
 
         after do
           ENV['GOPATH'] = nil
+        end
+
+        it 'should return an array of packages' do
+          packages = subject.current_packages
+          expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
+          expect(packages.map(&:version)).to include('61164e4', '3245708')
         end
 
         it 'should set the install_path to the GOPATH' do

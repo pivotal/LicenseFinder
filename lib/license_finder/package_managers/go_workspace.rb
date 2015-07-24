@@ -3,9 +3,9 @@ require 'json'
 module LicenseFinder
   class GoWorkspace < PackageManager
     def current_packages
-      go_output.map do |package|
-        package_name = package['ImportPath'].gsub(project_path.join('src').to_s, '')[1..-1]
-        GoPackage.new(package, logger: logger, package_name: package_name, workspace_root: project_path)
+      package_paths.map do |package_path|
+        package_name = Pathname(package_path).relative_path_from(project_src).to_s
+        GoPackage.from_workspace(package_name, package_path)
       end
     end
 
@@ -20,15 +20,13 @@ module LicenseFinder
 
     private
 
-    def go_output
-      cmd_text = `cd #{project_path} && go list -f "{{.ImportPath}} " ./...`
-      paths = cmd_text.gsub(/\s{2,}/, ",").split(",")
-      paths.map do |path|
-        {
-          'ImportPath' => path[1..-1],
-          'Rev' => 'unknown'
-        }
-      end
+    def project_src
+      project_path.join('src')
+    end
+
+    def package_paths
+      imports = `cd #{project_path} && go list -f "{{.ImportPath}} " ./...`
+      imports.gsub(/\s{2,}/, ',').split(',').map { |path| path[1..-1] }
     end
   end
 end

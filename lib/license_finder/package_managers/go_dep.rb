@@ -4,7 +4,7 @@ module LicenseFinder
   class GoDep < PackageManager
     def current_packages
       json = JSON.parse(package_path.read)
-      json['Deps'].map { |dep| GoPackage.new(dep, logger: logger, install_prefix: install_prefix) }
+      json['Deps'].map { |dep| GoPackage.from_dependency(dep, install_prefix) }
     end
 
     def package_path
@@ -15,7 +15,7 @@ module LicenseFinder
 
     def install_prefix
       go_path = workspace_dir.exist? ? workspace_dir : Pathname(ENV['GOPATH'])
-      go_path.join("src")
+      go_path.join('src')
     end
 
     def workspace_dir
