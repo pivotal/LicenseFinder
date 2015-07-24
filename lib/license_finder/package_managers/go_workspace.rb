@@ -21,7 +21,7 @@ module LicenseFinder
     private
 
     def go_output
-      cmd_text = `cd #{project_path}; go list -f "{{.ImportPath}} " ./...`
+      cmd_text = `cd #{project_path} && go list -f "{{.ImportPath}} " ./...`
       paths = cmd_text.gsub(/\s{2,}/, ",").split(",")
       paths.map do |path|
         {

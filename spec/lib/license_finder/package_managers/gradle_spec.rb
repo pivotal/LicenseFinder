@@ -10,20 +10,20 @@ module LicenseFinder
 
     describe '#current_packages' do
       before do
-        allow(subject).to receive('`').with('cd /fake/path; gradle downloadLicenses')
+        allow(subject).to receive('`').with('cd /fake/path && gradle downloadLicenses')
         dependencies = double(:subject_dependency_file, dependencies: content)
         expect(GradleDependencyFinder).to receive(:new).and_return(dependencies)
       end
 
       it 'uses custom subject command, if provided' do
         subject = Gradle.new(gradle_command: 'subjectfoo', project_path: '/fake/path')
-        expect(subject).to receive('`').with('cd /fake/path; subjectfoo downloadLicenses')
+        expect(subject).to receive('`').with('cd /fake/path && subjectfoo downloadLicenses')
         subject.current_packages
       end
 
       it 'sets the working directory to project_path, if provided' do
         subject = Gradle.new(project_path: '/Users/foo/bar')
-        expect(subject).to receive('`').with('cd /Users/foo/bar; gradle downloadLicenses')
+        expect(subject).to receive('`').with('cd /Users/foo/bar && gradle downloadLicenses')
         subject.current_packages
       end
 

@@ -14,7 +14,7 @@ jiffy TAG 0.9.0 https://github.com/davisp/jiffy.git
 
     describe '.current_packages' do
       it 'lists all the current packages' do
-        allow(subject).to receive(:capture).with('cd /fake/path; rebar list-deps').and_return([output, true])
+        allow(subject).to receive(:capture).with('cd /fake/path && rebar list-deps').and_return([output, true])
 
         current_packages = subject.current_packages
 

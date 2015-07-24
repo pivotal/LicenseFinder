@@ -21,7 +21,7 @@ module LicenseFinder
     private
 
     def rebar_ouput
-      command = "cd #{project_path}; #{@command} list-deps"
+      command = "cd #{project_path} && #{@command} list-deps"
       output, success = capture(command)
       raise "Command #{command} failed to execute: #{output}" unless success
 

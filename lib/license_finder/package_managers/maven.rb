@@ -3,7 +3,7 @@ require "xmlsimple"
 module LicenseFinder
   class Maven < PackageManager
     def current_packages
-      `cd #{project_path}; mvn license:download-licenses`
+      `cd #{project_path} && mvn license:download-licenses`
 
       xml = license_report.read
 

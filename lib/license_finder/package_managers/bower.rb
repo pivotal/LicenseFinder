@@ -11,7 +11,7 @@ module LicenseFinder
     private
 
     def bower_output
-      output = `cd #{project_path}; bower list --json -l action`
+      output = `cd #{project_path} && bower list --json -l action`
 
       JSON(output)
         .fetch("dependencies", {})
