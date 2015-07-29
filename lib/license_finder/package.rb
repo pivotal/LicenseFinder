@@ -68,6 +68,9 @@ module LicenseFinder
     end
 
     def approved?
+      # Question: is `blacklisted?` redundant?
+      # DecisionApplier does not call `whitelisted!` or `approved_manually!`
+      # if a Package has been blacklisted.
       (approved_manually? || whitelisted?) && !blacklisted?
     end
 
