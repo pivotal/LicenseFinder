@@ -11,13 +11,12 @@ module LicenseFinder
     def current_packages
       `cd #{project_path} && #{@command} downloadLicenses`
 
-      packages = []
       dependencies = GradleDependencyFinder.new(project_path).dependencies
-      dependencies.each do |xml_file|
+      packages = dependencies.flat_map do |xml_file|
         options = {'GroupTags' => {'dependencies' => 'dependency'}}
         contents = XmlSimple.xml_in(xml_file, options).fetch('dependency', [])
         contents.map do |dep|
-          packages << GradlePackage.new(dep, logger: logger)
+          GradlePackage.new(dep, logger: logger)
         end
       end
 

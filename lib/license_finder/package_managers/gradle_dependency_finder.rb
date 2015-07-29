@@ -5,11 +5,9 @@ module LicenseFinder
     end
 
     def dependencies
-      [].tap do |files|
-        Dir.glob("#{@project_path}/**/dependency-license.xml") do |file|
-          files << File.open(file).read
-        end
-      end
+      Pathname
+        .glob(@project_path.join('**', 'dependency-license.xml'))
+        .map(&:read)
     end
   end
 end
