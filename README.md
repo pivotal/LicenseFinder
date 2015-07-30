@@ -262,7 +262,7 @@ $ license_finder dependencies remove my_js_dep
 Sometimes a project will have development or test dependencies which
 you don't want to track.  You can exclude theses dependencies by running
 `license_finder ignored_groups`.  (Currently this only works for packages
-managed by Bundler.)
+managed by Bundler, NPM, and Nuget.)
 
 On rare occasions a package manager will report an individual dependency
 that you want to exclude from all reports, even though it is approved.
