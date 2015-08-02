@@ -149,6 +149,18 @@ module LicenseFinder
       def add_dep
         clone('single-module-gradle')
       end
+
+      class MultiModule < Project
+        def add_dep
+          clone('multi-module-gradle')
+        end
+      end
+
+      class FileBasedLibs < Project
+        def add_dep
+          clone('file-based-libs-gradle')
+        end
+      end
     end
 
     class GoProject < Project
@@ -168,12 +180,6 @@ module LicenseFinder
     class CompositeProject < Project
       def add_dep
         clone('single-module-gradle')
-        clone('multi-module-gradle')
-      end
-    end
-
-    class MultiModuleGradleProject < Project
-      def add_dep
         clone('multi-module-gradle')
       end
     end
