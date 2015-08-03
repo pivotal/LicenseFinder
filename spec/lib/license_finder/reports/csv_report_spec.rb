@@ -22,5 +22,11 @@ module LicenseFinder
       subject = described_class.new([dep], columns: %w[unknown])
       expect(subject.to_s).to eq("\n")
     end
+
+    it "does not include columns that should only be in merged reports" do
+      dep = Package.new('gem_a', '1.0')
+      subject = described_class.new([dep], columns: %w[subproject_paths])
+      expect(subject.to_s).to eq("\n")
+    end
   end
 end
