@@ -34,6 +34,7 @@ module LicenseFinder
 
       @name = name
       @version = version
+      @authors = options[:authors] || ""
       @summary = options[:summary] || ""
       @description = options[:description] || ""
       @homepage = options[:homepage] || ""
@@ -53,7 +54,7 @@ module LicenseFinder
       @decided_licenses = Set.new
     end
 
-    attr_reader :name, :version,
+    attr_reader :name, :version, :authors,
                 :summary, :description, :homepage,
                 :children, :parents, :groups
 
