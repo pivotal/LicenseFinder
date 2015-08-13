@@ -36,7 +36,7 @@ module LicenseFinder
     end
 
     def format_authors(dep)
-      dep.authors
+      dep.authors.to_s.strip
     end
 
     def format_homepage(dep)
