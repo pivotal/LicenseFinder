@@ -8,7 +8,7 @@ module LicenseFinder
         spec.name,
         spec.version.to_s,
         options.merge(
-          authors: spec.authors.to_s.tr('[]', ''),
+          authors: spec.authors.to_s.strip.tr('[]', ''),
           summary: spec.summary,
           description: spec.description,
           homepage: spec.homepage,
