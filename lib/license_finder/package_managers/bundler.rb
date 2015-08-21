@@ -22,8 +22,19 @@ module LicenseFinder
     attr_reader :ignore_groups
 
     def definition
-      # DI
-      @definition ||= ::Bundler::Definition.build(package_path, lockfile_path, nil)
+      if @definition.nil?
+        old_variables = ::Bundler.instance_variables.map { |v| [v,::Bundler.instance_variable_get(v)] }
+        old_variables.each { |v,_| ::Bundler.remove_instance_variable(v) }
+        old_gemfile = ENV['BUNDLE_GEMFILE']
+
+        load 'bundler/rubygems_integration.rb'
+        ENV['BUNDLE_GEMFILE'] = package_path.to_s
+        @definition = ::Bundler::Definition.build(package_path, lockfile_path, nil)
+
+        ENV['BUNDLE_GEMFILE'] = old_gemfile
+        old_variables.each { |v, val| ::Bundler.instance_variable_set(v, val) }
+      end
+      @definition
     end
 
     def details
