@@ -8,7 +8,7 @@ module LicenseFinder
       Gem::Specification.new do |s|
         s.name = 'spec_name'
         s.version = '2.1.3'
-        s.authors = 'authors'
+        s.authors = "\"authors\""
         s.summary = 'summary'
         s.description = 'description'
         s.homepage = 'homepage'

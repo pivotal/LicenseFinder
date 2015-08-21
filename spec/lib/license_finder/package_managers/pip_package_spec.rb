@@ -16,7 +16,7 @@ module LicenseFinder
 
     its(:name) { should == "jasmine" }
     its(:version) { should == "1.3.1" }
-    its(:authors){should == "authors"}
+    its(:authors){should == ""}
     its(:summary) { should == "summary" }
     its(:description) { should == "description" }
     its(:homepage) { should == "homepage" }
