@@ -29,6 +29,7 @@ module LicenseFinder
 
         load 'bundler/rubygems_integration.rb'
         ENV['BUNDLE_GEMFILE'] = package_path.to_s
+        ::Bundler.setup
         @definition = ::Bundler::Definition.build(package_path, lockfile_path, nil)
 
         ENV['BUNDLE_GEMFILE'] = old_gemfile
