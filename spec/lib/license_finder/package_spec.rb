@@ -19,7 +19,7 @@ module LicenseFinder
 
     its(:name) { should == "a package" }
     its(:version) { should == "1.3.1" }
-    its(:authors){should == 'the authors'}
+    its(:authors) { should == 'the authors' }
     its(:summary) { should == "a summary" }
     its(:description) { should == "a description" }
     its(:homepage) { should == "a homepage" }

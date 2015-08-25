@@ -11,7 +11,7 @@ module LicenseFinder
 
     its(:name) { should == "logback-classic" }
     its(:version) { should == "1.1.1" }
-    its(:authors){should == ""}
+    its(:authors) { should == "" }
     its(:summary) { should == "" }
     its(:description) { should == "" }
     its(:homepage) { should == "" }
