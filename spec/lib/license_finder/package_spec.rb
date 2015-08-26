@@ -6,6 +6,7 @@ module LicenseFinder
       described_class.new(
         "a package",
         "1.3.1",
+        authors: "the authors",
         summary: "a summary",
         description: "a description",
         homepage: "a homepage",
@@ -18,6 +19,7 @@ module LicenseFinder
 
     its(:name) { should == "a package" }
     its(:version) { should == "1.3.1" }
+    its(:authors) { should == 'the authors' }
     its(:summary) { should == "a summary" }
     its(:description) { should == "a description" }
     its(:homepage) { should == "a homepage" }
@@ -29,6 +31,7 @@ module LicenseFinder
       subject = described_class.new(nil, nil)
       expect(subject.name).to be_nil
       expect(subject.version).to be_nil
+      expect(subject.authors).to eq ""
       expect(subject.summary).to eq ""
       expect(subject.description).to eq ""
       expect(subject.homepage).to eq ""

@@ -19,6 +19,7 @@ module LicenseFinder
         name,
         version,
         options.merge(
+          authors: spec["author"],
           summary: spec["summary"],
           description: spec["description"],
           homepage: spec["home_page"],

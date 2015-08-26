@@ -8,6 +8,7 @@ module LicenseFinder
         spec.name,
         spec.version.to_s,
         options.merge(
+          authors: Array(spec.authors).join(', '),
           summary: spec.summary,
           description: spec.description,
           homepage: spec.homepage,
