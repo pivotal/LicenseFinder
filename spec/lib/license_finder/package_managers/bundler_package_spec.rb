@@ -8,7 +8,7 @@ module LicenseFinder
       Gem::Specification.new do |s|
         s.name = 'spec_name'
         s.version = '2.1.3'
-        s.authors = "\"authors\""
+        s.authors = ['first', 'second']
         s.summary = 'summary'
         s.description = 'description'
         s.homepage = 'homepage'
@@ -22,7 +22,7 @@ module LicenseFinder
 
     its(:name) { should == 'spec_name' }
     its(:version) { should == '2.1.3' }
-    its(:authors) { should == "\"\\\"authors\\\"\"" }
+    its(:authors) { should == 'first, second' }
     its(:summary) { should == "summary" }
     its(:description) { should == "description" }
     its(:homepage) { should == "homepage" }
