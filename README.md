@@ -66,7 +66,9 @@ problem, see [Excluding Dependencies](#excluding-dependencies).
 
 ## Usage
 
-The first time you run `license_finder` it will output a report of all your project's packages.
+Make sure your dependencies are installed (with your package manager's install command: `bundle install`, `npm install`, etc.)
+
+The first time you run `license_finder` it will list all your project's packages.
 
 ```sh
 $ license_finder
