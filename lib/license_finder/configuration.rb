@@ -1,3 +1,5 @@
+require_relative 'platform'
+
 module LicenseFinder
   class Configuration
     def self.with_optional_saved_config(primary_config)
@@ -20,7 +22,17 @@ module LicenseFinder
     end
 
     def gradle_command
-      get(:gradle_command) || 'gradle'
+      get(:gradle_command) || (
+        if Platform.windows?
+          wrapper = 'gradlew.bat'
+          gradle = 'gradle.bat'
+        else
+          wrapper = 'gradlew'
+          gradle = 'gradle'
+        end
+
+        File.exist?(wrapper) ? wrapper : gradle
+      )
     end
 
     def rebar_command
