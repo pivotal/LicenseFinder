@@ -13,9 +13,9 @@ module LicenseFinder
     end
 
     def valid_project_path?
-       if get(:project_path)
-         return project_path.exist?
-       end
+      if get(:project_path)
+        return project_path.exist?
+      end
       true
     end
 
