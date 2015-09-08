@@ -20,20 +20,20 @@ module LicenseFinder
     end
 
     def gradle_command
-      get(:gradle_command) || "gradle"
+      get(:gradle_command) || 'gradle'
     end
 
     def rebar_command
-      get(:rebar_command) || "rebar"
+      get(:rebar_command) || 'rebar'
     end
 
     def rebar_deps_dir
-      path = get(:rebar_deps_dir) || "deps"
+      path = get(:rebar_deps_dir) || 'deps'
       project_path.join(path).expand_path
     end
 
     def decisions_file_path
-      path = get(:decisions_file) || "doc/dependency_decisions.yml"
+      path = get(:decisions_file) || 'doc/dependency_decisions.yml'
       project_path.join(path).expand_path
     end
 
