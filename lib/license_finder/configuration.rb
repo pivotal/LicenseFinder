@@ -1,3 +1,5 @@
+require_relative 'platform'
+
 module LicenseFinder
   class Configuration
     def self.with_optional_saved_config(primary_config)
@@ -13,27 +15,37 @@ module LicenseFinder
     end
 
     def valid_project_path?
-       if get(:project_path)
-         return project_path.exist?
-       end
+      if get(:project_path)
+        return project_path.exist?
+      end
       true
     end
 
     def gradle_command
-      get(:gradle_command) || "gradle"
+      get(:gradle_command) || (
+        if Platform.windows?
+          wrapper = 'gradlew.bat'
+          gradle = 'gradle.bat'
+        else
+          wrapper = 'gradlew'
+          gradle = 'gradle'
+        end
+
+        File.exist?(wrapper) ? wrapper : gradle
+      )
     end
 
     def rebar_command
-      get(:rebar_command) || "rebar"
+      get(:rebar_command) || 'rebar'
     end
 
     def rebar_deps_dir
-      path = get(:rebar_deps_dir) || "deps"
+      path = get(:rebar_deps_dir) || 'deps'
       project_path.join(path).expand_path
     end
 
     def decisions_file_path
-      path = get(:decisions_file) || "doc/dependency_decisions.yml"
+      path = get(:decisions_file) || 'doc/dependency_decisions.yml'
       project_path.join(path).expand_path
     end
 

@@ -39,7 +39,12 @@ task :check_dependencies do
   satisfied = true
   dependencies.each do |dependency, description|
     printf "checking dev dependency for #{description} ... "
-    `which #{dependency}` ; status = $?
+    if LicenseFinder::Platform.windows?
+      `where #{dependency} 2>NUL`
+    else
+      `which #{dependency} 2>/dev/null`
+    end
+    status = $?
     if status.success?
       puts "OK"
     else
