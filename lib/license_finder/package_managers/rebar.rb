@@ -21,18 +21,14 @@ module LicenseFinder
     private
 
     def rebar_ouput
-      command = "cd #{project_path} && #{@command} list-deps"
-      output, success = capture(command)
-      raise "Command #{command} failed to execute: #{output}" unless success
+      command = "#{@command} list-deps"
+      output, success = Dir.chdir(project_path) { capture(command) }
+      raise "Command '#{command}' failed to execute: #{output}" unless success
 
       output
         .each_line
         .reject { |line| line.start_with?("=") }
         .map { |line| line.split(" ") }
-    end
-
-    def capture(command)
-      [`#{command}`, $?.success?]
     end
 
     def package_path

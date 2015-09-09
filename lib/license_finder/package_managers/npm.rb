@@ -42,8 +42,9 @@ module LicenseFinder
     end
 
     def npm_json
-      command = "cd #{project_path} && npm list --json --long"
-      output, success = capture(command)
+      command = 'npm list --json --long'
+      output, success = Dir.chdir(project_path) { capture(command) }
+
       if success
         json = JSON(output)
       else
@@ -53,16 +54,13 @@ module LicenseFinder
                  nil
                end
         if json
-          $stderr.puts "Command #{command} returned error but parsing succeeded."
+          $stderr.puts "Command '#{command}' returned an error but parsing succeeded."
         else
-          raise "Command #{command} failed to execute: #{output}"
+          raise "Command '#{command}' failed to execute: #{output}"
         end
       end
-      json
-    end
 
-    def capture(command)
-      [`#{command}`, $?.success?]
+      json
     end
 
     def package_path

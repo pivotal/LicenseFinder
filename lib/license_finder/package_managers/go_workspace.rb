@@ -25,8 +25,11 @@ module LicenseFinder
     end
 
     def package_paths
-      imports = `cd #{project_path} && go list -f "{{.ImportPath}} " ./...`
-      imports.gsub(/\s{2,}/, ',').split(',').map { |path| path[1..-1] }
+      command = 'go list -f "{{.ImportPath}} " ./...'
+      output, success = Dir.chdir(project_path) { capture(command) }
+      raise "Command '#{command}' failed to execute: #{output}" unless success
+
+      output.gsub(/\s{2,}/, ',').split(',').map { |path| path[1..-1] }
     end
   end
 end

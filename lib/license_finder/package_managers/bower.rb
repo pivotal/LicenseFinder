@@ -11,7 +11,9 @@ module LicenseFinder
     private
 
     def bower_output
-      output = `cd #{project_path} && bower list --json -l action`
+      command = 'bower list --json -l action'
+      output, success = Dir.chdir(project_path) { capture(command) }
+      raise "Command '#{command}' failed to execute: #{output}" unless success
 
       JSON(output)
         .fetch("dependencies", {})

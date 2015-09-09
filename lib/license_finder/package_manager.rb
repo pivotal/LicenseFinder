@@ -33,6 +33,10 @@ module LicenseFinder
         .tap { |is_active| logger.active self.class, is_active }
     end
 
+    def capture(command)
+      [`#{command}`, $?.success?]
+    end
+
     def current_packages_with_relations
       packages = current_packages
       packages.each do |parent|
