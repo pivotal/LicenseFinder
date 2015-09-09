@@ -115,10 +115,11 @@ module LicenseFinder
             }
           }
         JSON
-        allow(npm).to receive(:capture).with('cd /fake-node-project && npm list --json --long').and_return([json, true])
+
+        allow(Dir).to receive(:chdir).with(Pathname('/fake-node-project')) { |&block| block.call }
+        allow(npm).to receive(:capture).with('npm list --json --long').and_return([json, true])
 
         current_packages = npm.current_packages
-
         expect(current_packages.map(&:name)).to eq([])
       end
 

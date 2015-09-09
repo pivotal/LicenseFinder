@@ -10,20 +10,22 @@ module LicenseFinder
 
     describe '#current_packages' do
       before do
-        allow(subject).to receive('`').with('cd /fake/path && gradle downloadLicenses')
+        allow(Dir).to receive(:chdir).with(Pathname('/fake/path')).and_return(['', true])
         dependencies = double(:subject_dependency_file, dependencies: content)
         expect(GradleDependencyFinder).to receive(:new).and_return(dependencies)
       end
 
       it 'uses custom subject command, if provided' do
-        subject = Gradle.new(gradle_command: 'subjectfoo', project_path: '/fake/path')
-        expect(subject).to receive('`').with('cd /fake/path && subjectfoo downloadLicenses')
+        subject = Gradle.new(gradle_command: 'subjectfoo', project_path: Pathname('/fake/path'))
+        expect(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
+        expect(subject).to receive(:capture).with('subjectfoo downloadLicenses').and_return(['', true])
         subject.current_packages
       end
 
       it 'sets the working directory to project_path, if provided' do
-        subject = Gradle.new(project_path: '/Users/foo/bar')
-        expect(subject).to receive('`').with('cd /Users/foo/bar && gradle downloadLicenses')
+        subject = Gradle.new(project_path: Pathname('/Users/foo/bar'))
+        expect(Dir).to receive(:chdir).with(Pathname('/Users/foo/bar')) { |&block| block.call }
+        expect(subject).to receive(:capture).with('gradle downloadLicenses').and_return(['', true])
         subject.current_packages
       end
 

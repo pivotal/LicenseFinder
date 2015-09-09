@@ -19,7 +19,8 @@ module LicenseFinder
       }
 
       before do
-        allow_any_instance_of(Kernel).to receive('`').with('cd /Users/pivotal/workspace/loggregator && go list -f "{{.ImportPath}} " ./...').and_return(content.to_s)
+        allow(Dir).to receive(:chdir).with(Pathname('/Users/pivotal/workspace/loggregator')) { |&block| block.call }
+        allow(subject).to receive(:capture).with('go list -f "{{.ImportPath}} " ./...').and_return([content.to_s, true])
       end
 
       describe 'should return an array of go packages' do
