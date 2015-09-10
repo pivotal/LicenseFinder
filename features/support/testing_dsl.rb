@@ -324,7 +324,7 @@ module LicenseFinder
 
     class ProjectDir < SimpleDelegator # delegates to a Pathname
       def shell_out(command, allow_failures = false)
-        Shell.run("cd #{self} && #{command}", allow_failures)
+        Dir.chdir(self) { Shell.run(command, allow_failures) }
       end
 
       def add_to_file(filename, content)

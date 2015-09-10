@@ -19,7 +19,8 @@ module LicenseFinder
 
     describe '.current_packages' do
       before do
-        allow(subject).to receive('`').with('cd /fake/path && mvn license:download-licenses')
+        allow(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
+        allow(subject).to receive(:capture).with('mvn license:download-licenses').and_return(['', true])
       end
 
       def stub_license_report(deps)

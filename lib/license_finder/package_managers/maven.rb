@@ -3,7 +3,9 @@ require "xmlsimple"
 module LicenseFinder
   class Maven < PackageManager
     def current_packages
-      `cd #{project_path} && mvn license:download-licenses`
+      command = 'mvn license:download-licenses'
+      output, success = Dir.chdir(project_path) { capture(command) }
+      raise "Command '#{command}' failed to execute: #{output}" unless success
 
       xml = license_report.read
 

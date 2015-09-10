@@ -9,7 +9,9 @@ module LicenseFinder
     end
 
     def current_packages
-      `cd #{project_path} && #{@command} downloadLicenses`
+      command = "#{@command} downloadLicenses"
+      output, success = Dir.chdir(project_path) { capture(command) }
+      raise "Command '#{command}' failed to execute: #{output}" unless success
 
       dependencies = GradleDependencyFinder.new(project_path).dependencies
       packages = dependencies.flat_map do |xml_file|
