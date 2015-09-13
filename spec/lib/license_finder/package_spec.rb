@@ -151,9 +151,9 @@ module LicenseFinder
     end
 
     describe '#eql?' do
-      it 'returns true if package name, version, and licenses match' do
+      it 'returns true if package name matches' do
         p1 = Package.new('package', '0.0.1')
-        p2 = Package.new('package', '0.0.1')
+        p2 = Package.new('package', '0.0.2')
         p3 = Package.new('foo', 'foo')
 
         expect(p1.eql?(p2)).to be true
