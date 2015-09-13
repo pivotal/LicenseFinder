@@ -162,7 +162,7 @@ module LicenseFinder
             expect(subject).not_to receive(:save_report)
             expect(subject).to receive(:report_of)
 
-            subject.report
+            report
           end
         end
       end
