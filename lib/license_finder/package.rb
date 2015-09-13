@@ -32,6 +32,7 @@ module LicenseFinder
     def initialize(name, version = nil, options={})
       @logger = options[:logger] || Core.default_logger
 
+      ## DESCRIPTION
       @name = name
       @version = version
       @authors = options[:authors] || ""
@@ -54,6 +55,8 @@ module LicenseFinder
       @decided_licenses = Set.new
     end
 
+    ## DESCRIPTION
+
     attr_reader :name, :version, :authors,
                 :summary, :description, :homepage,
                 :children, :parents, :groups
@@ -69,7 +72,7 @@ module LicenseFinder
     end
 
     def approved?
-      # Question: is `blacklisted?` redundant?
+      # Question: is `!blacklisted?` redundant?
       # DecisionApplier does not call `whitelisted!` or `approved_manually!`
       # if a Package has been blacklisted.
       (approved_manually? || whitelisted?) && !blacklisted?
@@ -91,6 +94,10 @@ module LicenseFinder
       @blacklisted
     end
 
+    attr_reader :manual_approval
+
+    ## EQUALITY
+
     def <=>(other)
       name <=> other.name
     end
@@ -102,8 +109,6 @@ module LicenseFinder
     def hash
       [name].hash
     end
-
-    attr_reader :manual_approval
 
     ## LICENSING
 

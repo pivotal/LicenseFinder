@@ -155,7 +155,7 @@ describe 'Diff report' do
         expect(diff).to include("removed,foo,,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
         expect(diff).to include("added,foo,2.0.0,,BSD,\"#{project1.project_dir},#{project2.project_dir}\"")
         expect(diff).to include("added,baz,3.0.0,,BSD,#{project2.project_dir}")
-        end
+      end
 
       xspecify 'show licenses change when files do not contain exact copies of a dep' do
         project = developer.create_empty_project
