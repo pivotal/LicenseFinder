@@ -5,7 +5,7 @@ module LicenseFinder
     end
 
     def self.windows?
-      RUBY_PLATFORM =~ /mswin/ || RUBY_PLATFORM =~ /cygwin/ || RUBY_PLATFORM =~ /mingw/
+      RUBY_PLATFORM =~ /mswin|cygwin|mingw/
     end
   end
 end
