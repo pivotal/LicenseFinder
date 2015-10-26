@@ -34,6 +34,9 @@ module LicenseFinder
         unapproved = license_finder.unapproved
         blacklisted = license_finder.blacklisted
 
+        # Ensure to start output on a new line even with dot progress indicators.
+        say "\n"
+
         if unapproved.empty?
           say "All dependencies are approved for use", :green
         else
