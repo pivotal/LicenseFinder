@@ -1,9 +1,15 @@
-=== 2.0.5
+=== 2.1.0.rc1 / 2015-11-03
 
 * Features
   * Licenses can be blacklisted.  Dependencies which only have licenses in the
     blacklist will not be approved, even if someone tries.
   * Initial support for the Nuget package manager for .NET projects
+  * Experimental support for `godep` projects
+  * Experimental support for "golang workspace" projects (with .envrc)
+  * Improved support for multi-module `gradle` projects
+  * Gradle 2.x support (experimental)
+  * Experimental support for "composite" projects (multiple git submodules)
+  * Experimental support for "license diffs" between directories
 
 === 2.0.4 / 2015-04-16
 

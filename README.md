@@ -28,6 +28,8 @@ report.
 * Erlang (via `rebar`)
 * Objective-C (+ CocoaPods)
 * Nuget (without license discovery)
+* Godep
+* Go workspace (via a `.envrc` file)
 
 
 ## Installation
