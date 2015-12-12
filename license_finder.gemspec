@@ -50,7 +50,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec", "~> 3"
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "webmock", "~> 1.13"
-  s.add_development_dependency "cocoapods" if LicenseFinder::Platform.darwin?
+  s.add_development_dependency "cocoapods", "0.34.0" if LicenseFinder::Platform.darwin?
 
   # temporary to preserve ruby 1.9.3 support.
   s.add_development_dependency "mime-types", "< 3.0"
