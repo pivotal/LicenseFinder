@@ -48,9 +48,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency "fakefs"
   s.add_development_dependency "pry"
   s.add_development_dependency "rspec", "~> 3"
+  s.add_development_dependency "mime-types", "~> 1.16"
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "webmock", "~> 1.13"
-  s.add_development_dependency "cocoapods" if LicenseFinder::Platform.darwin?
+  s.add_development_dependency "cocoapods", "0.34.0" if LicenseFinder::Platform.darwin?
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
