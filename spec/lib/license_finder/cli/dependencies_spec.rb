@@ -39,6 +39,17 @@ module LicenseFinder
           expect(approval.who).to eq "Julian"
           expect(approval.why).to eq "We really need this"
         end
+
+        it 'has an --approve option to approve the added dependency & version combination' do
+          subject.options = { approve: true, who: "Julian", why: "We really need this", version: '1.0.0.RELEASE' }
+          silence_stdout do
+            subject.add("js_dep", "MIT")
+          end
+          approval = subject.decisions.approval_of("js_dep", '1.0.0.RELEASE')
+          expect(approval.who).to eq "Julian"
+          expect(approval.why).to eq "We really need this"
+          expect(approval.safe_versions).to eq ['1.0.0.RELEASE']
+        end
       end
 
       describe "remove" do
