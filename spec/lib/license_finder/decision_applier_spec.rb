@@ -147,6 +147,24 @@ module LicenseFinder
         expect(dep).to be_approved
         expect(dep).to be_approved_manually
       end
+
+      it 'returns an approval if the requested package has been approved, but no version was specified' do
+        decisions = Decisions.new
+                        .add_package('spring-boot', '1.3.0.RELEASE')
+                        .approve('spring-boot', versions: [], who: 'Approver', why: 'Because')
+        decision_applier = described_class.new(decisions: decisions, packages: [])
+        dep = decision_applier.acknowledged.last
+        expect(dep).to be_approved
+        expect(dep).to be_approved_manually
+      end
+
+      it 'does not return an approval if no dependencies have been approved' do
+        decisions = Decisions.new
+                        .add_package('spring-boot', '1.3.0.RELEASE')
+        decision_applier = described_class.new(decisions: decisions, packages: [])
+        dep = decision_applier.acknowledged.last
+        expect(dep).to_not be_approved
+      end
     end
 
     describe '#unapproved' do
