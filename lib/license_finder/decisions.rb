@@ -10,12 +10,20 @@ module LicenseFinder
       @licenses[name]
     end
 
-    def approval_of(name)
-      @approvals[name]
+    def approval_of(name, version=nil)
+      if version != nil
+        return @approvals[name] if !@approvals[name][:safe_versions].empty? && @approvals[name][:safe_versions].include?(version)
+      else
+        return @approvals[name] if @approvals[name][:safe_versions].empty?
+      end
     end
 
-    def approved?(name)
-      @approvals.has_key?(name)
+    def approved?(name, version=nil)
+      if version != nil
+        @approvals.has_key?(name) && !@approvals[name][:safe_versions].empty? && @approvals[name][:safe_versions].include?(version)
+      else
+        @approvals.has_key?(name)
+      end
     end
 
     def whitelisted?(lic)
@@ -38,9 +46,9 @@ module LicenseFinder
     # WRITE
     #######
 
-    TXN = Struct.new(:who, :why, :safe_when) do
+    TXN = Struct.new(:who, :why, :safe_when, :safe_versions) do
       def self.from_hash(txn)
-        new(txn[:who], txn[:why], txn[:when])
+        new(txn[:who], txn[:why], txn[:when], txn[:versions].nil? ? [] : txn[:versions])
       end
     end
 
@@ -81,7 +89,15 @@ module LicenseFinder
 
     def approve(name, txn = {})
       @decisions << [:approve, name, txn]
+
+      versions = []
+      if @approvals.has_key?(name)
+        versions = @approvals[name][:safe_versions]
+      end
+
       @approvals[name] = TXN.from_hash(txn)
+
+      @approvals[name][:safe_versions].concat(versions)
       self
     end
 
