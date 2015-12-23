@@ -11,16 +11,20 @@ module LicenseFinder
     end
 
     def approval_of(name, version=nil)
-      if version != nil
-        return @approvals[name] if !@approvals[name][:safe_versions].empty? && @approvals[name][:safe_versions].include?(version)
+      if !@approvals.has_key?(name)
+        nil
+      elsif version != nil
+        @approvals[name] if @approvals[name][:safe_versions].empty? || @approvals[name][:safe_versions].include?(version)
       else
-        return @approvals[name] if @approvals[name][:safe_versions].empty?
+        @approvals[name] if @approvals[name][:safe_versions].empty?
       end
     end
 
     def approved?(name, version=nil)
-      if version != nil
-        @approvals.has_key?(name) && !@approvals[name][:safe_versions].empty? && @approvals[name][:safe_versions].include?(version)
+      if !@approvals.has_key?(name)
+        nil
+      elsif version != nil
+        @approvals.has_key?(name) && @approvals[name][:safe_versions].empty? || @approvals[name][:safe_versions].include?(version)
       else
         @approvals.has_key?(name)
       end
