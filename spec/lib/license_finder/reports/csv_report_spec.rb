@@ -23,6 +23,12 @@ module LicenseFinder
       expect(subject.to_s).to eq("\n")
     end
 
+    it 'supports install_path column' do
+      dep = Package.new('gem_a', '1.0', install_path: '/tmp/gems/gem_a-1.0')
+      subject = described_class.new([dep], columns: %w[name version install_path])
+      expect(subject.to_s).to eq("gem_a,1.0,/tmp/gems/gem_a-1.0\n")
+    end
+
     it "does not include columns that should only be in merged reports" do
       dep = Package.new('gem_a', '1.0')
       subject = described_class.new([dep], columns: %w[subproject_paths])
