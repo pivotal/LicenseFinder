@@ -52,6 +52,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency "webmock", "~> 1.13"
   s.add_development_dependency "cocoapods" if LicenseFinder::Platform.darwin?
 
+  # temporary to preserve ruby 1.9.3 support.
+  s.add_development_dependency "mime-types", "< 3.0"
+
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
