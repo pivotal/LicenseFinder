@@ -1,15 +1,16 @@
 rvm:
-  - 2.1.0
-  - 2.0.0
   - 1.9.3
+  - 2.0
+  - 2.1
+  - 2.2
+  - 2.3
   - jruby-19mode
-  - ruby-head
-  - jruby-head
+  - jruby-1.7.23
+  - jruby-9.0.4.0
 
 matrix:
   allow_failures:
-    - rvm: ruby-head
-    - rvm: jruby-head
+    - rvm: 1.9.3
 
 env:
   - PATH=$PATH:$HOME/gradle/bin:$HOME/rebar:$HOME/go/bin GOPATH=$HOME/go
