@@ -1,9 +1,9 @@
 === 2.1.0.rc2 / unreleased
 
 * Features
-  * improved "go workspace" support by looking at git submodules.
-  * added an "install path" field to the report output
-
+  * specific versions of a dependency can be approved (#183, #185). (Thanks, @ipsi!)
+  * improved "go workspace" support by looking at git submodules. (Thanks, @jvshahid and @aminjam!)
+  * added an "install path" field to the report output. (Thanks, @jvshahid and @aminjam!)
 
 === 2.1.0.rc1 / 2015-11-03
 
