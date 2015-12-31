@@ -31,18 +31,20 @@ module LicenseFinder
           end
         end
 
-        it "sets approver and approval message" do
+        it "sets approver, approval message, and approval version" do
           subject.options = {
             who: "Julian",
-            why: "We really need this"
+            why: "We really need this",
+            version: '1.0.0.RELEASE'
           }
           silence_stdout do
             subject.add("foo")
           end
 
-          approval = subject.decisions.approval_of("foo")
+          approval = subject.decisions.approval_of("foo", '1.0.0.RELEASE')
           expect(approval.who).to eq "Julian"
           expect(approval.why).to eq "We really need this"
+          expect(approval.safe_versions).to eq ['1.0.0.RELEASE']
         end
       end
 

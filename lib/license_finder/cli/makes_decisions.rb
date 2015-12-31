@@ -9,6 +9,7 @@ module LicenseFinder
         def auditable
           method_option :who, desc: "The person making this decision"
           method_option :why, desc: "The reason for making this decision"
+          method_option :version, desc: 'The version that will be approved'
         end
       end
 
@@ -18,6 +19,7 @@ module LicenseFinder
         @txn ||= {
           who: options[:who],
           why: options[:why],
+          versions: options[:version] ? [options[:version]] : [],
           when: Time.now.getutc
         }
       end
