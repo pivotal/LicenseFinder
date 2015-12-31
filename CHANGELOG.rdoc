@@ -1,4 +1,4 @@
-=== 2.1.0.rc2 / unreleased
+=== 2.1.0.rc2 / 2015-12-31
 
 * Features
   * specific versions of a dependency can be approved (#183, #185). (Thanks, @ipsi!)
