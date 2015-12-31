@@ -21,10 +21,11 @@ module LicenseFinder
 
     def apply_decisions(system_packages)
       all_packages = decisions.packages + system_packages
-      all_packages
-        .map { |package| with_decided_licenses(package) }
-        .map { |package| with_approval(package) }
-        .reject { |package| ignored?(package) }
+      all_packages.each_with_object([]) do |_pkg, packages|
+        pkg = with_decided_licenses(_pkg)
+        package = with_approval(pkg)
+        packages << package unless ignored?(package)
+      end
     end
 
     def ignored?(package)
