@@ -2,10 +2,12 @@ require 'json'
 
 module LicenseFinder
   class GoWorkspace < PackageManager
+    Submodule = Struct.new :path, :revision
+
     def current_packages
-      package_paths.map do |package_path|
-        package_name = Pathname(package_path).relative_path_from(project_src).to_s
-        GoPackage.from_workspace(package_name, package_path)
+      submodules.map do |submodule|
+        import_path = Pathname.new(submodule.path).relative_path_from(project_src)
+        GoPackage.from_dependency({'ImportPath' => import_path.to_s, 'Rev' => submodule.revision}, project_src)
       end
     end
 
@@ -24,12 +26,16 @@ module LicenseFinder
       project_path.join('src')
     end
 
-    def package_paths
-      command = 'go list -f "{{.ImportPath}} " ./...'
-      output, success = Dir.chdir(project_path) { capture(command) }
-      raise "Command '#{command}' failed to execute: #{output}" unless success
-
-      output.gsub(/\s{2,}/, ',').split(',').map { |path| path[1..-1] }
+    def submodules
+      output = Dir.chdir(project_path) do |d|
+        result = capture('git submodule status')
+        raise 'git submodule status failed' unless result[1]
+        result.first
+      end
+      output.lines.map do |gitmodule|
+        columns = gitmodule.split.map(&:strip)
+        Submodule.new File.join(project_path,columns[1]), columns[0]
+      end
     end
   end
 end
