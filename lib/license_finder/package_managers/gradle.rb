@@ -6,6 +6,7 @@ module LicenseFinder
     def initialize(options={})
       super
       @command = options[:gradle_command] || 'gradle'
+      @include_groups = options[:gradle_include_groups]
     end
 
     def current_packages
@@ -18,7 +19,7 @@ module LicenseFinder
         options = {'GroupTags' => {'dependencies' => 'dependency'}}
         contents = XmlSimple.xml_in(xml_file, options).fetch('dependency', [])
         contents.map do |dep|
-          GradlePackage.new(dep, logger: logger)
+          GradlePackage.new(dep, logger: logger, include_groups: @include_groups)
         end
       end
 

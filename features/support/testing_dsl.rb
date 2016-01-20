@@ -145,6 +145,12 @@ module LicenseFinder
       end
     end
 
+    class BareGradleProject < Project
+      def add_dep
+        install_fixture('build.gradle')
+      end
+    end
+
     class GradleProject < Project
       def add_dep
         clone('single-module-gradle')

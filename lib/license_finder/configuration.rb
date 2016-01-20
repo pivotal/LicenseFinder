@@ -39,6 +39,10 @@ module LicenseFinder
       get(:go_full_version)
     end
 
+    def gradle_include_groups
+      get(:gradle_include_groups)
+    end
+
     def rebar_command
       get(:rebar_command) || 'rebar'
     end

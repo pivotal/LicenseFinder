@@ -66,6 +66,7 @@ module LicenseFinder
         ignore_groups: decisions.ignored_groups,
         go_full_version: config.go_full_version,
         gradle_command: config.gradle_command,
+        gradle_include_groups: config.gradle_include_groups,
         rebar_command: config.rebar_command,
         rebar_deps_dir: config.rebar_deps_dir,
       )
