@@ -21,6 +21,7 @@ module LicenseFinder
       class_option :columns, type: :array, desc: "For CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}", default: %w[name version licenses]
       class_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: "license_report"
       class_option :go_full_version, desc: "Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false."
+      class_option :gradle_include_groups, desc: "Whether dependency name should include group id. Only meaningful if used with a Java/gradle project. Defaults to false."
       class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradlew' / 'gradlew.bat' if the wrapper is present, otherwise to 'gradle'."
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."

@@ -40,6 +40,14 @@ module LicenseFinder
         end
       end
 
+      context 'when include_groups is set to true' do
+        subject { described_class.new({"name" => "a:b:c"}, include_groups: true) }
+
+        it 'includes the group id in the name' do
+          expect(subject.name).to eq("a:b")
+        end
+      end
+
       context "when there are no real licenses" do
         subject do
           described_class.new(

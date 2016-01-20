@@ -2,8 +2,10 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Gradle do
-    subject { Gradle.new(project_path: Pathname('/fake/path')) }
-    
+    let(:options) { {} }
+
+    subject { Gradle.new(options.merge(project_path: Pathname('/fake/path'))) }
+
     let(:content) { [] }
 
     it_behaves_like 'a PackageManager'
@@ -41,6 +43,14 @@ module LicenseFinder
 
         it 'lists all dependencies' do
           expect(subject.current_packages.map(&:name)).to eq ['spring-aop', 'spring-core']
+        end
+
+        context 'when gradle group ids option is enabled' do
+          let(:options) { { gradle_include_groups: true } }
+
+          it 'lists the dependencies with the group id' do
+            expect(subject.current_packages.map(&:name)).to eq ['org.springframework:spring-aop', 'org.springframework:spring-core']
+          end
         end
       end
 

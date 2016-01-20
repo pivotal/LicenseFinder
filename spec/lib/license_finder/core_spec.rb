@@ -29,6 +29,7 @@ module LicenseFinder
           ignore_groups: Set.new,
           go_full_version: nil,
           gradle_command: configuration.gradle_command,
+          gradle_include_groups: nil,
           rebar_command: configuration.rebar_command,
           rebar_deps_dir: configuration.rebar_deps_dir
         }
