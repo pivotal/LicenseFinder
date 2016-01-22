@@ -28,6 +28,7 @@ module LicenseFinder
         extract_options(
           :project_path,
           :decisions_file,
+          :go_full_version,
           :gradle_command,
           :rebar_command,
           :rebar_deps_dir,

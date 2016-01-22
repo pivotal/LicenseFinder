@@ -2,8 +2,9 @@ require 'spec_helper'
 
 module LicenseFinder
   describe GoWorkspace do
+    let(:options) { {} }
     let(:logger) { double(:logger, active: nil) }
-    subject { GoWorkspace.new(project_path: Pathname('/Users/pivotal/workspace/loggregator'), logger: logger) }
+    subject { GoWorkspace.new(options.merge(project_path: Pathname('/Users/pivotal/workspace/loggregator'), logger: logger)) }
 
     describe '#current_packages' do
       let(:content) {
@@ -51,6 +52,13 @@ module LicenseFinder
 
           it 'should raise an exception' do
             expect { subject.current_packages }.to raise_exception(/git submodule status failed/)
+          end
+        end
+
+        context 'when requesting the full version' do
+          let(:options) { { go_full_version:true } }
+          it 'list the dependencies with full version' do
+            expect(subject.current_packages.map(&:version)).to eq ["b8a35001b773c267e"]
           end
         end
       end

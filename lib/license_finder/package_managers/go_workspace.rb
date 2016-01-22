@@ -4,10 +4,15 @@ module LicenseFinder
   class GoWorkspace < PackageManager
     Submodule = Struct.new :path, :revision
 
+    def initialize(options={})
+      super
+      @full_version = options[:go_full_version]
+    end
+
     def current_packages
       submodules.map do |submodule|
         import_path = Pathname.new(submodule.path).relative_path_from(project_src)
-        GoPackage.from_dependency({'ImportPath' => import_path.to_s, 'Rev' => submodule.revision}, project_src)
+        GoPackage.from_dependency({'ImportPath' => import_path.to_s, 'Rev' => submodule.revision}, project_src, @full_version)
       end
     end
 
