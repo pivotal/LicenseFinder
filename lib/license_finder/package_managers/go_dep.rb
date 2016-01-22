@@ -2,9 +2,15 @@ require 'json'
 
 module LicenseFinder
   class GoDep < PackageManager
+
+    def initialize(options={})
+      super
+      @full_version = options[:go_full_version]
+    end
+
     def current_packages
       json = JSON.parse(package_path.read)
-      json['Deps'].map { |dep| GoPackage.from_dependency(dep, install_prefix) }
+      json['Deps'].map { |dep| GoPackage.from_dependency(dep, install_prefix, @full_version) }
     end
 
     def package_path

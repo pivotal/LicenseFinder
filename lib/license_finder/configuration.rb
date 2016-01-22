@@ -35,6 +35,10 @@ module LicenseFinder
       )
     end
 
+    def go_full_version
+      get(:go_full_version)
+    end
+
     def rebar_command
       get(:rebar_command) || 'rebar'
     end

@@ -2,7 +2,9 @@ require 'spec_helper'
 
 module LicenseFinder
   describe GoDep do
-    subject { GoDep.new(project_path: Pathname('/fake/path')) }
+    let(:options) { {} }
+    subject { GoDep.new(options.merge(project_path: Pathname('/fake/path'))) }
+
 
     it_behaves_like 'a PackageManager'
 
@@ -43,6 +45,15 @@ module LicenseFinder
           packages = subject.current_packages
           expect(packages[0].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/foo')
           expect(packages[1].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/bar')
+        end
+
+        context 'when requesting the full version' do
+          let(:options) { { go_full_version:true } }
+          it 'list the dependencies with full version' do
+            expect(subject.current_packages.map(&:version)).to eq [
+              "61164e49940b423ba1f12ddbdf01632ac793e5e9",
+              "3245708abcdef234589450649872346783298736"]
+          end
         end
       end
 

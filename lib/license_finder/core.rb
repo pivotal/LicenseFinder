@@ -64,6 +64,7 @@ module LicenseFinder
         logger: logger,
         project_path: config.project_path,
         ignore_groups: decisions.ignored_groups,
+        go_full_version: config.go_full_version,
         gradle_command: config.gradle_command,
         rebar_command: config.rebar_command,
         rebar_deps_dir: config.rebar_deps_dir,

@@ -27,6 +27,7 @@ module LicenseFinder
           logger: logger,
           project_path: configuration.project_path,
           ignore_groups: Set.new,
+          go_full_version: nil,
           gradle_command: configuration.gradle_command,
           rebar_command: configuration.rebar_command,
           rebar_deps_dir: configuration.rebar_deps_dir

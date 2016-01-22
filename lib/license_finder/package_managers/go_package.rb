@@ -4,9 +4,9 @@ module LicenseFinder
       LicenseFinder::Package.new(name, 'unknown', {install_path: install_path(path)})
     end
 
-    def self.from_dependency(hash, prefix)
+    def self.from_dependency(hash, prefix,full_version)
       name = hash['ImportPath']
-      version = hash['Rev'][0..6]
+      version = full_version ? hash['Rev'] : hash['Rev'][0..6]
       LicenseFinder::Package.new(name, version, {install_path: install_path(prefix.join(name))})
     end
 
