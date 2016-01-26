@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
     "Mike Dalessio"
   ]
 
-  s.email       = ["commoncode@pivotalabs.com"]
+  s.email       = ["labs-commoncode@pivotal.io"]
   s.homepage    = "https://github.com/pivotal/LicenseFinder"
   s.summary     = "Audit the OSS licenses of your application's dependencies."
 
