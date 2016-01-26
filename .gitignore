@@ -1,7 +1,8 @@
-pkg/*
-Gemfile.lock
-.rvmrc
-.idea/*
+.bundle
 .gradle/
-tmp/
+.idea/*
 .pairs
+.rvmrc
+Gemfile.lock
+pkg/*
+tmp/
