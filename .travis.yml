@@ -24,6 +24,7 @@ notifications:
     on_start: true
 
 before_install:
+  - gem update bundler
   - .travis/install_gradle.sh
   - .travis/install_rebar.sh
   - .travis/install_bower.sh
