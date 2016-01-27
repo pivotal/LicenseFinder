@@ -18,4 +18,11 @@ describe 'Composite project' do
     developer.execute_command('license_finder report --recursive --format csv --columns name version install_path licenses')
     expect(developer).to be_seeing('junit,4.11,,Common Public License Version 1.0')
   end
+
+  specify 'shows install path column when scanning recursively' do
+    project = LicenseFinder::TestingDSL::BundlerProject.create
+    project.install
+    developer.execute_command('license_finder report --recursive --format csv --columns name version install_path licenses')
+    expect(developer).to be_seeing_something_like(/multi_xml,0.\d+.\d+,.*\/gems\/multi_xml-0.\d+.\d+,MIT/)
+  end
 end
