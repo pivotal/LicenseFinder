@@ -4,9 +4,12 @@ rvm:
   - 2.1
   - 2.2
   - 2.3.0
-  - jruby-19mode
   - jruby-1.7.23
   - jruby-9.0.4.0
+
+matrix:
+  allow_failures:
+  - jruby-1.7.23
 
 env:
   - PATH=$PATH:$HOME/gradle/bin:$HOME/rebar:$HOME/go/bin GOPATH=$HOME/go
