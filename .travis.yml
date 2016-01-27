@@ -9,7 +9,7 @@ rvm:
 
 matrix:
   allow_failures:
-  - jruby-1.7.23
+  - rvm: jruby-1.7.23
 
 env:
   - PATH=$PATH:$HOME/gradle/bin:$HOME/rebar:$HOME/go/bin GOPATH=$HOME/go
