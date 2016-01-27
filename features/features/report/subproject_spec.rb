@@ -15,7 +15,7 @@ describe 'Subproject report' do
     project2.depend_on(developer.create_gem('bar', version: '2.0.0', license: 'GPLv2'))
 
     developer.create_empty_project
-    developer.execute_command("license_finder report --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
+    developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
     expect(developer).to be_seeing("foo,1.0.0,MIT,#{project1.project_dir}")
     expect(developer).to be_seeing("bar,2.0.0,GPLv2,#{project2.project_dir}")
   end
@@ -30,7 +30,7 @@ describe 'Subproject report' do
     project2.depend_on(foo)
 
     developer.create_empty_project
-    developer.execute_command("license_finder report --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
+    developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
     expect(developer).to be_seeing_once("foo,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
   end
 
@@ -45,7 +45,7 @@ describe 'Subproject report' do
     project2.depend_on(foo_11)
 
     developer.create_empty_project
-    developer.execute_command("license_finder report --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
+    developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
     expect(developer).to be_seeing_once("foo,1.0.0,MIT,#{project1.project_dir}")
     expect(developer).to be_seeing_once("foo,1.1.0,MIT,#{project2.project_dir}")
   end

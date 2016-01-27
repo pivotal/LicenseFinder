@@ -69,7 +69,7 @@ module LicenseFinder
 
         if subproject_paths && !subproject_paths.empty?
           finder = LicenseAggregator.new(license_finder_config, subproject_paths)
-          report = MergedReport.new(finder.dependencies)
+          report = MergedReport.new(finder.dependencies, options)
         else
           report = report_of(license_finder.acknowledged)
         end
