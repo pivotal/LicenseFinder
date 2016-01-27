@@ -12,4 +12,10 @@ describe 'Composite project' do
     developer.execute_command('license_finder report --recursive')
     expect(developer).to be_seeing('junit,4.11,Common Public License Version 1.0')
   end
+
+  specify 'shows csv report columns in the right order' do
+    LicenseFinder::TestingDSL::CompositeProject.create
+    developer.execute_command('license_finder report --recursive --format csv --columns name version install_path licenses')
+    expect(developer).to be_seeing('junit,4.11,,Common Public License Version 1.0')
+  end
 end
