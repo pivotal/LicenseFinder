@@ -1,3 +1,9 @@
+=== 2.1.0.rc4 / 2016-01-27
+
+* Features
+  * Add support for including maven/gradle GroupIds with `--gradle-include-groups`
+
+
 === 2.1.0.rc3 / 2016-01-22
 
 * Features
