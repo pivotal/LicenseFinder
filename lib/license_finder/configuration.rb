@@ -31,7 +31,8 @@ module LicenseFinder
           gradle = 'gradle'
         end
 
-        File.exist?(wrapper) ? wrapper : gradle
+        executable = File.exist?(wrapper) ? wrapper : gradle
+        "#{executable} --console plain"
       )
     end
 
