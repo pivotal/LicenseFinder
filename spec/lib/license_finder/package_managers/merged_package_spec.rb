@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module LicenseFinder
   describe MergedPackage do
-    let(:package) { Package.new('foo', '1.0.0', spec_licenses: ['MIT']) }
+    let(:package) { Package.new('foo', '1.0.0', spec_licenses: ['MIT'], install_path: '/tmp/foo') }
     let(:subproject_paths) { 'path/to/project/with/foo' }
 
     subject { MergedPackage.new(package, [subproject_paths]) }
@@ -22,6 +22,10 @@ module LicenseFinder
     it 'returns the project path' do
       expect(subject.subproject_paths.length).to eq(1)
       expect(subject.subproject_paths[0]).to end_with(subproject_paths)
+    end
+
+    it 'returns the install path' do
+      expect(subject.install_path).to eq('/tmp/foo')
     end
 
     describe '#eql?' do

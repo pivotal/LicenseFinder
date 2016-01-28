@@ -20,6 +20,10 @@ module LicenseFinder
       dependency.licenses
     end
 
+    def install_path
+      dependency.install_path
+    end
+
     def subproject_paths
       @subproject_paths.map { |p| p.expand_path.to_s }
     end
