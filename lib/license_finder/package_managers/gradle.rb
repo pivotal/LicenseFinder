@@ -5,7 +5,7 @@ module LicenseFinder
   class Gradle < PackageManager
     def initialize(options={})
       super
-      @command = options[:gradle_command] || 'gradle'
+      @command = options[:gradle_command] || 'gradle --console plain'
       @include_groups = options[:gradle_include_groups]
     end
 
