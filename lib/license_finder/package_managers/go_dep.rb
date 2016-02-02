@@ -10,7 +10,13 @@ module LicenseFinder
 
     def current_packages
       json = JSON.parse(package_path.read)
-      json['Deps'].map { |dep| GoPackage.from_dependency(dep, install_prefix, @full_version) }
+      # godep includes subpackages as a seperate dependency, we can de-dup that
+      deps = json['Deps'].each do |d|
+        next unless d['ImportPath'].include?('github.com')
+
+        d['ImportPath'] = d['ImportPath'].split('/')[0..2].join('/')
+      end
+      deps.uniq.map { |dep| GoPackage.from_dependency(dep, install_prefix, @full_version) }
     end
 
     def package_path
