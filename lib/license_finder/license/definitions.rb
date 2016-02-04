@@ -12,6 +12,7 @@ module LicenseFinder
           isc,
           lgpl,
           mit,
+          mpl2,
           newbsd,
           python,
           ruby,
@@ -103,6 +104,26 @@ module LicenseFinder
           short_name:  "MIT",
           other_names: ["Expat", "MIT license", "MIT License"],
           url:         "http://opensource.org/licenses/mit-license",
+          matcher:     matcher
+        )
+      end
+
+      def mpl2
+        header_regexp = /Mozilla Public Licen[sc]e, version 2.0/
+
+        matcher = AnyMatcher.new(
+          Matcher.from_template(Template.named("MPL2")),
+          HeaderMatcher.new(Matcher.from_regex(header_regexp))
+        )
+
+        License.new(
+          short_name:  "MPL2",
+          pretty_name: "Mozilla Public License 2.0",
+          other_names: [
+            "MPL-2.0",
+            "Mozilla Public License, Version 2.0"
+          ],
+          url:         "https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt",
           matcher:     matcher
         )
       end
