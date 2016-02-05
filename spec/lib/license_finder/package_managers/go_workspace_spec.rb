@@ -4,35 +4,107 @@ module LicenseFinder
   describe GoWorkspace do
     let(:options) { {} }
     let(:logger) { double(:logger, active: nil) }
-    subject { GoWorkspace.new(options.merge(project_path: Pathname('/Users/pivotal/workspace/loggregator'), logger: logger)) }
+    let(:project_path) { '/Users/pivotal/workspace/loggregator'}
+    subject { GoWorkspace.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
 
-    describe '#current_packages' do
-      let(:content) {
-        '_/Users/pivotal/workspace/loggregator/src/bitbucket.org/kardianos/osext
-         _/Users/pivotal/workspace/loggregator/src/bitbucket.org/kardianos/osext/something
-         _/Users/pivotal/workspace/loggregator/src/deaagent
-         _/Users/pivotal/workspace/loggregator/src/deaagent/deaagent
-         _/Users/pivotal/workspace/loggregator/src/deaagent/domain
-         _/Users/pivotal/workspace/loggregator/src/doppler
-         _/Users/pivotal/workspace/loggregator/src/doppler/config
-         _/Users/pivotal/workspace/loggregator/src/doppler/groupedsinks
-         _/Users/pivotal/workspace/loggregator/src/doppler/groupedsinks/firehose_group
-         _/Users/pivotal/workspace/loggregator/src/doppler/groupedsinks/sink_wrapper'
-      }
+    describe '#go_list' do
 
-      let(:git_modules) {
-        "b8a35001b773c267e src/bitbucket.org/kardianos/osext (heads/master)"
+      let(:go_list_output) {
+        <<HERE
+encoding/json
+github.com/onsi/ginkgo
+HERE
       }
 
       before do
+        allow(Dir).to receive(:chdir).with(Pathname.new project_path) { |&b| b.call() }
+        allow(FileTest).to receive(:exist?).and_return(false)
+        allow(FileTest).to receive(:exist?).with(File.join(project_path, '.envrc')).and_return(true)
+      end
+
+      it 'changes the directory' do
+        subject.send(:go_list)
+
+        expect(Dir).to have_received(:chdir)
+      end
+
+      it 'returns the skip the standard libs and return lines of the output' do
+        allow(subject).to receive(:capture).with('go list -f \'{{join .Deps "\n"}}\' ./...').and_return([go_list_output, true])
+        packages = subject.send(:go_list)
+        expect(packages.count).to eq(1)
+        expect(packages.first).to eq('github.com/onsi/ginkgo')
+      end
+
+      it 'sets gopath to the envrc path' do
+        allow(subject).to receive(:capture).with('go list -f \'{{join .Deps "\n"}}\' ./...') {
+          expect(ENV['GOPATH']).to eq(project_path)
+          ['', true]
+        }
+
+        subject.send(:go_list)
+      end
+    end
+
+    describe '#git_modules' do
+      before do
+        allow(FileTest).to receive(:exist?).and_return(false)
+        allow(FileTest).to receive(:exist?).with('/Users/pivotal/workspace/loggregator/.envrc').and_return(true)
+        allow(Dir).to receive(:chdir).with(Pathname.new '/Users/pivotal/workspace/loggregator') { |&b| b.call() }
+      end
+
+      context 'if git submodule status fails' do
+        before do
+          allow(subject).to receive(:capture).with('git submodule status').and_return(['', false])
+        end
+
+        it 'should raise an exception' do
+          expect { subject.send(:git_modules) }.to raise_exception(/git submodule status failed/)
+        end
+      end
+
+      context 'if git submodule status succeeds' do
+        let(:git_submodule_status_output) {
+          <<HERE
+1993eafbef57be29ee8f5eb9d26a22f20ff3c207 src/github.com/GaryBoone/GoStats (heads/master)
+55eb11d21d2a31a3cc93838241d04800f52e823d src/github.com/Sirupsen/logrus (v0.7.3)
+HERE
+        }
+
+        before do
+          allow(subject).to receive(:capture).with('git submodule status').and_return([git_submodule_status_output, true])
+        end
+
+        it 'should return the filtered submodules' do
+          submodules = subject.send(:git_modules)
+          expect(submodules.count).to eq(2)
+          expect(submodules.first.path).to eq('/Users/pivotal/workspace/loggregator/src/github.com/GaryBoone/GoStats')
+          expect(submodules.first.revision).to eq('1993eafbef57be29ee8f5eb9d26a22f20ff3c207')
+        end
+      end
+    end
+
+    describe '#current_packages' do
+      let(:git_modules_output) {
+        [GoWorkspace::Submodule.new("/Users/pivotal/workspace/loggregator/src/bitbucket.org/kardianos/osext", "b8a35001b773c267e")]
+      }
+
+      let(:go_list_output) {
+        ["bitbucket.org/kardianos/osext"]
+      }
+
+
+      before do
+        allow(FileTest).to receive(:exist?).and_return(true)
+
         allow(Dir).to receive(:chdir).with(Pathname('/Users/pivotal/workspace/loggregator')) { |&block| block.call }
-        allow(subject).to receive(:capture).with('go list -f "{{.ImportPath}} " ./...').and_return([content.to_s, true])
-        allow(subject).to receive(:capture).with('git submodule status').and_return([git_modules, true])
+        allow(subject).to receive(:go_list).and_return(go_list_output)
+        allow(subject).to receive(:git_modules).and_return(git_modules_output)
       end
 
       describe 'should return an array of go packages' do
         it 'provides package names' do
           packages = subject.current_packages
+          expect(packages.count).to eq(1)
           first_package = packages.first
           expect(first_package.name).to eq 'bitbucket.org/kardianos/osext'
           expect(first_package.version).to eq 'b8a3500'
@@ -45,53 +117,75 @@ module LicenseFinder
           expect(packages.count).to eq(1)
         end
 
-        context 'if git submodule status fails' do
-          before do
-            allow(subject).to receive(:capture).with('git submodule status').and_return(['', false])
-          end
-
-          it 'should raise an exception' do
-            expect { subject.current_packages }.to raise_exception(/git submodule status failed/)
-          end
-        end
-
         context 'when requesting the full version' do
           let(:options) { { go_full_version:true } }
           it 'list the dependencies with full version' do
             expect(subject.current_packages.map(&:version)).to eq ["b8a35001b773c267e"]
           end
         end
+
+        context 'when .envrc is in a parent directory' do
+        end
+      end
+    end
+
+    describe '#package_path' do
+      before do
+        allow(FileTest).to receive(:exist?).and_return(true)
       end
 
-      describe '#package_path' do
-        it 'returns the package_path' do
-          expect(subject.package_path).to eq Pathname('/Users/pivotal/workspace/loggregator/.envrc')
+      it 'returns the package_path' do
+        expect(subject.package_path).to eq Pathname('/Users/pivotal/workspace/loggregator')
+      end
+    end
+
+    describe '#active?' do
+      let(:envrc)   { '/Users/pivotal/workspace/loggregator/.envrc' }
+
+      before do
+        allow(FileTest).to receive(:exist?).and_return(false)
+      end
+
+      it 'returns true when .envrc contains GOPATH' do
+        allow(FileTest).to receive(:exist?).with(envrc).and_return(true)
+        allow(IO).to receive(:read).with(Pathname(envrc)).and_return('export GOPATH=/foo/bar')
+        expect(subject.active?).to eq(true)
+      end
+
+      it 'returns false when .envrc does not contain GOPATH' do
+        allow(FileTest).to receive(:exist?).with(envrc).and_return(true)
+        allow(IO).to receive(:read).with(Pathname(envrc)).and_return('this is not an envrc file')
+        expect(subject.active?).to eq(false)
+      end
+
+      it 'returns false when .envrc does not exist' do
+        expect(subject.active?).to eq(false)
+      end
+
+      it 'logs the active state' do
+        expect(logger).to receive(:active)
+        subject.active?
+      end
+
+      context 'when Godep is present' do
+        let(:godeps)   { '/Users/pivotal/workspace/loggregator/Godeps/Godeps.json' }
+
+        it 'should prefer Godeps over go_workspace' do
+          allow(FileTest).to receive(:exist?).with(Pathname(godeps)).and_return(true)
+          expect(subject.active?).to eq(false)
         end
       end
 
-      describe '#active?' do
-        let(:envrc)   { '/Users/pivotal/workspace/loggregator/.envrc' }
+      context 'when .envrc is present in a parent directory' do
+        subject {
+          GoWorkspace.new(options.merge(project_path: Pathname('/Users/pivotal/workspace/loggregator/src/github.com/foo/bar'),
+                                        logger: logger))
+        }
 
-        it 'returns true when .envrc contains GOPATH' do
+        it 'returns true' do
           allow(FileTest).to receive(:exist?).with(envrc).and_return(true)
           allow(IO).to receive(:read).with(Pathname(envrc)).and_return('export GOPATH=/foo/bar')
-          expect(subject.active?).to eq(true)
-        end
-
-        it 'returns false when .envrc does not contain GOPATH' do
-          allow(FileTest).to receive(:exist?).with(envrc).and_return(true)
-          allow(IO).to receive(:read).with(Pathname(envrc)).and_return('this is not an envrc file')
-          expect(subject.active?).to eq(false)
-        end
-
-        it 'returns false when .envrc does not exist' do
-          allow(FileTest).to receive(:exist?).with(envrc).and_return(false)
-          expect(subject.active?).to eq(false)
-        end
-
-        it 'logs the active state' do
-          expect(logger).to receive(:active)
-          subject.active?
+          expect(subject.active?).to be true
         end
       end
     end
