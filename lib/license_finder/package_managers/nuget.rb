@@ -1,4 +1,5 @@
 require "rexml/document"
+require 'zip'
 
 module LicenseFinder
   class Nuget < PackageManager
@@ -16,10 +17,22 @@ module LicenseFinder
 
     def current_packages
       dependencies.reduce({}) do |memo, dep|
-        memo[dep.name] ||= NugetPackage.new(dep.name, dep.version)
+        licenses = license_urls(dep)
+        memo[dep.name] ||= NugetPackage.new(dep.name, dep.version, spec_licenses: licenses)
         memo[dep.name].groups << dep.assembly if !memo[dep.name].groups.include? dep.assembly
         memo
       end.values
+    end
+
+    def license_urls dep
+      files = Dir["**/#{dep.name}.#{dep.version}.nupkg"]
+      return nil if files.empty?
+      file = files.first
+      Zip::File.open file do |zipfile|
+        content = zipfile.read(dep.name + ".nuspec")
+        xml = REXML::Document.new(content)
+        REXML::XPath.match(xml,"//metadata//licenseUrl").map(&:get_text)
+      end
     end
 
     def dependencies
