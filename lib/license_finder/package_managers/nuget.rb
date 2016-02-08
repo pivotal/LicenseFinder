@@ -3,7 +3,7 @@ require "rexml/document"
 module LicenseFinder
   class Nuget < PackageManager
     def package_path
-      project_path.join('packages')
+      project_path.join('.nuget')
     end
 
     def assemblies
