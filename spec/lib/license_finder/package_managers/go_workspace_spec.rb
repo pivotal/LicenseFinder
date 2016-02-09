@@ -77,7 +77,7 @@ HERE
         it 'should return the filtered submodules' do
           submodules = subject.send(:git_modules)
           expect(submodules.count).to eq(2)
-          expect(submodules.first.path).to eq('/Users/pivotal/workspace/loggregator/src/github.com/GaryBoone/GoStats')
+          expect(submodules.first.install_path).to eq('/Users/pivotal/workspace/loggregator/src/github.com/GaryBoone/GoStats')
           expect(submodules.first.revision).to eq('1993eafbef57be29ee8f5eb9d26a22f20ff3c207')
         end
       end
@@ -89,7 +89,10 @@ HERE
       }
 
       let(:go_list_output) {
-        ["bitbucket.org/kardianos/osext"]
+        [
+         "bitbucket.org/kardianos/osext",
+         "bitbucket.org/kardianos/osext/foo",
+        ]
       }
 
 
@@ -124,7 +127,31 @@ HERE
           end
         end
 
-        context 'when .envrc is in a parent directory' do
+        context 'when the deps are in a vendor directory' do
+          let(:git_modules_output) {
+            [GoWorkspace::Submodule.new("/Users/pivotal/workspace/loggregator/vendor/src/bitbucket.org/kardianos/osext", "b8a35001b773c267e")]
+          }
+
+          it 'reports the right import path' do
+            expect(subject.current_packages.map(&:name)).to include('bitbucket.org/kardianos/osext')
+          end
+
+          it 'reports the right install path' do
+            expect(subject.current_packages.map(&:install_path)).to include('/Users/pivotal/workspace/loggregator/vendor/src/bitbucket.org/kardianos/osext')
+          end
+        end
+
+        context 'when only the subpackage is being used' do
+          let(:go_list_output) {
+            [
+             "bitbucket.org/kardianos/osext/foo",
+            ]
+          }
+
+          it 'returns the top level repo name as the import path' do
+            packages = subject.current_packages
+            expect(packages.map(&:name)).to eq(['bitbucket.org/kardianos/osext'])
+          end
         end
       end
     end

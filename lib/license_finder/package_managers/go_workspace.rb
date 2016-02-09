@@ -2,7 +2,7 @@ require 'json'
 
 module LicenseFinder
   class GoWorkspace < PackageManager
-    Submodule = Struct.new :path, :revision
+    Submodule = Struct.new :install_path, :revision
 
     def initialize(options={})
       super
@@ -10,12 +10,19 @@ module LicenseFinder
     end
 
     def current_packages
-
-      package_src = package_path.join('src')
-      submodules.map do |submodule|
-        import_path = Pathname.new(submodule.path).relative_path_from(package_src)
-        GoPackage.from_dependency({'ImportPath' => import_path.to_s, 'Rev' => submodule.revision}, package_src, @full_version)
-      end
+      go_list_packages = go_list
+      git_modules.map do |submodule|
+        import_path = go_list_packages.select { |gp|
+          submodule.install_path =~ /#{repo_name(gp)}/
+        }.first
+        if import_path then
+          GoPackage.from_dependency({
+                                     'ImportPath' => repo_name(import_path),
+                                     'InstallPath' => submodule.install_path,
+                                     'Rev' => submodule.revision
+                                    }, nil, @full_version)
+        end
+      end.compact
     end
 
     def package_path
@@ -30,6 +37,10 @@ module LicenseFinder
     end
 
     private
+
+    def repo_name import_path
+      import_path.split("/")[0..2].join("/")
+    end
 
     def project_src
       project_path.join('src')
@@ -60,16 +71,6 @@ module LicenseFinder
           Submodule.new File.join(package_path, columns[1]), columns[0]
         end
       end
-    end
-
-    def submodules
-      go_list_packages = go_list
-      git_modules.reject do |git_module|
-        go_list_packages.select { |gp|
-          git_module.path =~ /#{gp.split("/")[0..2].join("/")}/
-        }.empty?
-      end
-
     end
   end
 end
