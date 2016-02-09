@@ -8,7 +8,7 @@ module LicenseFinder
     end
 
     def assemblies
-      Dir[project_path.join("**", "packages.config")].map do |d|
+      Dir.glob(project_path.join("**", "packages.config"), File::FNM_DOTMATCH).map do |d|
         path = Pathname.new(d).dirname
         name = path.basename.to_s
         Assembly.new path, name

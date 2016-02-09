@@ -24,6 +24,18 @@ module LicenseFinder
         nuget = Nuget.new project_path: Pathname.new("app")
         expect(nuget.assemblies.map(&:name)).to match_array ['Assembly1', 'Assembly1.Tests', 'Assembly2']
       end
+
+      context 'when packages.config is in .nuget directory' do
+        before do
+          FileUtils.mkdir_p 'app/.nuget'
+          FileUtils.touch 'app/.nuget/packages.config'
+        end
+
+        it "finds dependencies all subdirectories containing a packages.config" do
+          nuget = Nuget.new project_path: Pathname.new("app")
+          expect(nuget.assemblies.map(&:name)).to include('.nuget')
+        end
+      end
     end
 
     describe "#current_packages" do
