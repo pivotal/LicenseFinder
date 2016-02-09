@@ -19,5 +19,9 @@ module LicenseFinder
         )
       )
     end
+
+    def package_manager
+      'Bundler'
+    end
   end
 end

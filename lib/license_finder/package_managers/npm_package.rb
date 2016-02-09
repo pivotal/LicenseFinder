@@ -13,5 +13,9 @@ module LicenseFinder
         )
       )
     end
+
+    def package_manager
+      'Npm'
+    end
   end
 end

@@ -27,5 +27,9 @@ module LicenseFinder
         )
       )
     end
+
+    def package_manager
+      'Pip'
+    end
   end
 end

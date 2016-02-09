@@ -25,5 +25,9 @@ module LicenseFinder
         )
       )
     end
+
+    def package_manager
+      'Bower'
+    end
   end
 end

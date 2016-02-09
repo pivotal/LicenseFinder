@@ -1,11 +1,15 @@
 module LicenseFinder
   class GoPackage < Package
-    def self.from_dependency(hash, prefix,full_version)
+    def self.from_dependency(hash, prefix, full_version)
       name = hash['ImportPath']
       install_path = hash['InstallPath']
       install_path ||= install_path(prefix.join(name))
       version = full_version ? hash['Rev'] : hash['Rev'][0..6]
-      LicenseFinder::Package.new(name, version, {install_path: install_path})
+      self.new(name, version, {install_path: install_path, package_manager: "Go" })
+    end
+
+    def package_manager
+      "Go"
     end
 
     private

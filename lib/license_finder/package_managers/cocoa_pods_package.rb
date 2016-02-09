@@ -8,5 +8,9 @@ module LicenseFinder
     def licenses_from_spec
       [@license].compact
     end
+
+    def package_manager
+      'CocoaPods'
+    end
   end
 end

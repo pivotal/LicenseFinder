@@ -29,6 +29,12 @@ module LicenseFinder
       expect(subject.to_s).to eq("gem_a,1.0,/tmp/gems/gem_a-1.0\n")
     end
 
+    it 'supports package_manager column' do
+      dep = NugetPackage.new('gem_a', '1.0')
+      subject = described_class.new([dep], columns: %w[name version package_manager])
+      expect(subject.to_s).to eq("gem_a,1.0,Nuget\n")
+    end
+
     it "does not include columns that should only be in merged reports" do
       dep = Package.new('gem_a', '1.0')
       subject = described_class.new([dep], columns: %w[subproject_paths])
