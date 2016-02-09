@@ -37,7 +37,7 @@ HERE
 
       it 'sets gopath to the envrc path' do
         allow(subject).to receive(:capture).with('go list -f \'{{join .Deps "\n"}}\' ./...') {
-          expect(ENV['GOPATH']).to eq(project_path)
+          expect(ENV['GOPATH']).to be_nil
           ['', true]
         }
 

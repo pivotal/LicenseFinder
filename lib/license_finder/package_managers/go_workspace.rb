@@ -42,7 +42,12 @@ module LicenseFinder
 
     def go_list
       Dir.chdir(project_path) do
-        ENV['GOPATH'] = package_path.to_s
+        # avoid checking canonical import path. some projects uses
+        # non-canonical import path and rely on the fact that the deps are
+        # checked in. Canonical paths are only checked by `go get'. We
+        # discovered that `go list' will print a warning and unfortunately exit
+        # with status code 1. Setting GOPATH to nil removes those warnings.
+        ENV['GOPATH'] = nil
         val = capture('go list -f \'{{join .Deps "\n"}}\' ./...')
         raise 'go list failed' unless val.last
         # Select non-standard packages. Standard packages tend to be short
