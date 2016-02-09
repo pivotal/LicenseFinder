@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'fakefs/spec_helpers'
+require 'zip'
 
 module LicenseFinder
   describe Nuget do
@@ -75,6 +76,34 @@ module LicenseFinder
                   TestFramework
                   CoolNewDependency)
         expect(nuget.current_packages.map(&:name).uniq).to match_array(deps)
+      end
+
+      # cannot run on JRuby due to https://github.com/fakefs/fakefs/issues/303
+      context 'when there is a .nupkg file', :skip => RUBY_PLATFORM =~ /java/ do
+        before do
+          obscure_dependency_nuspec = <<-HERE
+          <?xml version="1.0"?>
+          <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+          <metadata>
+            <id>ObscureDependency</id>
+            <version>1.3.15</version>
+            <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+          </metadata>
+          </package>
+          HERE
+          File.write("app/packages/ObscureDependency.nuspec", obscure_dependency_nuspec)
+          Dir.chdir 'app/packages' do
+            Zip::File.open('ObscureDependency.1.3.15.nupkg', Zip::File::CREATE) do |zipfile|
+              zipfile.add('ObscureDependency.nuspec', 'ObscureDependency.nuspec')
+            end
+          end
+        end
+
+        it "include the licenseUrl from the nuspec file" do
+          nuget = Nuget.new project_path: Pathname.new("app")
+          obscure_dep = nuget.current_packages.select { |dep| dep.name == 'ObscureDependency' }.first
+          expect(obscure_dep.license_names_from_spec).to eq(['http://www.opensource.org/licenses/mit-license.php'])
+        end
       end
     end
   end
