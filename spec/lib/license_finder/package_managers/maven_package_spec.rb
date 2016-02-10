@@ -18,6 +18,7 @@ module LicenseFinder
     its(:groups) { should == [] } # no way to get groups from maven?
     its(:children) { should == [] } # no way to get children from maven?
     its(:install_path) { should be_nil }
+    its(:package_manager) { should eq 'Maven' }
 
     describe "#license_names_from_spec" do
       it "returns the license" do

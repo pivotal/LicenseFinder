@@ -30,5 +30,6 @@ module LicenseFinder
     its(:children) { should == ['foo'] }
     its(:license_names_from_spec) { should eq ['MIT', 'GPL'] }
     its(:install_path) { should =~ /spec_name-2\.1\.3\z/ }
+    its(:package_manager) { should == "Bundler" }
   end
 end

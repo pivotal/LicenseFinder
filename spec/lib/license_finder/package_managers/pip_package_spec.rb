@@ -23,6 +23,7 @@ module LicenseFinder
     its(:groups) { should == [] } # TODO: any way to extract install_requires and tests_require from `pip list` or `pip show`?
     its(:children) { should == ["achild"] }
     its(:install_path) { should eq "jasmine/install/path" }
+    its(:package_manager) { should eq 'Pip' }
 
 
     describe '#license_names_from_spec' do

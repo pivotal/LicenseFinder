@@ -19,5 +19,6 @@ module LicenseFinder
     its(:groups) { should == [] }
     its(:children) { should == [] }
     its(:install_path) { should eq "deps/uuid" }
+    its(:package_manager) { should eq 'Rebar' }
   end
 end

@@ -26,6 +26,7 @@ module LicenseFinder
     its(:groups) { should == [] } # TODO: put devDependencies in 'dev' group?
     its(:children) { should == ["coffee-script"] }
     its(:install_path) { should eq "some/node/package/path" }
+    its(:package_manager) { should eq 'Npm' }
 
     describe '#license_names_from_spec' do
       let(:node_module1) { {"license" => "MIT"} }

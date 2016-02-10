@@ -18,6 +18,7 @@ module LicenseFinder
     its(:groups) { should == [] } # no way to get groups from gradle?
     its(:children) { should == [] } # no way to get children from gradle?
     its(:install_path) { should be_nil }
+    its(:package_manager) { should eq 'Gradle' }
 
     describe "when file name has a funny format, possibly because it is a jar saved in the project" do
       it "uses a reasonable name and default version" do

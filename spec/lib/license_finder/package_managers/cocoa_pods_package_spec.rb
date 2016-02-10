@@ -14,6 +14,7 @@ module LicenseFinder
     its(:homepage) { should eq "" }
     its(:groups) { should == [] }
     its(:children) { should == [] }
+    its(:package_manager) { should eq 'CocoaPods' }
 
     describe '#licenses' do
       context "when there's a license" do

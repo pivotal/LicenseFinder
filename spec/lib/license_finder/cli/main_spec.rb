@@ -94,6 +94,16 @@ module LicenseFinder
           expect(report).to eq "one dependency,1.1\n"
         end
 
+        context 'when the package is a nuget package' do
+          let(:packages) { [NugetPackage.new('one dependency', "1.1")] }
+
+          it "will includes package_manager for csv report" do
+            subject.options = {format: 'csv', columns: ['name', 'version', 'package_manager']}
+
+            expect(report).to eq "one dependency,1.1,Nuget\n"
+          end
+        end
+
         context "in html reports" do
           before do
             subject.options = {format: 'html'}

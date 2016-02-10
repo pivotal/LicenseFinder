@@ -143,6 +143,10 @@ module LicenseFinder
       LicenseFiles.find(install_path)
     end
 
+    def package_manager
+      "unknown"
+    end
+
     def missing?
       @missing
     end

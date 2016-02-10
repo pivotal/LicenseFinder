@@ -16,5 +16,9 @@ module LicenseFinder
 
       super(name, version, options.merge(spec_licenses: licenses))
     end
+
+    def package_manager
+      'Gradle'
+    end
   end
 end

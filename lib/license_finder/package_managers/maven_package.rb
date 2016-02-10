@@ -9,5 +9,9 @@ module LicenseFinder
         )
       )
     end
+
+    def package_manager
+      'Maven'
+    end
   end
 end
