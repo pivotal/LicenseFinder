@@ -13,7 +13,7 @@ module LicenseFinder
       go_list_packages = go_list
       git_modules.map do |submodule|
         import_path = go_list_packages.select { |gp|
-          submodule.install_path =~ /#{repo_name(gp)}/
+          submodule.install_path =~ /#{repo_name(gp)}$/
         }.first
         if import_path then
           GoPackage.from_dependency({
