@@ -3,6 +3,7 @@ require 'json'
 module LicenseFinder
   class GoWorkspace < PackageManager
     Submodule = Struct.new :install_path, :revision
+    ENVRC_REGEXP = /GOPATH|GO15VENDOREXPERIMENT/
 
     def initialize(options={})
       super
@@ -32,7 +33,7 @@ module LicenseFinder
     def active?
       go_dep = LicenseFinder::GoDep.new({project_path: Pathname(project_path), logger: logger})
       return if go_dep.package_path.exist?
-      active = !!envrc_path && IO.read(envrc_path).include?('GOPATH')
+      active = !! (envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
       active.tap { |is_active| logger.active self.class, is_active }
     end
 

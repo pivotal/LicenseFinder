@@ -198,7 +198,13 @@ HERE
         expect(subject.active?).to eq(true)
       end
 
-      it 'returns false when .envrc does not contain GOPATH' do
+      it 'returns true when .envrc contains GO15VENDOREXPERIMENT' do
+        allow(FileTest).to receive(:exist?).with(envrc).and_return(true)
+        allow(IO).to receive(:read).with(Pathname(envrc)).and_return('export GO15VENDOREXPERIMENT=1')
+        expect(subject.active?).to eq(true)
+      end
+
+      it 'returns false when .envrc does not contain GOPATH or GO15VENDOREXPERIMENT' do
         allow(FileTest).to receive(:exist?).with(envrc).and_return(true)
         allow(IO).to receive(:read).with(Pathname(envrc)).and_return('this is not an envrc file')
         expect(subject.active?).to eq(false)
