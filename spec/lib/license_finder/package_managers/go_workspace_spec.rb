@@ -153,6 +153,25 @@ HERE
             expect(packages.map(&:name)).to eq(['bitbucket.org/kardianos/osext'])
           end
         end
+
+        context 'when only the subpackage is being used' do
+          let(:git_modules_output) {
+            [GoWorkspace::Submodule.new("/Users/pivotal/workspace/loggregator/vendor/src/github.com/onsi/foo", "e762c377b10053a8b"),
+             GoWorkspace::Submodule.new("/Users/pivotal/workspace/loggregator/vendor/src/github.com/onsi/foobar", "b8a35001b773c267e")]
+          }
+
+          let(:go_list_output) {
+            [
+             "github.com/onsi/foo",
+             "github.com/onsi/foobar",
+            ]
+          }
+
+          it 'returns the top level repo name as the import path' do
+            packages = subject.current_packages
+            expect(packages.map(&:name)).to eq(['github.com/onsi/foo', 'github.com/onsi/foobar'])
+          end
+        end
       end
     end
 
