@@ -1,7 +1,11 @@
-=== 2.1.0.rc6 / unreleased
+=== 2.1.0.rc6 / 2016-03-11
 
 * Features
   * detect GO15VENDOREXPERIMENT as evidence of a go workspace project
+
+* Bugfixes
+  * deep npm dependency trees no longer result in some packages having no metadata (#211)
+
 
 === 2.1.0.rc5 / 2016-02-19
 
