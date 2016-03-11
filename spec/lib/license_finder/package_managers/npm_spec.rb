@@ -132,6 +132,26 @@ module LicenseFinder
         allow(npm).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
         silence_stderr { npm.current_packages }
       end
+
+      context "npm recursive dependency edge case - GH#211" do
+        let(:package_json) do
+          FakeFS.without do
+            File.read fixture_path "npm-recursive-dependencies/package.json"
+          end
+        end
+        let(:dependency_json) do
+          FakeFS.without do
+            File.read fixture_path "npm-recursive-dependencies/npm-list.json"
+          end
+        end
+
+        describe ".current_packages" do
+          it "correctly navigates the dependencies tree and pulls out valid information" do
+            expect(npm.current_packages.find { |p| p.name == "pui-react-alerts" }.version).to eq("3.0.0-alpha.2")
+            expect(npm.current_packages.find { |p| p.name == "pui-react-media" }.version).to eq("3.0.0-alpha.2")
+          end
+        end
+      end
     end
   end
 end

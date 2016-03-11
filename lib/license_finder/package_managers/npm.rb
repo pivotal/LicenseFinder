@@ -10,7 +10,12 @@ module LicenseFinder
         group_name = dep[:group]
         walk_dependency_tree(dep[:name]) do |dependency|
           package_id = dependency["name"]
-          packages[package_id] ||= NpmPackage.new(dependency, logger: logger)
+          if packages[package_id] && packages[package_id].version.nil? && dependency["version"]
+            old_package = packages[package_id]
+            packages[package_id] = NpmPackage.new(dependency, logger: logger, groups: old_package.groups)
+          else
+            packages[package_id] ||= NpmPackage.new(dependency, logger: logger)
+          end
           packages[package_id].groups << group_name unless packages[package_id].groups.include?(group_name)
         end
       end
