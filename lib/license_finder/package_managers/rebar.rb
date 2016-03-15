@@ -18,6 +18,10 @@ module LicenseFinder
       end
     end
 
+    def self.package_management_command
+      "rebar"
+    end
+
     private
 
     def rebar_ouput

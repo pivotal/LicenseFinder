@@ -12,8 +12,22 @@ module LicenseFinder
     end
 
     class Base
+      def installed package_manager, is_installed
+        if String === is_installed
+          log package_manager, is_installed
+        elsif is_installed
+          log package_manager, Logger.green("is installed")
+        else
+          log package_manager, Logger.red("is not installed")
+        end
+      end
+
       def active package_manager, is_active
-        log package_manager, sprintf("%s active", (is_active ? "is" : "not"))
+        if is_active
+          log package_manager, Logger.green("is active")
+        else
+          log package_manager, "is not active"
+        end
       end
 
       def package package_manager, package
@@ -42,6 +56,18 @@ module LicenseFinder
       def log prefix, string
         raise NotImplementedError, "#log must be implemented"
       end
+    end
+
+    def self.green string
+      colorize 32, string
+    end
+
+    def self.red string
+      colorize 31, string
+    end
+
+    def self.colorize color_code, string
+      "\e[#{color_code}m#{string}\e[0m"
     end
 
     class Quiet < Base
