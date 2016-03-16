@@ -20,6 +20,10 @@ module LicenseFinder
       end
     end
 
+    def self.package_management_command
+      "mvn"
+    end
+
     private
 
     def license_report

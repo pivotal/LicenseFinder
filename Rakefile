@@ -26,31 +26,10 @@ end
 
 desc "Check for non-Ruby development dependencies."
 task :check_dependencies do
-  dependencies = {
-    "mvn" => "Maven",
-    "npm" => "NPM",
-    "pip" => "Pip",
-    "gradle" => "Gradle",
-    "bower" => "Bower",
-    "rebar" => "Rebar",
-    "godep" => "Go"
-  }
-  dependencies["pod"] = "Cocoapods" if LicenseFinder::Platform.darwin?
+  require './lib/license_finder'
   satisfied = true
-  dependencies.each do |dependency, description|
-    printf "checking dev dependency for #{description} ... "
-    if LicenseFinder::Platform.windows?
-      `where #{dependency} 2>NUL`
-    else
-      `which #{dependency} 2>/dev/null`
-    end
-    status = $?
-    if status.success?
-      puts "OK"
-    else
-      puts "missing `#{dependency}`"
-      satisfied = false
-    end
+  LicenseFinder::PackageManager.package_managers.each do |package_manager|
+    satisfied = false unless package_manager.installed?(LicenseFinder::Logger.new(debug:true))
   end
   exit 1 unless satisfied
 end

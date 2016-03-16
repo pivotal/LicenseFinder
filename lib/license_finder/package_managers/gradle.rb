@@ -26,6 +26,10 @@ module LicenseFinder
       packages.uniq
     end
 
+    def self.package_management_command
+      "gradle"
+    end
+
     private
 
     def package_path

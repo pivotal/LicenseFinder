@@ -17,6 +17,10 @@ module LicenseFinder
       end
     end
 
+    def self.package_management_command
+      "bundler"
+    end
+
     private
 
     attr_reader :ignore_groups

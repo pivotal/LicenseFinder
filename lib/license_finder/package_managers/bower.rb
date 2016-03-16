@@ -8,6 +8,10 @@ module LicenseFinder
       end
     end
 
+    def self.package_management_command
+      "bower"
+    end
+
     private
 
     def bower_output

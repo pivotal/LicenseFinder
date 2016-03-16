@@ -16,6 +16,10 @@ module LicenseFinder
       end
     end
 
+    def self.package_management_command
+      "pip"
+    end
+
     private
 
     def package_path

@@ -22,6 +22,10 @@ module LicenseFinder
       packages.values
     end
 
+    def self.package_management_command
+      "npm"
+    end
+
     private
 
     def direct_dependencies

@@ -23,14 +23,33 @@ module LicenseFinder
       active_package_managers.flat_map(&:current_packages_with_relations)
     end
 
+    def self.installed?(logger=Core.default_logger)
+      if package_management_command.nil?
+        logger.installed self, "no command defined" # TODO comment me out
+        return true
+      end
+
+      if command_exists?(package_management_command)
+        logger.installed self, true
+        return true
+      end
+
+      logger.installed self, false
+      return false
+    end
+
+    def self.package_management_command
+      nil
+    end
+
     def initialize options={}
       @logger       = options[:logger] || Core.default_logger
       @project_path = options[:project_path]
     end
 
     def active?
-      package_path.exist?
-        .tap { |is_active| logger.active self.class, is_active }
+      self.class.installed?(logger) &&
+        package_path.exist?.tap { |is_active| logger.active self.class, is_active }
     end
 
     def capture(command)
@@ -46,6 +65,16 @@ module LicenseFinder
         end
       end
       packages
+    end
+
+    def self.command_exists? command
+      if LicenseFinder::Platform.windows?
+        `where #{command} 2>NUL`
+      else
+        `which #{command} 2>/dev/null`
+      end
+      status = $?
+      return status.success?
     end
 
     private

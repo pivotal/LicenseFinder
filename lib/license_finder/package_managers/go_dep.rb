@@ -23,6 +23,10 @@ module LicenseFinder
       project_path.join('Godeps/Godeps.json')
     end
 
+    def self.package_management_command
+      "godep"
+    end
+
     private
 
     def install_prefix
