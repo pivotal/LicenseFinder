@@ -7,6 +7,19 @@ module LicenseFinder
     let(:project_path) { '/Users/pivotal/workspace/loggregator'}
     subject { GoWorkspace.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
 
+    before do
+      allow(logger).to receive(:installed)
+      allow(logger).to receive(:active)
+    end
+
+    context 'package manager' do
+      before do
+        allow_any_instance_of(GoDep).to receive(:active?).and_return(false)
+      end
+
+      it_behaves_like "a PackageManager"
+    end
+
     describe '#go_list' do
 
       let(:go_list_output) {

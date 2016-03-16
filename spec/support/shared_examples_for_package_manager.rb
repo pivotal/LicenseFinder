@@ -20,6 +20,7 @@ module LicenseFinder
       context 'package manager is installed' do
         before do
           allow(described_class).to receive(:installed?).and_return(true)
+          allow_any_instance_of(described_class).to receive(:has_go_files?).and_return(true)
         end
 
         it 'is true when package manager file exists' do

@@ -5,10 +5,24 @@ module LicenseFinder
   describe GoVendor do
     include FakeFS::SpecHelpers
 
-    let(:project_path) { '/app' }
-    let(:options) { {} }
     let(:logger) { double(:logger, active: nil) }
     subject { GoVendor.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
+
+    before do
+      allow(logger).to receive(:installed)
+      allow(logger).to receive(:active)
+    end
+
+    context 'package manager' do
+      before do
+        FileUtils.mkdir_p File.join(fixture_path('all_pms'), 'vendor')
+      end
+
+      it_behaves_like "a PackageManager"
+    end
+
+    let(:project_path) { '/app' }
+    let(:options) { {} }
 
     context 'when there are go files' do
       before do

@@ -9,7 +9,15 @@ module LicenseFinder
     end
 
     def active?
-      !Dir[project_path.join("**/*.go")].empty? && package_path.exist?
+      return false unless self.class.installed?(@logger)
+
+      (has_go_files? && package_path.exist?).tap do |is_active|
+        logger.active self.class, is_active
+      end
+    end
+
+    def has_go_files?
+      !Dir[project_path.join("**/*.go")].empty?
     end
 
     def package_path
