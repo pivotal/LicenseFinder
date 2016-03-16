@@ -1,3 +1,12 @@
+=== 2.1.0.rc9 / 2016-03-16
+
+* Features
+  * support a `groups` in reports (#210) (Thanks, Jon Wolski!)
+
+* Bugfixes
+  * `rubyzip` is now correctly a runtime dependency
+
+
 === 2.1.0.rc8 / 2016-03-16
 
 * Features
