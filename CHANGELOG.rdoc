@@ -1,3 +1,9 @@
+=== 2.1.0.rc7 / 2016-03-16
+
+* Features
+  * PackageManagers are not activated if the underlying package management tool isn't installed
+
+
 === 2.1.0.rc6 / 2016-03-11
 
 * Features
