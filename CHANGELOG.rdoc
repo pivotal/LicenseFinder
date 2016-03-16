@@ -1,3 +1,10 @@
+=== 2.1.0.rc8 / 2016-03-16
+
+* Features
+  * GoVendor and GoWorkspace define a package management tool, so they
+    won't try to run if you don't have `go` installed
+
+
 === 2.1.0.rc7 / 2016-03-16
 
 * Features
