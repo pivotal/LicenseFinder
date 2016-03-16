@@ -40,5 +40,23 @@ module LicenseFinder
       subject = described_class.new([dep], columns: %w[subproject_paths])
       expect(subject.to_s).to eq("\n")
     end
+
+    context "when no groups are specified" do
+      let( :dep ) { Package.new('gem_a', '1.0') }
+      subject { described_class.new([dep], columns: %w[name version groups]) }
+
+      it 'supports a groups column' do
+        expect(subject.to_s).to eq("gem_a,1.0,\"\"\n")
+      end
+    end
+
+    context "when some groups are specified" do
+      let( :dep ) { Package.new('gem_a', '1.0', groups: %w[development production]) }
+      subject { described_class.new([dep], columns: %w[name version groups]) }
+
+      it 'supports a groups column' do
+        expect(subject.to_s).to eq("gem_a,1.0,\"development,production\"\n")
+      end
+    end
   end
 end
