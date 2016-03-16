@@ -55,6 +55,10 @@ module LicenseFinder
       4.times.reduce([p]) { |memo, _| memo << memo.last.parent }.map { |p| p.join('.envrc') }.select(&:exist?).first
     end
 
+    def self.package_management_command
+      'go'
+    end
+
     def go_list
       Dir.chdir(project_path) do
         # avoid checking canonical import path. some projects uses

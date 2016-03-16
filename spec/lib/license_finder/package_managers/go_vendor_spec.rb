@@ -19,6 +19,16 @@ module LicenseFinder
       end
 
       it_behaves_like "a PackageManager"
+
+      it 'installed? should be true if go exists on the path' do
+        allow(PackageManager).to receive(:command_exists?).with('go').and_return true
+        expect(described_class.installed?).to eq(true)
+      end
+
+      it 'installed? should be false if go does not exists on the path' do
+        allow(PackageManager).to receive(:command_exists?).with('go').and_return false
+        expect(described_class.installed?).to eq(false)
+      end
     end
 
     let(:project_path) { '/app' }

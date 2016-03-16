@@ -44,6 +44,9 @@ module LicenseFinder
       end
     end
 
+    def self.package_management_command
+      'go'
+    end
 
     def go_list
       Dir.chdir(project_path) do
