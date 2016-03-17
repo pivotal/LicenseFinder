@@ -72,7 +72,7 @@ module LicenseFinder
     end
 
     def format_groups(dep)
-      dep.groups.join(",")
+      dep.groups.join(self.class::COMMA_SEP)
     end
     
     def format_parents(dep)
