@@ -1,37 +1,10 @@
-=== 2.1.0.rc9 / 2016-03-16
+=== 2.1.0 / 2016-04-01
 
 * Features
   * support a `groups` in reports (#210) (Thanks, Jon Wolski!)
-
-* Bugfixes
-  * `rubyzip` is now correctly a runtime dependency
-
-
-=== 2.1.0.rc8 / 2016-03-16
-
-* Features
-  * GoVendor and GoWorkspace define a package management tool, so they
-    won't try to run if you don't have `go` installed
-
-
-=== 2.1.0.rc7 / 2016-03-16
-
-* Features
+  * GoVendor and GoWorkspace define a package management tool, so they won't try to run if you don't have `go` installed
   * PackageManagers are not activated if the underlying package management tool isn't installed
-
-
-=== 2.1.0.rc6 / 2016-03-11
-
-* Features
   * detect GO15VENDOREXPERIMENT as evidence of a go workspace project
-
-* Bugfixes
-  * deep npm dependency trees no longer result in some packages having no metadata (#211)
-
-
-=== 2.1.0.rc5 / 2016-02-19
-
-* Features
   * provide path-to-dependency in recursive mode (#193)
   * dedup godep dependencies (#196)
   * add support for MPL2 detection
@@ -40,36 +13,12 @@
   * miscellaneous go support improvements (#203, #204)
   * add support for Golang 1.5 vendoring convention (#207)
   * return the package manager that detected the dependency (#206)
-
-* Bugfixes
-  * columns fixed in "recursive mode" (#191)
-  * gradle's use of termcaps avoided (#194)
-
-
-=== 2.1.0.rc4 / 2016-01-27
-
-* Features
   * Add support for including maven/gradle GroupIds with `--gradle-include-groups`
-
-
-=== 2.1.0.rc3 / 2016-01-22
-
-* Features
   * Godep dependencies can display the full commit SHA with `--go-full-version`
-
-
-=== 2.1.0.rc2 / 2015-12-31
-
-* Features
   * specific versions of a dependency can be approved (#183, #185). (Thanks, @ipsi!)
   * improved "go workspace" support by looking at git submodules. (Thanks, @jvshahid and @aminjam!)
   * added an "install path" field to the report output. (Thanks, @jvshahid and @aminjam!)
-
-=== 2.1.0.rc1 / 2015-11-03
-
-* Features
-  * Licenses can be blacklisted.  Dependencies which only have licenses in the
-    blacklist will not be approved, even if someone tries.
+  * Licenses can be blacklisted.  Dependencies which only have licenses in the blacklist will not be approved, even if someone tries.
   * Initial support for the Nuget package manager for .NET projects
   * Experimental support for `godep` projects
   * Experimental support for "golang workspace" projects (with .envrc)
@@ -77,6 +26,12 @@
   * Gradle 2.x support (experimental)
   * Experimental support for "composite" projects (multiple git submodules)
   * Experimental support for "license diffs" between directories
+
+* Bugfixes
+  * `rubyzip` is now correctly a runtime dependency
+  * deep npm dependency trees no longer result in some packages having no metadata (#211)
+  * columns fixed in "recursive mode" (#191)
+  * gradle's use of termcaps avoided (#194)
 
 
 === 2.0.4 / 2015-04-16
