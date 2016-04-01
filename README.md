@@ -20,17 +20,17 @@ report.
 * Python Eggs (via `pip`)
 * Node.js (via `npm`)
 * Bower
-
-### Experimental project types
-
-* Java (via `maven`)
-* Java (via `gradle`)
-* Erlang (via `rebar`)
-* Objective-C (+ CocoaPods)
 * Nuget (without license discovery)
 * Godep
 * Go workspace (via a `.envrc` file)
+* Go submodules
+* Java (via `maven`)
+* Java (via `gradle`)
 
+### Experimental project types
+
+* Erlang (via `rebar`)
+* Objective-C (+ CocoaPods)
 
 ## Installation
 
