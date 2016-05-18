@@ -44,6 +44,10 @@ module LicenseFinder
       get(:gradle_include_groups)
     end
 
+    def maven_include_groups
+      get(:maven_include_groups)
+    end
+
     def rebar_command
       get(:rebar_command) || 'rebar'
     end
