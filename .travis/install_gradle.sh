@@ -2,7 +2,7 @@
 
 pushd /tmp
 
-wget http://services.gradle.org/distributions/gradle-2.4-all.zip
+wget $(wget -qO- https://services.gradle.org/versions/current | jq -r .downloadUrl)
 unzip -q gradle*
 rm gradle*.zip
 mv gradle* ~/gradle
