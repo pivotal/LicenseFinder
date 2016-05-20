@@ -1,6 +1,4 @@
-#!/bin/bash
-set -e
-set -x
+#!/bin/bash -ex
 
 pushd ~
 
