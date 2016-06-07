@@ -4,7 +4,13 @@ require 'zip'
 module LicenseFinder
   class Nuget < PackageManager
     def package_path
-      project_path.join('.nuget')
+      path = project_path.join("**/*.nupkg")
+      nuget_dir = Dir[path].map{|pkg| File.dirname(pkg)}.uniq
+      if nuget_dir.length == 0
+        project_path.join(".nuget")
+      else
+        nuget_dir.first
+      end
     end
 
     def assemblies
