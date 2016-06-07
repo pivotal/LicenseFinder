@@ -13,6 +13,8 @@ module LicenseFinder
     def current_packages
       go_list_packages = go_list
       git_modules.map do |submodule|
+        # We are filtering the non-standard packages because the word "net"
+        # seems to be common that can give false positive when filtering the git submodules
         import_path = go_list_packages.select { |gp|
           submodule.install_path =~ /#{repo_name(gp)}$/
         }.first
@@ -69,9 +71,11 @@ module LicenseFinder
         ENV['GOPATH'] = nil
         val = capture('go list -f \'{{join .Deps "\n"}}\' ./...')
         raise 'go list failed' unless val.last
-        # Select non-standard packages. Standard packages tend to be short
-        # and have less than two slashes
-        val.first.lines.map(&:strip).select { |l| l.split("/").length > 2 }
+        # Select non-standard packages. Non-standard packages typically
+        # have a period somewhere in the namespace (github.com, gopkg.in,
+        # etc.).
+        #
+        val.first.lines.map(&:strip).select { |l| l =~ /.+\..+\// }
       end
     end
 
