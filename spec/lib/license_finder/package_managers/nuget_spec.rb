@@ -36,6 +36,23 @@ module LicenseFinder
           expect(nuget.assemblies.map(&:name)).to include('.nuget')
         end
       end
+
+    end
+
+    describe "#package_path" do
+      include FakeFS::SpecHelpers
+
+      context 'when .nupkg files exist, but are not in .nuget directory' do
+        before do
+          FileUtils.mkdir_p 'app/vendor'
+          FileUtils.touch 'app/vendor/package.nupkg'
+        end
+
+        it "returns vendored director" do
+          nuget = Nuget.new project_path: Pathname.new("app")
+          expect(nuget.package_path).to eq('/app/vendor')
+        end
+      end
     end
 
     describe "#current_packages" do
