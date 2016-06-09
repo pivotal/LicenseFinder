@@ -1,3 +1,15 @@
+=== 2.1.1 / 2016-06-09
+
+Features:
+
+* GoWorkspace now detects some non-standard package names with only two path parts. (#226)
+
+Bugfixes:
+
+* NuGet now appropriately returns a Pathname from #package_path (previously was a String) (#227)
+* NuGet now correctly chooses a directory with vendored .nupkg packages
+
+
 === 2.1.0 / 2016-04-01
 
 * Features
