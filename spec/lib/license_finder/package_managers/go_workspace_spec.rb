@@ -35,6 +35,7 @@ module LicenseFinder
       let(:go_list_output) {
         <<HERE
 encoding/json
+gopkg.in/yaml.v2
 github.com/onsi/ginkgo
 HERE
       }
@@ -54,8 +55,9 @@ HERE
       it 'returns the skip the standard libs and return lines of the output' do
         allow(subject).to receive(:capture).with('go list -f \'{{join .Deps "\n"}}\' ./...').and_return([go_list_output, true])
         packages = subject.send(:go_list)
-        expect(packages.count).to eq(1)
-        expect(packages.first).to eq('github.com/onsi/ginkgo')
+        expect(packages.count).to eq(2)
+        expect(packages).to include 'github.com/onsi/ginkgo'
+        expect(packages).to include 'gopkg.in/yaml.v2'
       end
 
       it 'sets gopath to the envrc path' do
