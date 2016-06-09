@@ -1,4 +1,5 @@
-=== 2.1.1 / 2016-06-09
+
+# 2.1.1 / 2016-06-09
 
 Features:
 
@@ -10,7 +11,7 @@ Bugfixes:
 * NuGet now correctly chooses a directory with vendored .nupkg packages
 
 
-=== 2.1.0 / 2016-04-01
+# 2.1.0 / 2016-04-01
 
 * Features
   * support a `groups` in reports (#210) (Thanks, Jon Wolski!)
@@ -46,21 +47,21 @@ Bugfixes:
   * gradle's use of termcaps avoided (#194)
 
 
-=== 2.0.4 / 2015-04-16
+# 2.0.4 / 2015-04-16
 
 * Features
 
   * Allow project path to be set in a command line option (Thanks, @robertclancy!)
 
 
-=== 2.0.3 / 2015-03-18
+# 2.0.3 / 2015-03-18
 
 * Bugfixes
 
   * Ignoring subdirectories of a LICENSE directory. (#143) (Thanks, @pmeskers and @yuki24!)
 
 
-=== 2.0.2 / 2015-03-14
+# 2.0.2 / 2015-03-14
 
 * Features
 
@@ -75,13 +76,15 @@ Bugfixes:
     requirements.txt, or their dependencies, instead of all installed
     distributions, which may include distributions from other projects. #119
 
-=== 2.0.1 / 2015-03-02
+
+# 2.0.1 / 2015-03-02
 
 * Features
 
   * Support for rebar projects
 
-=== 2.0.0 / 2015-03-02
+
+# 2.0.0 / 2015-03-02
 
 * Features
 
@@ -109,13 +112,15 @@ Bugfixes:
 
   * `license_finder` does not write anything to the file system, #94, #114, #117
 
-=== 1.2.1 / unreleased
+
+# 1.2.1 / unreleased
 
 * Features
 
   * Can list dependencies that were added manually
 
-=== 1.2 / 2014-11-10
+
+# 1.2 / 2014-11-10
 
 * Features
 
@@ -125,7 +130,8 @@ Bugfixes:
   * Added `--debug` option when scanning, to provide details on
     packages, dependencies and where each license was discovered.
 
-=== 1.1.1 / 2014-07-29
+
+# 1.1.1 / 2014-07-29
 
 * Bugfixes
 
@@ -133,7 +139,8 @@ Bugfixes:
     [Original issue.](https://github.com/pivotal/LicenseFinder/issues/108)
   * Allow license_finder to process incorrectly-defined dependencies.
 
-=== 1.0.1 / 2014-05-28
+
+# 1.0.1 / 2014-05-28
 
 * Features
 
@@ -147,13 +154,15 @@ Bugfixes:
   * Dependency reports generate when license_finder.yml updates
   * Dependency reports generate when config is changed through the command line
 
-=== 1.0.0.1 / 2014-05-23
+
+# 1.0.0.1 / 2014-05-23
 
 * Bugfixes
 
   * LicenseFinder detects its own license
 
-=== 1.0.0 / 2014-04-03
+
+# 1.0.0 / 2014-04-03
 
 * Features
 
@@ -162,13 +171,15 @@ Bugfixes:
     'license_finder' as a development dependency, and run `license_finder` in
     the shell.
 
-=== 0.9.5.1 / 2014-01-30
+
+# 0.9.5.1 / 2014-01-30
 
 * Features
 
   * Adds homepage for Bower, NPM, and PIP packages
 
-=== 0.9.5 / 2014-01-30
+
+# 0.9.5 / 2014-01-30
 
 * Features
 
@@ -181,7 +192,8 @@ Bugfixes:
   * Make node dependency json parsing more robust
   * Clean up directories created during test runs
 
-=== 0.9.4 / 2014-01-05
+
+# 0.9.4 / 2014-01-05
 
 * Features
 
@@ -195,7 +207,8 @@ Bugfixes:
 
   * Use all dependencies by default for npm as bundler does
 
-=== 0.9.3 / 2013-10-01
+
+# 0.9.3 / 2013-10-01
 
 * Features
 
@@ -205,7 +218,8 @@ Bugfixes:
 
   * Fix problem which prevented license finder from running in rails < 3.2
 
-=== 0.9.2 / 2013-08-17
+
+# 0.9.2 / 2013-08-17
 
 * Features
 
@@ -215,7 +229,8 @@ Bugfixes:
 
   * Fix HTML output in firefox
 
-=== 0.9.1 / 2013-07-30
+
+# 0.9.1 / 2013-07-30
 
 * Features
 
@@ -233,7 +248,8 @@ Bugfixes:
   * HTML report now works when served over https (PR #36 - bwalding)
   * dependencies.txt is now dependencies.csv (It was always a csv in spirit)
 
-=== 0.9.0 / 2013-07-16
+
+# 0.9.0 / 2013-07-16
 
 * Features
 
@@ -246,7 +262,8 @@ Bugfixes:
   * Fix CLI grammar errors
   * Using license_finder in a non-RVM environment now works (Issue #35)
 
-=== 0.8.2 / 2013-07-09
+
+# 0.8.2 / 2013-07-09
 
 * Features
 
@@ -261,7 +278,8 @@ Bugfixes:
     contains spaces.
   * Upgrading from 0.7.2 no longer removes non-gem dependencies (Issue #20)
 
-=== 0.8.1 / 2013-04-14
+
+# 0.8.1 / 2013-04-14
 
 * Features
 
@@ -273,7 +291,8 @@ Bugfixes:
 
   * Fix ruby 1.9.2 support.
 
-=== 0.8.0 / 2013-04-03
+
+# 0.8.0 / 2013-04-03
 
 * Features
 
@@ -294,27 +313,31 @@ Bugfixes:
   * Add an option to silence the binary's spinner so as not to fill up log
     files.
 
-=== 0.7.2 / 2013-02-18
+
+# 0.7.2 / 2013-02-18
 
 * Features
 
   * Dependency cleanup.
 
-=== 0.7.1 / 2013-02-18
+
+# 0.7.1 / 2013-02-18
 
 * Features
 
   * Add variants to detectable licenses.
   * Remove README files from data persistence.
 
-=== 0.7.0 / 2012-09-25
+
+# 0.7.0 / 2012-09-25
 
 * Features
 
   * Dependencies can be approved via CLI.
   * Dependencies licenses can be set via CLI.
 
-=== 0.6.0 / 2012-09-15
+
+# 0.6.0 / 2012-09-15
 
 * Features
 
@@ -329,7 +352,8 @@ Bugfixes:
 
   * Fix formatting of `rake license:action_items` output.
 
-=== 0.5.0 / 2012-09-12
+
+# 0.5.0 / 2012-09-12
 
 * Features
 
@@ -347,7 +371,8 @@ Bugfixes:
   * Create `config/` director if it doesn't exist, don't blow up.
   * Better support for non-US word spellings.
 
-=== 0.4.5 / 2012-09-09
+
+# 0.4.5 / 2012-09-09
 
 * Features
 
