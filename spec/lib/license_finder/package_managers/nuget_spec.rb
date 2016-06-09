@@ -3,6 +3,10 @@ require 'fakefs/spec_helpers'
 require 'zip'
 
 module LicenseFinder
+  def self.broken_fakefs?
+    RUBY_PLATFORM =~ /java/ || RUBY_VERSION =~ /^(1\.9|2\.0)/
+  end
+
   describe Nuget do
 
     it_behaves_like "a PackageManager"
@@ -108,18 +112,18 @@ module LicenseFinder
       end
 
       # cannot run on JRuby due to https://github.com/fakefs/fakefs/issues/303
-      context 'when there is a .nupkg file', :skip => RUBY_PLATFORM =~ /java/ do
+      context 'when there is a .nupkg file', :skip => LicenseFinder.broken_fakefs? do
         before do
-          obscure_dependency_nuspec = <<-HERE
-          <?xml version="1.0"?>
-          <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-          <metadata>
-            <id>ObscureDependency</id>
-            <version>1.3.15</version>
-            <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
-          </metadata>
-          </package>
-          HERE
+          obscure_dependency_nuspec = <<-EOXML
+            <?xml version="1.0"?>
+            <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+              <metadata>
+                <id>ObscureDependency</id>
+                <version>1.3.15</version>
+                <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+              </metadata>
+            </package>
+          EOXML
           File.write("app/packages/ObscureDependency.nuspec", obscure_dependency_nuspec)
           Dir.chdir 'app/packages' do
             Zip::File.open('ObscureDependency.1.3.15.nupkg', Zip::File::CREATE) do |zipfile|
