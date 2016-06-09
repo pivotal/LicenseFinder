@@ -50,7 +50,7 @@ module LicenseFinder
 
         it "returns vendored director" do
           nuget = Nuget.new project_path: Pathname.new("app")
-          expect(nuget.package_path).to eq('/app/vendor')
+          expect(nuget.package_path).to eq Pathname('/app/vendor')
         end
       end
     end

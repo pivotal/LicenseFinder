@@ -9,7 +9,7 @@ module LicenseFinder
       if nuget_dir.length == 0
         project_path.join(".nuget")
       else
-        nuget_dir.first
+        Pathname(nuget_dir.first)
       end
     end
 
