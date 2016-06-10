@@ -48,6 +48,8 @@ module LicenseFinder
 
       context 'when .nupkg files exist, but are not in .nuget directory' do
         before do
+          FileUtils.mkdir_p 'app/submodule/vendor'
+          FileUtils.touch 'app/submodule/vendor/package.nupkg'
           FileUtils.mkdir_p 'app/vendor'
           FileUtils.touch 'app/vendor/package.nupkg'
         end
