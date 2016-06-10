@@ -4,7 +4,7 @@ require 'zip'
 module LicenseFinder
   class Nuget < PackageManager
     def package_path
-      path = project_path.join("**/*.nupkg")
+      path = project_path.join("vendor/*.nupkg")
       nuget_dir = Dir[path].map{|pkg| File.dirname(pkg)}.uniq
       if nuget_dir.length == 0
         project_path.join(".nuget")
