@@ -1,3 +1,9 @@
+# 2.1.2 / 2016-06-10
+
+Bugfixes:
+
+* NuGet limits its recursive search for .nupkg packages to the `vendor` subdirectory. (#228)
+
 
 # 2.1.1 / 2016-06-09
 
