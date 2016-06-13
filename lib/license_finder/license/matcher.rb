@@ -15,7 +15,7 @@ module LicenseFinder
       end
 
       def matches_text?(text)
-        !!(Text.normalize_punctuation(text) =~ regexp)
+        !(Text.normalize_punctuation(text) =~ regexp).nil?
       end
     end
   end

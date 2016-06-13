@@ -114,15 +114,15 @@ module LicenseFinder
       end
 
       def save?
-        !!options[:save]
+        !options[:save].nil?
       end
 
       def recursive?
-        !!options[:recursive]
+        !options[:recursive].nil?
       end
 
       def subprojects?
-        !!options[:subprojects]
+        !options[:subprojects].nil?
       end
     end
   end
