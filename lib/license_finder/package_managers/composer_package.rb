@@ -3,7 +3,7 @@ module LicenseFinder
     def initialize(spec, options={})
       super(
         spec["name"],
-        spec["version"], # @todo what does spec give us about the package?
+        spec["version"],
         options.merge(
           description: spec["description"],
           homepage: spec["homepage"],
@@ -15,7 +15,7 @@ module LicenseFinder
     end
 
     def package_manager
-      'Npm'
+      'Composer'
     end
   end
 end

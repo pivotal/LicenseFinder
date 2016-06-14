@@ -212,7 +212,7 @@ module LicenseFinder
 
     class ComposerProject < Project
       def add_dep
-        install_fixture("composer.json") # @todo use lockfile instead?
+        install_fixture("composer.json")
       end
 
       def install
