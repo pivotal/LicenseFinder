@@ -248,7 +248,7 @@ Bugfixes:
 * Features
 
   * Projects now have a title which can be configured from CLI
-  * JRuby officially supported. Test suite works against jruby, removed 
+  * JRuby officially supported. Test suite works against jruby, removed
     warnings
   * Internal clean-up of database behavior
   * Updated documentation with breakdown of HTML report
@@ -396,3 +396,4 @@ Bugfixes:
 * Bugfixes
 
   * Fix blow up if there's not `ignore_groups` setting in the config file.
+
