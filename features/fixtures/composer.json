@@ -1,0 +1,8 @@
+{
+  "name": "license_finder/fixture",
+  "description": "A sample composer.json file.",
+  "license": "MIT",
+  "require": {
+    "laravel/laravel": "5.2.x"
+  }
+}

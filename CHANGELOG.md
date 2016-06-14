@@ -1,3 +1,10 @@
+# 2.1.3 / 2016-06-14
+
+* Features
+
+  * Support for composer projects
+
+
 # 2.1.2 / 2016-06-10
 
 Bugfixes:
@@ -51,6 +58,12 @@ Bugfixes:
   * deep npm dependency trees no longer result in some packages having no metadata (#211)
   * columns fixed in "recursive mode" (#191)
   * gradle's use of termcaps avoided (#194)
+
+=== 2.0.3 / 2016-06-10
+
+* Features
+
+  * Support for composer projects
 
 
 # 2.0.4 / 2015-04-16
