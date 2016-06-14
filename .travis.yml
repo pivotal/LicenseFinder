@@ -27,6 +27,7 @@ before_install:
 - ".travis/install_rebar.sh"
 - ".travis/install_bower.sh"
 - ".travis/install_godep.sh"
+- ".travis/install_composer.sh"
 script:
 - rake install
 - rake spec
