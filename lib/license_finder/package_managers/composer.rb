@@ -11,8 +11,9 @@ module LicenseFinder
 
     def current_packages
       packages = {}
-      walk_dependency_tree(dep[:name]) do |name, dependency|
+      dependency_list.each do |name, dependency|
         package_id = name
+        dependency['name'] = name
         if packages[package_id] && packages[package_id].version.nil? && dependency["version"]
           old_package = packages[package_id]
           packages[package_id] = ComposerPackage.new(dependency, logger: logger, groups: old_package.groups)
@@ -35,13 +36,13 @@ module LicenseFinder
       project_path.join('composer.lock')
     end
 
-    def walk_dependency_tree(dependency, &block)
-      @json ||= composer_json
-      deps = @json.fetch("dependencies", {}).reject { |_,d| d.is_a?(String) }
+    def dependency_list
+      json ||= composer_json
+      json.fetch("dependencies", {}).reject { |_,d| d.is_a?(String) }
     end
 
     def composer_json
-      command = @command + "licenses --format=json"
+      command = @command + " licenses --format=json"
       output, success = Dir.chdir(project_path) { capture(command) }
 
       if success
