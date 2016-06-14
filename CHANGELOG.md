@@ -59,12 +59,6 @@ Bugfixes:
   * columns fixed in "recursive mode" (#191)
   * gradle's use of termcaps avoided (#194)
 
-=== 2.0.3 / 2016-06-10
-
-* Features
-
-  * Support for composer projects
-
 
 # 2.0.4 / 2015-04-16
 
