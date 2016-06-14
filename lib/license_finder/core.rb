@@ -69,6 +69,7 @@ module LicenseFinder
         gradle_include_groups: config.gradle_include_groups,
         rebar_command: config.rebar_command,
         rebar_deps_dir: config.rebar_deps_dir,
+        composer_command: config.composer_command,
       )
     end
   end

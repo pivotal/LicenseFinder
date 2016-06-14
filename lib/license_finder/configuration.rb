@@ -53,6 +53,10 @@ module LicenseFinder
       project_path.join(path).expand_path
     end
 
+    def composer_command
+      get(:composer_command) || 'composer'
+    end
+
     def decisions_file_path
       path = get(:decisions_file) || 'doc/dependency_decisions.yml'
       project_path.join(path).expand_path

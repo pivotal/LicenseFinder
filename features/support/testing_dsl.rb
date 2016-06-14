@@ -210,6 +210,16 @@ module LicenseFinder
       end
     end
 
+    class ComposerProject < Project
+      def add_dep
+        install_fixture("composer.json") # @todo use lockfile instead?
+      end
+
+      def install
+        shell_out("composer install")
+      end
+    end
+
     class NugetProject < Project
       def add_dep
         clone('nuget')

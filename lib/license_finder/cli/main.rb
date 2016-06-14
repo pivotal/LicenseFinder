@@ -25,6 +25,7 @@ module LicenseFinder
       class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradlew' / 'gradlew.bat' if the wrapper is present, otherwise to 'gradle'."
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
+      class_option :composer_command, desc: "Command to use when fetching composer packages. Only meaningful if used with a PHP/Composer project. Defaults to 'composer'."
       class_option :subprojects, type: :array, desc: "Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2'"
       class_option :recursive, desc: "Recursively runs License Finder on all sub-projects."
 

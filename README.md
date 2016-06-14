@@ -31,6 +31,7 @@ report.
 
 * Erlang (via `rebar`)
 * Objective-C (+ CocoaPods)
+* PHP (via `composer`)
 
 ## Installation
 
@@ -116,6 +117,7 @@ languages, as long as that language has a package definition in the project dire
 * `Podfile` (for CocoaPods)
 * `rebar.config` (for `rebar`)
 * `packages/` directory (for `Nuget`)
+* `composer.json` (for `composer`)
 
 
 ### Continuous Integration
