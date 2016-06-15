@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 rvm:
 - 1.9.3
 - 2.0
@@ -11,7 +11,7 @@ matrix:
   allow_failures:
   - rvm: jruby-1.7.23
 env:
-- PATH=$PATH:$HOME/gradle/bin:$HOME/rebar:$HOME/go/bin GOPATH=$HOME/go
+- PATH=$PATH:$HOME/gradle/bin:$HOME/rebar:$HOME/go/bin:$HOME/composer GOPATH=$HOME/go
 notifications:
   email:
   - licensefinder@pivotallabs.com
