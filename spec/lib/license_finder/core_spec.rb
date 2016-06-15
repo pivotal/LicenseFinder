@@ -15,23 +15,25 @@ module LicenseFinder
     describe "#unapproved" do
       let(:options) {
         {
-          logger: {},
-          project_path: 'other_directory',
-          gradle_command: 'just_do_it',
-          rebar_command: 'do_it',
-          rebar_deps_dir: 'nowhere/deps'
+            logger: {},
+            project_path: 'other_directory',
+            gradle_command: 'just_do_it',
+            rebar_command: 'do_it',
+            rebar_deps_dir: 'nowhere/deps',
+            composer_command: 'do_this_too',
         }
       }
       let(:package_options) {
         {
-          logger: logger,
-          project_path: configuration.project_path,
-          ignore_groups: Set.new,
-          go_full_version: nil,
-          gradle_command: configuration.gradle_command,
-          gradle_include_groups: nil,
-          rebar_command: configuration.rebar_command,
-          rebar_deps_dir: configuration.rebar_deps_dir
+            logger: logger,
+            project_path: configuration.project_path,
+            ignore_groups: Set.new,
+            go_full_version: nil,
+            gradle_command: configuration.gradle_command,
+            gradle_include_groups: nil,
+            rebar_command: configuration.rebar_command,
+            rebar_deps_dir: configuration.rebar_deps_dir,
+            composer_command: configuration.composer_command,
         }
       }
 

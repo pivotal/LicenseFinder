@@ -212,7 +212,7 @@ module LicenseFinder
 
     class ComposerProject < Project
       def add_dep
-        install_fixture("composer.json")
+        add_to_file("composer.json", '{"require" : {"vlucas/phpdotenv": "2.3.x"}}')
       end
 
       def install

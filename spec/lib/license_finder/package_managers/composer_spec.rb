@@ -10,15 +10,15 @@ module LicenseFinder
 
     let(:package_json) do
       {
-          "name": "license_finder/fixture",
-          "description": "A sample composer.json file.",
-          "version": "1.0.0",
-          "license": "MIT",
-          "require": {
-              "vlucas/phpdotenv": "2.3.x"
+          "name" => "license_finder/fixture",
+          "description" => "A sample composer.json file.",
+          "version" => "1.0.0",
+          "license" => "MIT",
+          "require" => {
+              "vlucas/phpdotenv" => "2.3.x"
           },
-          "require-dev": {
-              "symfony/debug": "3.0.x"
+          "require-dev" => {
+              "symfony/debug" => "3.0.x"
           }
       }.to_json
     end

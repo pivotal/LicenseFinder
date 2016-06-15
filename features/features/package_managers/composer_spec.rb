@@ -9,6 +9,6 @@ describe "Composer Dependencies" do
   specify "are shown in reports" do
     LicenseFinder::TestingDSL::ComposerProject.create
     php_developer.run_license_finder
-    expect(php_developer).to be_seeing_line "laravel/laravel, \"BRANCH: 5.2.*\", \"MIT\""
+    expect(php_developer).to be_seeing_line "vlucas/phpdotenv, \"2.3.x\", \"BSD 3-Clause License\""
   end
 end
