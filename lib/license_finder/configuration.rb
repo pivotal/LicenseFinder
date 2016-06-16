@@ -31,7 +31,7 @@ module LicenseFinder
           gradle = 'gradle'
         end
 
-        File.exist?(wrapper) ? wrapper : gradle
+        File.exist?(File.join(project_path, wrapper)) ? wrapper : gradle
       )
     end
 
