@@ -4,7 +4,7 @@ require_relative "maven_dependency_finder"
 module LicenseFinder
   class Maven < PackageManager
     def current_packages
-      command = 'mvn license:download-licenses'
+      command = "#{Maven::package_management_command} license:download-licenses"
       output, success = Dir.chdir(project_path) { capture(command) }
       raise "Command '#{command}' failed to execute: #{output}" unless success
 

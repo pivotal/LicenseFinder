@@ -2,7 +2,7 @@ module LicenseFinder
   class Rebar < PackageManager
     def initialize(options={})
       super
-      @command = options[:rebar_command] || "rebar"
+      @command = options[:rebar_command] || Rebar::package_management_command
       @deps_path = Pathname(options[:rebar_deps_dir] || "deps")
     end
 
