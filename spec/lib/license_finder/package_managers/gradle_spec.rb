@@ -18,6 +18,13 @@ module LicenseFinder
         expect(GradleDependencyFinder).to receive(:new).and_return(dependencies)
       end
 
+      it 'uses the gradle wrapper, if present' do
+        subject = Gradle.new(project_path: Pathname('features/fixtures/gradle-wrapper'))
+        expect(Dir).to receive(:chdir).with(Pathname('features/fixtures/gradle-wrapper')).and_call_original
+        expect(subject.package_management_command).to eq('./gradlew').or eq('gradlew.bat')
+        subject.current_packages
+      end
+
       it 'uses custom subject command, if provided' do
         subject = Gradle.new(gradle_command: 'subjectfoo', project_path: Pathname('/fake/path'))
         expect(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
