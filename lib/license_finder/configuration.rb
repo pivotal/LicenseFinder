@@ -27,7 +27,7 @@ module LicenseFinder
           wrapper = 'gradlew.bat'
           gradle = 'gradle.bat'
         else
-          wrapper = 'gradlew'
+          wrapper = './gradlew'
           gradle = 'gradle'
         end
 
