@@ -53,7 +53,7 @@ module LicenseFinder
           {gradle_command: nil},
           {"gradle_command" => nil}
         )
-        expect(subject.gradle_command).to eq "gradle --console plain"
+        expect(subject.gradle_command).to eq "gradle"
       end
     end
 

@@ -27,10 +27,9 @@ module LicenseFinder
       it 'sets the working directory to project_path, if provided' do
         subject = Gradle.new(project_path: Pathname('/Users/foo/bar'))
         expect(Dir).to receive(:chdir).with(Pathname('/Users/foo/bar')) { |&block| block.call }
-        expect(subject).to receive(:capture).with('gradle --console plain downloadLicenses').and_return(['', true])
+        expect(subject).to receive(:capture).with('gradle downloadLicenses').and_return(['', true])
         subject.current_packages
       end
-
 
       context 'when dependencies are found' do
         let(:content) do

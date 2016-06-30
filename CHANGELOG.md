@@ -1,3 +1,10 @@
+# not yet released
+
+Bugfixes:
+
+* Gradle works in CI containers where TERM is not set (revert and fix of c15bdb7, which broke older versions of gradle)
+
+
 # 2.1.2 / 2016-06-10
 
 Bugfixes:
