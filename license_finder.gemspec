@@ -43,6 +43,7 @@ Gem::Specification.new do |s|
   s.add_dependency "httparty"
   s.add_dependency "xml-simple"
   s.add_dependency "rubyzip"
+  s.add_dependency "with_env"
 
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "cocoapods", "0.34.0" if LicenseFinder::Platform.darwin?
