@@ -18,7 +18,7 @@ module LicenseFinder
     end
 
     def self.package_management_command
-      "bundler"
+      "bundle"
     end
 
     private
