@@ -3,6 +3,7 @@
 Bugfixes:
 
 * Gradle works in CI containers where TERM is not set (revert and fix of c15bdb7, which broke older versions of gradle)
+* Check for the correct Ruby Bundler command: `bundle` (#233. Thanks, @raimon49!)
 
 
 # 2.1.2 / 2016-06-10
