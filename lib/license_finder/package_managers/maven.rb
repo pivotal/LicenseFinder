@@ -1,4 +1,5 @@
 require "xmlsimple"
+require_relative "maven_dependency_finder"
 
 module LicenseFinder
   class Maven < PackageManager
@@ -7,7 +8,7 @@ module LicenseFinder
       output, success = Dir.chdir(project_path) { capture(command) }
       raise "Command '#{command}' failed to execute: #{output}" unless success
 
-      xml = license_report.read
+      xml = MavenDependencyFinder.new(project_path).dependencies
 
       options = {
         'GroupTags' => { 'licenses' => 'license', 'dependencies' => 'dependency' },
@@ -25,10 +26,6 @@ module LicenseFinder
     end
 
     private
-
-    def license_report
-      project_path.join('target/generated-resources/licenses.xml')
-    end
 
     def package_path
       project_path.join('pom.xml')
