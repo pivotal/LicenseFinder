@@ -22,17 +22,7 @@ module LicenseFinder
     end
 
     def gradle_command
-      get(:gradle_command) || (
-        if Platform.windows?
-          wrapper = 'gradlew.bat'
-          gradle = 'gradle.bat'
-        else
-          wrapper = 'gradlew'
-          gradle = 'gradle'
-        end
-
-        File.exist?(wrapper) ? wrapper : gradle
-      )
+      get(:gradle_command)
     end
 
     def go_full_version
@@ -44,7 +34,7 @@ module LicenseFinder
     end
 
     def rebar_command
-      get(:rebar_command) || 'rebar'
+      get(:rebar_command)
     end
 
     def rebar_deps_dir
