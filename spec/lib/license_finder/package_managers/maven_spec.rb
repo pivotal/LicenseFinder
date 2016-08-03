@@ -24,8 +24,8 @@ module LicenseFinder
       end
 
       def stub_license_report(deps)
-        fake_file = double(:license_report, read: license_xml(deps))
-        allow(subject).to receive(:license_report).and_return(fake_file)
+        dependencies = double(:subject_dependency_file, dependencies: [license_xml(deps)])
+        expect(MavenDependencyFinder).to receive(:new).and_return(dependencies)
       end
 
       it 'lists all the current packages' do
