@@ -2,6 +2,11 @@ require "xmlsimple"
 
 module LicenseFinder
   class Maven < PackageManager
+    def initialize(options={})
+      super
+      @include_groups = options[:maven_include_groups]
+    end
+
     def current_packages
       command = 'mvn license:download-licenses'
       output, success = Dir.chdir(project_path) { capture(command) }
@@ -16,7 +21,7 @@ module LicenseFinder
       dependencies = XmlSimple.xml_in(xml, options)["dependencies"]
 
       dependencies.map do |dep|
-        MavenPackage.new(dep, logger: logger)
+        MavenPackage.new(dep, logger: logger, include_groups: @include_groups)
       end
     end
 

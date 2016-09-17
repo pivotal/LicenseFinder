@@ -2,11 +2,16 @@ require 'spec_helper'
 
 module LicenseFinder
   describe MavenPackage do
+    let(:options) { {} }
     subject do
       described_class.new(
-        "artifactId" => "hamcrest-core",
-        "version" => "4.11",
-        "licenses" => [{ "name" => "MIT" }]
+        {
+          "groupId" => "org.hamcrest",
+          "artifactId" => "hamcrest-core",
+          "version" => "4.11",
+          "licenses" => [{ "name" => "MIT" }],
+        },
+        options
       )
     end
 
@@ -30,6 +35,14 @@ module LicenseFinder
 
         it "is empty" do
           expect(subject.license_names_from_spec).to be_empty
+        end
+      end
+
+      context 'when include_groups is set to true' do
+        let(:options) { {include_groups: true} }
+
+        it 'includes the group id in the name' do
+          expect(subject.name).to eq("org.hamcrest:hamcrest-core")
         end
       end
 

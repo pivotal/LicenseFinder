@@ -1,8 +1,13 @@
 module LicenseFinder
   class MavenPackage < Package
     def initialize(spec, options={})
+      name = spec['artifactId']
+      if options[:include_groups]
+        name = "#{spec['groupId']}:#{name}"
+      end
+
       super(
-        spec["artifactId"],
+        name,
         spec["version"],
         options.merge(
           spec_licenses: Array(spec["licenses"]).map { |l| l["name"] }
