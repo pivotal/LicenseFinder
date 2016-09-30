@@ -5,7 +5,10 @@ module LicenseFinder
     def initialize(dependencies, options)
       empty_options = {}
       default_columns = %w[name version licenses]
-      columns = (Array(options[:columns]) & self.class::AVAILABLE_COLUMNS) || default_columns
+      columns = (Array(options[:columns]) & self.class::AVAILABLE_COLUMNS)
+      if columns.empty?
+        columns = default_columns
+      end
       super(dependencies, empty_options.merge(columns: columns))
     end
   end
