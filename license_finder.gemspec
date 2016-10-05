@@ -54,6 +54,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-its"
   s.add_development_dependency "webmock", "~> 1.13"
 
+  # to preserve ruby < 2.2.2 support.
+  s.add_development_dependency 'rack', ((RUBY_VERSION < '2.2.2') ? '1.6.0' : '> 1.6')
+
   # temporary to preserve ruby 1.9.3 support.
   s.add_development_dependency "mime-types", "< 3.0"
 
