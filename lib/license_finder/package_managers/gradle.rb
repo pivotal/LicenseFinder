@@ -35,7 +35,24 @@ module LicenseFinder
     private
 
     def package_path
+      alternate_build_file = build_file_from_settings(project_path)
+      return alternate_build_file if alternate_build_file
+
       project_path.join('build.gradle')
+    end
+
+    def build_file_from_settings(project_path)
+      settings_gradle_path = project_path.join 'settings.gradle'
+
+      return nil unless File.exists? settings_gradle_path
+
+      settings_gradle = File.read settings_gradle_path
+
+      match = /rootProject.buildFileName = ['"](?<build_file>.*)['"]/.match settings_gradle
+
+      return nil unless match
+
+      return project_path.join match[:build_file]
     end
   end
 end

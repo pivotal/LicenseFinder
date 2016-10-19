@@ -169,6 +169,12 @@ module LicenseFinder
       end
     end
 
+    class AlternateBuildFileGradleProject < Project
+      def add_dep
+        clone('alternate-build-file-gradle')
+      end
+    end
+
     class GoProject < Project
       def add_dep
         clone('gopath')
