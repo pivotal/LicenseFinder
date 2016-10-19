@@ -112,6 +112,7 @@ languages, as long as that language has a package definition in the project dire
 * `package.json` (for `npm`)
 * `pom.xml` (for `maven`)
 * `build.gradle` (for `gradle`)
+* `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
 * `Podfile` (for CocoaPods)
 * `rebar.config` (for `rebar`)

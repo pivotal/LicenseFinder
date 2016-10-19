@@ -25,4 +25,10 @@ describe 'Gradle Dependencies' do
     expect(java_developer).to be_seeing_line 'data.json-0.2.3.jar, unknown, unknown'
     expect(java_developer).to be_seeing_line 'guava, 18.0, "Apache 2.0"'
   end
+
+  specify 'are shown in reports for a project with an alternate build.gradle file' do
+    LicenseFinder::TestingDSL::AlternateBuildFileGradleProject.create
+    java_developer.run_license_finder('alternate-build-file-gradle')
+    expect(java_developer).to be_seeing_line 'junit, 4.11, "Common Public License Version 1.0"'
+  end
 end

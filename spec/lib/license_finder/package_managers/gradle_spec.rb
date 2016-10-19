@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe Gradle do
@@ -121,6 +122,44 @@ module LicenseFinder
           end
         end
       end
+    end
+
+    describe '#active?' do
+      include FakeFS::SpecHelpers
+
+      it 'return true if build.gradle exists' do
+        FakeFS do
+          FileUtils.mkdir_p '/fake/path'
+          FileUtils.touch '/fake/path/build.gradle'
+
+          expect(subject.active?).to be true
+        end
+      end
+
+      context "when there's no build.gradle" do
+        it 'returns false' do
+          expect(subject.active?).to be false
+        end
+      end
+
+      context "when there's a settings.gradle" do
+        it 'uses the build.gradle referenced inside' do
+          SETTINGS_DOT_GRADLE = <<-eos
+rootProject.buildFileName = 'build-alt.gradle'
+          eos
+
+          FakeFS do
+            FileUtils.mkdir_p '/fake/path'
+            File.open('/fake/path/settings.gradle', 'w') do |file|
+              file.write SETTINGS_DOT_GRADLE
+            end
+            FileUtils.touch '/fake/path/build-alt.gradle'
+
+            expect(subject.active?).to be true
+          end
+        end
+      end
+
     end
   end
 end
