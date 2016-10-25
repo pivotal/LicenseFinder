@@ -31,7 +31,7 @@ report.
 ### Experimental project types
 
 * Erlang (via `rebar`)
-* Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
+* Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 
 ## Installation
 
@@ -116,6 +116,7 @@ languages, as long as that language has a package definition in the project dire
 * `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
 * `Podfile` (for CocoaPods)
+* `Cartfile.resolved` (for Carthage)
 * `rebar.config` (for `rebar`)
 * `packages/` directory (for `Nuget`)
 
