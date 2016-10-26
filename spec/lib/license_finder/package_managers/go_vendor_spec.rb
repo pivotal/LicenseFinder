@@ -55,7 +55,7 @@ module LicenseFinder
         }
 
         before do
-          allow(subject).to receive(:capture).with(%q[go list -f '{{join .Deps "\n"}}' ./...]).and_return(go_deps)
+          allow(subject).to receive(:capture).with(%q[go list -f "{{join .Deps \"\n\"}}" ./...]).and_return(go_deps)
           allow(subject).to receive(:capture).with(%q[go list std]).and_return(std_deps)
           allow(subject).to receive(:capture).with(%q[git rev-list --max-count 1 HEAD]).and_return(["e0ff7ae205f\n", true])
         end

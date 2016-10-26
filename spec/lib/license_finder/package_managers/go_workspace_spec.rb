@@ -54,7 +54,7 @@ HERE
         allow(Dir).to receive(:chdir).with(Pathname.new project_path) { |&b| b.call() }
         allow(FileTest).to receive(:exist?).and_return(false)
         allow(FileTest).to receive(:exist?).with(File.join(project_path, '.envrc')).and_return(true)
-        allow(subject).to receive(:capture).with('go list -f \'{{join .Deps "\n"}}\' ./...').and_return([go_list_output, true])
+        allow(subject).to receive(:capture).with('go list -f "{{join .Deps \"\n\"}}" ./...').and_return([go_list_output, true])
         allow(subject).to receive(:capture).with('go list std').and_return([std_packages, true])
       end
 
@@ -71,7 +71,7 @@ HERE
       end
 
       it 'sets gopath to the envrc path' do
-        allow(subject).to receive(:capture).with('go list -f \'{{join .Deps "\n"}}\' ./...') {
+        allow(subject).to receive(:capture).with('go list -f "{{join .Deps \"\n\"}}" ./...') {
           expect(ENV['GOPATH']).to be_nil
           ['', true]
         }
