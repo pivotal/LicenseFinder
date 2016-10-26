@@ -4,9 +4,9 @@ set -x
 
 pushd /tmp
 
-wget http://services.gradle.org/distributions/gradle-2.4-all.zip
-unzip -q gradle*
-rm gradle*.zip
+curl -L -o gradle.zip http://services.gradle.org/distributions/gradle-2.4-bin.zip
+unzip -q gradle.zip
+rm gradle.zip
 mv gradle* ~/gradle
 
 popd
