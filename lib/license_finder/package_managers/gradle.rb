@@ -6,7 +6,7 @@ module LicenseFinder
   class Gradle < PackageManager
     def initialize(options={})
       super
-      @command = options[:gradle_command] || 'gradle'
+      @command = options[:gradle_command] || package_management_command
       @include_groups = options[:gradle_include_groups]
     end
 
@@ -28,8 +28,16 @@ module LicenseFinder
       end
     end
 
-    def self.package_management_command
-      "gradle"
+    def package_management_command
+        if Platform.windows?
+          wrapper = 'gradlew.bat'
+          gradle = 'gradle.bat'
+        else
+          wrapper = './gradlew'
+          gradle = 'gradle'
+        end
+
+        File.exist?(File.join(project_path, wrapper)) ? wrapper : gradle
     end
 
     private

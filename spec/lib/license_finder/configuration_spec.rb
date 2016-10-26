@@ -47,14 +47,6 @@ module LicenseFinder
         )
         expect(subject.gradle_command).to eq "secondary"
       end
-
-      it "has default" do
-        subject = described_class.new(
-          {gradle_command: nil},
-          {"gradle_command" => nil}
-        )
-        expect(subject.gradle_command).to eq "gradle"
-      end
     end
 
     describe "decisions_file" do

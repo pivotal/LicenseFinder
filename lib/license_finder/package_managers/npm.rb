@@ -51,7 +51,7 @@ module LicenseFinder
     end
 
     def npm_json
-      command = 'npm list --json --long'
+      command = "#{NPM::package_management_command} list --json --long"
       output, success = Dir.chdir(project_path) { capture(command) }
 
       if success
