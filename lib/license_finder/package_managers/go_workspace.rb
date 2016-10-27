@@ -70,8 +70,10 @@ module LicenseFinder
         # checked in. Canonical paths are only checked by `go get'. We
         # discovered that `go list' will print a warning and unfortunately exit
         # with status code 1. Setting GOPATH to nil removes those warnings.
+        orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = nil
         val = capture('go list -f "{{join .Deps \"\n\"}}" ./...')
+        ENV['GOPATH'] = orig_gopath
         raise 'go list failed' unless val.last
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
