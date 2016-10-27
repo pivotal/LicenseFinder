@@ -101,11 +101,12 @@ module LicenseFinder
 
       context 'when dependencies are not vendored' do
         before do
+          @orig_gopath = ENV['GOPATH']
           ENV['GOPATH'] = '/fake/go/path'
         end
 
         after do
-          ENV['GOPATH'] = nil
+          ENV['GOPATH'] = @orig_gopath
         end
 
         it 'should return an array of packages' do
