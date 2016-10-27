@@ -73,21 +73,21 @@ module LicenseFinder
       context 'when there are duplicate dependencies' do
         let(:content) do
           '{
-	           "ImportPath": "github.com/foo/bar",
-	           "GoVersion": "go1.3",
-	           "Deps": [
-	           	{
-	           		"ImportPath": "github.com/foo/baz/sub1",
-	           		"Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-	           	},
-	           	{
-	           		"ImportPath": "github.com/foo/baz/sub2",
-	           		"Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-	           	},
-	           	{
-	           		"ImportPath": "github.com/foo/baz/sub3",
-	           		"Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-	           	}
+               "ImportPath": "github.com/foo/bar",
+               "GoVersion": "go1.3",
+               "Deps": [
+                {
+                    "ImportPath": "github.com/foo/baz/sub1",
+                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
+                },
+                {
+                    "ImportPath": "github.com/foo/baz/sub2",
+                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
+                },
+                {
+                    "ImportPath": "github.com/foo/baz/sub3",
+                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
+                }
             ]
           }'
         end
