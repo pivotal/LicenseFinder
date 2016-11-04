@@ -28,6 +28,13 @@ module LicenseFinder
         expect(MavenDependencyFinder).to receive(:new).and_return(dependencies)
       end
 
+      it 'uses the maven wrapper, if present' do
+        subject = Maven.new(project_path: Pathname('features/fixtures/maven-wrapper'))
+        expect(Dir).to receive(:chdir).with(Pathname('features/fixtures/maven-wrapper')).and_call_original
+        expect(subject.package_management_command).to eq('./mvnw').or eq('mvnw.cmd')
+        subject.current_packages
+      end
+
       it 'lists all the current packages' do
         stub_license_report("
           <dependency>

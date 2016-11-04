@@ -4,7 +4,7 @@ require_relative "maven_dependency_finder"
 module LicenseFinder
   class Maven < PackageManager
     def current_packages
-      command = "#{Maven::package_management_command} license:download-licenses"
+      command = "#{package_management_command} license:download-licenses"
       output, success = Dir.chdir(project_path) { capture(command) }
       raise "Command '#{command}' failed to execute: #{output}" unless success
 
@@ -22,8 +22,16 @@ module LicenseFinder
       packages.uniq
     end
 
-    def self.package_management_command
-      "mvn"
+    def package_management_command
+      if Platform.windows?
+        wrapper = 'mvnw.cmd'
+        maven = 'mvn'
+      else
+        wrapper = './mvnw'
+        maven = 'mvn'
+      end
+
+      File.exist?(File.join(project_path, wrapper)) ? wrapper : maven
     end
 
     private
