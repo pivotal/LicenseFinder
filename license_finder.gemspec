@@ -60,6 +60,7 @@ Gem::Specification.new do |s|
 
   # temporary to preserve ruby 1.9.3 support.
   s.add_development_dependency "mime-types", "< 3.0"
+  s.add_development_dependency "addressable", "< 2.5.0"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
