@@ -71,11 +71,16 @@ module LicenseFinder
         ENV['GOPATH'] = nil
         val = capture('go list -f \'{{join .Deps "\n"}}\' ./...')
         raise 'go list failed' unless val.last
-        # Select non-standard packages. Non-standard packages typically
-        # have a period somewhere in the namespace (github.com, gopkg.in,
-        # etc.).
-        #
-        val.first.lines.map(&:strip).select { |l| l =~ /.+\..+\// }
+        # Select non-standard packages. `go list std` returns the list of standard
+        # dependencies. We then filter those dependencies out of the full list of
+        # dependencies.
+        deps = val.first.split("\n")
+        capture('go list std').first.split("\n").each do |std|
+          deps.delete_if do |dep|
+            dep =~ /(\/|^)#{std}(\/|$)/
+          end
+        end
+        deps
       end
     end
 

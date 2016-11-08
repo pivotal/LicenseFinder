@@ -34,9 +34,19 @@ module LicenseFinder
 
       let(:go_list_output) {
         <<HERE
-encoding/json
 gopkg.in/yaml.v2
 github.com/onsi/ginkgo
+myblip/blop-custom
+encoding/json
+golang.org/x/tools/go/ast/astutil
+HERE
+      }
+
+      let(:std_packages) {
+        <<HERE
+go/ast
+blop
+encoding/json
 HERE
       }
 
@@ -44,6 +54,8 @@ HERE
         allow(Dir).to receive(:chdir).with(Pathname.new project_path) { |&b| b.call() }
         allow(FileTest).to receive(:exist?).and_return(false)
         allow(FileTest).to receive(:exist?).with(File.join(project_path, '.envrc')).and_return(true)
+        allow(subject).to receive(:capture).with('go list -f \'{{join .Deps "\n"}}\' ./...').and_return([go_list_output, true])
+        allow(subject).to receive(:capture).with('go list std').and_return([std_packages, true])
       end
 
       it 'changes the directory' do
@@ -52,12 +64,10 @@ HERE
         expect(Dir).to have_received(:chdir)
       end
 
-      it 'returns the skip the standard libs and return lines of the output' do
-        allow(subject).to receive(:capture).with('go list -f \'{{join .Deps "\n"}}\' ./...').and_return([go_list_output, true])
+      it 'lists only non-standard packages' do
         packages = subject.send(:go_list)
-        expect(packages.count).to eq(2)
-        expect(packages).to include 'github.com/onsi/ginkgo'
-        expect(packages).to include 'gopkg.in/yaml.v2'
+        expect(packages.count).to eq(3)
+        expect(packages).to eq(['gopkg.in/yaml.v2', 'github.com/onsi/ginkgo', 'myblip/blop-custom'])
       end
 
       it 'sets gopath to the envrc path' do

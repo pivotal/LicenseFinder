@@ -39,6 +39,7 @@ module LicenseFinder
         FileUtils.mkdir_p project_path
         FileUtils.touch File.join(project_path, 'main.go')
         FileUtils.mkdir_p File.join(project_path, 'vendor', 'github.com', 'foo', 'bar')
+        FileUtils.mkdir_p File.join(project_path, 'vendor', 'golang.org', 'bar', 'baz')
       end
 
       it 'detects the project as go vendor project' do
@@ -49,9 +50,13 @@ module LicenseFinder
         let(:go_deps) {
           ["github.com/foo/bar", true]
         }
+        let(:std_deps) {
+          ["stdbar/baz", true]
+        }
 
         before do
           allow(subject).to receive(:capture).with(%q[go list -f '{{join .Deps "\n"}}' ./...]).and_return(go_deps)
+          allow(subject).to receive(:capture).with(%q[go list std]).and_return(std_deps)
           allow(subject).to receive(:capture).with(%q[git rev-list --max-count 1 HEAD]).and_return(["e0ff7ae205f\n", true])
         end
 
@@ -75,7 +80,6 @@ module LicenseFinder
             ["github.com/foo/bar\ngithub.com/foo/bar/baz", true]
           }
 
-          include_examples 'current_packages'
         end
 
         context 'when only sub packages are being used' do
@@ -92,6 +96,23 @@ module LicenseFinder
           }
 
           include_examples 'current_packages'
+        end
+
+        context 'when standard packages are being used' do
+          let(:go_deps) {
+            ["github.com/foo/bar\ngolang.org/stdbar/baz", true]
+          }
+
+          include_examples 'current_packages'
+        end
+
+        context 'when standard package names match part of a nonstandard package' do
+          let(:go_deps) {
+            ["github.com/foo/bar/my-stdbar/baz\ngolang.org/stdbar/baz", true]
+          }
+
+          include_examples 'current_packages'
+
         end
       end
     end
