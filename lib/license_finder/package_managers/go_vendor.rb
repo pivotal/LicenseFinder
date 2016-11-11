@@ -24,8 +24,8 @@ module LicenseFinder
       project_path.join("vendor")
     end
 
-    def project_sha
-      @project_sha ||= Dir.chdir(project_path) do
+    def project_sha(path)
+      Dir.chdir(path) do
         val = capture('git rev-list --max-count 1 HEAD')
         raise 'git rev-list failed' unless val.last
         val.first.strip
@@ -39,7 +39,7 @@ module LicenseFinder
         GoPackage.from_dependency({
                                    'ImportPath' => dep,
                                    'InstallPath' => package_path.join(dep),
-                                   'Rev' => 'vendored-' + project_sha
+                                   'Rev' => 'vendored-' + project_sha(package_path.join(dep))
                                   }, nil, true)
       end
     end
