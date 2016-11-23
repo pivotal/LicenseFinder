@@ -2,7 +2,9 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Maven do
-    subject { Maven.new(project_path: Pathname('/fake/path')) }
+    let(:options) { {} }
+
+    subject { Maven.new(options.merge(project_path: Pathname('/fake/path'))) }
 
     it_behaves_like "a PackageManager"
 
@@ -38,10 +40,12 @@ module LicenseFinder
       it 'lists all the current packages' do
         stub_license_report("
           <dependency>
+            <groupId>org.otherorg</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
           </dependency>
           <dependency>
+            <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <version>1.3</version>
            </dependency>
@@ -68,6 +72,30 @@ module LicenseFinder
         ")
 
         expect(subject.current_packages.first.licenses.map(&:name)).to eq ['License 1', 'License 2']
+      end
+
+      context 'when maven group ids option is enabled' do
+        let(:options) { { maven_include_groups: true } }
+
+        it 'lists all the current packages' do
+          stub_license_report("
+            <dependency>
+              <groupId>junit</groupId>
+              <artifactId>junit</artifactId>
+              <version>4.11</version>
+            </dependency>
+            <dependency>
+              <groupId>org.hamcrest</groupId>
+              <artifactId>hamcrest-core</artifactId>
+              <version>1.3</version>
+            </dependency>
+          ")
+
+          expect(subject.current_packages.map { |p| [p.name, p.version] }).to eq [
+            ["junit:junit", "4.11"],
+            ["org.hamcrest:hamcrest-core", "1.3"]
+          ]
+        end
       end
 
       it "handles no licenses" do

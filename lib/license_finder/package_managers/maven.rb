@@ -3,6 +3,11 @@ require_relative "maven_dependency_finder"
 
 module LicenseFinder
   class Maven < PackageManager
+    def initialize(options={})
+      super
+      @include_groups = options[:maven_include_groups]
+    end
+
     def current_packages
       command = "#{package_management_command} license:download-licenses"
       output, success = Dir.chdir(project_path) { capture(command) }
@@ -16,7 +21,7 @@ module LicenseFinder
         }
         contents = XmlSimple.xml_in(xml, options)["dependencies"]
         contents.map do |dep|
-          MavenPackage.new(dep, logger: logger)
+          MavenPackage.new(dep, logger: logger, include_groups: @include_groups)
         end
       end
       packages.uniq
