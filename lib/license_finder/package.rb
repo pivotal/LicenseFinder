@@ -99,15 +99,17 @@ module LicenseFinder
     ## EQUALITY
 
     def <=>(other)
-      name <=> other.name
+      eq_name = name <=> other.name
+      return eq_name unless eq_name == 0
+      version <=> other.version
     end
 
     def eql?(other)
-      name == other.name
+      name == other.name && version == other.version
     end
 
     def hash
-      [name].hash
+      [name,version].hash
     end
 
     ## LICENSING
