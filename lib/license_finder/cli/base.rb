@@ -31,6 +31,7 @@ module LicenseFinder
           :go_full_version,
           :gradle_command,
           :gradle_include_groups,
+          :maven_include_groups,
           :rebar_command,
           :rebar_deps_dir,
           :save

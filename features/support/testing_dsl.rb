@@ -3,11 +3,11 @@ require 'delegate'
 module LicenseFinder
   module TestingDSL
     class User
-      def run_license_finder(path = nil)
+      def run_license_finder(path = nil, options='')
         if path
-          execute_command_in_path('license_finder --quiet', Paths.project("my_app/#{path}"))
+          execute_command_in_path("license_finder --quiet #{options}", Paths.project("my_app/#{path}"))
         else
-          execute_command 'license_finder --quiet'
+          execute_command "license_finder --quiet #{options}"
         end
       end
 
