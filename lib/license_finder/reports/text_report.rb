@@ -3,7 +3,12 @@ module LicenseFinder
     COMMA_SEP =  ", "
 
     def initialize(dependencies, options={})
-      super(dependencies, options.merge(columns: %w[name version licenses]))
+      super(dependencies, options)
+
+      default_columns = %w[name version licenses]
+      if @columns.empty?
+        @columns = default_columns
+      end
     end
   end
 end
