@@ -23,10 +23,7 @@ notifications:
     secure: VIrS65Ssun4Jpu6Y5DpZFAjNmsxVBHxqa2VbrwghibhdhUksxQtit4a7ncGrgEoOMYMZfETjB0SD15au+Dx3TbVS+yuLk7lP5cI2Yf37Q87+hGRRY1FpuPtF45/r1CTHqv8GyVvz2RMwyDYYoLeSl62CUpJatm/+z9x6q2EImJo=
 before_install:
 - gem update bundler
-- ".travis/install_gradle.sh"
-- ".travis/install_rebar.sh"
-- ".travis/install_bower.sh"
-- ".travis/install_godep.sh"
+- for s in .travis/install_*.sh; do $s; done
 script:
 - rake install
 - rake spec

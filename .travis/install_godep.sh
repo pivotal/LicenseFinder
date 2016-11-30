@@ -1,6 +1,4 @@
-#!/bin/sh
-set -e
-set -x
+#!/bin/bash -ex
 
 mkdir -p ~/go
 go get github.com/tools/godep
