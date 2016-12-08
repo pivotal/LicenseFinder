@@ -12,13 +12,10 @@ module LicenseFinder
       pick_package.name
     end
 
-    def current_version
-      @current_package ? @current_package.version : nil
+    def version
+      pick_package.version
     end
 
-    def previous_version
-      @previous_package ? @previous_package.version : nil
-    end
 
     def subproject_paths
       pick_package.subproject_paths

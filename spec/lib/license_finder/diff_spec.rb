@@ -56,15 +56,15 @@ module LicenseFinder
         let(:file1_content) { "rspec,3.2.0,MIT" }
         let(:file2_content) { "rspec,3.3.0,MIT" }
 
-        it 'should set the state to unchanged and record the version change' do
+        it 'should add the new version and remove the previous version' do
           rspecs = find_package_with_name('rspec')
           expect(rspecs.size).to eq(2)
           rspecs.each do |rspec|
             case rspec.status
               when :removed
-                expect(rspec.previous_version).to eq('3.2.0')
+                expect(rspec.version).to eq('3.2.0')
               when :added
-                expect(rspec.current_version).to eq('3.3.0')
+                expect(rspec.version).to eq('3.3.0')
             end
           end
         end
@@ -78,13 +78,12 @@ module LicenseFinder
             rspecs.each do |rspec|
               case rspec.status
                 when :removed
-                  expect(rspec.previous_version).to eq('3.2.0')
+                  expect(rspec.version).to eq('3.2.0')
                 when :added
-                  expect(rspec.current_version).to eq('3.3.0')
+                  expect(rspec.version).to eq('3.3.0')
                 else
                   expect(rspec.status).to eq(:unchanged)
-                  expect(rspec.current_version).to eq('1.1.0')
-                  expect(rspec.previous_version).to eq('1.1.0')
+                  expect(rspec.version).to eq('1.1.0')
               end
             end
           end
@@ -96,16 +95,14 @@ module LicenseFinder
         let(:file2_content) { "rspec,3.3.0,GPLv2" }
 
         it 'should set the state to unchanged and record the version change' do
-          rspec_old = diff.find {|p| p.previous_version == '3.2.0'}
-          rspec_new = diff.find {|p| p.current_version == '3.3.0'}
+          rspec_old = diff.find {|p| p.version == '3.2.0'}
+          rspec_new = diff.find {|p| p.version == '3.3.0'}
 
           expect(rspec_old.status).to eq(:removed)
-          expect(rspec_old.current_version).to eq(nil)
-          expect(rspec_old.previous_version).to eq('3.2.0')
+          expect(rspec_old.version).to eq('3.2.0')
 
           expect(rspec_new.status).to eq(:added)
-          expect(rspec_new.current_version).to eq('3.3.0')
-          expect(rspec_new.previous_version).to eq(nil)
+          expect(rspec_new.version).to eq('3.3.0')
         end
       end
 
@@ -116,15 +113,13 @@ module LicenseFinder
         it 'should show the diff of the reports' do
           rspec = find_package_with_name('rspec')[0]
           expect(rspec.status).to eq(:unchanged)
-          expect(rspec.current_version).to eq('3.2.0')
-          expect(rspec.previous_version).to eq('3.2.0')
+          expect(rspec.version).to eq('3.2.0')
           paths = ['/path/to/project1', '/path/to/project2'].map { |p| File.absolute_path(p) }
           expect(rspec.subproject_paths).to match_array(paths)
 
           rails = find_package_with_name('rails')[0]
           expect(rails.status).to eq(:added)
-          expect(rails.current_version).to eq('4.2.0')
-          expect(rails.previous_version).to eq(nil)
+          expect(rails.version).to eq('4.2.0')
           paths = ['/path/to/project1'].map { |p| File.absolute_path(p) }
           expect(rails.subproject_paths).to match_array(paths)
         end
