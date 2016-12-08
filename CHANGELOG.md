@@ -1,9 +1,21 @@
 # not yet released
 
+Features:
+
+* Changed dependencies to be unique based on name _and_ version (#241)
+* Enable '--columns' option with text reports (#244, thanks @raimon49!)
+* Flag maven-include-groups adds group to maven depenency information (#219, #258, thanks @dgodd!)
+* Package managers determine their package management command (#250, Thanks @sschuberth!)
+
 Bugfixes:
 
 * Gradle works in CI containers where TERM is not set (revert and fix of c15bdb7, which broke older versions of gradle)
 * Check for the correct Ruby Bundler command: `bundle` (#233. Thanks, @raimon49!)
+* Uses settings.gradle to determine the build file name (#248)
+* Fix detecting the Gradle wrapper if not scanning the current directory (#238, Thanks @sschuberth!)
+* Use maven wrapper if available on maven projects
+* Check golang package lists against standard packages instead of excluding short package paths (#243)
+* Update the project_sha method to return the sha of the dependency, not the parent project
 
 
 # 2.1.2 / 2016-06-10
