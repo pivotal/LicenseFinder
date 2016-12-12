@@ -57,6 +57,23 @@ module LicenseFinder
         ]
       end
 
+      context 'when ignore_groups is used' do
+        subject {
+          Maven.new(options.merge(
+              project_path: Pathname('/fake/path'),
+              ignore_groups: Set.new(%w(system test provided import))
+          ))
+        }
+
+        before do
+          expect(subject).to receive(:capture).with('mvn license:download-licenses -Dlicense.excludedScopes=system,test,provided,import').and_return(['', true])
+        end
+
+        it 'uses skips the specified groups' do
+          subject.current_packages
+        end
+      end
+
       it "handles multiple licenses" do
         stub_license_report("
           <dependency>

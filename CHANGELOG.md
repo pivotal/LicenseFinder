@@ -6,6 +6,7 @@ Features:
 * Enable '--columns' option with text reports (#244, thanks @raimon49!)
 * Flag maven-include-groups adds group to maven depenency information (#219, #258, thanks @dgodd!)
 * Package managers determine their package management command (#250, Thanks @sschuberth!)
+* Support --ignored_groups for maven
 
 Bugfixes:
 
