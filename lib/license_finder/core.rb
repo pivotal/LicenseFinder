@@ -63,7 +63,7 @@ module LicenseFinder
       PackageManager.current_packages(
         logger: logger,
         project_path: config.project_path,
-        ignore_groups: decisions.ignored_groups,
+        ignored_groups: decisions.ignored_groups,
         go_full_version: config.go_full_version,
         gradle_command: config.gradle_command,
         gradle_include_groups: config.gradle_include_groups,

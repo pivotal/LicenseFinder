@@ -26,7 +26,7 @@ module LicenseFinder
         {
           logger: logger,
           project_path: configuration.project_path,
-          ignore_groups: Set.new,
+          ignored_groups: Set.new,
           go_full_version: nil,
           gradle_command: configuration.gradle_command,
           gradle_include_groups: nil,

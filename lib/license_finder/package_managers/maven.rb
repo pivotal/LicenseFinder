@@ -5,13 +5,13 @@ module LicenseFinder
   class Maven < PackageManager
     def initialize(options={})
       super
-      @ignore_groups = options[:ignore_groups]
+      @ignored_groups = options[:ignored_groups]
       @include_groups = options[:maven_include_groups]
     end
 
     def current_packages
       command = "#{package_management_command} license:download-licenses"
-      command += " -Dlicense.excludedScopes=#{@ignore_groups.to_a.join(',')}" if @ignore_groups and !@ignore_groups.empty?
+      command += " -Dlicense.excludedScopes=#{@ignored_groups.to_a.join(',')}" if @ignored_groups and !@ignored_groups.empty?
 
       output, success = Dir.chdir(project_path) { capture(command) }
       raise "Command '#{command}' failed to execute: #{output}" unless success

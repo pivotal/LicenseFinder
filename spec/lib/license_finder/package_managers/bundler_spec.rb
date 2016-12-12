@@ -30,7 +30,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       subject do
-        Bundler.new(ignore_groups: ['dev', 'test'], definition: definition).current_packages
+        Bundler.new(ignored_groups: ['dev', 'test'], definition: definition).current_packages
       end
 
       it "should have 2 dependencies" do

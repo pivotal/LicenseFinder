@@ -57,11 +57,11 @@ module LicenseFinder
         ]
       end
 
-      context 'when ignore_groups is used' do
+      context 'when ignored_groups is used' do
         subject {
           Maven.new(options.merge(
               project_path: Pathname('/fake/path'),
-              ignore_groups: Set.new(%w(system test provided import))
+              ignored_groups: Set.new(%w(system test provided import))
           ))
         }
 
