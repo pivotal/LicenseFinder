@@ -69,7 +69,7 @@ module LicenseFinder
         # discovered that `go list' will print a warning and unfortunately exit
         # with status code 1. Setting GOPATH to nil removes those warnings.
         ENV['GOPATH'] = nil
-        val = capture('go list -f \'{{join .Deps "\n"}}\' ./...')
+        val = capture('go list -f "{{join .Deps \"\n\"}}" ./...')
         raise 'go list failed' unless val.last
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of

@@ -31,6 +31,7 @@ task :check_dependencies do
   LicenseFinder::PackageManager.package_managers.each do |package_manager|
     satisfied = false unless package_manager.installed?(LicenseFinder::Logger.new(debug:true))
   end
+  STDOUT.flush
   exit 1 unless satisfied
 end
 

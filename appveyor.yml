@@ -1,0 +1,21 @@
+environment:
+  HOME: $(HOMEDRIVE)$(HOMEPATH)
+  GOPATH: $(HOME)\go
+  PATH: $(PATH);$(GOPATH)\bin;$(HOME)\rebar;$(HOME)\gradle\bin
+
+install:
+  - bundle install
+
+build_script:
+  - rake build
+
+# Prerequisites for running tests.
+before_test:
+  - rake install
+  - bash --login -c "ci/install_godep.sh"
+  - bash --login -c "ci/install_bower.sh"
+  - bash --login -c "ci/install_rebar.sh"
+  - bash --login -c "ci/install_gradle.sh"
+
+test_script:
+  - rake spec
