@@ -18,8 +18,8 @@ describe 'Diff report' do
 
       developer.execute_command('license_finder diff report-1.csv report-2.csv')
 
-      expect(developer).to be_seeing('added,bar,2.0.0,,GPLv2')
-      expect(developer).to be_seeing('unchanged,foo,1.0.0,1.0.0,MIT')
+      expect(developer).to be_seeing('added,bar,2.0.0,GPLv2')
+      expect(developer).to be_seeing('unchanged,foo,1.0.0,MIT')
     end
 
     specify 'shows version changes between two csv reports' do
@@ -31,7 +31,8 @@ describe 'Diff report' do
       developer.execute_command('license_finder report --save=report-2.csv --format=csv')
 
       developer.execute_command('license_finder diff report-1.csv report-2.csv')
-      expect(developer).to be_seeing('unchanged,foo,2.0.0,1.0.0,MIT')
+      expect(developer).to be_seeing('added,foo,2.0.0,MIT')
+      expect(developer).to be_seeing('removed,foo,1.0.0,MIT')
     end
 
     specify 'shows license changes between two csv reports' do
@@ -43,8 +44,8 @@ describe 'Diff report' do
       developer.execute_command('license_finder report --save=report-2.csv --format=csv')
 
       developer.execute_command('license_finder diff report-1.csv report-2.csv')
-      expect(developer).to be_seeing('removed,foo,,1.0.0,MIT')
-      expect(developer).to be_seeing('added,foo,2.0.0,,GPLv2')
+      expect(developer).to be_seeing('removed,foo,1.0.0,MIT')
+      expect(developer).to be_seeing('added,foo,2.0.0,GPLv2')
     end
   end
 
@@ -69,9 +70,9 @@ describe 'Diff report' do
       developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
 
       diff = IO.read(project.project_dir.join('diff.csv'))
-      expect(diff).to include("unchanged,foo,1.0.0,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
-      expect(diff).to include("unchanged,bar,2.0.0,2.0.0,GPLv2,#{project1.project_dir}")
-      expect(diff).to include("added,baz,3.0.0,,BSD,#{project2.project_dir}")
+      expect(diff).to include("unchanged,foo,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
+      expect(diff).to include("unchanged,bar,2.0.0,GPLv2,#{project1.project_dir}")
+      expect(diff).to include("added,baz,3.0.0,BSD,#{project2.project_dir}")
     end
 
     context 'when change affects only one file' do
@@ -96,9 +97,10 @@ describe 'Diff report' do
         developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
 
         diff = IO.read(project.project_dir.join('diff.csv'))
-        expect(diff).to include("unchanged,foo,1.0.0,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
-        expect(diff).to include("unchanged,bar,3.0.0,2.0.0,GPLv2,#{project1.project_dir}")
-        expect(diff).to include("added,baz,3.0.0,,BSD,#{project2.project_dir}")
+        expect(diff).to include("unchanged,foo,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
+        expect(diff).to include("added,bar,3.0.0,GPLv2,#{project1.project_dir}")
+        expect(diff).to include("removed,bar,2.0.0,GPLv2,#{project1.project_dir}")
+        expect(diff).to include("added,baz,3.0.0,BSD,#{project2.project_dir}")
       end
 
       specify 'shows license changes' do
@@ -122,10 +124,10 @@ describe 'Diff report' do
         developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
 
         diff = IO.read(project.project_dir.join('diff.csv'))
-        expect(diff).to include("unchanged,foo,1.0.0,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
-        expect(diff).to include("removed,bar,,2.0.0,GPLv2,#{project1.project_dir}")
-        expect(diff).to include("added,bar,3.0.0,,MIT,#{project1.project_dir}")
-        expect(diff).to include("added,baz,3.0.0,,BSD,#{project2.project_dir}")
+        expect(diff).to include("unchanged,foo,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
+        expect(diff).to include("removed,bar,2.0.0,GPLv2,#{project1.project_dir}")
+        expect(diff).to include("added,bar,3.0.0,MIT,#{project1.project_dir}")
+        expect(diff).to include("added,baz,3.0.0,BSD,#{project2.project_dir}")
       end
     end
 
@@ -151,10 +153,10 @@ describe 'Diff report' do
         developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
 
         diff = IO.read(project.project_dir.join('diff.csv'))
-        expect(diff).to include("unchanged,bar,2.0.0,2.0.0,GPLv2,#{project1.project_dir}")
-        expect(diff).to include("removed,foo,,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
-        expect(diff).to include("added,foo,2.0.0,,BSD,\"#{project1.project_dir},#{project2.project_dir}\"")
-        expect(diff).to include("added,baz,3.0.0,,BSD,#{project2.project_dir}")
+        expect(diff).to include("unchanged,bar,2.0.0,GPLv2,#{project1.project_dir}")
+        expect(diff).to include("removed,foo,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
+        expect(diff).to include("added,foo,2.0.0,BSD,\"#{project1.project_dir},#{project2.project_dir}\"")
+        expect(diff).to include("added,baz,3.0.0,BSD,#{project2.project_dir}")
       end
 
       xspecify 'show licenses change when files do not contain exact copies of a dep' do
@@ -178,12 +180,13 @@ describe 'Diff report' do
         developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
 
         diff = IO.read(project.project_dir.join('diff.csv'))
-        expect(diff).to include("removed,foo,,1.0.0,MIT,#{project1.project_dir}")
+        expect(diff).to include("removed,foo,1.0.0,MIT,#{project1.project_dir}")
         # expect(diff).to include("removed,foo,,2.0.0,BSD,#{project2.project_dir}")
-        expect(diff).to include("unchanged,foo,2.0.0,1.0.0,BSD,\"#{project1.project_dir},#{project2.project_dir}\"")
+        expect(diff).to include("added,foo,2.0.0,BSD,\"#{project1.project_dir},#{project2.project_dir}\"")
+        expect(diff).to include("removed,foo,1.0.0,BSD,\"#{project1.project_dir},#{project2.project_dir}\"")
 
-        expect(diff).to include("unchanged,bar,2.0.0,2.0.0,GPLv2,#{project1.project_dir}")
-        expect(diff).to include("added,baz,3.0.0,,BSD,#{project2.project_dir}")
+        expect(diff).to include("unchanged,bar,2.0.0,GPLv2,#{project1.project_dir}")
+        expect(diff).to include("added,baz,3.0.0,BSD,#{project2.project_dir}")
       end
     end
   end
