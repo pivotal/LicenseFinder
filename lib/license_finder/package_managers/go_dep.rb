@@ -11,12 +11,18 @@ module LicenseFinder
     def current_packages
       json = JSON.parse(package_path.read)
       # godep includes subpackages as a seperate dependency, we can de-dup that
-      deps = json['Deps'].each do |d|
-        next unless d['ImportPath'].include?('github.com')
 
-        d['ImportPath'] = d['ImportPath'].split('/')[0..2].join('/')
+      dependencies_info = json['Deps'].map do |json|
+        {
+            'Homepage' => homepage(json),
+            'ImportPath' => import_path(json),
+            'InstallPath' => json['InstallPath'],
+            'Rev' => json['Rev']
+        }
       end
-      deps.uniq.map { |dep| GoPackage.from_dependency(dep, install_prefix, @full_version) }
+      dependencies_info.uniq.map do |info|
+        GoPackage.from_dependency(info, install_prefix, @full_version)
+      end
     end
 
     def package_path
@@ -36,6 +42,17 @@ module LicenseFinder
 
     def workspace_dir
       project_path.join('Godeps/_workspace')
+    end
+
+    def homepage(dependency_json)
+      import_path dependency_json
+    end
+
+    def import_path(dependency_json)
+      import_path = dependency_json['ImportPath']
+      return import_path unless import_path.include?('github.com')
+
+      import_path.split('/')[0..2].join('/')
     end
   end
 end

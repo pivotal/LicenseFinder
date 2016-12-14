@@ -5,7 +5,8 @@ module LicenseFinder
       install_path = hash['InstallPath']
       install_path ||= install_path(prefix.join(name))
       version = full_version ? hash['Rev'] : hash['Rev'][0..6]
-      self.new(name, version, {install_path: install_path, package_manager: "Go" })
+      homepage = hash['Homepage']
+      self.new(name, version, {install_path: install_path, package_manager: "Go", homepage: homepage })
     end
 
     def package_manager

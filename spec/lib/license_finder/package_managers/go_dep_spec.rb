@@ -21,6 +21,10 @@ module LicenseFinder
             {
               "ImportPath": "github.com/pivotal/bar",
               "Rev": "3245708abcdef234589450649872346783298736"
+            },
+            {
+              "ImportPath": "code.google.com/foo/bar",
+              "Rev": "3245708abcdef234589450649872346783298735"
             }
           ]
         }'
@@ -28,6 +32,14 @@ module LicenseFinder
 
       before do
         allow(IO).to receive(:read).with('/fake/path/Godeps/Godeps.json').and_return(content.to_s)
+      end
+
+      it 'sets the homepage for packages' do
+        packages = subject.current_packages
+
+        expect(packages[0].homepage).to eq("github.com/pivotal/foo")
+        expect(packages[1].homepage).to eq("github.com/pivotal/bar")
+        expect(packages[2].homepage).to eq("code.google.com/foo/bar")
       end
 
       context 'when dependencies are vendored' do
@@ -52,7 +64,8 @@ module LicenseFinder
           it 'list the dependencies with full version' do
             expect(subject.current_packages.map(&:version)).to eq [
               "61164e49940b423ba1f12ddbdf01632ac793e5e9",
-              "3245708abcdef234589450649872346783298736"]
+              "3245708abcdef234589450649872346783298736",
+              "3245708abcdef234589450649872346783298735"]
           end
         end
       end
