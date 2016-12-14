@@ -21,7 +21,11 @@ module LicenseFinder
       it 'uses the gradle wrapper, if present' do
         subject = Gradle.new(project_path: Pathname('features/fixtures/gradle-wrapper'))
         expect(Dir).to receive(:chdir).with(Pathname('features/fixtures/gradle-wrapper')).and_call_original
-        expect(subject.package_management_command).to eq('./gradlew').or eq('gradlew.bat')
+        if Platform.windows?
+          expect(subject.package_management_command).to eq('gradlew.bat')
+        else
+          expect(subject.package_management_command).to eq('./gradlew')
+        end
         subject.current_packages
       end
 
@@ -35,7 +39,11 @@ module LicenseFinder
       it 'sets the working directory to project_path, if provided' do
         subject = Gradle.new(project_path: Pathname('/Users/foo/bar'))
         expect(Dir).to receive(:chdir).with(Pathname('/Users/foo/bar')) { |&block| block.call }
-        expect(subject).to receive(:capture).with('gradle downloadLicenses').and_return(['', true])
+        if Platform.windows?
+          expect(subject).to receive(:capture).with('gradle.bat downloadLicenses').and_return(['', true])
+        else
+          expect(subject).to receive(:capture).with('gradle downloadLicenses').and_return(['', true])
+        end
         subject.current_packages
       end
 
