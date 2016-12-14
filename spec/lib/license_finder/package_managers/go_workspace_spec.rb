@@ -139,6 +139,12 @@ HERE
         allow(subject).to receive(:git_modules).and_return(git_modules_output)
       end
 
+      it 'sets homepage for the packages' do
+        packages = subject.current_packages
+
+        expect(packages[0].homepage).to eq('bitbucket.org/kardianos/osext')
+      end
+
       describe 'should return an array of go packages' do
         it 'provides package names' do
           packages = subject.current_packages

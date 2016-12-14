@@ -7,7 +7,7 @@ Features:
 * Flag maven-include-groups adds group to maven depenency information (#219, #258, thanks @dgodd!)
 * Package managers determine their package management command (#250, Thanks @sschuberth!)
 * Support --ignored_groups for maven
-* Support `homepage` column for godeps dependencies
+* Support `homepage` column for godeps dependencies, and dependencies from go workspaces using `.envrc`
 
 Bugfixes:
 

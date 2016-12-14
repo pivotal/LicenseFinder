@@ -19,11 +19,13 @@ module LicenseFinder
           submodule.install_path =~ /#{repo_name(gp)}$/
         }.first
         if import_path then
-          GoPackage.from_dependency({
-                                     'ImportPath' => repo_name(import_path),
-                                     'InstallPath' => submodule.install_path,
-                                     'Rev' => submodule.revision
-                                    }, nil, @full_version)
+          dependency_info = {
+              'ImportPath' => repo_name(import_path),
+              'Homepage' => repo_name(import_path),
+              'InstallPath' => submodule.install_path,
+              'Rev' => submodule.revision
+          }
+          GoPackage.from_dependency(dependency_info, nil, @full_version)
         end
       end.compact
     end
