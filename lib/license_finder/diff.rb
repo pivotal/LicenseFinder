@@ -10,8 +10,8 @@ module LicenseFinder
 
       [].tap do |packages|
         unchanged.each do |package|
-          package_previous = package_with_name(p1, package)
-          package_current = package_with_name(p2, package)
+          package_previous = find_package(p1, package)
+          package_current = find_package(p2, package)
 
           if package_current.licenses == package_previous.licenses
             packages << PackageDelta.unchanged(package_current, package_previous)
@@ -40,8 +40,8 @@ module LicenseFinder
       end
     end
 
-    def self.package_with_name(set, package)
-      set.find { |p| p.name == package.name }
+    def self.find_package(set, package)
+      set.find { |p| p.eql? package}
     end
   end
 end

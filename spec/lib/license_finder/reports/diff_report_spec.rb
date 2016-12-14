@@ -13,8 +13,8 @@ module LicenseFinder
           bar_change = PackageDelta.removed(bar)
 
           report = DiffReport.new([foo_change, bar_change])
-          expect(report.to_s).to include('removed,bar,,1.1.0,GPLv2')
-          expect(report.to_s).to include('added,foo,1.0.0,,MIT')
+          expect(report.to_s).to include('removed,bar,1.1.0,GPLv2')
+          expect(report.to_s).to include('added,foo,1.0.0,MIT')
         end
 
         it 'should generate a diff report displaying version changes' do
@@ -25,7 +25,7 @@ module LicenseFinder
           foo = PackageDelta.unchanged(foo_new, foo_old)
 
           report = DiffReport.new([foo])
-          expect(report.to_s).to include('unchanged,foo,1.1.0,1.0.0,MIT')
+          expect(report.to_s).to include('unchanged,foo,1.1.0,MIT')
         end
       end
 
@@ -47,8 +47,8 @@ module LicenseFinder
 
 
           report = DiffReport.new([foo, bar])
-          expect(report.to_s).to include("unchanged,foo,1.1.0,1.0.0,MIT,#{expanded_foo_path}")
-          expect(report.to_s).to include("added,bar,1.1.0,,MIT,\"#{expanded_bar_path1},#{expanded_bar_path2}\"")
+          expect(report.to_s).to include("unchanged,foo,1.1.0,MIT,#{expanded_foo_path}")
+          expect(report.to_s).to include("added,bar,1.1.0,MIT,\"#{expanded_bar_path1},#{expanded_bar_path2}\"")
         end
       end
     end
