@@ -49,8 +49,17 @@ module LicenseFinder
       get(:rebar_command)
     end
 
+    def mix_command
+      get(:mix_command) || "mix"
+    end
+
     def rebar_deps_dir
       path = get(:rebar_deps_dir) || 'deps'
+      project_path.join(path).expand_path
+    end
+
+    def mix_deps_dir
+      path = get(:mix_deps_dir) || 'deps'
       project_path.join(path).expand_path
     end
 
