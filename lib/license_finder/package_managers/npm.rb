@@ -29,7 +29,7 @@ module LicenseFinder
     private
 
     def direct_dependencies
-      package_json = JSON.parse(File.read(package_path))
+      package_json = JSON.parse(File.read(package_path), :max_nesting => false)
       DEPENDENCY_GROUPS.map do |group|
         package_json.fetch(group, {}).keys.map do |dependency|
           {
@@ -55,10 +55,10 @@ module LicenseFinder
       output, success = Dir.chdir(project_path) { capture(command) }
 
       if success
-        json = JSON(output)
+        json = JSON(output, :max_nesting => false)
       else
         json = begin
-                 JSON(output)
+                 JSON(output, :max_nesting => false)
                rescue JSON::ParserError
                  nil
                end
