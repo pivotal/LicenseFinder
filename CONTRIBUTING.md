@@ -44,9 +44,18 @@ If you come up with something useful, consider posting it to the Google Group
 
 
 ## Development Dependencies
+To successfully run the test suite, you will need the following installed: 
+- NPM (requires Node)
+- Bower (requires Node and NPM)
+- Maven (requires Java)
+- Gradle (requires Java)
+- Pip (requires python)
+- Rebar (requires erlang)
+- GoDep, GoWorkspace, and GoVendor (requires golang)
+- CocoaPods (requires ruby)
+- Bundler (requires ruby)
 
-To successfully run the test suite, you will need npm, maven, pip, gradle and
-bower installed. If you run `rake check_dependencies`, you'll see exactly what
+If you run `rake check_dependencies`, you'll see exactly which package managers
 you're missing.
 
 ### Python
