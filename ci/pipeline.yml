@@ -1,0 +1,14 @@
+resources:
+- name: LicenseFinder
+  type: git
+  source:
+    uri: https://github.com/joemoore/LicenseFinder.git
+    branch: master
+
+jobs:
+- name: test-app
+  plan:
+  - get: LicenseFinder
+    trigger: true
+  - task: tests
+    file: LicenseFinder/build.yml

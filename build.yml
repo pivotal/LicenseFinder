@@ -1,0 +1,12 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: codequest/ruby-golang-java-nodejs
+
+inputs:
+- name: LicenseFinder
+
+run:
+  path: ./LicenseFinder/ci/test.sh
