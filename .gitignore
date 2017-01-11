@@ -6,4 +6,5 @@
 Gemfile.lock
 pkg/*
 tmp/
+features/fixtures/maven-wrapper/target
 *~
