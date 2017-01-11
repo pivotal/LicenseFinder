@@ -30,7 +30,7 @@ report.
 ### Experimental project types
 
 * Erlang (via `rebar`)
-* Objective-C (+ CocoaPods)
+* Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 
 ## Installation
 
