@@ -3,6 +3,7 @@
 set -e -x
 
 pushd LicenseFinder
+  source /root/.bash_profile
   rbenv global $RUBY_VERSION
   chmod +x ci/install_*.sh
   ./ci/install_rebar.sh
