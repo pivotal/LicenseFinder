@@ -4,7 +4,7 @@ image_resource:
   type: docker-image
   source:
     repository: ddubson/rb-go-java-node-erl-py
-    tag: 'v2'
+    tag: v2
 
 inputs:
 - name: LicenseFinder
