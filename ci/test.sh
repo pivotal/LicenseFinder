@@ -12,6 +12,7 @@ pushd LicenseFinder
   ./ci/install_godep.sh
   export PATH=$PATH:$HOME/gradle/bin:$HOME/rebar:$HOME/go/bin GOPATH=$HOME/go
 
+  gem update --system
   gem install bundler
   bundle install
 
