@@ -3,12 +3,15 @@ resources:
   type: git
   source:
     uri: https://github.com/joemoore/LicenseFinder.git
-    branch: master
+    branch: aggregate
 
 jobs:
 - name: test-app
   plan:
   - get: LicenseFinder
     trigger: true
-  - task: tests
-    file: LicenseFinder/build.yml
+  - aggregate:
+    - task: test1
+      file: LicenseFinder/build.yml
+    - task: test2
+      file: LicenseFinder/build.yml
