@@ -6,12 +6,18 @@ resources:
     branch: aggregate
 
 jobs:
-- name: test-app
+- name: ruby-2-3-1
   plan:
   - get: LicenseFinder
     trigger: true
   - aggregate:
     - task: test1
       file: LicenseFinder/build.yml
-    - task: test2
+
+- name: ruby-2-2
+  plan:
+  - get: LicenseFinder
+    trigger: true
+  - aggregate:
+    - task: test1
       file: LicenseFinder/build.yml
