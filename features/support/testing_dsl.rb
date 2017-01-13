@@ -131,7 +131,7 @@ module LicenseFinder
       end
 
       def install
-        shell_out("bower install 2>/dev/null")
+        shell_out("bower install --allow-root 2>/dev/null")
       end
     end
 
