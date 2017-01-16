@@ -6,11 +6,20 @@ resources:
     branch: aggregate
 
 jobs:
+- name: ruby-2-4-0
+  plan:
+  - get: LicenseFinder
+    trigger: false
+  - task: ruby-2-4-0
+    file: LicenseFinder/build.yml
+    params:
+      RUBY_VERSION: 2.4.0
+
 - name: ruby-2-3-0
   plan:
   - get: LicenseFinder
     trigger: false
-  - task: test1
+  - task: ruby-2-3-0
     file: LicenseFinder/build.yml
     params:
       RUBY_VERSION: 2.3.0
@@ -19,7 +28,7 @@ jobs:
   plan:
   - get: LicenseFinder
     trigger: false
-  - task: test1
+  - task: ruby-2-2-0
     file: LicenseFinder/build.yml
     params:
       RUBY_VERSION: 2.2.0
@@ -28,7 +37,16 @@ jobs:
   plan:
   - get: LicenseFinder
     trigger: false
-  - task: test1
+  - task: ruby-2-1-5
     file: LicenseFinder/build.yml
     params:
       RUBY_VERSION: 2.1.5
+
+- name: jruby-9-0-4-0
+  plan:
+  - get: LicenseFinder
+    trigger: false
+  - task: jruby-9-0-4-0
+    file: LicenseFinder/build.yml
+    params:
+      RUBY_VERSION: jruby-9.0.4.0
