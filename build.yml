@@ -11,3 +11,6 @@ inputs:
 
 run:
   path: ./LicenseFinder/ci/test.sh
+
+params:
+  RUBY_VERSION:
