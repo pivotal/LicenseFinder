@@ -18,6 +18,13 @@ pushd LicenseFinder
 
   gem update --system
   gem install bundler
+  # jruby-9 specific: requires  >= rack 2.x
+  if [ "$RUBY_VERSION" == "jruby-9.0.4.0" ]
+  then
+    bundle update rack
+  fi
+  #
+
   bundle install
   # rbenv global $RUBY_VERSION
   ruby --version
