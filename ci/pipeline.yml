@@ -9,7 +9,7 @@ jobs:
 - name: ruby-2-3-0
   plan:
   - get: LicenseFinder
-    trigger: true
+    trigger: false
   - task: test1
     file: LicenseFinder/build.yml
     params:
@@ -18,8 +18,17 @@ jobs:
 - name: ruby-2-2-0
   plan:
   - get: LicenseFinder
-    trigger: true
+    trigger: false
   - task: test1
     file: LicenseFinder/build.yml
     params:
       RUBY_VERSION: 2.2.0
+
+- name: ruby-2-1-5
+  plan:
+  - get: LicenseFinder
+    trigger: false
+  - task: test1
+    file: LicenseFinder/build.yml
+    params:
+      RUBY_VERSION: 2.1.5

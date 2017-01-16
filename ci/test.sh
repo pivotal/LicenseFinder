@@ -4,7 +4,17 @@ set -e -x
 
 pushd LicenseFinder
   source /root/.bash_profile
+
+  echo "*****************************************"
+  ls -al
+
   rbenv global $RUBY_VERSION
+  ruby --version
+  rbenv local $RUBY_VERSION
+  ruby --version
+
+  echo "*****************************************"
+
   chmod +x ci/install_*.sh
   ./ci/install_rebar.sh
   ./ci/install_bower.sh
@@ -15,6 +25,9 @@ pushd LicenseFinder
   gem update --system
   gem install bundler
   bundle install
+  rbenv global $RUBY_VERSION
+  ruby --version
+  bundler --version
 
   bundle exec rake install
   bundle exec rake spec
