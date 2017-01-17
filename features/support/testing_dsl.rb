@@ -383,7 +383,8 @@ module LicenseFinder
 
       def reset_projects!
         # only destroyed when a test starts, so you can poke around after a failure
-        projects.rmtree if projects.exist?
+        require 'fileutils'
+        FileUtils.rmtree(projects) if projects.exist?
         projects.mkpath
       end
     end
