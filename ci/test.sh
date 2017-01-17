@@ -27,12 +27,11 @@ pushd LicenseFinder
   fi
   #
 
-  #bundle install
-  # rbenv global $RUBY_VERSION
-  ruby --version
-  bundler --version
-
   bundle exec rake install
   bundle exec rake spec
   bundle exec rake features
+
+  #rspec ./features/features/package_managers/godep_spec.rb
+  #rspec ./features/features/package_managers/npm_spec.rb
+  #rspec ./features/features/package_managers/nuget_spec.rb
 popd
