@@ -2,8 +2,8 @@ resources:
 - name: LicenseFinder
   type: git
   source:
-    uri: https://github.com/joemoore/LicenseFinder.git
-    branch: aggregate
+    uri: https://github.com/ddubson/LicenseFinder.git
+    branch: master
 
 jobs:
 - name: ruby-2-4-0
