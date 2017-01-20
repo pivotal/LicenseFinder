@@ -9,6 +9,7 @@ against a user-defined whitelist, and give you an actionable exception
 report.
 
 * code: https://github.com/pivotal/LicenseFinder
+* ci: https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder
 * support:
   * license-finder@googlegroups.com
   * https://groups.google.com/forum/#!forum/license-finder
