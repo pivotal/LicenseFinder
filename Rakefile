@@ -35,6 +35,11 @@ task :check_dependencies do
   exit 1 unless satisfied
 end
 
+desc "Configure ci pipeline"
+task :update_pipeline do
+  cmd = 'bash -c "fly -t osl set-pipeline -n -p LicenseFinder --config <(erb ci/pipeline.yml.erb)"'
+  system(cmd)
+end
 task :spec     => :check_dependencies
 task :features => :check_dependencies
 
