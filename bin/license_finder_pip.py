@@ -6,7 +6,7 @@ from pip.download import PipSession
 from pip._vendor import pkg_resources
 from pip._vendor.six import print_
 
-requirements = [req.req for req
+requirements = [pkg_resources.Requirement(str(req.req)) for req
                 in parse_requirements('requirements.txt', session=PipSession())]
 
 transform = lambda dist: {
