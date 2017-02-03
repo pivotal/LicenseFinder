@@ -37,7 +37,7 @@ end
 
 desc "Configure ci pipeline"
 task :update_pipeline do
-  cmd = 'bash -c "fly -t osl set-pipeline -n -p LicenseFinder --config <(erb ci/pipeline.yml.erb)"'
+  cmd = 'bash -c "fly -t osl set-pipeline -n -p LicenseFinder --config <(erb ci/pipelines/pipeline.yml.erb)"'
   system(cmd)
 end
 task :spec     => :check_dependencies
