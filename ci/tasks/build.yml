@@ -3,14 +3,14 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: ddubson/rb-go-java-node-erl-py
-    tag: v2
+    repository: licensefinder/license_finder
+    tag: latest
 
 inputs:
 - name: LicenseFinder
 
 run:
-  path: ./LicenseFinder/ci/test.sh
+  path: ./LicenseFinder/ci/scripts/test.sh
 
 params:
   RUBY_VERSION:
