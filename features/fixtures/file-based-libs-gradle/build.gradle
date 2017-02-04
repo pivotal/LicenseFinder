@@ -14,5 +14,5 @@ dependencies {
         )
 
         // Import external libraries that are **not** available to download via repo
-        compile fileTree(dir: 'libs', include: '*.jar')
+        compile fileTree(dir: 'libs', include: ['*.jar'])
 }
