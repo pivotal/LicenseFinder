@@ -1,7 +1,14 @@
 # License Finder
 
-[![Build Status](https://secure.travis-ci.org/pivotal/LicenseFinder.png)](http://travis-ci.org/pivotal/LicenseFinder)
 [![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
+
+Build status
+* Ruby 2.1.5 [![Ruby 2.1.5 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.1.5/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.2.0 [![Ruby 2.2.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.2.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.3.0 [![Ruby 2.3.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.4.0 [![Ruby 2.4.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.0.4.0 [![JRuby 9.0.4.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.0.4.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+
 
 LicenseFinder works with your package managers to find dependencies,
 detect the licenses of the packages in them, compare those licenses
