@@ -12,22 +12,10 @@ module LicenseFinder
         .and_return(frameworks.join("\n"))
     end
 
-    def stub_license(hash = {})
-      hash.each_key do |key|
-        filename = project_path.join("Carthage/Checkouts/#{key}/LICENSE")
-        allow(IO).to receive(:read)
-          .with(filename)
-          .and_return(hash[key])
-
-        allow(File).to receive(:exists?)
-          .with(filename)
-          .and_return(true)
-      end
-    end
-
     def stub_license_md(hash = {})
       hash.each_key do |key|
-        filename = project_path.join("Carthage/Checkouts/#{key}/LICENSE.md")
+        license_pattern = project_path.join('Carthage', 'Checkouts', key, 'LICENSE*')
+        filename = project_path.join('Carthage', 'Checkouts', key, 'LICENSE.md')
         allow(IO).to receive(:read)
           .with(filename)
           .and_return(hash[key])
@@ -35,25 +23,17 @@ module LicenseFinder
         allow(File).to receive(:exists?)
           .with(filename)
           .and_return(true)
-      end
-    end
 
-    def stub_license_markdown(hash = {})
-      hash.each_key do |key|
-        filename = project_path.join("Carthage/Checkouts/#{key}/LICENSE.markdown")
-        allow(IO).to receive(:read)
-          .with(filename)
-          .and_return(hash[key])
-
-        allow(File).to receive(:exists?)
-          .with(filename)
-          .and_return(true)
+        allow(Dir).to receive(:glob)
+          .with(license_pattern, File::FNM_CASEFOLD)
+          .and_return([filename])
       end
     end
 
     before do
       allow(IO).to receive(:read).and_call_original
       allow(File).to receive(:exists?).and_return(false)
+      allow(Dir).to receive(:glob).and_return([])
     end
 
     describe '.current_packages' do

@@ -1,10 +1,8 @@
-require "json"
+require 'json'
 
 module LicenseFinder
   class Carthage < PackageManager
     def current_packages
-      cartfile = IO.read(resolved_path)
-
       cartfile.each_line.map do |line|
         name, version = name_version_from_line line
 
@@ -19,45 +17,35 @@ module LicenseFinder
     end
 
     def self.package_management_command
-      LicenseFinder::Platform.darwin? ? "carthage" : nil
+      LicenseFinder::Platform.darwin? ? 'carthage' : nil
     end
 
     private
+
+    def cartfile
+      @cartfile ||= IO.read(resolved_path)
+    end
 
     def package_path
       resolved_path
     end
 
-    def public_dependency_path
-      project_path.join("Cartfile")
-    end
-
-    def private_dependency_path
-      project_path.join("Cartfile.private")
-    end
-
     def resolved_path
-      project_path.join("Cartfile.resolved")
+      project_path.join('Cartfile.resolved')
     end
 
     def project_checkout(name)
-      project_path.join("Carthage/Checkouts/#{name}")
+      project_path.join('Carthage', 'Checkouts', name)
     end
 
     def license_text(name)
-      checkout_path = project_checkout name
-      plain_text_path = checkout_path.join('LICENSE')
-      md_path = checkout_path.join('LICENSE.md')
-      markdown_path = checkout_path.join('LICENSE.markdown')
-      license_path = nil
-      if File.exists?(plain_text_path)
-        license_path = plain_text_path
-      elsif File.exists?(md_path)
-        license_path = md_path
-      elsif File.exists?(markdown_path)
-        license_path = markdown_path
-      end
+      license_path = license_pattern(name).find { |f| File.exists?(f) }
       license_path.nil? ? nil : IO.read(license_path)
+    end
+
+    def license_pattern(name)
+      checkout_path = project_checkout(name)
+      Dir.glob(checkout_path.join('LICENSE*'), File::FNM_CASEFOLD)
     end
 
     def name_version_from_line(cartfile_line)
