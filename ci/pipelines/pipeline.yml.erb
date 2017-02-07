@@ -1,10 +1,20 @@
+resource_types:
+- name: pull-request
+  type: docker-image
+  source:
+    repository: jtarchie/pr
+
 resources:
 - name: LicenseFinder
   type: git
   source:
     uri: https://github.com/pivotal/LicenseFinder.git
     branch: master
-
+- name: PR
+  type: pull-request
+  source:
+    repo: pivotal/LicenseFinder
+    base: master
 
 jobs:
 <% ['2.4.0', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
@@ -15,6 +25,19 @@ jobs:
     trigger: true
   - task: ruby-<%= ruby_version %>
     file: LicenseFinder/ci/tasks/build.yml
+    params:
+      RUBY_VERSION: <%= ruby_version %>
+<% end %>
+
+<% ['2.4.0', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
+- name: pr-ruby-<%= ruby_version %>
+  public: true
+  plan:
+  - get: PR
+    trigger: true
+    version: every
+  - task: ruby-<%= ruby_version %>
+    file: PR/ci/tasks/build-pr.yml
     params:
       RUBY_VERSION: <%= ruby_version %>
 <% end %>
