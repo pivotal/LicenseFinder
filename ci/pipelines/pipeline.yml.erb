@@ -10,11 +10,14 @@ resources:
   source:
     uri: https://github.com/pivotal/LicenseFinder.git
     branch: master
-- name: PR
+- name: pull-request
   type: pull-request
   source:
     repo: pivotal/LicenseFinder
     base: master
+    <% if defined?(github_access_token) %>
+    access_token: <%= github_access_token %>
+    <% end %>
 
 jobs:
 <% ['2.4.0', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
@@ -30,14 +33,15 @@ jobs:
 <% end %>
 
 <% ['2.4.0', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
-- name: pr-ruby-<%= ruby_version %>
+- name: PR-ruby-<%= ruby_version %>
   public: true
   plan:
-  - get: PR
+  - get: pull-request
     trigger: true
     version: every
   - task: ruby-<%= ruby_version %>
-    file: PR/ci/tasks/build-pr.yml
+    file: pull-request/ci/tasks/build.yml
     params:
       RUBY_VERSION: <%= ruby_version %>
+    input_mapping: { LicenseFinder: pull-request }
 <% end %>

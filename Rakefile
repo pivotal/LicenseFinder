@@ -36,8 +36,16 @@ task :check_dependencies do
 end
 
 desc "Configure ci pipeline"
-task :update_pipeline do
-  cmd = 'bash -c "fly -t osl set-pipeline -n -p LicenseFinder --config <(erb ci/pipelines/pipeline.yml.erb)"'
+task :update_pipeline, [:github_access_token] do |_, args|
+  access_token = args[:github_access_token]
+
+  unless access_token
+    puts 'Warning: You should provide a Github access token with repo:status permission if you want to avoid rate limiting'
+  end
+
+  github_param = access_token ? "github_access_token=#{access_token}" : ''
+
+  cmd = "bash -c \"fly -t osl set-pipeline -n -p LicenseFinder --config <(erb #{github_param} ci/pipelines/pipeline.yml.erb)\""
   system(cmd)
 end
 task :spec     => :check_dependencies
