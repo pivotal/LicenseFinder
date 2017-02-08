@@ -2,6 +2,8 @@ require 'json'
 
 module LicenseFinder
   class Carthage < PackageManager
+    class CarthageError < RuntimeError; end
+
     def current_packages
       cartfile.each_line.map do |line|
         name, version = name_version_from_line line
@@ -23,11 +25,20 @@ module LicenseFinder
     private
 
     def cartfile
-      @cartfile ||= IO.read(resolved_path)
+      if File.exists?(resolved_path)
+        @cartfile ||= IO.read(resolved_path)
+      else
+        raise CarthageError.new('No Cartfile.resolved found.
+          Please install your dependencies first.')
+      end
     end
 
     def package_path
-      resolved_path
+      public_dependency_path
+    end
+
+    def public_dependency_path
+      project_path.join('Cartfile')
     end
 
     def resolved_path

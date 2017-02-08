@@ -208,11 +208,11 @@ module LicenseFinder
 
     class CarthageProject < Project
       def add_dep
-        install_fixture('Cartfile.resolved')
+        install_fixture('Cartfile')
       end
 
       def install
-        shell_out('carthage checkout')
+        shell_out('carthage bootstrap')
       end
     end
 

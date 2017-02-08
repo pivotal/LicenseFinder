@@ -37,31 +37,45 @@ module LicenseFinder
     end
 
     describe '.current_packages' do
-      it 'lists all the current packages' do
-        stub_resolved([
-          'github "younata/Lepton" "92a21f46f12f2ec6a814aedc30a51e551d42a573"',
-          'github "pivotal/PivotalCoreKit" "v0.3.4"',
-          'git "https://example.com/dependency.git" "v0.1.0"'
-        ])
+      context 'when carthage already ran and Cartfile.resolved exists' do
+        before do
+          allow(File).to receive(:exists?).and_return(true)
+        end
 
-        expect(carthage.current_packages.map { |p| [p.name, p.version] }).to eq [
-          ['Lepton', '92a21f46f12f2ec6a814aedc30a51e551d42a573'],
-          ['PivotalCoreKit', 'v0.3.4'],
-          ['dependency', 'v0.1.0']
-        ]
+        it 'lists all the current packages' do
+          stub_resolved([
+                            'github "younata/Lepton" "92a21f46f12f2ec6a814aedc30a51e551d42a573"',
+                            'github "pivotal/PivotalCoreKit" "v0.3.4"',
+                            'git "https://example.com/dependency.git" "v0.1.0"'
+                        ])
+
+          expect(carthage.current_packages.map { |p| [p.name, p.version] }).to eq [
+                                                                                      ['Lepton', '92a21f46f12f2ec6a814aedc30a51e551d42a573'],
+                                                                                      ['PivotalCoreKit', 'v0.3.4'],
+                                                                                      ['dependency', 'v0.1.0']
+                                                                                  ]
+        end
+
+        it 'passes the license text to the package' do
+          stub_resolved(['github "pivotal/PivotalCoreKit" "v0.3.4"'])
+          stub_license_md({'PivotalCoreKit' => 'The MIT License'})
+
+          expect(carthage.current_packages.first.licenses.map(&:name)).to eq ['MIT']
+        end
+
+        it 'handles no licenses' do
+          stub_resolved(['github "pivotal/PivotalCoreKit" "v0.3.4"'])
+
+          expect(carthage.current_packages.first.licenses.map(&:name)).to eq ['unknown']
+        end
       end
 
-      it 'passes the license text to the package' do
-        stub_resolved(['github "pivotal/PivotalCoreKit" "v0.3.4"'])
-        stub_license_md({'PivotalCoreKit' => 'The MIT License'})
-
-        expect(carthage.current_packages.first.licenses.map(&:name)).to eq ['MIT']
-      end
-
-      it 'handles no licenses' do
-        stub_resolved(['github "pivotal/PivotalCoreKit" "v0.3.4"'])
-
-        expect(carthage.current_packages.first.licenses.map(&:name)).to eq ['unknown']
+      context 'when carthage did not run yet' do
+        it 'raises an exception to explain the reason' do
+          expect {
+            carthage.current_packages.first.licenses.map(&:name)
+          }.to raise_exception(Carthage::CarthageError)
+        end
       end
     end
   end

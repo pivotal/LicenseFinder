@@ -54,6 +54,7 @@ To successfully run the test suite, you will need the following installed:
 - GoDep, GoWorkspace, and GoVendor (requires golang)
 - CocoaPods (requires ruby)
 - Bundler (requires ruby)
+- Carthage (requires homebrew)
 
 If you run `rake check_dependencies`, you'll see exactly which package managers
 you're missing.

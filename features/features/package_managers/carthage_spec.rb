@@ -9,6 +9,6 @@ describe 'Carthage Dependencies', ios: true do
   specify 'are shown in reports' do
     LicenseFinder::TestingDSL::CarthageProject.create
     apple_platform_developer.run_license_finder
-    expect(apple_platform_developer).to be_seeing_line 'DSWaveformImage, 3.0.1, MIT'
+    expect(apple_platform_developer).to be_seeing_line 'DSWaveformImage, 1.1.2, MIT'
   end
 end

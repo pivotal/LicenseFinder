@@ -116,7 +116,7 @@ languages, as long as that language has a package definition in the project dire
 * `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
 * `Podfile` (for CocoaPods)
-* `Cartfile.resolved` (for Carthage)
+* `Cartfile` (for Carthage)
 * `rebar.config` (for `rebar`)
 * `packages/` directory (for `Nuget`)
 
