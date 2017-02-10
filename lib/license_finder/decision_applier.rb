@@ -20,11 +20,15 @@ module LicenseFinder
     attr_reader :decisions
 
     def apply_decisions(system_packages)
-      all_packages = decisions.packages + system_packages
-      all_packages
-        .map { |package| with_decided_licenses(package) }
-        .map { |package| with_approval(package) }
-        .reject { |package| ignored?(package) }
+      [].tap do |packages|
+        all_packages = decisions.packages + system_packages
+        all_packages.each do |_pkg|
+          pkg = with_decided_licenses(_pkg)
+          package = with_approval(pkg)
+          next if ignored?(package)
+          packages << package
+        end
+      end
     end
 
     def ignored?(package)
