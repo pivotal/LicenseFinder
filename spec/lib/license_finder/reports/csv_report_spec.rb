@@ -58,5 +58,44 @@ module LicenseFinder
         expect(subject.to_s).to eq("gem_a,1.0,\"development,production\"\n")
       end
     end
+
+    context "when no parents are specified" do
+      let( :dep ) { Package.new('gem_a', '1.0') }
+      subject { described_class.new([dep], columns: %w[name version parents]) }
+
+      it 'supports a parents column' do
+        expect(subject.to_s).to eq("gem_a,1.0,\"\"\n")
+      end
+    end
+
+    context "when some parents are specified" do
+      dep = Package.new('gem_a', '1.0')
+      dep.parents << "gem_b"
+      dep.parents << "gem_c"
+      subject { described_class.new([dep], columns: %w[name version parents]) }
+
+      it 'supports a parents column' do
+        expect(subject.to_s).to eq("gem_a,1.0,\"gem_b,gem_c\"\n")
+      end
+    end
+
+    context "when no children are specified" do
+      let( :dep ) { Package.new('gem_a', '1.0') }
+      subject { described_class.new([dep], columns: %w[name version children]) }
+
+      it 'supports the children column' do
+        expect(subject.to_s).to eq("gem_a,1.0,\"\"\n")
+      end
+    end
+
+    context "when some children are specified" do
+      let( :dep ) { Package.new('gem_a', '1.0', children: %w[gem_b gem_c]) }
+      subject { described_class.new([dep], columns: %w[name version children]) }
+
+      it 'supports the children column' do
+        expect(subject.to_s).to eq("gem_a,1.0,\"gem_b,gem_c\"\n")
+      end
+    end
+
   end
 end
