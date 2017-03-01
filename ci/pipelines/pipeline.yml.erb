@@ -1,8 +1,17 @@
+<% setup_slack = defined?(slack_url) && defined?(slack_channel) %>
+
 resource_types:
 - name: pull-request
   type: docker-image
   source:
     repository: jtarchie/pr
+<% if setup_slack %>
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+<% end %>
 
 resources:
 - name: LicenseFinder
@@ -18,6 +27,12 @@ resources:
     <% if defined?(github_access_token) %>
     access_token: <%= github_access_token %>
     <% end %>
+<% if setup_slack %>
+- name: slack-alert
+  type: slack-notification
+  source:
+    url: <%= slack_url %>
+<% end %>
 
 jobs:
 <% ['2.4.0', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
@@ -30,6 +45,14 @@ jobs:
     file: LicenseFinder/ci/tasks/build.yml
     params:
       RUBY_VERSION: <%= ruby_version %>
+<% if setup_slack %>
+  on_failure:
+    put: slack-alert
+    params:
+      channel: '<%= slack_channel %>'
+      icon_emoji: ':crying_cat_face:'
+      text: '<%= "License Finder build failed. Build: https://osl.ci.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
+<% end %>
 <% end %>
 
 <% ['2.4.0', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
@@ -44,4 +67,12 @@ jobs:
     params:
       RUBY_VERSION: <%= ruby_version %>
     input_mapping: { LicenseFinder: pull-request }
+<% if setup_slack %>
+  on_failure:
+    put: slack-alert
+    params:
+      channel: '<%= slack_channel %>'
+      icon_emoji: ':crying_cat_face:'
+      text: '<%= "License Finder build failed. Build: https://osl.ci.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
+<% end %>
 <% end %>
