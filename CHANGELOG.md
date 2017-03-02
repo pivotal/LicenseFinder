@@ -1,4 +1,4 @@
-# not yet released
+# 3.0.0 / 2016-03-02
 
 Features:
 
@@ -8,6 +8,9 @@ Features:
 * Package managers determine their package management command (#250, Thanks @sschuberth!)
 * Support --ignored_groups for maven
 * Support `homepage` column for godeps dependencies, and dependencies from go workspaces using `.envrc`
+* Support `license_links` column for csv option (#281, Thanks @lbalceda!)
+* Added a Dockerfile for [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
+* Switched from Travis to Concourse
 
 Bugfixes:
 
@@ -18,7 +21,11 @@ Bugfixes:
 * Use maven wrapper if available on maven projects
 * Check golang package lists against standard packages instead of excluding short package paths (#243)
 * Update the project_sha method to return the sha of the dependency, not the parent project
-
+* Change Maven wrapper to call mvn.cmd and fall back on mvn.bat (#263, Thanks @sschuberth!)
+* Allow bower to run as root
+* Fix packaging errors scanning pip based projects
+* Add JSON lib attribute to handle deeply nested JSON (#269. Thanks, @antongurov!)
+* Use the fully qualified name of the license-maven-plugin (#284)
 
 # 2.1.2 / 2016-06-10
 
