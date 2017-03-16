@@ -13,6 +13,13 @@ task :spec do
   end
 end
 
+desc "Only run cocoapods specs"
+RSpec::Core::RakeTask.new("spec:cocoapods") do |t|
+  t.fail_on_error = true
+  t.pattern = "./spec/lib/license_finder/package_managers/cocoa_pods_*spec.rb"
+  t.rspec_opts = %w[--color]
+end
+
 desc "Run all specs in features/"
 task :features do
   RSpec::Core::RakeTask.new(:features) do |t|
