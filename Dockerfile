@@ -18,7 +18,7 @@ RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
 # install bundler
-RUN bash -lc "rvm install 2.3.3 && rvm use 2.3.3 && gem install bundler"
+RUN bash -lc "rvm install 2.4.0 && rvm use 2.4.0 && gem install bundler"
 
 #install java 8
 #http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
