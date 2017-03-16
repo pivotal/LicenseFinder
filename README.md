@@ -17,6 +17,8 @@ report.
 
 * code: https://github.com/pivotal/LicenseFinder
 * ci: https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder
+* docker: [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
+  * the docker image contains all the package managers needed to run `license_finder`
 * support:
   * license-finder@googlegroups.com
   * https://groups.google.com/forum/#!forum/license-finder

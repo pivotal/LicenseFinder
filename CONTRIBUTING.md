@@ -8,6 +8,18 @@
 * Rebase on top of master.
 * Send a pull request.
 
+## Running Tests
+
+You can use the [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) to run the tests.
+
+```
+$ docker run -it licensefinder/license_finder /bin/bash --login
+
+# inside the container...
+
+$ cd /LicenseFinder
+$ rake
+```
 
 ## Adding Package Managers
 
@@ -44,7 +56,8 @@ If you come up with something useful, consider posting it to the Google Group
 
 
 ## Development Dependencies
-To successfully run the test suite, you will need the following installed: 
+
+To successfully run the test suite, you will need the following installed:
 - NPM (requires Node)
 - Bower (requires Node and NPM)
 - Maven (requires Java)
@@ -55,8 +68,9 @@ To successfully run the test suite, you will need the following installed:
 - CocoaPods (requires ruby)
 - Bundler (requires ruby)
 
-If you run `rake check_dependencies`, you'll see exactly which package managers
-you're missing.
+The [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) already contains these dependencies.
+
+If you run `rake check_dependencies`, you'll see exactly which package managers you're missing.
 
 ### Python
 
