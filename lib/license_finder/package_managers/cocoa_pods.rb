@@ -40,19 +40,15 @@ module LicenseFinder
     end
 
     def acknowledgements_path
-      filename = 'Pods-acknowledgements.plist'
-      directories = [
-        'Pods',                          # cocoapods < 0.34
-        'Pods/Target Support Files/Pods' # cocoapods >= 0.34
-      ]
+      search_paths = [ "Pods/Pods-acknowledgements.plist",
+                       "Pods/Target Support Files/Pods/Pods-acknowledgements.plist",
+                       "Pods/Target Support Files/Pods-*/Pods-*-acknowledgements.plist" ]
 
-      directories
-        .map { |dir| project_path.join(dir, filename) }
-        .find(&:exist?)
+      Dir[*search_paths.map {|path| File.join(project_path, path) }].first
     end
 
     def read_plist pathname
-      JSON.parse(`plutil -convert json -o - '#{pathname.expand_path}'`)
+      JSON.parse(`plutil -convert json -o - '#{pathname}'`)
     end
   end
 end
