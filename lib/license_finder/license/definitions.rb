@@ -11,6 +11,8 @@ module LicenseFinder
           gplv3,
           isc,
           lgpl,
+          lgpl2,
+          lgpl3,
           mit,
           mpl2,
           newbsd,
@@ -34,8 +36,8 @@ module LicenseFinder
         License.new(
           short_name:  "Apache2",
           pretty_name: "Apache 2.0",
+          spdx:        "Apache-2.0",
           other_names: [
-            "Apache-2.0",
             "Apache Software License",
             "Apache License 2.0",
             "Apache License Version 2.0",
@@ -60,6 +62,7 @@ module LicenseFinder
       def gplv2
         License.new(
           short_name:  "GPLv2",
+          spdx:        "GPL-2.0",
           other_names: ["GPL V2", "gpl-v2", "GNU GENERAL PUBLIC LICENSE Version 2"],
           url:         "http://www.gnu.org/licenses/gpl-2.0.txt"
         )
@@ -68,6 +71,7 @@ module LicenseFinder
       def gplv3
         License.new(
           short_name:  "GPLv3",
+          spdx:        "GPL-3.0",
           other_names: ["GPL V3", "gpl-v3", "GNU GENERAL PUBLIC LICENSE Version 3"],
           url:         "http://www.gnu.org/licenses/gpl-3.0.txt"
         )
@@ -76,6 +80,7 @@ module LicenseFinder
       def isc
         License.new(
           short_name: "ISC",
+          spdx:       "ISC",
           url:        "http://en.wikipedia.org/wiki/ISC_license"
         )
       end
@@ -83,8 +88,27 @@ module LicenseFinder
       def lgpl
         License.new(
           short_name:  "LGPL",
+          spdx:        "LGPL-3.0",
           other_names: ["LGPL-3", "LGPLv3", "LGPL-3.0"],
           url:         "http://www.gnu.org/licenses/lgpl.txt"
+        )
+      end
+
+      def lgpl2
+        License.new(
+          short_name:  "LGPL3",
+          spdx:        "LGPL-3.0",
+          other_names: ["LGPL-3", "LGPLv3", "LGPL-3.0"],
+          url:         "https://www.gnu.org/licenses/old-licenses/lgpl-2.0-standalone.html"
+        )
+      end
+
+      def lgpl3
+        License.new(
+          short_name:  "LGPL3",
+          spdx:        "LGPL-3.0",
+          other_names: ["LGPL-3", "LGPLv3", "LGPL-3.0"],
+          url:         "https://www.gnu.org/licenses/lgpl-3.0-standalone.html"
         )
       end
 
@@ -102,6 +126,7 @@ module LicenseFinder
 
         License.new(
           short_name:  "MIT",
+          spdx:        "MIT",
           other_names: ["Expat", "MIT license", "MIT License"],
           url:         "http://opensource.org/licenses/mit-license",
           matcher:     matcher
@@ -118,6 +143,7 @@ module LicenseFinder
 
         License.new(
           short_name:  "MPL2",
+          spdx:        "MPL-2.0",
           pretty_name: "Mozilla Public License 2.0",
           other_names: [
             "MPL-2.0",
@@ -143,6 +169,7 @@ module LicenseFinder
         License.new(
           short_name:  "NewBSD",
           pretty_name: "New BSD",
+          spdx:        "BSD-3-Clause",
           other_names: ["Modified BSD", "BSD3", "BSD-3", "3-clause BSD", "BSD-3-Clause"],
           url:         "http://opensource.org/licenses/BSD-3-Clause",
           matcher:     matcher
@@ -152,6 +179,7 @@ module LicenseFinder
       def python
         License.new(
           short_name:  "Python",
+          spdx:        "Python-2.0",
           pretty_name: "Python Software Foundation License",
           other_names: ["PSF"],
           url:         "http://hg.python.org/cpython/raw-file/89ce323357db/LICENSE"
@@ -169,6 +197,7 @@ module LicenseFinder
         License.new(
           short_name:  "Ruby",
           pretty_name: "ruby",
+          spdx:        "Ruby",
           url:         url,
           matcher:     matcher
         )
@@ -178,6 +207,7 @@ module LicenseFinder
         License.new(
           short_name:  "SimplifiedBSD",
           pretty_name: "Simplified BSD",
+          spdx:        "BSD-2-Clause",
           other_names: ["FreeBSD", "2-clause BSD", "BSD-2-Clause", "BSD 2-Clause"],
           url:         "http://opensource.org/licenses/bsd-license"
         )
