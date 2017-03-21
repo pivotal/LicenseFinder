@@ -54,9 +54,20 @@ module LicenseFinder
           FileUtils.touch 'app/vendor/package.nupkg'
         end
 
-        it "returns vendored director" do
+        it "returns vendored directory" do
           nuget = Nuget.new project_path: Pathname.new("app")
           expect(nuget.package_path).to eq Pathname('/app/vendor')
+        end
+      end
+
+      context 'when vendor and .nuget are not present but a packages directory exists' do
+        before do
+          FileUtils.mkdir_p 'app/packages'
+        end
+
+        it "returns the packages directory" do
+          nuget = Nuget.new project_path: Pathname.new("app")
+          expect(nuget.package_path).to eq Pathname('app/packages')
         end
       end
     end
