@@ -2,6 +2,14 @@ require 'spec_helper'
 
 module LicenseFinder
   describe DecisionApplier do
+    it "reports nothing found" do
+      decision_applier = described_class.new(
+        decisions: Decisions.new,
+        packages: []
+      )
+      expect(decision_applier.any_packages?).to be false
+    end
+
     describe "#acknowledged" do
       it "combines manual and system packages" do
         decision_applier = described_class.new(

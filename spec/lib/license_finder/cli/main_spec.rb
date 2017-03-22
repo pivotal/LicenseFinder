@@ -12,9 +12,10 @@ module LicenseFinder
         )
       end
       let(:configuration) { double(:configuration, valid_project_path?: true) }
-      let(:license_finder_instance) { double(:license_finder, unapproved: [unapproved_dependency], blacklisted: [], project_name: 'taco stand', config: configuration) }
+      let(:found_any_packages) { true }
+      let(:license_finder_instance) { double(:license_finder, unapproved: unapproved_dependencies, blacklisted: [], project_name: 'taco stand', config: configuration, any_packages?: found_any_packages) }
       let(:license) { double(:license, name: "thing") }
-      let(:unapproved_dependency) { double(:dependency, name: "a dependency", version: "2.4.1", missing?: false, licenses: [license]) }
+      let(:unapproved_dependencies) { [double(:dependency, name: "a dependency", version: "2.4.1", missing?: false, licenses: [license])] }
 
       before do
         allow(Decisions).to receive(:fetch_saved) { decisions }
@@ -24,7 +25,7 @@ module LicenseFinder
       describe "default" do
         it "checks for action items" do
           decisions.add_package("a dependency", nil)
-          expect_any_instance_of(LicenseFinder::Core).to receive(:unapproved).and_return([unapproved_dependency])
+          expect_any_instance_of(LicenseFinder::Core).to receive(:unapproved).and_return(unapproved_dependencies)
           silence_stdout do
             expect { described_class.start(["--quiet"]) }.to raise_error(SystemExit)
           end
@@ -183,6 +184,21 @@ module LicenseFinder
           subject.action_items
         end
 
+        context "with a directory that doesn't have any detected packages" do
+          let(:found_any_packages) { false }
+
+          before do
+            allow(LicenseFinder::Core).to receive(:new).and_return(license_finder_instance)
+          end
+
+          it "reports that no packages were found" do
+            result = capture_stdout do
+              expect { action_items }.to raise_error(SystemExit)
+            end
+            expect(result).to match /no dependencies recognized/i
+          end
+        end
+
         context "with unapproved dependencies" do
           let(:packages) { [Package.new('one dependency')] }
 
@@ -207,11 +223,19 @@ module LicenseFinder
           end
         end
 
-        it "reports that all dependencies are approved" do
-          result = capture_stdout do
-            expect { action_items }.not_to raise_error
+        context "with no unapproved dependencies" do
+          let(:unapproved_dependencies) {[]}
+
+          before do
+            allow(LicenseFinder::Core).to receive(:new).and_return(license_finder_instance)
           end
-          expect(result).to match /approved/i
+
+          it "reports that all dependencies are approved" do
+            result = capture_stdout do
+              expect { action_items }.not_to raise_error
+            end
+            expect(result).to match /approved/i
+          end
         end
       end
     end
