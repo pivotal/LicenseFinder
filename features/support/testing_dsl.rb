@@ -181,7 +181,10 @@ module LicenseFinder
       end
 
       def install
-        shell_out("GOPATH=#{project_dir}/gopath godep restore")
+        orig_gopath = ENV['GOPATH']
+        ENV['GOPATH'] = "#{project_dir}/gopath"
+        shell_out("godep restore")
+        ENV['GOPATH'] = orig_gopath
       end
 
       def shell_out(command)
