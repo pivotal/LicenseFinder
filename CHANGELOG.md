@@ -1,3 +1,9 @@
+# Not Yet Released:
+
+Bugfixes:
+
+* Restore the original GOPATH after modifying it (#287, thanks @sschuberth!)
+
 # 3.0.0 / 2016-03-02
 
 Features:
