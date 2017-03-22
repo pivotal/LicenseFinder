@@ -3,6 +3,7 @@
 Bugfixes:
 
 * Restore the original GOPATH after modifying it (#287, thanks @sschuberth!)
+* LF doesn't recognize .NET projects using 'packages' directory (#290, #292, thanks @bspeck!)
 
 # 3.0.0 / 2016-03-02
 
