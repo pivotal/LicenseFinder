@@ -351,7 +351,11 @@ module LicenseFinder
       end
 
       def install_fixture(fixture_name)
-        join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
+        if Platform.windows?
+          FileUtils.cp(Paths.fixtures.join(fixture_name), join(fixture_name))
+        else
+          join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
+        end
       end
 
       def make
