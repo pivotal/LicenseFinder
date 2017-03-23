@@ -121,7 +121,7 @@ module LicenseFinder
       end
 
       def install
-        shell_out("npm install 2>/dev/null")
+        shell_out("npm install 2>#{Shell.null_device}")
       end
     end
 
@@ -131,7 +131,7 @@ module LicenseFinder
       end
 
       def install
-        shell_out("bower install --allow-root 2>/dev/null")
+        shell_out("bower install --allow-root 2>#{Shell.null_device}")
       end
     end
 
@@ -425,6 +425,10 @@ EOM
         end
 
         return [output, status.exitstatus]
+      end
+
+      def self.null_device
+        Platform.windows? ? 'NUL' : '/dev/null'
       end
     end
   end
