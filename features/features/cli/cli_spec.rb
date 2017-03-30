@@ -36,7 +36,7 @@ describe "License Finder command line executable" do
 
     developer.run_license_finder
     expect(developer).to be_receiving_exit_code(0)
-    expect(developer).to be_seeing 'All dependencies are approved for use'
+    expect(developer).to be_seeing 'No dependencies recognized!'
   end
 
   specify "displays an error if project_path does not exist" do
