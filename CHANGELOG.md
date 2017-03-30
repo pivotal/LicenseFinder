@@ -5,6 +5,8 @@ Bugfixes:
 * Restore the original GOPATH after modifying it (#287, thanks @sschuberth!)
 * LF doesn't recognize .NET projects using 'packages' directory (#290, #292, thanks @bspeck!)
 * Use glob for finding acknowledgements path for CocoaPods (#177, #288, thanks @aditya87!)
+* Fix some failing tests on Windows (#294, thanks @sschuberth!)
+* Add warning message if no dependencies are recognized (#293, thanks @bspeck!)
 
 # 3.0.0 / 2016-03-02
 
