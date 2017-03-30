@@ -43,7 +43,7 @@ module LicenseFinder
 
         unless any_packages
           say "No dependencies recognized!", :red
-          exit 1
+          exit 0
         end
 
         if unapproved.empty?

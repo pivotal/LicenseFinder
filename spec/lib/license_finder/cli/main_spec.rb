@@ -191,7 +191,7 @@ module LicenseFinder
             allow(LicenseFinder::Core).to receive(:new).and_return(license_finder_instance)
           end
 
-          it "reports that no packages were found" do
+          it "reports that no dependencies were recognized" do
             result = capture_stdout do
               expect { action_items }.to raise_error(SystemExit)
             end
