@@ -6,7 +6,7 @@ Build status
 * Ruby 2.1.5 [![Ruby 2.1.5 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.1.5/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.2.0 [![Ruby 2.2.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.2.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.3.0 [![Ruby 2.3.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.4.0 [![Ruby 2.4.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.4.1 [![Ruby 2.4.1 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.1/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
 * JRuby 9.0.4.0 [![JRuby 9.0.4.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.0.4.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
