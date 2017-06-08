@@ -2,7 +2,6 @@ require 'bundler'
 Bundler::GemHelper.install_tasks
 
 require './lib/license_finder/platform'
-require 'rspec/core/rake_task'
 
 desc "Run all specs in spec/"
 task :spec do
