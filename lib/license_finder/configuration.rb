@@ -37,6 +37,10 @@ module LicenseFinder
       get(:maven_include_groups)
     end
 
+    def maven_options
+      get(:maven_options)
+    end
+
     def rebar_command
       get(:rebar_command)
     end

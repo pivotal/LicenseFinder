@@ -32,6 +32,7 @@ module LicenseFinder
           :gradle_command,
           :gradle_include_groups,
           :maven_include_groups,
+          :maven_options,
           :rebar_command,
           :rebar_deps_dir,
           :save
@@ -70,4 +71,3 @@ module LicenseFinder
     end
   end
 end
-
