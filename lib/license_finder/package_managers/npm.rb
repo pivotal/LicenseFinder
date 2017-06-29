@@ -1,4 +1,5 @@
-require 'json'
+require 'yajl'
+require 'tempfile'
 
 module LicenseFinder
   class NPM < PackageManager
@@ -33,8 +34,8 @@ module LicenseFinder
       DEPENDENCY_GROUPS.map do |group|
         package_json.fetch(group, {}).keys.map do |dependency|
           {
-            group: group,
-            name: dependency
+              group: group,
+              name: dependency
           }
         end
       end.flatten
@@ -42,7 +43,7 @@ module LicenseFinder
 
     def walk_dependency_tree(dependency, &block)
       @json ||= npm_json
-      deps = @json.fetch("dependencies", {}).reject { |_,d| d.is_a?(String) }
+      deps = @json.fetch("dependencies", {}).reject { |_, d| d.is_a?(String) }
       current_dep = deps[dependency]
       block.call(current_dep) if current_dep
       recursive_dependencies(current_dep) do |d|
@@ -51,24 +52,29 @@ module LicenseFinder
     end
 
     def npm_json
-      command = "#{NPM::package_management_command} list --json --long"
-      output, success = Dir.chdir(project_path) { capture(command) }
+      tempfile = Tempfile.new
+      begin
+        command = "#{NPM::package_management_command} list --json --long > #{tempfile.path}"
+        output, success = Dir.chdir(project_path) { capture(command) }
 
-      if success
-        json = JSON(output, :max_nesting => false)
-      else
-        json = begin
-                 JSON(output, :max_nesting => false)
-               rescue JSON::ParserError
-                 nil
-               end
-        if json
-          $stderr.puts "Command '#{command}' returned an error but parsing succeeded."
+        if success
+          json = Yajl::Parser.parse(File.open(tempfile.path))
         else
-          raise "Command '#{command}' failed to execute: #{output}"
+          json = begin
+            Yajl::Parser.parse(File.open(tempfile.path))
+          rescue Yajl::ParseError
+            nil
+          end
+          if json
+            $stderr.puts "Command '#{command}' returned an error but parsing succeeded."
+          else
+            raise "Command '#{command}' failed to execute: #{output}"
+          end
         end
+      ensure
+        tempfile.close
+        tempfile.unlink
       end
-
       json
     end
 

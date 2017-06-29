@@ -43,6 +43,7 @@ Gem::Specification.new do |s|
   s.add_dependency "httparty"
   s.add_dependency "xml-simple"
   s.add_dependency "rubyzip"
+  s.add_dependency "yajl-ruby"
   # to preserve ruby 1.9.3 support
   s.add_dependency 'with_env', ((RUBY_VERSION <= '1.9.3') ? '1.0.0' : '> 1.0')
 
