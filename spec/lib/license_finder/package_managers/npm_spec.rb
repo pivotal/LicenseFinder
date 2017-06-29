@@ -86,9 +86,14 @@ module LicenseFinder
       include FakeFS::SpecHelpers
       before do
         NPM.instance_variable_set(:@modules, nil)
+        FileUtils.mkdir_p(Dir.tmpdir)
         FileUtils.mkdir_p(root)
         File.write(File.join(root, "package.json"), package_json)
-        allow(npm).to receive(:capture).with(/npm/).and_return([dependency_json, true])
+        allow(npm).to receive(:capture) do |command|
+          filename = command.scan(/> (.*)$/).last.first
+          File.write(filename, dependency_json)
+          ['', true]
+        end
       end
 
       it 'fetches data from npm' do
@@ -117,7 +122,11 @@ module LicenseFinder
         JSON
 
         allow(Dir).to receive(:chdir).with(Pathname('/fake-node-project')) { |&block| block.call }
-        allow(npm).to receive(:capture).with('npm list --json --long').and_return([json, true])
+        allow(npm).to receive(:capture) do |command|
+          filename = command.scan(/> (.*)$/).last.first
+          File.write(filename, json)
+          ['', true]
+        end
 
         current_packages = npm.current_packages
         expect(current_packages.map(&:name)).to eq([])
@@ -129,7 +138,11 @@ module LicenseFinder
       end
 
       it "does not fail when command fails but produces output" do
-        allow(npm).to receive(:capture).with(/npm/).and_return('{"foo":"bar"}', false).once
+        allow(npm).to receive(:capture) do |command|
+          filename = command.scan(/> (.*)$/).last.first
+          File.write(filename, '{"foo":"bar"}')
+          ['', false]
+        end
         silence_stderr { npm.current_packages }
       end
 
