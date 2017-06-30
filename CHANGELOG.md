@@ -7,6 +7,7 @@ Bugfixes:
 * Use glob for finding acknowledgements path for CocoaPods (#177, #288, thanks @aditya87!)
 * Fix some failing tests on Windows (#294, thanks @sschuberth!)
 * Add warning message if no dependencies are recognized (#293, thanks @bspeck!)
+* Switch to YAJL for parsing the json output from npm using a tmp file rather than an in-memory string (#301, #304)
 
 # 3.0.0 / 2016-03-02
 
