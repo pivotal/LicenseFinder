@@ -31,6 +31,7 @@ module LicenseFinder
           gradle_command: configuration.gradle_command,
           gradle_include_groups: nil,
           maven_include_groups: nil,
+          maven_options: nil,
           rebar_command: configuration.rebar_command,
           rebar_deps_dir: configuration.rebar_deps_dir
         }
