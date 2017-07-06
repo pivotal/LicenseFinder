@@ -1,5 +1,9 @@
 # Not Yet Released:
 
+Features:
+
+* Add --maven-options to allow options for maven scans (#305, thanks @jgielstra!)
+
 Bugfixes:
 
 * Restore the original GOPATH after modifying it (#287, thanks @sschuberth!)
