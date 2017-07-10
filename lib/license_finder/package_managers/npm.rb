@@ -10,6 +10,8 @@ module LicenseFinder
       direct_dependencies.each do |dep|
         group_name = dep[:group]
         walk_dependency_tree(dep[:name]) do |dependency|
+          # Skip dependency if the license is declared elsewhere
+          next if dependency['licenses'] == '[Circular]'
           package_id = dependency["name"]
           if packages[package_id] && packages[package_id].version.nil? && dependency["version"]
             old_package = packages[package_id]

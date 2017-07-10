@@ -10,7 +10,7 @@ ENV PATH=/usr/local/rvm/bin:$PATH
 RUN apt-get install -y build-essential wget unzip
 
 # nodejs seems to be required for the one of the gems
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get -y install nodejs
 
 # install bower
