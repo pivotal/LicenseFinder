@@ -6,51 +6,26 @@ module LicenseFinder
     DEPENDENCY_GROUPS = ["dependencies", "devDependencies"]
 
     def current_packages
-      packages = {}
-      direct_dependencies.each do |dep|
-        group_name = dep[:group]
-        walk_dependency_tree(dep[:name]) do |dependency|
-          # Skip dependency if the license is declared elsewhere
-          next if dependency['licenses'] == '[Circular]'
-          package_id = dependency["name"]
-          if packages[package_id] && packages[package_id].version.nil? && dependency["version"]
-            old_package = packages[package_id]
-            packages[package_id] = NpmPackage.new(dependency, logger: logger, groups: old_package.groups)
-          else
-            packages[package_id] ||= NpmPackage.new(dependency, logger: logger)
-          end
-          packages[package_id].groups << group_name unless packages[package_id].groups.include?(group_name)
+      top_level_deps = npm_json['dependencies']&.values || []
+      package_json = JSON.parse(File.read(package_path), :max_nesting => false)
+      top_level_deps.each do |dep|
+        dep['groups'] = DEPENDENCY_GROUPS.select do |group|
+          package_json[group]&.keys&.include? dep['name']
         end
       end
-      packages.values
+      dependency_matches = flatten(top_level_deps)
+      dependency_matches = dependency_matches.group_by {|dep| [dep['name'], dep['version']]}
+      dependency_matches.map {|id, dep_matches| construct_npm_package(dep_matches, id)}
     end
+
+    private
 
     def self.package_management_command
       "npm"
     end
 
-    private
-
-    def direct_dependencies
-      package_json = JSON.parse(File.read(package_path), :max_nesting => false)
-      DEPENDENCY_GROUPS.map do |group|
-        package_json.fetch(group, {}).keys.map do |dependency|
-          {
-              group: group,
-              name: dependency
-          }
-        end
-      end.flatten
-    end
-
-    def walk_dependency_tree(dependency, &block)
-      @json ||= npm_json
-      deps = @json.fetch("dependencies", {}).reject { |_, d| d.is_a?(String) }
-      current_dep = deps[dependency]
-      block.call(current_dep) if current_dep
-      recursive_dependencies(current_dep) do |d|
-        block.call(d)
-      end
+    def package_path
+      project_path.join('package.json')
     end
 
     def npm_json
@@ -80,17 +55,41 @@ module LicenseFinder
       json
     end
 
-    def package_path
-      project_path.join('package.json')
+    def flatten(list)
+      list.inject [] {|acc, dep| acc + [dep] + flatten(dep['dependencies']&.values&.map {|inner_dep| inner_dep['groups'] = dep['groups']; inner_dep} || [])}
     end
 
-    def recursive_dependencies(node_module, &block)
-      return unless node_module # node_module can be empty hash if it is included elsewhere
-      block.call(node_module)
-      node_module.fetch('dependencies', {}).each do |dep_key, data|
-        data['name'] ||= dep_key
-        recursive_dependencies(data, &block)
+    def licenses(dep_matches)
+      licenses_lists = dep_matches.map do |match|
+        match['licenses']
       end
+
+      licenses_lists.reject! {|licenses| licenses.nil? || licenses == '[Circular]'}
+      licenses_lists = licenses_lists.uniq
+      case licenses_lists.count
+        when 0
+          dep_matches.map {|dep_match| dep_match['license']}.reject(&:nil?).uniq
+        when 1
+          licenses_lists.first.map {|license| license['type']}
+        else
+          raise "Varying lists of licenses provided for #{dep_matches.first['name']} (#{dep_matches.first['version']})"
+      end
+    end
+
+    def construct_npm_package(dep_matches, id)
+      name, version = id
+      homepage = dep_matches.map {|match| match['homepage']}.reject(&:nil?).uniq&.first
+      description = dep_matches.map {|match| match['description']}.reject(&:nil?).uniq&.first
+      package = NpmPackage.new({'name' => name,
+                                'version' => version,
+                                'homepage' => homepage,
+                                'description' => description,
+                                'licenses' => licenses(dep_matches)},
+                               logger: logger)
+      dep_matches.map {|match| match['groups']}.flatten.uniq.each {|group|
+        package.groups << group
+      }
+      package
     end
   end
 end
