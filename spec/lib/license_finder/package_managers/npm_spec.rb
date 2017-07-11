@@ -146,6 +146,27 @@ module LicenseFinder
         silence_stderr { npm.current_packages }
       end
 
+      context "npm circular license edge case - GH#307" do
+        let(:package_json) do
+          FakeFS.without do
+            File.read fixture_path "npm-circular-licenses/package.json"
+          end
+        end
+        let(:dependency_json) do
+          FakeFS.without do
+            File.read fixture_path "npm-circular-licenses/npm-list.json"
+          end
+        end
+
+        describe ".current_packages" do
+          it "correctly navigates the dependencies tree and pulls out valid information" do
+            FakeFS::FileSystem.clone(File.expand_path('../../../../../lib/license_finder/license/templates', __FILE__))
+              expect(npm.current_packages.find {|p| p.name == "has"}.licenses.map(&:name)).to eq ["MIT"]
+              expect(npm.current_packages.find {|p| p.name == "function-bind"}.licenses.map(&:name)).to eq ["MIT"]
+          end
+        end
+      end
+
       context "npm recursive dependency edge case - GH#211" do
         let(:package_json) do
           FakeFS.without do
