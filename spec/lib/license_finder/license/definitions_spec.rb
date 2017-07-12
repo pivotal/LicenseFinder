@@ -14,6 +14,10 @@ describe LicenseFinder::License, "Apache2" do
   it "should be recognized" do |e|
     expect(described_class.find_by_name("Apache2").url).to be
   end
+
+  it "should be findable by spdx" do |e|
+    expect(described_class.find_by_spdx("Apache-2.0")).to be
+  end
 end
 
 describe LicenseFinder::License, "BSD" do
@@ -26,17 +30,29 @@ describe LicenseFinder::License, "GPLv2" do
   it "should be recognized" do
     expect(described_class.find_by_name("GPLv2").url).to be
   end
+
+  it "should be findable by spdx" do |e|
+    expect(described_class.find_by_spdx("GPL-2.0")).to be
+  end
 end
 
 describe LicenseFinder::License, "GPLv3" do
   it "should be recognized" do
     expect(described_class.find_by_name("GPLv3").url).to be
   end
+
+  it "should be findable by spdx" do |e|
+    expect(described_class.find_by_spdx("GPL-3.0")).to be
+  end
 end
 
 describe LicenseFinder::License, "ISC" do
   it "should be recognized" do
     expect(described_class.find_by_name("ISC").url).to be
+  end
+
+  it "should be findable by spdx" do |e|
+    expect(described_class.find_by_spdx("ISC")).to be
   end
 end
 
@@ -72,6 +88,10 @@ describe LicenseFinder::License, "MIT" do
       expect(subject).to be_matches_text "is released under the MIT licence"
     end
   end
+
+  it "should be findable by spdx" do |e|
+    expect(described_class.find_by_spdx("MIT")).to be
+  end
 end
 
 describe LicenseFinder::License, "MPL2" do
@@ -83,6 +103,10 @@ describe LicenseFinder::License, "MPL2" do
 
       expect(subject).not_to be_matches_text "Something else\nMozilla Public License, version 2.0"
     end
+  end
+
+  it "should be findable by spdx" do |e|
+    expect(described_class.find_by_spdx("MPL-2.0")).to be
   end
 end
 
@@ -149,6 +173,10 @@ end
 describe LicenseFinder::License, "Python" do
   it "should be recognized" do
     expect(described_class.find_by_name("Python").url).to be
+  end
+
+  it "should be findable by spdx" do |e|
+    expect(described_class.find_by_spdx("Python-2.0")).to be
   end
 end
 
