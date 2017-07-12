@@ -1,13 +1,5 @@
 FROM ubuntu:trusty
-RUN apt-get update && apt-get install -y curl git-core
-
-#install rvm
-RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 && \
-    curl -sSL https://get.rvm.io | bash -s stable --ruby
-ENV PATH=/usr/local/rvm/bin:$PATH
-
-# install build-essential wget unzip
-RUN apt-get install -y build-essential wget unzip
+RUN apt-get update && apt-get install -y curl git-core wget unzip
 
 # nodejs seems to be required for the one of the gems
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
@@ -16,9 +8,6 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
 # install bower
 RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
-
-# install bundler
-RUN bash -lc "rvm install 2.4.1 && rvm use 2.4.1 && gem install bundler"
 
 #install java 8
 #http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
@@ -75,6 +64,14 @@ RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
+
+#install rvm
+RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 && \
+    curl -sSL https://raw.githubusercontent.com/wayneeseguin/rvm/stable/binscripts/rvm-installer | sudo bash -s stable --ruby=2.4.1
+ENV PATH=/usr/local/rvm/bin:$PATH
+
+# install bundler
+RUN bash -lc "rvm install 2.4.1 --default && gem install bundler"
 
 # install license_finder
 RUN bash -lc "git clone https://github.com/pivotal/LicenseFinder /LicenseFinder && cd /LicenseFinder && bundle install -j4 && rake install"
