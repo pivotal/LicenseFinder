@@ -1,0 +1,23 @@
+{
+  "name": "license_finder_test",
+  "version": "0.0.1",
+  "description": "has a licenses string field",
+  "main": "index.js",
+  "dependencies": {
+    "node-polyglot": "^2.0.0"
+  },
+  "devDependencies": {
+    "enzyme": "^2.8.2"
+  },
+  "scripts": {},
+  "repository": {},
+  "author": "",
+  "licenses": "MIT",
+  "bugs": {},
+  "private": true,
+  "engines": {
+    "node": "^6.11.0",
+    "yarn": "^0.24.6",
+    "npm": "^5.0.3"
+  }
+}
