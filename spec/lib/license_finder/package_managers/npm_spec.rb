@@ -89,11 +89,7 @@ module LicenseFinder
         FileUtils.mkdir_p(Dir.tmpdir)
         FileUtils.mkdir_p(root)
         File.write(File.join(root, "package.json"), package_json)
-        allow(npm).to receive(:capture) do |command|
-          filename = command.scan(/> (.*)$/).last.first
-          File.write(filename, dependency_json)
-          ['', true]
-        end
+        allow(npm).to receive(:run_command_with_tempfile_buffer).and_return ['', JSON.parse(dependency_json), true]
       end
 
       it 'fetches data from npm' do
@@ -122,27 +118,19 @@ module LicenseFinder
         JSON
 
         allow(Dir).to receive(:chdir).with(Pathname('/fake-node-project')) { |&block| block.call }
-        allow(npm).to receive(:capture) do |command|
-          filename = command.scan(/> (.*)$/).last.first
-          File.write(filename, json)
-          ['', true]
-        end
+        allow(npm).to receive(:run_command_with_tempfile_buffer).and_return ['', JSON.parse(json), true]
 
         current_packages = npm.current_packages
         expect(current_packages.map(&:name)).to eq([])
       end
 
       it "fails when command fails" do
-        allow(npm).to receive(:capture).with(/npm/).and_return('Some error', false).once
+        allow(npm).to receive(:run_command_with_tempfile_buffer).with(/npm/).and_return('Some error', nil, false).once
         expect { npm.current_packages }.to raise_error(RuntimeError)
       end
 
       it "does not fail when command fails but produces output" do
-        allow(npm).to receive(:capture) do |command|
-          filename = command.scan(/> (.*)$/).last.first
-          File.write(filename, '{"foo":"bar"}')
-          ['', false]
-        end
+        allow(npm).to receive(:run_command_with_tempfile_buffer).and_return ['', {'foo' => 'bar'}, false]
         silence_stderr { npm.current_packages }
       end
 
