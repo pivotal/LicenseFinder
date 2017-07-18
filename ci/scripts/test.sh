@@ -3,8 +3,7 @@
 set -e -x
 
 pushd LicenseFinder
-  rvm install $RUBY_VERSION
-  rvm use $RUBY_VERSION
+  rvm install --default $RUBY_VERSION_UNDER_TEST
   ruby --version
 
   export GOPATH=$HOME/go
@@ -15,7 +14,7 @@ pushd LicenseFinder
   bundle install
 
   # jruby-9 specific: requires  >= rack 2.x
-  if [ "$RUBY_VERSION" == "jruby-9.0.4.0" ]
+  if [ "$RUBY_VERSION_UNDER_TEST" == "jruby-9.0.4.0" ]
   then
     bundle update rack
   fi
