@@ -18,7 +18,7 @@ module LicenseFinder
     end
 
     def run_command_with_tempfile_buffer(command, &block)
-      tempfile = Tempfile.new
+      tempfile = Tempfile.new 'npm-list.json'
       begin
         output, success = Dir.chdir(project_path) { capture("#{command} > #{tempfile.path}") }
         result = block.call(File.read(tempfile.path))
