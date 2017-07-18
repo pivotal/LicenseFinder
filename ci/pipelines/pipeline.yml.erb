@@ -44,7 +44,7 @@ jobs:
   - task: ruby-<%= ruby_version %>
     file: LicenseFinder/ci/tasks/build.yml
     params:
-      RUBY_VERSION: <%= ruby_version %>
+      RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
 <% if setup_slack %>
   on_failure:
     put: slack-alert
@@ -65,7 +65,7 @@ jobs:
   - task: ruby-<%= ruby_version %>
     file: pull-request/ci/tasks/build.yml
     params:
-      RUBY_VERSION: <%= ruby_version %>
+      RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
     input_mapping: { LicenseFinder: pull-request }
 <% if setup_slack %>
   on_failure:

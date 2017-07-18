@@ -13,4 +13,4 @@ run:
   path: ./LicenseFinder/ci/scripts/test.sh
 
 params:
-  RUBY_VERSION:
+  RUBY_VERSION_UNDER_TEST:
