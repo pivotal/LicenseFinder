@@ -7,7 +7,8 @@ module LicenseFinder
       package_json = PackageJson.new(package_path)
       root_package.dependencies.each { |d| d.groups = package_json.groups(d.identifier) }
       root_package.propagate_groups
-      root_package.dependencies.map(&:flatten).flatten.uniq(&:identifier)
+      flattened_deps = root_package.dependencies.map(&:flattened_dependencies).flatten
+      merge_dependencies flattened_deps
     end
 
     def initialize(npm_json, root=self)
@@ -25,24 +26,23 @@ module LicenseFinder
 
     def propagate_groups
       @dependencies.each do |child|
-        child.groups = (child.groups + @groups).uniq
+        child.groups |= @groups
         child.propagate_groups
       end
-      self
     end
 
     def decircularize
       noncircular = @root.find_noncircular(@identifier)
-      noncircular.dependencies = @dependencies.map(&:decircularize)
+      noncircular.dependencies |= @dependencies.map(&:decircularize)
       noncircular
     end
 
-    def flatten
-      [self] + @dependencies.map(&:flatten).flatten(1)
+    def flattened_dependencies
+      [self] + @dependencies.map(&:flattened_dependencies).flatten(1)
     end
 
     def find_noncircular(identifier)
-      flatten.select{ |p| p.identifier == identifier }.find(&:noncircular?)
+      flattened_dependencies.select{ |p| p.identifier == identifier }.find(&:noncircular?)
     end
 
     def noncircular?
@@ -61,6 +61,28 @@ module LicenseFinder
       'Npm'
     end
 
+    private
+
+    def self.merge_dependencies(dependencies)
+      grouped_dependencies = dependencies.group_by { |dep| dep.identifier }
+      grouped_dependencies.map do |_, deps|
+        merge_dep_group(deps)
+      end
+    end
+
+    def self.merge_dep_group(deps)
+      d_index = deps.index(&:noncircular?)
+      dependency = deps[d_index]
+      deps.delete_at d_index
+      dependency.tap do |d|
+        deps.each do |dep|
+          d.description ||= dep.description
+          d.homepage ||= dep.homepage
+          d.groups |= dep.groups
+        end
+      end
+    end
+
     class Identifier
       attr_accessor :name, :version
 
@@ -70,7 +92,9 @@ module LicenseFinder
       end
 
       def self.from_hash(hash)
-        Identifier.new(hash['name'], hash['version'])
+        name = hash['name'] || ''
+        version = hash['version'] || ''
+        Identifier.new(name, version)
       end
 
       def ==(other)
