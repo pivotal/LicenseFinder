@@ -1,3 +1,15 @@
+# 3.0.2 / 2017-07-27:
+
+Features:
+
+* Add status checks to pull requests
+
+Bugfixes:
+
+* Support NPM packages providing a string for the licenses key
+* Use different env-var to indicate ruby version for tests
+* Resolve NPM circular dependencies
+
 # 3.0.1 / 2017-07-12:
 
 Features:
