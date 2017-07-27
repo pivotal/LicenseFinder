@@ -358,7 +358,7 @@ downloadLicenses {
 
 ## Requirements
 
-`license_finder` requires ruby >= 1.9, or jruby.
+`license_finder` requires ruby >= 2.3.0, or jruby.
 
 
 ## Upgrading
