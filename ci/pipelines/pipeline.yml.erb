@@ -35,7 +35,7 @@ resources:
 <% end %>
 
 jobs:
-<% ['2.4.1', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
+<% %w(2.4.1 2.3.0 2.2.0 2.1.5 jruby-9.0.4.0).each do |ruby_version| %>
 - name: ruby-<%= ruby_version %>
   public: true
   plan:
@@ -55,7 +55,7 @@ jobs:
 <% end %>
 <% end %>
 
-<% ['2.4.1', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
+<% %w(2.4.1 2.3.0 2.2.0 2.1.5 jruby-9.0.4.0).each do |ruby_version| %>
 - name: PR-ruby-<%= ruby_version %>
   public: true
   plan:
@@ -67,6 +67,18 @@ jobs:
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
     input_mapping: { LicenseFinder: pull-request }
+    on_success:
+      put: pull-request
+      params:
+        path: pull-request
+        status: success
+        context: ruby-<%= ruby_version %>
+    on_failure:
+      put: pull-request
+      params:
+        path: pull-request
+        status: failure
+        context: ruby-<%= ruby_version %>
 <% if setup_slack %>
   on_failure:
     put: slack-alert
