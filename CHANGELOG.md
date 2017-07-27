@@ -2,13 +2,13 @@
 
 Features:
 
-* Add status checks to pull requests
+* Add status checks to pull requests (#321)
 
 Bugfixes:
 
-* Support NPM packages providing a string for the licenses key
-* Use different env-var to indicate ruby version for tests
-* Resolve NPM circular dependencies
+* Support NPM packages providing a string for the licenses key (#317)
+* Use different env-var to indicate ruby version for tests (#303)
+* Resolve NPM circular dependencies (#306, #307, #311, #313, #314, #319, #322)
 
 # 3.0.1 / 2017-07-12:
 
