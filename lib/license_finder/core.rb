@@ -69,7 +69,7 @@ module LicenseFinder
         gradle_include_groups: config.gradle_include_groups,
         maven_include_groups: config.maven_include_groups,
         maven_options: config.maven_options,
-        python_requirements_path: config.python_requirements_path,
+        pip_requirements_path: config.pip_requirements_path,
         rebar_command: config.rebar_command,
         rebar_deps_dir: config.rebar_deps_dir,
       )

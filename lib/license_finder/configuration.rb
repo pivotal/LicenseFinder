@@ -41,8 +41,8 @@ module LicenseFinder
       get(:maven_options)
     end
 
-    def python_requirements_path
-      get(:python_requirements_path)
+    def pip_requirements_path
+      get(:pip_requirements_path)
     end
 
     def rebar_command
