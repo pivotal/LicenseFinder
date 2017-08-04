@@ -5,7 +5,7 @@ module LicenseFinder
   class Pip < PackageManager
     def initialize(options={})
       super
-      @requirements_path = options[:python_requirements_path] || 'requirements.txt'
+      @requirements_path = options[:pip_requirements_path] || 'requirements.txt'
     end
 
     def current_packages
