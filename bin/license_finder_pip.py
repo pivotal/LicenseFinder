@@ -8,7 +8,7 @@ from pip._vendor import pkg_resources
 from pip._vendor.six import print_
 
 requirements = [pkg_resources.Requirement.parse(str(req.req)) for req
-                in parse_requirements(sys.argv[1], session=PipSession()) if str(req.req) != 'None']
+                in parse_requirements(sys.argv[1], session=PipSession()) if req.req != None]
 
 transform = lambda dist: {
         'name': dist.project_name,
