@@ -13,6 +13,7 @@ module LicenseFinder
           "dependencies" => {
               "coffee-script" => {
                   "name" => "coffee-script",
+                  "version" => "1.2.3"
               }
           }
       )
@@ -29,11 +30,11 @@ module LicenseFinder
     its(:package_manager) { should eq 'Npm' }
 
     describe '#license_names_from_spec' do
-      let(:node_module1) { {"license" => "MIT"} }
-      let(:node_module2) { {"licenses" => [{"type" => "BSD"}]} }
-      let(:node_module3) { {"license" => {"type" => "PSF"}} }
-      let(:node_module4) { {"licenses" => ["MIT"]} }
-      let(:misdeclared_node_module) { {"licenses" => {"type" => "MIT"}} }
+      let(:node_module1) { {"name" => "node_module1", "version" => "1", "license" => "MIT"} }
+      let(:node_module2) { {"name" => "node_module2", "version" => "2", "licenses" => [{"type" => "BSD"}]} }
+      let(:node_module3) { {"name" => "node_module3", "version" => "3", "license" => {"type" => "PSF"}} }
+      let(:node_module4) { {"name" => "node_module4", "version" => "4", "licenses" => ["MIT"]} }
+      let(:misdeclared_node_module) { {"name" => "node_module0", "version" => "0", "licenses" => {"type" => "MIT"}} }
 
       it 'finds the license for both license structures' do
         package = NpmPackage.new(node_module1)

@@ -32,7 +32,8 @@ module LicenseFinder
                 "path": "/path/to/thing",
                 "dependencies": {
                   "dependency1-1.js": {
-                    "name": "dependency1-1.js"
+                    "name": "dependency1-1.js",
+                    "version": "1-1"
                   }
                 }
               },
@@ -45,9 +46,11 @@ module LicenseFinder
                 "dependencies": {
                   "dependency2-1.js": {
                     "name": "dependency2-1.js",
+                    "version": "2-1",
                     "dependencies": {
                       "dependency1-1.js": {
-                        "name": "dependency1-1.js"
+                        "name": "dependency1-1.js",
+                        "version": "1-1"
                       }
                     }
                   }
@@ -61,10 +64,12 @@ module LicenseFinder
                 "path": "/path/to/thing3",
                 "dependencies": {
                   "dependency1-1.js": {
-                    "name": "dependency1-1.js"
+                    "name": "dependency1-1.js",
+                    "version": "1-1"
                   },
                  "dependency3-1.js": {
-                    "name": "dependency3-1.js"
+                    "name": "dependency3-1.js",
+                    "version": "3-1"
                   }
                 }
               }
@@ -213,6 +218,33 @@ module LicenseFinder
             expect(packages.select{|p| p.name == 'babel-register'}.count).to eq(1)
             expect(packages.select{|p| p.name == 'babel-core'}.count).to eq(1)
             expect(packages.find{|p| p.name == 'babel-register'}.dependencies.count).to be > 0
+          end
+        end
+      end
+
+      context 'when packages have circular dependencies and the stack becomes too deep  - GH#327' do
+        let(:package_json) do
+          FakeFS.without do
+            File.read fixture_path 'npm-stack-too-deep/package.json'
+          end
+        end
+        let(:dependency_json) do
+          FakeFS.without do
+            File.read fixture_path 'npm-stack-too-deep/npm-list.json'
+          end
+        end
+
+
+        describe '.current_packages' do
+          it 'should return package tree successfully' do
+            packages = npm.current_packages
+            expect(packages.count).to be > 1
+            expect(packages.select{|p| p.name == 'es6-iterator'}.count).to eq(1)
+            expect(packages.select{|p| p.name == 'es5-ext'}.count).to eq(1)
+            expect(packages.select{|p| p.name == 'd'}.count).to eq(1)
+            expect(packages.find{|p| p.name == 'es6-iterator'}.dependencies.count).to be > 0
+            expect(packages.find{|p| p.name == 'es5-ext'}.dependencies.count).to be > 0
+            expect(packages.find{|p| p.name == 'd'}.dependencies.count).to be > 0
           end
         end
       end
