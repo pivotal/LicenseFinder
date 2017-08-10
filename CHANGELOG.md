@@ -1,22 +1,30 @@
-# 3.0.2 / 2017-07-27:
+# [Unreleased]
 
-Features:
+### Added
+* Allow Custom Pip Requirements File Path (#328, thanks @sam-10e)
 
-* Add status checks to pull requests (#321)
+### Fixed
+* Fixed NPM stack too deep issue (#327, #329)
 
-Bugfixes:
+# [3.0.2] / 2017-07-27:
+
+### Added
+
+* Add CI status checks to pull requests (#321)
+
+### Fixed
 
 * Support NPM packages providing a string for the licenses key (#317)
 * Use different env-var to indicate ruby version for tests (#303)
 * Resolve NPM circular dependencies (#306, #307, #311, #313, #314, #319, #322)
 
-# 3.0.1 / 2017-07-12:
+# [3.0.1] / 2017-07-12:
 
-Features:
+### Added
 
 * Add --maven-options to allow options for maven scans (#305, thanks @jgielstra!)
 
-Bugfixes:
+### Fixed:
 
 * Restore the original GOPATH after modifying it (#287, thanks @sschuberth!)
 * LF doesn't recognize .NET projects using 'packages' directory (#290, #292, thanks @bspeck!)
@@ -27,9 +35,9 @@ Bugfixes:
 * Fix dockerfile by explicitly using rvm stable (#303)
 * Report multiple versions of the same NPM dependency (#310)
 
-# 3.0.0 / 2016-03-02
+# [3.0.0] / 2016-03-02
 
-Features:
+### Added
 
 * Changed dependencies to be unique based on name _and_ version (#241)
 * Enable '--columns' option with text reports (#244, thanks @raimon49!)
@@ -41,7 +49,7 @@ Features:
 * Added a Dockerfile for [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
 * Switched from Travis to Concourse
 
-Bugfixes:
+### Fixed
 
 * Gradle works in CI containers where TERM is not set (revert and fix of c15bdb7, which broke older versions of gradle)
 * Check for the correct Ruby Bundler command: `bundle` (#233. Thanks, @raimon49!)
@@ -447,3 +455,9 @@ Bugfixes:
 * Bugfixes
 
   * Fix blow up if there's not `ignore_groups` setting in the config file.
+
+
+[Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...HEAD
+[3.0.2]: https://github.com/pivotal/LicenseFinder/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/pivotal/LicenseFinder/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/pivotal/LicenseFinder/compare/v2.1.2...v3.0.0
