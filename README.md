@@ -390,7 +390,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 ## Support
 
 * Send an email to the list: [license-finder@googlegroups.com](license-finder@googlegroups.com)
-* View the project backlog at Pivotal Tracker: [https://www.pivotaltracker.com/s/projects/234851](https://www.pivotaltracker.com/n/projects/234851)
+* View the project backlog at Pivotal Tracker: [https://www.pivotaltracker.com/n/projects/234851](https://www.pivotaltracker.com/n/projects/234851)
 
 
 ## Contributing
