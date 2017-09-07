@@ -1,0 +1,25 @@
+resources:
+- name: LicenseFinder
+  type: git
+  source:
+    uri: https://github.com/pivotal/LicenseFinder
+    branch: master
+
+- name: image
+  type: docker-image
+  source:
+    repository: licensefinder/license_finder
+    email: ((LicenseFinderDockerEmail))
+    username: ((LicenseFinderDockerUserName))
+    password: ((LicenseFinderDockerPassword))
+
+jobs:
+- name: docker
+  plan:
+  - get: LicenseFinder
+  - put: image
+    params:
+     build: LicenseFinder
+     build-arg:
+      - key: no-cache
+        value: true
