@@ -20,9 +20,6 @@ jobs:
   - put: image
     params:
      build: LicenseFinder
-     build-arg:
-      - key: no-cache
-        value: true
 
 - name: build-push-gem
   plan:
