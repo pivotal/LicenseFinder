@@ -20,3 +20,22 @@ jobs:
   - put: image
     params:
      build: LicenseFinder
+
+- name: build-push-gem
+  plan:
+  - aggregate:
+    - get: LicenseFinder
+    - get: image
+  - task: run rake
+    image: image
+    params:
+      GEM_API_KEY: ((LicenseFinderGemApiKey))
+    config:
+      platform: linux
+      inputs:
+      - name: LicenseFinder
+      run:
+        path: bash
+        args:
+        - "-lc"
+        - ./LicenseFinder/ci/scripts/pushscript.sh
