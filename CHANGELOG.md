@@ -1,6 +1,8 @@
-# [Unreleased]
+# [3.0.3] / 2017-09-11
 
 ### Added
+* Added concourse pipeline file for Docker image process (#335, #337)
+* Add status checks to pull requests
 * Allow Custom Pip Requirements File Path (#328, thanks @sam-10e)
 
 ### Fixed
