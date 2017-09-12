@@ -26,16 +26,18 @@ report.
 
 ### Supported project types
 
-* Ruby Gems (via `bundler`)
-* Python Eggs (via `pip`)
-* Node.js (via `npm`)
-* Bower
-* Nuget (without license discovery)
-* Godep
-* Go workspace (via a `.envrc` file)
-* Go submodules
-* Java (via `maven`)
-* Java (via `gradle`)
+| Project Type | Package Manager | Tested on Version |
+| ------------ | --------------- | -------:|
+| Ruby Gems    | bundler         | 1.15.4  |
+| Python Eggs  | pip             | 9.0.1   |
+| Node.js      | npm             | 5.3.0   |
+| Bower        | bower           | 1.8.0   |
+| Nuget (without license discovery) | nuget | N/A |
+| Godep        | Godep           | 79      |
+| Go workspace (via a `.envrc` file) | Go lang |    1.8.3 |
+| Go submodules | Go lang | 1.8.3 |
+| Java         | maven           | 3.5.0   |
+| Java         | gradle          | 2.9     |
 
 ### Experimental project types
 
@@ -343,7 +345,7 @@ Android projects will sometimes specify their meaningful dependencies in the
 "compile" group), you can specify it in your project's `build.gradle`:
 
 ```
-// Must come *after* the 'apply plugin: license' line
+// Must come *after* applying the appropriate plugin from [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
 
 downloadLicenses {
   dependencyConfiguration "compile"
