@@ -113,6 +113,30 @@ Run `license_finder help` to see other available commands, and
 `license_finder help [COMMAND]` for detailed help on a specific
 command.
 
+### Docker
+
+If you have docker installed, try using the included `dlf` script (potentially
+symlinked to be in your path via `ln -s LicenseFinder/dlf /usr/local/bin` or
+whatever method you prefer). This will run any commmands passed to it inside a
+pre-provisioned Docker container to maintain consistent versions of all the
+package managers. For example,
+
+```
+$ dlf npm --version
+5.3.0
+
+$ dlf license_finder --help
+
+Dependencies that need approval:
+...
+license_finder, 3.0.3, MIT
+
+$ dlf "bundle install && license_finder"
+```
+
+You can better understand the way this script works by looking at its source, but for
+reference it will mount your current directory at the path `/scan` and run any commands
+passed to it from that directory.
 
 ### Activation
 
