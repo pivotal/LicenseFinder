@@ -34,22 +34,22 @@ RUN apt-get install -y python-pip && \
     pip install --upgrade pip
 
 # install maven
-RUN curl -O http://www-us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz && \
-    tar -xf apache-maven-3.3.9-bin.tar.gz; rm -rf apache-maven-3.3.9-bin.tar.gz && \
-    mv apache-maven-3.3.9 /usr/local/lib/maven && \
+RUN curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz && \
+    tar -xf apache-maven-3.5.0-bin.tar.gz; rm -rf apache-maven-3.5.0-bin.tar.gz && \
+    mv apache-maven-3.5.0 /usr/local/lib/maven && \
     ln -s /usr/local/lib/maven/bin/mvn /usr/local/bin/mvn
 
 # install gradle
 WORKDIR /tmp
-RUN curl -L -o gradle.zip http://services.gradle.org/distributions/gradle-2.4-bin.zip && \
+RUN curl -L -o gradle.zip http://services.gradle.org/distributions/gradle-2.9-bin.zip && \
     unzip -q gradle.zip && \
     rm gradle.zip && \
-    mv gradle-2.4 /root/gradle
+    mv gradle-2.9 /root/gradle
 ENV PATH=/root/gradle/bin:$PATH
 
 #install go
 WORKDIR /go
-RUN wget https://storage.googleapis.com/golang/go1.5.3.linux-amd64.tar.gz -O go.tar.gz && tar --strip-components=1 -xf go.tar.gz
+RUN wget https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz -O go.tar.gz && tar --strip-components=1 -xf go.tar.gz
 ENV GOROOT /go
 ENV PATH=$PATH:/go/bin
 
