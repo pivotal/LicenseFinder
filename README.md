@@ -26,16 +26,18 @@ report.
 
 ### Supported project types
 
-* Ruby Gems (via `bundler`)
-* Python Eggs (via `pip`)
-* Node.js (via `npm`)
-* Bower
-* Nuget (without license discovery)
-* Godep
-* Go workspace (via a `.envrc` file)
-* Go submodules
-* Java (via `maven`)
-* Java (via `gradle`)
+| Project Type | Package Manager | Tested on Version |
+| ------------ | --------------- | -------:|
+| Ruby Gems    | bundler         | 1.15.4  |
+| Python Eggs  | pip             | 9.0.1   |
+| Node.js      | npm             | 5.3.0   |
+| Bower        | bower           | 1.8.0   |
+| Nuget (without license discovery) | nuget | N/A |
+| Godep        | Godep           | 79      |
+| Go workspace (via a `.envrc` file) | Go lang |    1.8.3 |
+| Go submodules | Go lang | 1.8.3 |
+| Java         | maven           | 3.5.0   |
+| Java         | gradle          | 2.9     |
 
 ### Experimental project types
 
@@ -111,6 +113,30 @@ Run `license_finder help` to see other available commands, and
 `license_finder help [COMMAND]` for detailed help on a specific
 command.
 
+### Docker
+
+If you have docker installed, try using the included `dlf` script (potentially
+symlinked to be in your path via `ln -s LicenseFinder/dlf /usr/local/bin` or
+whatever method you prefer). This will run any commmands passed to it inside a
+pre-provisioned Docker container to maintain consistent versions of all the
+package managers. For example,
+
+```
+$ dlf npm --version
+5.3.0
+
+$ dlf license_finder --help
+
+Dependencies that need approval:
+...
+license_finder, 3.0.3, MIT
+
+$ dlf "bundle install && license_finder"
+```
+
+You can better understand the way this script works by looking at its source, but for
+reference it will mount your current directory at the path `/scan` and run any commands
+passed to it from that directory.
 
 ### Activation
 
@@ -343,7 +369,7 @@ Android projects will sometimes specify their meaningful dependencies in the
 "compile" group), you can specify it in your project's `build.gradle`:
 
 ```
-// Must come *after* the 'apply plugin: license' line
+// Must come *after* applying the appropriate plugin from [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
 
 downloadLicenses {
   dependencyConfiguration "compile"
