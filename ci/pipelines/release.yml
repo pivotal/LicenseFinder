@@ -1,0 +1,60 @@
+resources:
+- name: lf-git
+  type: git
+  source:
+    uri: git@github.com:pivotal/LicenseFinder.git
+    private_key: ((CfOslBotPrivateKey))
+    branch: master
+
+- name: lf-image
+  type: docker-image
+  source:
+    repository: licensefinder/license_finder
+    email: ((LicenseFinderDockerEmail))
+    username: ((LicenseFinderDockerUserName))
+    password: ((LicenseFinderDockerPassword))
+
+- name: lf-release
+  type: github-release
+  source:
+    owner: pivotal
+    repository: LicenseFinder
+    access_token: ((GithubApiTokenProduction))
+
+jobs:
+- name: docker
+  plan:
+  - get: lf-git
+  - put: lf-image
+    params:
+     build: lf-git
+
+- name: release
+  plan:
+  - get: lf-git
+  - get: lf-image
+    params:
+      save: true
+  - task: get-version-and-tag
+    image: lf-image
+    file: lf-git/ci/tasks/get-version-and-tag.yml
+  - task: build-and-push-gem
+    image: lf-image
+    params:
+      GEM_API_KEY: ((LicenseFinderGemApiKey))
+    file: lf-git/ci/tasks/build-and-push-gem.yml
+  - task: create-source-archives
+    file: lf-git/ci/tasks/create-source-archives.yml
+  - put: lf-git
+    params:
+      repository: lf-git
+      tag: version/tag.txt
+  - put: lf-image
+    params:
+      load: lf-image
+      tag: version/version.txt
+  - put: lf-release
+    params:
+      name: version/tag.txt
+      tag: version/tag.txt
+      globs: ["archives/*.zip", "archives/*.tar.gz"]
