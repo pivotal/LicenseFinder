@@ -1,4 +1,4 @@
-# [3.0.4] / 2017-09-11
+# [3.0.4] / 2017-09-14
 
 ### Added
 * Added concourse pipeline file for Docker image process (#335, #337)
