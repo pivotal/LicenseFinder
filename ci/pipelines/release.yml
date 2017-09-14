@@ -43,8 +43,6 @@ jobs:
     params:
       GEM_API_KEY: ((LicenseFinderGemApiKey))
     file: lf-git/ci/tasks/build-and-push-gem.yml
-  - task: create-source-archives
-    file: lf-git/ci/tasks/create-source-archives.yml
   - put: lf-git
     params:
       repository: lf-git
@@ -57,4 +55,3 @@ jobs:
     params:
       name: version/tag.txt
       tag: version/tag.txt
-      globs: ["archives/*.zip", "archives/*.tar.gz"]
