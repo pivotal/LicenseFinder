@@ -1,5 +1,5 @@
 FROM ubuntu:trusty
-RUN apt-get update && apt-get install -y curl git-core wget unzip
+RUN apt-get update && apt-get install -y curl git-core build-essential wget unzip
 
 # nodejs seems to be required for the one of the gems
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
