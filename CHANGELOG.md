@@ -1,4 +1,4 @@
-# [3.0.3] / 2017-09-11
+# [3.0.4] / 2017-09-11
 
 ### Added
 * Added concourse pipeline file for Docker image process (#335, #337)
@@ -7,6 +7,8 @@
 
 ### Fixed
 * Fixed NPM stack too deep issue (#327, #329)
+
+# [3.0.3] / Skipped because of accidentally yanking gem
 
 # [3.0.2] / 2017-07-27:
 

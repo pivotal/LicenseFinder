@@ -1,0 +1,20 @@
+---
+image_resource:
+  type: docker-image
+  source:
+    repository: licensefinder/license_finder
+    tag: latest
+platform: linux
+inputs:
+- name: lf-git
+outputs:
+- name: version
+run:
+  path: bash
+  args:
+  - -elc
+  - |
+    version=$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")
+    echo "v$version" > version/tag.txt
+    echo "$version" > version/version.txt
+

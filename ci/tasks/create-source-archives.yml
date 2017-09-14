@@ -1,0 +1,23 @@
+---
+image_resource:
+  type: docker-image
+  source:
+    repository: kramos/alpine-zip
+    tag: latest
+platform: linux
+inputs:
+- name: lf-git
+- name: version
+outputs:
+- name: archives
+run:
+  path: sh
+  args:
+  - -ec
+  - |
+    version=`cat version/version.txt`
+    tmp_dir_name=tmp/LicenseFinder-$version
+    mkdir -p $tmp_dir_name
+    cp -r lf-git $tmp_dir_name
+    zip -r archives/LicenseFinder-$version.zip tmp
+    tar -cz $tmp_dir_name > archives/LicenseFinder-$version.tar.gz
