@@ -1,4 +1,4 @@
-# [3.0.4] / 2017-09-11
+# [3.0.4] / 2017-09-14
 
 ### Added
 * Added concourse pipeline file for Docker image process (#335, #337)
@@ -461,7 +461,8 @@ Bugfixes:
   * Fix blow up if there's not `ignore_groups` setting in the config file.
 
 
-[Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...HEAD
+[Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...HEAD
+[3.0.4]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...v3.0.4
 [3.0.2]: https://github.com/pivotal/LicenseFinder/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/pivotal/LicenseFinder/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/pivotal/LicenseFinder/compare/v2.1.2...v3.0.0
