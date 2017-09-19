@@ -1,4 +1,5 @@
 <% setup_slack = defined?(slack_url) && defined?(slack_channel) %>
+<% ruby_versions = %w(2.4.1 2.3.0 2.2.0 2.1.5 jruby-9.0.4.0) %>
 
 resource_types:
 - name: pull-request
@@ -35,7 +36,7 @@ resources:
 <% end %>
 
 jobs:
-<% %w(2.4.1 2.3.0 2.2.0 2.1.5 jruby-9.0.4.0).each do |ruby_version| %>
+<% ruby_versions.each do |ruby_version| %>
 - name: ruby-<%= ruby_version %>
   public: true
   plan:
@@ -55,8 +56,24 @@ jobs:
 <% end %>
 <% end %>
 
-<% %w(2.4.1 2.3.0 2.2.0 2.1.5 jruby-9.0.4.0).each do |ruby_version| %>
-- name: PR-ruby-<%= ruby_version %>
+- name: ruby-2.3-windows
+  public: true
+  plan:
+  - get: LicenseFinder
+    trigger: true
+  - task: ruby-2.3-windows
+    file: LicenseFinder/ci/tasks/build-windows.yml
+<% if setup_slack %>
+  on_failure:
+    put: slack-alert
+    params:
+      channel: '<%= slack_channel %>'
+      icon_emoji: ':crying_cat_face:'
+      text: '<%= "License Finder build failed. Build: https://osl.ci.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
+<% end %>
+
+<% ruby_versions.each do |ruby_version| %>
+- name: PR-ruby-<%= ruby_version %>-linux
   public: true
   plan:
   - get: pull-request
