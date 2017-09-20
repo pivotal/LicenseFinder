@@ -43,6 +43,7 @@ jobs:
   - get: LicenseFinder
     trigger: true
   - task: ruby-<%= ruby_version %>
+    privileged: true
     file: LicenseFinder/ci/tasks/build.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
@@ -80,6 +81,7 @@ jobs:
     trigger: true
     version: every
   - task: ruby-<%= ruby_version %>
+    privileged: true
     file: pull-request/ci/tasks/build.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
