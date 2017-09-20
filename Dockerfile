@@ -71,7 +71,7 @@ RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A170311380
 ENV PATH=/usr/local/rvm/bin:$PATH
 
 # install bundler
-RUN bash -lc "rvm install 2.4.1 --default && gem install bundler"
+RUN bash -lc "gem update --system && gem install bundler"
 
 # install license_finder
 RUN bash -lc "git clone https://github.com/pivotal/LicenseFinder /LicenseFinder && cd /LicenseFinder && bundle install -j4 && rake install"
