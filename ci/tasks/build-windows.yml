@@ -1,0 +1,6 @@
+platform: windows
+inputs:
+- name: lf-git
+run:
+  path: powershell
+  args: ["-File", "lf-git/ci/scripts/test.ps1"]
