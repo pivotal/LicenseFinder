@@ -1,6 +1,6 @@
 platform: windows
 inputs:
-- name: lf-git
+- name: LicenseFinder
 run:
   path: powershell
   args: ["-File", "lf-git/ci/scripts/test.ps1"]
