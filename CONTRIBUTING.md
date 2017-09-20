@@ -67,6 +67,7 @@ To successfully run the test suite, you will need the following installed:
 - GoDep, GoWorkspace, and GoVendor (requires golang)
 - CocoaPods (requires ruby)
 - Bundler (requires ruby)
+- Mix (requires Elixir)
 
 The [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) already contains these dependencies.
 

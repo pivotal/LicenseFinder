@@ -111,5 +111,62 @@ module LicenseFinder
         expect(subject.rebar_deps_dir.to_s).to end_with "magic_path/primary"
       end
     end
+
+    describe "mix_deps_dir" do
+      it "has default" do
+        subject = described_class.new(
+            {mix_deps_dir: nil},
+            {"mix_deps_dir" => nil}
+        )
+        expect(subject.mix_deps_dir.to_s).to end_with "deps"
+      end
+
+      it "prepends project path to default path if project_path option is set" do
+        subject = described_class.new({project_path: "magic_path"}, {})
+        expect(subject.mix_deps_dir.to_s).to end_with "magic_path/deps"
+      end
+
+      it "prepends the saved config value if set" do
+        subject = described_class.new({}, {"mix_command" => "savedmix"})
+        expect(subject.mix_command.to_s).to eq "savedmix"
+      end
+
+      it "prepends project path to provided value" do
+        subject = described_class.new(
+            {mix_deps_dir: "primary",
+             project_path: "magic_path"},
+            {"mix_deps_dir" => "secondary"}
+        )
+        expect(subject.mix_deps_dir.to_s).to end_with "magic_path/primary"
+      end
+    end
+
+    describe "mix_command" do
+      it "has default" do
+        subject = described_class.new(
+            {mix_command: nil},
+            {"mix_command" => nil}
+        )
+        expect(subject.mix_command.to_s).to eq "mix"
+      end
+
+      it "defaults the mix_command to mix" do
+        subject = described_class.new({}, {})
+        expect(subject.mix_command.to_s).to eq "mix"
+      end
+
+      it "defaults to the saved config if set" do
+        subject = described_class.new({}, { "mix_command" => "savedmix" })
+        expect(subject.mix_command.to_s).to eq "savedmix"
+      end
+
+      it "overrides the mix command if specified" do
+        subject = described_class.new(
+            {mix_command: "newmix"},
+            {"mix_command" => "mix"}
+        )
+        expect(subject.mix_command.to_s).to eq "newmix"
+      end
+    end
   end
 end

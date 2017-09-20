@@ -43,6 +43,7 @@ report.
 
 * Erlang (via `rebar`)
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
+* Elixir (via `mix`)
 
 ## Installation
 
@@ -152,6 +153,7 @@ languages, as long as that language has a package definition in the project dire
 * `bower.json` (for `bower`)
 * `Podfile` (for CocoaPods)
 * `rebar.config` (for `rebar`)
+* `mix.exs` (for `mix`)
 * `packages/` directory (for `Nuget`)
 
 
@@ -336,10 +338,13 @@ If you have a gradle project, you can invoke gradle with a custom script by
 passing (for example) `--gradle_command gradlew` to `license_finder` or
 `license_finder report`.
 
-
 Similarly you can invoke a custom rebar script with `--rebar_command rebar2`.
 If you store rebar dependencies in a custom directory (by setting `deps_dir` in
 `rebar.config`), set `--rebar_deps_dir`.
+
+You can also invoke a custom Mix script `remix` with `--mix_command remix` and
+set `--mix_deps_dir` to fetch Mix dependencies from a custom directory.
+
 
 ### Saving Configuration
 
@@ -355,6 +360,8 @@ decisions_file: './some_path/decisions.yml'
 gradle_command: './gradlew'
 rebar_command: './rebarw'
 rebar_deps_dir: './rebar_deps'
+mix_command: './mixw'
+mix_deps_dir: './mix_deps'
 ```
 
 ### Gradle Projects
