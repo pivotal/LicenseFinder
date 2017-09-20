@@ -72,6 +72,8 @@ module LicenseFinder
         pip_requirements_path: config.pip_requirements_path,
         rebar_command: config.rebar_command,
         rebar_deps_dir: config.rebar_deps_dir,
+        mix_command: config.mix_command,
+        mix_deps_dir: config.mix_deps_dir,
       )
     end
   end

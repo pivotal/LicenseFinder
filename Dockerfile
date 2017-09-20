@@ -70,6 +70,13 @@ RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A170311380
     curl -sSL https://raw.githubusercontent.com/wayneeseguin/rvm/stable/binscripts/rvm-installer | sudo bash -s stable --ruby=2.4.1
 ENV PATH=/usr/local/rvm/bin:$PATH
 
+#install mix
+RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && \
+    sudo dpkg -i erlang-solutions_1.0_all.deb && \
+    sudo apt-get update && \
+    sudo apt-get install -y esl-erlang && \
+    sudo apt-get install -y elixir
+
 # install bundler
 RUN bash -lc "gem update --system && gem install bundler"
 
