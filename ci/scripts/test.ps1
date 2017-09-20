@@ -68,7 +68,7 @@ function set-env-vars {
 
 function run-tests {
     set-env-vars
-    push-location lf-git
+    push-location LicenseFinder
         stream-cmd "gem" "install bundler"
         stream-cmd "bundle" "install"
         stream-cmd "bundle" "exec rake install"
