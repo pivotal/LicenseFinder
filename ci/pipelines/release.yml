@@ -6,6 +6,14 @@ resources:
     private_key: ((CfOslBotPrivateKey))
     branch: master
 
+- name: lf-dockerfile
+  type: git
+  source:
+    uri: git@github.com:pivotal/LicenseFinder.git
+    private_key: ((CfOslBotPrivateKey))
+    branch: master
+    paths: ["Dockerfile"]
+
 - name: lf-image
   type: docker-image
   source:
@@ -24,10 +32,11 @@ resources:
 jobs:
 - name: docker
   plan:
-  - get: lf-git
+  - get: lf-dockerfile
+    trigger: true
   - put: lf-image
     params:
-     build: lf-git
+     build: lf-dockerfile
 
 - name: release
   plan:
