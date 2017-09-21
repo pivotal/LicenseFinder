@@ -1,18 +1,16 @@
 plugins {
-    id "com.github.hierynomus.license" version "0.14.0"
+    id 'com.github.hierynomus.license' version '0.14.0'
 }
 
 repositories {
-        mavenCentral()
+    mavenCentral()
 }
 
 apply plugin: 'java'
 
 dependencies {
-        compile(
-                "com.google.guava:guava:18.0"
-        )
+    compile 'com.google.guava:guava:18.0'
 
-        // Import external libraries that are **not** available to download via repo
-        compile fileTree(dir: 'libs', include: ['*.jar'])
+    // Import external libraries that are **not** available to download via repo
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }

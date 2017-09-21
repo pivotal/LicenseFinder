@@ -1,20 +1,12 @@
-buildscript {
-  repositories {
-    maven {
-        url 'https://plugins.gradle.org/m2/'
-    }
-  }
-
-  dependencies {
-    classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1'
-  }
+plugins {
+    id 'com.github.hierynomus.license' version '0.14.0' apply false
 }
 
 allprojects {
-  apply plugin: 'java'
-  apply plugin: 'license'
+    apply plugin: 'java'
+    apply plugin: 'license'
 
-  repositories {
-    mavenCentral()
-  }
+    repositories {
+      mavenCentral()
+    }
 }
