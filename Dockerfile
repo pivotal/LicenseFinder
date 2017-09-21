@@ -18,7 +18,8 @@ RUN cd /tmp && \
     tar xf /tmp/jdk-8.tgz && \
     mkdir -p /usr/lib/jvm && \
     mv jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8 && \
-    rm /tmp/jdk-8.tgz
+    rm /tmp/jdk-8.tgz && \
+    cp /usr/lib/jvm/oracle_jdk8/jre/lib/security/cacerts /usr/lib/jvm/java-7-openjdk-i386/jre/lib/security/cacerts
 
 ENV J2SDKDIR=/usr/lib/jvm/oracle_jdk8
 ENV J2REDIR=/usr/lib/jvm/oracle_jdk8/jre
