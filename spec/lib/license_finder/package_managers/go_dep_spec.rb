@@ -44,7 +44,7 @@ module LicenseFinder
 
       context 'when dependencies are vendored' do
         before do
-          allow(FileTest).to receive(:exist?).with('/fake/path/Godeps/_workspace').and_return(true)
+          allow(FileTest).to receive(:directory?).with('/fake/path/Godeps/_workspace').and_return(true)
         end
 
         it 'should return an array of packages' do
