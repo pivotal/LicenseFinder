@@ -1,7 +1,14 @@
 # License Finder
 
-[![Build Status](https://secure.travis-ci.org/pivotal/LicenseFinder.png)](http://travis-ci.org/pivotal/LicenseFinder)
 [![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
+
+Build status
+* Ruby 2.1.5 [![Ruby 2.1.5 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.1.5/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.2.0 [![Ruby 2.2.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.2.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.3.0 [![Ruby 2.3.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.4.1 [![Ruby 2.4.1 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.1/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.0.4.0 [![JRuby 9.0.4.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.0.4.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+
 
 LicenseFinder works with your package managers to find dependencies,
 detect the licenses of the packages in them, compare those licenses
@@ -10,28 +17,34 @@ report.
 
 * code: https://github.com/pivotal/LicenseFinder
 * ci: https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder
+* docker: [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
+  * the docker image contains all the package managers needed to run `license_finder`
 * support:
   * license-finder@googlegroups.com
   * https://groups.google.com/forum/#!forum/license-finder
-* backlog: https://www.pivotaltracker.com/s/projects/234851
+* backlog: https://www.pivotaltracker.com/n/projects/234851
 
 ### Supported project types
 
-* Ruby Gems (via `bundler`)
-* Python Eggs (via `pip`)
-* Node.js (via `npm`)
-* Bower
-* Nuget (without license discovery)
-* Godep
-* Go workspace (via a `.envrc` file)
-* Go submodules
-* Java (via `maven`)
-* Java (via `gradle`)
+| Project Type | Package Manager | Tested on Version |
+| ------------ | --------------- | -------:|
+| Ruby Gems    | bundler         | 1.15.4  |
+| Python Eggs  | pip             | 9.0.1   |
+| Node.js      | npm             | 5.3.0   |
+| Bower        | bower           | 1.8.0   |
+| Nuget (without license discovery) | nuget | N/A |
+| Godep        | Godep           | 79      |
+| Go workspace (via a `.envrc` file) | Go lang |    1.8.3 |
+| Go submodules | Go lang | 1.8.3 |
+| Java         | maven           | 3.5.0   |
+| Java         | gradle          | 2.9     |
 
 ### Experimental project types
 
 * Erlang (via `rebar`)
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
+* Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
+* Elixir (via `mix`)
 
 ## Installation
 
@@ -102,6 +115,30 @@ Run `license_finder help` to see other available commands, and
 `license_finder help [COMMAND]` for detailed help on a specific
 command.
 
+### Docker
+
+If you have docker installed, try using the included `dlf` script (potentially
+symlinked to be in your path via `ln -s LicenseFinder/dlf /usr/local/bin` or
+whatever method you prefer). This will run any commmands passed to it inside a
+pre-provisioned Docker container to maintain consistent versions of all the
+package managers. For example,
+
+```
+$ dlf npm --version
+5.3.0
+
+$ dlf license_finder --help
+
+Dependencies that need approval:
+...
+license_finder, 3.0.3, MIT
+
+$ dlf "bundle install && license_finder"
+```
+
+You can better understand the way this script works by looking at its source, but for
+reference it will mount your current directory at the path `/scan` and run any commands
+passed to it from that directory.
 
 ### Activation
 
@@ -118,6 +155,7 @@ languages, as long as that language has a package definition in the project dire
 * `Podfile` (for CocoaPods)
 * `Cartfile` (for Carthage)
 * `rebar.config` (for `rebar`)
+* `mix.exs` (for `mix`)
 * `packages/` directory (for `Nuget`)
 
 
@@ -302,10 +340,13 @@ If you have a gradle project, you can invoke gradle with a custom script by
 passing (for example) `--gradle_command gradlew` to `license_finder` or
 `license_finder report`.
 
-
 Similarly you can invoke a custom rebar script with `--rebar_command rebar2`.
 If you store rebar dependencies in a custom directory (by setting `deps_dir` in
 `rebar.config`), set `--rebar_deps_dir`.
+
+You can also invoke a custom Mix script `remix` with `--mix_command remix` and
+set `--mix_deps_dir` to fetch Mix dependencies from a custom directory.
+
 
 ### Saving Configuration
 
@@ -321,6 +362,8 @@ decisions_file: './some_path/decisions.yml'
 gradle_command: './gradlew'
 rebar_command: './rebarw'
 rebar_deps_dir: './rebar_deps'
+mix_command: './mixw'
+mix_deps_dir: './mix_deps'
 ```
 
 ### Gradle Projects
@@ -335,7 +378,7 @@ Android projects will sometimes specify their meaningful dependencies in the
 "compile" group), you can specify it in your project's `build.gradle`:
 
 ```
-// Must come *after* the 'apply plugin: license' line
+// Must come *after* applying the appropriate plugin from [https://github.com/hierynomus/license-gradle-plugin](https://github.com/hierynomus/license-gradle-plugin)
 
 downloadLicenses {
   dependencyConfiguration "compile"
@@ -382,7 +425,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 ## Support
 
 * Send an email to the list: [license-finder@googlegroups.com](license-finder@googlegroups.com)
-* View the project backlog at Pivotal Tracker: [https://www.pivotaltracker.com/s/projects/234851](https://www.pivotaltracker.com/s/projects/234851)
+* View the project backlog at Pivotal Tracker: [https://www.pivotaltracker.com/n/projects/234851](https://www.pivotaltracker.com/n/projects/234851)
 
 
 ## Contributing

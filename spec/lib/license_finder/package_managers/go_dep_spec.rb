@@ -44,7 +44,7 @@ module LicenseFinder
 
       context 'when dependencies are vendored' do
         before do
-          allow(FileTest).to receive(:exist?).with('/fake/path/Godeps/_workspace').and_return(true)
+          allow(FileTest).to receive(:directory?).with('/fake/path/Godeps/_workspace').and_return(true)
         end
 
         it 'should return an array of packages' do
@@ -73,21 +73,21 @@ module LicenseFinder
       context 'when there are duplicate dependencies' do
         let(:content) do
           '{
-	           "ImportPath": "github.com/foo/bar",
-	           "GoVersion": "go1.3",
-	           "Deps": [
-	           	{
-	           		"ImportPath": "github.com/foo/baz/sub1",
-	           		"Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-	           	},
-	           	{
-	           		"ImportPath": "github.com/foo/baz/sub2",
-	           		"Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-	           	},
-	           	{
-	           		"ImportPath": "github.com/foo/baz/sub3",
-	           		"Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-	           	}
+               "ImportPath": "github.com/foo/bar",
+               "GoVersion": "go1.3",
+               "Deps": [
+                {
+                    "ImportPath": "github.com/foo/baz/sub1",
+                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
+                },
+                {
+                    "ImportPath": "github.com/foo/baz/sub2",
+                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
+                },
+                {
+                    "ImportPath": "github.com/foo/baz/sub3",
+                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
+                }
             ]
           }'
         end
@@ -101,11 +101,12 @@ module LicenseFinder
 
       context 'when dependencies are not vendored' do
         before do
+          @orig_gopath = ENV['GOPATH']
           ENV['GOPATH'] = '/fake/go/path'
         end
 
         after do
-          ENV['GOPATH'] = nil
+          ENV['GOPATH'] = @orig_gopath
         end
 
         it 'should return an array of packages' do

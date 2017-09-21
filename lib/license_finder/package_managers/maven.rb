@@ -7,12 +7,13 @@ module LicenseFinder
       super
       @ignored_groups = options[:ignored_groups]
       @include_groups = options[:maven_include_groups]
+      @maven_options = options[:maven_options]
     end
 
     def current_packages
-      command = "#{package_management_command} license:download-licenses"
+      command = "#{package_management_command} org.codehaus.mojo:license-maven-plugin:download-licenses"
       command += " -Dlicense.excludedScopes=#{@ignored_groups.to_a.join(',')}" if @ignored_groups and !@ignored_groups.empty?
-
+      command += " #{@maven_options}" if !@maven_options.nil?
       output, success = Dir.chdir(project_path) { capture(command) }
       raise "Command '#{command}' failed to execute: #{output}" unless success
 

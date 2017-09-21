@@ -36,7 +36,11 @@ module LicenseFinder
     private
 
     def install_prefix
-      go_path = workspace_dir.exist? ? workspace_dir : Pathname(ENV['GOPATH'])
+      go_path = if workspace_dir.directory?
+        workspace_dir
+      else
+        Pathname(ENV['GOPATH'] || ENV['HOME'] + '/go')
+      end
       go_path.join('src')
     end
 

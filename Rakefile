@@ -13,6 +13,13 @@ task :spec do
   end
 end
 
+desc "Only run cocoapods specs"
+RSpec::Core::RakeTask.new("spec:cocoapods") do |t|
+  t.fail_on_error = true
+  t.pattern = "./spec/lib/license_finder/package_managers/cocoa_pods_*spec.rb"
+  t.rspec_opts = %w[--color]
+end
+
 desc "Run all specs in features/"
 task :features do
   RSpec::Core::RakeTask.new(:features) do |t|
@@ -36,10 +43,31 @@ task :check_dependencies do
 end
 
 desc "Configure ci pipeline"
-task :update_pipeline do
-  cmd = 'bash -c "fly -t osl set-pipeline -n -p LicenseFinder --config <(erb ci/pipelines/pipeline.yml.erb)"'
+task :update_pipeline, [:slack_url, :slack_channel, :github_access_token] do |_, args|
+  access_token = args[:github_access_token]
+  slack_url = args[:slack_url]
+  slack_channel = args[:slack_channel]
+
+  unless access_token
+    puts 'Warning: You should provide a Github access token with repo:status permission if you want to avoid rate limiting'
+  end
+
+  if !(slack_url || slack_channel)
+    puts 'Warning: skipping slack notifications setup'
+    puts 'Warning: You should provide slack channel and url to receive slack notifications on build failures'
+  end
+
+  params = []
+  params << "slack_url=#{slack_url}" if slack_url
+  params << "slack_channel=#{slack_channel}" if slack_channel
+  params << "github_access_token=#{access_token}" if access_token
+
+  vars = params.join(' ')
+  cmd = "bash -c \"fly -t osl set-pipeline -n -p LicenseFinder --config <(erb #{vars} ci/pipelines/pipeline.yml.erb)\""
+
   system(cmd)
 end
+
 task :spec     => :check_dependencies
 task :features => :check_dependencies
 

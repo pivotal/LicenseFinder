@@ -181,7 +181,10 @@ module LicenseFinder
       end
 
       def install
-        shell_out("GOPATH=#{project_dir}/gopath godep restore")
+        orig_gopath = ENV['GOPATH']
+        ENV['GOPATH'] = "#{project_dir}/gopath"
+        shell_out("godep restore")
+        ENV['GOPATH'] = orig_gopath
       end
 
       def shell_out(command)
@@ -223,6 +226,19 @@ module LicenseFinder
 
       def install
         shell_out("rebar get-deps")
+      end
+    end
+
+    class MixProject < Project
+      def add_dep
+        install_fixture("mix.exs")
+      end
+
+      def install
+        shell_out("mix local.hex --force")
+        shell_out("mix local.rebar --force")
+        shell_out("mix deps.get")
+        shell_out("mix deps.compile")
       end
     end
 
@@ -358,7 +374,11 @@ module LicenseFinder
       end
 
       def install_fixture(fixture_name)
-        join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
+        if Platform.windows?
+          FileUtils.cp(Paths.fixtures.join(fixture_name), join(fixture_name))
+        else
+          join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
+        end
       end
 
       def make

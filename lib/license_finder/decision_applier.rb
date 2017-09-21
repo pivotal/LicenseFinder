@@ -2,7 +2,8 @@ module LicenseFinder
   class DecisionApplier
     def initialize(options)
       @decisions = options.fetch(:decisions)
-      @acknowledged = apply_decisions(options.fetch(:packages))
+      @all_packages = decisions.packages + options.fetch(:packages)
+      @acknowledged = apply_decisions
     end
 
     attr_reader :acknowledged
@@ -15,12 +16,15 @@ module LicenseFinder
       acknowledged.select(&:blacklisted?)
     end
 
+    def any_packages?
+      all_packages.any?
+    end
+
     private
 
-    attr_reader :decisions
+    attr_reader :decisions, :all_packages
 
-    def apply_decisions(system_packages)
-      all_packages = decisions.packages + system_packages
+    def apply_decisions
       all_packages
         .map { |package| with_decided_licenses(package) }
         .map { |package| with_approval(package) }

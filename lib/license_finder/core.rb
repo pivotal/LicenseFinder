@@ -37,7 +37,7 @@ module LicenseFinder
     end
 
     extend Forwardable
-    def_delegators :decision_applier, :acknowledged, :unapproved, :blacklisted
+    def_delegators :decision_applier, :acknowledged, :unapproved, :blacklisted, :any_packages?
 
     def project_name
       decisions.project_name || config.project_path.basename.to_s
@@ -68,10 +68,13 @@ module LicenseFinder
         gradle_command: config.gradle_command,
         gradle_include_groups: config.gradle_include_groups,
         maven_include_groups: config.maven_include_groups,
+        maven_options: config.maven_options,
+        pip_requirements_path: config.pip_requirements_path,
         rebar_command: config.rebar_command,
         rebar_deps_dir: config.rebar_deps_dir,
+        mix_command: config.mix_command,
+        mix_deps_dir: config.mix_deps_dir,
       )
     end
   end
 end
-

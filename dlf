@@ -1,0 +1,8 @@
+#!/bin/bash
+if `which docker > /dev/null`; then
+  docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && `echo $@`"
+else
+  echo "You do not have docker installed. Please install it:"
+  echo "    https://docs.docker.com/engine/installation/"
+  exit 1
+fi

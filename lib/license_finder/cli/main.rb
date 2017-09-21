@@ -24,8 +24,12 @@ module LicenseFinder
       class_option :gradle_include_groups, desc: "Whether dependency name should include group id. Only meaningful if used with a Java/gradle project. Defaults to false."
       class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradlew' / 'gradlew.bat' if the wrapper is present, otherwise to 'gradle'."
       class_option :maven_include_groups, desc: "Whether dependency name should include group id. Only meaningful if used with a Java/maven project. Defaults to false."
+      class_option :maven_options, desc: "Maven options to append to command. Defaults to empty."
+      class_option :pip_requirements_path, desc: "Path to python requirements file. Defaults to requirements.txt."
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
+      class_option :mix_command, desc: "Command to use when fetching packages through Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'mix'."
+      class_option :mix_deps_dir, desc: "Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'."
       class_option :subprojects, type: :array, desc: "Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2'"
       class_option :recursive, desc: "Recursively runs License Finder on all sub-projects."
 
@@ -34,11 +38,17 @@ module LicenseFinder
       desc "action_items", "List unapproved dependencies (the default action for `license_finder`)"
 
       def action_items
+        any_packages = license_finder.any_packages?
         unapproved = license_finder.unapproved
         blacklisted = license_finder.blacklisted
 
         # Ensure to start output on a new line even with dot progress indicators.
         say "\n"
+
+        unless any_packages
+          say "No dependencies recognized!", :red
+          exit 0
+        end
 
         if unapproved.empty?
           say "All dependencies are approved for use", :green

@@ -1,20 +1,109 @@
+<% setup_slack = defined?(slack_url) && defined?(slack_channel) %>
+<% ruby_versions = %w(2.4.1 2.3.0 2.2.0 2.1.5 jruby-9.0.4.0) %>
+
+resource_types:
+- name: pull-request
+  type: docker-image
+  source:
+    repository: jtarchie/pr
+<% if setup_slack %>
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+<% end %>
+
 resources:
 - name: LicenseFinder
   type: git
   source:
     uri: https://github.com/pivotal/LicenseFinder.git
     branch: master
-
+- name: pull-request
+  type: pull-request
+  source:
+    repo: pivotal/LicenseFinder
+    base: master
+    <% if defined?(github_access_token) %>
+    access_token: <%= github_access_token %>
+    <% end %>
+<% if setup_slack %>
+- name: slack-alert
+  type: slack-notification
+  source:
+    url: <%= slack_url %>
+<% end %>
 
 jobs:
-<% ['2.4.0', '2.3.0', '2.2.0', '2.1.5', 'jruby-9.0.4.0'].each do |ruby_version| %>
+<% ruby_versions.each do |ruby_version| %>
 - name: ruby-<%= ruby_version %>
   public: true
   plan:
   - get: LicenseFinder
     trigger: true
   - task: ruby-<%= ruby_version %>
+    privileged: true
     file: LicenseFinder/ci/tasks/build.yml
     params:
-      RUBY_VERSION: <%= ruby_version %>
+      RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
+<% if setup_slack %>
+  on_failure:
+    put: slack-alert
+    params:
+      channel: '<%= slack_channel %>'
+      icon_emoji: ':crying_cat_face:'
+      text: '<%= "License Finder build failed. Build: https://osl.ci.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
+<% end %>
+<% end %>
+
+- name: ruby-2.3-windows
+  public: true
+  plan:
+  - get: LicenseFinder
+    trigger: true
+  - task: ruby-2.3-windows
+    file: LicenseFinder/ci/tasks/build-windows.yml
+<% if setup_slack %>
+  on_failure:
+    put: slack-alert
+    params:
+      channel: '<%= slack_channel %>'
+      icon_emoji: ':crying_cat_face:'
+      text: '<%= "License Finder build failed. Build: https://osl.ci.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
+<% end %>
+
+<% ruby_versions.each do |ruby_version| %>
+- name: PR-ruby-<%= ruby_version %>-linux
+  public: true
+  plan:
+  - get: pull-request
+    trigger: true
+    version: every
+  - task: ruby-<%= ruby_version %>
+    privileged: true
+    file: pull-request/ci/tasks/build.yml
+    params:
+      RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
+    input_mapping: { LicenseFinder: pull-request }
+    on_success:
+      put: pull-request
+      params:
+        path: pull-request
+        status: success
+        context: ruby-<%= ruby_version %>
+    on_failure:
+      put: pull-request
+      params:
+        path: pull-request
+        status: failure
+        context: ruby-<%= ruby_version %>
+<% if setup_slack %>
+  on_failure:
+    put: slack-alert
+    params:
+      channel: '<%= slack_channel %>'
+      icon_emoji: ':crying_cat_face:'
+      text: '<%= "License Finder build failed. Build: https://osl.ci.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
+<% end %>
 <% end %>

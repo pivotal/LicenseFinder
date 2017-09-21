@@ -1,6 +1,47 @@
-# not yet released
+# [3.0.4] / 2017-09-14
 
-Features:
+### Added
+* Added concourse pipeline file for Docker image process (#335, #337)
+* Add status checks to pull requests
+* Allow Custom Pip Requirements File Path (#328, thanks @sam-10e)
+
+### Fixed
+* Fixed NPM stack too deep issue (#327, #329)
+
+# [3.0.3] / Skipped because of accidentally yanking gem
+
+# [3.0.2] / 2017-07-27:
+
+### Added
+
+* Add CI status checks to pull requests (#321)
+
+### Fixed
+
+* Support NPM packages providing a string for the licenses key (#317)
+* Use different env-var to indicate ruby version for tests (#303)
+* Resolve NPM circular dependencies (#306, #307, #311, #313, #314, #319, #322)
+
+# [3.0.1] / 2017-07-12:
+
+### Added
+
+* Add --maven-options to allow options for maven scans (#305, thanks @jgielstra!)
+
+### Fixed:
+
+* Restore the original GOPATH after modifying it (#287, thanks @sschuberth!)
+* LF doesn't recognize .NET projects using 'packages' directory (#290, #292, thanks @bspeck!)
+* Use glob for finding acknowledgements path for CocoaPods (#177, #288, thanks @aditya87!)
+* Fix some failing tests on Windows (#294, thanks @sschuberth!)
+* Add warning message if no dependencies are recognized (#293, thanks @bspeck!)
+* Switch to YAJL for parsing the json output from npm using a tmp file rather than an in-memory string (#301, #304)
+* Fix dockerfile by explicitly using rvm stable (#303)
+* Report multiple versions of the same NPM dependency (#310)
+
+# [3.0.0] / 2016-03-02
+
+### Added
 
 * Changed dependencies to be unique based on name _and_ version (#241)
 * Enable '--columns' option with text reports (#244, thanks @raimon49!)
@@ -8,8 +49,11 @@ Features:
 * Package managers determine their package management command (#250, Thanks @sschuberth!)
 * Support --ignored_groups for maven
 * Support `homepage` column for godeps dependencies, and dependencies from go workspaces using `.envrc`
+* Support `license_links` column for csv option (#281, Thanks @lbalceda!)
+* Added a Dockerfile for [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
+* Switched from Travis to Concourse
 
-Bugfixes:
+### Fixed
 
 * Gradle works in CI containers where TERM is not set (revert and fix of c15bdb7, which broke older versions of gradle)
 * Check for the correct Ruby Bundler command: `bundle` (#233. Thanks, @raimon49!)
@@ -18,7 +62,11 @@ Bugfixes:
 * Use maven wrapper if available on maven projects
 * Check golang package lists against standard packages instead of excluding short package paths (#243)
 * Update the project_sha method to return the sha of the dependency, not the parent project
-
+* Change Maven wrapper to call mvn.cmd and fall back on mvn.bat (#263, Thanks @sschuberth!)
+* Allow bower to run as root
+* Fix packaging errors scanning pip based projects
+* Add JSON lib attribute to handle deeply nested JSON (#269. Thanks, @antongurov!)
+* Use the fully qualified name of the license-maven-plugin (#284)
 
 # 2.1.2 / 2016-06-10
 
@@ -411,3 +459,10 @@ Bugfixes:
 * Bugfixes
 
   * Fix blow up if there's not `ignore_groups` setting in the config file.
+
+
+[Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...HEAD
+[3.0.4]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...v3.0.4
+[3.0.2]: https://github.com/pivotal/LicenseFinder/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/pivotal/LicenseFinder/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/pivotal/LicenseFinder/compare/v2.1.2...v3.0.0

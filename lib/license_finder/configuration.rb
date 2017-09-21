@@ -37,12 +37,29 @@ module LicenseFinder
       get(:maven_include_groups)
     end
 
+    def maven_options
+      get(:maven_options)
+    end
+
+    def pip_requirements_path
+      get(:pip_requirements_path)
+    end
+
     def rebar_command
       get(:rebar_command)
     end
 
+    def mix_command
+      get(:mix_command) || "mix"
+    end
+
     def rebar_deps_dir
       path = get(:rebar_deps_dir) || 'deps'
+      project_path.join(path).expand_path
+    end
+
+    def mix_deps_dir
+      path = get(:mix_deps_dir) || 'deps'
       project_path.join(path).expand_path
     end
 

@@ -32,8 +32,12 @@ module LicenseFinder
           :gradle_command,
           :gradle_include_groups,
           :maven_include_groups,
+          :maven_options,
+          :pip_requirements_path,
           :rebar_command,
           :rebar_deps_dir,
+          :mix_command,
+          :mix_deps_dir,
           :save
         ).merge(
           logger: logger_config
@@ -70,4 +74,3 @@ module LicenseFinder
     end
   end
 end
-

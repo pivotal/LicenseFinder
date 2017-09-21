@@ -3,14 +3,14 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: licensefinder/license_finder
+    repository: concourse/docker-image-resource
     tag: latest
 
 inputs:
 - name: LicenseFinder
 
 run:
-  path: ./LicenseFinder/ci/scripts/test.sh
+  path: ./LicenseFinder/ci/scripts/containerize-tests.sh
 
 params:
-  RUBY_VERSION:
+  RUBY_VERSION_UNDER_TEST:
