@@ -1,3 +1,8 @@
 #!/bin/sh
 
-gradle
+if which gradle; then
+    gradle "$@"
+else
+    echo "No Gradle installation found. Please install it from https://gradle.org/install/." >&2
+    exit 1
+fi
