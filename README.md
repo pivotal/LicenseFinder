@@ -42,6 +42,7 @@ report.
 ### Experimental project types
 
 * Erlang (via `rebar`)
+* Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
 
@@ -152,6 +153,7 @@ languages, as long as that language has a package definition in the project dire
 * `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
 * `Podfile` (for CocoaPods)
+* `Cartfile` (for Carthage)
 * `rebar.config` (for `rebar`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `Nuget`)
