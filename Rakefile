@@ -43,14 +43,9 @@ task :check_dependencies do
 end
 
 desc "Configure ci pipeline"
-task :update_pipeline, [:slack_url, :slack_channel, :github_access_token] do |_, args|
-  access_token = args[:github_access_token]
+task :update_pipeline, [:slack_url, :slack_channel] do |_, args|
   slack_url = args[:slack_url]
   slack_channel = args[:slack_channel]
-
-  unless access_token
-    puts 'Warning: You should provide a Github access token with repo:status permission if you want to avoid rate limiting'
-  end
 
   if !(slack_url || slack_channel)
     puts 'Warning: skipping slack notifications setup'
@@ -60,7 +55,6 @@ task :update_pipeline, [:slack_url, :slack_channel, :github_access_token] do |_,
   params = []
   params << "slack_url=#{slack_url}" if slack_url
   params << "slack_channel=#{slack_channel}" if slack_channel
-  params << "github_access_token=#{access_token}" if access_token
 
   vars = params.join(' ')
   cmd = "bash -c \"fly -t osl set-pipeline -n -p LicenseFinder --config <(erb #{vars} ci/pipelines/pipeline.yml.erb)\""
