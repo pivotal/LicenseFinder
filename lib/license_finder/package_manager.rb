@@ -13,7 +13,7 @@ module LicenseFinder
   #
   class PackageManager
     def self.package_managers
-      [GoDep, GoWorkspace, GoVendor, Bundler, NPM, Pip, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix]
+      [GoDep, GoWorkspace, GoVendor, Gvt, Bundler, NPM, Pip, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix]
     end
 
     def self.current_packages(options)
@@ -87,6 +87,7 @@ require 'license_finder/package_managers/bower'
 require 'license_finder/package_managers/go_workspace'
 require 'license_finder/package_managers/go_vendor'
 require 'license_finder/package_managers/go_dep'
+require 'license_finder/package_managers/gvt'
 require 'license_finder/package_managers/bundler'
 require 'license_finder/package_managers/npm'
 require 'license_finder/package_managers/pip'
