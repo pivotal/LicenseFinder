@@ -9,12 +9,13 @@
 			"branch": "master",
 			"notests": true
 		},
-		{
-			"importpath": "github.com/go-sql-driver/mysql",
-			"repository": "https://github.com/go-sql-driver/mysql",
+                {
+			"importpath": "github.com/golang/protobuf/proto",
+			"repository": "https://github.com/golang/protobuf",
 			"vcs": "git",
-			"revision": "2e00b5cd70399450106cec6431c2e2ce3cae5034",
+			"revision": "8ee79997227bf9b34611aee7946ae64735e6fd93",
 			"branch": "master",
+			"path": "/proto",
 			"notests": true
 		}
 	]

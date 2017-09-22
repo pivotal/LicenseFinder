@@ -17,10 +17,17 @@ module LicenseFinder
     end
 
     def self.current_packages(options)
-      active_package_managers = package_managers
-        .map { |pm| pm.new(options) }
-        .select(&:active?)
-      active_package_managers.flat_map(&:current_packages_with_relations)
+      active_package_managers(options).flat_map(&:current_packages_with_relations)
+    end
+
+    def self.active_package_managers(options={:project_path => Pathname.new('')})
+      active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
+      active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
+      active_pm_classes.map { |pm_class| pm_class.new(options) }
+    end
+
+    def self.takes_priority_over
+      nil
     end
 
     def self.installed?(logger=Core.default_logger)

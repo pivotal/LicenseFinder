@@ -19,7 +19,7 @@ module LicenseFinder
       end
     end
 
-    describe "#package_management_command" do
+    describe ".package_management_command" do
       it "defaults to nil" do
         expect(LicenseFinder::PackageManager.package_management_command).to be_nil
       end
@@ -56,6 +56,25 @@ module LicenseFinder
         it "returns false" do
           expect(LicenseFinder::PackageManager.installed?).to be_falsey
         end
+      end
+    end
+
+    describe ".active_package_managers" do
+      it "should return active package managers" do
+        bundler = double(:bundler, :active? => true)
+        allow(Bundler).to receive(:new).and_return bundler
+        expect(LicenseFinder::PackageManager.active_package_managers).to include bundler
+      end
+
+      it "should exclude GoVendor when Gvt is active" do
+        gvt = Gvt.new
+        allow(Gvt).to receive(:new).and_return gvt
+        allow(gvt).to receive(:active?).and_return true
+        govendor = GoVendor.new
+        allow(GoVendor).to receive(:new).and_return govendor
+        allow(govendor).to receive(:active?).and_return true
+        expect(LicenseFinder::PackageManager.active_package_managers).to include gvt
+        expect(LicenseFinder::PackageManager.active_package_managers).not_to include govendor
       end
     end
   end
