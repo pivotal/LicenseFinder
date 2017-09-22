@@ -22,7 +22,7 @@ module LicenseFinder
     def project_sha(path)
       Dir.chdir(path) do
         val = capture('git rev-list --max-count 1 HEAD')
-        raise 'git rev-list failed' unless val.last
+        raise 'git rev-list failed' unless val.last == 0
         val.first.strip
       end
     end
@@ -54,7 +54,7 @@ module LicenseFinder
         ENV['GOPATH'] = nil
         val = capture('go list -f "{{join .Deps \"\n\"}}" ./...')
         ENV['GOPATH'] = orig_gopath
-        return [] unless val.last
+        return [] unless val.last == 0
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
         # dependencies.

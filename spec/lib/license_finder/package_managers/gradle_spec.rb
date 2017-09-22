@@ -12,7 +12,7 @@ module LicenseFinder
 
     describe '#current_packages' do
       before do
-        allow(Dir).to receive(:chdir).with(Pathname('/fake/path')).and_return(['', true])
+        allow(Dir).to receive(:chdir).with(Pathname('/fake/path')).and_return(['', '', 0])
         dependencies = double(:subject_dependency_file, dependencies: content)
         expect(GradleDependencyFinder).to receive(:new).and_return(dependencies)
       end
@@ -35,7 +35,7 @@ BUILD SUCCESSFUL in 0s
       it 'uses custom subject command, if provided' do
         subject = Gradle.new(gradle_command: 'subjectfoo', project_path: Pathname('/fake/path'))
         expect(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
-        expect(subject).to receive(:capture).with('subjectfoo downloadLicenses').and_return(['', true])
+        expect(subject).to receive(:capture).with('subjectfoo downloadLicenses').and_return(['', '', 0])
         subject.current_packages
       end
 
@@ -43,9 +43,9 @@ BUILD SUCCESSFUL in 0s
         subject = Gradle.new(project_path: Pathname('/Users/foo/bar'))
         expect(Dir).to receive(:chdir).with(Pathname('/Users/foo/bar')) { |&block| block.call }
         if Platform.windows?
-          expect(subject).to receive(:capture).with('gradle.bat downloadLicenses').and_return(['', true])
+          expect(subject).to receive(:capture).with('gradle.bat downloadLicenses').and_return(['', '', 0])
         else
-          expect(subject).to receive(:capture).with('gradle downloadLicenses').and_return(['', true])
+          expect(subject).to receive(:capture).with('gradle downloadLicenses').and_return(['', '', 0])
         end
         subject.current_packages
       end

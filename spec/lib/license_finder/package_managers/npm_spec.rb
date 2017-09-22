@@ -94,7 +94,7 @@ module LicenseFinder
         FileUtils.mkdir_p(Dir.tmpdir)
         FileUtils.mkdir_p(root)
         File.write(File.join(root, 'package.json'), package_json)
-        allow(npm).to receive(:run_command_with_tempfile_buffer).and_return ['', JSON.parse(dependency_json), true]
+        allow(npm).to receive(:npm_json).and_return JSON.parse(dependency_json)
       end
 
       it 'fetches data from npm' do
@@ -122,19 +122,19 @@ module LicenseFinder
         JSON
 
         allow(Dir).to receive(:chdir).with(Pathname('/fake-node-project')) { |&block| block.call }
-        allow(npm).to receive(:run_command_with_tempfile_buffer).and_return ['', JSON.parse(json), true]
+        allow(npm).to receive(:npm_json).and_return JSON.parse(json)
 
         current_packages = npm.current_packages
         expect(current_packages.map(&:name)).to eq([])
       end
 
       it 'fails when command fails' do
-        allow(npm).to receive(:run_command_with_tempfile_buffer).with(/npm/).and_return('Some error', nil, false).once
+        allow(npm).to receive(:capture).with('npm list --json --long').and_return ['', '', 1]
         expect { npm.current_packages }.to raise_error(RuntimeError)
       end
 
       it 'does not fail when command fails but produces output' do
-        allow(npm).to receive(:run_command_with_tempfile_buffer).and_return ['', { 'foo' => 'bar' }, false]
+        allow(npm).to receive(:npm_json).and_return({'foo' => 'bar'})
         silence_stderr { npm.current_packages }
       end
 

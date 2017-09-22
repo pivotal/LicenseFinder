@@ -22,7 +22,7 @@ module LicenseFinder
     describe '.current_packages' do
       before do
         allow(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
-        allow(subject).to receive(:capture).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', true])
+        allow(subject).to receive(:capture).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', '', 0])
       end
 
       def stub_license_report(deps)
@@ -67,7 +67,7 @@ module LicenseFinder
         end
 
         before do
-          expect(subject).to receive(:capture).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses -Dlicense.excludedScopes=system,test,provided,import').and_return(['', true])
+          expect(subject).to receive(:capture).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses -Dlicense.excludedScopes=system,test,provided,import').and_return(['', '', 0])
         end
 
         it 'uses skips the specified groups' do

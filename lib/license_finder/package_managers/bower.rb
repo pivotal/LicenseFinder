@@ -15,12 +15,12 @@ module LicenseFinder
     private
 
     def bower_output
-      command = "#{Bower.package_management_command} list --json -l action --allow-root"
-      output, success = Dir.chdir(project_path) { capture(command) }
-      raise "Command '#{command}' failed to execute: #{output}" unless success
+      command = "#{Bower::package_management_command} list --json -l action --allow-root"
+      stdout, stderr, exitstatus = Dir.chdir(project_path) { capture(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless exitstatus == 0
 
-      JSON(output)
-        .fetch('dependencies', {})
+      JSON(stdout)
+        .fetch("dependencies", {})
         .values
     end
 

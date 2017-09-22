@@ -79,7 +79,7 @@ module LicenseFinder
         ENV['GOPATH'] = nil
         val = capture('go list -f "{{join .Deps \"\n\"}}" ./...')
         ENV['GOPATH'] = orig_gopath
-        raise 'go list failed' unless val.last
+        raise 'go list failed' unless val.last == 0
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
         # dependencies.
