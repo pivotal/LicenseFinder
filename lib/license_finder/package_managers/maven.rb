@@ -14,8 +14,8 @@ module LicenseFinder
       command = "#{package_management_command} org.codehaus.mojo:license-maven-plugin:download-licenses"
       command += " -Dlicense.excludedScopes=#{@ignored_groups.to_a.join(',')}" if @ignored_groups and !@ignored_groups.empty?
       command += " #{@maven_options}" if !@maven_options.nil?
-      output, success = Dir.chdir(project_path) { capture(command) }
-      raise "Command '#{command}' failed to execute: #{output}" unless success
+      stdout, stderr, exitstatus = Dir.chdir(project_path) { capture(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless exitstatus == 0
 
       dependencies = MavenDependencyFinder.new(project_path).dependencies
       packages = dependencies.flat_map do |xml|

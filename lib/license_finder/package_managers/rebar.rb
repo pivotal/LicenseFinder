@@ -26,10 +26,10 @@ module LicenseFinder
 
     def rebar_ouput
       command = "#{@command} list-deps"
-      output, success = Dir.chdir(project_path) { capture(command) }
-      raise "Command '#{command}' failed to execute: #{output}" unless success
+      stdout, stderr, exitstatus = Dir.chdir(project_path) { capture(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless exitstatus == 0
 
-      output
+      stdout
         .each_line
         .reject { |line| line.start_with?("=") }
         .map { |line| line.split(" ") }

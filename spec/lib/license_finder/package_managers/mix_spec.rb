@@ -44,7 +44,7 @@ module LicenseFinder
       end
 
       it 'lists all the current packages' do
-        allow(subject).to receive(:capture).with('mix deps').and_return([output, true])
+        allow(subject).to receive(:capture).with('mix deps').and_return([output, '', 0])
 
         current_packages = subject.current_packages
         expect(current_packages.map(&:name)).to eq(["fs", "gettext", "uuid-refknown", "uuid"])
@@ -53,13 +53,13 @@ module LicenseFinder
       end
 
       it "fails when command fails" do
-        allow(subject).to receive(:capture).with(/mix/).and_return(['Some error', false]).once
+        allow(subject).to receive(:capture).with(/mix/).and_return(['Some error', '', 1]).once
         expect { subject.current_packages }.to raise_error(RuntimeError)
       end
 
       it "uses custom mix command, if provided" do
         mix = Mix.new(mix_command: "mixfoo", project_path: Pathname('/fake/path'))
-        allow(mix).to receive(:capture).with(/mixfoo/).and_return([output, true])
+        allow(mix).to receive(:capture).with(/mixfoo/).and_return([output, '', 0])
 
         current_packages = mix.current_packages
         expect(current_packages.map(&:name)).to eq(["fs", "gettext", "uuid-refknown", "uuid"])
@@ -67,7 +67,7 @@ module LicenseFinder
 
       it "uses custom mix_deps_dir, if provided" do
         mix = Mix.new(mix_deps_dir: "foo", project_path: Pathname('/fake/path'))
-        allow(mix).to receive(:capture).with(/mix/).and_return([output, true])
+        allow(mix).to receive(:capture).with(/mix/).and_return([output, '', 0])
 
         current_packages = mix.current_packages
         expect(current_packages.map(&:install_path)).to eq([Pathname("foo/fs"), Pathname("foo/gettext"), Pathname("foo/uuid-refknown"), Pathname("foo/uuid")])

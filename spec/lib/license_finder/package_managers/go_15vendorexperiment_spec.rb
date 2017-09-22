@@ -48,16 +48,16 @@ module LicenseFinder
 
       describe '#current_packages' do
         let(:go_deps) {
-          ["github.com/foo/bar", true]
+          ['github.com/foo/bar', '', 0]
         }
         let(:std_deps) {
-          ["stdbar/baz", true]
+          ['stdbar/baz', '', 0]
         }
 
         before do
           allow(subject).to receive(:capture).with(%q[go list -f "{{join .Deps \"\n\"}}" ./...]).and_return(go_deps)
           allow(subject).to receive(:capture).with(%q[go list std]).and_return(std_deps)
-          allow(subject).to receive(:capture).with(%q[git rev-list --max-count 1 HEAD]).and_return(["e0ff7ae205f\n", true])
+          allow(subject).to receive(:capture).with(%q[git rev-list --max-count 1 HEAD]).and_return(["e0ff7ae205f\n", '', 0])
         end
 
         RSpec.shared_examples 'current_packages' do |parameter|
