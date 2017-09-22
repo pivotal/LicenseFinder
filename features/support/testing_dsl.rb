@@ -209,6 +209,16 @@ module LicenseFinder
       end
     end
 
+    class CarthageProject < Project
+      def add_dep
+        install_fixture('Cartfile')
+      end
+
+      def install
+        shell_out('carthage bootstrap')
+      end
+    end
+
     class RebarProject < Project
       def add_dep
         install_fixture("rebar.config")
