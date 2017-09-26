@@ -7,6 +7,17 @@ describe 'Subproject report' do
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }
 
+  specify 'shows specified columns' do
+    foo_10 = developer.create_gem_in_path('foo', 'v-10', version: '1.0.0', license: 'MIT', homepage: 'http://example.homepage.com')
+
+    project1 = developer.create_ruby_app('project_1')
+    project1.depend_on(foo_10)
+
+    developer.create_empty_project
+    developer.execute_command("license_finder report --columns name homepage subproject_paths --subprojects #{project1.project_dir} --format=csv")
+    expect(developer).to be_seeing_once("foo,http://example.homepage.com,#{project1.project_dir}")
+  end
+
   specify 'shows dependencies for multiple subprojects' do
     project1 = developer.create_ruby_app('project_1')
     project1.depend_on(developer.create_gem('foo', version: '1.0.0', license: 'MIT'))
