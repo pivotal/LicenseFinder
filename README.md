@@ -45,6 +45,7 @@ report.
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
+* Golang via `gvt`
 
 ## Installation
 
@@ -157,6 +158,7 @@ languages, as long as that language has a package definition in the project dire
 * `rebar.config` (for `rebar`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `Nuget`)
+* `src/vendor/manifest` file (for `gvt`)
 
 
 ### Continuous Integration
