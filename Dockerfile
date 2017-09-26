@@ -57,7 +57,7 @@ ENV PATH=$PATH:/go/bin
 ENV GOROOT=/go
 ENV GOPATH=/gopath
 ENV PATH=$PATH:$GOPATH/bin
-RUN mkdir /gopath && go get github.com/tools/godep
+RUN mkdir /gopath && go get github.com/tools/godep && go get github.com/FiloSottile/gvt
 
 # Fix the locale
 RUN locale-gen en_US.UTF-8
@@ -81,6 +81,7 @@ RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && \
 RUN bash -lc "gem update --system && gem install bundler"
 
 # install license_finder
-RUN bash -lc "git clone https://github.com/pivotal/LicenseFinder /LicenseFinder && cd /LicenseFinder && bundle install -j4 && rake install"
+COPY . /LicenseFinder
+RUN bash -lc "cd /LicenseFinder && bundle install -j4 && rake install"
 
 WORKDIR /
