@@ -192,6 +192,17 @@ module LicenseFinder
       end
     end
 
+    class GlideProject < Project
+      def add_dep
+        install_fixture('glide.lock')
+        install_fixture('glide.yaml')
+      end
+
+      def install
+        shell_out("glide install")
+      end
+    end
+
     class GvtProject < Project
       def add_dep
         clone('gopath_gvt')
