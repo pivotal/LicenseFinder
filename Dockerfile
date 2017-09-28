@@ -41,10 +41,10 @@ RUN curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-ma
 
 # install gradle
 WORKDIR /tmp
-RUN curl -L -o gradle.zip http://services.gradle.org/distributions/gradle-2.9-bin.zip && \
+RUN curl -L -o gradle.zip http://services.gradle.org/distributions/gradle-4.2-bin.zip && \
     unzip -q gradle.zip && \
     rm gradle.zip && \
-    mv gradle-2.9 /root/gradle
+    mv gradle-4.2 /root/gradle
 ENV PATH=/root/gradle/bin:$PATH
 
 #install go
