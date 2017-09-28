@@ -3,6 +3,7 @@ module LicenseFinder
     def package_path
       project_path.join("glide.lock")
     end
+
     def current_packages
       YAML.load_file(package_path).fetch('imports').map do |package_hash|
         import_path = package_hash.fetch('name')
@@ -13,6 +14,7 @@ module LicenseFinder
                                   }, nil, true)
       end
     end
+
     def self.takes_priority_over
       GoVendor
     end
