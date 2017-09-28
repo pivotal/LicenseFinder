@@ -192,6 +192,23 @@ module LicenseFinder
       end
     end
 
+    class GvtProject < Project
+      def add_dep
+        clone('gopath_gvt')
+      end
+
+      def install
+        orig_gopath = ENV['GOPATH']
+        ENV['GOPATH'] = "#{project_dir}/gopath_gvt"
+        shell_out("gvt restore")
+        ENV['GOPATH'] = orig_gopath
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_gvt', 'src')).shell_out(command)
+      end
+    end
+
     class CompositeProject < Project
       def add_dep
         clone('single-module-gradle')
