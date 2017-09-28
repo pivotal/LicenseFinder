@@ -57,7 +57,7 @@ ENV PATH=$PATH:/go/bin
 ENV GOROOT=/go
 ENV GOPATH=/gopath
 ENV PATH=$PATH:$GOPATH/bin
-RUN mkdir /gopath && go get github.com/tools/godep
+RUN mkdir /gopath && go get github.com/tools/godep && go get github.com/FiloSottile/gvt
 
 # Fix the locale
 RUN locale-gen en_US.UTF-8
