@@ -1,7 +1,7 @@
 module LicenseFinder
   class Glide < PackageManager
     def package_path
-      project_path.join("glide.lock")
+      project_path.join('src', 'glide.lock')
     end
 
     def current_packages
@@ -9,7 +9,7 @@ module LicenseFinder
         import_path = package_hash.fetch('name')
         GoPackage.from_dependency({
                                    'ImportPath' => import_path,
-                                   'InstallPath' => project_path.join('vendor', import_path),
+                                   'InstallPath' => project_path.join('src', 'vendor', import_path),
                                    'Rev' => package_hash.fetch('version')
                                   }, nil, true)
       end

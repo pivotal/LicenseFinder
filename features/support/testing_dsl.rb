@@ -194,12 +194,18 @@ module LicenseFinder
 
     class GlideProject < Project
       def add_dep
-        install_fixture('glide.lock')
-        install_fixture('glide.yaml')
+        clone('gopath_glide')
       end
 
       def install
+        orig_gopath = ENV['GOPATH']
+        ENV['GOPATH'] = "#{project_dir}/gopath_glide"
         shell_out("glide install")
+        ENV['GOPATH'] = orig_gopath
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_glide', 'src')).shell_out(command)
       end
     end
 
