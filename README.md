@@ -46,6 +46,7 @@ report.
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
 * Golang via `gvt` and `glide`
+* JavaScript via `yarn`
 
 ## Installation
 
@@ -160,6 +161,7 @@ languages, as long as that language has a package definition in the project dire
 * `packages/` directory (for `Nuget`)
 * `src/vendor/manifest` file (for `gvt`)
 * `glide.lock` file (for `glide`)
+* `yarn.lock` file (for `yarn`)
 
 
 ### Continuous Integration

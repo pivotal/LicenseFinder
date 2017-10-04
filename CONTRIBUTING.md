@@ -59,6 +59,7 @@ If you come up with something useful, consider posting it to the Google Group
 
 To successfully run the test suite, you will need the following installed:
 - NPM (requires Node)
+- Yarn (requires Node)
 - Bower (requires Node and NPM)
 - Maven (requires Java)
 - Gradle (requires Java)

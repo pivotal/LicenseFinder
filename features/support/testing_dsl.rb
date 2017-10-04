@@ -135,6 +135,13 @@ module LicenseFinder
       end
     end
 
+    class YarnProject < Project
+      def add_dep
+        add_to_file('yarn.lock', '')
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.6.1"}}')
+      end
+    end
+
     class MavenProject < Project
       def add_dep
         install_fixture("pom.xml")

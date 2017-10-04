@@ -5,6 +5,12 @@ RUN apt-get update && apt-get install -y curl git-core build-essential wget unzi
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get -y install nodejs
 
+# install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
+  apt-get update && \
+  apt-get install yarn
+
 # install bower
 RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
