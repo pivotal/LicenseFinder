@@ -37,7 +37,7 @@ report.
 | Go workspace (via a `.envrc` file) | Go lang |    1.8.3 |
 | Go submodules | Go lang | 1.8.3 |
 | Java         | maven           | 3.5.0   |
-| Java         | gradle          | 2.9     |
+| Java         | gradle          | 4.2     |
 
 ### Experimental project types
 
