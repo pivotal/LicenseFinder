@@ -3,4 +3,4 @@ inputs:
 - name: LicenseFinder
 run:
   path: powershell
-  args: ["-File", "lf-git/ci/scripts/test.ps1"]
+  args: ["-File", "LicenseFinder/ci/scripts/test.ps1"]
