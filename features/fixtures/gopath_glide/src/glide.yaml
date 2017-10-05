@@ -1,0 +1,6 @@
+package: github.com/Masterminds/glide
+import:
+  - package: github.com/Masterminds/semver
+  - package: github.com/Masterminds/cookoo
+    version: ^1.2.0
+    repo: https://github.com/Masterminds/cookoo.git
