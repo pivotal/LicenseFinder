@@ -24,6 +24,30 @@ module LicenseFinder
       dependency.install_path
     end
 
+    def authors
+      dependency.authors
+    end
+
+    def homepage
+      dependency.homepage
+    end
+
+    def summary
+      dependency.summary
+    end
+
+    def description
+      dependency.description
+    end
+
+    def groups
+      dependency.groups
+    end
+
+    def package_manager
+      dependency.package_manager
+    end
+
     def subproject_paths
       @subproject_paths.map { |p| p.expand_path.to_s }
     end
