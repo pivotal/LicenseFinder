@@ -13,14 +13,22 @@ module LicenseFinder
   #
   class PackageManager
     def self.package_managers
-      [GoDep, GoWorkspace, GoVendor, Bundler, NPM, Pip, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix]
+      [GoDep, GoWorkspace, GoVendor, Gvt, Bundler, NPM, Pip, Yarn,
+       Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix]
     end
 
     def self.current_packages(options)
-      active_package_managers = package_managers
-        .map { |pm| pm.new(options) }
-        .select(&:active?)
-      active_package_managers.flat_map(&:current_packages_with_relations)
+      active_package_managers(options).flat_map(&:current_packages_with_relations)
+    end
+
+    def self.active_package_managers(options={:project_path => Pathname.new('')})
+      active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
+      active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
+      active_pm_classes.map { |pm_class| pm_class.new(options) }
+    end
+
+    def self.takes_priority_over
+      nil
     end
 
     def self.installed?(logger=Core.default_logger)
@@ -87,8 +95,10 @@ require 'license_finder/package_managers/bower'
 require 'license_finder/package_managers/go_workspace'
 require 'license_finder/package_managers/go_vendor'
 require 'license_finder/package_managers/go_dep'
+require 'license_finder/package_managers/gvt'
 require 'license_finder/package_managers/bundler'
 require 'license_finder/package_managers/npm'
+require 'license_finder/package_managers/yarn'
 require 'license_finder/package_managers/pip'
 require 'license_finder/package_managers/maven'
 require 'license_finder/package_managers/mix'

@@ -135,6 +135,13 @@ module LicenseFinder
       end
     end
 
+    class YarnProject < Project
+      def add_dep
+        add_to_file('yarn.lock', '')
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.6.1"}}')
+      end
+    end
+
     class MavenProject < Project
       def add_dep
         install_fixture("pom.xml")
@@ -189,6 +196,23 @@ module LicenseFinder
 
       def shell_out(command)
         ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath', 'src', 'github.com', 'pivotal', 'foo')).shell_out(command)
+      end
+    end
+
+    class GvtProject < Project
+      def add_dep
+        clone('gopath_gvt')
+      end
+
+      def install
+        orig_gopath = ENV['GOPATH']
+        ENV['GOPATH'] = "#{project_dir}/gopath_gvt"
+        shell_out("gvt restore")
+        ENV['GOPATH'] = orig_gopath
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_gvt', 'src')).shell_out(command)
       end
     end
 

@@ -37,7 +37,7 @@ report.
 | Go workspace (via a `.envrc` file) | Go lang |    1.8.3 |
 | Go submodules | Go lang | 1.8.3 |
 | Java         | maven           | 3.5.0   |
-| Java         | gradle          | 2.9     |
+| Java         | gradle          | 4.2     |
 
 ### Experimental project types
 
@@ -45,6 +45,8 @@ report.
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
+* Golang via `gvt`
+* JavaScript via `yarn`
 
 ## Installation
 
@@ -157,6 +159,8 @@ languages, as long as that language has a package definition in the project dire
 * `rebar.config` (for `rebar`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `Nuget`)
+* `src/vendor/manifest` file (for `gvt`)
+* `yarn.lock` file (for `yarn`)
 
 
 ### Continuous Integration

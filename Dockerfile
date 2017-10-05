@@ -5,6 +5,12 @@ RUN apt-get update && apt-get install -y curl git-core build-essential wget unzi
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get -y install nodejs
 
+# install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
+  apt-get update && \
+  apt-get install yarn
+
 # install bower
 RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
@@ -41,10 +47,10 @@ RUN curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-ma
 
 # install gradle
 WORKDIR /tmp
-RUN curl -L -o gradle.zip http://services.gradle.org/distributions/gradle-2.9-bin.zip && \
+RUN curl -L -o gradle.zip http://services.gradle.org/distributions/gradle-4.2-bin.zip && \
     unzip -q gradle.zip && \
     rm gradle.zip && \
-    mv gradle-2.9 /root/gradle
+    mv gradle-4.2 /root/gradle
 ENV PATH=/root/gradle/bin:$PATH
 
 #install go
@@ -57,7 +63,7 @@ ENV PATH=$PATH:/go/bin
 ENV GOROOT=/go
 ENV GOPATH=/gopath
 ENV PATH=$PATH:$GOPATH/bin
-RUN mkdir /gopath && go get github.com/tools/godep
+RUN mkdir /gopath && go get github.com/tools/godep && go get github.com/FiloSottile/gvt
 
 # Fix the locale
 RUN locale-gen en_US.UTF-8
@@ -81,6 +87,7 @@ RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && \
 RUN bash -lc "gem update --system && gem install bundler"
 
 # install license_finder
-RUN bash -lc "git clone https://github.com/pivotal/LicenseFinder /LicenseFinder && cd /LicenseFinder && bundle install -j4 && rake install"
+COPY . /LicenseFinder
+RUN bash -lc "cd /LicenseFinder && bundle install -j4 && rake install"
 
 WORKDIR /
