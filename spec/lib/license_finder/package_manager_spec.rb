@@ -70,8 +70,8 @@ module LicenseFinder
         gvt = Gvt.new
         allow(Gvt).to receive(:new).and_return gvt
         allow(gvt).to receive(:active?).and_return true
-        govendor = GoVendor.new
-        allow(GoVendor).to receive(:new).and_return govendor
+        govendor = Go15VendorExperiment.new
+        allow(Go15VendorExperiment).to receive(:new).and_return govendor
         allow(govendor).to receive(:active?).and_return true
         expect(LicenseFinder::PackageManager.active_package_managers).to include gvt
         expect(LicenseFinder::PackageManager.active_package_managers).not_to include govendor
