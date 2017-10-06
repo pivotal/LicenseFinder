@@ -47,7 +47,7 @@ module LicenseFinder
     end
 
     def self.takes_priority_over
-      GoVendor
+      Go15VendorExperiment
     end
   end
 end

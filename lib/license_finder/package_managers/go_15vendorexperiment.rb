@@ -1,7 +1,7 @@
 require 'json'
 
 module LicenseFinder
-  class GoVendor < PackageManager
+  class Go15VendorExperiment < PackageManager
 
     def initialize(options={})
       super

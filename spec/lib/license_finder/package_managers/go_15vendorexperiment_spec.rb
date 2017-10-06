@@ -2,11 +2,11 @@ require 'spec_helper'
 require 'fakefs/spec_helpers'
 
 module LicenseFinder
-  describe GoVendor do
+  describe Go15VendorExperiment do
     include FakeFS::SpecHelpers
 
     let(:logger) { double(:logger, active: nil) }
-    subject { GoVendor.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
+    subject { Go15VendorExperiment.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
 
     before do
       allow(logger).to receive(:installed)
