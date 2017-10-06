@@ -159,7 +159,7 @@ languages, as long as that language has a package definition in the project dire
 * `rebar.config` (for `rebar`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `Nuget`)
-* `src/vendor/manifest` file (for `gvt`)
+* `vendor/manifest` or `*/vendor/manifest` file (for `gvt`)
 * `glide.lock` file (for `glide`)
 * `yarn.lock` file (for `yarn`)
 

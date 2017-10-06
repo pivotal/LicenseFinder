@@ -56,8 +56,10 @@ module LicenseFinder
     end
 
     def active?
+      path = package_path
       self.class.installed?(logger) &&
-        package_path.exist?.tap { |is_active| logger.active self.class, is_active }
+          !path.nil? &&
+        path.exist?.tap { |is_active| logger.active self.class, is_active }
     end
 
     def capture(command)
