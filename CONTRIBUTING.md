@@ -65,7 +65,7 @@ To successfully run the test suite, you will need the following installed:
 - Gradle (requires Java)
 - Pip (requires python)
 - Rebar (requires erlang)
-- GoDep, GoWorkspace, GoVendor, Glide, and Gvt (requires golang)
+- GoDep, GoWorkspace, govendor, Glide, and Gvt (requires golang)
 - CocoaPods (requires ruby)
 - Bundler (requires ruby)
 - Carthage (requires homebrew)
