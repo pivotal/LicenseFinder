@@ -66,7 +66,8 @@ ENV PATH=$PATH:$GOPATH/bin
 RUN mkdir /gopath && \
   go get github.com/tools/godep && \
   go get github.com/FiloSottile/gvt && \
-  go get github.com/Masterminds/glide
+  go get github.com/Masterminds/glide && \
+  go get github.com/kardianos/govendor
 
 # Fix the locale
 RUN locale-gen en_US.UTF-8
