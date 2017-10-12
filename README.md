@@ -45,7 +45,7 @@ report.
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
-* Golang via `gvt`, `glide`, and `govendor`
+* Golang via `gvt`, `glide`,`dep`, and `govendor`
 * JavaScript via `yarn`
 
 ## Installation
@@ -162,6 +162,7 @@ languages, as long as that language has a package definition in the project dire
 * `vendor/manifest` or `*/vendor/manifest` file (for `gvt`)
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
+* `Gopkg.lock` file (for `dep`)
 * `yarn.lock` file (for `yarn`)
 
 

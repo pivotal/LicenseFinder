@@ -1,0 +1,7 @@
+[[constraint]]
+  name = "github.com/Bowery/prompt"
+  revision = "0f1139e9a1c74b57ccce6bdb3cd2f7cd04dd3449"
+
+[[constraint]]
+  name = "github.com/dchest/safefile"
+  revision = "855e8d98f1852d48dde521e0522408d1fe7e836a"
