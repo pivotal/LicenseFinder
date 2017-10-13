@@ -8,6 +8,11 @@ module LicenseFinder
         expect(license.name).to eq "MIT"
       end
 
+      it "should ignore certain prefixes of name" do
+        license = License.find_by_name("The MIT License")
+        expect(license.name).to eq "MIT"
+      end
+
       it "should make an unrecognized license" do
         license = License.find_by_name("not a known license")
         expect(license.name).to eq "not a known license"

@@ -17,7 +17,7 @@ module LicenseFinder
 
       def find_by_name(name)
         name ||= "unknown"
-        all.detect { |l| l.matches_name? name } || Definitions.build_unrecognized(name)
+        all.detect { |l| l.matches_name? l.stripped_name(name) } || Definitions.build_unrecognized(name)
       end
 
       def find_by_text(text)
@@ -37,6 +37,10 @@ module LicenseFinder
 
     def name
       pretty_name
+    end
+
+    def stripped_name(name)
+      name.sub(/^The /i,'')
     end
 
     def matches_name?(name)

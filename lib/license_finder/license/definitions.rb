@@ -40,7 +40,7 @@ module LicenseFinder
             "Apache License 2.0",
             "Apache License Version 2.0",
             "Apache Public License 2.0",
-            "The Apache Software License, Version 2.0",
+            "Apache Software License, Version 2.0",
             "Apache 2",
             "Apache License",
             "Apache License, Version 2.0"

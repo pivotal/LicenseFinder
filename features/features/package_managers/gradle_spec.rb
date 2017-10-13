@@ -16,7 +16,7 @@ describe 'Gradle Dependencies' do
     LicenseFinder::TestingDSL::GradleProject::MultiModule.create
     java_developer.run_license_finder('multi-module-gradle')
     expect(java_developer).to be_seeing_line 'junit, 4.12, "Eclipse Public License 1.0"'
-    expect(java_developer).to be_seeing_line 'mockito-core, 1.9.5, "The MIT License"'
+    expect(java_developer).to be_seeing_line 'mockito-core, 1.9.5, MIT'
   end
 
   specify 'show both file-based jars and downloaded dependencies' do
