@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "capybara", "~> 2.0.0"
   s.add_development_dependency "cocoapods", "0.34.0" if LicenseFinder::Platform.darwin?
-  s.add_development_dependency "fakefs", "~> 0.6.7"
+  s.add_development_dependency "fakefs", "~> 0.11.3"
   s.add_development_dependency "pry"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec", "~> 3"
