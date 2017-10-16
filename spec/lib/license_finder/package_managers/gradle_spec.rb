@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'fakefs/spec_helpers'
-
 module LicenseFinder
   describe Gradle do
     let(:options) { {} }
@@ -16,11 +15,16 @@ module LicenseFinder
         allow(Dir).to receive(:chdir).with(Pathname('/fake/path')).and_return(['', true])
         dependencies = double(:subject_dependency_file, dependencies: content)
         expect(GradleDependencyFinder).to receive(:new).and_return(dependencies)
+
       end
 
       it 'uses the gradle wrapper, if present' do
         subject = Gradle.new(project_path: Pathname('features/fixtures/gradle-wrapper'))
         expect(Dir).to receive(:chdir).with(Pathname('features/fixtures/gradle-wrapper')).and_call_original
+        allow(subject).to receive(:capture).and_return(['/usr/local/bin/gradle
+
+BUILD SUCCESSFUL in 0s
+1 actionable task: 1 executed',true])
         if Platform.windows?
           expect(subject.package_management_command).to eq('gradlew.bat')
         else

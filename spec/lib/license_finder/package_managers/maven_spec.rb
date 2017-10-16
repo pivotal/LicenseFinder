@@ -32,6 +32,7 @@ module LicenseFinder
 
       it 'uses the maven wrapper, if present' do
         subject = Maven.new(project_path: Pathname('features/fixtures/maven-wrapper'))
+        allow(subject).to receive(:capture).with('./mvnw org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', true])
         expect(Dir).to receive(:chdir).with(Pathname('features/fixtures/maven-wrapper')).and_call_original
         expect(subject.package_management_command).to eq('./mvnw').or eq('mvnw.cmd')
         subject.current_packages
