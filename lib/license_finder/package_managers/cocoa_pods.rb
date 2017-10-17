@@ -25,8 +25,8 @@ module LicenseFinder
 
     private
 
-    def package_path
-      project_path.join("Podfile")
+    def possible_package_paths
+      [project_path.join("Podfile")]
     end
 
     def lockfile_path

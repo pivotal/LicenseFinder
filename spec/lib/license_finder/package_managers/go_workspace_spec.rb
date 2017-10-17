@@ -83,6 +83,7 @@ HERE
     describe '#git_modules' do
       before do
         allow(FileTest).to receive(:exist?).and_return(false)
+        allow(FileTest).to receive(:exist?).with('/Users/pivotal/workspace/loggregator').and_return(true)
         allow(FileTest).to receive(:exist?).with('/Users/pivotal/workspace/loggregator/.envrc').and_return(true)
         allow(Dir).to receive(:chdir).with(Pathname.new '/Users/pivotal/workspace/loggregator') { |&b| b.call() }
       end
@@ -216,13 +217,13 @@ HERE
       end
     end
 
-    describe '#package_path' do
+    describe '#detected_package_path' do
       before do
         allow(FileTest).to receive(:exist?).and_return(true)
       end
 
-      it 'returns the package_path' do
-        expect(subject.package_path).to eq Pathname('/Users/pivotal/workspace/loggregator')
+      it 'returns the detected_package_path' do
+        expect(subject.detected_package_path).to eq Pathname('/Users/pivotal/workspace/loggregator')
       end
     end
 

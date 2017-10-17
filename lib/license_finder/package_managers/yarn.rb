@@ -2,8 +2,8 @@ module LicenseFinder
   class Yarn < PackageManager
     SHELL_COMMAND = 'yarn licenses list --no-progress --json'
 
-    def package_path
-      project_path.join('yarn.lock')
+    def possible_package_paths
+      [project_path.join('yarn.lock')]
     end
 
     def current_packages

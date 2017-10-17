@@ -42,7 +42,7 @@ module LicenseFinder
 
     private
 
-    def package_path
+    def detected_package_path
       alternate_build_file = build_file_from_settings(project_path)
       return alternate_build_file if alternate_build_file
 

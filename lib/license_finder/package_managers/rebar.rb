@@ -35,8 +35,8 @@ module LicenseFinder
         .map { |line| line.split(" ") }
     end
 
-    def package_path
-      project_path.join('rebar.config')
+    def possible_package_paths
+      [project_path.join('rebar.config')]
     end
   end
 end

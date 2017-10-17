@@ -9,7 +9,7 @@ module LicenseFinder
     end
 
     def current_packages
-      json = JSON.parse(package_path.read)
+      json = JSON.parse(detected_package_path.read)
       # godep includes subpackages as a seperate dependency, we can de-dup that
 
       dependencies_info = json['Deps'].map do |json|
@@ -25,8 +25,8 @@ module LicenseFinder
       end
     end
 
-    def package_path
-      project_path.join('Godeps/Godeps.json')
+    def possible_package_paths
+      [project_path.join('Godeps/Godeps.json')]
     end
 
     def self.package_management_command
@@ -36,10 +36,10 @@ module LicenseFinder
     private
 
     def install_prefix
-      go_path = if workspace_dir.directory?
-        workspace_dir
+      if workspace_dir.directory?
+        go_path = workspace_dir
       else
-        Pathname(ENV['GOPATH'] || ENV['HOME'] + '/go')
+        go_path = Pathname(ENV['GOPATH'] || ENV['HOME'] + '/go')
       end
       go_path.join('src')
     end

@@ -1,11 +1,11 @@
 module LicenseFinder
   class Govendor < PackageManager
-    def package_path
-      project_path.join('vendor', 'vendor.json')
+    def possible_package_paths
+      [project_path.join('vendor', 'vendor.json')]
     end
 
     def current_packages
-      file = File.read(package_path)
+      file = File.read(detected_package_path)
       json = JSON.parse(file)
       packages = json['package']
       packages.map do |package|

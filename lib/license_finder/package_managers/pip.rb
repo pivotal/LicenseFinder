@@ -5,7 +5,7 @@ module LicenseFinder
   class Pip < PackageManager
     def initialize(options={})
       super
-      @requirements_path = options[:pip_requirements_path] || 'requirements.txt'
+      @requirements_path = options[:pip_requirements_path] || Pathname('requirements.txt')
     end
 
     def current_packages
@@ -27,16 +27,16 @@ module LicenseFinder
 
     private
 
-    def package_path
+    def possible_package_paths
       unless project_path.nil?
-        project_path.join(@requirements_path)
+        [project_path.join(@requirements_path)]
       else
-        @requirements_path
+        [@requirements_path]
       end
     end
 
     def pip_output
-      output = `#{LicenseFinder::BIN_PATH.join("license_finder_pip.py")} #{package_path}`
+      output = `#{LicenseFinder::BIN_PATH.join("license_finder_pip.py")} #{detected_package_path}`
       JSON(output).map do |package|
         package.values_at(*%w[name version dependencies location])
       end

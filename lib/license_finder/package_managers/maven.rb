@@ -45,8 +45,8 @@ module LicenseFinder
 
     private
 
-    def package_path
-      project_path.join('pom.xml')
+    def possible_package_paths
+      [project_path.join('pom.xml')]
     end
   end
 end

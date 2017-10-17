@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe GoDep do
@@ -31,41 +32,61 @@ module LicenseFinder
       end
 
       before do
-        allow(IO).to receive(:read).with('/fake/path/Godeps/Godeps.json').and_return(content.to_s)
+        FakeFS do
+          FileUtils.mkdir_p '/fake/path/Godeps'
+          File.write('/fake/path/Godeps/Godeps.json', content)
+        end
+
+        @orig_gopath = ENV['GOPATH']
+        ENV['GOPATH'] = '/fake/go/path'
+      end
+
+      after do
+        ENV['GOPATH'] = @orig_gopath
       end
 
       it 'sets the homepage for packages' do
-        packages = subject.current_packages
+        FakeFS do
+          packages = subject.current_packages
 
-        expect(packages[0].homepage).to eq("github.com/pivotal/foo")
-        expect(packages[1].homepage).to eq("github.com/pivotal/bar")
-        expect(packages[2].homepage).to eq("code.google.com/foo/bar")
+          expect(packages[0].homepage).to eq("github.com/pivotal/foo")
+          expect(packages[1].homepage).to eq("github.com/pivotal/bar")
+          expect(packages[2].homepage).to eq("code.google.com/foo/bar")
+        end
       end
 
       context 'when dependencies are vendored' do
         before do
+          FakeFS do
           allow(FileTest).to receive(:directory?).with('/fake/path/Godeps/_workspace').and_return(true)
+          end
         end
 
         it 'should return an array of packages' do
-          packages = subject.current_packages
-          expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
-          expect(packages.map(&:version)).to include('61164e4', '3245708')
+          FakeFS do
+            packages = subject.current_packages
+            expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
+            expect(packages.map(&:version)).to include('61164e4', '3245708')
+          end
         end
 
         it 'should set the install_path to the vendored directory' do
-          packages = subject.current_packages
-          expect(packages[0].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/foo')
-          expect(packages[1].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/bar')
+          FakeFS do
+            packages = subject.current_packages
+            expect(packages[0].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/foo')
+            expect(packages[1].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/bar')
+          end
         end
 
         context 'when requesting the full version' do
           let(:options) { { go_full_version:true } }
           it 'list the dependencies with full version' do
-            expect(subject.current_packages.map(&:version)).to eq [
-              "61164e49940b423ba1f12ddbdf01632ac793e5e9",
-              "3245708abcdef234589450649872346783298736",
-              "3245708abcdef234589450649872346783298735"]
+            FakeFS do
+              expect(subject.current_packages.map(&:version)).to eq [
+                                                                        "61164e49940b423ba1f12ddbdf01632ac793e5e9",
+                                                                        "3245708abcdef234589450649872346783298736",
+                                                                        "3245708abcdef234589450649872346783298735"]
+            end
           end
         end
       end
@@ -92,10 +113,18 @@ module LicenseFinder
           }'
         end
 
+        before do
+          FakeFS do
+            File.write('/fake/path/Godeps/Godeps.json', content)
+          end
+        end
+
         it 'should return one dependency only' do
-          packages = subject.current_packages
-          expect(packages.map(&:name)).to eq(['github.com/foo/baz'])
-          expect(packages.map(&:version)).to eq(['28838aa'])
+          FakeFS do
+            packages = subject.current_packages
+            expect(packages.map(&:name)).to eq(['github.com/foo/baz'])
+            expect(packages.map(&:version)).to eq(['28838aa'])
+          end
         end
       end
 
@@ -110,15 +139,19 @@ module LicenseFinder
         end
 
         it 'should return an array of packages' do
-          packages = subject.current_packages
-          expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
-          expect(packages.map(&:version)).to include('61164e4', '3245708')
+          FakeFS do
+            packages = subject.current_packages
+            expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
+            expect(packages.map(&:version)).to include('61164e4', '3245708')
+          end
         end
 
         it 'should set the install_path to the GOPATH' do
-          packages = subject.current_packages
-          expect(packages[0].install_path).to eq('/fake/go/path/src/github.com/pivotal/foo')
-          expect(packages[1].install_path).to eq('/fake/go/path/src/github.com/pivotal/bar')
+          FakeFS do
+            packages = subject.current_packages
+            expect(packages[0].install_path).to eq('/fake/go/path/src/github.com/pivotal/foo')
+            expect(packages[1].install_path).to eq('/fake/go/path/src/github.com/pivotal/bar')
+          end
         end
       end
     end

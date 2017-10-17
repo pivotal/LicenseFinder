@@ -3,18 +3,18 @@ require 'zip'
 
 module LicenseFinder
   class Nuget < PackageManager
-    def package_path
+    def possible_package_paths
       path = project_path.join("vendor/*.nupkg")
       nuget_dir = Dir[path].map{|pkg| File.dirname(pkg)}.uniq
       if nuget_dir.length == 0
         path = project_path.join(".nuget")
         if File.directory?(path)
-          path
+          [path]
         else
-          project_path.join("packages")
+          [project_path.join("packages")]
         end
       else
-        Pathname(nuget_dir.first)
+        [Pathname(nuget_dir.first)]
       end
     end
 

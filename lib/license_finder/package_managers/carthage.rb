@@ -33,8 +33,8 @@ module LicenseFinder
       end
     end
 
-    def package_path
-      public_dependency_path
+    def possible_package_paths
+      [public_dependency_path]
     end
 
     def public_dependency_path
