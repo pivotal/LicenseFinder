@@ -1,14 +1,7 @@
 module LicenseFinder
   class Glide < PackageManager
     def possible_package_paths
-      return [alternate_detected_package_path] if alternate_detected_package_path
-      [project_path.join('src', 'glide.lock')]
-    end
-
-    def alternate_detected_package_path
-      path = project_path.join('glide.lock')
-      return nil unless File.exist? path
-      path
+      [project_path.join('src', 'glide.lock'), project_path.join('glide.lock')]
     end
 
     def current_packages

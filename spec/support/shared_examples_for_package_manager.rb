@@ -1,12 +1,12 @@
 module LicenseFinder
-  shared_examples "a PackageManager" do
-    let(:all_pms) { fixture_path("all_pms") }
+  shared_examples 'a PackageManager' do
+    let(:all_pms) { fixture_path('all_pms') }
 
     it { expect(described_class.ancestors).to include PackageManager }
     it { expect(PackageManager.package_managers).to include described_class }
 
-    context "logging" do
-      it "logs when it checks for active-ness" do
+    context 'logging' do
+      it 'logs when it checks for active-ness' do
         logger = double(:logger)
         expect(logger).to receive(:installed)
         expect(logger).to receive(:active)
@@ -28,7 +28,7 @@ module LicenseFinder
         end
 
         it 'is false without a package manager file' do
-          no_pms = fixture_path("not/a/path")
+          no_pms = fixture_path('not/a/path')
           expect(described_class.new(project_path: no_pms)).to_not be_active
         end
       end
@@ -43,7 +43,7 @@ module LicenseFinder
         end
 
         it 'is false without a package manager file' do
-          no_pms = fixture_path("not/a/path")
+          no_pms = fixture_path('not/a/path')
           expect(described_class.new(project_path: no_pms)).to_not be_active
         end
       end

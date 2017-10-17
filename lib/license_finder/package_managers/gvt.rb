@@ -7,7 +7,7 @@ module LicenseFinder
     end
 
     def self.package_management_command
-      "gvt"
+      'gvt'
     end
 
     def current_packages
