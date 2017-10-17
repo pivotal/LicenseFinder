@@ -1,22 +1,20 @@
 module LicenseFinder
   class Gvt < PackageManager
-    def package_path
+    def possible_package_paths
       potential_path_list = Dir.glob project_path.join('*', 'vendor', 'manifest')
       potential_path_list << project_path.join('vendor', 'manifest')
-      path = potential_path_list.find { |potential_path| Pathname(potential_path).exist? }
-
-      Pathname(path) unless path.nil?
+      potential_path_list.map { |path| Pathname path }
     end
 
     def self.package_management_command
-      "gvt"
+      'gvt'
     end
 
     def current_packages
       split_project_path = project_path.to_s.split('/')
       project_root_depth = split_project_path.length - 1
 
-      split_package_path = package_path.to_s.split('/')
+      split_package_path = detected_package_path.to_s.split('/')
       vendor_dir_depth = split_package_path.index('vendor')
       return [] if (vendor_dir_depth.nil?)
       vendor_dir_parent_depth = vendor_dir_depth - 1

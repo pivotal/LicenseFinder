@@ -43,7 +43,7 @@ module LicenseFinder
 
     end
 
-    describe "#package_path" do
+    describe "#detected_package_path" do
       include FakeFS::SpecHelpers
 
       context 'when .nupkg files exist, but are not in .nuget directory' do
@@ -56,7 +56,7 @@ module LicenseFinder
 
         it "returns vendored directory" do
           nuget = Nuget.new project_path: Pathname.new("app")
-          expect(nuget.package_path).to eq Pathname('/app/vendor')
+          expect(nuget.detected_package_path).to eq Pathname('/app/vendor')
         end
       end
 
@@ -67,7 +67,7 @@ module LicenseFinder
 
         it "returns the packages directory" do
           nuget = Nuget.new project_path: Pathname.new("app")
-          expect(nuget.package_path).to eq Pathname('app/packages')
+          expect(nuget.detected_package_path).to eq Pathname('app/packages')
         end
       end
     end

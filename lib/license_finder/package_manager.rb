@@ -9,7 +9,7 @@ module LicenseFinder
   # Additional guidelines are:
   #
   # - implement #current_packages, to return a list of `Package`s this package manager is tracking
-  # - implement #package_path, a `Pathname` which, if the file exists, indicates the package manager is in use on this project
+  # - implement #possible_package_paths, an array of `Pathname`s which are the possible locations which contain a configuration file/folder indicating the package manager is in use.
   #
   class PackageManager
     def self.package_managers
@@ -56,10 +56,16 @@ module LicenseFinder
     end
 
     def active?
-      path = package_path
+      path = detected_package_path
       self.class.installed?(logger) &&
           !path.nil? &&
         path.exist?.tap { |is_active| logger.active self.class, is_active }
+    end
+
+    def detected_package_path
+      possible_package_paths.find { |path|
+        path.exist?
+      }
     end
 
     def capture(command)

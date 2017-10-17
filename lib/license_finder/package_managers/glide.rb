@@ -1,18 +1,11 @@
 module LicenseFinder
   class Glide < PackageManager
-    def package_path
-      return alternate_package_path if alternate_package_path
-      project_path.join('src', 'glide.lock')
-    end
-
-    def alternate_package_path
-      path = project_path.join('glide.lock')
-      return nil unless File.exist? path
-      path
+    def possible_package_paths
+      [project_path.join('src', 'glide.lock'), project_path.join('glide.lock')]
     end
 
     def current_packages
-      YAML.load_file(package_path).fetch('imports').map do |package_hash|
+      YAML.load_file(detected_package_path).fetch('imports').map do |package_hash|
         import_path = package_hash.fetch('name')
         GoPackage.from_dependency({
                                    'ImportPath' => import_path,

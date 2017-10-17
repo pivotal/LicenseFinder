@@ -9,19 +9,15 @@ module LicenseFinder
     end
 
     def active?
-      return false unless self.class.installed?(@logger)
-
-      (has_go_files? && package_path.exist?).tap do |is_active|
-        logger.active self.class, is_active
-      end
+      super && has_go_files?
     end
 
     def has_go_files?
-      !Dir[project_path.join("**/*.go")].empty?
+      !Dir[project_path.join('**/*.go')].empty?
     end
 
-    def package_path
-      project_path.join("vendor")
+    def possible_package_paths
+      [project_path.join('vendor')]
     end
 
     def project_sha(path)
@@ -34,12 +30,12 @@ module LicenseFinder
 
     def current_packages
       deps = go_list
-      vendored_deps = deps.select { |dep| package_path.join(dep).exist? }
+      vendored_deps = deps.select { |dep| detected_package_path.join(dep).exist? }
       vendored_deps.map do |dep|
         GoPackage.from_dependency({
                                    'ImportPath' => dep,
-                                   'InstallPath' => package_path.join(dep),
-                                   'Rev' => 'vendored-' + project_sha(package_path.join(dep))
+                                   'InstallPath' => detected_package_path.join(dep),
+                                   'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep))
                                   }, nil, true)
       end
     end

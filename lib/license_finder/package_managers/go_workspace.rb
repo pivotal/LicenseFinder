@@ -30,8 +30,8 @@ module LicenseFinder
       end.compact
     end
 
-    def package_path
-      envrc_path.dirname
+    def possible_package_paths
+      [envrc_path.dirname]
     end
 
     def active?
@@ -89,12 +89,12 @@ module LicenseFinder
     end
 
     def git_modules
-      Dir.chdir(package_path) do |d|
+      Dir.chdir(detected_package_path) do |d|
         result = capture('git submodule status')
         raise 'git submodule status failed' unless result[1]
         result.first.lines.map do |l|
           columns = l.split.map(&:strip)
-          Submodule.new File.join(package_path, columns[1]), columns[0]
+          Submodule.new File.join(detected_package_path, columns[1]), columns[0]
         end
       end
     end

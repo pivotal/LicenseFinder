@@ -27,7 +27,7 @@ module LicenseFinder
 
     def definition
       # DI
-      @definition ||= ::Bundler::Definition.build(package_path, lockfile_path, nil)
+      @definition ||= ::Bundler::Definition.build(detected_package_path, lockfile_path, nil)
     end
 
     def details
@@ -49,8 +49,8 @@ module LicenseFinder
       definition.groups - ignored_groups.map(&:to_sym)
     end
 
-    def package_path
-      project_path.join("Gemfile")
+    def possible_package_paths
+      [project_path.join("Gemfile")]
     end
 
     def lockfile_path

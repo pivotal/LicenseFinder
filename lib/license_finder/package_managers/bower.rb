@@ -24,8 +24,8 @@ module LicenseFinder
         .values
     end
 
-    def package_path
-      project_path.join('bower.json')
+    def possible_package_paths
+      [project_path.join('bower.json')]
     end
   end
 end

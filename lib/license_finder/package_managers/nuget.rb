@@ -1,25 +1,18 @@
-require "rexml/document"
+require 'rexml/document'
 require 'zip'
 
 module LicenseFinder
   class Nuget < PackageManager
-    def package_path
-      path = project_path.join("vendor/*.nupkg")
+    def possible_package_paths
+      path = project_path.join('vendor/*.nupkg')
       nuget_dir = Dir[path].map{|pkg| File.dirname(pkg)}.uniq
-      if nuget_dir.length == 0
-        path = project_path.join(".nuget")
-        if File.directory?(path)
-          path
-        else
-          project_path.join("packages")
-        end
-      else
-        Pathname(nuget_dir.first)
-      end
+      possible_paths = [project_path.join('.nuget'), project_path.join('packages')]
+      possible_paths.unshift(Pathname(nuget_dir.first)) unless nuget_dir.length == 0
+      possible_paths
     end
 
     def assemblies
-      Dir.glob(project_path.join("**", "packages.config"), File::FNM_DOTMATCH).map do |d|
+      Dir.glob(project_path.join('**', 'packages.config'), File::FNM_DOTMATCH).map do |d|
         path = Pathname.new(d).dirname
         name = path.basename.to_s
         Assembly.new path, name
@@ -40,9 +33,9 @@ module LicenseFinder
       return nil if files.empty?
       file = files.first
       Zip::File.open file do |zipfile|
-        content = zipfile.read(dep.name + ".nuspec")
+        content = zipfile.read(dep.name + '.nuspec')
         xml = REXML::Document.new(content)
-        REXML::XPath.match(xml,"//metadata//licenseUrl").map(&:get_text)
+        REXML::XPath.match(xml, '//metadata//licenseUrl').map(&:get_text)
       end
     end
 

@@ -46,8 +46,8 @@ module LicenseFinder
       line =~ /locked at ([^\s]+)/ ? $1 : line
     end
 
-    def package_path
-      project_path.join('mix.exs')
+    def possible_package_paths
+      [project_path.join('mix.exs')]
     end
   end
 end

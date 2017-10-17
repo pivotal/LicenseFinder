@@ -4,7 +4,7 @@ require 'tempfile'
 module LicenseFinder
   class NPM < PackageManager
     def current_packages
-      NpmPackage.packages_from_json(npm_json, package_path)
+      NpmPackage.packages_from_json(npm_json, detected_package_path)
     end
 
     private
@@ -13,8 +13,8 @@ module LicenseFinder
       'npm'
     end
 
-    def package_path
-      project_path.join('package.json')
+    def possible_package_paths
+      [project_path.join('package.json')]
     end
 
     def run_command_with_tempfile_buffer(command, &block)

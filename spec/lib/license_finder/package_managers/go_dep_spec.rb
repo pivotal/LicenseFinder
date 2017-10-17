@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe GoDep do
@@ -31,7 +32,17 @@ module LicenseFinder
       end
 
       before do
-        allow(IO).to receive(:read).with('/fake/path/Godeps/Godeps.json').and_return(content.to_s)
+        FakeFS.activate!
+        FileUtils.mkdir_p '/fake/path/Godeps'
+        File.write('/fake/path/Godeps/Godeps.json', content)
+
+        @orig_gopath = ENV['GOPATH']
+        ENV['GOPATH'] = '/fake/go/path'
+      end
+
+      after do
+        FakeFS.deactivate!
+        ENV['GOPATH'] = @orig_gopath
       end
 
       it 'sets the homepage for packages' do
@@ -63,9 +74,9 @@ module LicenseFinder
           let(:options) { { go_full_version:true } }
           it 'list the dependencies with full version' do
             expect(subject.current_packages.map(&:version)).to eq [
-              "61164e49940b423ba1f12ddbdf01632ac793e5e9",
-              "3245708abcdef234589450649872346783298736",
-              "3245708abcdef234589450649872346783298735"]
+                                                                      "61164e49940b423ba1f12ddbdf01632ac793e5e9",
+                                                                      "3245708abcdef234589450649872346783298736",
+                                                                      "3245708abcdef234589450649872346783298735"]
           end
         end
       end
@@ -90,6 +101,10 @@ module LicenseFinder
                 }
             ]
           }'
+        end
+
+        before do
+          File.write('/fake/path/Godeps/Godeps.json', content)
         end
 
         it 'should return one dependency only' do

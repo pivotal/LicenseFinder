@@ -10,7 +10,8 @@ module LicenseFinder
       it 'returns the packages described by vendor/vendor.json' do
         FakeFS do
           FileUtils.mkdir_p '/app/vendor'
-          File.write(subject.package_path.to_s,
+          File.write(
+              '/app/vendor/vendor.json',
           '
           {
             "comment": "",
