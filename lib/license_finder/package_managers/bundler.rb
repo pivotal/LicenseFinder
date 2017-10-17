@@ -26,8 +26,12 @@ module LicenseFinder
     attr_reader :ignored_groups
 
     def definition
-      # DI
-      @definition ||= ::Bundler::Definition.build(package_path, lockfile_path, nil)
+      if @definition.nil?
+        ENV['BUNDLE_GEMFILE'] = package_path.to_s
+        ::Bundler.setup
+        @definition = ::Bundler::Definition.build(package_path, lockfile_path, nil)
+      end
+      @definition
     end
 
     def details
