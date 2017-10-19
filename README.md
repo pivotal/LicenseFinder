@@ -45,8 +45,9 @@ report.
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
-* Golang via `gvt`, `glide`,`dep`, and `govendor`
-* JavaScript via `yarn`
+* Golang (via `gvt`, `glide`,`dep`, and `govendor`)
+* JavaScript (via `yarn`)
+* C++/C (via `conan`)
 
 ## Installation
 
@@ -164,6 +165,7 @@ languages, as long as that language has a package definition in the project dire
 * `vendor/vendor.json` file (for `govendor`)
 * `Gopkg.lock` file (for `dep`)
 * `yarn.lock` file (for `yarn`)
+* `conanfile.txt` file (for `conan`)
 
 
 ### Continuous Integration

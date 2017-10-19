@@ -294,6 +294,16 @@ module LicenseFinder
       end
     end
 
+    class ConanProject < Project
+      def add_dep
+        install_fixture('conanfile.txt')
+      end
+
+      def install
+        shell_out('conan install')
+      end
+    end
+
     class RebarProject < Project
       def add_dep
         install_fixture("rebar.config")
