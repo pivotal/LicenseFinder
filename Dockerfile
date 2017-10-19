@@ -91,6 +91,10 @@ RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && \
 # install bundler
 RUN bash -lc "gem update --system && gem install bundler"
 
+# install conan
+RUN apt-get install -y python-dev && \
+	pip install conan
+
 # install license_finder
 COPY . /LicenseFinder
 RUN bash -lc "cd /LicenseFinder && bundle install -j4 && rake install"

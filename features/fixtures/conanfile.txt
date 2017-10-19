@@ -1,0 +1,11 @@
+[requires]
+range-v3/0.3.0@ericniebler/stable
+
+[generators]
+txt
+cmake
+
+[options]
+
+[imports]
+., license* -> ./licenses @ folder=True, ignore_case=True
