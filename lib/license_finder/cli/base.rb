@@ -38,7 +38,8 @@ module LicenseFinder
           :rebar_deps_dir,
           :mix_command,
           :mix_deps_dir,
-          :save
+          :save,
+          :prepare
         ).merge(
           logger: logger_config
         )

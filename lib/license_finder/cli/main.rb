@@ -17,27 +17,45 @@ module LicenseFinder
         'csv' => CsvReport
       }
 
-      class_option :format, desc: "The desired output format.", default: 'text', enum: FORMATS.keys
+      class_option :format, desc: 'The desired output format.', default: 'text', enum: FORMATS.keys
       class_option :columns, type: :array, desc: "For text or CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}", default: %w[name version licenses]
-      class_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: "license_report"
-      class_option :go_full_version, desc: "Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false."
-      class_option :gradle_include_groups, desc: "Whether dependency name should include group id. Only meaningful if used with a Java/gradle project. Defaults to false."
-      class_option :gradle_command, desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradlew' / 'gradlew.bat' if the wrapper is present, otherwise to 'gradle'."
-      class_option :maven_include_groups, desc: "Whether dependency name should include group id. Only meaningful if used with a Java/maven project. Defaults to false."
-      class_option :maven_options, desc: "Maven options to append to command. Defaults to empty."
-      class_option :pip_requirements_path, desc: "Path to python requirements file. Defaults to requirements.txt."
-      class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
-      class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
-      class_option :mix_command, desc: "Command to use when fetching packages through Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'mix'."
-      class_option :mix_deps_dir, desc: "Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'."
-      class_option :subprojects, type: :array, desc: "Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2'"
-      class_option :recursive, desc: "Recursively runs License Finder on all sub-projects."
+      class_option :save, desc: %q(Save report to a file. Default: 'license_report.csv' in project root.), lazy_default: 'license_report'
+      class_option :go_full_version, desc: 'Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false.'
+      class_option :gradle_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Java/gradle project. Defaults to false.'
+      class_option :gradle_command, desc: %q(Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradlew' / 'gradlew.bat' if the wrapper is present, otherwise to 'gradle'.)
+      class_option :maven_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Java/maven project. Defaults to false.'
+      class_option :maven_options, desc: 'Maven options to append to command. Defaults to empty.'
+      class_option :pip_requirements_path, desc: 'Path to python requirements file. Defaults to requirements.txt.'
+      class_option :rebar_command, desc: %q(Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'.)
+      class_option :rebar_deps_dir, desc: %q(Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'.)
+      class_option :mix_command, desc: %q(Command to use when fetching packages through Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'mix'.)
+      class_option :mix_deps_dir, desc: %q(Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'.)
+      class_option :subprojects, type: :array, desc: %q(Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2')
+      class_option :recursive, desc: 'Recursively runs License Finder on all sub-projects.'
 
-      method_option :quiet, type: :boolean, desc: "silences progress report"
-      method_option :debug, type: :boolean, desc: "emit detailed info about what LicenseFinder is doing"
+      # Method options which are shared between report and action_item
+      def self.shared_options
+
+        method_option :debug,
+                      :aliases => '-d',
+                      :type => :boolean,
+                      :desc => 'emit detailed info about what LicenseFinder is doing'
+
+        method_option :prepare,
+                      :aliases => '-p',
+                      :type => :boolean,
+                      :desc => 'Prepares the project first for license_finder',
+                      :default => false,
+                      :required => false
+
+      end
+
       desc "action_items", "List unapproved dependencies (the default action for `license_finder`)"
-
+      method_option :quiet, :aliases => '-q',:type => :boolean, :desc => 'Silences progress report', :required => false
+      shared_options
       def action_items
+
+
         any_packages = license_finder.any_packages?
         unapproved = license_finder.unapproved
         blacklisted = license_finder.blacklisted
@@ -71,10 +89,9 @@ module LicenseFinder
       default_task :action_items
 
       desc "report", "Print a report of the project's dependencies to stdout"
-
+      shared_options
       def report
         logger_config[:quiet] = true
-
         subproject_paths = options[:subprojects] if subprojects?
         subproject_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if recursive?
 
@@ -82,6 +99,7 @@ module LicenseFinder
           finder = LicenseAggregator.new(license_finder_config, subproject_paths)
           report = MergedReport.new(finder.dependencies, options)
         else
+          run_prepare_phase if prepare?
           report = report_of(license_finder.acknowledged)
         end
         save? ? save_report(report, options[:save]) : say(report)
@@ -135,6 +153,15 @@ module LicenseFinder
       def subprojects?
         !!options[:subprojects]
       end
+
+      def prepare?
+        options[:prepare]
+      end
+
+      def run_prepare_phase
+        license_finder.prepare_projects
+      end
+
     end
   end
 end

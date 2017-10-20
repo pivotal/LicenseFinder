@@ -19,6 +19,17 @@ module LicenseFinder
         expect(results.map(&:name)).to match_array ['hammer', 'helmet']
       end
 
+      context 'when prepare flag is included' do
+        it 'should run the prepare_projects method on the finders' do
+
+          expect(license_finder_1).to receive(:prepare_projects)
+          expect(license_finder_2).to receive(:prepare_projects)
+
+          aggregator = LicenseAggregator.new({prepare: true}, ['path/to/subproject-1', 'path/to/subproject-2'])
+          results = aggregator.dependencies
+        end
+      end
+
       context 'when there are duplicates' do
         let(:license_finder_2) { double(:license_finder, acknowledged: [helmet, hammer])}
 

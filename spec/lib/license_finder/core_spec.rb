@@ -21,7 +21,8 @@ module LicenseFinder
           rebar_command: 'do_it',
           rebar_deps_dir: 'nowhere/deps',
           mix_command: 'mix_it',
-          mix_deps_dir: 'mixes_in_here/deps'
+          mix_deps_dir: 'mixes_in_here/deps',
+          prepare: 'prepare'
         }
       }
       let(:package_options) {
@@ -38,7 +39,8 @@ module LicenseFinder
           rebar_command: configuration.rebar_command,
           rebar_deps_dir: configuration.rebar_deps_dir,
           mix_command: configuration.mix_command,
-          mix_deps_dir: configuration.mix_deps_dir
+          mix_deps_dir: configuration.mix_deps_dir,
+          prepare: configuration.prepare
         }
       }
 

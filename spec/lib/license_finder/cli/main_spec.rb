@@ -41,7 +41,8 @@ module LicenseFinder
           "--rebar_deps_dir=rebar_dir",
           "--mix_command=surprise_me",
           "--mix_deps_dir=mix_dir",
-          "--save"
+          "--save",
+          "--prepare"
         ] }
         let(:logger_options) {
           [
@@ -58,6 +59,7 @@ module LicenseFinder
           mix_command: 'surprise_me',
           mix_deps_dir: 'mix_dir',
           save: 'license_report',
+          prepare: true ,
           logger: {}
         } }
 
@@ -69,7 +71,7 @@ module LicenseFinder
         end
 
         it "passes the logger options to the new LicenseFinder::Core instance" do
-          expect(LicenseFinder::Core).to receive(:new).with({logger: {debug: true, quiet: true}}).and_return(license_finder_instance)
+          expect(LicenseFinder::Core).to receive(:new).with({prepare: false, logger: {debug: true, quiet: true}}).and_return(license_finder_instance)
           silence_stdout do
             expect { described_class.start(logger_options) }.to raise_error(SystemExit)
           end

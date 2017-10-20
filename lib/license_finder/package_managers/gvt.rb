@@ -44,6 +44,11 @@ module LicenseFinder
       end
     end
 
+    def prepare
+      shell_command = 'gvt restore'
+      output, success = capture(shell_command)
+    end
+
     def self.takes_priority_over
       Go15VendorExperiment
     end

@@ -72,6 +72,10 @@ module LicenseFinder
       Pathname(path_prefix).expand_path
     end
 
+    def prepare
+      get(:prepare)
+    end
+
     private
 
     attr_reader :saved_config

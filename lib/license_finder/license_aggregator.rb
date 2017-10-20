@@ -18,6 +18,7 @@ module LicenseFinder
     def aggregate_packages
       @subprojects.flat_map do |project_path|
         finder = LicenseFinder::Core.new(@license_finder_config.merge(project_path: project_path))
+        finder.prepare_projects if @license_finder_config[:prepare]
         finder.acknowledged.map { |dep| MergedPackage.new(dep, [project_path]) }
       end
     end

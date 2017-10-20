@@ -10,6 +10,7 @@ module LicenseFinder
   #
   # - implement #current_packages, to return a list of `Package`s this package manager is tracking
   # - implement #possible_package_paths, an array of `Pathname`s which are the possible locations which contain a configuration file/folder indicating the package manager is in use.
+  # - implement(Optional) #prepare, this is the method that gets run when the --prepare flag is passed to license_finder. This should call the relevant package manager setup methods to setup the project.
   #
   class PackageManager
     def self.package_managers
@@ -26,6 +27,7 @@ module LicenseFinder
       active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
       active_pm_classes.map { |pm_class| pm_class.new(options) }
     end
+
 
     def self.takes_priority_over
       nil
@@ -66,6 +68,9 @@ module LicenseFinder
       possible_package_paths.find { |path|
         path.exist?
       }
+    end
+
+    def prepare
     end
 
     def capture(command)

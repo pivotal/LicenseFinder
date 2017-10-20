@@ -47,6 +47,12 @@ module LicenseFinder
       @decisions ||= Decisions.fetch_saved(config.decisions_file_path)
     end
 
+    def prepare_projects
+      PackageManager.active_package_managers.each do |manager|
+        manager.prepare
+      end
+    end
+
     private
 
     attr_reader :logger
@@ -74,7 +80,9 @@ module LicenseFinder
         rebar_deps_dir: config.rebar_deps_dir,
         mix_command: config.mix_command,
         mix_deps_dir: config.mix_deps_dir,
+        prepare: config.prepare
       )
     end
+
   end
 end
