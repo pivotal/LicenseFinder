@@ -50,12 +50,12 @@ module LicenseFinder
 
       end
 
-      desc "action_items", "List unapproved dependencies (the default action for `license_finder`)"
+      desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
       method_option :quiet, :aliases => '-q',:type => :boolean, :desc => 'Silences progress report', :required => false
       shared_options
       def action_items
 
-
+        run_prepare_phase if prepare?
         any_packages = license_finder.any_packages?
         unapproved = license_finder.unapproved
         blacklisted = license_finder.blacklisted
@@ -64,21 +64,21 @@ module LicenseFinder
         say "\n"
 
         unless any_packages
-          say "No dependencies recognized!", :red
+          say 'No dependencies recognized!', :red
           exit 0
         end
 
         if unapproved.empty?
-          say "All dependencies are approved for use", :green
+          say 'All dependencies are approved for use', :green
         else
           unless blacklisted.empty?
-            say "Blacklisted dependencies:", :red
+            say 'Blacklisted dependencies:', :red
             say report_of(blacklisted)
           end
 
           other_unapproved = unapproved - blacklisted
           unless other_unapproved.empty?
-            say "Dependencies that need approval:", :yellow
+            say 'Dependencies that need approval:', :yellow
             say report_of(other_unapproved)
           end
 
@@ -88,7 +88,7 @@ module LicenseFinder
 
       default_task :action_items
 
-      desc "report", "Print a report of the project's dependencies to stdout"
+      desc 'report', "Print a report of the project's dependencies to stdout"
       shared_options
       def report
         logger_config[:quiet] = true
@@ -105,13 +105,13 @@ module LicenseFinder
         save? ? save_report(report, options[:save]) : say(report)
       end
 
-      desc "version", "Print the version of LicenseFinder"
+      desc 'version', 'Print the version of LicenseFinder'
 
       def version
         puts LicenseFinder::VERSION
       end
 
-      desc "diff OLDFILE NEWFILE", "Command to view the differences between two generated reports (csv)."
+      desc 'diff OLDFILE NEWFILE', 'Command to view the differences between two generated reports (csv).'
 
       def diff(file1, file2)
         f1 = IO.read(file1)
@@ -120,14 +120,14 @@ module LicenseFinder
         save? ? save_report(report, options[:save]) : say(report)
       end
 
-      subcommand "dependencies", Dependencies, "Add or remove dependencies that your package managers are not aware of"
-      subcommand "licenses", Licenses, "Set a dependency's licenses, if the licenses found by license_finder are missing or wrong"
-      subcommand "approvals", Approvals, "Manually approve dependencies, even if their licenses are not whitelisted"
-      subcommand "ignored_groups", IgnoredGroups, "Exclude test and development dependencies from action items and reports"
-      subcommand "ignored_dependencies", IgnoredDependencies, "Exclude individual dependencies from action items and reports"
-      subcommand "whitelist", Whitelist, "Automatically approve any dependency that has a whitelisted license"
-      subcommand "blacklist", Blacklist, "Forbid approval of any dependency whose licenses are all blacklisted"
-      subcommand "project_name", ProjectName, "Set the project name, for display in reports"
+      subcommand 'dependencies', Dependencies, 'Add or remove dependencies that your package managers are not aware of'
+      subcommand 'licenses', Licenses, "Set a dependency's licenses, if the licenses found by license_finder are missing or wrong"
+      subcommand 'approvals', Approvals, 'Manually approve dependencies, even if their licenses are not whitelisted'
+      subcommand 'ignored_groups', IgnoredGroups, 'Exclude test and development dependencies from action items and reports'
+      subcommand 'ignored_dependencies', IgnoredDependencies, 'Exclude individual dependencies from action items and reports'
+      subcommand 'whitelist', Whitelist, 'Automatically approve any dependency that has a whitelisted license'
+      subcommand 'blacklist', Blacklist, 'Forbid approval of any dependency whose licenses are all blacklisted'
+      subcommand 'project_name', ProjectName, 'Set the project name, for display in reports'
 
       private
 

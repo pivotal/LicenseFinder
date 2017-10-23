@@ -13,43 +13,47 @@ module LicenseFinder
   # - implement(Optional) #prepare, this is the method that gets run when the --prepare flag is passed to license_finder. This should call the relevant package manager setup methods to setup the project.
   #
   class PackageManager
-    def self.package_managers
-      [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
-       Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan]
-    end
-
-    def self.current_packages(options)
-      active_package_managers(options).flat_map(&:current_packages_with_relations)
-    end
-
-    def self.active_package_managers(options={:project_path => Pathname.new('')})
-      active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
-      active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
-      active_pm_classes.map { |pm_class| pm_class.new(options) }
-    end
-
-
-    def self.takes_priority_over
-      nil
-    end
-
-    def self.installed?(logger=Core.default_logger)
-      if package_management_command.nil?
-        logger.installed self, "no command defined" # TODO comment me out
-        return true
+    class << self
+      attr_accessor :active_managers
+      def package_managers
+        [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
+         Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan]
       end
 
-      if command_exists?(package_management_command)
-        logger.installed self, true
-        return true
+      def current_packages(options)
+        active_package_managers(options).flat_map(&:current_packages_with_relations)
       end
 
-      logger.installed self, false
-      return false
-    end
+      def active_package_managers(options={:project_path => Pathname.new('')})
 
-    def self.package_management_command
-      nil
+        return @active_managers unless @active_managers.nil?
+        active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
+        active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
+        @active_managers = active_pm_classes.map { |pm_class| pm_class.new(options) }
+      end
+
+      def takes_priority_over
+        nil
+      end
+
+      def installed?(logger=Core.default_logger)
+        if package_management_command.nil?
+          logger.installed self, "no command defined" # TODO comment me out
+          return true
+        end
+
+        if command_exists?(package_management_command)
+          logger.installed self, true
+          return true
+        end
+
+        logger.installed self, false
+        return false
+      end
+
+      def package_management_command
+        nil
+      end
     end
 
     def initialize options={}
@@ -71,6 +75,8 @@ module LicenseFinder
     end
 
     def prepare
+      # warn the user that there is no prepare
+      logger.prepare self.class, false
     end
 
     def capture(command)

@@ -22,6 +22,16 @@ module LicenseFinder
         end
       end
 
+      def prepare package_manager, can_prepare
+        if String === can_prepare
+          log package_manager, can_prepare
+        elsif can_prepare
+          log package_manager, Logger.green('preparing')
+        else
+          log package_manager, Logger.red('no prepare step provided')
+        end
+      end
+
       def active package_manager, is_active
         if is_active
           log package_manager, Logger.green("is active")
