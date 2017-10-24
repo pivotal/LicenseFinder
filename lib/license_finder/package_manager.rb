@@ -14,7 +14,6 @@ module LicenseFinder
   #
   class PackageManager
     class << self
-      attr_accessor :active_managers
       def package_managers
         [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
          Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan]
@@ -25,11 +24,9 @@ module LicenseFinder
       end
 
       def active_package_managers(options={:project_path => Pathname.new('')})
-
-        return @active_managers unless @active_managers.nil?
         active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
         active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
-        @active_managers = active_pm_classes.map { |pm_class| pm_class.new(options) }
+        active_pm_classes.map { |pm_class| pm_class.new(options) }
       end
 
       def takes_priority_over

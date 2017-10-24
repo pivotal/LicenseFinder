@@ -46,7 +46,11 @@ module LicenseFinder
 
     def prepare
       shell_command = 'gvt restore'
-      output, success = capture(shell_command)
+      _, success = capture(shell_command)
+      #TODO should crash out if not successs
+      #TODO output logs if logging is verbose
+      raise RuntimeError.new('GVT prepare step failed') unless success
+      #TODO if !success, raise should also specify failure cause.
     end
 
     def self.takes_priority_over
