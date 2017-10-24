@@ -13,7 +13,7 @@ module LicenseFinder
       end
       let(:configuration) { double(:configuration, valid_project_path?: true) }
       let(:found_any_packages) { true }
-      let(:license_finder_instance) { double(:license_finder, unapproved: unapproved_dependencies, blacklisted: [], project_name: 'taco stand', config: configuration, any_packages?: found_any_packages) }
+      let(:license_finder_instance) { double(:license_finder, unapproved: unapproved_dependencies, blacklisted: [], project_name: 'taco stand', config: configuration, any_packages?: found_any_packages, prepare_projects: nil) }
       let(:license) { double(:license, name: "thing") }
       let(:unapproved_dependencies) { [double(:dependency, name: "a dependency", version: "2.4.1", missing?: false, licenses: [license])] }
 
@@ -80,6 +80,7 @@ module LicenseFinder
 
       describe "#report" do
         let(:packages) { [Package.new('one dependency', "1.1")] }
+
 
         def report
           capture_stdout { subject.report }
@@ -180,6 +181,29 @@ module LicenseFinder
             expect(subject).to receive(:report_of)
 
             report
+          end
+        end
+
+        describe 'Prepare Option' do
+
+          let(:license_finder) { double(:license_finder, unapproved: unapproved_dependencies, blacklisted: [], project_name: 'taco stand', config: configuration, any_packages?: found_any_packages, prepare_projects: nil, acknowledged: []) }
+          before do
+            allow(LicenseFinder::Core).to receive(:new).and_return(license_finder)
+          end
+          context 'when the --prepare option is passed' do
+            it 'runs the prepare phase for package managers' do
+              subject.options = {prepare: true, format: 'text'}
+              expect(license_finder).to receive(:prepare_projects)
+              subject.report
+            end
+          end
+
+          context 'when the --prepare option is NOT passed' do
+            it 'runs the prepare phase for package managers' do
+              subject.options = {prepare: false, format: 'text'}
+              expect(license_finder).not_to receive(:prepare_projects)
+              subject.report
+            end
           end
         end
       end

@@ -60,6 +60,15 @@ module LicenseFinder
     end
 
     describe ".active_package_managers" do
+
+      before do
+        LicenseFinder::PackageManager.active_managers = nil
+      end
+
+      after do
+        LicenseFinder::PackageManager.active_managers = nil
+      end
+
       it "should return active package managers" do
         bundler = double(:bundler, :active? => true)
         allow(Bundler).to receive(:new).and_return bundler
