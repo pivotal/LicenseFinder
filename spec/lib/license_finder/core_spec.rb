@@ -12,7 +12,7 @@ module LicenseFinder
       allow(Logger).to receive(:new).and_return(logger)
     end
 
-    describe "#unapproved" do
+    describe '#unapproved' do
       let(:options) {
         {
           logger: {},
@@ -44,15 +44,15 @@ module LicenseFinder
         }
       }
 
-      it "delegates to the decision_applier" do
+      it 'delegates to the decision_applier' do
         decision_applier =  double(:decision_applier)
         allow(license_finder).to receive(:decision_applier).and_return(decision_applier)
         expect(decision_applier).to receive(:unapproved)
         license_finder.unapproved
       end
 
-      it "passes through options when fetching current packages" do
-        expect(PackageManager).to receive(:current_packages).with(package_options).and_return([])
+      it 'passes through options when fetching current packages' do
+        expect(PackageManager).to receive(:active_packages).with(package_options).and_return([])
         license_finder.unapproved
       end
     end

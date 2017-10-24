@@ -52,7 +52,7 @@ module LicenseFinder
       package_managers.each do |manager|
         logger.log self.class, 'Running prepare on projects'
         manager.prepare
-        logger.log self.class, 'Finished prepare on prorojects'
+        logger.log self.class, 'Finished prepare on projects'
       end
     end
 
@@ -69,7 +69,7 @@ module LicenseFinder
 
     def current_packages
       # lazy, do not move to `initialize`
-      PackageManager.current_packages options
+      PackageManager.active_packages options
     end
 
     def options

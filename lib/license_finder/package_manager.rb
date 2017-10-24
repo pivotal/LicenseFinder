@@ -19,7 +19,7 @@ module LicenseFinder
          Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan]
       end
 
-      def current_packages(options)
+      def active_packages(options)
         active_package_managers(options).flat_map(&:current_packages_with_relations)
       end
 
@@ -81,7 +81,7 @@ module LicenseFinder
     end
 
     def current_packages_with_relations
-      packages = current_packages
+      packages = self.current_packages
       packages.each do |parent|
         parent.children.each do |child_name|
           child = packages.detect { |child| child.name == child_name }
