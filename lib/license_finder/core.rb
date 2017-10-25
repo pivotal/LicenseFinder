@@ -50,9 +50,9 @@ module LicenseFinder
     def prepare_projects
       package_managers = PackageManager.active_package_managers options
       package_managers.each do |manager|
-        logger.log self.class, 'Running prepare on projects'
+        logger.log self.class, 'Running prepare on project'
         manager.prepare
-        logger.log self.class, 'Finished prepare on projects'
+        logger.log self.class, Logger.green('Finished prepare on project')
       end
     end
 

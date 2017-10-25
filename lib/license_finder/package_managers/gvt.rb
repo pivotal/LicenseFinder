@@ -10,6 +10,10 @@ module LicenseFinder
       'gvt'
     end
 
+    def self.prepare_command
+      'gvt restore'
+    end
+
     def current_packages
       split_project_path = project_path.to_s.split('/')
       project_root_depth = split_project_path.length - 1
@@ -42,15 +46,6 @@ module LicenseFinder
                                       'Homepage' => repo
                                   }, nil, true)
       end
-    end
-
-    def prepare
-      shell_command = 'gvt restore'
-      _, success = capture(shell_command)
-      #TODO should crash out if not successs
-      #TODO output logs if logging is verbose
-      raise RuntimeError.new('GVT prepare step failed') unless success
-      #TODO if !success, raise should also specify failure cause.
     end
 
     def self.takes_priority_over

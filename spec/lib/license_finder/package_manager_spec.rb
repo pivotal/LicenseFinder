@@ -78,5 +78,36 @@ module LicenseFinder
         expect(LicenseFinder::PackageManager.active_package_managers).not_to include govendor
       end
     end
+
+    describe '#prepare' do
+      context 'when there is a prepare_command' do
+        before do
+          allow(described_class).to receive(:prepare_command).and_return('sh commands')
+        end
+
+        it 'succeeds when prepare command runs successfully' do
+          expect(subject).to receive(:capture).with('sh commands').and_return(['output', true])
+
+          expect { subject.prepare }.to_not raise_error
+        end
+
+        it 'raises exception when prepare command runs into failure' do
+          expect(subject).to receive(:capture).with('sh commands').and_return(['output', false])
+
+          expect { subject.prepare }.to raise_error("Prepare command 'sh commands' failed")
+        end
+      end
+
+      context 'when there is no prepare_command' do
+        it 'issues a warning' do
+          logger = double(:logger)
+          expect(logger).to receive(:prepare).with(described_class, nil)
+          expect(subject).to_not receive(:capture).with('sh commands')
+
+          subject = described_class.new logger: logger
+          subject.prepare
+        end
+      end
+    end
   end
 end

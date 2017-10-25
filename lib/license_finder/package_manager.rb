@@ -10,7 +10,7 @@ module LicenseFinder
   #
   # - implement #current_packages, to return a list of `Package`s this package manager is tracking
   # - implement #possible_package_paths, an array of `Pathname`s which are the possible locations which contain a configuration file/folder indicating the package manager is in use.
-  # - implement(Optional) #prepare, this is the method that gets run when the --prepare flag is passed to license_finder. This should call the relevant package manager setup methods to setup the project.
+  # - implement(Optional) #prepare_command, this is the package manager command that gets run when the --prepare flag is passed to license_finder.
   #
   class PackageManager
     class << self
@@ -51,6 +51,10 @@ module LicenseFinder
       def package_management_command
         nil
       end
+
+      def prepare_command
+        nil
+      end
     end
 
     def initialize options={}
@@ -72,8 +76,12 @@ module LicenseFinder
     end
 
     def prepare
-      # warn the user that there is no prepare
-      logger.prepare self.class, false
+      if self.class.prepare_command
+        _, success = capture(self.class.prepare_command)
+        raise "Prepare command '#{self.class.prepare_command}' failed" unless success
+      end
+
+      logger.prepare self.class, self.class.prepare_command
     end
 
     def capture(command)
