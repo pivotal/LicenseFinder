@@ -10,8 +10,9 @@ module LicenseFinder
   #
   # - implement #current_packages, to return a list of `Package`s this package manager is tracking
   # - implement #possible_package_paths, an array of `Pathname`s which are the possible locations which contain a configuration file/folder indicating the package manager is in use.
-  # - implement(Optional) #prepare_command, this is the package manager command that gets run when the --prepare flag is passed to license_finder.
-  #
+  # - implement(Optional) #package_management_command, string for invoking the package manager
+  # - implement(Optional) #prepare_command, string for fetching dependencies for package manager (runs when the --prepare flag is passed to license_finder)
+
   class PackageManager
     class << self
       def package_managers
@@ -48,10 +49,12 @@ module LicenseFinder
         return false
       end
 
+      # see class description
       def package_management_command
         nil
       end
 
+      # see class description
       def prepare_command
         nil
       end

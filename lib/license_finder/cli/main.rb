@@ -39,7 +39,7 @@ module LicenseFinder
         method_option :debug,
                       :aliases => '-d',
                       :type => :boolean,
-                      :desc => 'emit detailed info about what LicenseFinder is doing'
+                      :desc => 'Emit detailed info about what LicenseFinder is doing'
 
         method_option :prepare,
                       :aliases => '-p',
