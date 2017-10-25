@@ -53,5 +53,18 @@ module LicenseFinder
         end
       end
     end
+
+    describe '.prepare_method' do
+      it 'returns the correct prepare method' do
+        expect(described_class.prepare_method).to eq('dep ensure')
+      end
+    end
+
+    describe '.package_management_command' do
+      it 'returns the correct package management command' do
+        expect(described_class.package_management_command).to eq('dep')
+      end
+    end
+
   end
 end

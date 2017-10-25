@@ -42,5 +42,13 @@ module LicenseFinder
     def self.takes_priority_over
       NPM
     end
+
+    def self.package_management_command
+      'yarn'
+    end
+
+    def self.prepare_method
+      'yarn install'
+    end
   end
 end

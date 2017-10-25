@@ -20,5 +20,14 @@ module LicenseFinder
     def self.takes_priority_over
       Go15VendorExperiment
     end
+
+    def self.package_management_command
+      'govendor'
+    end
+
+    def self.prepare_method
+      'govendor sync'
+    end
+
   end
 end

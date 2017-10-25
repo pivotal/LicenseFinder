@@ -18,5 +18,13 @@ module LicenseFinder
     def self.takes_priority_over
       Go15VendorExperiment
     end
+
+    def self.package_management_command
+      'glide'
+    end
+
+    def self.prepare_method
+      'glide install'
+    end
   end
 end

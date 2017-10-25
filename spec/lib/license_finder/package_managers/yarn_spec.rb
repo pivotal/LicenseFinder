@@ -4,7 +4,7 @@ require 'fakefs/spec_helpers'
 module LicenseFinder
   describe Yarn do
     it_behaves_like 'a PackageManager'
-    describe "#current_packages" do
+    describe '#current_packages' do
       subject {Yarn.new(project_path: Pathname('/app'), logger: double(:logger, active: nil))}
 
       it 'displays packages as returned from "yarn list"' do
@@ -29,6 +29,18 @@ module LicenseFinder
         expect(subject.current_packages.last.name).to eq 'fsevents'
         expect(subject.current_packages.last.version).to eq '1.1.1'
         expect(subject.current_packages.last.license_names_from_spec).to eq ['unknown']
+      end
+    end
+
+    describe '.prepare_method' do
+      it 'returns the correct prepare method' do
+        expect(described_class.prepare_method).to eq('yarn install')
+      end
+    end
+
+    describe '.package_management_command' do
+      it 'returns the correct package management command' do
+        expect(described_class.package_management_command).to eq('yarn')
       end
     end
   end
