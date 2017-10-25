@@ -3,8 +3,8 @@ require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe Gvt do
-    it_behaves_like "a PackageManager"
-    describe "#current_packages" do
+    it_behaves_like 'a PackageManager'
+    describe '#current_packages' do
       subject { Gvt.new(project_path: Pathname('/app'), logger: double(:logger, active: nil)) }
 
       before do
@@ -15,9 +15,9 @@ module LicenseFinder
         FakeFS.deactivate!
       end
 
-      context "when the 'vendor' folder is nested in another folder" do
+      context 'when the \'vendor\' folder is nested in another folder' do
         include FakeFS::SpecHelpers
-        it "returns the packages described by 'gvt list'" do
+        it 'returns the packages described by \'gvt list\'' do
           FileUtils.mkdir_p '/app/anything/vendor'
           File.write('/app/anything/vendor/manifest',
                      '{
@@ -63,7 +63,7 @@ module LicenseFinder
         end
       end
 
-      context "when the 'vendor' folder is not nested in another folder" do
+      context 'when the \'vendor\' folder is not nested in another folder' do
         include FakeFS::SpecHelpers
         it "returns the packages described by 'gvt list'" do
           FileUtils.mkdir_p '/app/vendor'
@@ -112,11 +112,23 @@ module LicenseFinder
       end
 
 
-      it "returns empty package list if 'gvt list' fails" do
+      it 'returns empty package list if \'gvt list\' fails' do
         allow(subject).to receive(:capture).with(anything()) do
           ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", false]
         end
         expect(subject.current_packages).to eq []
+      end
+    end
+
+    describe '.prepare_command' do
+      it 'returns the correct gvt restore command' do
+        expect(described_class.prepare_command).to eq('gvt restore')
+      end
+    end
+
+    describe '.package_management_command' do
+      it 'returns the correct package management command' do
+        expect(described_class.package_management_command).to eq('gvt')
       end
     end
   end

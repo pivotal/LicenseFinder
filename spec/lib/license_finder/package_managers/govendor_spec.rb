@@ -44,5 +44,17 @@ module LicenseFinder
         end
       end
     end
+
+    describe '.prepare_method' do
+      it 'returns the correct prepare method' do
+        expect(described_class.prepare_method).to eq('govendor sync')
+      end
+    end
+
+    describe '.package_management_command' do
+      it 'returns the correct package management command' do
+        expect(described_class.package_management_command).to eq('govendor')
+      end
+    end
   end
 end
