@@ -10,44 +10,54 @@ module LicenseFinder
   #
   # - implement #current_packages, to return a list of `Package`s this package manager is tracking
   # - implement #possible_package_paths, an array of `Pathname`s which are the possible locations which contain a configuration file/folder indicating the package manager is in use.
-  #
+  # - implement(Optional) #package_management_command, string for invoking the package manager
+  # - implement(Optional) #prepare_command, string for fetching dependencies for package manager (runs when the --prepare flag is passed to license_finder)
+
   class PackageManager
-    def self.package_managers
-      [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
-       Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan]
-    end
-
-    def self.current_packages(options)
-      active_package_managers(options).flat_map(&:current_packages_with_relations)
-    end
-
-    def self.active_package_managers(options={:project_path => Pathname.new('')})
-      active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
-      active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
-      active_pm_classes.map { |pm_class| pm_class.new(options) }
-    end
-
-    def self.takes_priority_over
-      nil
-    end
-
-    def self.installed?(logger=Core.default_logger)
-      if package_management_command.nil?
-        logger.installed self, "no command defined" # TODO comment me out
-        return true
+    class << self
+      def package_managers
+        [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
+         Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan]
       end
 
-      if command_exists?(package_management_command)
-        logger.installed self, true
-        return true
+      def active_packages(options)
+        active_package_managers(options).flat_map(&:current_packages_with_relations)
       end
 
-      logger.installed self, false
-      return false
-    end
+      def active_package_managers(options={:project_path => Pathname.new('')})
+        active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
+        active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
+        active_pm_classes.map { |pm_class| pm_class.new(options) }
+      end
 
-    def self.package_management_command
-      nil
+      def takes_priority_over
+        nil
+      end
+
+      def installed?(logger=Core.default_logger)
+        if package_management_command.nil?
+          logger.installed self, "no command defined" # TODO comment me out
+          return true
+        end
+
+        if command_exists?(package_management_command)
+          logger.installed self, true
+          return true
+        end
+
+        logger.installed self, false
+        return false
+      end
+
+      # see class description
+      def package_management_command
+        nil
+      end
+
+      # see class description
+      def prepare_command
+        nil
+      end
     end
 
     def initialize options={}
@@ -68,12 +78,21 @@ module LicenseFinder
       }
     end
 
+    def prepare
+      if self.class.prepare_command
+        _, success = capture(self.class.prepare_command)
+        raise "Prepare command '#{self.class.prepare_command}' failed" unless success
+      end
+
+      logger.prepare self.class, self.class.prepare_command
+    end
+
     def capture(command)
       [`#{command}`, $?.success?]
     end
 
     def current_packages_with_relations
-      packages = current_packages
+      packages = self.current_packages
       packages.each do |parent|
         parent.children.each do |child_name|
           child = packages.detect { |child| child.name == child_name }

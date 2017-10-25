@@ -10,6 +10,10 @@ module LicenseFinder
       'gvt'
     end
 
+    def self.prepare_command
+      'gvt restore'
+    end
+
     def current_packages
       split_project_path = project_path.to_s.split('/')
       project_root_depth = split_project_path.length - 1

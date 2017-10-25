@@ -47,6 +47,15 @@ module LicenseFinder
       @decisions ||= Decisions.fetch_saved(config.decisions_file_path)
     end
 
+    def prepare_projects
+      package_managers = PackageManager.active_package_managers options
+      package_managers.each do |manager|
+        logger.log self.class, 'Running prepare on project'
+        manager.prepare
+        logger.log self.class, Logger.green('Finished prepare on project')
+      end
+    end
+
     private
 
     attr_reader :logger
@@ -60,21 +69,26 @@ module LicenseFinder
 
     def current_packages
       # lazy, do not move to `initialize`
-      PackageManager.current_packages(
-        logger: logger,
-        project_path: config.project_path,
-        ignored_groups: decisions.ignored_groups,
-        go_full_version: config.go_full_version,
-        gradle_command: config.gradle_command,
-        gradle_include_groups: config.gradle_include_groups,
-        maven_include_groups: config.maven_include_groups,
-        maven_options: config.maven_options,
-        pip_requirements_path: config.pip_requirements_path,
-        rebar_command: config.rebar_command,
-        rebar_deps_dir: config.rebar_deps_dir,
-        mix_command: config.mix_command,
-        mix_deps_dir: config.mix_deps_dir,
-      )
+      PackageManager.active_packages options
+    end
+
+    def options
+      {
+          logger: logger,
+          project_path: config.project_path,
+          ignored_groups: decisions.ignored_groups,
+          go_full_version: config.go_full_version,
+          gradle_command: config.gradle_command,
+          gradle_include_groups: config.gradle_include_groups,
+          maven_include_groups: config.maven_include_groups,
+          maven_options: config.maven_options,
+          pip_requirements_path: config.pip_requirements_path,
+          rebar_command: config.rebar_command,
+          rebar_deps_dir: config.rebar_deps_dir,
+          mix_command: config.mix_command,
+          mix_deps_dir: config.mix_deps_dir,
+          prepare: config.prepare
+      }
     end
   end
 end

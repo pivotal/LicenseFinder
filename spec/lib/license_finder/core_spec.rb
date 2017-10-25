@@ -12,7 +12,7 @@ module LicenseFinder
       allow(Logger).to receive(:new).and_return(logger)
     end
 
-    describe "#unapproved" do
+    describe '#unapproved' do
       let(:options) {
         {
           logger: {},
@@ -21,7 +21,8 @@ module LicenseFinder
           rebar_command: 'do_it',
           rebar_deps_dir: 'nowhere/deps',
           mix_command: 'mix_it',
-          mix_deps_dir: 'mixes_in_here/deps'
+          mix_deps_dir: 'mixes_in_here/deps',
+          prepare: 'prepare'
         }
       }
       let(:package_options) {
@@ -38,19 +39,20 @@ module LicenseFinder
           rebar_command: configuration.rebar_command,
           rebar_deps_dir: configuration.rebar_deps_dir,
           mix_command: configuration.mix_command,
-          mix_deps_dir: configuration.mix_deps_dir
+          mix_deps_dir: configuration.mix_deps_dir,
+          prepare: configuration.prepare
         }
       }
 
-      it "delegates to the decision_applier" do
+      it 'delegates to the decision_applier' do
         decision_applier =  double(:decision_applier)
         allow(license_finder).to receive(:decision_applier).and_return(decision_applier)
         expect(decision_applier).to receive(:unapproved)
         license_finder.unapproved
       end
 
-      it "passes through options when fetching current packages" do
-        expect(PackageManager).to receive(:current_packages).with(package_options).and_return([])
+      it 'passes through options when fetching current packages' do
+        expect(PackageManager).to receive(:active_packages).with(package_options).and_return([])
         license_finder.unapproved
       end
     end
