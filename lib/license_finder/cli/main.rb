@@ -30,8 +30,6 @@ module LicenseFinder
       class_option :rebar_deps_dir, desc: %q(Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'.)
       class_option :mix_command, desc: %q(Command to use when fetching packages through Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'mix'.)
       class_option :mix_deps_dir, desc: %q(Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'.)
-      class_option :subprojects, type: :array, desc: %q(Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2')
-      class_option :recursive, desc: 'Recursively runs License Finder on all sub-projects.'
 
       # Method options which are shared between report and action_item
       def self.shared_options
@@ -90,10 +88,15 @@ module LicenseFinder
 
       desc 'report', "Print a report of the project's dependencies to stdout"
       shared_options
+      method_option :recursive, aliases: '-r', type: :boolean, default: false,
+                    desc: 'Recursively runs License Finder on all sub-projects'
+
+      method_option :subprojects, aliases: '-s', type: :array,
+                    desc: %q(Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2')
       def report
         logger_config[:quiet] = true
-        subproject_paths = options[:subprojects] if subprojects?
-        subproject_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if recursive?
+        subproject_paths = options[:subprojects]
+        subproject_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
 
         if subproject_paths && !subproject_paths.empty?
           finder = LicenseAggregator.new(license_finder_config, subproject_paths)
@@ -106,13 +109,11 @@ module LicenseFinder
       end
 
       desc 'version', 'Print the version of LicenseFinder'
-
       def version
         puts LicenseFinder::VERSION
       end
 
       desc 'diff OLDFILE NEWFILE', 'Command to view the differences between two generated reports (csv).'
-
       def diff(file1, file2)
         f1 = IO.read(file1)
         f2 = IO.read(file2)
@@ -144,14 +145,6 @@ module LicenseFinder
 
       def save?
         !!options[:save]
-      end
-
-      def recursive?
-        !!options[:recursive]
-      end
-
-      def subprojects?
-        !!options[:subprojects]
       end
 
       def prepare?
