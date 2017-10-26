@@ -123,7 +123,7 @@ module LicenseFinder
 
     def activations
       licensing.activations.tap do |activations|
-        activations.each { |activation| logger.activation(activation) }
+        activations.each { |activation| log_activation activation }
       end
     end
 
@@ -151,6 +151,17 @@ module LicenseFinder
 
     def missing?
       @missing
+    end
+
+    def log_activation activation
+      preamble = sprintf("package %s:", activation.package.name)
+      if activation.sources.empty?
+        logger.log activation.package.class, sprintf("%s no licenses found", preamble)
+      else
+        activation.sources.each do |source|
+          logger.log activation.package.class, sprintf("%s found license '%s' %s", preamble, activation.license.name, source)
+        end
+      end
     end
   end
 end

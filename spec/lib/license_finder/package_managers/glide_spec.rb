@@ -5,7 +5,7 @@ module LicenseFinder
   describe Glide do
     it_behaves_like "a PackageManager"
 
-    subject {Glide.new(project_path: Pathname('/app'), logger: double(:logger, active: nil, installed: true))}
+    subject {Glide.new(project_path: Pathname('/app'), logger: double(:logger, active: nil, log: true))}
 
     context "when lock file is contained in src folder" do
       it "should return active" do
