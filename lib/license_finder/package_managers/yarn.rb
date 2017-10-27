@@ -1,6 +1,6 @@
 module LicenseFinder
   class Yarn < PackageManager
-    SHELL_COMMAND = 'yarn licenses list --no-progress --json'
+    SHELL_COMMAND = 'yarn licenses list --no-progress --json'.freeze
 
     def possible_package_paths
       [project_path.join('yarn.lock')]
@@ -24,14 +24,14 @@ module LicenseFinder
         packages = body.map do |json_package|
           Hash[head.zip(json_package)]
         end.map do |package_hash|
-          Package.new(package_hash['Name'], package_hash['Version'], {spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl']})
+          Package.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl'])
         end
       end
 
       json_objects.each do |json_object|
-        match = (/(?<name>[\w,\-]+)@(?<version>(\d+\.?)+)/) =~ json_object['data'].to_s
+        match = /(?<name>[\w,\-]+)@(?<version>(\d+\.?)+)/ =~ json_object['data'].to_s
         if match
-          package = Package.new(name, version, {spec_licenses: ['unknown']})
+          package = Package.new(name, version, spec_licenses: ['unknown'])
           incompatiblePackages.push(package)
         end
       end

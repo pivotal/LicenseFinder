@@ -45,7 +45,6 @@ module LicenseFinder
           expanded_bar_path1 = File.expand_path(merged_bar_new.subproject_paths[0])
           expanded_bar_path2 = File.expand_path(merged_bar_new.subproject_paths[1])
 
-
           report = DiffReport.new([foo, bar])
           expect(report.to_s).to include("unchanged,foo,1.1.0,MIT,#{expanded_foo_path}")
           expect(report.to_s).to include("added,bar,1.1.0,MIT,\"#{expanded_bar_path1},#{expanded_bar_path2}\"")

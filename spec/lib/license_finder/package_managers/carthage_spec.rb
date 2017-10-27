@@ -20,7 +20,7 @@ module LicenseFinder
           .with(filename)
           .and_return(hash[key])
 
-        allow(File).to receive(:exists?)
+        allow(File).to receive(:exist?)
           .with(filename)
           .and_return(true)
 
@@ -32,33 +32,33 @@ module LicenseFinder
 
     before do
       allow(IO).to receive(:read).and_call_original
-      allow(File).to receive(:exists?).and_return(false)
+      allow(File).to receive(:exist?).and_return(false)
       allow(Dir).to receive(:glob).and_return([])
     end
 
     describe '.current_packages' do
       context 'when carthage already ran and Cartfile.resolved exists' do
         before do
-          allow(File).to receive(:exists?).and_return(true)
+          allow(File).to receive(:exist?).and_return(true)
         end
 
         it 'lists all the current packages' do
           stub_resolved([
-                            'github "younata/Lepton" "92a21f46f12f2ec6a814aedc30a51e551d42a573"',
-                            'github "pivotal/PivotalCoreKit" "v0.3.4"',
-                            'git "https://example.com/dependency.git" "v0.1.0"'
+                          'github "younata/Lepton" "92a21f46f12f2ec6a814aedc30a51e551d42a573"',
+                          'github "pivotal/PivotalCoreKit" "v0.3.4"',
+                          'git "https://example.com/dependency.git" "v0.1.0"'
                         ])
 
           expect(carthage.current_packages.map { |p| [p.name, p.version] }).to eq [
-                                                                                      ['Lepton', '92a21f46f12f2ec6a814aedc30a51e551d42a573'],
-                                                                                      ['PivotalCoreKit', 'v0.3.4'],
-                                                                                      ['dependency', 'v0.1.0']
-                                                                                  ]
+            %w[Lepton 92a21f46f12f2ec6a814aedc30a51e551d42a573],
+            ['PivotalCoreKit', 'v0.3.4'],
+            ['dependency', 'v0.1.0']
+          ]
         end
 
         it 'passes the license text to the package' do
           stub_resolved(['github "pivotal/PivotalCoreKit" "v0.3.4"'])
-          stub_license_md({'PivotalCoreKit' => 'The MIT License'})
+          stub_license_md('PivotalCoreKit' => 'The MIT License')
 
           expect(carthage.current_packages.first.licenses.map(&:name)).to eq ['MIT']
         end
@@ -72,9 +72,9 @@ module LicenseFinder
 
       context 'when carthage did not run yet' do
         it 'raises an exception to explain the reason' do
-          expect {
+          expect do
             carthage.current_packages.first.licenses.map(&:name)
-          }.to raise_exception(Carthage::CarthageError)
+          end.to raise_exception(Carthage::CarthageError)
         end
       end
     end

@@ -17,8 +17,8 @@ module LicenseFinder
 
       it 'fetches data from pip' do
         stub_pip [
-          {'name' => 'jasmine', 'version' => '1.3.1', 'location' => 'jasmine/path', 'dependencies' => ['jasmine-core']},
-          {'name' => 'jasmine-core', 'version' => '1.3.1', 'location' => 'jasmine-core/path'}
+          { 'name' => 'jasmine', 'version' => '1.3.1', 'location' => 'jasmine/path', 'dependencies' => ['jasmine-core'] },
+          { 'name' => 'jasmine-core', 'version' => '1.3.1', 'location' => 'jasmine-core/path' }
         ].to_json
         stub_pypi('jasmine', '1.3.1', status: 200, body: '{}')
         stub_pypi('jasmine-core', '1.3.1', status: 200, body: '{}')
@@ -30,14 +30,14 @@ module LicenseFinder
       end
 
       it 'fetches data from pypi' do
-        stub_pip [{'name' => 'jasmine', 'version' => '1.3.1', 'location' => 'jasmine/path'}].to_json
-        stub_pypi('jasmine', '1.3.1', status: 200, body: JSON.generate(info: {summary: 'A summary'}))
+        stub_pip [{ 'name' => 'jasmine', 'version' => '1.3.1', 'location' => 'jasmine/path' }].to_json
+        stub_pypi('jasmine', '1.3.1', status: 200, body: JSON.generate(info: { summary: 'A summary' }))
 
         expect(pip.current_packages.first.summary).to eq 'A summary'
       end
 
       it 'ignores pypi if it cannot find useful info' do
-        stub_pip [{'name' => 'jasmine', 'version' => '1.3.1', 'location' => 'jasmine/path'}].to_json
+        stub_pip [{ 'name' => 'jasmine', 'version' => '1.3.1', 'location' => 'jasmine/path' }].to_json
         stub_pypi('jasmine', '1.3.1', status: 404, body: '')
 
         expect(pip.current_packages.first.summary).to eq ''

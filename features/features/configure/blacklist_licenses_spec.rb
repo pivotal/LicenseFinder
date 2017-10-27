@@ -1,6 +1,6 @@
 require_relative '../../support/feature_helper'
 
-describe "Blacklisted licenses" do
+describe 'Blacklisted licenses' do
   # As a lawyer
   # I want to blacklist certain licenses
   # So that any dependencies with only these licenses cannot be approved
@@ -14,14 +14,14 @@ describe "Blacklisted licenses" do
     developer.execute_command 'license_finder dependencies add blacklisted_dep BSD'
   end
 
-  specify "prevent packages from being approved" do
+  specify 'prevent packages from being approved' do
     developer.execute_command 'license_finder approval add blacklisted_dep'
 
     lawyer.run_license_finder
     expect(lawyer).to be_seeing 'blacklisted_dep'
   end
 
-  specify "override the whitelist" do
+  specify 'override the whitelist' do
     developer.execute_command 'license_finder whitelist add BSD'
 
     lawyer.run_license_finder

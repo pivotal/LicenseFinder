@@ -1,0 +1,13 @@
+Documentation:
+  Enabled: false
+YAMLLoad:
+  Enabled: false
+AllCops:
+  Include:
+    - 'bin/license_finder'
+  Exclude:
+    - 'lib/license_finder/reports'
+    - 'features/fixtures'
+    - 'releases'
+    - 'ci'
+    - 'tmp'

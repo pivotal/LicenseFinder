@@ -1,6 +1,6 @@
 require_relative '../../support/feature_helper'
 
-describe "HTML report" do
+describe 'HTML report' do
   # As a non-technical product owner
   # I want an HTML report
   # So that I can easily review my application's dependencies and licenses
@@ -8,15 +8,15 @@ describe "HTML report" do
   let(:developer) { LicenseFinder::TestingDSL::User.new }
   let(:product_owner) { LicenseFinder::TestingDSL::User.new }
 
-  specify "shows basic dependency data" do
-    gem_name = "a_gem"
-    gem_group = "test"
+  specify 'shows basic dependency data' do
+    gem_name = 'a_gem'
+    gem_group = 'test'
     gem_attributes = {
-      license:     "MIT",
-      summary:     "gem is cool",
-      description: "seriously",
-      version:     "0.0.1",
-      homepage:    "http://a_gem.github.com"
+      license:     'MIT',
+      summary:     'gem is cool',
+      description: 'seriously',
+      version:     '0.0.1',
+      homepage:    'http://a_gem.github.com'
     }
 
     project = developer.create_ruby_app
@@ -33,7 +33,7 @@ describe "HTML report" do
     end
   end
 
-  specify "shows approval status of dependencies" do
+  specify 'shows approval status of dependencies' do
     developer.create_empty_project
     developer.execute_command 'license_finder dependencies add gpl_dep GPL'
     developer.execute_command 'license_finder dependencies add mit_dep MIT'

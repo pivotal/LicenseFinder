@@ -12,4 +12,3 @@ describe 'Gvt Dependencies' do
     expect(go_developer).to be_seeing_line 'github.com/golang/protobuf/proto, 8ee79997227bf9b34611aee7946ae64735e6fd93, "New BSD"'
   end
 end
-

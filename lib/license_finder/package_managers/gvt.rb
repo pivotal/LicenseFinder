@@ -20,12 +20,12 @@ module LicenseFinder
 
       split_package_path = detected_package_path.to_s.split('/')
       vendor_dir_depth = split_package_path.index('vendor')
-      return [] if (vendor_dir_depth.nil?)
+      return [] if vendor_dir_depth.nil?
       vendor_dir_parent_depth = vendor_dir_depth - 1
 
       is_project_root_parent_of_vendor_dir = project_root_depth == vendor_dir_parent_depth
-      
-      if (is_project_root_parent_of_vendor_dir)
+
+      if is_project_root_parent_of_vendor_dir
         shell_command = 'gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"'
         path = project_path.join('vendor')
       else
@@ -40,10 +40,10 @@ module LicenseFinder
       package_lines.map do |package_line|
         import_path, revision, repo = package_line.split
         GoPackage.from_dependency({
-                                      'ImportPath' => import_path,
-                                      'InstallPath' => path.join(import_path),
-                                      'Rev' => revision,
-                                      'Homepage' => repo
+                                    'ImportPath' => import_path,
+                                    'InstallPath' => path.join(import_path),
+                                    'Rev' => revision,
+                                    'Homepage' => repo
                                   }, nil, true)
       end
     end

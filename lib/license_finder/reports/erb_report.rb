@@ -38,7 +38,7 @@ module LicenseFinder
     end
 
     def link_to(text, link = "##{text}")
-      %{<a href="#{link}">#{text}</a>}
+      %(<a href="#{link}">#{text}</a>)
     end
 
     def license_names(dependency)
@@ -51,9 +51,7 @@ module LicenseFinder
 
     def version_groups(dependency)
       result = "v#{dependency.version}"
-      if dependency.groups.any?
-        result << " (#{dependency.groups.join(", ")})"
-      end
+      result << " (#{dependency.groups.join(', ')})" if dependency.groups.any?
       result
     end
   end

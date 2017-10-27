@@ -1,6 +1,6 @@
 module LicenseFinder
   class BundlerPackage < Package
-    def initialize(spec, bundler_def, options={})
+    def initialize(spec, bundler_def, options = {})
       children = spec.dependencies.map(&:name)
       groups = Array(bundler_def && bundler_def.groups).map(&:to_s)
 

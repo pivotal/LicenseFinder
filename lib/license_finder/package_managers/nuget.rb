@@ -5,9 +5,9 @@ module LicenseFinder
   class Nuget < PackageManager
     def possible_package_paths
       path = project_path.join('vendor/*.nupkg')
-      nuget_dir = Dir[path].map{|pkg| File.dirname(pkg)}.uniq
+      nuget_dir = Dir[path].map { |pkg| File.dirname(pkg) }.uniq
       possible_paths = [project_path.join('.nuget'), project_path.join('packages')]
-      possible_paths.unshift(Pathname(nuget_dir.first)) unless nuget_dir.length == 0
+      possible_paths.unshift(Pathname(nuget_dir.first)) unless nuget_dir.empty?
       possible_paths
     end
 
@@ -20,15 +20,14 @@ module LicenseFinder
     end
 
     def current_packages
-      dependencies.reduce({}) do |memo, dep|
+      dependencies.each_with_object({}) do |dep, memo|
         licenses = license_urls(dep)
         memo[dep.name] ||= NugetPackage.new(dep.name, dep.version, spec_licenses: licenses)
-        memo[dep.name].groups << dep.assembly if !memo[dep.name].groups.include? dep.assembly
-        memo
+        memo[dep.name].groups << dep.assembly unless memo[dep.name].groups.include? dep.assembly
       end.values
     end
 
-    def license_urls dep
+    def license_urls(dep)
       files = Dir["**/#{dep.name}.#{dep.version}.nupkg"]
       return nil if files.empty?
       file = files.first
@@ -51,11 +50,11 @@ module LicenseFinder
       end
 
       def dependencies
-        xml = REXML::Document.new(File.read(path.join("packages.config")))
-        packages = REXML::XPath.match(xml, "//package")
+        xml = REXML::Document.new(File.read(path.join('packages.config')))
+        packages = REXML::XPath.match(xml, '//package')
         packages.map do |p|
           attrs = p.attributes
-          Dependency.new(attrs["id"], attrs["version"], self.name)
+          Dependency.new(attrs['id'], attrs['version'], name)
         end
       end
     end
@@ -64,4 +63,3 @@ module LicenseFinder
     end
   end
 end
-

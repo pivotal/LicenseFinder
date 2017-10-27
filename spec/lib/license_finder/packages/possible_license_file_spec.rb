@@ -2,10 +2,10 @@ require 'spec_helper'
 
 module LicenseFinder
   describe PossibleLicenseFile do
-    context "file parsing" do
+    context 'file parsing' do
       subject { described_class.new('root/nested/path') }
 
-      context "ignoring text" do
+      context 'ignoring text' do
         before do
           allow(subject).to receive(:text).and_return('file text')
         end
@@ -17,17 +17,17 @@ module LicenseFinder
 
     subject { described_class.new('gem/license/path') }
 
-    context "with a known license" do
+    context 'with a known license' do
       before do
         allow(subject).to receive(:text).and_return('a known license')
 
-        allow(License).to receive(:find_by_text).with('a known license').and_return(License.find_by_name("MIT"))
+        allow(License).to receive(:find_by_text).with('a known license').and_return(License.find_by_name('MIT'))
       end
 
-      its(:license) { should == License.find_by_name("MIT") }
+      its(:license) { should == License.find_by_name('MIT') }
     end
 
-    context "with an unknown license" do
+    context 'with an unknown license' do
       before do
         allow(subject).to receive(:text).and_return('')
       end

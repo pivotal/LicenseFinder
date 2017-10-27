@@ -1,19 +1,19 @@
 require_relative '../../support/feature_helper'
 
-describe "License Finder command line executable" do
+describe 'License Finder command line executable' do
   # As a developer
   # I want a command-line interface
   # So that I can manage my application's dependencies and licenses
 
   let(:developer) { LicenseFinder::TestingDSL::User.new }
 
-  specify "shows usage and subcommand help" do
+  specify 'shows usage and subcommand help' do
     developer.create_empty_project
 
-    developer.execute_command "license_finder help"
+    developer.execute_command 'license_finder help'
     expect(developer).to be_seeing 'license_finder help [COMMAND]'
 
-    developer.execute_command "license_finder ignored_groups help add"
+    developer.execute_command 'license_finder ignored_groups help add'
     expect(developer).to be_seeing 'license_finder ignored_groups add GROUP'
   end
 
@@ -31,7 +31,7 @@ describe "License Finder command line executable" do
     expect(developer).to be_seeing_something_like /thor.*MIT/
   end
 
-  specify "runs default command" do
+  specify 'runs default command' do
     developer.create_empty_project
 
     developer.run_license_finder
@@ -39,7 +39,7 @@ describe "License Finder command line executable" do
     expect(developer).to be_seeing 'No dependencies recognized!'
   end
 
-  specify "displays an error if project_path does not exist" do
+  specify 'displays an error if project_path does not exist' do
     developer.create_empty_project
 
     path = '/path/that/does/not/exist'

@@ -4,21 +4,21 @@ require_relative 'gradle_dependency_finder'
 
 module LicenseFinder
   class Gradle < PackageManager
-    def initialize(options={})
+    def initialize(options = {})
       super
       @command = options[:gradle_command] || package_management_command
       @include_groups = options[:gradle_include_groups]
     end
 
     def current_packages
-      WithEnv.with_env({"TERM" => "dumb"}) do
+      WithEnv.with_env('TERM' => 'dumb') do
         command = "#{@command} downloadLicenses"
         output, success = Dir.chdir(project_path) { capture(command) }
         raise "Command '#{command}' failed to execute: #{output}" unless success
 
         dependencies = GradleDependencyFinder.new(project_path).dependencies
         packages = dependencies.flat_map do |xml_file|
-          options = {'GroupTags' => {'dependencies' => 'dependency'}}
+          options = { 'GroupTags' => { 'dependencies' => 'dependency' } }
           contents = XmlSimple.xml_in(xml_file, options).fetch('dependency', [])
           contents.map do |dep|
             GradlePackage.new(dep, logger: logger, include_groups: @include_groups)
@@ -29,15 +29,15 @@ module LicenseFinder
     end
 
     def package_management_command
-        if Platform.windows?
-          wrapper = 'gradlew.bat'
-          gradle = 'gradle.bat'
-        else
-          wrapper = './gradlew'
-          gradle = 'gradle'
-        end
+      if Platform.windows?
+        wrapper = 'gradlew.bat'
+        gradle = 'gradle.bat'
+      else
+        wrapper = './gradlew'
+        gradle = 'gradle'
+      end
 
-        File.exist?(File.join(project_path, wrapper)) ? wrapper : gradle
+      File.exist?(File.join(project_path, wrapper)) ? wrapper : gradle
     end
 
     private
@@ -52,7 +52,7 @@ module LicenseFinder
     def build_file_from_settings(project_path)
       settings_gradle_path = project_path.join 'settings.gradle'
 
-      return nil unless File.exists? settings_gradle_path
+      return nil unless File.exist? settings_gradle_path
 
       settings_gradle = File.read settings_gradle_path
 
@@ -60,7 +60,7 @@ module LicenseFinder
 
       return nil unless match
 
-      return project_path.join match[:build_file]
+      project_path.join match[:build_file]
     end
   end
 end

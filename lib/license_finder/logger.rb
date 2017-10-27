@@ -1,6 +1,6 @@
 module LicenseFinder
   module Logger
-    def self.new options={}
+    def self.new(options = {})
       klass = if options[:quiet]
                 Quiet
               elsif options[:debug]

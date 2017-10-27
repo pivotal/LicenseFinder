@@ -5,7 +5,7 @@ module LicenseFinder
     def self.with_optional_saved_config(primary_config)
       project_path = Pathname(primary_config.fetch(:project_path, Pathname.pwd)).expand_path
       config_file =  project_path.join('config', 'license_finder.yml')
-      saved_config = config_file.exist? ? YAML.load(config_file.read) : {}
+      saved_config = config_file.exist? ? YAML.safe_load(config_file.read) : {}
       new(primary_config, saved_config)
     end
 
@@ -15,9 +15,7 @@ module LicenseFinder
     end
 
     def valid_project_path?
-      if get(:project_path)
-        return project_path.exist?
-      end
+      return project_path.exist? if get(:project_path)
       true
     end
 
@@ -50,7 +48,7 @@ module LicenseFinder
     end
 
     def mix_command
-      get(:mix_command) || "mix"
+      get(:mix_command) || 'mix'
     end
 
     def rebar_deps_dir

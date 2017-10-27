@@ -5,7 +5,7 @@ module LicenseFinder
   describe Yarn do
     it_behaves_like 'a PackageManager'
     describe '#current_packages' do
-      subject {Yarn.new(project_path: Pathname('/app'), logger: double(:logger, active: nil))}
+      subject { Yarn.new(project_path: Pathname('/app'), logger: double(:logger, active: nil)) }
 
       it 'displays packages as returned from "yarn list"' do
         allow(subject).to receive(:capture).with(Yarn::SHELL_COMMAND) do

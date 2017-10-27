@@ -7,8 +7,8 @@ module LicenseFinder
 
       module ClassMethods
         def auditable
-          method_option :who, desc: "The person making this decision"
-          method_option :why, desc: "The reason for making this decision"
+          method_option :who, desc: 'The person making this decision'
+          method_option :why, desc: 'The reason for making this decision'
           method_option :version, desc: 'The version that will be approved'
         end
       end

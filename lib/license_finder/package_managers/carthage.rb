@@ -25,11 +25,11 @@ module LicenseFinder
     private
 
     def cartfile
-      if File.exists?(resolved_path)
+      if File.exist?(resolved_path)
         @cartfile ||= IO.read(resolved_path)
       else
-        raise CarthageError.new('No Cartfile.resolved found.
-          Please install your dependencies first.')
+        raise CarthageError, 'No Cartfile.resolved found.
+          Please install your dependencies first.'
       end
     end
 
@@ -50,7 +50,7 @@ module LicenseFinder
     end
 
     def license_text(name)
-      license_path = license_pattern(name).find { |f| File.exists?(f) }
+      license_path = license_pattern(name).find { |f| File.exist?(f) }
       license_path.nil? ? nil : IO.read(license_path)
     end
 
@@ -60,7 +60,7 @@ module LicenseFinder
     end
 
     def name_version_from_line(cartfile_line)
-      cartfile_line.split(' ')[1, 2].map { |f| f.split('/').last.gsub('"', '').gsub('.git', '') }
+      cartfile_line.split(' ')[1, 2].map { |f| f.split('/').last.delete('"').gsub('.git', '') }
     end
   end
 end

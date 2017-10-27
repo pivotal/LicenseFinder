@@ -3,7 +3,7 @@ module LicenseFinder
     private
 
     def template_name
-      "markdown_report"
+      'markdown_report'
     end
   end
 end

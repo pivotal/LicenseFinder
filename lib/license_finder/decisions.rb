@@ -10,23 +10,23 @@ module LicenseFinder
       @licenses[name]
     end
 
-    def approval_of(name, version=nil)
-      if !@approvals.has_key?(name)
+    def approval_of(name, version = nil)
+      if !@approvals.key?(name)
         nil
-      elsif version != nil
+      elsif !version.nil?
         @approvals[name] if @approvals[name][:safe_versions].empty? || @approvals[name][:safe_versions].include?(version)
       else
         @approvals[name] if @approvals[name][:safe_versions].empty?
       end
     end
 
-    def approved?(name, version=nil)
-      if !@approvals.has_key?(name)
+    def approved?(name, version = nil)
+      if !@approvals.key?(name)
         nil
-      elsif version != nil
-        @approvals.has_key?(name) && @approvals[name][:safe_versions].empty? || @approvals[name][:safe_versions].include?(version)
+      elsif !version.nil?
+        @approvals.key?(name) && @approvals[name][:safe_versions].empty? || @approvals[name][:safe_versions].include?(version)
       else
-        @approvals.has_key?(name)
+        @approvals.key?(name)
       end
     end
 
@@ -85,7 +85,7 @@ module LicenseFinder
       self
     end
 
-    def unlicense(name, lic, txn= {})
+    def unlicense(name, lic, txn = {})
       @decisions << [:unlicense, name, lic, txn]
       @licenses[name].delete(License.find_by_name(lic))
       self
@@ -95,9 +95,7 @@ module LicenseFinder
       @decisions << [:approve, name, txn]
 
       versions = []
-      if @approvals.has_key?(name)
-        versions = @approvals[name][:safe_versions]
-      end
+      versions = @approvals[name][:safe_versions] if @approvals.key?(name)
 
       @approvals[name] = TXN.from_hash(txn)
 

@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 module LicenseFinder
   module CLI
@@ -9,27 +9,27 @@ module LicenseFinder
         allow(Decisions).to receive(:fetch_saved) { decisions }
       end
 
-      describe "show" do
-        it "shows the configured project name" do
-          decisions.name_project("test")
+      describe 'show' do
+        it 'shows the configured project name' do
+          decisions.name_project('test')
 
           expect(capture_stdout { subject.show }).to match /test/
         end
       end
 
-      describe "add" do
-        it "sets the project name" do
+      describe 'add' do
+        it 'sets the project name' do
           silence_stdout do
-            subject.add("test")
+            subject.add('test')
           end
-          expect(subject.decisions.project_name).to eq "test"
+          expect(subject.decisions.project_name).to eq 'test'
         end
       end
 
-      describe "remove" do
-        it "removes the project name" do
+      describe 'remove' do
+        it 'removes the project name' do
           silence_stdout do
-            subject.add("test")
+            subject.add('test')
             subject.remove
           end
           expect(subject.decisions.project_name).to be_nil

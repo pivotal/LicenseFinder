@@ -50,7 +50,7 @@ module LicenseFinder
     end
 
     def nested_path?(path, pathname)
-      (path.to_s).start_with?(pathname.to_s) && path.to_s != pathname.to_s
+      path.to_s.start_with?(pathname.to_s) && path.to_s != pathname.to_s
     end
   end
 end

@@ -3,7 +3,7 @@ module LicenseFinder
     AVAILABLE_COLUMNS = AVAILABLE_COLUMNS + ['subproject_paths']
 
     def initialize(dependencies, options = {})
-      options[:columns] ||= %w(name version licenses subproject_paths)
+      options[:columns] ||= %w[name version licenses subproject_paths]
       super(dependencies, options)
     end
 

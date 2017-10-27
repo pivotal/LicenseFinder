@@ -1,6 +1,6 @@
 module LicenseFinder
   class PackageDelta
-    STATUSES = [:added, :removed, :unchanged]
+    STATUSES = %i[added removed unchanged].freeze
 
     def initialize(status, current_package, previous_package)
       @status = status
@@ -16,14 +16,11 @@ module LicenseFinder
       pick_package.version
     end
 
-
     def subproject_paths
       pick_package.subproject_paths
     end
 
-    def status
-      @status
-    end
+    attr_reader :status
 
     def licenses
       pick_package.licenses
@@ -33,7 +30,7 @@ module LicenseFinder
       pick_package.class == MergedPackage
     end
 
-    def method_missing(method_name)
+    def method_missing(_method_name)
       nil
     end
 

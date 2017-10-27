@@ -28,6 +28,5 @@ module LicenseFinder
     def self.prepare_method
       'govendor sync'
     end
-
   end
 end

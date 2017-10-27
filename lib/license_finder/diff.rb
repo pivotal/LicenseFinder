@@ -41,7 +41,7 @@ module LicenseFinder
     end
 
     def self.find_package(set, package)
-      set.find { |p| p.eql? package}
+      set.find { |p| p.eql? package }
     end
   end
 end

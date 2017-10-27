@@ -55,4 +55,3 @@ module LicenseFinder
     end
   end
 end
-

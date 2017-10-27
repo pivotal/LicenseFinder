@@ -111,9 +111,8 @@ module LicenseFinder
         end
       end
 
-
       it 'returns empty package list if \'gvt list\' fails' do
-        allow(subject).to receive(:capture).with(anything()) do
+        allow(subject).to receive(:capture).with(anything) do
           ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", false]
         end
         expect(subject.current_packages).to eq []

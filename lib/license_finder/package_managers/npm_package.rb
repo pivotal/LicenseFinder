@@ -36,7 +36,7 @@ module LicenseFinder
 
     private
 
-    def self.flattened_dependencies(npm_json, existing_packages={})
+    def self.flattened_dependencies(npm_json, existing_packages = {})
       identifier = Identifier.from_hash npm_json
       if existing_packages[identifier].nil?
         existing_packages[identifier] = NpmPackage.new(npm_json) if identifier
@@ -55,11 +55,10 @@ module LicenseFinder
       package_json.groups.each do |group|
         group.package_names.each do |package_name|
           @packages.keys.each do |identifier|
-            if identifier.name == package_name
-              dependency = @packages[identifier]
-              dependency.groups |= [group.name]
-              NpmPackage.populate_child_groups(dependency, @packages)
-            end
+            next unless identifier.name == package_name
+            dependency = @packages[identifier]
+            dependency.groups |= [group.name]
+            NpmPackage.populate_child_groups(dependency, @packages)
           end
         end
       end
@@ -67,11 +66,10 @@ module LicenseFinder
 
     def self.populate_child_groups(dependency, packages, populated_ids = [])
       dependency.dependencies.each do |id|
-        unless populated_ids.include? id
-          populated_ids.push id
-          packages[id].groups |= dependency.groups
-          populate_child_groups(packages[id], packages, populated_ids)
-        end
+        next if populated_ids.include? id
+        populated_ids.push id
+        packages[id].groups |= dependency.groups
+        populate_child_groups(packages[id], packages, populated_ids)
       end
     end
 
@@ -114,7 +112,6 @@ module LicenseFinder
       def to_s
         "#{@name} - #{@version}"
       end
-
     end
 
     class Group
@@ -132,12 +129,11 @@ module LicenseFinder
       def to_s
         @name
       end
-
     end
 
     class PackageJson
       attr_reader :groups
-      DEPENDENCY_GROUPS = %w(dependencies devDependencies)
+      DEPENDENCY_GROUPS = %w[dependencies devDependencies].freeze
 
       def initialize(path)
         json = JSON.parse(File.read(path), max_nesting: false)
@@ -147,7 +143,6 @@ module LicenseFinder
       def groups_for(identifier)
         @groups.select { |g| g.include? identifier }.map(&:name)
       end
-
     end
   end
 end

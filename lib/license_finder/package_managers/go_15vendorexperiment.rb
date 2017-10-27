@@ -2,8 +2,7 @@ require 'json'
 
 module LicenseFinder
   class Go15VendorExperiment < PackageManager
-
-    def initialize(options={})
+    def initialize(options = {})
       super
       @full_version = options[:go_full_version]
     end
@@ -33,9 +32,9 @@ module LicenseFinder
       vendored_deps = deps.select { |dep| detected_package_path.join(dep).exist? }
       vendored_deps.map do |dep|
         GoPackage.from_dependency({
-                                   'ImportPath' => dep,
-                                   'InstallPath' => detected_package_path.join(dep),
-                                   'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep))
+                                    'ImportPath' => dep,
+                                    'InstallPath' => detected_package_path.join(dep),
+                                    'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep))
                                   }, nil, true)
       end
     end

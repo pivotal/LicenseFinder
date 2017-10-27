@@ -5,7 +5,7 @@ module LicenseFinder
     Submodule = Struct.new :install_path, :revision
     ENVRC_REGEXP = /GOPATH|GO15VENDOREXPERIMENT/
 
-    def initialize(options={})
+    def initialize(options = {})
       super
       @full_version = options[:go_full_version]
     end
@@ -15,18 +15,17 @@ module LicenseFinder
       git_modules.map do |submodule|
         # We are filtering the non-standard packages because the word "net"
         # seems to be common that can give false positive when filtering the git submodules
-        import_path = go_list_packages.select { |gp|
+        import_path = go_list_packages.select do |gp|
           submodule.install_path =~ /#{repo_name(gp)}$/
-        }.first
-        if import_path then
-          dependency_info = {
-              'ImportPath' => repo_name(import_path),
-              'Homepage' => repo_name(import_path),
-              'InstallPath' => submodule.install_path,
-              'Rev' => submodule.revision
-          }
-          GoPackage.from_dependency(dependency_info, nil, @full_version)
-        end
+        end.first
+        next unless import_path
+        dependency_info = {
+          'ImportPath' => repo_name(import_path),
+          'Homepage' => repo_name(import_path),
+          'InstallPath' => submodule.install_path,
+          'Rev' => submodule.revision
+        }
+        GoPackage.from_dependency(dependency_info, nil, @full_version)
       end.compact
     end
 
@@ -37,7 +36,7 @@ module LicenseFinder
     def active?
       return false unless self.class.installed?(logger)
 
-      godep = LicenseFinder::GoDep.new({project_path: Pathname(project_path)})
+      godep = LicenseFinder::GoDep.new(project_path: Pathname(project_path))
       # go workspace is only active if GoDep wasn't. There are some projects
       # that will use the .envrc and have a Godep folder as well.
       active = !! (!godep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
@@ -52,8 +51,8 @@ module LicenseFinder
 
     private
 
-    def repo_name import_path
-      import_path.split("/")[0..2].join("/")
+    def repo_name(import_path)
+      import_path.split('/')[0..2].join('/')
     end
 
     def project_src
@@ -95,7 +94,7 @@ module LicenseFinder
     end
 
     def git_modules
-      Dir.chdir(detected_package_path) do |d|
+      Dir.chdir(detected_package_path) do |_d|
         result = capture('git submodule status')
         raise 'git submodule status failed' unless result[1]
         result.first.lines.map do |l|

@@ -17,7 +17,7 @@ end
 
 RSpec.configure do |config|
   config.after(:suite) do
-    ["./doc"].each do |tmp_dir|
+    ['./doc'].each do |tmp_dir|
       tmp_dir = Pathname(tmp_dir)
       tmp_dir.rmtree if tmp_dir.directory?
     end

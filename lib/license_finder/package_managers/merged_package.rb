@@ -1,6 +1,5 @@
 module LicenseFinder
   class MergedPackage
-
     attr_reader :dependency
 
     def initialize(dependency, subproject_paths)
@@ -64,7 +63,7 @@ module LicenseFinder
       dependency.hash
     end
 
-    def method_missing(method_name)
+    def method_missing(_method_name)
       nil
     end
   end
