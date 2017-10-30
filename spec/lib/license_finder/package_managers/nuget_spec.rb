@@ -125,7 +125,7 @@ module LicenseFinder
       # cannot run on JRuby due to https://github.com/fakefs/fakefs/issues/303
       context 'when there is a .nupkg file', skip: LicenseFinder.broken_fakefs? do
         before do
-          obscure_dependency_nuspec = <<-EOXML
+          obscure_dependency_nuspec = <<-XML
             <?xml version="1.0"?>
             <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
               <metadata>
@@ -134,7 +134,7 @@ module LicenseFinder
                 <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
               </metadata>
             </package>
-          EOXML
+          XML
           File.write('app/packages/ObscureDependency.nuspec', obscure_dependency_nuspec)
           Dir.chdir 'app/packages' do
             Zip::File.open('ObscureDependency.1.3.15.nupkg', Zip::File::CREATE) do |zipfile|

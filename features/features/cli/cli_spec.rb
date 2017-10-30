@@ -21,14 +21,14 @@ describe 'License Finder command line executable' do
     developer.create_ruby_app # has license_finder as a dependency
 
     developer.run_license_finder
-    expect(developer).to be_seeing_something_like /license_finder.*MIT/
+    expect(developer).to be_seeing_something_like(/license_finder.*MIT/)
   end
 
   it "reports dependencies' licenses" do
     developer.create_ruby_app # has license_finder as a dependency, which has thor as a dependency
 
     developer.run_license_finder
-    expect(developer).to be_seeing_something_like /thor.*MIT/
+    expect(developer).to be_seeing_something_like(/thor.*MIT/)
   end
 
   specify 'runs default command' do

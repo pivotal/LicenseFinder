@@ -97,7 +97,7 @@ module LicenseFinder
       packages = current_packages
       packages.each do |parent|
         parent.children.each do |child_name|
-          child = packages.detect { |child| child.name == child_name }
+          child = packages.detect { |child_package| child_package.name == child_name }
           child.parents << parent.name if child
         end
       end

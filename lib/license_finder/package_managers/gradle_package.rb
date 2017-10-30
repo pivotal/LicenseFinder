@@ -12,7 +12,7 @@ module LicenseFinder
 
       licenses = Array(spec['license'])
                  .map { |l| l['name'] }
-                 .reject { |name| name == 'No license found' }
+                 .reject { |reject_name| reject_name == 'No license found' }
 
       super(name, version, options.merge(spec_licenses: licenses))
     end

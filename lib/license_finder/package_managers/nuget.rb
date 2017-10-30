@@ -3,6 +3,25 @@ require 'zip'
 
 module LicenseFinder
   class Nuget < PackageManager
+    class Assembly
+      attr_reader :name, :path
+      def initialize(path, name)
+        @path = path
+        @name = name
+      end
+
+      def dependencies
+        xml = REXML::Document.new(File.read(path.join('packages.config')))
+        packages = REXML::XPath.match(xml, '//package')
+        packages.map do |p|
+          attrs = p.attributes
+          Dependency.new(attrs['id'], attrs['version'], name)
+        end
+      end
+    end
+
+    Dependency = Struct.newV(:name, :version, :assembly)
+
     def possible_package_paths
       path = project_path.join('vendor/*.nupkg')
       nuget_dir = Dir[path].map { |pkg| File.dirname(pkg) }.uniq
@@ -40,26 +59,6 @@ module LicenseFinder
 
     def dependencies
       assemblies.flat_map(&:dependencies)
-    end
-
-    class Assembly
-      attr_reader :name, :path
-      def initialize(path, name)
-        @path = path
-        @name = name
-      end
-
-      def dependencies
-        xml = REXML::Document.new(File.read(path.join('packages.config')))
-        packages = REXML::XPath.match(xml, '//package')
-        packages.map do |p|
-          attrs = p.attributes
-          Dependency.new(attrs['id'], attrs['version'], name)
-        end
-      end
-    end
-
-    class Dependency < Struct.new(:name, :version, :assembly)
     end
   end
 end

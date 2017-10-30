@@ -102,17 +102,15 @@ module LicenseFinder
 
     describe '.unapprove' do
       it 'will not report the given dependency as approved' do
-        decisions = subject
-                    .approve('dep')
-                    .unapprove('dep')
+        subject.approve('dep')
+               .unapprove('dep')
         expect(subject).not_to be_approved('dep')
       end
 
       it 'is cumulative' do
-        decisions = subject
-                    .approve('dep')
-                    .unapprove('dep')
-                    .approve('dep')
+        subject.approve('dep')
+               .unapprove('dep')
+               .approve('dep')
         expect(subject).to be_approved('dep')
       end
     end

@@ -9,14 +9,14 @@ module LicenseFinder
     it_behaves_like 'a PackageManager'
 
     def license_xml(xml)
-      <<-resp
+      <<-RESP
         <?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <licenseSummary>
           <dependencies>
             #{xml}
           </dependencies>
         </licenseSummary>
-      resp
+      RESP
     end
 
     describe '.current_packages' do

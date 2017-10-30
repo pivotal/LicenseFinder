@@ -11,12 +11,12 @@ module LicenseFinder
       json = JSON.parse(detected_package_path.read)
       # godep includes subpackages as a seperate dependency, we can de-dup that
 
-      dependencies_info = json['Deps'].map do |json|
+      dependencies_info = json['Deps'].map do |dep_json|
         {
-          'Homepage' => homepage(json),
-          'ImportPath' => import_path(json),
-          'InstallPath' => json['InstallPath'],
-          'Rev' => json['Rev']
+          'Homepage' => homepage(dep_json),
+          'ImportPath' => import_path(dep_json),
+          'InstallPath' => dep_json['InstallPath'],
+          'Rev' => dep_json['Rev']
         }
       end
       dependencies_info.uniq.map do |info|

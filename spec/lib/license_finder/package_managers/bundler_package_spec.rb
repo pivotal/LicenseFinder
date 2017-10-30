@@ -29,7 +29,7 @@ module LicenseFinder
     its(:groups) { should == %w[staging assets] }
     its(:children) { should == ['foo'] }
     its(:license_names_from_spec) { should eq %w[MIT GPL] }
-    its(:install_path) { should =~ /spec_name-2\.1\.3\z/ }
+    its(:install_path) { should end_with 'spec_name-2.1.3' }
     its(:package_manager) { should == 'Bundler' }
   end
 end

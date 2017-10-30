@@ -2,11 +2,52 @@ module LicenseFinder
   class NpmPackage < Package
     attr_accessor :identifier, :dependencies, :groups, :json
 
-    def self.packages_from_json(npm_json, package_path)
-      @packages = NpmPackage.flattened_dependencies(npm_json)
-      package_json = PackageJson.new(package_path)
-      populate_groups(package_json)
-      @packages.values
+    class << self
+      def packages_from_json(npm_json, package_path)
+        @packages = NpmPackage.flattened_dependencies(npm_json)
+        package_json = PackageJson.new(package_path)
+        populate_groups(package_json)
+        @packages.values
+      end
+
+      private
+
+      def flattened_dependencies(npm_json, existing_packages = {})
+        identifier = Identifier.from_hash npm_json
+        if existing_packages[identifier].nil?
+          existing_packages[identifier] = NpmPackage.new(npm_json) if identifier
+          npm_json.fetch('dependencies', {}).values.map { |d| NpmPackage.flattened_dependencies(d, existing_packages) }
+        else
+          duplicate_package = NpmPackage.new(npm_json)
+          unless existing_packages[identifier].dependencies.include?(duplicate_package.dependencies)
+            existing_packages[identifier].dependencies |= duplicate_package.dependencies
+            npm_json.fetch('dependencies', {}).values.map { |d| NpmPackage.flattened_dependencies(d, existing_packages) }
+          end
+        end
+        existing_packages
+      end
+
+      def populate_groups(package_json)
+        package_json.groups.each do |group|
+          group.package_names.each do |package_name|
+            @packages.each_key do |identifier|
+              next unless identifier.name == package_name
+              dependency = @packages[identifier]
+              dependency.groups |= [group.name]
+              NpmPackage.populate_child_groups(dependency, @packages)
+            end
+          end
+        end
+      end
+
+      def populate_child_groups(dependency, packages, populated_ids = [])
+        dependency.dependencies.each do |id|
+          next if populated_ids.include? id
+          populated_ids.push id
+          packages[id].groups |= dependency.groups
+          populate_child_groups(packages[id], packages, populated_ids)
+        end
+      end
     end
 
     def initialize(npm_json)
@@ -35,43 +76,6 @@ module LicenseFinder
     end
 
     private
-
-    def self.flattened_dependencies(npm_json, existing_packages = {})
-      identifier = Identifier.from_hash npm_json
-      if existing_packages[identifier].nil?
-        existing_packages[identifier] = NpmPackage.new(npm_json) if identifier
-        npm_json.fetch('dependencies', {}).values.map { |d| NpmPackage.flattened_dependencies(d, existing_packages) }
-      else
-        duplicate_package = NpmPackage.new(npm_json)
-        unless existing_packages[identifier].dependencies.include?(duplicate_package.dependencies)
-          existing_packages[identifier].dependencies |= duplicate_package.dependencies
-          npm_json.fetch('dependencies', {}).values.map { |d| NpmPackage.flattened_dependencies(d, existing_packages) }
-        end
-      end
-      existing_packages
-    end
-
-    def self.populate_groups(package_json)
-      package_json.groups.each do |group|
-        group.package_names.each do |package_name|
-          @packages.keys.each do |identifier|
-            next unless identifier.name == package_name
-            dependency = @packages[identifier]
-            dependency.groups |= [group.name]
-            NpmPackage.populate_child_groups(dependency, @packages)
-          end
-        end
-      end
-    end
-
-    def self.populate_child_groups(dependency, packages, populated_ids = [])
-      dependency.dependencies.each do |id|
-        next if populated_ids.include? id
-        populated_ids.push id
-        packages[id].groups |= dependency.groups
-        populate_child_groups(packages[id], packages, populated_ids)
-      end
-    end
 
     def deps_from_json
       @json.fetch('dependencies', {}).values.map { |dep| Identifier.from_hash(dep) }.compact

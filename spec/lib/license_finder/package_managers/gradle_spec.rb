@@ -162,9 +162,9 @@ BUILD SUCCESSFUL in 0s
 
       context "when there's a settings.gradle" do
         it 'uses the build.gradle referenced inside' do
-          SETTINGS_DOT_GRADLE = <<-eos.freeze
+          SETTINGS_DOT_GRADLE = <<-GRADLE.freeze
 rootProject.buildFileName = 'build-alt.gradle'
-          eos
+          GRADLE
 
           FakeFS do
             FileUtils.mkdir_p '/fake/path'

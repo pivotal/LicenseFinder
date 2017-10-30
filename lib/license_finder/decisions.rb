@@ -15,8 +15,8 @@ module LicenseFinder
         nil
       elsif !version.nil?
         @approvals[name] if @approvals[name][:safe_versions].empty? || @approvals[name][:safe_versions].include?(version)
-      else
-        @approvals[name] if @approvals[name][:safe_versions].empty?
+      elsif @approvals[name][:safe_versions].empty?
+        @approvals[name]
       end
     end
 

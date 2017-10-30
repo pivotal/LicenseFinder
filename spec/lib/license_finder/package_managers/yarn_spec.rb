@@ -1,15 +1,26 @@
 require 'spec_helper'
 require 'fakefs/spec_helpers'
+require 'json'
 
 module LicenseFinder
   describe Yarn do
     it_behaves_like 'a PackageManager'
+
+    let(:yarn_shell_command_output) do
+      {
+        'type' => 'table',
+        'data' => {
+          'body' => [['yn', '2.0.0', 'MIT', 'https://github.com/sindresorhus/yn.git', 'sindresorhus.com', 'Sindre Sorhus']],
+          'head' => %w[Name Version License URL VendorUrl VendorName]
+        }
+      }.to_json
+    end
     describe '#current_packages' do
       subject { Yarn.new(project_path: Pathname('/app'), logger: double(:logger, active: nil)) }
 
       it 'displays packages as returned from "yarn list"' do
         allow(subject).to receive(:capture).with(Yarn::SHELL_COMMAND) do
-          ['{"type":"table","data": {"body": [["yn","2.0.0","MIT","https://github.com/sindresorhus/yn.git","sindresorhus.com","Sindre Sorhus"]],"head": ["Name","Version","License","URL","VendorUrl","VendorName"]},"type": "table"}', true]
+          [yarn_shell_command_output, true]
         end
 
         expect(subject.current_packages.length).to eq 1

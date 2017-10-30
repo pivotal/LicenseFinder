@@ -1,13 +1,34 @@
 Documentation:
   Enabled: false
+MethodMissing:
+  Enabled: false
 YAMLLoad:
+  Enabled: false
+FileName:
+  Exclude:
+    - '**/Rakefile'
+    - '**/Gemfile'
+    - '**/Podfile'
+LineLength:
+  Max: 200
+MethodLength:
+  Enabled: false
+BlockLength:
+  Enabled: false # TODO: enable and refactor long methods
+#  ExcludedMethods: ['describe', 'context', 'it', 'shared_examples']  # uncomment once enabled
+AbcSize:
+  Max: 25
+AmbiguousRegexpLiteral:
+  Enabled: false
+ModuleLength:
   Enabled: false
 AllCops:
   Include:
     - 'bin/license_finder'
   Exclude:
-    - 'lib/license_finder/reports'
-    - 'features/fixtures'
-    - 'releases'
-    - 'ci'
-    - 'tmp'
+    - 'lib/license_finder/reports/**/*'
+    - 'features/fixtures/**/*'
+    - 'releases/**/*'
+    - 'ci/**/*'
+    - 'tmp/**/*'
+    - 'Gemfile'

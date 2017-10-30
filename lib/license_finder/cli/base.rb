@@ -62,9 +62,7 @@ module LicenseFinder
       end
 
       def assert_some(things)
-        unless things.any?
-          raise ArgumentError, 'wrong number of arguments (0 for 1+)', caller
-        end
+        raise ArgumentError, 'wrong number of arguments (0 for 1+)', caller unless things.any?
       end
 
       def extract_options(*keys)

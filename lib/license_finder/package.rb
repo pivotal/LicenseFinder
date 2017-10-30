@@ -100,7 +100,7 @@ module LicenseFinder
 
     def <=>(other)
       eq_name = name <=> other.name
-      return eq_name unless eq_name == 0
+      return eq_name unless eq_name.zero?
       version <=> other.version
     end
 

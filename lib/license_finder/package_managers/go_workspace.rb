@@ -10,6 +10,10 @@ module LicenseFinder
       @full_version = options[:go_full_version]
     end
 
+    def self.package_management_command
+      'go'
+    end
+
     def current_packages
       go_list_packages = go_list
       git_modules.map do |submodule|
@@ -61,11 +65,7 @@ module LicenseFinder
 
     def envrc_path
       p = Pathname.new project_path
-      4.times.reduce([p]) { |memo, _| memo << memo.last.parent }.map { |p| p.join('.envrc') }.select(&:exist?).first
-    end
-
-    def self.package_management_command
-      'go'
+      4.times.reduce([p]) { |memo, _| memo << memo.last.parent }.map { |path| path.join('.envrc') }.select(&:exist?).first
     end
 
     def go_list
@@ -86,7 +86,7 @@ module LicenseFinder
         deps = val.first.split("\n")
         capture('go list std').first.split("\n").each do |std|
           deps.delete_if do |dep|
-            dep =~ /(\/|^)#{std}(\/|$)/
+            dep =~ %r{(\/|^)#{std}(\/|$)}
           end
         end
         deps

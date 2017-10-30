@@ -48,7 +48,7 @@ module LicenseFinder
       end
 
       def seeing_something_like?(regex)
-        !!(@output =~ regex)
+        (@output =~ regex)
       end
 
       def receiving_exit_code?(code)
@@ -413,7 +413,9 @@ module LicenseFinder
     end
 
     require 'capybara'
-    class HtmlReport < SimpleDelegator # delegates to the parsed html
+    class HtmlReport < SimpleDelegator
+      # delegates to the parsed html
+
       def self.from_string(str)
         new(Capybara.string(str))
       end
@@ -443,7 +445,9 @@ module LicenseFinder
       end
     end
 
-    class ProjectDir < SimpleDelegator # delegates to a Pathname
+    class ProjectDir < SimpleDelegator
+      # delegates to a Pathname
+
       def shell_out(command, allow_failures = false)
         Dir.chdir(self) { Shell.run(command, allow_failures) }
       end
@@ -503,11 +507,11 @@ module LicenseFinder
     end
 
     module Shell
-      ERROR_MESSAGE_FORMAT = <<EOM.freeze
+      ERROR_MESSAGE_FORMAT = <<ERRORFORMAT.freeze
 Command failed: `%s`
 output: %s
 exit: %d
-EOM
+ERRORFORMAT
 
       def self.run(command, allow_failures = false)
         output = `#{command} 2>&1`

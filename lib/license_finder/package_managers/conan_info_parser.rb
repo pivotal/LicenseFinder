@@ -7,7 +7,7 @@ module LicenseFinder
       @current_project = nil # current project being populated in the SM
       @current_vals = [] # current val list being populate in the SM
       @current_key = nil # current key to be associated with the current val
-      while line = @lines.shift
+      while (line = @lines.shift)
         next if line == ''
         case @state
         when :project_level
@@ -18,14 +18,12 @@ module LicenseFinder
           key, val = key_val(line)
           if val
             @current_project[key] = val
+          elsif line.start_with?(' ')
+            @current_key = key
+            @current_vals = []
+            @state = :val_list
           else
-            if line.start_with?(' ')
-              @current_key = key
-              @current_vals = []
-              @state = :val_list
-            else
-              change_to_new_project_state line
-            end
+            change_to_new_project_state line
           end
         when :val_list
           if val_list_level(line)
@@ -38,7 +36,7 @@ module LicenseFinder
             else
               change_to_new_project_state line
             end
-            end
+          end
         end
       end
       wrap_up

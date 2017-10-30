@@ -11,32 +11,25 @@ module LicenseFinder
       return [] unless success
 
       packages = []
-      incompatiblePackages = []
+      incompatible_packages = []
 
       json_strings = output.split("\n")
       json_objects = json_strings.map { |json_object| JSON.parse(json_object) }
 
       if json_objects.last['type'] == 'table'
         license_json = json_objects.pop['data']
-        body = license_json['body']
-        head = license_json['head']
-
-        packages = body.map do |json_package|
-          Hash[head.zip(json_package)]
-        end.map do |package_hash|
-          Package.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl'])
-        end
+        packages = packages_from_json(license_json)
       end
 
       json_objects.each do |json_object|
         match = /(?<name>[\w,\-]+)@(?<version>(\d+\.?)+)/ =~ json_object['data'].to_s
         if match
           package = Package.new(name, version, spec_licenses: ['unknown'])
-          incompatiblePackages.push(package)
+          incompatible_packages.push(package)
         end
       end
 
-      packages + incompatiblePackages.uniq
+      packages + incompatible_packages.uniq
     end
 
     def self.takes_priority_over
@@ -49,6 +42,21 @@ module LicenseFinder
 
     def self.prepare_method
       'yarn install'
+    end
+
+    private
+
+    def packages_from_json(json_data)
+      body = json_data['body']
+      head = json_data['head']
+
+      packages = body.map do |json_package|
+        Hash[head.zip(json_package)]
+      end
+
+      packages.map do |package_hash|
+        Package.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl'])
+      end
     end
   end
 end

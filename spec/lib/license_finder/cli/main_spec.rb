@@ -13,7 +13,12 @@ module LicenseFinder
       end
       let(:configuration) { double(:configuration, valid_project_path?: true) }
       let(:found_any_packages) { true }
-      let(:license_finder_instance) { double(:license_finder, unapproved: unapproved_dependencies, blacklisted: [], project_name: 'taco stand', config: configuration, any_packages?: found_any_packages, prepare_projects: nil) }
+      let(:license_finder_instance) do
+        methods = { unapproved: unapproved_dependencies, blacklisted: [],
+                    project_name: 'taco stand', config: configuration,
+                    any_packages?: found_any_packages, prepare_projects: nil }
+        double(:license_finder, methods)
+      end
       let(:license) { double(:license, name: 'thing') }
       let(:unapproved_dependencies) { [double(:dependency, name: 'a dependency', version: '2.4.1', missing?: false, licenses: [license])] }
 
@@ -188,7 +193,15 @@ module LicenseFinder
         end
 
         describe 'Prepare Option' do
-          let(:license_finder) { double(:license_finder, unapproved: unapproved_dependencies, blacklisted: [], project_name: 'taco stand', config: configuration, any_packages?: found_any_packages, prepare_projects: nil, acknowledged: []) }
+          let(:license_finder) do
+            methods = {
+              unapproved: unapproved_dependencies, blacklisted: [], project_name: 'taco stand',
+              config: configuration, any_packages?: found_any_packages,
+              prepare_projects: nil, acknowledged: []
+            }
+
+            double(:license_finder, methods)
+          end
           before do
             allow(LicenseFinder::Core).to receive(:new).and_return(license_finder)
           end

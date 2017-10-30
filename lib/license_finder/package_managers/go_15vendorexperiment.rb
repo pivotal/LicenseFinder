@@ -8,10 +8,10 @@ module LicenseFinder
     end
 
     def active?
-      super && has_go_files?
+      super && go_files_exist?
     end
 
-    def has_go_files?
+    def go_files_exist?
       !Dir[project_path.join('**/*.go')].empty?
     end
 
@@ -61,7 +61,7 @@ module LicenseFinder
         deps = val.first.split("\n")
         capture('go list std').first.split("\n").each do |std|
           deps.delete_if do |dep|
-            dep =~ /(\/|^)#{std}(\/|$)/
+            dep =~ %r{(\/|^)#{std}(\/|$)}
           end
         end
         deps.map do |d|

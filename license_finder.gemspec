@@ -62,6 +62,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'addressable', '< 2.5.0'
   s.add_development_dependency 'mime-types', '< 3.0'
 
-  s.files         = `git ls-files`.split("\n").reject { |s| s.start_with? 'spec' }
+  s.files         = `git ls-files`.split("\n").reject { |f| f.start_with? 'spec' }
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
 end

@@ -32,7 +32,7 @@ module LicenseFinder
 
     def details
       gem_details.map do |gem_detail|
-        bundle_detail = bundler_details.detect { |bundle_detail| bundle_detail.name == gem_detail.name }
+        bundle_detail = bundler_details.detect { |bundler_detail| bundler_detail.name == gem_detail.name }
         [gem_detail, bundle_detail]
       end
     end

@@ -25,7 +25,7 @@ module LicenseFinder
           expect(license_finder_2).to receive(:prepare_projects)
 
           aggregator = LicenseAggregator.new({ prepare: true }, ['path/to/subproject-1', 'path/to/subproject-2'])
-          results = aggregator.dependencies
+          aggregator.dependencies
         end
       end
 

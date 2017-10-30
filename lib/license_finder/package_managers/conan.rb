@@ -9,8 +9,8 @@ module LicenseFinder
     def current_packages
       install_command = 'conan install'
       info_command = 'conan info'
-      _, install_success = Dir.chdir(project_path) { capture(install_command) }
-      info_output, info_success = Dir.chdir(project_path) { capture(info_command) }
+      Dir.chdir(project_path) { capture(install_command) }
+      info_output, = Dir.chdir(project_path) { capture(info_command) }
 
       info_parser = ConanInfoParser.new
 
