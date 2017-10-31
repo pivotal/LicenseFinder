@@ -36,17 +36,15 @@ module LicenseFinder
 
       def installed?(logger=Core.default_logger)
         if package_management_command.nil?
-          logger.installed self, "no command defined" # TODO comment me out
+          logger.log self, 'no command defined' #TODO comment me out
           return true
-        end
-
-        if command_exists?(package_management_command)
-          logger.installed self, true
+        elsif command_exists?(package_management_command)
+          logger.log self, 'is installed', color: :green
           return true
+        else
+          logger.log self, 'is not installed', color: :red
+          return false
         end
-
-        logger.installed self, false
-        return false
       end
 
       # see class description
@@ -69,7 +67,13 @@ module LicenseFinder
       path = detected_package_path
       self.class.installed?(logger) &&
           !path.nil? &&
-        path.exist?.tap { |is_active| logger.active self.class, is_active }
+        path.exist?.tap do |is_active|
+          if is_active
+            logger.log self.class, 'is active', color: :green
+          else
+            logger.log self.class, 'is not active'
+          end
+        end
     end
 
     def detected_package_path
@@ -82,9 +86,9 @@ module LicenseFinder
       if self.class.prepare_command
         _, success = capture(self.class.prepare_command)
         raise "Prepare command '#{self.class.prepare_command}' failed" unless success
+      else
+        logger.log self.class, 'no prepare step provided', color: :red
       end
-
-      logger.prepare self.class, self.class.prepare_command
     end
 
     def capture(command)

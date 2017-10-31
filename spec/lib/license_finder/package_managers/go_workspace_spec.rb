@@ -3,14 +3,9 @@ require 'spec_helper'
 module LicenseFinder
   describe GoWorkspace do
     let(:options) { {} }
-    let(:logger) { double(:logger, active: nil) }
+    let(:logger) { double(:logger, log: nil) }
     let(:project_path) { '/Users/pivotal/workspace/loggregator'}
     subject { GoWorkspace.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
-
-    before do
-      allow(logger).to receive(:installed)
-      allow(logger).to receive(:active)
-    end
 
     context 'package manager' do
       before do
@@ -257,7 +252,7 @@ HERE
       end
 
       it 'logs the active state' do
-        expect(logger).to receive(:active)
+        expect(logger).to receive(:log)
         subject.active?
       end
 

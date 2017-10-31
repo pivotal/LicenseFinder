@@ -9,7 +9,7 @@ module LicenseFinder
     subject { Go15VendorExperiment.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
 
     before do
-      allow(logger).to receive(:installed)
+      allow(logger).to receive(:log)
       allow(logger).to receive(:active)
     end
 

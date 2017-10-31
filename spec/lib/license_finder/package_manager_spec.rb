@@ -101,7 +101,7 @@ module LicenseFinder
       context 'when there is no prepare_command' do
         it 'issues a warning' do
           logger = double(:logger)
-          expect(logger).to receive(:prepare).with(described_class, nil)
+          expect(logger).to receive(:log).with(described_class, 'no prepare step provided', color: :red)
           expect(subject).to_not receive(:capture).with('sh commands')
 
           subject = described_class.new logger: logger

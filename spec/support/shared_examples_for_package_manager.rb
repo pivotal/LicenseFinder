@@ -8,8 +8,7 @@ module LicenseFinder
     context 'logging' do
       it 'logs when it checks for active-ness' do
         logger = double(:logger)
-        expect(logger).to receive(:installed)
-        expect(logger).to receive(:active)
+        expect(logger).to receive(:log).twice
 
         subject = described_class.new logger: logger, project_path: all_pms
         subject.active?

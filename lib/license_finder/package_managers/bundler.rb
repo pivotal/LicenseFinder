@@ -12,13 +12,13 @@ module LicenseFinder
       logger.log self.class, "including groups #{included_groups.inspect}"
       details.map do |gem_detail, bundle_detail|
         BundlerPackage.new(gem_detail, bundle_detail, logger: logger).tap do |package|
-          logger.package self.class, package
+          log_package_dependencies package
         end
       end
     end
 
     def self.package_management_command
-      "bundle"
+      'bundle'
     end
 
     private
@@ -50,11 +50,24 @@ module LicenseFinder
     end
 
     def possible_package_paths
-      [project_path.join("Gemfile")]
+      [project_path.join('Gemfile')]
     end
 
     def lockfile_path
       project_path.join('Gemfile.lock')
+    end
+
+    def log_package_dependencies package
+      dependencies = package.children
+      if dependencies.empty?
+        logger.log self.class, sprintf("package '%s' has no dependencies", package.name)
+      else
+        logger.log self.class, sprintf("package '%s' has dependencies:", package.name)
+        dependencies.each do |dep|
+          logger.log self.class, sprintf("- %s", dep)
+        end
+      end
+
     end
   end
 end
