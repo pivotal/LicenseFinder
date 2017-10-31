@@ -18,7 +18,7 @@ jiffy TAG 0.9.0 https://github.com/davisp/jiffy.git
       end
 
       it 'lists all the current packages' do
-        allow(subject).to receive(:capture).with('rebar list-deps').and_return([output, true])
+        allow(subject).to receive(:capture).with('rebar list-deps').and_return([output, '', 0])
 
         current_packages = subject.current_packages
         expect(current_packages.map(&:name)).to eq(["uuid", "jiffy"])
@@ -26,13 +26,13 @@ jiffy TAG 0.9.0 https://github.com/davisp/jiffy.git
       end
 
       it "fails when command fails" do
-        allow(subject).to receive(:capture).with(/rebar/).and_return(['Some error', false]).once
+        allow(subject).to receive(:capture).with(/rebar/).and_return(['Some error', '', 1]).once
         expect { subject.current_packages }.to raise_error(RuntimeError)
       end
 
       it "uses custom rebar command, if provided" do
         rebar = Rebar.new(rebar_command: "rebarfoo", project_path: Pathname('/fake/path'))
-        allow(rebar).to receive(:capture).with(/rebarfoo/).and_return([output, true])
+        allow(rebar).to receive(:capture).with(/rebarfoo/).and_return([output, '', 0])
 
         current_packages = rebar.current_packages
         expect(current_packages.map(&:name)).to eq(["uuid", "jiffy"])
@@ -40,7 +40,7 @@ jiffy TAG 0.9.0 https://github.com/davisp/jiffy.git
 
       it "uses custom rebar_deps_dir, if provided" do
         rebar = Rebar.new(rebar_deps_dir: "foo", project_path: Pathname('/fake/path'))
-        allow(rebar).to receive(:capture).with(/rebar/).and_return([output, true])
+        allow(rebar).to receive(:capture).with(/rebar/).and_return([output, '', 0])
 
         current_packages = rebar.current_packages
         expect(current_packages.map(&:install_path)).to eq([Pathname("foo/uuid"), Pathname("foo/jiffy")])

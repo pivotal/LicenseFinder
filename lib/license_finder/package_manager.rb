@@ -88,7 +88,9 @@ module LicenseFinder
     end
 
     def capture(command)
-      [`#{command}`, $?.success?]
+      require 'open3'
+      stdout, stderr, process = Open3.capture3(command)
+      [stdout, stderr, process.exitstatus]
     end
 
     def current_packages_with_relations
