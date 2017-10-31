@@ -3,32 +3,32 @@ require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe Glide do
-    it_behaves_like "a PackageManager"
+    it_behaves_like 'a PackageManager'
 
     subject {Glide.new(project_path: Pathname('/app'), logger: double(:logger, active: nil, log: true))}
 
-    context "when lock file is contained in src folder" do
-      it "should return active" do
+    context 'when lock file is contained in src folder' do
+      it 'should return active' do
         FakeFS.with_fresh do
           FileUtils.mkdir_p '/app/src'
-          File.write(Pathname('/app/src/glide.lock').to_s,'')
+          File.write(Pathname('/app/src/glide.lock').to_s, '')
           expect(subject.active?).to be_truthy
         end
       end
     end
 
-    context "when lock file is contained in root folder" do
-      it "should return active" do
+    context 'when lock file is contained in root folder' do
+      it 'should return active' do
         FakeFS.with_fresh do
           FileUtils.mkdir_p '/app'
-          File.write(Pathname('/app/glide.lock').to_s,'')
+          File.write(Pathname('/app/glide.lock').to_s, '')
           expect(subject.active?).to be_truthy
         end
       end
     end
 
-    describe "#current_packages" do
-      it "returns the packages described by glide.lock" do
+    describe '#current_packages' do
+      it 'returns the packages described by glide.lock' do
         FakeFS.with_fresh do
           FileUtils.mkdir_p '/app/src'
           File.write(Pathname('/app/src/glide.lock').to_s,

@@ -60,11 +60,13 @@ describe 'Diff report' do
 
       project2 = developer.create_ruby_app('project_2')
       project2.depend_on(developer.create_gem('foo', version: '1.0.0', license: 'MIT'))
-      developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-1.csv --format=csv")
+      developer
+        .execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-1.csv --format=csv")
 
       # Second multi-project report
       project2.depend_on(developer.create_gem('baz', version: '3.0.0', license: 'BSD'))
-      developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-2.csv --format=csv")
+      developer
+        .execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-2.csv --format=csv")
 
       # Diff the reports
       developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
@@ -85,13 +87,15 @@ describe 'Diff report' do
 
         project2 = developer.create_ruby_app('project_2')
         project2.depend_on(developer.create_gem('foo', version: '1.0.0', license: 'MIT'))
-        developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-1.csv --format=csv")
+        developer
+          .execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-1.csv --format=csv")
 
         # Second multi-project report
         project2.depend_on(developer.create_gem('baz', version: '3.0.0', license: 'BSD'))
         project1.depend_on(developer.create_gem('bar', version: '3.0.0', license: 'GPLv2'))
 
-        developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-2.csv --format=csv")
+        developer
+          .execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-2.csv --format=csv")
 
         # Diff the reports
         developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
@@ -112,16 +116,19 @@ describe 'Diff report' do
 
         project2 = developer.create_ruby_app('project_2')
         project2.depend_on(developer.create_gem('foo', version: '1.0.0', license: 'MIT'))
-        developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-1.csv --format=csv")
+        developer
+          .execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-1.csv --format=csv")
 
         # Second multi-project report
         project2.depend_on(developer.create_gem('baz', version: '3.0.0', license: 'BSD'))
         project1.depend_on(developer.create_gem('bar', version: '3.0.0', license: 'MIT'))
 
-        developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-2.csv --format=csv")
+        developer
+          .execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-2.csv --format=csv")
 
         # Diff the reports
-        developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
+        developer
+          .execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
 
         diff = IO.read(project.project_dir.join('diff.csv'))
         expect(diff).to include("unchanged,foo,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
@@ -141,16 +148,19 @@ describe 'Diff report' do
 
         project2 = developer.create_ruby_app('project_2')
         project2.depend_on(developer.create_gem('foo', version: '1.0.0', license: 'MIT'))
-        developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-1.csv --format=csv")
+        developer
+          .execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-1.csv --format=csv")
 
         # Second multi-project report
         project2.depend_on(developer.create_gem('baz', version: '3.0.0', license: 'BSD'))
         project1.depend_on(developer.create_gem('foo', version: '2.0.0', license: 'BSD'))
 
-        developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-2.csv --format=csv")
+        developer
+          .execute_command("license_finder report --columns name version licenses subproject_paths --subprojects=#{project1.project_dir} #{project2.project_dir} --save=report-2.csv --format=csv")
 
         # Diff the reports
-        developer.execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
+        developer
+          .execute_command('license_finder diff report-1.csv report-2.csv --save=diff.csv --format=csv')
 
         diff = IO.read(project.project_dir.join('diff.csv'))
         expect(diff).to include("unchanged,bar,2.0.0,GPLv2,#{project1.project_dir}")

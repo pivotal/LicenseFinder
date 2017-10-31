@@ -1,11 +1,11 @@
-require "bundler"
+require 'bundler'
 
 module LicenseFinder
   class Bundler < PackageManager
-    def initialize options={}
+    def initialize(options = {})
       super
       @ignored_groups = options[:ignored_groups]
-      @definition    = options[:definition] # dependency injection for tests
+      @definition = options[:definition] # dependency injection for tests
     end
 
     def current_packages
@@ -32,7 +32,7 @@ module LicenseFinder
 
     def details
       gem_details.map do |gem_detail|
-        bundle_detail = bundler_details.detect { |bundle_detail| bundle_detail.name == gem_detail.name }
+        bundle_detail = bundler_details.detect { |bundler_detail| bundler_detail.name == gem_detail.name }
         [gem_detail, bundle_detail]
       end
     end

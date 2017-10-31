@@ -5,7 +5,7 @@ module LicenseFinder
   describe Dep do
     it_behaves_like 'a PackageManager'
     describe '#current_packages' do
-      subject {Dep.new(project_path: Pathname('/app'), logger: double(:logger, active: nil))}
+      subject { Dep.new(project_path: Pathname('/app'), logger: double(:logger, active: nil)) }
 
       it 'returns the packages described by Gopkg.lock' do
         FakeFS do
@@ -49,7 +49,6 @@ module LicenseFinder
 
           expect(subject.current_packages.last.name).to eq 'golang.org/x/sys'
           expect(subject.current_packages.last.version).to eq 'ebfc5b4631820b793c9010c87fd8fef0f39eb082'
-
         end
       end
     end
@@ -65,6 +64,5 @@ module LicenseFinder
         expect(described_class.package_management_command).to eq('dep')
       end
     end
-
   end
 end

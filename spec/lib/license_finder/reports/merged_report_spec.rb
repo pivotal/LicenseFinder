@@ -19,15 +19,15 @@ module LicenseFinder
 
       it 'supports license_links column' do
         dep = Package.new('gem_a', '1.0')
-        mit = License.find_by_name("MIT")
+        mit = License.find_by_name('MIT')
         dep.decide_on_license(mit)
         subject = described_class.new([dep], columns: %w[name licenses license_links])
         expect(subject.to_s).to eq("gem_a,MIT,#{mit.url}\n")
       end
     end
 
-    context "when no groups are specified" do
-      let( :dep ) { Package.new('gem_a', '1.0') }
+    context 'when no groups are specified' do
+      let(:dep) { Package.new('gem_a', '1.0') }
       subject { described_class.new([dep], columns: %w[name version groups]) }
 
       it 'supports a groups column' do
@@ -35,8 +35,8 @@ module LicenseFinder
       end
     end
 
-    context "when some groups are specified" do
-      let( :dep ) { Package.new('gem_a', '1.0', groups: %w[development production]) }
+    context 'when some groups are specified' do
+      let(:dep) { Package.new('gem_a', '1.0', groups: %w[development production]) }
       subject { described_class.new([dep], columns: %w[name version groups]) }
 
       it 'supports a groups column' do

@@ -6,17 +6,17 @@ module LicenseFinder
 
     subject { Maven.new(options.merge(project_path: Pathname('/fake/path'))) }
 
-    it_behaves_like "a PackageManager"
+    it_behaves_like 'a PackageManager'
 
     def license_xml(xml)
-      <<-resp
+      <<-RESP
         <?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <licenseSummary>
           <dependencies>
             #{xml}
           </dependencies>
         </licenseSummary>
-      resp
+      RESP
     end
 
     describe '.current_packages' do
@@ -53,18 +53,18 @@ module LicenseFinder
         ")
 
         expect(subject.current_packages.map { |p| [p.name, p.version] }).to eq [
-          ["junit", "4.11"],
-          ["hamcrest-core", "1.3"]
+          ['junit', '4.11'],
+          ['hamcrest-core', '1.3']
         ]
       end
 
       context 'when ignored_groups is used' do
-        subject {
+        subject do
           Maven.new(options.merge(
-              project_path: Pathname('/fake/path'),
-              ignored_groups: Set.new(%w(system test provided import))
+                      project_path: Pathname('/fake/path'),
+                      ignored_groups: Set.new(%w[system test provided import])
           ))
-        }
+        end
 
         before do
           expect(subject).to receive(:capture).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses -Dlicense.excludedScopes=system,test,provided,import').and_return(['', true])
@@ -75,7 +75,7 @@ module LicenseFinder
         end
       end
 
-      it "handles multiple licenses" do
+      it 'handles multiple licenses' do
         stub_license_report("
           <dependency>
             <licenses>
@@ -110,13 +110,13 @@ module LicenseFinder
           ")
 
           expect(subject.current_packages.map { |p| [p.name, p.version] }).to eq [
-            ["junit:junit", "4.11"],
-            ["org.hamcrest:hamcrest-core", "1.3"]
+            ['junit:junit', '4.11'],
+            ['org.hamcrest:hamcrest-core', '1.3']
           ]
         end
       end
 
-      it "handles no licenses" do
+      it 'handles no licenses' do
         stub_license_report("
           <dependency>
           </dependency>

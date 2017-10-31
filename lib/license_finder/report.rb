@@ -10,6 +10,7 @@ module LicenseFinder
     end
 
     private
+
     attr_reader :dependencies, :project_name
 
     def sorted_dependencies

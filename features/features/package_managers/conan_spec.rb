@@ -8,5 +8,4 @@ describe 'Conan Dependencies' do
     conan_developer.run_license_finder
     expect(conan_developer).to be_seeing_line 'range-v3, 0.3.0, MIT'
   end
-
 end

@@ -2,8 +2,8 @@ require 'license_finder/packages/possible_license_file'
 
 module LicenseFinder
   class LicenseFiles
-    CANDIDATE_FILE_NAMES = %w(LICENSE License Licence COPYING README Readme ReadMe)
-    CANDIDATE_PATH_WILDCARD = "*{#{CANDIDATE_FILE_NAMES.join(',')}}*"
+    CANDIDATE_FILE_NAMES = %w[LICENSE License Licence COPYING README Readme ReadMe].freeze
+    CANDIDATE_PATH_WILDCARD = "*{#{CANDIDATE_FILE_NAMES.join(',')}}*".freeze
 
     def self.find(install_path)
       new(install_path).find
@@ -24,10 +24,10 @@ module LicenseFinder
     attr_reader :install_path
 
     def paths_of_candidate_files
-      candidate_files_and_dirs.
-        flat_map { |path| path.directory? ? path.children : path }.
-        reject { |path| path.directory? }.
-        uniq
+      candidate_files_and_dirs
+        .flat_map { |path| path.directory? ? path.children : path }
+        .reject(&:directory?)
+        .uniq
     end
 
     def candidate_files_and_dirs

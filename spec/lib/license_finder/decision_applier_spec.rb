@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module LicenseFinder
   describe DecisionApplier do
-    it "reports nothing found" do
+    it 'reports nothing found' do
       decision_applier = described_class.new(
         decisions: Decisions.new,
         packages: []
@@ -10,35 +10,35 @@ module LicenseFinder
       expect(decision_applier.any_packages?).to be false
     end
 
-    describe "#acknowledged" do
-      it "combines manual and system packages" do
+    describe '#acknowledged' do
+      it 'combines manual and system packages' do
         decision_applier = described_class.new(
-          decisions: Decisions.new.add_package("manual", nil),
-          packages: [Package.new("system")]
+          decisions: Decisions.new.add_package('manual', nil),
+          packages: [Package.new('system')]
         )
-        expect(decision_applier.acknowledged.map(&:name)).to match_array ["manual", "system"]
+        expect(decision_applier.acknowledged.map(&:name)).to match_array %w[manual system]
       end
 
-      it "applies decided licenses" do
+      it 'applies decided licenses' do
         decisions = Decisions.new
-          .add_package("manual", nil)
-          .license("manual", "MIT")
+                             .add_package('manual', nil)
+                             .license('manual', 'MIT')
         decision_applier = described_class.new(decisions: decisions, packages: [])
-        expect(decision_applier.acknowledged.last.licenses).to eq Set.new([License.find_by_name("MIT")])
+        expect(decision_applier.acknowledged.last.licenses).to eq Set.new([License.find_by_name('MIT')])
       end
 
-      it "ignores specific packages" do
+      it 'ignores specific packages' do
         decisions = Decisions.new
-          .add_package("manual", nil)
-          .ignore("manual")
+                             .add_package('manual', nil)
+                             .ignore('manual')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         expect(decision_applier.acknowledged).to be_empty
       end
 
-      it "ignores packages in certain groups" do
+      it 'ignores packages in certain groups' do
         decisions = Decisions.new
-          .ignore_group("development")
-        dev_dep = Package.new("dep", nil, groups: ["development"])
+                             .ignore_group('development')
+        dev_dep = Package.new('dep', nil, groups: ['development'])
         decision_applier = described_class.new(
           decisions: decisions,
           packages: [dev_dep]
@@ -46,10 +46,10 @@ module LicenseFinder
         expect(decision_applier.acknowledged).to be_empty
       end
 
-      it "does not ignore packages if some of their groups are not ignored" do
+      it 'does not ignore packages if some of their groups are not ignored' do
         decisions = Decisions.new
-                      .ignore_group("development")
-        dev_and_prod_dep = Package.new("dev_and_prod_dep", nil, groups: ["development", "production"])
+                             .ignore_group('development')
+        dev_and_prod_dep = Package.new('dev_and_prod_dep', nil, groups: %w[development production])
         decision_applier = described_class.new(
           decisions: decisions,
           packages: [dev_and_prod_dep]
@@ -57,10 +57,10 @@ module LicenseFinder
         expect(decision_applier.acknowledged).to eq [dev_and_prod_dep]
       end
 
-      it "does not ignore packages if they have no groups" do
+      it 'does not ignore packages if they have no groups' do
         decisions = Decisions.new
-                      .ignore_group("development")
-        dep_with_no_group = Package.new("dep_with_no_group", nil, groups: [])
+                             .ignore_group('development')
+        dep_with_no_group = Package.new('dep_with_no_group', nil, groups: [])
         decision_applier = described_class.new(
           decisions: decisions,
           packages: [dep_with_no_group]
@@ -68,60 +68,59 @@ module LicenseFinder
         expect(decision_applier.acknowledged).to eq [dep_with_no_group]
       end
 
-
-      it "adds manual approvals to packages" do
+      it 'adds manual approvals to packages' do
         decisions = Decisions.new
-          .add_package("manual", nil)
-          .approve("manual", who: "Approver", why: "Because")
+                             .add_package('manual', nil)
+                             .approve('manual', who: 'Approver', why: 'Because')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_approved_manually
-        expect(dep.manual_approval.who).to eq "Approver"
-        expect(dep.manual_approval.why).to eq "Because"
+        expect(dep.manual_approval.who).to eq 'Approver'
+        expect(dep.manual_approval.why).to eq 'Because'
       end
 
-      it "adds whitelist approvals to packages" do
+      it 'adds whitelist approvals to packages' do
         decisions = Decisions.new
-          .add_package("manual", nil)
-          .license("manual", "MIT")
-          .whitelist("MIT")
+                             .add_package('manual', nil)
+                             .license('manual', 'MIT')
+                             .whitelist('MIT')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_whitelisted
       end
 
-      it "forbids approval of packages with only blacklisted license" do
+      it 'forbids approval of packages with only blacklisted license' do
         decisions = Decisions.new
-          .add_package("manual", nil)
-          .license("manual", "ABC")
-          .whitelist("ABC")
-          .approve("manual")
-          .blacklist("ABC")
+                             .add_package('manual', nil)
+                             .license('manual', 'ABC')
+                             .whitelist('ABC')
+                             .approve('manual')
+                             .blacklist('ABC')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).not_to be_approved
       end
 
-      it "allows approval of packages if not all licenses are blacklisted" do
+      it 'allows approval of packages if not all licenses are blacklisted' do
         decisions = Decisions.new
-          .add_package("manual", nil)
-          .license("manual", "ABC")
-          .license("manual", "DEF")
-          .whitelist("ABC")
-          .blacklist("DEF")
+                             .add_package('manual', nil)
+                             .license('manual', 'ABC')
+                             .license('manual', 'DEF')
+                             .whitelist('ABC')
+                             .blacklist('DEF')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_whitelisted
 
         decisions = Decisions.new
-          .add_package("manual", nil)
-          .license("manual", "ABC")
-          .license("manual", "DEF")
-          .approve("manual")
-          .blacklist("DEF")
+                             .add_package('manual', nil)
+                             .license('manual', 'ABC')
+                             .license('manual', 'DEF')
+                             .approve('manual')
+                             .blacklist('DEF')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
@@ -130,8 +129,8 @@ module LicenseFinder
 
       it 'does not return an approval for a package without a version if all approvals have an explicit version' do
         decisions = Decisions.new
-                        .add_package('spring-boot', nil)
-                        .approve('spring-boot', versions: ['1.3.0.RELEASE'], who: 'Approver', why: 'Because')
+                             .add_package('spring-boot', nil)
+                             .approve('spring-boot', versions: ['1.3.0.RELEASE'], who: 'Approver', why: 'Because')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to_not be_approved
@@ -139,8 +138,8 @@ module LicenseFinder
 
       it 'does not return an approval if the package has the wrong version' do
         decisions = Decisions.new
-                        .add_package('spring-boot', '1.3.1.RELEASE')
-                        .approve('spring-boot', versions: ['1.3.0.RELEASE'], who: 'Approver', why: 'Because')
+                             .add_package('spring-boot', '1.3.1.RELEASE')
+                             .approve('spring-boot', versions: ['1.3.0.RELEASE'], who: 'Approver', why: 'Because')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to_not be_approved
@@ -148,8 +147,8 @@ module LicenseFinder
 
       it 'returns an approval if the requested package has an approved version' do
         decisions = Decisions.new
-                        .add_package('spring-boot', '1.3.0.RELEASE')
-                        .approve('spring-boot', versions: ['1.3.0.RELEASE'], who: 'Approver', why: 'Because')
+                             .add_package('spring-boot', '1.3.0.RELEASE')
+                             .approve('spring-boot', versions: ['1.3.0.RELEASE'], who: 'Approver', why: 'Because')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
@@ -158,8 +157,8 @@ module LicenseFinder
 
       it 'returns an approval if the requested package has been approved, but no version was specified' do
         decisions = Decisions.new
-                        .add_package('spring-boot', '1.3.0.RELEASE')
-                        .approve('spring-boot', versions: [], who: 'Approver', why: 'Because')
+                             .add_package('spring-boot', '1.3.0.RELEASE')
+                             .approve('spring-boot', versions: [], who: 'Approver', why: 'Because')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
@@ -168,7 +167,7 @@ module LicenseFinder
 
       it 'does not return an approval if no dependencies have been approved' do
         decisions = Decisions.new
-                        .add_package('spring-boot', '1.3.0.RELEASE')
+                             .add_package('spring-boot', '1.3.0.RELEASE')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to_not be_approved
@@ -182,9 +181,9 @@ module LicenseFinder
           Package.new('bar', '0.0.1', spec_licenses: ['blacklist'])
         ]
         decisions = Decisions.new
-          .add_package('baz', '0.0.1')
-          .whitelist('whitelist')
-          .blacklist('blacklist')
+                             .add_package('baz', '0.0.1')
+                             .whitelist('whitelist')
+                             .blacklist('blacklist')
         decision_applier = described_class.new(decisions: decisions, packages: packages)
 
         expect(decision_applier.unapproved.map(&:name)).to include('baz')
@@ -204,12 +203,12 @@ module LicenseFinder
       end
 
       it 'does not report ignored packages' do
-        dev_dep = Package.new("dev_dep", nil, spec_licenses: ['GPLv3'], groups: ["development"])
+        dev_dep = Package.new('dev_dep', nil, spec_licenses: ['GPLv3'], groups: ['development'])
         decisions = Decisions.new
-          .ignore_group("development")
-          .add_package("manual", nil)
-          .ignore("manual")
-          .blacklist('GPLv3')
+                             .ignore_group('development')
+                             .add_package('manual', nil)
+                             .ignore('manual')
+                             .blacklist('GPLv3')
         decision_applier = described_class.new(decisions: decisions, packages: [dev_dep])
 
         expect(decision_applier.blacklisted).to be_empty

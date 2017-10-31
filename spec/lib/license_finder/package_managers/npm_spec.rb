@@ -11,11 +11,11 @@ module LicenseFinder
     let(:package_json) do
       {
         dependencies: {
-            'dependency.js' => '1.3.3.7',
-            'dependency2.js' => '4.2'
+          'dependency.js' => '1.3.3.7',
+          'dependency2.js' => '4.2'
         },
         devDependencies: {
-            'dependency3.js' => '4.2'
+          'dependency3.js' => '4.2'
         }
       }.to_json
     end
@@ -99,13 +99,13 @@ module LicenseFinder
 
       it 'fetches data from npm' do
         current_packages = npm.current_packages
-        expect(current_packages.map(&:name)).to eq(%w(dependency.js dependency1-1.js dependency2.js dependency2-1.js dependency3.js dependency3-1.js))
+        expect(current_packages.map(&:name)).to eq(%w[dependency.js dependency1-1.js dependency2.js dependency2-1.js dependency3.js dependency3-1.js])
       end
 
       it 'finds the groups for dependencies' do
         current_packages = npm.current_packages
         expect(current_packages.find { |p| p.name == 'dependency.js' }.groups).to eq(['dependencies'])
-        expect(current_packages.find { |p| p.name == 'dependency1-1.js' }.groups).to eq(%w(dependencies devDependencies))
+        expect(current_packages.find { |p| p.name == 'dependency1-1.js' }.groups).to eq(%w[dependencies devDependencies])
         expect(current_packages.find { |p| p.name == 'dependency2.js' }.groups).to eq(['dependencies'])
         expect(current_packages.find { |p| p.name == 'dependency2-1.js' }.groups).to eq(['dependencies'])
         expect(current_packages.find { |p| p.name == 'dependency3.js' }.groups).to eq(['devDependencies'])
@@ -134,7 +134,7 @@ module LicenseFinder
       end
 
       it 'does not fail when command fails but produces output' do
-        allow(npm).to receive(:run_command_with_tempfile_buffer).and_return ['', {'foo' => 'bar'}, false]
+        allow(npm).to receive(:run_command_with_tempfile_buffer).and_return ['', { 'foo' => 'bar' }, false]
         silence_stderr { npm.current_packages }
       end
 
@@ -173,8 +173,8 @@ module LicenseFinder
         describe '.current_packages' do
           it 'correctly navigates the dependencies tree and pulls out valid information' do
             FakeFS::FileSystem.clone(File.expand_path('../../../../../lib/license_finder/license/templates', __FILE__))
-            expect(npm.current_packages.find {|p| p.name == 'has'}.licenses.map(&:name)).to eq ['MIT']
-            expect(npm.current_packages.find {|p| p.name == 'function-bind'}.licenses.map(&:name)).to eq ['MIT']
+            expect(npm.current_packages.find { |p| p.name == 'has' }.licenses.map(&:name)).to eq ['MIT']
+            expect(npm.current_packages.find { |p| p.name == 'function-bind' }.licenses.map(&:name)).to eq ['MIT']
           end
         end
       end
@@ -194,7 +194,7 @@ module LicenseFinder
         describe '.current_packages' do
           it 'correctly reports the license type' do
             FakeFS::FileSystem.clone(File.expand_path('../../../../../lib/license_finder/license/templates', __FILE__))
-            expect(npm.current_packages.find {|p| p.name == 'boolbase'}.licenses.map(&:name)).to eq ['ISC']
+            expect(npm.current_packages.find { |p| p.name == 'boolbase' }.licenses.map(&:name)).to eq ['ISC']
           end
         end
       end
@@ -215,9 +215,9 @@ module LicenseFinder
           it 'should return package tree successfully' do
             packages = npm.current_packages
             expect(packages.count).to be > 1
-            expect(packages.select{|p| p.name == 'babel-register'}.count).to eq(1)
-            expect(packages.select{|p| p.name == 'babel-core'}.count).to eq(1)
-            expect(packages.find{|p| p.name == 'babel-register'}.dependencies.count).to be > 0
+            expect(packages.select { |p| p.name == 'babel-register' }.count).to eq(1)
+            expect(packages.select { |p| p.name == 'babel-core' }.count).to eq(1)
+            expect(packages.find { |p| p.name == 'babel-register' }.dependencies.count).to be > 0
           end
         end
       end
@@ -234,17 +234,16 @@ module LicenseFinder
           end
         end
 
-
         describe '.current_packages' do
           it 'should return package tree successfully' do
             packages = npm.current_packages
             expect(packages.count).to be > 1
-            expect(packages.select{|p| p.name == 'es6-iterator'}.count).to eq(1)
-            expect(packages.select{|p| p.name == 'es5-ext'}.count).to eq(1)
-            expect(packages.select{|p| p.name == 'd'}.count).to eq(1)
-            expect(packages.find{|p| p.name == 'es6-iterator'}.dependencies.count).to be > 0
-            expect(packages.find{|p| p.name == 'es5-ext'}.dependencies.count).to be > 0
-            expect(packages.find{|p| p.name == 'd'}.dependencies.count).to be > 0
+            expect(packages.select { |p| p.name == 'es6-iterator' }.count).to eq(1)
+            expect(packages.select { |p| p.name == 'es5-ext' }.count).to eq(1)
+            expect(packages.select { |p| p.name == 'd' }.count).to eq(1)
+            expect(packages.find { |p| p.name == 'es6-iterator' }.dependencies.count).to be > 0
+            expect(packages.find { |p| p.name == 'es5-ext' }.dependencies.count).to be > 0
+            expect(packages.find { |p| p.name == 'd' }.dependencies.count).to be > 0
           end
         end
       end

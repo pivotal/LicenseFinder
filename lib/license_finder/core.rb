@@ -74,20 +74,20 @@ module LicenseFinder
 
     def options
       {
-          logger: logger,
-          project_path: config.project_path,
-          ignored_groups: decisions.ignored_groups,
-          go_full_version: config.go_full_version,
-          gradle_command: config.gradle_command,
-          gradle_include_groups: config.gradle_include_groups,
-          maven_include_groups: config.maven_include_groups,
-          maven_options: config.maven_options,
-          pip_requirements_path: config.pip_requirements_path,
-          rebar_command: config.rebar_command,
-          rebar_deps_dir: config.rebar_deps_dir,
-          mix_command: config.mix_command,
-          mix_deps_dir: config.mix_deps_dir,
-          prepare: config.prepare
+        logger: logger,
+        project_path: config.project_path,
+        ignored_groups: decisions.ignored_groups,
+        go_full_version: config.go_full_version,
+        gradle_command: config.gradle_command,
+        gradle_include_groups: config.gradle_include_groups,
+        maven_include_groups: config.maven_include_groups,
+        maven_options: config.maven_options,
+        pip_requirements_path: config.pip_requirements_path,
+        rebar_command: config.rebar_command,
+        rebar_deps_dir: config.rebar_deps_dir,
+        mix_command: config.mix_command,
+        mix_deps_dir: config.mix_deps_dir,
+        prepare: config.prepare
       }
     end
   end

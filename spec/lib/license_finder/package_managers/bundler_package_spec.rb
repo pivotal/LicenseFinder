@@ -8,28 +8,28 @@ module LicenseFinder
       Gem::Specification.new do |s|
         s.name = 'spec_name'
         s.version = '2.1.3'
-        s.authors = ['first', 'second']
+        s.authors = %w[first second]
         s.summary = 'summary'
         s.description = 'description'
         s.homepage = 'homepage'
-        s.licenses = ['MIT', 'GPL']
+        s.licenses = %w[MIT GPL]
 
         s.add_dependency 'foo'
       end
     end
 
-    let(:bundler_dependency) { double(:dependency, groups: [:staging, :assets]) }
+    let(:bundler_dependency) { double(:dependency, groups: %i[staging assets]) }
 
     its(:name) { should == 'spec_name' }
     its(:version) { should == '2.1.3' }
     its(:authors) { should == 'first, second' }
-    its(:summary) { should == "summary" }
-    its(:description) { should == "description" }
-    its(:homepage) { should == "homepage" }
+    its(:summary) { should == 'summary' }
+    its(:description) { should == 'description' }
+    its(:homepage) { should == 'homepage' }
     its(:groups) { should == %w[staging assets] }
     its(:children) { should == ['foo'] }
-    its(:license_names_from_spec) { should eq ['MIT', 'GPL'] }
-    its(:install_path) { should =~ /spec_name-2\.1\.3\z/ }
-    its(:package_manager) { should == "Bundler" }
+    its(:license_names_from_spec) { should eq %w[MIT GPL] }
+    its(:install_path) { should end_with 'spec_name-2.1.3' }
+    its(:package_manager) { should == 'Bundler' }
   end
 end

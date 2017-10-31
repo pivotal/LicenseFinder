@@ -3,8 +3,10 @@ require 'thor'
 module LicenseFinder
   module CLI
     class Base < Thor
-      class_option :project_path, desc: "Path to the project. Defaults to current working directory."
-      class_option :decisions_file, desc: "Where decisions are saved. Defaults to doc/dependency_decisions.yml."
+      class_option :project_path,
+                   desc: 'Path to the project. Defaults to current working directory.'
+      class_option :decisions_file,
+                   desc: 'Where decisions are saved. Defaults to doc/dependency_decisions.yml.'
 
       no_commands do
         def decisions
@@ -21,7 +23,7 @@ module LicenseFinder
       end
 
       def fail(message)
-        say message and exit 1
+        say(message) && exit(1)
       end
 
       def license_finder_config
@@ -60,15 +62,13 @@ module LicenseFinder
       end
 
       def assert_some(things)
-        unless things.any?
-          raise ArgumentError, "wrong number of arguments (0 for 1+)", caller
-        end
+        raise ArgumentError, 'wrong number of arguments (0 for 1+)', caller unless things.any?
       end
 
       def extract_options(*keys)
         result = {}
         keys.each do |key|
-          result[key.to_sym] = options[key.to_s] if options.has_key? key.to_s
+          result[key.to_sym] = options[key.to_s] if options.key? key.to_s
         end
         result
       end

@@ -15,7 +15,6 @@ module LicenseFinder
         allow(Dir).to receive(:chdir).with(Pathname('/fake/path')).and_return(['', true])
         dependencies = double(:subject_dependency_file, dependencies: content)
         expect(GradleDependencyFinder).to receive(:new).and_return(dependencies)
-
       end
 
       it 'uses the gradle wrapper, if present' do
@@ -24,7 +23,7 @@ module LicenseFinder
         allow(subject).to receive(:capture).and_return(['/usr/local/bin/gradle
 
 BUILD SUCCESSFUL in 0s
-1 actionable task: 1 executed',true])
+1 actionable task: 1 executed', true])
         if Platform.windows?
           expect(subject.package_management_command).to eq('gradlew.bat')
         else
@@ -163,9 +162,9 @@ BUILD SUCCESSFUL in 0s
 
       context "when there's a settings.gradle" do
         it 'uses the build.gradle referenced inside' do
-          SETTINGS_DOT_GRADLE = <<-eos
+          SETTINGS_DOT_GRADLE = <<-GRADLE.freeze
 rootProject.buildFileName = 'build-alt.gradle'
-          eos
+          GRADLE
 
           FakeFS do
             FileUtils.mkdir_p '/fake/path'
@@ -178,7 +177,6 @@ rootProject.buildFileName = 'build-alt.gradle'
           end
         end
       end
-
     end
   end
 end

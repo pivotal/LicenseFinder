@@ -1,9 +1,9 @@
 module LicenseFinder
   class Rebar < PackageManager
-    def initialize(options={})
+    def initialize(options = {})
       super
-      @command = options[:rebar_command] || Rebar::package_management_command
-      @deps_path = Pathname(options[:rebar_deps_dir] || "deps")
+      @command = options[:rebar_command] || Rebar.package_management_command
+      @deps_path = Pathname(options[:rebar_deps_dir] || 'deps')
     end
 
     def current_packages
@@ -19,7 +19,7 @@ module LicenseFinder
     end
 
     def self.package_management_command
-      "rebar"
+      'rebar'
     end
 
     private
@@ -31,8 +31,8 @@ module LicenseFinder
 
       output
         .each_line
-        .reject { |line| line.start_with?("=") }
-        .map { |line| line.split(" ") }
+        .reject { |line| line.start_with?('=') }
+        .map { |line| line.split(' ') }
     end
 
     def possible_package_paths

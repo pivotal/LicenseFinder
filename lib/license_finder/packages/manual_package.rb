@@ -5,11 +5,11 @@ module LicenseFinder
     end
 
     def eql?(other)
-      name == other.name # && version.to_s == other.version.to_s # ignore version
+      name == other.name
     end
 
     def hash
-      name.hash # ^ version.to_s.hash # ignore version
+      name.hash
     end
 
     private

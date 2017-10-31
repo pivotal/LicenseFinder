@@ -2,17 +2,16 @@ require 'json'
 
 module LicenseFinder
   class Go15VendorExperiment < PackageManager
-
-    def initialize(options={})
+    def initialize(options = {})
       super
       @full_version = options[:go_full_version]
     end
 
     def active?
-      super && has_go_files?
+      super && go_files_exist?
     end
 
-    def has_go_files?
+    def go_files_exist?
       !Dir[project_path.join('**/*.go')].empty?
     end
 
@@ -33,9 +32,9 @@ module LicenseFinder
       vendored_deps = deps.select { |dep| detected_package_path.join(dep).exist? }
       vendored_deps.map do |dep|
         GoPackage.from_dependency({
-                                   'ImportPath' => dep,
-                                   'InstallPath' => detected_package_path.join(dep),
-                                   'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep))
+                                    'ImportPath' => dep,
+                                    'InstallPath' => detected_package_path.join(dep),
+                                    'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep))
                                   }, nil, true)
       end
     end
@@ -62,7 +61,7 @@ module LicenseFinder
         deps = val.first.split("\n")
         capture('go list std').first.split("\n").each do |std|
           deps.delete_if do |dep|
-            dep =~ /(\/|^)#{std}(\/|$)/
+            dep =~ %r{(\/|^)#{std}(\/|$)}
           end
         end
         deps.map do |d|

@@ -1,9 +1,9 @@
-require "xmlsimple"
-require_relative "maven_dependency_finder"
+require 'xmlsimple'
+require_relative 'maven_dependency_finder'
 
 module LicenseFinder
   class Maven < PackageManager
-    def initialize(options={})
+    def initialize(options = {})
       super
       @ignored_groups = options[:ignored_groups]
       @include_groups = options[:maven_include_groups]
@@ -12,8 +12,8 @@ module LicenseFinder
 
     def current_packages
       command = "#{package_management_command} org.codehaus.mojo:license-maven-plugin:download-licenses"
-      command += " -Dlicense.excludedScopes=#{@ignored_groups.to_a.join(',')}" if @ignored_groups and !@ignored_groups.empty?
-      command += " #{@maven_options}" if !@maven_options.nil?
+      command += " -Dlicense.excludedScopes=#{@ignored_groups.to_a.join(',')}" if @ignored_groups && !@ignored_groups.empty?
+      command += " #{@maven_options}" unless @maven_options.nil?
       output, success = Dir.chdir(project_path) { capture(command) }
       raise "Command '#{command}' failed to execute: #{output}" unless success
 
@@ -21,9 +21,9 @@ module LicenseFinder
       packages = dependencies.flat_map do |xml|
         options = {
           'GroupTags' => { 'licenses' => 'license', 'dependencies' => 'dependency' },
-          'ForceArray' => ['license', 'dependency']
+          'ForceArray' => %w[license dependency]
         }
-        contents = XmlSimple.xml_in(xml, options)["dependencies"]
+        contents = XmlSimple.xml_in(xml, options)['dependencies']
         contents.map do |dep|
           MavenPackage.new(dep, logger: logger, include_groups: @include_groups)
         end
@@ -32,13 +32,12 @@ module LicenseFinder
     end
 
     def package_management_command
-      if Platform.windows?
-        wrapper = 'mvnw.cmd'
-        maven = 'mvn'
-      else
-        wrapper = './mvnw'
-        maven = 'mvn'
-      end
+      wrapper = if Platform.windows?
+                  'mvnw.cmd'
+                else
+                  './mvnw'
+                end
+      maven = 'mvn'
 
       File.exist?(File.join(project_path, wrapper)) ? wrapper : maven
     end

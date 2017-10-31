@@ -1,11 +1,11 @@
-require "spec_helper"
+require 'spec_helper'
 
 module LicenseFinder
   describe Core do
     let(:options) { {} }
     let(:license_finder) { described_class.new(options) }
     let(:logger) { Logger.new(options[:logger]) }
-    let(:configuration) { LicenseFinder::Configuration.new(options, {})}
+    let(:configuration) { LicenseFinder::Configuration.new(options, {}) }
     let(:pathname) { Pathname.pwd + Pathname(options[:project_path]) }
 
     before do
@@ -13,7 +13,7 @@ module LicenseFinder
     end
 
     describe '#unapproved' do
-      let(:options) {
+      let(:options) do
         {
           logger: {},
           project_path: 'other_directory',
@@ -24,8 +24,8 @@ module LicenseFinder
           mix_deps_dir: 'mixes_in_here/deps',
           prepare: 'prepare'
         }
-      }
-      let(:package_options) {
+      end
+      let(:package_options) do
         {
           logger: logger,
           project_path: configuration.project_path,
@@ -42,10 +42,10 @@ module LicenseFinder
           mix_deps_dir: configuration.mix_deps_dir,
           prepare: configuration.prepare
         }
-      }
+      end
 
       it 'delegates to the decision_applier' do
-        decision_applier =  double(:decision_applier)
+        decision_applier = double(:decision_applier)
         allow(license_finder).to receive(:decision_applier).and_return(decision_applier)
         expect(decision_applier).to receive(:unapproved)
         license_finder.unapproved

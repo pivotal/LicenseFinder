@@ -3,7 +3,7 @@ require 'httparty'
 
 module LicenseFinder
   class Pip < PackageManager
-    def initialize(options={})
+    def initialize(options = {})
       super
       @requirements_path = options[:pip_requirements_path] || Pathname('requirements.txt')
     end
@@ -16,7 +16,7 @@ module LicenseFinder
           pypi_def(name, version),
           logger: logger,
           children: children,
-          install_path: Pathname(location).join(name),
+          install_path: Pathname(location).join(name)
         )
       end
     end
@@ -28,17 +28,17 @@ module LicenseFinder
     private
 
     def possible_package_paths
-      unless project_path.nil?
-        [project_path.join(@requirements_path)]
-      else
+      if project_path.nil?
         [@requirements_path]
+      else
+        [project_path.join(@requirements_path)]
       end
     end
 
     def pip_output
       output = `#{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} #{detected_package_path}`
       JSON(output).map do |package|
-        package.values_at(*%w[name version dependencies location])
+        package.values_at('name', 'version', 'dependencies', 'location')
       end
     end
 

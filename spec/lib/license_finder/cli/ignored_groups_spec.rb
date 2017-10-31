@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 module LicenseFinder
   module CLI
@@ -9,28 +9,28 @@ module LicenseFinder
         allow(Decisions).to receive(:fetch_saved) { decisions }
       end
 
-      describe "list" do
-        it "shows the ignored groups in the standard output" do
-          decisions.ignore_group("development")
+      describe 'list' do
+        it 'shows the ignored groups in the standard output' do
+          decisions.ignore_group('development')
 
           expect(capture_stdout { subject.list }).to match /development/
         end
       end
 
-      describe "add" do
-        it "adds the specified group to the ignored groups list" do
+      describe 'add' do
+        it 'adds the specified group to the ignored groups list' do
           silence_stdout do
-            subject.add("test")
+            subject.add('test')
           end
-          expect(subject.decisions.ignored_groups).to eq ["test"].to_set
+          expect(subject.decisions.ignored_groups).to eq ['test'].to_set
         end
       end
 
-      describe "remove" do
-        it "removes the specified group from the ignored groups list" do
+      describe 'remove' do
+        it 'removes the specified group from the ignored groups list' do
           silence_stdout do
-            subject.add("test")
-            subject.remove("test")
+            subject.add('test')
+            subject.remove('test')
           end
           expect(subject.decisions.ignored_groups).to be_empty
         end

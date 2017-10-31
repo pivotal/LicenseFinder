@@ -24,7 +24,7 @@ module LicenseFinder
         active_package_managers(options).flat_map(&:current_packages_with_relations)
       end
 
-      def active_package_managers(options={:project_path => Pathname.new('')})
+      def active_package_managers(options = { project_path: Pathname.new('') })
         active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
         active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
         active_pm_classes.map { |pm_class| pm_class.new(options) }
@@ -34,7 +34,7 @@ module LicenseFinder
         nil
       end
 
-      def installed?(logger=Core.default_logger)
+      def installed?(logger = Core.default_logger)
         if package_management_command.nil?
           logger.log self, 'no command defined' #TODO comment me out
           return true
@@ -58,7 +58,7 @@ module LicenseFinder
       end
     end
 
-    def initialize options={}
+    def initialize(options = {})
       @logger       = options[:logger] || Core.default_logger
       @project_path = options[:project_path]
     end
@@ -77,9 +77,7 @@ module LicenseFinder
     end
 
     def detected_package_path
-      possible_package_paths.find { |path|
-        path.exist?
-      }
+      possible_package_paths.find(&:exist?)
     end
 
     def prepare
@@ -92,28 +90,28 @@ module LicenseFinder
     end
 
     def capture(command)
-      [`#{command}`, $?.success?]
+      [`#{command}`, $CHILD_STATUS.success?]
     end
 
     def current_packages_with_relations
-      packages = self.current_packages
+      packages = current_packages
       packages.each do |parent|
         parent.children.each do |child_name|
-          child = packages.detect { |child| child.name == child_name }
+          child = packages.detect { |child_package| child_package.name == child_name }
           child.parents << parent.name if child
         end
       end
       packages
     end
 
-    def self.command_exists? command
+    def self.command_exists?(command)
       if LicenseFinder::Platform.windows?
         `where #{command} 2>NUL`
       else
         `which #{command} 2>/dev/null`
       end
-      status = $?
-      return status.success?
+      status = $CHILD_STATUS
+      status.success?
     end
 
     private

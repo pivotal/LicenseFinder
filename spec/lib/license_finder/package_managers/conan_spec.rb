@@ -16,7 +16,6 @@ cmake
 
 [imports]
 ., license* -> ./licenses @ folder=True, ignore_case=True'
-
       end
       let(:conaninfo) do
         'PROJECT
@@ -83,34 +82,34 @@ zlib/1.2.11@conan/stable
             FileUtils.mkdir_p '/fake/path/licenses/zlib/license'
             FileUtils.mkdir_p '/fake/path/licenses/OpenSSL'
             FileUtils.mkdir_p '/fake/path/licenses/Poco/license'
-            File.write('/fake/path/licenses/zlib/license/LICENSE','zlib license')
-            File.write('/fake/path/licenses/OpenSSL/LICENSE','OpenSSL license')
-            File.write('/fake/path/licenses/Poco/license/LICENSE','Poco license')
+            File.write('/fake/path/licenses/zlib/license/LICENSE', 'zlib license')
+            File.write('/fake/path/licenses/OpenSSL/LICENSE', 'OpenSSL license')
+            File.write('/fake/path/licenses/Poco/license/LICENSE', 'Poco license')
             expect(subject).to receive(:capture).with('conan install').ordered
             expect(subject).to receive(:capture).with('conan info').ordered.and_return([conaninfo, true])
           end
 
           it 'should list all the current packages name and version' do
             expect(subject.current_packages.map { |p| [p.name, p.version] }).to eq [
-                                                                                       ['OpenSSL', '1.0.2l'],
-                                                                                       ['Poco', '1.7.8p3'],
-                                                                                       ['zlib', '1.2.11']]
+              ['OpenSSL', '1.0.2l'],
+              ['Poco', '1.7.8p3'],
+              ['zlib', '1.2.11']
+            ]
           end
 
           it 'should obtain license text for each of the dependencies' do
-            expect(ConanPackage).to receive(:new).with('OpenSSL','1.0.2l','OpenSSL license',anything)
-            expect(ConanPackage).to receive(:new).with('Poco','1.7.8p3','Poco license',anything)
-            expect(ConanPackage).to receive(:new).with('zlib','1.2.11','zlib license',anything)
+            expect(ConanPackage).to receive(:new).with('OpenSSL', '1.0.2l', 'OpenSSL license', anything)
+            expect(ConanPackage).to receive(:new).with('Poco', '1.7.8p3', 'Poco license', anything)
+            expect(ConanPackage).to receive(:new).with('zlib', '1.2.11', 'zlib license', anything)
             subject.current_packages
           end
 
           it 'should obtain the url from conan info' do
-            expect(ConanPackage).to receive(:new).with('OpenSSL','1.0.2l',anything,'http://github.com/lasote/conan-openssl')
-            expect(ConanPackage).to receive(:new).with('Poco','1.7.8p3',anything,'http://github.com/lasote/conan-poco')
-            expect(ConanPackage).to receive(:new).with('zlib','1.2.11',anything,'http://github.com/lasote/conan-zlib')
+            expect(ConanPackage).to receive(:new).with('OpenSSL', '1.0.2l', anything, 'http://github.com/lasote/conan-openssl')
+            expect(ConanPackage).to receive(:new).with('Poco', '1.7.8p3', anything, 'http://github.com/lasote/conan-poco')
+            expect(ConanPackage).to receive(:new).with('zlib', '1.2.11', anything, 'http://github.com/lasote/conan-zlib')
             subject.current_packages
           end
-
         end
       end
     end

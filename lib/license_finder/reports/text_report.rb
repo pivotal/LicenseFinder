@@ -1,14 +1,12 @@
 module LicenseFinder
   class TextReport < CsvReport
-    COMMA_SEP =  ", "
+    COMMA_SEP = ', '.freeze
 
-    def initialize(dependencies, options={})
+    def initialize(dependencies, options = {})
       super(dependencies, options)
 
       default_columns = %w[name version licenses]
-      if @columns.empty?
-        @columns = default_columns
-      end
+      @columns = default_columns if @columns.empty?
     end
   end
 end

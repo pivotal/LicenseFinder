@@ -15,44 +15,43 @@ module LicenseFinder
         'html' => HtmlReport,
         'markdown' => MarkdownReport,
         'csv' => CsvReport
-      }
+      }.freeze
 
       class_option :format, desc: 'The desired output format.', default: 'text', enum: FORMATS.keys
       class_option :columns, type: :array, desc: "For text or CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}", default: %w[name version licenses]
-      class_option :save, desc: %q(Save report to a file. Default: 'license_report.csv' in project root.), lazy_default: 'license_report'
+      class_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
       class_option :go_full_version, desc: 'Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false.'
       class_option :gradle_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Java/gradle project. Defaults to false.'
-      class_option :gradle_command, desc: %q(Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project. Defaults to 'gradlew' / 'gradlew.bat' if the wrapper is present, otherwise to 'gradle'.)
+      class_option :gradle_command,
+                   desc: "Command to use when fetching gradle packages. Only meaningful if used with a Java/gradle project.
+                          Defaults to 'gradlew' / 'gradlew.bat' if the wrapper is present, otherwise to 'gradle'."
       class_option :maven_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Java/maven project. Defaults to false.'
       class_option :maven_options, desc: 'Maven options to append to command. Defaults to empty.'
       class_option :pip_requirements_path, desc: 'Path to python requirements file. Defaults to requirements.txt.'
-      class_option :rebar_command, desc: %q(Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'.)
-      class_option :rebar_deps_dir, desc: %q(Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'.)
-      class_option :mix_command, desc: %q(Command to use when fetching packages through Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'mix'.)
-      class_option :mix_deps_dir, desc: %q(Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'.)
+      class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
+      class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
+      class_option :mix_command, desc: "Command to use when fetching packages through Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'mix'."
+      class_option :mix_deps_dir, desc: "Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'."
 
       # Method options which are shared between report and action_item
       def self.shared_options
-
         method_option :debug,
-                      :aliases => '-d',
-                      :type => :boolean,
-                      :desc => 'Emit detailed info about what LicenseFinder is doing'
+                      aliases: '-d',
+                      type: :boolean,
+                      desc: 'Emit detailed info about what LicenseFinder is doing'
 
         method_option :prepare,
-                      :aliases => '-p',
-                      :type => :boolean,
-                      :desc => 'Prepares the project first for license_finder',
-                      :default => false,
-                      :required => false
-
+                      aliases: '-p',
+                      type: :boolean,
+                      desc: 'Prepares the project first for license_finder',
+                      default: false,
+                      required: false
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
-      method_option :quiet, :aliases => '-q',:type => :boolean, :desc => 'Silences progress report', :required => false
+      method_option :quiet, aliases: '-q', type: :boolean, desc: 'Silences progress report', required: false
       shared_options
       def action_items
-
         run_prepare_phase if prepare?
         any_packages = license_finder.any_packages?
         unapproved = license_finder.unapproved
@@ -89,10 +88,10 @@ module LicenseFinder
       desc 'report', "Print a report of the project's dependencies to stdout"
       shared_options
       method_option :recursive, aliases: '-r', type: :boolean, default: false,
-                    desc: 'Recursively runs License Finder on all sub-projects'
+                                desc: 'Recursively runs License Finder on all sub-projects'
 
       method_option :subprojects, aliases: '-s', type: :array,
-                    desc: %q(Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2')
+                                  desc: "Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2'"
       def report
         logger_config[:quiet] = true
         subproject_paths = options[:subprojects]
@@ -154,7 +153,6 @@ module LicenseFinder
       def run_prepare_phase
         license_finder.prepare_projects
       end
-
     end
   end
 end

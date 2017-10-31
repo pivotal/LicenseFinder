@@ -3,11 +3,11 @@ module LicenseFinder
     private
 
     def template_name
-      "html_report"
+      'html_report'
     end
 
     def bootstrap
-      TEMPLATE_PATH.join("bootstrap.css").read
+      TEMPLATE_PATH.join('bootstrap.css').read
     end
   end
 end

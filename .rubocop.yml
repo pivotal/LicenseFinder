@@ -1,0 +1,56 @@
+#Layout Cops
+IndentHeredoc:
+  Enabled: false
+
+#Linting Cops
+AmbiguousRegexpLiteral:
+  Enabled: false
+
+# Metrics Cops
+AbcSize:
+  Max: 30
+BlockLength:
+  Enabled: false # TODO: enable and refactor long methods
+#  ExcludedMethods: ['describe', 'context', 'it', 'shared_examples']  # uncomment once enabled
+ClassLength:
+  Enabled: false
+CyclomaticComplexity:
+  Max: 10
+PerceivedComplexity:
+  Max: 10
+LineLength:
+  Max: 200
+MethodLength:
+  Enabled: false
+ModuleLength:
+  Enabled: false
+
+# Security Cops
+YAMLLoad:
+  Enabled: false
+
+#Style Cops
+DoubleNegation:
+  Enabled: false
+Documentation:
+  Enabled: false
+FileName:
+  Exclude:
+    - '**/Rakefile'
+    - '**/Gemfile'
+    - '**/Podfile'
+MethodMissing:
+  Enabled: false
+ModuleFunction:
+  Enabled: false
+
+AllCops:
+  Include:
+    - 'bin/license_finder'
+  Exclude:
+    - 'lib/license_finder/reports/**/*'
+    - 'features/fixtures/**/*'
+    - 'releases/**/*'
+    - 'ci/**/*'
+    - 'tmp/**/*'
+    - 'Gemfile'

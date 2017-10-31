@@ -1,12 +1,12 @@
-require "license_finder/license/text"
-require "license_finder/license/template"
+require 'license_finder/license/text'
+require 'license_finder/license/template'
 
-require "license_finder/license/matcher"
-require "license_finder/license/header_matcher"
-require "license_finder/license/any_matcher"
-require "license_finder/license/none_matcher"
+require 'license_finder/license/matcher'
+require 'license_finder/license/header_matcher'
+require 'license_finder/license/any_matcher'
+require 'license_finder/license/none_matcher'
 
-require "license_finder/license/definitions"
+require 'license_finder/license/definitions'
 
 module LicenseFinder
   class License
@@ -16,7 +16,7 @@ module LicenseFinder
       end
 
       def find_by_name(name)
-        name ||= "unknown"
+        name ||= 'unknown'
         all.detect { |l| l.matches_name? l.stripped_name(name) } || Definitions.build_unrecognized(name)
       end
 
@@ -40,7 +40,7 @@ module LicenseFinder
     end
 
     def stripped_name(name)
-      name.sub(/^The /i,'')
+      name.sub(/^The /i, '')
     end
 
     def matches_name?(name)

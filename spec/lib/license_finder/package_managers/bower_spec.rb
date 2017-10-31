@@ -31,7 +31,7 @@ module LicenseFinder
         allow(subject).to receive(:capture).with('bower list --json -l action --allow-root').and_return([json, true])
 
         expect(subject.current_packages.map { |p| [p.name, p.install_path] }).to eq [
-          %w(dependency-library /path/to/thing), %w(another-dependency /path/to/thing2)
+          %w[dependency-library /path/to/thing], %w[another-dependency /path/to/thing2]
         ]
       end
     end

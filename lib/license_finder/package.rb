@@ -18,27 +18,27 @@ module LicenseFinder
     attr_reader :logger
 
     def self.license_names_from_standard_spec(spec)
-      licenses = spec["licenses"] || [spec["license"]].compact
+      licenses = spec['licenses'] || [spec['license']].compact
       licenses = [licenses] unless licenses.is_a?(Array)
       licenses.map do |license|
         if license.is_a? Hash
-          license["type"]
+          license['type']
         else
           license
         end
       end
     end
 
-    def initialize(name, version = nil, options={})
+    def initialize(name, version = nil, options = {})
       @logger = options[:logger] || Core.default_logger
 
       ## DESCRIPTION
       @name = name
       @version = version
-      @authors = options[:authors] || ""
-      @summary = options[:summary] || ""
-      @description = options[:description] || ""
-      @homepage = options[:homepage] || ""
+      @authors = options[:authors] || ''
+      @summary = options[:summary] || ''
+      @description = options[:description] || ''
+      @homepage = options[:homepage] || ''
       @children = options[:children] || []
       @parents = Set.new # will be figured out later by package manager
       @groups = options[:groups] || []
@@ -100,7 +100,7 @@ module LicenseFinder
 
     def <=>(other)
       eq_name = name <=> other.name
-      return eq_name unless eq_name == 0
+      return eq_name unless eq_name.zero?
       version <=> other.version
     end
 
@@ -109,7 +109,7 @@ module LicenseFinder
     end
 
     def hash
-      [name,version].hash
+      [name, version].hash
     end
 
     ## LICENSING
@@ -146,7 +146,7 @@ module LicenseFinder
     end
 
     def package_manager
-      "unknown"
+      'unknown'
     end
 
     def missing?

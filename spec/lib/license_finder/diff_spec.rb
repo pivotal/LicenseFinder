@@ -12,7 +12,7 @@ module LicenseFinder
 
     describe '#compare' do
       context 'when a dependency is added' do
-        let(:file1_content) { "nokogiri,1.6.6.2,MIT" }
+        let(:file1_content) { 'nokogiri,1.6.6.2,MIT' }
         let(:file2_content) { "nokogiri,1.6.6.2,MIT\nrspec,3.2.0,MIT" }
 
         it 'should create and set packages with added diff state' do
@@ -23,7 +23,7 @@ module LicenseFinder
 
       context 'when a dependency is removed' do
         let(:file1_content) { "nokogiri,1.6.6.2,MIT\nrspec,3.2.0,MIT" }
-        let(:file2_content) { "nokogiri,1.6.6.2,MIT" }
+        let(:file2_content) { 'nokogiri,1.6.6.2,MIT' }
 
         it 'should create and set packages with removed diff state' do
           rspec = find_package_with_name('rspec')[0]
@@ -32,8 +32,8 @@ module LicenseFinder
       end
 
       context 'when a dependency is unchanged' do
-        let(:file1_content) { "nokogiri,1.6.6.2,MIT" }
-        let(:file2_content) { "nokogiri,1.6.6.2,MIT" }
+        let(:file1_content) { 'nokogiri,1.6.6.2,MIT' }
+        let(:file2_content) { 'nokogiri,1.6.6.2,MIT' }
 
         it 'should create and set packages with unchanged diff state' do
           nokogiri = find_package_with_name('nokogiri')[0]
@@ -53,18 +53,18 @@ module LicenseFinder
       end
 
       context 'when the version changes' do
-        let(:file1_content) { "rspec,3.2.0,MIT" }
-        let(:file2_content) { "rspec,3.3.0,MIT" }
+        let(:file1_content) { 'rspec,3.2.0,MIT' }
+        let(:file2_content) { 'rspec,3.3.0,MIT' }
 
         it 'should add the new version and remove the previous version' do
           rspecs = find_package_with_name('rspec')
           expect(rspecs.size).to eq(2)
           rspecs.each do |rspec|
             case rspec.status
-              when :removed
-                expect(rspec.version).to eq('3.2.0')
-              when :added
-                expect(rspec.version).to eq('3.3.0')
+            when :removed
+              expect(rspec.version).to eq('3.2.0')
+            when :added
+              expect(rspec.version).to eq('3.3.0')
             end
           end
         end
@@ -77,13 +77,13 @@ module LicenseFinder
             expect(rspecs.size).to eq(3)
             rspecs.each do |rspec|
               case rspec.status
-                when :removed
-                  expect(rspec.version).to eq('3.2.0')
-                when :added
-                  expect(rspec.version).to eq('3.3.0')
-                else
-                  expect(rspec.status).to eq(:unchanged)
-                  expect(rspec.version).to eq('1.1.0')
+              when :removed
+                expect(rspec.version).to eq('3.2.0')
+              when :added
+                expect(rspec.version).to eq('3.3.0')
+              else
+                expect(rspec.status).to eq(:unchanged)
+                expect(rspec.version).to eq('1.1.0')
               end
             end
           end
@@ -91,12 +91,12 @@ module LicenseFinder
       end
 
       context 'when the license changes' do
-        let(:file1_content) { "rspec,3.2.0,MIT" }
-        let(:file2_content) { "rspec,3.3.0,GPLv2" }
+        let(:file1_content) { 'rspec,3.2.0,MIT' }
+        let(:file2_content) { 'rspec,3.3.0,GPLv2' }
 
         it 'should set the state to unchanged and record the version change' do
-          rspec_old = diff.find {|p| p.version == '3.2.0'}
-          rspec_new = diff.find {|p| p.version == '3.3.0'}
+          rspec_old = diff.find { |p| p.version == '3.2.0' }
+          rspec_new = diff.find { |p| p.version == '3.3.0' }
 
           expect(rspec_old.status).to eq(:removed)
           expect(rspec_old.version).to eq('3.2.0')
@@ -107,7 +107,7 @@ module LicenseFinder
       end
 
       context 'when the files are merged reports' do
-        let(:file1_content) { "rspec,3.2.0,MIT,\"/path/to/project1,/path/to/project2\"" }
+        let(:file1_content) { 'rspec,3.2.0,MIT,"/path/to/project1,/path/to/project2"' }
         let(:file2_content) { "rspec,3.2.0,MIT,\"/path/to/project1,/path/to/project2\"\nrails,4.2.0,MIT,/path/to/project1" }
 
         it 'should show the diff of the reports' do

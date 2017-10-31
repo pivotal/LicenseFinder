@@ -8,10 +8,10 @@ describe 'Subproject report' do
   let(:developer) { LicenseFinder::TestingDSL::User.new }
 
   specify 'shows specified columns' do
-    foo_10 = developer.create_gem_in_path('foo', 'v-10', version: '1.0.0', license: 'MIT', homepage: 'http://example.homepage.com')
+    foo10 = developer.create_gem_in_path('foo', 'v-10', version: '1.0.0', license: 'MIT', homepage: 'http://example.homepage.com')
 
     project1 = developer.create_ruby_app('project_1')
-    project1.depend_on(foo_10)
+    project1.depend_on(foo10)
 
     developer.create_empty_project
     developer.execute_command("license_finder report --columns name homepage subproject_paths --subprojects #{project1.project_dir} --format=csv")
@@ -46,14 +46,14 @@ describe 'Subproject report' do
   end
 
   specify 'does not mark dependencies with different versions as duplicates' do
-    foo_10 = developer.create_gem_in_path('foo', 'v-10', version: '1.0.0', license: 'MIT')
-    foo_11 = developer.create_gem_in_path('foo', 'v-11', version: '1.1.0', license: 'MIT')
+    foo10 = developer.create_gem_in_path('foo', 'v-10', version: '1.0.0', license: 'MIT')
+    foo11 = developer.create_gem_in_path('foo', 'v-11', version: '1.1.0', license: 'MIT')
 
     project1 = developer.create_ruby_app('project_1')
-    project1.depend_on(foo_10)
+    project1.depend_on(foo10)
 
     project2 = developer.create_ruby_app('project_2')
-    project2.depend_on(foo_11)
+    project2.depend_on(foo11)
 
     developer.create_empty_project
     developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")

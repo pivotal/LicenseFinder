@@ -17,10 +17,11 @@ module LicenseFinder
 
     def collect_project_path(all_paths)
       potential_project_path = all_paths.first
-      if active_project?(potential_project_path)
-        remove_nested(potential_project_path, all_paths)
-        return potential_project_path.to_s
-      end
+      is_active_project = active_project?(potential_project_path)
+      return unless is_active_project
+
+      remove_nested(potential_project_path, all_paths)
+      potential_project_path.to_s
     end
 
     private
@@ -50,7 +51,7 @@ module LicenseFinder
     end
 
     def nested_path?(path, pathname)
-      (path.to_s).start_with?(pathname.to_s) && path.to_s != pathname.to_s
+      path.to_s.start_with?(pathname.to_s) && path.to_s != pathname.to_s
     end
   end
 end

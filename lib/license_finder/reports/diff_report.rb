@@ -2,7 +2,7 @@ module LicenseFinder
   class DiffReport < CsvReport
     AVAILABLE_COLUMNS = AVAILABLE_COLUMNS + %w[status current_version previous_version project_paths]
 
-    def initialize(dependencies, options={})
+    def initialize(dependencies, options = {})
       super(dependencies, options.merge(columns: build_columns(dependencies)))
     end
 
@@ -22,7 +22,7 @@ module LicenseFinder
 
     def build_columns(dependencies)
       columns = %w[status name version licenses]
-      columns << 'project_paths' if dependencies.all? { |delta| delta.merged_package? }
+      columns << 'project_paths' if dependencies.all?(&:merged_package?)
       columns
     end
   end

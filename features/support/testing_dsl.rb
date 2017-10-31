@@ -1,9 +1,10 @@
 require 'delegate'
+require 'English'
 
 module LicenseFinder
   module TestingDSL
     class User
-      def run_license_finder(path = nil, options='')
+      def run_license_finder(path = nil, options = '')
         if path
           execute_command_in_path("license_finder --quiet #{options}", Paths.project("my_app/#{path}"))
         else
@@ -11,11 +12,11 @@ module LicenseFinder
         end
       end
 
-      def create_empty_project(name = "my_app")
+      def create_empty_project(name = 'my_app')
         EmptyProject.create(name)
       end
 
-      def create_ruby_app(name = "my_app")
+      def create_ruby_app(name = 'my_app')
         BundlerProject.create(name)
       end
 
@@ -74,23 +75,21 @@ module LicenseFinder
 
       attr_reader :name
 
-      def self.create(name = "my_app")
+      def self.create(name = 'my_app')
         project = new(name)
         project.add_dep
         project.install
         project
       end
 
-      def initialize(name = "my_app")
+      def initialize(name = 'my_app')
         @name = name
         project_dir.make
       end
 
-      def add_dep
-      end
+      def add_dep; end
 
-      def install
-      end
+      def install; end
 
       def project_dir
         Paths.project(name)
@@ -107,21 +106,21 @@ module LicenseFinder
 
     class PipProject < Project
       def add_dep
-        add_to_file("requirements.txt", 'rsa==3.1.4')
+        add_to_file('requirements.txt', 'rsa==3.1.4')
       end
 
       def install
-        shell_out("pip install -r requirements.txt --user")
+        shell_out('pip install -r requirements.txt --user')
       end
     end
 
     class NpmProject < Project
       def add_dep
-        add_to_file("package.json", '{"dependencies" : {"http-server": "0.6.1"}}')
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.6.1"}}')
       end
 
       def install
-        shell_out("npm install 2>/dev/null")
+        shell_out('npm install 2>/dev/null')
       end
     end
 
@@ -131,7 +130,7 @@ module LicenseFinder
       end
 
       def install
-        shell_out("bower install --allow-root 2>/dev/null")
+        shell_out('bower install --allow-root 2>/dev/null')
       end
     end
 
@@ -144,11 +143,11 @@ module LicenseFinder
 
     class MavenProject < Project
       def add_dep
-        install_fixture("pom.xml")
+        install_fixture('pom.xml')
       end
 
       def install
-        shell_out("mvn install")
+        shell_out('mvn install')
       end
     end
 
@@ -190,7 +189,7 @@ module LicenseFinder
       def install
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = "#{project_dir}/gopath"
-        shell_out("godep restore")
+        shell_out('godep restore')
         ENV['GOPATH'] = orig_gopath
       end
 
@@ -207,7 +206,7 @@ module LicenseFinder
       def install
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = "#{project_dir}/gopath_glide"
-        shell_out("glide install")
+        shell_out('glide install')
         ENV['GOPATH'] = orig_gopath
       end
 
@@ -224,7 +223,7 @@ module LicenseFinder
       def install
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = "#{project_dir}/gopath_gvt"
-        shell_out("gvt restore")
+        shell_out('gvt restore')
         ENV['GOPATH'] = orig_gopath
       end
 
@@ -241,7 +240,7 @@ module LicenseFinder
       def install
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = "#{project_dir}/gopath_dep"
-        shell_out("dep ensure")
+        shell_out('dep ensure')
         ENV['GOPATH'] = orig_gopath
       end
 
@@ -258,7 +257,7 @@ module LicenseFinder
       def install
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = "#{project_dir}/gopath_govendor"
-        shell_out("govendor sync")
+        shell_out('govendor sync')
         ENV['GOPATH'] = orig_gopath
       end
 
@@ -276,11 +275,11 @@ module LicenseFinder
 
     class CocoaPodsProject < Project
       def add_dep
-        install_fixture("Podfile")
+        install_fixture('Podfile')
       end
 
       def install
-        shell_out("pod install --no-integrate")
+        shell_out('pod install --no-integrate')
       end
     end
 
@@ -306,24 +305,24 @@ module LicenseFinder
 
     class RebarProject < Project
       def add_dep
-        install_fixture("rebar.config")
+        install_fixture('rebar.config')
       end
 
       def install
-        shell_out("rebar get-deps")
+        shell_out('rebar get-deps')
       end
     end
 
     class MixProject < Project
       def add_dep
-        install_fixture("mix.exs")
+        install_fixture('mix.exs')
       end
 
       def install
-        shell_out("mix local.hex --force")
-        shell_out("mix local.rebar --force")
-        shell_out("mix deps.get")
-        shell_out("mix deps.compile")
+        shell_out('mix local.hex --force')
+        shell_out('mix local.rebar --force')
+        shell_out('mix deps.get')
+        shell_out('mix deps.compile')
       end
     end
 
@@ -340,7 +339,7 @@ module LicenseFinder
       end
 
       def install
-        shell_out("bundle install")
+        shell_out('bundle install')
       end
 
       def depend_on(gem, bundler_options = {})
@@ -355,11 +354,12 @@ module LicenseFinder
       end
 
       def add_to_gemfile(content)
-        add_to_file("Gemfile", content)
+        add_to_file('Gemfile', content)
       end
     end
 
-    class GemProject # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
+    # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
+    class GemProject
       def self.create(name, options)
         result = new(name)
         result.define(options)
@@ -396,13 +396,13 @@ module LicenseFinder
 
       def gemspec_string(options)
         dependencies = Array(options[:dependencies]).map do |dep|
-          %[s.add_dependency "#{dep}"]
+          %(s.add_dependency "#{dep}")
         end.join("\n")
 
         <<-GEMSPEC
       Gem::Specification.new do |s|
         s.name = "#{name}"
-        s.version = "#{options[:version] || "0.0.0"}"
+        s.version = "#{options[:version] || '0.0.0'}"
         s.license = "#{options.fetch(:license)}"
         s.author = "license_finder tests"
         s.summary = "#{options[:summary]}"
@@ -415,7 +415,9 @@ module LicenseFinder
     end
 
     require 'capybara'
-    class HtmlReport < SimpleDelegator # delegates to the parsed html
+    class HtmlReport < SimpleDelegator
+      # delegates to the parsed html
+
       def self.from_string(str)
         new(Capybara.string(str))
       end
@@ -427,15 +429,15 @@ module LicenseFinder
       end
 
       def approved?(dep_name)
-        classes_of(dep_name).include? "approved"
+        classes_of(dep_name).include? 'approved'
       end
 
       def unapproved?(dep_name)
-        classes_of(dep_name).include? "unapproved"
+        classes_of(dep_name).include? 'unapproved'
       end
 
       def titled?(title)
-        find("h1").has_content? title
+        find('h1').has_content? title
       end
 
       private
@@ -445,7 +447,9 @@ module LicenseFinder
       end
     end
 
-    class ProjectDir < SimpleDelegator # delegates to a Pathname
+    class ProjectDir < SimpleDelegator
+      # delegates to a Pathname
+
       def shell_out(command, allow_failures = false)
         Dir.chdir(self) { Shell.run(command, allow_failures) }
       end
@@ -477,22 +481,22 @@ module LicenseFinder
 
       def root
         # where license_finder is installed
-        ProjectDir.new(Pathname.new(__FILE__).dirname.join("..", "..").realpath)
+        ProjectDir.new(Pathname.new(__FILE__).dirname.join('..', '..').realpath)
       end
 
       def fixtures
-        root.join("features", "fixtures")
+        root.join('features', 'fixtures')
       end
 
       def projects
-        root.join("tmp", "projects")
+        root.join('tmp', 'projects')
       end
 
       def my_app
-        root.join("tmp", "projects", "my_app")
+        root.join('tmp', 'projects', 'my_app')
       end
 
-      def project(name = "my_app")
+      def project(name = 'my_app')
         ProjectDir.new(projects.join(name))
       end
 
@@ -505,21 +509,21 @@ module LicenseFinder
     end
 
     module Shell
-      ERROR_MESSAGE_FORMAT = <<EOM
+      ERROR_MESSAGE_FORMAT = <<ERRORFORMAT.freeze
 Command failed: `%s`
 output: %s
 exit: %d
-EOM
+ERRORFORMAT
 
       def self.run(command, allow_failures = false)
         output = `#{command} 2>&1`
-        status = $?
+        status = $CHILD_STATUS
         unless status.success? || allow_failures
-          message = sprintf ERROR_MESSAGE_FORMAT, command, output.chomp, status.exitstatus
-          raise RuntimeError.new(message)
+          message = format ERROR_MESSAGE_FORMAT, command, output.chomp, status.exitstatus
+          raise message
         end
 
-        return [output, status.exitstatus]
+        [output, status.exitstatus]
       end
     end
   end

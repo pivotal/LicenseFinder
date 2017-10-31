@@ -6,13 +6,13 @@ module LicenseFinder
 
     class FromDecision < Basic
       def sources
-        ["from decision"]
+        ['from decision']
       end
     end
 
     class FromSpec < Basic
       def sources
-        ["from spec"]
+        ['from spec']
       end
     end
 

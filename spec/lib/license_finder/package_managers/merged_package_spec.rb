@@ -2,16 +2,18 @@ require 'spec_helper'
 
 module LicenseFinder
   describe MergedPackage do
-    let(:package) { Package.new(
+    let(:package) do
+      Package.new(
         'foo', '1.0.0',
         spec_licenses: ['MIT'],
         install_path: '/tmp/foo',
-        authors: "An author",
-        description: "A description",
-        summary: "A summary",
-        homepage: "http://homepage.example.com",
+        authors: 'An author',
+        description: 'A description',
+        summary: 'A summary',
+        homepage: 'http://homepage.example.com',
         groups: %w[development production]
-      )}
+      )
+    end
 
     let(:subproject_paths) { 'path/to/project/with/foo' }
 
