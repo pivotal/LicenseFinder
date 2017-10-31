@@ -1,13 +1,19 @@
+#Layout Cops
+IndentHeredoc:
+  Enabled: false
+
 #Linting Cops
 AmbiguousRegexpLiteral:
   Enabled: false
 
 # Metrics Cops
 AbcSize:
-  Max: 25
+  Max: 30
 BlockLength:
   Enabled: false # TODO: enable and refactor long methods
 #  ExcludedMethods: ['describe', 'context', 'it', 'shared_examples']  # uncomment once enabled
+ClassLength:
+  Enabled: false
 CyclomaticComplexity:
   Max: 10
 PerceivedComplexity:
@@ -34,6 +40,8 @@ FileName:
     - '**/Gemfile'
     - '**/Podfile'
 MethodMissing:
+  Enabled: false
+ModuleFunction:
   Enabled: false
 
 AllCops:

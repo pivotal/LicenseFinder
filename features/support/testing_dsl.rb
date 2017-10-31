@@ -1,4 +1,5 @@
 require 'delegate'
+require 'English'
 
 module LicenseFinder
   module TestingDSL
@@ -357,7 +358,8 @@ module LicenseFinder
       end
     end
 
-    class GemProject # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
+    # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
+    class GemProject
       def self.create(name, options)
         result = new(name)
         result.define(options)
