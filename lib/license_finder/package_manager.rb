@@ -39,10 +39,10 @@ module LicenseFinder
           logger.log self, 'no command defined' #TODO comment me out
           return true
         elsif command_exists?(package_management_command)
-          logger.log self, Logger.green('is installed')
+          logger.log self, 'is installed', color: :green
           return true
         else
-          logger.log self, Logger.red('is not installed')
+          logger.log self, 'is not installed', color: :red
           return false
         end
       end
@@ -68,8 +68,11 @@ module LicenseFinder
       self.class.installed?(logger) &&
           !path.nil? &&
         path.exist?.tap do |is_active|
-          message = is_active ? Logger.green("is active") : 'is not active'
-          logger.log self.class, message
+          if is_active
+            logger.log self.class, 'is active', color: :green
+          else
+            logger.log self.class, 'is not active'
+          end
         end
     end
 
@@ -84,7 +87,7 @@ module LicenseFinder
         _, success = capture(self.class.prepare_command)
         raise "Prepare command '#{self.class.prepare_command}' failed" unless success
       else
-        logger.log self.class, Logger.red('no prepare step provided')
+        logger.log self.class, 'no prepare step provided', color: :red
       end
     end
 

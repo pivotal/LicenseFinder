@@ -42,8 +42,11 @@ module LicenseFinder
       # that will use the .envrc and have a Godep folder as well.
       active = !! (!godep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
       active.tap do |is_active|
-        message = is_active ? Logger.green("is active") : 'is not active'
-        logger.log self.class, message
+        if is_active
+          logger.log self.class, 'is active', color: :green
+        else
+          logger.log self.class, 'is not active'
+        end
       end
     end
 

@@ -11,38 +11,37 @@ module LicenseFinder
       klass.new
     end
 
+    def self.colorize string, color
+      case color
+        when :red
+          "\e[31m#{string}\e[0m"
+        when :green
+          "\e[32m#{string}\e[0m"
+        else
+          string
+      end
+    end
+
     class Base
-      def log prefix, string
+      def log prefix, string, options={}
         raise NotImplementedError, "#log must be implemented"
       end
     end
 
-    def self.green string
-      colorize 32, string
-    end
-
-    def self.red string
-      colorize 31, string
-    end
-
-    def self.colorize color_code, string
-      "\e[#{color_code}m#{string}\e[0m"
-    end
-
     class Quiet < Base
-      def log prefix, string
+      def log prefix, string, options={}
       end
     end
 
     class Progress < Base
-      def log prefix, string
+      def log prefix, string, options={}
         print(".") && $stdout.flush
       end
     end
 
     class Verbose < Base
-      def log prefix, string
-        printf("%s: %s\n", prefix, string)
+      def log prefix, string, options={}
+        printf("%s: %s\n", prefix, Logger.colorize(string, options[:color]))
       end
     end
 

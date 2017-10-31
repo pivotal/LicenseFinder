@@ -52,7 +52,7 @@ module LicenseFinder
       package_managers.each do |manager|
         logger.log self.class, 'Running prepare on project'
           manager.prepare
-        logger.log self.class, Logger.green('Finished prepare on project')
+        logger.log self.class, 'Finished prepare on project', color: :green
       end
     end
 
