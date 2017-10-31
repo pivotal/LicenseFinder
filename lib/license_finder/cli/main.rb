@@ -141,7 +141,7 @@ module LicenseFinder
       end
 
       def save?
-        options[:save]
+        !!options[:save]
       end
 
       def prepare?

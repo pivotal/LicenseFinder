@@ -20,7 +20,7 @@ module LicenseFinder
       end
     end
 
-    Dependency = Struct.newV(:name, :version, :assembly)
+    Dependency = Struct.new(:name, :version, :assembly)
 
     def possible_package_paths
       path = project_path.join('vendor/*.nupkg')

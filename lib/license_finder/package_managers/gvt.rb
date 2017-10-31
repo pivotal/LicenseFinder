@@ -36,6 +36,16 @@ module LicenseFinder
 
       output, success = capture(shell_command)
       return [] unless success
+      packages_from_output(output, path)
+    end
+
+    def self.takes_priority_over
+      Go15VendorExperiment
+    end
+
+    private
+
+    def packages_from_output(output, path)
       package_lines = output.split("\n")
       package_lines.map do |package_line|
         import_path, revision, repo = package_line.split
@@ -46,10 +56,6 @@ module LicenseFinder
                                     'Homepage' => repo
                                   }, nil, true)
       end
-    end
-
-    def self.takes_priority_over
-      Go15VendorExperiment
     end
   end
 end

@@ -4,7 +4,7 @@ module LicenseFinder
 
     class << self
       def packages_from_json(npm_json, package_path)
-        @packages = NpmPackage.flattened_dependencies(npm_json)
+        @packages = flattened_dependencies(npm_json)
         package_json = PackageJson.new(package_path)
         populate_groups(package_json)
         @packages.values
@@ -16,12 +16,16 @@ module LicenseFinder
         identifier = Identifier.from_hash npm_json
         if existing_packages[identifier].nil?
           existing_packages[identifier] = NpmPackage.new(npm_json) if identifier
-          npm_json.fetch('dependencies', {}).values.map { |d| NpmPackage.flattened_dependencies(d, existing_packages) }
+          npm_json.fetch('dependencies', {}).values.map do |d|
+            flattened_dependencies(d, existing_packages)
+          end
         else
           duplicate_package = NpmPackage.new(npm_json)
           unless existing_packages[identifier].dependencies.include?(duplicate_package.dependencies)
             existing_packages[identifier].dependencies |= duplicate_package.dependencies
-            npm_json.fetch('dependencies', {}).values.map { |d| NpmPackage.flattened_dependencies(d, existing_packages) }
+            npm_json.fetch('dependencies', {}).values.map do |d|
+              flattened_dependencies(d, existing_packages)
+            end
           end
         end
         existing_packages
@@ -34,7 +38,7 @@ module LicenseFinder
               next unless identifier.name == package_name
               dependency = @packages[identifier]
               dependency.groups |= [group.name]
-              NpmPackage.populate_child_groups(dependency, @packages)
+              populate_child_groups(dependency, @packages)
             end
           end
         end

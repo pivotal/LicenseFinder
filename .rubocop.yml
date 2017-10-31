@@ -1,27 +1,41 @@
-Documentation:
+#Linting Cops
+AmbiguousRegexpLiteral:
   Enabled: false
-MethodMissing:
+
+# Metrics Cops
+AbcSize:
+  Max: 25
+BlockLength:
+  Enabled: false # TODO: enable and refactor long methods
+#  ExcludedMethods: ['describe', 'context', 'it', 'shared_examples']  # uncomment once enabled
+CyclomaticComplexity:
+  Max: 10
+PerceivedComplexity:
+  Max: 10
+LineLength:
+  Max: 200
+MethodLength:
   Enabled: false
+ModuleLength:
+  Enabled: false
+
+# Security Cops
 YAMLLoad:
+  Enabled: false
+
+#Style Cops
+DoubleNegation:
+  Enabled: false
+Documentation:
   Enabled: false
 FileName:
   Exclude:
     - '**/Rakefile'
     - '**/Gemfile'
     - '**/Podfile'
-LineLength:
-  Max: 200
-MethodLength:
+MethodMissing:
   Enabled: false
-BlockLength:
-  Enabled: false # TODO: enable and refactor long methods
-#  ExcludedMethods: ['describe', 'context', 'it', 'shared_examples']  # uncomment once enabled
-AbcSize:
-  Max: 25
-AmbiguousRegexpLiteral:
-  Enabled: false
-ModuleLength:
-  Enabled: false
+
 AllCops:
   Include:
     - 'bin/license_finder'

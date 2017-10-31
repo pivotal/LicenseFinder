@@ -48,7 +48,7 @@ module LicenseFinder
       end
 
       def seeing_something_like?(regex)
-        (@output =~ regex)
+        !!(@output =~ regex)
       end
 
       def receiving_exit_code?(code)

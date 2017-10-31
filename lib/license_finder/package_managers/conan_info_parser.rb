@@ -15,31 +15,41 @@ module LicenseFinder
           @current_project['name'] = line.strip
           @state = :key_val
         when :key_val
-          key, val = key_val(line)
-          if val
-            @current_project[key] = val
-          elsif line.start_with?(' ')
-            @current_key = key
-            @current_vals = []
-            @state = :val_list
-          else
-            change_to_new_project_state line
-          end
+          parse_key_val(line)
         when :val_list
-          if val_list_level(line)
-            @current_vals << line.strip
-          else
-            @current_project[@current_key] = @current_vals
-            if line.start_with?(' ')
-              @state = :key_val
-              @lines.unshift(line)
-            else
-              change_to_new_project_state line
-            end
-          end
+          parse_val_list(line)
         end
       end
       wrap_up
+    end
+
+    private
+
+    def parse_key_val(line)
+      key, val = key_val(line)
+      if val
+        @current_project[key] = val
+      elsif line.start_with?(' ')
+        @current_key = key
+        @current_vals = []
+        @state = :val_list
+      else
+        change_to_new_project_state line
+      end
+    end
+
+    def parse_val_list(line)
+      if val_list_level(line)
+        @current_vals << line.strip
+      else
+        @current_project[@current_key] = @current_vals
+        if line.start_with?(' ')
+          @state = :key_val
+          @lines.unshift(line)
+        else
+          change_to_new_project_state line
+        end
+      end
     end
 
     def wrap_up
