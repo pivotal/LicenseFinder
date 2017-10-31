@@ -43,9 +43,9 @@ module LicenseFinder
       end
     end
 
-    describe '.prepare_method' do
+    describe '.prepare_command' do
       it 'returns the correct prepare method' do
-        expect(described_class.prepare_method).to eq('yarn install')
+        expect(described_class.prepare_command).to eq('yarn install')
       end
     end
 
