@@ -43,7 +43,7 @@ module LicenseFinder
       godep = LicenseFinder::GoDep.new(project_path: Pathname(project_path))
       # go workspace is only active if GoDep wasn't. There are some projects
       # that will use the .envrc and have a Godep folder as well.
-      active = !! (!godep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
+      active = !!(!godep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
       active.tap do |is_active|
         if is_active
           logger.log self.class, 'is active', color: :green

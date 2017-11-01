@@ -4,7 +4,7 @@ module LicenseFinder
   describe GoWorkspace do
     let(:options) { {} }
     let(:logger) { double(:logger, log: nil) }
-    let(:project_path) { '/Users/pivotal/workspace/loggregator'}
+    let(:project_path) { '/Users/pivotal/workspace/loggregator' }
     subject { GoWorkspace.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
 
     context 'package manager' do

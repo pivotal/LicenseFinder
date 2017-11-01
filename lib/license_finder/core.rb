@@ -51,7 +51,7 @@ module LicenseFinder
       package_managers = PackageManager.active_package_managers options
       package_managers.each do |manager|
         logger.log manager.class, 'Running prepare on project'
-          manager.prepare
+        manager.prepare
         logger.log manager.class, 'Finished prepare on project', color: :green
       end
     end
