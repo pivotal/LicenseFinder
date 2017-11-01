@@ -55,13 +55,6 @@ jobs:
 <% end %>
 <% end %>
 
-- name: ruby-2.3-windows
-  public: true
-  plan:
-  - get: LicenseFinder
-    trigger: true
-  - task: ruby-2.3-windows
-    file: LicenseFinder/ci/tasks/build-windows.yml
 <% if setup_slack %>
   on_failure:
     put: slack-alert
