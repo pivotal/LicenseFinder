@@ -107,7 +107,7 @@ jobs:
     trigger: true
     version: every
   - task: run-rubocop
-    priviledged: true
+    privileged: true
     file: pull-request/ci/tasks/rubocop.yml
     input_mapping: { LicenseFinder: pull-request }
     on_success:
