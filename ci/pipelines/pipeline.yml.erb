@@ -26,6 +26,7 @@ resources:
     repo: pivotal/LicenseFinder
     base: master
     access_token: ((GithubApiTokenLicenseFinder))
+
 <% if setup_slack %>
 - name: slack-alert
   type: slack-notification
@@ -98,3 +99,26 @@ jobs:
       text: '<%= "License Finder build failed. Build: https://osl.ci.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
 <% end %>
 <% end %>
+
+- name: PR-rubocop
+  public: true
+  plan:
+  - get: pull-request
+    trigger: true
+    version: every
+  - task: run-rubocop
+    priviledged: true
+    file: pull-request/ci/tasks/rubocop.yml
+    input_mapping: { LicenseFinder: pull-request }
+    on_success:
+      put: pull-request
+      params:
+        path: pull-request
+        status: success
+        context: run-rubocop
+    on_failure:
+      put: pull-request
+      params:
+        path: pull-request
+        status: failure
+        context: run-rubocop
