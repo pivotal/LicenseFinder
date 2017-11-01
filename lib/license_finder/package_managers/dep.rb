@@ -22,7 +22,7 @@ module LicenseFinder
       Go15VendorExperiment
     end
 
-    def self.prepare_method
+    def self.prepare_command
       'dep ensure'
     end
 

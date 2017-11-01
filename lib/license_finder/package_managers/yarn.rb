@@ -40,7 +40,7 @@ module LicenseFinder
       'yarn'
     end
 
-    def self.prepare_method
+    def self.prepare_command
       'yarn install'
     end
 
