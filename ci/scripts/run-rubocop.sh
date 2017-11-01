@@ -2,4 +2,4 @@
 
 cd LicenseFinder
 gem install rubocop
-rubocop
+/usr/local/bundle/bin/rubocop
