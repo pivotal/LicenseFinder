@@ -36,14 +36,14 @@ module LicenseFinder
 
       def installed?(logger = Core.default_logger)
         if package_management_command.nil?
-          logger.log self, 'no command defined' #TODO comment me out
-          return true
+          logger.log self, 'no command defined' # TODO: comment me out
+          true
         elsif command_exists?(package_management_command)
           logger.log self, 'is installed', color: :green
-          return true
+          true
         else
           logger.log self, 'is not installed', color: :red
-          return false
+          false
         end
       end
 
@@ -66,7 +66,7 @@ module LicenseFinder
     def active?
       path = detected_package_path
       self.class.installed?(logger) &&
-          !path.nil? &&
+        !path.nil? &&
         path.exist?.tap do |is_active|
           if is_active
             logger.log self.class, 'is active', color: :green

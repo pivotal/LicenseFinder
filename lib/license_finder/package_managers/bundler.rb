@@ -57,17 +57,16 @@ module LicenseFinder
       project_path.join('Gemfile.lock')
     end
 
-    def log_package_dependencies package
+    def log_package_dependencies(package)
       dependencies = package.children
       if dependencies.empty?
-        logger.log self.class, sprintf("package '%s' has no dependencies", package.name)
+        logger.log self.class, format("package '%s' has no dependencies", package.name)
       else
-        logger.log self.class, sprintf("package '%s' has dependencies:", package.name)
+        logger.log self.class, format("package '%s' has dependencies:", package.name)
         dependencies.each do |dep|
-          logger.log self.class, sprintf("- %s", dep)
+          logger.log self.class, format('- %s', dep)
         end
       end
-
     end
   end
 end

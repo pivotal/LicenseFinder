@@ -5,7 +5,7 @@ module LicenseFinder
   describe Conan do
     it_behaves_like 'a PackageManager'
 
-    subject { Conan.new(project_path: Pathname('/fake/path'),logger: double(:logger, active: nil, log: true)) }
+    subject { Conan.new(project_path: Pathname('/fake/path'), logger: double(:logger, active: nil, log: true)) }
     describe '#current_packages' do
       let(:content) do
         '[requires]

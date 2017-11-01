@@ -153,13 +153,13 @@ module LicenseFinder
       @missing
     end
 
-    def log_activation activation
-      preamble = sprintf("package %s:", activation.package.name)
+    def log_activation(activation)
+      preamble = format('package %s:', activation.package.name)
       if activation.sources.empty?
-        logger.log activation.package.class, sprintf("%s no licenses found", preamble)
+        logger.log activation.package.class, format('%s no licenses found', preamble)
       else
         activation.sources.each do |source|
-          logger.log activation.package.class, sprintf("%s found license '%s' %s", preamble, activation.license.name, source)
+          logger.log activation.package.class, format("%s found license '%s' %s", preamble, activation.license.name, source)
         end
       end
     end
