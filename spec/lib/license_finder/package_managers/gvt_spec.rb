@@ -44,8 +44,8 @@ module LicenseFinder
 }
 ')
 
-          allow(subject).to receive(:capture).with('cd anything && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
-            ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", true]
+          allow(SharedHelpers::Cmd).to receive(:run).with('cd anything && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
+            ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
           end
           expect(subject.current_packages.length).to eq 2
 
@@ -92,8 +92,8 @@ module LicenseFinder
 }
 ')
 
-          allow(subject).to receive(:capture).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
-            ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", true]
+          allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
+            ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
           end
           expect(subject.current_packages.length).to eq 2
 
@@ -112,8 +112,8 @@ module LicenseFinder
       end
 
       it 'returns empty package list if \'gvt list\' fails' do
-        allow(subject).to receive(:capture).with(anything) do
-          ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", false]
+        allow(SharedHelpers::Cmd).to receive(:run).with(anything) do
+          ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_failure]
         end
         expect(subject.current_packages).to eq []
       end

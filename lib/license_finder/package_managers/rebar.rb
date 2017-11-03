@@ -26,8 +26,8 @@ module LicenseFinder
 
     def rebar_ouput
       command = "#{@command} list-deps"
-      stdout, stderr, exitstatus = Dir.chdir(project_path) { capture(command) }
-      raise "Command '#{command}' failed to execute: #{stderr}" unless exitstatus == 0
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
       stdout
         .each_line

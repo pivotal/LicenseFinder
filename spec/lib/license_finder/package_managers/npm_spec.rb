@@ -94,12 +94,17 @@ module LicenseFinder
         FileUtils.mkdir_p(Dir.tmpdir)
         FileUtils.mkdir_p(root)
         File.write(File.join(root, 'package.json'), package_json)
-        allow(npm).to receive(:npm_json).and_return JSON.parse(dependency_json)
+      end
+
+      before do
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
+                                                  .and_return([dependency_json, '', cmd_success])
       end
 
       it 'fetches data from npm' do
         current_packages = npm.current_packages
-        expect(current_packages.map(&:name)).to eq(%w[dependency.js dependency1-1.js dependency2.js dependency2-1.js dependency3.js dependency3-1.js])
+        dependencies = %w[dependency.js dependency1-1.js dependency2.js dependency2-1.js dependency3.js dependency3-1.js]
+        expect(current_packages.map(&:name)).to eq(dependencies)
       end
 
       it 'finds the groups for dependencies' do
@@ -129,12 +134,12 @@ module LicenseFinder
       end
 
       it 'fails when command fails' do
-        allow(npm).to receive(:capture).with('npm list --json --long').and_return ['', '', 1]
-        expect { npm.current_packages }.to raise_error(RuntimeError)
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long').and_return ['', 'error', cmd_failure]
+        expect { npm.current_packages }.to raise_error("Command 'npm list --json --long' failed to execute: error")
       end
 
       it 'does not fail when command fails but produces output' do
-        allow(npm).to receive(:npm_json).and_return({'foo' => 'bar'})
+        allow(npm).to receive(:npm_json).and_return('foo' => 'bar')
         silence_stderr { npm.current_packages }
       end
 

@@ -48,8 +48,8 @@ HERE
         allow(Dir).to receive(:chdir).with(Pathname.new(project_path)) { |&b| b.call }
         allow(FileTest).to receive(:exist?).and_return(false)
         allow(FileTest).to receive(:exist?).with(File.join(project_path, '.envrc')).and_return(true)
-        allow(subject).to receive(:capture).with('go list -f "{{join .Deps \"\n\"}}" ./...').and_return([go_list_output, '', 0])
-        allow(subject).to receive(:capture).with('go list std').and_return([std_packages, '', 0])
+        allow(SharedHelpers::Cmd).to receive(:run).with('go list -f "{{join .Deps \"\n\"}}" ./...').and_return([go_list_output, '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run).with('go list std').and_return([std_packages, '', cmd_success])
       end
 
       it 'changes the directory' do
@@ -65,9 +65,9 @@ HERE
       end
 
       it 'sets gopath to the envrc path' do
-        allow(subject).to receive(:capture).with('go list -f "{{join .Deps \"\n\"}}" ./...') {
+        allow(SharedHelpers::Cmd).to receive(:run).with('go list -f "{{join .Deps \"\n\"}}" ./...') {
           expect(ENV['GOPATH']).to be_nil
-          ['', '', 0]
+          ['', '', cmd_success]
         }
 
         subject.send(:go_list)
@@ -84,7 +84,7 @@ HERE
 
       context 'if git submodule status fails' do
         before do
-          allow(subject).to receive(:capture).with('git submodule status').and_return(['', '', 1])
+          allow(SharedHelpers::Cmd).to receive(:run).with('git submodule status').and_return(['', '', cmd_failure])
         end
 
         it 'should raise an exception' do
@@ -101,7 +101,7 @@ HERE
         end
 
         before do
-          allow(subject).to receive(:capture).with('git submodule status').and_return([git_submodule_status_output, '', 0])
+          allow(SharedHelpers::Cmd).to receive(:run).with('git submodule status').and_return([git_submodule_status_output, '', cmd_success])
         end
 
         it 'should return the filtered submodules' do

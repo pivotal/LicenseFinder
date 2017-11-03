@@ -18,9 +18,9 @@ module LicenseFinder
     end
 
     def npm_json
-      command = "#{NPM::package_management_command} list --json --long"
-      stdout, stderr, exitstatus = Dir.chdir(project_path) { capture(command) }
-      raise "Command '#{command}' failed to execute: #{stderr}" unless exitstatus == 0
+      command = "#{NPM.package_management_command} list --json --long"
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
       JSON.parse(stdout)
     end

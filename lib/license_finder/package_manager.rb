@@ -14,6 +14,8 @@ module LicenseFinder
   # - implement(Optional) #prepare_command, string for fetching dependencies for package manager (runs when the --prepare flag is passed to license_finder)
 
   class PackageManager
+    include LicenseFinder::SharedHelpers
+
     class << self
       def package_managers
         [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
@@ -82,17 +84,11 @@ module LicenseFinder
 
     def prepare
       if self.class.prepare_command
-        _, success = capture(self.class.prepare_command)
-        raise "Prepare command '#{self.class.prepare_command}' failed" unless success
+        _stdout, _stderr, status = Cmd.run(self.class.prepare_command)
+        raise "Prepare command '#{self.class.prepare_command}' failed" unless status.success?
       else
         logger.log self.class, 'no prepare step provided', color: :red
       end
-    end
-
-    def capture(command)
-      require 'open3'
-      stdout, stderr, process = Open3.capture3(command)
-      [stdout, stderr, process.exitstatus]
     end
 
     def current_packages_with_relations
@@ -108,11 +104,11 @@ module LicenseFinder
 
     def self.command_exists?(command)
       if LicenseFinder::Platform.windows?
-        `where #{command} 2>NUL`
+        _stdout, _stderr, status = Cmd.run("where #{command} 2>NUL")
       else
-        `which #{command} 2>/dev/null`
+        _stdout, _stderr, status = Cmd.run("which #{command} 2>/dev/null")
       end
-      status = $CHILD_STATUS
+
       status.success?
     end
 

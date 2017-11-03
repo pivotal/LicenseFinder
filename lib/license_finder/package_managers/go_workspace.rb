@@ -77,14 +77,14 @@ module LicenseFinder
         # with status code 1. Setting GOPATH to nil removes those warnings.
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = nil
-        val = capture('go list -f "{{join .Deps \"\n\"}}" ./...')
+        val, _stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
         ENV['GOPATH'] = orig_gopath
-        raise 'go list failed' unless val.last == 0
+        raise 'go list failed' unless status.success?
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
         # dependencies.
-        deps = val.first.split("\n")
-        capture('go list std').first.split("\n").each do |std|
+        deps = val.split("\n")
+        Cmd.run('go list std').first.split("\n").each do |std|
           deps.delete_if do |dep|
             dep =~ %r{(\/|^)#{std}(\/|$)}
           end
@@ -95,9 +95,9 @@ module LicenseFinder
 
     def git_modules
       Dir.chdir(detected_package_path) do |_d|
-        result = capture('git submodule status')
-        raise 'git submodule status failed' unless result[1]
-        result.first.lines.map do |l|
+        result, _stderr, status = Cmd.run('git submodule status')
+        raise 'git submodule status failed' unless status.success?
+        result.lines.map do |l|
           columns = l.split.map(&:strip)
           Submodule.new File.join(detected_package_path, columns[1]), columns[0]
         end

@@ -19,8 +19,8 @@ module LicenseFinder
       subject { Yarn.new(project_path: Pathname('/app'), logger: double(:logger, active: nil)) }
 
       it 'displays packages as returned from "yarn list"' do
-        allow(subject).to receive(:capture).with(Yarn::SHELL_COMMAND) do
-          [yarn_shell_command_output, true]
+        allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND) do
+          [yarn_shell_command_output, '', cmd_success]
         end
 
         expect(subject.current_packages.length).to eq 1
@@ -31,9 +31,9 @@ module LicenseFinder
       end
 
       it 'displays incompatible packages with license type unknown' do
-        allow(subject).to receive(:capture).with(Yarn::SHELL_COMMAND) do
+        allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND) do
           ['{"type":"info","data":"fsevents@1.1.1: The platform \"linux\" is incompatible with this module."}
-            {"type":"info","data":"\"fsevents@1.1.1\" is an optional dependency and failed compatibility check. Excluding it from installation."}', true]
+            {"type":"info","data":"\"fsevents@1.1.1\" is an optional dependency and failed compatibility check. Excluding it from installation."}', '', cmd_success]
         end
 
         expect(subject.current_packages.length).to eq 1

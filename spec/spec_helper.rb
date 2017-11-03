@@ -16,6 +16,8 @@ RSpec.configure do |config|
 end
 
 RSpec.configure do |config|
+  config.include SharedDefinitions
+
   config.after(:suite) do
     ['./doc'].each do |tmp_dir|
       tmp_dir = Pathname(tmp_dir)

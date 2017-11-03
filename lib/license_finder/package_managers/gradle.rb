@@ -13,8 +13,8 @@ module LicenseFinder
     def current_packages
       WithEnv.with_env('TERM' => 'dumb') do
         command = "#{@command} downloadLicenses"
-        stdout, stderr, exitstatus = Dir.chdir(project_path) { capture(command) }
-        raise "Command '#{command}' failed to execute: #{stderr}" unless exitstatus == 0
+        _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+        raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
         dependencies = GradleDependencyFinder.new(project_path).dependencies
         packages = dependencies.flat_map do |xml_file|
