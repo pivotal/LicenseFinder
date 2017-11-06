@@ -23,6 +23,11 @@ module LicenseFinder
       let(:unapproved_dependencies) { [double(:dependency, name: 'a dependency', version: '2.4.1', missing?: false, licenses: [license])] }
 
       before do
+        logger = double('Logger', info: true, debug: true)
+        allow(LicenseFinder::Logger).to receive(:new).and_return(logger)
+      end
+
+      before do
         allow(Decisions).to receive(:fetch_saved) { decisions }
         allow(DecisionApplier).to receive(:new) { decision_applier }
       end
@@ -53,7 +58,6 @@ module LicenseFinder
         end
         let(:logger_options) do
           [
-            '--quiet',
             '--debug'
           ]
         end
@@ -68,7 +72,7 @@ module LicenseFinder
             mix_deps_dir: 'mix_dir',
             save: 'license_report',
             prepare: true,
-            logger: {}
+            logger: { mode: LicenseFinder::Logger::MODE_INFO }
           }
         end
 
@@ -80,7 +84,7 @@ module LicenseFinder
         end
 
         it 'passes the logger options to the new LicenseFinder::Core instance' do
-          expect(LicenseFinder::Core).to receive(:new).with(prepare: false, logger: { debug: true, quiet: true }).and_return(license_finder_instance)
+          expect(LicenseFinder::Core).to receive(:new).with(prepare: false, logger: { mode: LicenseFinder::Logger::MODE_DEBUG }).and_return(license_finder_instance)
           silence_stdout do
             expect { described_class.start(logger_options) }.to raise_error(SystemExit)
           end

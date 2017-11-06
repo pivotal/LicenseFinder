@@ -1,17 +1,34 @@
+require 'logger'
+
 module LicenseFinder
-  module Logger
-    def self.new(options = {})
-      klass = if options[:quiet]
-                Quiet
-              elsif options[:debug]
-                Verbose
-              else
-                Progress
-              end
-      klass.new
+  class Logger
+    MODE_QUIET = :quiet
+    MODE_INFO = :info
+    MODE_DEBUG = :debug
+
+    attr_reader :mode
+
+    def initialize(options = {})
+      @system_logger = ::Logger.new(STDOUT)
+      @system_logger.formatter = proc do |_, _, _, msg|
+        "#{msg}\n"
+      end
+
+      self.mode = options[:mode] || MODE_INFO
     end
 
-    def self.colorize(string, color)
+    [MODE_INFO, MODE_DEBUG].each do |level|
+      define_method level do |prefix, string, options = {}|
+        msg = format('%s: %s', prefix, colorize(string, options[:color]))
+        log(msg, level)
+      end
+    end
+
+    private
+
+    attr_reader :system_logger
+
+    def colorize(string, color)
       case color
       when :red
         "\e[31m#{string}\e[0m"
@@ -22,28 +39,25 @@ module LicenseFinder
       end
     end
 
-    class Base
-      def log(_prefix, _string, _options = {})
-        raise NotImplementedError, '#log must be implemented'
-      end
+    def mode=(v)
+      @mode = v
+
+      return if quiet?
+      level = @mode.equal?(MODE_DEBUG) ? ::Logger::DEBUG : ::Logger::INFO
+      system_logger.level = level
     end
 
-    class Quiet < Base
-      def log(prefix, string, options = {}); end
+    def log(msg, method)
+      return if quiet?
+      system_logger.send(method, msg)
     end
 
-    class Progress < Base
-      def log(_prefix, _string, _options = {})
-        print('.') && $stdout.flush
-      end
+    def debug?
+      @mode.equal?(MODE_DEBUG)
     end
 
-    class Verbose < Base
-      def log(prefix, string, options = {})
-        printf("%s: %s\n", prefix, Logger.colorize(string, options[:color]))
-      end
+    def quiet?
+      @mode.equal?(MODE_QUIET)
     end
-
-    Default = Quiet
   end
 end

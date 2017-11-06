@@ -5,13 +5,8 @@ module LicenseFinder
   describe Go15VendorExperiment do
     include FakeFS::SpecHelpers
 
-    let(:logger) { double(:logger, active: nil) }
+    let(:logger) { double(:logger, debug: true, info: true) }
     subject { Go15VendorExperiment.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
-
-    before do
-      allow(logger).to receive(:log)
-      allow(logger).to receive(:active)
-    end
 
     context 'package manager' do
       before do
@@ -27,7 +22,7 @@ module LicenseFinder
 
       it 'installed? should be false if go does not exists on the path' do
         allow(PackageManager).to receive(:command_exists?).with('go').and_return false
-        expect(described_class.installed?).to eq(false)
+        expect(described_class.installed?(logger)).to eq(false)
       end
     end
 

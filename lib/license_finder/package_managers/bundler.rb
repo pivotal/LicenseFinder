@@ -9,7 +9,7 @@ module LicenseFinder
     end
 
     def current_packages
-      logger.log self.class, "including groups #{included_groups.inspect}"
+      logger.debug self.class, "including groups #{included_groups.inspect}"
       details.map do |gem_detail, bundle_detail|
         BundlerPackage.new(gem_detail, bundle_detail, logger: logger).tap do |package|
           log_package_dependencies package
@@ -60,11 +60,11 @@ module LicenseFinder
     def log_package_dependencies(package)
       dependencies = package.children
       if dependencies.empty?
-        logger.log self.class, format("package '%s' has no dependencies", package.name)
+        logger.debug self.class, format("package '%s' has no dependencies", package.name)
       else
-        logger.log self.class, format("package '%s' has dependencies:", package.name)
+        logger.debug self.class, format("package '%s' has dependencies:", package.name)
         dependencies.each do |dep|
-          logger.log self.class, format('- %s', dep)
+          logger.debug self.class, format('- %s', dep)
         end
       end
     end
