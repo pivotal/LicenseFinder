@@ -103,11 +103,12 @@ module LicenseFinder
     end
 
     def self.command_exists?(command)
-      if LicenseFinder::Platform.windows?
-        _stdout, _stderr, status = Cmd.run("where #{command} 2>NUL")
-      else
-        _stdout, _stderr, status = Cmd.run("which #{command} 2>/dev/null")
-      end
+      _stdout, _stderr, status =
+        if LicenseFinder::Platform.windows?
+          Cmd.run("where #{command}")
+        else
+          Cmd.run("which #{command}")
+        end
 
       status.success?
     end
