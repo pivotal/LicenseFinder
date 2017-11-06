@@ -21,9 +21,9 @@ module LicenseFinder
 
     def project_sha(path)
       Dir.chdir(path) do
-        val = capture('git rev-list --max-count 1 HEAD')
-        raise 'git rev-list failed' unless val.last
-        val.first.strip
+        stdout, _stderr, status = Cmd.run('git rev-list --max-count 1 HEAD')
+        raise 'git rev-list failed' unless status.success?
+        stdout.strip
       end
     end
 
@@ -52,14 +52,14 @@ module LicenseFinder
         # with status code 1. Setting GOPATH to nil removes those warnings.
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = nil
-        val = capture('go list -f "{{join .Deps \"\n\"}}" ./...')
+        val, _stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
         ENV['GOPATH'] = orig_gopath
-        return [] unless val.last
+        return [] unless status.success?
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
         # dependencies.
-        deps = val.first.split("\n")
-        capture('go list std').first.split("\n").each do |std|
+        deps = val.split("\n")
+        Cmd.run('go list std').first.split("\n").each do |std|
           deps.delete_if do |dep|
             dep =~ %r{(\/|^)#{std}(\/|$)}
           end

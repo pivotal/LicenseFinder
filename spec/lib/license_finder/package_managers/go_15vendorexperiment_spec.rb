@@ -48,16 +48,16 @@ module LicenseFinder
 
       describe '#current_packages' do
         let(:go_deps) do
-          ['github.com/foo/bar', true]
+          ['github.com/foo/bar', '', cmd_success]
         end
         let(:std_deps) do
-          ['stdbar/baz', true]
+          ['stdbar/baz', '', cmd_success]
         end
 
         before do
-          allow(subject).to receive(:capture).with(%q(go list -f "{{join .Deps \"\n\"}}" ./...)).and_return(go_deps)
-          allow(subject).to receive(:capture).with('go list std').and_return(std_deps)
-          allow(subject).to receive(:capture).with('git rev-list --max-count 1 HEAD').and_return(["e0ff7ae205f\n", true])
+          allow(SharedHelpers::Cmd).to receive(:run).with(%q(go list -f "{{join .Deps \"\n\"}}" ./...)).and_return(go_deps)
+          allow(SharedHelpers::Cmd).to receive(:run).with('go list std').and_return(std_deps)
+          allow(SharedHelpers::Cmd).to receive(:run).with('git rev-list --max-count 1 HEAD').and_return(["e0ff7ae205f\n", '', cmd_success])
         end
 
         RSpec.shared_examples 'current_packages' do |_parameter|
@@ -77,13 +77,13 @@ module LicenseFinder
 
         context 'when sub packages are being used' do
           let(:go_deps) do
-            ["github.com/foo/bar\ngithub.com/foo/bar/baz", true]
+            ["github.com/foo/bar\ngithub.com/foo/bar/baz", '', cmd_success]
           end
         end
 
         context 'when only sub packages are being used' do
           let(:go_deps) do
-            ['github.com/foo/bar/baz', true]
+            ['github.com/foo/bar/baz', '', cmd_success]
           end
 
           include_examples 'current_packages'
@@ -91,7 +91,7 @@ module LicenseFinder
 
         context 'when unvendored packages are being used' do
           let(:go_deps) do
-            ["github.com/foo/bar\ntext/template/parse", true]
+            ["github.com/foo/bar\ntext/template/parse", '', cmd_success]
           end
 
           include_examples 'current_packages'
@@ -99,7 +99,7 @@ module LicenseFinder
 
         context 'when standard packages are being used' do
           let(:go_deps) do
-            ["github.com/foo/bar\ngolang.org/stdbar/baz", true]
+            ["github.com/foo/bar\ngolang.org/stdbar/baz", '', cmd_success]
           end
 
           include_examples 'current_packages'
@@ -107,7 +107,7 @@ module LicenseFinder
 
         context 'when standard package names match part of a nonstandard package' do
           let(:go_deps) do
-            ["github.com/foo/bar/my-stdbar/baz\ngolang.org/stdbar/baz", true]
+            ["github.com/foo/bar/my-stdbar/baz\ngolang.org/stdbar/baz", '', cmd_success]
           end
 
           include_examples 'current_packages'

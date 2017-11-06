@@ -7,13 +7,13 @@ module LicenseFinder
     end
 
     def current_packages
-      output, success = capture(Yarn::SHELL_COMMAND)
-      return [] unless success
+      stdout, _stderr, status = Cmd.run(Yarn::SHELL_COMMAND)
+      return [] unless status.success?
 
       packages = []
       incompatible_packages = []
 
-      json_strings = output.split("\n")
+      json_strings = stdout.split("\n")
       json_objects = json_strings.map { |json_object| JSON.parse(json_object) }
 
       if json_objects.last['type'] == 'table'

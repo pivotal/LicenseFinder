@@ -25,10 +25,10 @@ module LicenseFinder
 
     def mix_output
       command = "#{@command} deps"
-      output, success = Dir.chdir(project_path) { capture(command) }
-      raise "Command '#{command}' failed to execute: #{output}" unless success
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
-      output
+      stdout
         .each_line
         .map(&:strip)
         .select { |line| line_of_interest? line }

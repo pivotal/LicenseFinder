@@ -34,9 +34,9 @@ module LicenseFinder
         path = project_path.join(vendor_dir_parent, 'vendor')
       end
 
-      output, success = capture(shell_command)
-      return [] unless success
-      packages_from_output(output, path)
+      stdout, _stderr, status = Cmd.run(shell_command)
+      return [] unless status.success?
+      packages_from_output(stdout, path)
     end
 
     def self.takes_priority_over

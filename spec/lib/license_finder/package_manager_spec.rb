@@ -85,13 +85,13 @@ module LicenseFinder
         end
 
         it 'succeeds when prepare command runs successfully' do
-          expect(subject).to receive(:capture).with('sh commands').and_return(['output', true])
+          expect(SharedHelpers::Cmd).to receive(:run).with('sh commands').and_return(['output', nil, cmd_success])
 
           expect { subject.prepare }.to_not raise_error
         end
 
         it 'raises exception when prepare command runs into failure' do
-          expect(subject).to receive(:capture).with('sh commands').and_return(['output', false])
+          expect(SharedHelpers::Cmd).to receive(:run).with('sh commands').and_return(['output', nil, cmd_failure])
 
           expect { subject.prepare }.to raise_error("Prepare command 'sh commands' failed")
         end
@@ -101,7 +101,7 @@ module LicenseFinder
         it 'issues a warning' do
           logger = double(:logger)
           expect(logger).to receive(:log).with(described_class, 'no prepare step provided', color: :red)
-          expect(subject).to_not receive(:capture).with('sh commands')
+          expect(SharedHelpers::Cmd).to_not receive(:run).with('sh commands')
 
           subject = described_class.new logger: logger
           subject.prepare

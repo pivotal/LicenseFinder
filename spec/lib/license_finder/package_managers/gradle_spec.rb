@@ -12,7 +12,7 @@ module LicenseFinder
 
     describe '#current_packages' do
       before do
-        allow(Dir).to receive(:chdir).with(Pathname('/fake/path')).and_return(['', true])
+        allow(Dir).to receive(:chdir).with(Pathname('/fake/path')).and_return(['', '', cmd_success])
         dependencies = double(:subject_dependency_file, dependencies: content)
         expect(GradleDependencyFinder).to receive(:new).and_return(dependencies)
       end
@@ -20,10 +20,10 @@ module LicenseFinder
       it 'uses the gradle wrapper, if present' do
         subject = Gradle.new(project_path: Pathname('features/fixtures/gradle-wrapper'))
         expect(Dir).to receive(:chdir).with(Pathname('features/fixtures/gradle-wrapper')).and_call_original
-        allow(subject).to receive(:capture).and_return(['/usr/local/bin/gradle
+        allow(SharedHelpers::Cmd).to receive(:run).and_return(['/usr/local/bin/gradle
 
 BUILD SUCCESSFUL in 0s
-1 actionable task: 1 executed', true])
+1 actionable task: 1 executed', '', cmd_success])
         if Platform.windows?
           expect(subject.package_management_command).to eq('gradlew.bat')
         else
@@ -35,7 +35,7 @@ BUILD SUCCESSFUL in 0s
       it 'uses custom subject command, if provided' do
         subject = Gradle.new(gradle_command: 'subjectfoo', project_path: Pathname('/fake/path'))
         expect(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
-        expect(subject).to receive(:capture).with('subjectfoo downloadLicenses').and_return(['', true])
+        expect(SharedHelpers::Cmd).to receive(:run).with('subjectfoo downloadLicenses').and_return(['', '', cmd_success])
         subject.current_packages
       end
 
@@ -43,9 +43,9 @@ BUILD SUCCESSFUL in 0s
         subject = Gradle.new(project_path: Pathname('/Users/foo/bar'))
         expect(Dir).to receive(:chdir).with(Pathname('/Users/foo/bar')) { |&block| block.call }
         if Platform.windows?
-          expect(subject).to receive(:capture).with('gradle.bat downloadLicenses').and_return(['', true])
+          expect(SharedHelpers::Cmd).to receive(:run).with('gradle.bat downloadLicenses').and_return(['', '', cmd_success])
         else
-          expect(subject).to receive(:capture).with('gradle downloadLicenses').and_return(['', true])
+          expect(SharedHelpers::Cmd).to receive(:run).with('gradle downloadLicenses').and_return(['', '', cmd_success])
         end
         subject.current_packages
       end

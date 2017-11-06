@@ -17,36 +17,12 @@ module LicenseFinder
       [project_path.join('package.json')]
     end
 
-    def run_command_with_tempfile_buffer(command)
-      tempfile = Tempfile.new 'npm-list.json'
-      begin
-        output, success = Dir.chdir(project_path) { capture("#{command} > #{tempfile.path}") }
-        result = yield(File.read(tempfile.path))
-      ensure
-        tempfile.close
-        tempfile.unlink
-      end
-      [output, result, success]
-    end
-
     def npm_json
       command = "#{NPM.package_management_command} list --json --long"
-      output, json, success = run_command_with_tempfile_buffer(command, &:parse_json_safely)
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
-      unless success
-        raise "Command '#{command}' failed to execute: #{output}" unless json
-        warn "Command '#{command}' returned an error but parsing succeeded." if json
-      end
-
-      json
-    end
-  end
-
-  String.class_eval do
-    def parse_json_safely
-      JSON.parse(self)
-    rescue JSONError
-      nil
+      JSON.parse(stdout)
     end
   end
 end

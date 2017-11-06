@@ -17,6 +17,7 @@ cmake
 [imports]
 ., license* -> ./licenses @ folder=True, ignore_case=True'
       end
+
       let(:conaninfo) do
         'PROJECT
     ID: 4c3dfe99a9c2d5003148e0054b9bacf58ac69f66
@@ -85,8 +86,8 @@ zlib/1.2.11@conan/stable
             File.write('/fake/path/licenses/zlib/license/LICENSE', 'zlib license')
             File.write('/fake/path/licenses/OpenSSL/LICENSE', 'OpenSSL license')
             File.write('/fake/path/licenses/Poco/license/LICENSE', 'Poco license')
-            expect(subject).to receive(:capture).with('conan install').ordered
-            expect(subject).to receive(:capture).with('conan info').ordered.and_return([conaninfo, true])
+            expect(SharedHelpers::Cmd).to receive(:run).with('conan install').ordered
+            expect(SharedHelpers::Cmd).to receive(:run).with('conan info').ordered.and_return([conaninfo, '', cmd_success])
           end
 
           it 'should list all the current packages name and version' do

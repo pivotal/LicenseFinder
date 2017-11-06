@@ -22,7 +22,7 @@ module LicenseFinder
     describe '.current_packages' do
       before do
         allow(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
-        allow(subject).to receive(:capture).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', true])
+        allow(SharedHelpers::Cmd).to receive(:run).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', '', cmd_success])
       end
 
       def stub_license_report(deps)
@@ -32,7 +32,7 @@ module LicenseFinder
 
       it 'uses the maven wrapper, if present' do
         subject = Maven.new(project_path: Pathname('features/fixtures/maven-wrapper'))
-        allow(subject).to receive(:capture).with('./mvnw org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', true])
+        allow(SharedHelpers::Cmd).to receive(:run).with('./mvnw org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', '', cmd_success])
         expect(Dir).to receive(:chdir).with(Pathname('features/fixtures/maven-wrapper')).and_call_original
         expect(subject.package_management_command).to eq('./mvnw').or eq('mvnw.cmd')
         subject.current_packages
@@ -66,8 +66,14 @@ module LicenseFinder
           ))
         end
 
+        let(:command) do
+          'mvn org.codehaus.mojo:license-maven-plugin:download-licenses -Dlicense.excludedScopes=system,test,provided,import'
+        end
+
         before do
-          expect(subject).to receive(:capture).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses -Dlicense.excludedScopes=system,test,provided,import').and_return(['', true])
+          expect(SharedHelpers::Cmd).to receive(:run)
+            .with(command)
+            .and_return(['', '', cmd_success])
         end
 
         it 'uses skips the specified groups' do
