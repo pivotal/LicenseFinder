@@ -28,16 +28,16 @@ module LicenseFinder
     end
 
     describe '#current_packages' do
+      let(:content) do
+        FakeFS.without do
+          fixture_from('glide.yml')
+        end
+      end
       it 'returns the packages described by glide.lock' do
+
         FakeFS.with_fresh do
           FileUtils.mkdir_p '/app/src'
-          File.write(Pathname('/app/src/glide.lock').to_s,
-                     'imports:
-- name: some-package-name
-  version: 123abc
-  repo: example.com
-- name: another-package-name
-  version: 456xyz')
+          File.write(Pathname('/app/src/glide.lock').to_s,content)
           expect(subject.current_packages.length).to eq 2
 
           expect(subject.current_packages.first.name).to eq 'some-package-name'

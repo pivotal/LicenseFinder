@@ -8,27 +8,19 @@ module LicenseFinder
 
     it_behaves_like 'a PackageManager'
 
-    describe '#current_packages' do
-      let(:content) do
-        '{
-          "ImportPath": "github.com/pivotal/foo",
-          "GoVersion": "go1.4.2",
-          "Deps": [
-            {
-              "ImportPath": "github.com/pivotal/foo",
-              "Rev": "61164e49940b423ba1f12ddbdf01632ac793e5e9"
-            },
-            {
-              "ImportPath": "github.com/pivotal/bar",
-              "Rev": "3245708abcdef234589450649872346783298736"
-            },
-            {
-              "ImportPath": "code.google.com/foo/bar",
-              "Rev": "3245708abcdef234589450649872346783298735"
-            }
-          ]
-        }'
+    let(:content_with_duplicates) do
+      FakeFS.without do
+        fixture_from('godep_with_duplicates.json')
       end
+    end
+
+    let(:content) do
+      FakeFS.without do
+        fixture_from('godep.json')
+      end
+    end
+
+    describe '#current_packages' do
 
       before do
         FakeFS.activate!
@@ -82,29 +74,8 @@ module LicenseFinder
       end
 
       context 'when there are duplicate dependencies' do
-        let(:content) do
-          '{
-               "ImportPath": "github.com/foo/bar",
-               "GoVersion": "go1.3",
-               "Deps": [
-                {
-                    "ImportPath": "github.com/foo/baz/sub1",
-                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-                },
-                {
-                    "ImportPath": "github.com/foo/baz/sub2",
-                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-                },
-                {
-                    "ImportPath": "github.com/foo/baz/sub3",
-                    "Rev": "28838aae6e8158e3695cf90e2f0ed2498b68ee1d"
-                }
-            ]
-          }'
-        end
-
         before do
-          File.write('/fake/path/Godeps/Godeps.json', content)
+          File.write('/fake/path/Godeps/Godeps.json', content_with_duplicates)
         end
 
         it 'should return one dependency only' do

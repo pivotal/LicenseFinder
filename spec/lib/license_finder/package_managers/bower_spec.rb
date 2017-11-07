@@ -8,27 +8,12 @@ module LicenseFinder
 
     describe '.current_packages' do
       it 'lists all the current packages' do
-        json = <<-JSON
-          {
-            "dependencies": {
-              "dependency-library": {
-                "canonicalDir": "/path/to/thing",
-                "pkgMeta": {
-                  "name": "dependency-library"
-                }
-              },
-              "another-dependency": {
-                "canonicalDir": "/path/to/thing2",
-                "pkgMeta": {
-                  "name": "another-dependency"
-                }
-              }
-            }
-          }
-        JSON
+        json = fixture_from('bower.json')
 
         allow(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
-        allow(SharedHelpers::Cmd).to receive(:run).with('bower list --json -l action --allow-root').and_return([json, '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run)
+                                         .with('bower list --json -l action --allow-root')
+                                         .and_return([json, '', cmd_success])
 
         expect(subject.current_packages.map { |p| [p.name, p.install_path] }).to eq [
           %w[dependency-library /path/to/thing], %w[another-dependency /path/to/thing2]

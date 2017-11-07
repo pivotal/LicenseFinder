@@ -3,5 +3,10 @@ module LicenseFinder
     def fixture_path(fixture)
       LicenseFinder::ROOT_PATH.join('..', '..', 'spec', 'fixtures', fixture)
     end
+
+    def fixture_from(filename)
+      filepath = LicenseFinder::ROOT_PATH.join('..', '..', 'spec', 'fixtures', 'config', filename)
+      File.open(filepath) { |f| f.read }
+    end
   end
 end

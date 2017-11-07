@@ -4,6 +4,13 @@ require 'fakefs/spec_helpers'
 module LicenseFinder
   describe Gvt do
     it_behaves_like 'a PackageManager'
+
+    let(:content) do
+      FakeFS.without do
+        fixture_from('gvt.json')
+      end
+    end
+
     describe '#current_packages' do
       subject { Gvt.new(project_path: Pathname('/app'), logger: double(:logger, active: nil)) }
 
@@ -19,31 +26,7 @@ module LicenseFinder
         include FakeFS::SpecHelpers
         it 'returns the packages described by \'gvt list\'' do
           FileUtils.mkdir_p '/app/anything/vendor'
-          File.write('/app/anything/vendor/manifest',
-                     '{
-  "version": 0,
-  "dependencies": [
-    {
-      "importpath": "github.com/aws/aws-sdk-go",
-      "repository": "https://github.com/aws/aws-sdk-go",
-      "vcs": "git",
-      "revision": "ea4ed6c6aec305f9c990547f16141b3591493516",
-      "branch": "master",
-      "notests": true
-    },
-                {
-      "importpath": "github.com/golang/protobuf/proto",
-      "repository": "https://github.com/golang/protobuf",
-      "vcs": "git",
-      "revision": "8ee79997227bf9b34611aee7946ae64735e6fd93",
-      "branch": "master",
-      "path": "/proto",
-      "notests": true
-    }
-  ]
-}
-')
-
+          File.write('/app/anything/vendor/manifest',content)
           allow(SharedHelpers::Cmd).to receive(:run).with('cd anything && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
           end
@@ -67,31 +50,7 @@ module LicenseFinder
         include FakeFS::SpecHelpers
         it "returns the packages described by 'gvt list'" do
           FileUtils.mkdir_p '/app/vendor'
-          File.write('/app/vendor/manifest',
-                     '{
-	"version": 0,
-	"dependencies": [
-		{
-			"importpath": "github.com/aws/aws-sdk-go",
-			"repository": "https://github.com/aws/aws-sdk-go",
-			"vcs": "git",
-			"revision": "ea4ed6c6aec305f9c990547f16141b3591493516",
-			"branch": "master",
-			"notests": true
-		},
-                {
-			"importpath": "github.com/golang/protobuf/proto",
-			"repository": "https://github.com/golang/protobuf",
-			"vcs": "git",
-			"revision": "8ee79997227bf9b34611aee7946ae64735e6fd93",
-			"branch": "master",
-			"path": "/proto",
-			"notests": true
-		}
-	]
-}
-')
-
+          File.write('/app/vendor/manifest',content)
           allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
           end
