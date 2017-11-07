@@ -12,8 +12,8 @@ module LicenseFinder
 
         allow(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
         allow(SharedHelpers::Cmd).to receive(:run)
-                                         .with('bower list --json -l action --allow-root')
-                                         .and_return([json, '', cmd_success])
+          .with('bower list --json -l action --allow-root')
+          .and_return([json, '', cmd_success])
 
         expect(subject.current_packages.map { |p| [p.name, p.install_path] }).to eq [
           %w[dependency-library /path/to/thing], %w[another-dependency /path/to/thing2]

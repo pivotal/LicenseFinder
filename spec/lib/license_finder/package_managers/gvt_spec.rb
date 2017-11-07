@@ -26,7 +26,7 @@ module LicenseFinder
         include FakeFS::SpecHelpers
         it 'returns the packages described by \'gvt list\'' do
           FileUtils.mkdir_p '/app/anything/vendor'
-          File.write('/app/anything/vendor/manifest',content)
+          File.write('/app/anything/vendor/manifest', content)
           allow(SharedHelpers::Cmd).to receive(:run).with('cd anything && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
           end
@@ -50,7 +50,7 @@ module LicenseFinder
         include FakeFS::SpecHelpers
         it "returns the packages described by 'gvt list'" do
           FileUtils.mkdir_p '/app/vendor'
-          File.write('/app/vendor/manifest',content)
+          File.write('/app/vendor/manifest', content)
           allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
           end

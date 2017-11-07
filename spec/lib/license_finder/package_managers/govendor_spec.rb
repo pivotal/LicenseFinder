@@ -16,7 +16,7 @@ module LicenseFinder
       it 'returns the packages described by vendor/vendor.json' do
         FakeFS do
           FileUtils.mkdir_p '/app/vendor'
-          File.write('/app/vendor/vendor.json',content)
+          File.write('/app/vendor/vendor.json', content)
 
           expect(subject.current_packages.length).to eq 2
 

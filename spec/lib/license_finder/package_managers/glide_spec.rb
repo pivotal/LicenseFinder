@@ -34,10 +34,9 @@ module LicenseFinder
         end
       end
       it 'returns the packages described by glide.lock' do
-
         FakeFS.with_fresh do
           FileUtils.mkdir_p '/app/src'
-          File.write(Pathname('/app/src/glide.lock').to_s,content)
+          File.write(Pathname('/app/src/glide.lock').to_s, content)
           expect(subject.current_packages.length).to eq 2
 
           expect(subject.current_packages.first.name).to eq 'some-package-name'

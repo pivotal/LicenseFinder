@@ -104,7 +104,7 @@ module LicenseFinder
       end
 
       let(:assembly_2_packages) do
-      <<-ONE
+        <<-ONE
         <?xml version="1.0" encoding="utf-8"?>
         <packages>
           <package id="ObscureDependency" version="1.3.15" targetFramework="net45" />

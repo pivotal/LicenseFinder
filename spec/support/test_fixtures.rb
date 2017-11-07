@@ -6,7 +6,7 @@ module LicenseFinder
 
     def fixture_from(filename)
       filepath = LicenseFinder::ROOT_PATH.join('..', '..', 'spec', 'fixtures', 'config', filename)
-      File.open(filepath) { |f| f.read }
+      File.open(filepath, &:read)
     end
   end
 end

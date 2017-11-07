@@ -21,7 +21,6 @@ module LicenseFinder
     end
 
     describe '#current_packages' do
-
       before do
         FakeFS.activate!
         FileUtils.mkdir_p '/fake/path/Godeps'
