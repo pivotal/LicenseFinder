@@ -40,9 +40,9 @@ RUN apt-get install -y python-pip && \
     pip install --upgrade pip
 
 # install maven
-RUN curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz && \
-    tar -xf apache-maven-3.5.0-bin.tar.gz; rm -rf apache-maven-3.5.0-bin.tar.gz && \
-    mv apache-maven-3.5.0 /usr/local/lib/maven && \
+RUN curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz && \
+    tar -xf apache-maven-3.5.2-bin.tar.gz; rm -rf apache-maven-3.5.2-bin.tar.gz && \
+    mv apache-maven-3.5.2 /usr/local/lib/maven && \
     ln -s /usr/local/lib/maven/bin/mvn /usr/local/bin/mvn
 
 # install gradle
@@ -77,7 +77,7 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
 #install rvm
-RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 && \
+RUN gpg --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 && \
     curl -sSL https://raw.githubusercontent.com/wayneeseguin/rvm/stable/binscripts/rvm-installer | sudo bash -s stable --ruby=2.4.1
 ENV PATH=/usr/local/rvm/bin:$PATH
 
