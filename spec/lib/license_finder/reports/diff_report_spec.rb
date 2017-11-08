@@ -29,7 +29,7 @@ module LicenseFinder
         end
       end
 
-      context 'reports from subprojects' do
+      context 'reports from projects' do
         it 'should generate a diff report displaying source path' do
           project1_foo_old = Package.new('foo', '1.0.0', spec_licenses: ['MIT'])
           project1_foo_new = Package.new('foo', '1.1.0', spec_licenses: ['MIT'])
@@ -41,9 +41,9 @@ module LicenseFinder
 
           foo = PackageDelta.unchanged(merged_foo_new, merged_foo_old)
           bar = PackageDelta.added(merged_bar_new)
-          expanded_foo_path = File.expand_path(merged_foo_old.subproject_paths[0])
-          expanded_bar_path1 = File.expand_path(merged_bar_new.subproject_paths[0])
-          expanded_bar_path2 = File.expand_path(merged_bar_new.subproject_paths[1])
+          expanded_foo_path = File.expand_path(merged_foo_old.aggregate_paths[0])
+          expanded_bar_path1 = File.expand_path(merged_bar_new.aggregate_paths[0])
+          expanded_bar_path2 = File.expand_path(merged_bar_new.aggregate_paths[1])
 
           report = DiffReport.new([foo, bar])
           expect(report.to_s).to include("unchanged,foo,1.1.0,MIT,#{expanded_foo_path}")

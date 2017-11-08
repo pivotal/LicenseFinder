@@ -115,13 +115,13 @@ module LicenseFinder
           expect(rspec.status).to eq(:unchanged)
           expect(rspec.version).to eq('3.2.0')
           paths = ['/path/to/project1', '/path/to/project2'].map { |p| File.absolute_path(p) }
-          expect(rspec.subproject_paths).to match_array(paths)
+          expect(rspec.aggregate_paths).to match_array(paths)
 
           rails = find_package_with_name('rails')[0]
           expect(rails.status).to eq(:added)
           expect(rails.version).to eq('4.2.0')
           paths = ['/path/to/project1'].map { |p| File.absolute_path(p) }
-          expect(rails.subproject_paths).to match_array(paths)
+          expect(rails.aggregate_paths).to match_array(paths)
         end
       end
     end

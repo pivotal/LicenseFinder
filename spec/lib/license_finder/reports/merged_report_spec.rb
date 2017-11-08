@@ -9,8 +9,8 @@ module LicenseFinder
 
         merged_foo = MergedPackage.new(foo, ['path/to/foo'])
         merged_bar = MergedPackage.new(bar, ['path/to/bar'])
-        expanded_foo_path = File.expand_path(merged_foo.subproject_paths[0])
-        expanded_bar_path = File.expand_path(merged_bar.subproject_paths[0])
+        expanded_foo_path = File.expand_path(merged_foo.aggregate_paths[0])
+        expanded_bar_path = File.expand_path(merged_bar.aggregate_paths[0])
 
         report = MergedReport.new([merged_foo, merged_bar])
         expect(report.to_s).to include("foo,1.0.0,MIT,#{expanded_foo_path}")

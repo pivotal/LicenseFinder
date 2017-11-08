@@ -16,8 +16,8 @@ module LicenseFinder
       pick_package.version
     end
 
-    def subproject_paths
-      pick_package.subproject_paths
+    def aggregate_paths
+      pick_package.aggregate_paths
     end
 
     attr_reader :status
