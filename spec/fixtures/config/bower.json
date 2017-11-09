@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "dependency-library": {
+      "canonicalDir": "/path/to/thing",
+      "pkgMeta": {
+        "name": "dependency-library"
+      }
+    },
+    "another-dependency": {
+      "canonicalDir": "/path/to/thing2",
+      "pkgMeta": {
+        "name": "another-dependency"
+      }
+    }
+  }
+}
