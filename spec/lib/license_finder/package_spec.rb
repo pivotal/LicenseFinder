@@ -2,6 +2,7 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Package do
+    let(:logger) { double('Logger', info: nil, debug: nil) }
     subject do
       described_class.new(
         'a package',
@@ -13,7 +14,8 @@ module LicenseFinder
         groups: %w[dev test],
         children: %w[child-1 child2],
         install_path: 'some/package/path',
-        spec_licenses: %w[MIT GPL]
+        spec_licenses: %w[MIT GPL],
+        logger: logger
       )
     end
 
@@ -47,7 +49,7 @@ module LicenseFinder
         license_files = license_names.map do |license_name|
           double(:file, license: License.find_by_name(license_name), path: 'some/path')
         end
-        allow(LicenseFiles).to receive(:find).with('some/package/path')
+        allow(LicenseFiles).to receive(:find).with('some/package/path', logger: logger)
                                              .and_return(license_files)
       end
 
@@ -79,7 +81,7 @@ module LicenseFinder
 
         it 'trumps licenses from the install path' do
           stub_license_files 'Detected License'
-          subject = described_class.new(nil, nil, install_path: 'some/package/path')
+          subject = described_class.new(nil, nil, install_path: 'some/package/path', logger: logger)
           subject.decide_on_license(License.find_by_name('MIT'))
           expect(subject.licenses.map(&:name)).to eq ['MIT']
         end
@@ -92,13 +94,13 @@ module LicenseFinder
         end
 
         it 'de-duplicates across license aliases' do
-          subject = described_class.new(nil, nil, spec_licenses: %w[MIT Expat])
+          subject = described_class.new(nil, nil, spec_licenses: %w[MIT Expat], logger: logger)
           expect(subject.licenses.map(&:name)).to eq ['MIT']
         end
 
         it 'trumps licenses from the install path' do
           stub_license_files 'Detected License'
-          subject = described_class.new(nil, nil, spec_licenses: ['MIT'], install_path: 'some/package/path')
+          subject = described_class.new(nil, nil, spec_licenses: ['MIT'], install_path: 'some/package/path', logger: logger)
           expect(subject.licenses.map(&:name)).to eq ['MIT']
         end
       end
@@ -106,13 +108,13 @@ module LicenseFinder
       describe 'from the install path' do
         it 'uses the licenses reported by files in the install path' do
           stub_license_files 'MIT', 'GPL'
-          subject = described_class.new(nil, nil, install_path: 'some/package/path')
+          subject = described_class.new(nil, nil, install_path: 'some/package/path', logger: logger)
           expect(subject.licenses.map(&:name)).to eq %w[MIT GPL]
         end
 
         it 'de-duplicates across license aliases' do
           stub_license_files 'MIT', 'Expat'
-          subject = described_class.new(nil, nil, install_path: 'some/package/path')
+          subject = described_class.new(nil, nil, install_path: 'some/package/path', logger: logger)
           expect(subject.licenses.map(&:name)).to eq ['MIT']
         end
       end

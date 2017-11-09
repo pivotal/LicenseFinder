@@ -15,7 +15,8 @@ module LicenseFinder
       end
     end
 
-    subject { described_class.new('gem/license/path') }
+    let(:logger) { double('Logger', info: nil) }
+    subject { described_class.new('gem/license/path', logger: logger) }
 
     context 'with a known license' do
       before do
@@ -33,6 +34,19 @@ module LicenseFinder
       end
 
       its(:license) { should be_nil }
+    end
+
+    context 'with dangling symlink' do
+      let(:path) { Pathname(subject.path) }
+      before do
+        allow(Pathname).to receive(:new).with('gem/license/path').and_return(path)
+        allow(path).to receive(:exist?).and_return(false)
+      end
+
+      it 'should log error msg' do
+        expect(logger).to receive(:info).with('ERROR', 'gem/license/path does not exists', color: :red)
+        subject.text
+      end
     end
   end
 end
