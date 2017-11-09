@@ -91,7 +91,7 @@ module LicenseFinder
       method_option :recursive, aliases: '-r', type: :boolean, default: false,
                                 desc: 'Recursively runs License Finder on all sub-projects'
 
-      method_option :aggregate_paths, type: :array,
+      method_option :aggregate_paths, aliases: '-a', type: :array,
                                       desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
       def report
         logger_config[:mode] = Logger::MODE_QUIET
