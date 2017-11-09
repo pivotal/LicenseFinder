@@ -1,0 +1,6 @@
+imports:
+- name: some-package-name
+  version: 123abc
+  repo: example.com
+- name: another-package-name
+  version: 456xyz

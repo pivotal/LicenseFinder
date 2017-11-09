@@ -82,8 +82,8 @@ module LicenseFinder
         FileUtils.touch 'app/Assembly2/packages.config'
       end
 
-      before do
-        assembly_1_packages = <<-ONE
+      let(:assembly_1_packages) do
+        <<-ONE
         <?xml version="1.0" encoding="utf-8"?>
         <packages>
           <package id="GoToDependency" version="4.84.4790.14417" targetFramework="net45" />
@@ -91,22 +91,29 @@ module LicenseFinder
           <package id="OtherObscureDependency" version="2.4.2" targetFramework="net45" />
         </packages>
         ONE
+      end
 
-        assembly_1_tests_packages = <<-ONE
+      let(:assembly_1_tests_packages) do
+        <<-ONE
         <?xml version="1.0" encoding="utf-8"?>
         <packages>
           <package id="GoToDependency" version="4.84.4790.14417" targetFramework="net45" />
           <package id="TestFramework" version="5.0.1" targetFramework="net45" />
         </packages>
         ONE
-        assembly_2_packages = <<-ONE
+      end
+
+      let(:assembly_2_packages) do
+        <<-ONE
         <?xml version="1.0" encoding="utf-8"?>
         <packages>
           <package id="ObscureDependency" version="1.3.15" targetFramework="net45" />
           <package id="CoolNewDependency" version="2.4.2" targetFramework="net45" />
         </packages>
-        ONE
+      ONE
+      end
 
+      before do
         File.write('app/Assembly1/packages.config', assembly_1_packages)
         File.write('app/Assembly1.Tests/packages.config', assembly_1_tests_packages)
         File.write('app/Assembly2/packages.config', assembly_2_packages)
