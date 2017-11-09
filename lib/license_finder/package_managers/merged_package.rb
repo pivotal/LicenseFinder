@@ -4,7 +4,7 @@ module LicenseFinder
 
     def initialize(dependency, aggregate_paths)
       @dependency = dependency
-      @aggregate_paths= aggregate_paths.map { |p| Pathname(p) }
+      @aggregate_paths = aggregate_paths.map { |p| Pathname(p) }
     end
 
     def name
