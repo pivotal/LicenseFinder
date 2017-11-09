@@ -15,7 +15,7 @@ module LicenseFinder
     end
 
     def format_project_paths(dep)
-      dep.subproject_paths.join(self.class::COMMA_SEP)
+      dep.aggregate_paths.join(self.class::COMMA_SEP)
     end
 
     private

@@ -1,6 +1,6 @@
 require_relative '../../support/feature_helper'
 
-describe 'Subproject report' do
+describe 'Aggregate Paths Projects report' do
   # As a non-technical product owner
   # I want a single csv report that includes multiple sub-projects
   # So that I can easily review my composite application's dependencies and licenses
@@ -14,11 +14,11 @@ describe 'Subproject report' do
     project1.depend_on(foo10)
 
     developer.create_empty_project
-    developer.execute_command("license_finder report --columns name homepage subproject_paths --subprojects #{project1.project_dir} --format=csv")
+    developer.execute_command("license_finder report --columns name homepage aggregate_paths --aggregate_paths #{project1.project_dir} --format=csv")
     expect(developer).to be_seeing_once("foo,http://example.homepage.com,#{project1.project_dir}")
   end
 
-  specify 'shows dependencies for multiple subprojects' do
+  specify 'shows dependencies for multiple projects' do
     project1 = developer.create_ruby_app('project_1')
     project1.depend_on(developer.create_gem('foo', version: '1.0.0', license: 'MIT'))
 
@@ -26,7 +26,7 @@ describe 'Subproject report' do
     project2.depend_on(developer.create_gem('bar', version: '2.0.0', license: 'GPLv2'))
 
     developer.create_empty_project
-    developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
+    developer.execute_command("license_finder report --columns name version licenses aggregate_paths --aggregate_paths #{project1.project_dir} #{project2.project_dir} --format=csv")
     expect(developer).to be_seeing("foo,1.0.0,MIT,#{project1.project_dir}")
     expect(developer).to be_seeing("bar,2.0.0,GPLv2,#{project2.project_dir}")
   end
@@ -41,7 +41,7 @@ describe 'Subproject report' do
     project2.depend_on(foo)
 
     developer.create_empty_project
-    developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
+    developer.execute_command("license_finder report --columns name version licenses aggregate_paths --aggregate_paths #{project1.project_dir} #{project2.project_dir} --format=csv")
     expect(developer).to be_seeing_once("foo,1.0.0,MIT,\"#{project1.project_dir},#{project2.project_dir}\"")
   end
 
@@ -56,7 +56,7 @@ describe 'Subproject report' do
     project2.depend_on(foo11)
 
     developer.create_empty_project
-    developer.execute_command("license_finder report --columns name version licenses subproject_paths --subprojects #{project1.project_dir} #{project2.project_dir} --format=csv")
+    developer.execute_command("license_finder report --columns name version licenses aggregate_paths --aggregate_paths #{project1.project_dir} #{project2.project_dir} --format=csv")
     expect(developer).to be_seeing_once("foo,1.0.0,MIT,#{project1.project_dir}")
     expect(developer).to be_seeing_once("foo,1.1.0,MIT,#{project2.project_dir}")
   end

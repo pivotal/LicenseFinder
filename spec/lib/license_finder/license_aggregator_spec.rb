@@ -39,11 +39,11 @@ module LicenseFinder
           expect(results.count).to eq(2)
 
           expect(results[1].name).to eq('helmet')
-          expect(results[1].subproject_paths[0]).to end_with('path/to/subproject-2')
+          expect(results[1].aggregate_paths[0]).to end_with('path/to/subproject-2')
 
           expect(results[0].name).to eq('hammer')
-          expect(results[0].subproject_paths[0]).to end_with('path/to/subproject-1')
-          expect(results[0].subproject_paths[1]).to end_with('path/to/subproject-2')
+          expect(results[0].aggregate_paths[0]).to end_with('path/to/subproject-1')
+          expect(results[0].aggregate_paths[1]).to end_with('path/to/subproject-2')
         end
       end
 
@@ -57,9 +57,9 @@ module LicenseFinder
 
           expect(results.count).to eq(3)
           expect(results.map(&:name)).to match_array %w[hammer helmet hammer]
-          expect(find_package(results, 'hammer', '1.0.0').subproject_paths[0]).to end_with('path/to/subproject-1')
-          expect(find_package(results, 'hammer', '2.0.0').subproject_paths[0]).to end_with('path/to/subproject-2')
-          expect(find_package(results, 'helmet', '3.0.0').subproject_paths[0]).to end_with('path/to/subproject-2')
+          expect(find_package(results, 'hammer', '1.0.0').aggregate_paths[0]).to end_with('path/to/subproject-1')
+          expect(find_package(results, 'hammer', '2.0.0').aggregate_paths[0]).to end_with('path/to/subproject-2')
+          expect(find_package(results, 'helmet', '3.0.0').aggregate_paths[0]).to end_with('path/to/subproject-2')
         end
       end
 

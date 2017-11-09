@@ -15,9 +15,9 @@ module LicenseFinder
       )
     end
 
-    let(:subproject_paths) { 'path/to/project/with/foo' }
+    let(:aggregate_paths) { 'path/to/project/with/foo' }
 
-    subject { MergedPackage.new(package, [subproject_paths]) }
+    subject { MergedPackage.new(package, [aggregate_paths]) }
 
     it 'returns the package name' do
       expect(subject.name).to eq(package.name)
@@ -32,8 +32,8 @@ module LicenseFinder
     end
 
     it 'returns the project path' do
-      expect(subject.subproject_paths.length).to eq(1)
-      expect(subject.subproject_paths[0]).to end_with(subproject_paths)
+      expect(subject.aggregate_paths.length).to eq(1)
+      expect(subject.aggregate_paths[0]).to end_with(aggregate_paths)
     end
 
     it 'returns the install path' do

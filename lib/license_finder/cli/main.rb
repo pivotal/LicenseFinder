@@ -91,15 +91,15 @@ module LicenseFinder
       method_option :recursive, aliases: '-r', type: :boolean, default: false,
                                 desc: 'Recursively runs License Finder on all sub-projects'
 
-      method_option :subprojects, aliases: '-s', type: :array,
-                                  desc: "Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2'"
+      method_option :aggregate_paths, aliases: '-a', type: :array,
+                                      desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
       def report
         logger_config[:mode] = Logger::MODE_QUIET
-        subproject_paths = options[:subprojects]
-        subproject_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
+        aggregate_paths = options[:aggregate_paths]
+        aggregate_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
 
-        if subproject_paths && !subproject_paths.empty?
-          finder = LicenseAggregator.new(license_finder_config, subproject_paths)
+        if aggregate_paths && !aggregate_paths.empty?
+          finder = LicenseAggregator.new(license_finder_config, aggregate_paths)
           report = MergedReport.new(finder.dependencies, options)
         else
           run_prepare_phase if prepare?
