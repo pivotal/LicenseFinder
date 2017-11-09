@@ -14,7 +14,7 @@ module LicenseFinder
     attr_reader :config
 
     def self.default_logger
-      Logger::Default.new
+      Logger.new
     end
 
     # Default +options+:
@@ -50,9 +50,9 @@ module LicenseFinder
     def prepare_projects
       package_managers = PackageManager.active_package_managers options
       package_managers.each do |manager|
-        logger.log manager.class, 'Running prepare on project'
+        logger.debug manager.class, 'Running prepare on project'
         manager.prepare
-        logger.log manager.class, 'Finished prepare on project', color: :green
+        logger.debug manager.class, 'Finished prepare on project', color: :green
       end
     end
 
@@ -64,6 +64,7 @@ module LicenseFinder
     # packages.
     def decision_applier
       # lazy, do not move to `initialize`
+      # Needs to be lazy loaded to prvent multiple decision appliers being created each time
       @applier ||= DecisionApplier.new(decisions: decisions, packages: current_packages)
     end
 
