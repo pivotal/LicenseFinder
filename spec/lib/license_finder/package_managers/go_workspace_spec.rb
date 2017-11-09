@@ -3,7 +3,7 @@ require 'spec_helper'
 module LicenseFinder
   describe GoWorkspace do
     let(:options) { {} }
-    let(:logger) { double(:logger, log: nil) }
+    let(:logger) { double(:logger, debug: nil, info: nil) }
     let(:project_path) { '/Users/pivotal/workspace/loggregator' }
     subject { GoWorkspace.new(options.merge(project_path: Pathname(project_path), logger: logger)) }
 
@@ -12,8 +12,6 @@ module LicenseFinder
         allow_any_instance_of(GoDep).to receive(:active?).and_return(false)
       end
 
-      it_behaves_like 'a PackageManager'
-
       it 'installed? should be true if go exists on the path' do
         allow(PackageManager).to receive(:command_exists?).with('go').and_return true
         expect(described_class.installed?).to eq(true)
@@ -21,7 +19,7 @@ module LicenseFinder
 
       it 'installed? should be false if go does not exists on the path' do
         allow(PackageManager).to receive(:command_exists?).with('go').and_return false
-        expect(described_class.installed?).to eq(false)
+        expect(described_class.installed?(logger)).to eq(false)
       end
     end
 
@@ -247,11 +245,6 @@ HERE
 
       it 'returns false when .envrc does not exist' do
         expect(subject.active?).to eq(false)
-      end
-
-      it 'logs the active state' do
-        expect(logger).to receive(:log)
-        subject.active?
       end
 
       context 'when Godep is present' do

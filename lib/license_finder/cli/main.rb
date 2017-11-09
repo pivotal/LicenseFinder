@@ -4,6 +4,7 @@ require 'license_finder/diff'
 require 'license_finder/package_delta'
 require 'license_finder/license_aggregator'
 require 'license_finder/project_finder'
+require 'license_finder/logger'
 
 module LicenseFinder
   module CLI
@@ -93,7 +94,7 @@ module LicenseFinder
       method_option :subprojects, aliases: '-s', type: :array,
                                   desc: "Generate a single report for multiple sub-projects. Ex: --subprojects='path/to/project1', 'path/to/project2'"
       def report
-        logger_config[:quiet] = true
+        logger_config[:mode] = Logger::MODE_QUIET
         subproject_paths = options[:subprojects]
         subproject_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
 
