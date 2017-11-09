@@ -4,11 +4,13 @@ module LicenseFinder
   describe Core do
     let(:options) { {} }
     let(:license_finder) { described_class.new(options) }
-    let(:logger) { Logger.new(options[:logger]) }
+    let(:logger) { LicenseFinder::Logger.new(options[:logger]) }
     let(:configuration) { LicenseFinder::Configuration.new(options, {}) }
     let(:pathname) { Pathname.pwd + Pathname(options[:project_path]) }
 
     before do
+      allow(logger).to receive(LicenseFinder::Logger::MODE_INFO)
+      allow(logger).to receive(LicenseFinder::Logger::MODE_DEBUG)
       allow(Logger).to receive(:new).and_return(logger)
     end
 

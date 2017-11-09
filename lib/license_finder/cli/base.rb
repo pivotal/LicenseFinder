@@ -48,7 +48,17 @@ module LicenseFinder
       end
 
       def logger_config
-        @logger_config ||= extract_options(:quiet, :debug)
+        quiet = LicenseFinder::Logger::MODE_QUIET
+        debug = LicenseFinder::Logger::MODE_DEBUG
+        info = LicenseFinder::Logger::MODE_INFO
+        mode = extract_options(quiet, debug)
+        if mode[quiet]
+          { mode: quiet }
+        elsif mode[debug]
+          { mode: debug }
+        else
+          { mode: info }
+        end
       end
 
       def say_each(coll)

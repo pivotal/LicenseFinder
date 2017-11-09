@@ -22,12 +22,26 @@ module LicenseFinder
          Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan]
       end
 
-      def active_packages(options)
-        active_package_managers(options).flat_map(&:current_packages_with_relations)
+      def active_packages(options = { project_path: Pathname.new('') })
+        package_managers = active_package_managers(options)
+        installed_package_managers = package_managers.select { |pm| pm.class.installed?(options[:logger]) }
+        installed_package_managers.flat_map(&:current_packages_with_relations)
       end
 
       def active_package_managers(options = { project_path: Pathname.new('') })
-        active_pm_classes = package_managers.select { |pm_class| pm_class.new(options).active? }
+        logger = options[:logger]
+
+        active_pm_classes = []
+        package_managers.each do |pm_class|
+          active = pm_class.new(options).active?
+          if active
+            logger.info pm_class, 'is active', color: :green
+            active_pm_classes << pm_class
+          else
+            logger.debug pm_class, 'is not active', color: :red
+          end
+        end
+
         active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
         active_pm_classes.map { |pm_class| pm_class.new(options) }
       end
@@ -38,13 +52,13 @@ module LicenseFinder
 
       def installed?(logger = Core.default_logger)
         if package_management_command.nil?
-          logger.log self, 'no command defined' # TODO: comment me out
+          logger.debug self, 'no command defined' # TODO: comment me out
           true
         elsif command_exists?(package_management_command)
-          logger.log self, 'is installed', color: :green
+          logger.debug self, 'is installed', color: :green
           true
         else
-          logger.log self, 'is not installed', color: :red
+          logger.info self, 'is not installed', color: :red
           false
         end
       end
@@ -67,15 +81,7 @@ module LicenseFinder
 
     def active?
       path = detected_package_path
-      self.class.installed?(logger) &&
-        !path.nil? &&
-        path.exist?.tap do |is_active|
-          if is_active
-            logger.log self.class, 'is active', color: :green
-          else
-            logger.log self.class, 'is not active'
-          end
-        end
+      path && path.exist?
     end
 
     def detected_package_path
@@ -87,7 +93,7 @@ module LicenseFinder
         _stdout, _stderr, status = Cmd.run(self.class.prepare_command)
         raise "Prepare command '#{self.class.prepare_command}' failed" unless status.success?
       else
-        logger.log self.class, 'no prepare step provided', color: :red
+        logger.debug self.class, 'no prepare step provided', color: :red
       end
     end
 
@@ -103,11 +109,12 @@ module LicenseFinder
     end
 
     def self.command_exists?(command)
-      if LicenseFinder::Platform.windows?
-        _stdout, _stderr, status = Cmd.run("where #{command} 2>NUL")
-      else
-        _stdout, _stderr, status = Cmd.run("which #{command} 2>/dev/null")
-      end
+      _stdout, _stderr, status =
+        if LicenseFinder::Platform.windows?
+          Cmd.run("where #{command}")
+        else
+          Cmd.run("which #{command}")
+        end
 
       status.success?
     end
