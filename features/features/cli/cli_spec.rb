@@ -1,5 +1,4 @@
 require_relative '../../support/feature_helper'
-
 describe 'License Finder command line executable' do
   # As a developer
   # I want a command-line interface
@@ -46,5 +45,12 @@ describe 'License Finder command line executable' do
     developer.execute_command("license_finder report --project-path=#{path}")
     expect(developer).to be_seeing("Project path '#{File.absolute_path(path)}' does not exist!")
     expect(developer).to be_receiving_exit_code(1)
+  end
+
+  specify 'displays an error if symlink to potential license file is dangling' do
+    project = LicenseFinder::TestingDSL::BrokenSymLinkDepProject.create
+    ENV['GOPATH'] = "#{project.project_dir}/gopath_dep"
+    developer.run_license_finder('gopath_dep/src/foo-dep')
+    expect(developer).to be_seeing_something_like %r{ERROR: .*my_app/gopath_dep/src/foo-dep/vendor/a/b/LICENSE does not exists}
   end
 end

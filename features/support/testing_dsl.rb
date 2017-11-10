@@ -249,6 +249,18 @@ module LicenseFinder
       end
     end
 
+    class BrokenSymLinkDepProject < Project
+      def add_dep
+        clone('gopath_dep')
+      end
+
+      def install; end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_dep', 'src', 'foo-dep')).shell_out(command)
+      end
+    end
+
     class GovendorProject < Project
       def add_dep
         clone('gopath_govendor')

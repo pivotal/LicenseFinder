@@ -142,7 +142,7 @@ module LicenseFinder
     end
 
     def license_files
-      LicenseFiles.find(install_path)
+      LicenseFiles.find(install_path, logger: logger)
     end
 
     def package_manager
