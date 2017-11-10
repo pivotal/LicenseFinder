@@ -1,3 +1,14 @@
+# [4.0.0] / 2017-11-10
+
+### Changed
+
+* CLI output has been altered to be clear about active states and installed states.
+* option `--subprojects`have been renamed to `--aggregate_paths` in order to be clear about its functionality
+
+### Fixed
+
+* Fixed issue where dangling symbolic link would cause License Finder to crash and not continue. Instead, License Finder will now warn about the issue and continue.
+
 # [3.1.0] / 2017-11-10
 
 ### Added
@@ -487,6 +498,7 @@ Bugfixes:
 
 
 [Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...HEAD
+[4.0.0]: https://github.com/pivotal/LicenseFinder/compare/v3.1.0...v4.0.0
 [3.1.0]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...v3.1.0
 [3.0.4]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...v3.0.4
 [3.0.2]: https://github.com/pivotal/LicenseFinder/compare/v3.0.1...v3.0.2
