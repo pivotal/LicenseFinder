@@ -5,17 +5,17 @@ module LicenseFinder
     CANDIDATE_FILE_NAMES = %w[LICENSE License Licence COPYING README Readme ReadMe].freeze
     CANDIDATE_PATH_WILDCARD = "*{#{CANDIDATE_FILE_NAMES.join(',')}}*".freeze
 
-    def self.find(install_path)
-      new(install_path).find
+    def self.find(install_path, options = {})
+      new(install_path).find(options)
     end
 
     def initialize(install_path)
       @install_path = install_path ? Pathname(install_path) : nil
     end
 
-    def find
+    def find(options = {})
       paths_of_candidate_files
-        .map { |path| PossibleLicenseFile.new(path) }
+        .map { |path| PossibleLicenseFile.new(path, options) }
         .reject { |file| file.license.nil? }
     end
 
