@@ -1,3 +1,3 @@
 module LicenseFinder
-  VERSION = '3.1.0'.freeze
+  VERSION = '4.0.0'.freeze
 end
