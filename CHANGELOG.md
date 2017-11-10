@@ -1,3 +1,28 @@
+# [3.1.0] / 2017-11-10
+
+### Added
+
+* Added support for [Carthage](https://github.com/Carthage/Carthage) 
+* Added support for [gvt](https://github.com/FiloSottile/gvt)
+* Added support for [yarn](https://yarnpkg.com/en/)
+* Added support for [glide](https://github.com/Masterminds/glide)
+* Added support for [GoVendor](https://github.com/kardianos/govendor)
+* Added support for [Dep](https://github.com/golang/dep)
+* Added support for [Conan](https://conan.io/)
+* Added `--prepare` option
+  * `--prepare`/`-p` is an option which can now be passed to the `action_items` or `report` task of `license_finder`
+  * `prepare` will indicate to License Finder that it should attempt to prepare the project before running in a License scan.
+
+### Changed
+
+* Upgrade `Gradle` in Dockerfile
+* Clean up some CLI interaction and documentation
+
+### Fixed
+
+* `build-essential` was added back into the Dockerfile after accidentally being removed
+* Ignore leading prefixes such as 'The' when looking for licenses
+
 # [3.0.4] / 2017-09-14
 
 ### Added
@@ -462,6 +487,7 @@ Bugfixes:
 
 
 [Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...HEAD
+[3.1.0]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...v3.1.0
 [3.0.4]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...v3.0.4
 [3.0.2]: https://github.com/pivotal/LicenseFinder/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/pivotal/LicenseFinder/compare/v3.0.0...v3.0.1
