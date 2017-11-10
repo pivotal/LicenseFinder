@@ -24,6 +24,12 @@ module LicenseFinder
       end
     end
 
+    describe '.prepare_command' do
+      it 'returns the correct prepare method' do
+        expect(described_class.prepare_command).to eq('bundle install')
+      end
+    end
+
     describe '.current_packages' do
       subject do
         Bundler.new(ignored_groups: %w[dev test], definition: definition).current_packages

@@ -21,6 +21,10 @@ module LicenseFinder
       'bundle'
     end
 
+    def self.prepare_command
+      'bundle install'
+    end
+
     private
 
     attr_reader :ignored_groups
