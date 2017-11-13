@@ -46,6 +46,32 @@ module LicenseFinder
           expect(subject.current_packages.last.version).to eq '456xyz'
         end
       end
+
+      context 'when there is a src directory' do
+        it 'looks for licenses under src/vendor directory' do
+          FakeFS.with_fresh do
+            FileUtils.mkdir_p '/app/src'
+            File.write(Pathname('/app/src/glide.lock').to_s, content)
+
+            subject.current_packages.each do |package|
+              expect(package.install_path).to eq(Pathname("/app/src/vendor/#{package.name}"))
+            end
+          end
+        end
+      end
+
+      context 'when there is not src directory' do
+        it 'looks for licenses under vendor directory' do
+          FakeFS.with_fresh do
+            FileUtils.mkdir_p '/app'
+            File.write(Pathname('/app/glide.lock').to_s, content)
+
+            subject.current_packages.each do |package|
+              expect(package.install_path).to eq(Pathname("/app/vendor/#{package.name}"))
+            end
+          end
+        end
+      end
     end
 
     describe '.prepare_command' do
