@@ -5,11 +5,20 @@ module LicenseFinder
     end
 
     def current_packages
-      YAML.load_file(detected_package_path).fetch('imports').map do |package_hash|
+      detected_path = detected_package_path
+
+      YAML.load_file(detected_path).fetch('imports').map do |package_hash|
         import_path = package_hash.fetch('name')
+        license_path =
+          if detected_path == possible_package_paths.first
+            project_path.join('src', 'vendor', import_path)
+          else
+            project_path.join('vendor', import_path)
+          end
+
         GoPackage.from_dependency({
                                     'ImportPath' => import_path,
-                                    'InstallPath' => project_path.join('src', 'vendor', import_path),
+                                    'InstallPath' => license_path,
                                     'Rev' => package_hash.fetch('version')
                                   }, nil, true)
       end
