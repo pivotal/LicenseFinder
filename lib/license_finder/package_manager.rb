@@ -42,6 +42,10 @@ module LicenseFinder
           end
         end
 
+        if active_pm_classes.empty?
+          logger.info 'License Finder', 'No active and installed package managers found for project.', color: :red
+        end
+
         active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
         active_pm_classes.map { |pm_class| pm_class.new(options) }
       end

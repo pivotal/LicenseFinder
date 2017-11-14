@@ -98,6 +98,15 @@ module LicenseFinder
         expect(LicenseFinder::PackageManager.active_package_managers(logger: logger, project_path: Pathname.new(''))).to include gvt
         expect(LicenseFinder::PackageManager.active_package_managers(logger: logger, project_path: Pathname.new(''))).not_to include govendor
       end
+
+      context 'when there are no active package managers' do
+        it 'should show and appropriate error message' do
+          bundler = double(:bundler, active?: false, class: Bundler)
+          allow(Bundler).to receive(:new).and_return bundler
+          expect(logger).to receive(:info).with('License Finder', 'No active and installed package managers found for project.', color: :red)
+          LicenseFinder::PackageManager.active_package_managers(logger: logger, project_path: Pathname.new(''))
+        end
+      end
     end
 
     describe '.active_packages' do
