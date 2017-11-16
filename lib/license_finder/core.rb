@@ -43,6 +43,10 @@ module LicenseFinder
       decisions.project_name || config.project_path.basename.to_s
     end
 
+    def project_path
+      config.project_path
+    end
+
     def decisions
       @decisions ||= Decisions.fetch_saved(config.decisions_file_path)
     end

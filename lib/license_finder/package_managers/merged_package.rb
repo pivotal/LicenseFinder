@@ -1,10 +1,11 @@
 module LicenseFinder
-  class MergedPackage
+  class MergedPackage < Package
     attr_reader :dependency
 
-    def initialize(dependency, aggregate_paths)
-      @dependency = dependency
+    def initialize(package, aggregate_paths)
+      @dependency = package
       @aggregate_paths = aggregate_paths.map { |p| Pathname(p) }
+      super(package.name, package.version)
     end
 
     def name
@@ -39,6 +40,22 @@ module LicenseFinder
       dependency.description
     end
 
+    def approved_manually?
+      dependency.approved_manually?
+    end
+
+    def approved?
+      dependency.approved?
+    end
+
+    def whitelisted?
+      dependency.whitelisted?
+    end
+
+    def blacklisted?
+      dependency.blacklisted?
+    end
+
     def groups
       dependency.groups
     end
@@ -56,7 +73,15 @@ module LicenseFinder
     end
 
     def eql?(other)
-      dependency.eql?(other.dependency)
+      if other.instance_of? MergedPackage
+        other.dependency.eql?(dependency)
+      else
+        dependency.eql?(other)
+      end
+  end
+
+    def ==(other)
+      dependency.eql?(other.dependency) && aggregate_paths.eql?(other.aggregate_paths)
     end
 
     def hash
