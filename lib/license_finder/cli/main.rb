@@ -55,7 +55,6 @@ module LicenseFinder
                       desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
 
         method_option :quiet, aliases: '-q', type: :boolean, desc: 'Silences progress report', required: false
-
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'

@@ -2,40 +2,37 @@ require 'spec_helper'
 
 module LicenseFinder
   describe LicenseAggregator do
-
     context 'when there are no packages' do
 
       describe '#any_packages' do
         let(:project_1_path) { 'path/to/subproject-1' }
-        let(:license_finder_1) { double(:license_finder, acknowledged: [], project_path:project_1_path, any_packages?: false) }
+        let(:license_finder_1) { double(:license_finder, acknowledged: [], project_path: project_1_path, any_packages?: false) }
         it 'should return false' do
           allow(Core).to receive(:new).and_return(license_finder_1)
-          expect(described_class.new({},[project_1_path]).any_packages?).to be_falsey
+          expect(described_class.new({}, [project_1_path]).any_packages?).to be_falsey
         end
       end
-
     end
 
     context 'when no duplicates' do
-
       let(:hammer) { Package.new('hammer', '1.0.0') }
       let(:helmet) { Package.new('helmet', '3.0.0') }
       let(:project_1_path) { 'path/to/subproject-1' }
       let(:project_2_path) { 'path/to/subproject-2' }
-      let(:license_finder_1) { double(:license_finder, acknowledged: [hammer], project_path:project_1_path, any_packages?: true) }
-      let(:license_finder_2) { double(:license_finder, acknowledged: [helmet], project_path:project_2_path, any_packages?: true) }
+      let(:license_finder_1) { double(:license_finder, acknowledged: [hammer], project_path: project_1_path, any_packages?: true) }
+      let(:license_finder_2) { double(:license_finder, acknowledged: [helmet], project_path: project_2_path, any_packages?: true) }
       before do
         allow(Core).to receive(:new).and_return(license_finder_1, license_finder_2)
       end
       describe '#any_packages?' do
         it 'should return true' do
-          expect(described_class.new({},[project_1_path, project_2_path]).any_packages?).to be_truthy
+          expect(described_class.new({}, [project_1_path, project_2_path]).any_packages?).to be_truthy
         end
       end
 
       describe '#unapproved' do
-        let (:merged_1_expected) { MergedPackage.new(hammer, [project_1_path]) }
-        let (:merged_2_expected) { MergedPackage.new(helmet, [project_2_path]) }
+        let(:merged_1_expected) { MergedPackage.new(hammer, [project_1_path]) }
+        let(:merged_2_expected) { MergedPackage.new(helmet, [project_2_path]) }
         it 'should return list of unapproved packages' do
           aggregator = described_class.new({}, [project_1_path, project_2_path])
           expect(aggregator.unapproved).to eq([merged_1_expected, merged_2_expected])
@@ -46,7 +43,7 @@ module LicenseFinder
         before do
           hammer.blacklisted!
         end
-        let (:merged_1_expected) { MergedPackage.new(hammer, [project_1_path]) }
+        let(:merged_1_expected) { MergedPackage.new(hammer, [project_1_path]) }
         it 'should return list of blacklisted packages' do
           aggregator = described_class.new({}, [project_1_path, project_2_path])
           expect(aggregator.blacklisted).to eq([merged_1_expected])
@@ -60,21 +57,21 @@ module LicenseFinder
       let(:helmet) { Package.new('helmet', '3.0.0') }
       let(:project_1_path) { 'path/to/subproject-1' }
       let(:project_2_path) { 'path/to/subproject-2' }
-      let(:license_finder_1) { double(:license_finder, acknowledged: [hammer], project_path:project_1_path, any_packages?: true) }
-      let(:license_finder_2) { double(:license_finder, acknowledged: [hammer, helmet], project_path:project_2_path, any_packages?: true) }
+      let(:license_finder_1) { double(:license_finder, acknowledged: [hammer], project_path: project_1_path, any_packages?: true) }
+      let(:license_finder_2) { double(:license_finder, acknowledged: [hammer, helmet], project_path: project_2_path, any_packages?: true) }
       before do
         allow(Core).to receive(:new).and_return(license_finder_1, license_finder_2)
       end
 
       describe '#any_packages?' do
         it 'should return true' do
-          expect(described_class.new({},[project_1_path, project_2_path]).any_packages?).to be_truthy
+          expect(described_class.new({}, [project_1_path, project_2_path]).any_packages?).to be_truthy
         end
       end
 
       describe '#unapproved' do
-        let (:merged_1_expected) { MergedPackage.new(hammer, [project_1_path, project_2_path]) }
-        let (:merged_2_expected) { MergedPackage.new(helmet, [project_2_path]) }
+        let(:merged_1_expected) { MergedPackage.new(hammer, [project_1_path, project_2_path]) }
+        let(:merged_2_expected) { MergedPackage.new(helmet, [project_2_path]) }
         it 'should return list of unapproved packages' do
           aggregator = described_class.new({}, [project_1_path, project_2_path])
           expect(aggregator.unapproved).to eq([merged_1_expected, merged_2_expected])
@@ -85,7 +82,7 @@ module LicenseFinder
         before do
           hammer.blacklisted!
         end
-        let (:merged_1_expected) { MergedPackage.new(hammer, [project_1_path, project_2_path]) }
+        let(:merged_1_expected) { MergedPackage.new(hammer, [project_1_path, project_2_path]) }
         it 'should return list of blacklisted packages' do
           aggregator = described_class.new({}, [project_1_path, project_2_path])
           expect(aggregator.blacklisted).to eq([merged_1_expected])
@@ -99,21 +96,21 @@ module LicenseFinder
       let(:hammer2) { Package.new('hammer', '3.0.0') }
       let(:project_1_path) { 'path/to/subproject-1' }
       let(:project_2_path) { 'path/to/subproject-2' }
-      let(:license_finder_1) { double(:license_finder, acknowledged: [hammer1], project_path:project_1_path, any_packages?: true) }
-      let(:license_finder_2) { double(:license_finder, acknowledged: [hammer1, hammer2], project_path:project_2_path, any_packages?: true) }
+      let(:license_finder_1) { double(:license_finder, acknowledged: [hammer1], project_path: project_1_path, any_packages?: true) }
+      let(:license_finder_2) { double(:license_finder, acknowledged: [hammer1, hammer2], project_path: project_2_path, any_packages?: true) }
 
       before do
         allow(Core).to receive(:new).and_return(license_finder_1, license_finder_2)
       end
       describe '#any_packages?' do
         it 'should return true' do
-          expect(described_class.new({},[project_1_path, project_2_path]).any_packages?).to be_truthy
+          expect(described_class.new({}, [project_1_path, project_2_path]).any_packages?).to be_truthy
         end
       end
 
       describe '#unapproved' do
-        let (:merged_1_expected) { MergedPackage.new(hammer1, [project_1_path, project_2_path]) }
-        let (:merged_2_expected) { MergedPackage.new(hammer2, [project_2_path]) }
+        let(:merged_1_expected) { MergedPackage.new(hammer1, [project_1_path, project_2_path]) }
+        let(:merged_2_expected) { MergedPackage.new(hammer2, [project_2_path]) }
         it 'should return list of unapproved packages' do
           aggregator = described_class.new({}, [project_1_path, project_2_path])
           expect(aggregator.unapproved).to eq([merged_1_expected, merged_2_expected])
@@ -124,7 +121,7 @@ module LicenseFinder
         before do
           hammer1.blacklisted!
         end
-        let (:merged_1_expected) { MergedPackage.new(hammer1, [project_1_path, project_2_path]) }
+        let(:merged_1_expected) { MergedPackage.new(hammer1, [project_1_path, project_2_path]) }
         it 'should return list of blacklisted packages' do
           aggregator = described_class.new({}, [project_1_path, project_2_path])
           expect(aggregator.blacklisted).to eq([merged_1_expected])
@@ -138,8 +135,8 @@ module LicenseFinder
       let(:helmet) { Package.new('helmet', '3.0.0') }
       let(:project_1_path) { 'path/to/subproject-1' }
       let(:project_2_path) { 'path/to/subproject-2' }
-      let(:license_finder_1) { double(:license_finder, acknowledged: [hammer], project_path:project_1_path) }
-      let(:license_finder_2) { double(:license_finder, acknowledged: [helmet], project_path:project_2_path) }
+      let(:license_finder_1) { double(:license_finder, acknowledged: [hammer], project_path: project_1_path) }
+      let(:license_finder_2) { double(:license_finder, acknowledged: [helmet], project_path: project_2_path) }
 
       before do
         allow(Core).to receive(:new).and_return(license_finder_1, license_finder_2)
@@ -163,7 +160,7 @@ module LicenseFinder
       end
 
       context 'when there are duplicates' do
-        let(:license_finder_2) { double(:license_finder, acknowledged: [helmet, hammer], project_path:project_2_path) }
+        let(:license_finder_2) { double(:license_finder, acknowledged: [helmet, hammer], project_path: project_2_path) }
 
         it 'aggregates duplicate packages by package name' do
           aggregator = LicenseAggregator.new({}, ['path/to/subproject-1', 'path/to/subproject-2'])
@@ -182,7 +179,7 @@ module LicenseFinder
 
       context 'when there are duplicate packages with different versions' do
         let(:hammer_new) { Package.new('hammer', '2.0.0') }
-        let(:license_finder_2) { double(:license_finder, acknowledged: [helmet, hammer_new], project_path:project_2_path) }
+        let(:license_finder_2) { double(:license_finder, acknowledged: [helmet, hammer_new], project_path: project_2_path) }
 
         it 'does not aggregate packages with different versions' do
           aggregator = LicenseAggregator.new({}, ['path/to/subproject-1', 'path/to/subproject-2'])

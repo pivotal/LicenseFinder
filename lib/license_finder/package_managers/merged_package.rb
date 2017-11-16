@@ -78,7 +78,7 @@ module LicenseFinder
       else
         dependency.eql?(other)
       end
-  end
+    end
 
     def ==(other)
       dependency.eql?(other.dependency) && aggregate_paths.eql?(other.aggregate_paths)
