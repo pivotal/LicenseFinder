@@ -88,12 +88,11 @@ module LicenseFinder
         end
 
         it 'passes the config options to the new LicenseFinder::LicenseAggregator instance' do
-          expect(LicenseFinder::LicenseAggregator).to receive(:new).with(parsed_config,anything).and_return(license_finder_instance)
+          expect(LicenseFinder::LicenseAggregator).to receive(:new).with(parsed_config, anything).and_return(license_finder_instance)
           silence_stdout do
             expect { described_class.start(config_options) }.to raise_error(SystemExit)
           end
         end
-
       end
 
       describe '#report' do
@@ -254,7 +253,6 @@ module LicenseFinder
         end
 
         context 'with unapproved dependencies' do
-
           before do
             allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(license_aggregator_instance)
           end
@@ -269,7 +267,7 @@ module LicenseFinder
         end
 
         context 'with blacklisted dependencies' do
-          let(:blacklisted){ [ Package.new('blacklisted', '1.0', spec_licenses: ['GPLv3']) ]}
+          let(:blacklisted) { [Package.new('blacklisted', '1.0', spec_licenses: ['GPLv3'])] }
           before do
             allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(license_aggregator_instance)
           end
