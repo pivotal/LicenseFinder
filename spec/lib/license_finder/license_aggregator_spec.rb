@@ -3,7 +3,6 @@ require 'spec_helper'
 module LicenseFinder
   describe LicenseAggregator do
     context 'when there are no packages' do
-
       describe '#any_packages' do
         let(:project_1_path) { 'path/to/subproject-1' }
         let(:license_finder_1) { double(:license_finder, acknowledged: [], project_path: project_1_path, any_packages?: false) }
@@ -49,7 +48,6 @@ module LicenseFinder
           expect(aggregator.blacklisted).to eq([merged_1_expected])
         end
       end
-
     end
 
     context 'when duplicates' do
@@ -88,7 +86,6 @@ module LicenseFinder
           expect(aggregator.blacklisted).to eq([merged_1_expected])
         end
       end
-
     end
 
     context 'when duplicates with different versions' do
@@ -127,7 +124,6 @@ module LicenseFinder
           expect(aggregator.blacklisted).to eq([merged_1_expected])
         end
       end
-
     end
 
     describe '#dependencies' do

@@ -49,25 +49,17 @@ module LicenseFinder
                       required: false
 
         method_option :recursive, aliases: '-r', type: :boolean, default: false,
-                      desc: 'Recursively runs License Finder on all sub-projects'
+                                  desc: 'Recursively runs License Finder on all sub-projects'
 
         method_option :aggregate_paths, aliases: '-a', type: :array,
-                      desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
+                                        desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
 
         method_option :quiet, aliases: '-q', type: :boolean, desc: 'Silences progress report', required: false
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
-
       shared_options
       def action_items
-        aggregate_paths = options[:aggregate_paths]
-        aggregate_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
-
-        if (aggregate_paths.nil? || aggregate_paths.empty?) && !license_finder_config[:project_path].nil?
-          aggregate_paths = [license_finder_config[:project_path]]
-        end
-
         finder = LicenseAggregator.new(license_finder_config, aggregate_paths)
         any_packages = finder.any_packages?
         unapproved = finder.unapproved
@@ -142,6 +134,13 @@ module LicenseFinder
       subcommand 'project_name', ProjectName, 'Set the project name, for display in reports'
 
       private
+
+      def aggregate_paths
+        aggregate_paths = options[:aggregate_paths]
+        aggregate_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
+        return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
+        [license_finder_config[:project_path]] unless license_finder_config[:project_path].nil?
+      end
 
       def save_report(content, file_name)
         File.open(file_name, 'w') do |f|
