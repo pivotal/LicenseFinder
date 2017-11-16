@@ -79,7 +79,10 @@ module LicenseFinder
         p3 = MergedPackage.new(p1, ['/path/to/package3', '/path/to/package1'])
         p4 = MergedPackage.new(p2, ['/path/to/package4', '/path/to/package2'])
         expect(p1.eql?(p3)).to eq(true)
+        expect(p3.eql?(p1)).to eq(true)
         expect(p1.eql?(p4)).not_to eq(true)
+        expect(p4.eql?(p1)).not_to eq(true)
+        expect(p3.eql?(p3)).to eq(true)
       end
     end
 

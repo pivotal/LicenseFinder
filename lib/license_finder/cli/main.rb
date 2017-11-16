@@ -47,16 +47,32 @@ module LicenseFinder
                       desc: 'Prepares the project first for license_finder',
                       default: false,
                       required: false
+
+        method_option :recursive, aliases: '-r', type: :boolean, default: false,
+                      desc: 'Recursively runs License Finder on all sub-projects'
+
+        method_option :aggregate_paths, aliases: '-a', type: :array,
+                      desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
+
+        method_option :quiet, aliases: '-q', type: :boolean, desc: 'Silences progress report', required: false
+
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
-      method_option :quiet, aliases: '-q', type: :boolean, desc: 'Silences progress report', required: false
+
       shared_options
       def action_items
-        run_prepare_phase if prepare?
-        any_packages = license_finder.any_packages?
-        unapproved = license_finder.unapproved
-        blacklisted = license_finder.blacklisted
+        aggregate_paths = options[:aggregate_paths]
+        aggregate_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
+
+        if (aggregate_paths.nil? || aggregate_paths.empty?) && !license_finder_config[:project_path].nil?
+          aggregate_paths = [license_finder_config[:project_path]]
+        end
+
+        finder = LicenseAggregator.new(license_finder_config, aggregate_paths)
+        any_packages = finder.any_packages?
+        unapproved = finder.unapproved
+        blacklisted = finder.blacklisted
 
         # Ensure to start output on a new line even with dot progress indicators.
         say "\n"
@@ -88,11 +104,7 @@ module LicenseFinder
 
       desc 'report', "Print a report of the project's dependencies to stdout"
       shared_options
-      method_option :recursive, aliases: '-r', type: :boolean, default: false,
-                                desc: 'Recursively runs License Finder on all sub-projects'
 
-      method_option :aggregate_paths, aliases: '-a', type: :array,
-                                      desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
       def report
         logger_config[:mode] = Logger::MODE_QUIET
         aggregate_paths = options[:aggregate_paths]

@@ -19,9 +19,16 @@ module LicenseFinder
                     any_packages?: found_any_packages, prepare_projects: nil }
         double(:license_finder, methods)
       end
+
+      let(:license_aggregator_instance) do
+        methods = { unapproved: unapproved_dependencies, blacklisted: blacklisted,
+                    any_packages?: found_any_packages }
+        double(:license_aggregator, methods)
+      end
+
       let(:license) { double(:license, name: 'thing') }
       let(:unapproved_dependencies) { [double(:dependency, name: 'a dependency', version: '2.4.1', missing?: false, licenses: [license])] }
-
+      let(:blacklisted) { [] }
       before do
         logger = double('Logger', info: true, debug: true)
         allow(LicenseFinder::Logger).to receive(:new).and_return(logger)
@@ -35,7 +42,11 @@ module LicenseFinder
       describe 'default' do
         it 'checks for action items' do
           decisions.add_package('a dependency', nil)
-          expect_any_instance_of(LicenseFinder::Core).to receive(:unapproved).and_return(unapproved_dependencies)
+          aggregator = double(:license_aggregator)
+          expect(aggregator).to receive(:unapproved)
+          expect(aggregator).to receive(:blacklisted)
+          expect(aggregator).to receive(:any_packages?)
+          allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(aggregator)
           silence_stdout do
             expect { described_class.start(['--quiet']) }.to raise_error(SystemExit)
           end
@@ -76,19 +87,13 @@ module LicenseFinder
           }
         end
 
-        it 'passes the config options to the new LicenseFinder::Core instance' do
-          expect(LicenseFinder::Core).to receive(:new).with(parsed_config).and_return(license_finder_instance)
+        it 'passes the config options to the new LicenseFinder::LicenseAggregator instance' do
+          expect(LicenseFinder::LicenseAggregator).to receive(:new).with(parsed_config,anything).and_return(license_finder_instance)
           silence_stdout do
             expect { described_class.start(config_options) }.to raise_error(SystemExit)
           end
         end
 
-        it 'passes the logger options to the new LicenseFinder::Core instance' do
-          expect(LicenseFinder::Core).to receive(:new).with(prepare: false, logger: { mode: LicenseFinder::Logger::MODE_DEBUG }).and_return(license_finder_instance)
-          silence_stdout do
-            expect { described_class.start(logger_options) }.to raise_error(SystemExit)
-          end
-        end
       end
 
       describe '#report' do
@@ -237,7 +242,7 @@ module LicenseFinder
           let(:found_any_packages) { false }
 
           before do
-            allow(LicenseFinder::Core).to receive(:new).and_return(license_finder_instance)
+            allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(license_aggregator_instance)
           end
 
           it 'reports that no dependencies were recognized' do
@@ -249,20 +254,25 @@ module LicenseFinder
         end
 
         context 'with unapproved dependencies' do
-          let(:packages) { [Package.new('one dependency')] }
+
+          before do
+            allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(license_aggregator_instance)
+          end
 
           it 'reports unapproved dependencies' do
             result = capture_stdout do
               expect { action_items }.to raise_error(SystemExit)
             end
             expect(result).to match /dependencies/i
-            expect(result).to match /one dependency/
+            expect(result).to match /a dependency/
           end
         end
 
         context 'with blacklisted dependencies' do
-          let(:decisions) { Decisions.new.blacklist('GPLv3') }
-          let(:packages)  { [Package.new('blacklisted', '1.0', spec_licenses: ['GPLv3'])] }
+          let(:blacklisted){ [ Package.new('blacklisted', '1.0', spec_licenses: ['GPLv3']) ]}
+          before do
+            allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(license_aggregator_instance)
+          end
 
           it 'reports blacklisted dependencies' do
             result = capture_stdout do
@@ -276,7 +286,7 @@ module LicenseFinder
           let(:unapproved_dependencies) { [] }
 
           before do
-            allow(LicenseFinder::Core).to receive(:new).and_return(license_finder_instance)
+            allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(license_aggregator_instance)
           end
 
           it 'reports that all dependencies are approved' do
