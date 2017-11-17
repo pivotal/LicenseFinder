@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'httparty'
   s.add_dependency 'rubyzip'
   s.add_dependency 'thor'
-  s.add_dependency 'toml', '0.1.2'
+  s.add_dependency 'toml', '0.2.0'
   s.add_dependency 'xml-simple'
 
   # to preserve ruby 1.9.3 support
