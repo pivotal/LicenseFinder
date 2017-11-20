@@ -3,7 +3,9 @@ module LicenseFinder
     AVAILABLE_COLUMNS = AVAILABLE_COLUMNS + ['aggregate_paths']
 
     def initialize(dependencies, options = {})
+      options=options.dup
       options[:columns] ||= %w[name version licenses aggregate_paths]
+
       super(dependencies, options)
     end
 

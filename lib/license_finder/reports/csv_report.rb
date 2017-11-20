@@ -8,6 +8,7 @@ module LicenseFinder
 
     def initialize(dependencies, options)
       super
+      options[:columns] ||= %w[name version licenses]
       @columns = Array(options[:columns]) & self.class::AVAILABLE_COLUMNS
     end
 
