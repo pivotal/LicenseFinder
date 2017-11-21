@@ -42,7 +42,10 @@ module LicenseFinder
     end
 
     def gem_details
-      @gem_details ||= definition.specs_for(included_groups)
+      return @gem_details if @gem_details
+      # clear gem paths before runninng specs_for
+      Gem.clear_paths
+      @gem_details = definition.specs_for(included_groups)
     end
 
     def bundler_details
