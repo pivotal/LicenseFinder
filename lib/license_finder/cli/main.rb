@@ -98,16 +98,9 @@ module LicenseFinder
 
       def report
         logger_config[:mode] = Logger::MODE_QUIET
-        aggregate_paths = options[:aggregate_paths]
-        aggregate_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
 
-        if aggregate_paths && !aggregate_paths.empty?
-          finder = LicenseAggregator.new(license_finder_config, aggregate_paths)
-          report = MergedReport.new(finder.dependencies, options)
-        else
-          run_prepare_phase if prepare?
-          report = report_of(license_finder.acknowledged)
-        end
+        finder = LicenseAggregator.new(license_finder_config, aggregate_paths)
+        report = report_of(finder.dependencies)
         save? ? save_report(report, options[:save]) : say(report)
       end
 
@@ -150,6 +143,7 @@ module LicenseFinder
 
       def report_of(content)
         report = FORMATS[options[:format]]
+        if report == CsvReport && options[:aggregate_paths] then report = MergedReport end
         report.of(content, columns: options[:columns], project_name: license_finder.project_name)
       end
 

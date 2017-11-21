@@ -199,36 +199,6 @@ module LicenseFinder
             report
           end
         end
-
-        describe 'Prepare Option' do
-          let(:license_finder) do
-            methods = {
-              unapproved: unapproved_dependencies, blacklisted: [], project_name: 'taco stand',
-              config: configuration, any_packages?: found_any_packages,
-              prepare_projects: nil, acknowledged: []
-            }
-
-            double(:license_finder, methods)
-          end
-          before do
-            allow(LicenseFinder::Core).to receive(:new).and_return(license_finder)
-          end
-          context 'when the --prepare option is passed' do
-            it 'runs the prepare phase for package managers' do
-              subject.options = { prepare: true, format: 'text' }
-              expect(license_finder).to receive(:prepare_projects)
-              subject.report
-            end
-          end
-
-          context 'when the --prepare option is NOT passed' do
-            it 'runs the prepare phase for package managers' do
-              subject.options = { prepare: false, format: 'text' }
-              expect(license_finder).not_to receive(:prepare_projects)
-              subject.report
-            end
-          end
-        end
       end
 
       describe '#action_items' do
