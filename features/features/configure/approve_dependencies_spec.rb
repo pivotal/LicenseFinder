@@ -11,7 +11,7 @@ describe 'Manually Approved Dependencies' do
   before do
     developer.create_empty_project
     developer.execute_command 'license_finder dependencies add manual_dep MIT 1.2.3'
-    developer.execute_command "license_finder approval add manual_dep --who 'Julian' --why 'We really need this'"
+    developer.execute_command 'license_finder approval add manual_dep --who "Julian" --why "We really need this"'
   end
 
   specify 'do not appear in action items' do
