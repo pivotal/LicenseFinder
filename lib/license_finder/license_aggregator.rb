@@ -10,7 +10,10 @@ module LicenseFinder
     end
 
     def any_packages?
-      finders.map(&:any_packages?).reduce(:|)
+      finders.map do |finder|
+        finder.prepare_projects if @license_finder_config[:prepare]
+        finder.any_packages?
+      end.reduce(:|)
     end
 
     def unapproved
