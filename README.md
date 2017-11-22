@@ -394,7 +394,7 @@ downloadLicenses {
 }
 ```
 
-### Conan rojects
+### Conan Projects
 
 `license_finder` supports Conan. You need to have the following lines in your conanfile.txt for `license_finder` to retrieve dependencies' licenses.
 Ensure that `conan install` does not generate an error. 
