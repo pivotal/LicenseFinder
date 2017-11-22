@@ -25,7 +25,7 @@ module LicenseFinder
       context 'when the dependency is a merged package' do
         context 'when there is at least one aggregate path' do
           let(:merged_dependency) do
-            dep = MergedPackage.new(dependency, ['path1','path2'])
+            dep = MergedPackage.new(dependency, %w[path1 path2])
             dep.decide_on_license License.find_by_name('MIT')
             dep
           end
@@ -48,7 +48,6 @@ module LicenseFinder
           end
         end
       end
-
 
       context 'when the dependency is manually approved' do
         before { dependency.approved_manually!(Decisions::TXN.new('the-approver', 'the-approval-note', Time.now.utc)) }
