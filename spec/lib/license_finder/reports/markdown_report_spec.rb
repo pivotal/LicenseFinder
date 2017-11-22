@@ -24,7 +24,7 @@ module LicenseFinder
       context 'when the dependency is a merged package' do
         context 'when there is at least one aggregate path' do
           let(:merged_dependency) do
-            dep = MergedPackage.new(dep1, ['path1','path2'])
+            dep = MergedPackage.new(dep1, %w[path1 path2])
             dep.decide_on_license License.find_by_name('MIT')
             dep
           end
