@@ -83,6 +83,14 @@
           <%= link_to_dependency(dependency) %>
           <small><%= version_groups(dependency) %></small>
         </h2>
+        <% if dependency.is_a?(MergedPackage) && dependency.aggregate_paths&.count > 0-%>
+        <h4>Paths</h4>
+        <dl>
+          <% dependency.aggregate_paths.each do |path| -%>
+          <dd><%= path %></dd>
+          <% end -%>
+        </dl>
+        <% end -%>
         <h4><%= dependency.summary %></h4>
         <p><%= dependency.description %></p>
         <% if dependency.parents.any? -%>

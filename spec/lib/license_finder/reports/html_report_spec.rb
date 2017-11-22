@@ -18,6 +18,38 @@ module LicenseFinder
         expect(title).to have_text 'project name'
       end
 
+      it 'should not show the paths section' do
+        is_expected.not_to have_text 'Paths'
+      end
+
+      context 'when the dependency is a merged package' do
+        context 'when there is at least one aggregate path' do
+          let(:merged_dependency) do
+            dep = MergedPackage.new(dependency, ['path1','path2'])
+            dep.decide_on_license License.find_by_name('MIT')
+            dep
+          end
+          let(:dependencies) { [merged_dependency] }
+          it 'should show each of the aggregate paths' do
+            is_expected.to have_text 'Paths'
+            is_expected.to have_text 'path1'
+            is_expected.to have_text 'path2'
+          end
+        end
+        context 'when there are no aggregate paths' do
+          let(:merged_dependency) do
+            dep = MergedPackage.new(dependency, [])
+            dep.decide_on_license License.find_by_name('MIT')
+            dep
+          end
+          let(:dependencies) { [merged_dependency] }
+          it 'should not show the paths section' do
+            is_expected.not_to have_text 'Paths'
+          end
+        end
+      end
+
+
       context 'when the dependency is manually approved' do
         before { dependency.approved_manually!(Decisions::TXN.new('the-approver', 'the-approval-note', Time.now.utc)) }
 
