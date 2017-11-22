@@ -24,6 +24,13 @@ As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %>. <%= dependencies.size %> to
 ### <%= link_to_dependency(dependency) %> <%= version_groups(dependency) %>
 #### <%= dependency.summary %>
 
+<% if dependency.is_a?(MergedPackage) && dependency.aggregate_paths&.count > 0-%>
+##### Paths
+<% dependency.aggregate_paths.each do |path| -%>
+* <%= path %>
+<% end -%>
+<% end -%>
+
 <% if dependency.approved_manually? -%>
 <%= license_links(dependency) %> manually approved
 

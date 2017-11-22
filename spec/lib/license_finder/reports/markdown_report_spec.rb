@@ -13,8 +13,40 @@ module LicenseFinder
         result.approved_manually!(double(:approval).as_null_object)
         result
       end
+      let(:dependencies) { [dep2, dep1] }
 
-      subject { MarkdownReport.new([dep2, dep1], project_name: 'new_project_name').to_s }
+      subject { MarkdownReport.new(dependencies, project_name: 'new_project_name').to_s }
+
+      it 'should not show the paths section' do
+        is_expected.not_to match 'Paths'
+      end
+
+      context 'when the dependency is a merged package' do
+        context 'when there is at least one aggregate path' do
+          let(:merged_dependency) do
+            dep = MergedPackage.new(dep1, ['path1','path2'])
+            dep.decide_on_license License.find_by_name('MIT')
+            dep
+          end
+          let(:dependencies) { [merged_dependency] }
+          it 'should show each of the aggregate paths' do
+            is_expected.to match 'Paths'
+            is_expected.to match 'path1'
+            is_expected.to match 'path2'
+          end
+        end
+        context 'when there are no aggregate paths' do
+          let(:merged_dependency) do
+            dep = MergedPackage.new(dep1, [])
+            dep.decide_on_license License.find_by_name('MIT')
+            dep
+          end
+          let(:dependencies) { [merged_dependency] }
+          it 'should not show the paths section' do
+            is_expected.not_to match 'Paths'
+          end
+        end
+      end
 
       it 'should have the correct header' do
         is_expected.to match '# new_project_name'
