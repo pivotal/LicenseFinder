@@ -20,13 +20,14 @@ module LicenseFinder
     def self.license_names_from_standard_spec(spec)
       licenses = spec['licenses'] || [spec['license']].compact
       licenses = [licenses] unless licenses.is_a?(Array)
-      licenses.map do |license|
+      licenses = licenses.map do |license|
         if license.is_a? Hash
           license['type']
         else
           license
         end
       end
+      licenses.flatten
     end
 
     def initialize(name, version = nil, options = {})
