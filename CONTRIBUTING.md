@@ -21,6 +21,33 @@ $ cd /LicenseFinder
 $ rake
 ```
 
+There are 2 sets of tests to run in order to confirm that License Finder is working as intended.
+
+```
+rake spec
+rake features
+```
+The `spec` task runs all the unit test and the `features` task will run all the feature test.
+Note that the feature test will use the installed gem, therefore if you are running the feature test in the docker using
+the `dlf` script, you must rebuild the docker image or ensure that the gem is updated with your changes. 
+
+```
+dlf rake spec
+dlf rake features
+```
+
+## Useful Tips
+
+To build the docker image simply call `docker build .` or explicitly pass the `Dockerfile`. Prebuilt versions of the 
+dockerfile can also be found on [Dockerhub](https://hub.docker.com/r/licensefinder/license_finder/tags/).  
+
+To launch the docker image and interact with it via bash:
+```
+docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -l
+
+```
+`-v $PWD:/scan` will mount the current working directory to the /scan path
+
 ## Adding Package Managers
 
 There are a few steps to adding a new package manager.
