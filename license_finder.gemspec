@@ -10,6 +10,12 @@ Gem::Specification.new do |s|
   s.version     = LicenseFinder::VERSION
 
   s.authors = [
+    'Ryan Collins',
+    'Vikram Yadav',
+    'Andy Shen',
+    'Shane Lattanzio',
+    'Li Sheng Tai',
+    'Vlad vassilovski',
     'Jacob Maine',
     'Matthew Kane Parker',
     'Ian Lesperance',
