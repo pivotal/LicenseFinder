@@ -20,7 +20,6 @@ module LicenseFinder
 
       class_option :format, desc: 'The desired output format.', default: 'text', enum: FORMATS.keys
       class_option :columns, type: :array, desc: "For text or CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}"
-      class_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
       class_option :go_full_version, desc: 'Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false.'
       class_option :gradle_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Java/gradle project. Defaults to false.'
       class_option :gradle_command,
@@ -48,13 +47,22 @@ module LicenseFinder
                       default: false,
                       required: false
 
-        method_option :recursive, aliases: '-r', type: :boolean, default: false,
-                                  desc: 'Recursively runs License Finder on all sub-projects'
+        method_option :recursive,
+                      aliases: '-r',
+                      type: :boolean,
+                      default: false,
+                      desc: 'Recursively runs License Finder on all sub-projects'
 
-        method_option :aggregate_paths, aliases: '-a', type: :array,
-                                        desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
+        method_option :aggregate_paths,
+                      aliases: '-a',
+                      type: :array,
+                      desc: "Generate a single report for multiple projects. Ex: --aggregate_paths='path/to/project1' 'path/to/project2'"
 
-        method_option :quiet, aliases: '-q', type: :boolean, desc: 'Silences progress report', required: false
+        method_option :quiet,
+                      aliases: '-q',
+                      type: :boolean,
+                      desc: 'Silences progress report',
+                      required: false
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
@@ -95,6 +103,7 @@ module LicenseFinder
 
       desc 'report', "Print a report of the project's dependencies to stdout"
       shared_options
+      method_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
 
       def report
         logger_config[:mode] = Logger::MODE_QUIET
@@ -110,6 +119,7 @@ module LicenseFinder
       end
 
       desc 'diff OLDFILE NEWFILE', 'Command to view the differences between two generated reports (csv).'
+      method_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
       def diff(file1, file2)
         f1 = IO.read(file1)
         f2 = IO.read(file2)
