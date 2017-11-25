@@ -10,31 +10,17 @@
 
 ## Running Tests
 
-You can use the [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) to run the tests.
+You can use the [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) to run the tests by using the `dlf` script.
+There are 2 sets of tests to run in order to confirm that License Finder is working as intended:
 
 ```
-$ docker run -it licensefinder/license_finder /bin/bash --login
-
-# inside the container...
-
-$ cd /LicenseFinder
-$ rake
+./dlf rake spec
+./dlf rake features
 ```
 
-There are 2 sets of tests to run in order to confirm that License Finder is working as intended.
-
-```
-rake spec
-rake features
-```
 The `spec` task runs all the unit test and the `features` task will run all the feature test.
 Note that the feature test will use the installed gem, therefore if you are running the feature test in the docker using
 the `dlf` script, you must rebuild the docker image or ensure that the gem is updated with your changes. 
-
-```
-dlf rake spec
-dlf rake features
-```
 
 ## Useful Tips
 
