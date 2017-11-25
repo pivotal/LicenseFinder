@@ -32,7 +32,7 @@ To launch the docker image and interact with it via bash:
 docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -l
 
 ```
-`-v $PWD:/scan` will mount the current working directory to the /scan path
+`-v $PWD:/scan` will mount the current working directory to the /scan path.
 
 ## Adding Package Managers
 
