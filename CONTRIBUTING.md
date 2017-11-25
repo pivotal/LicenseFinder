@@ -15,12 +15,12 @@ There are 2 sets of tests to run in order to confirm that License Finder is work
 
 ```
 ./dlf rake spec
-./dlf rake features
+./dlf bundle exec rake features
 ```
 
 The `spec` task runs all the unit test and the `features` task will run all the feature test.
-Note that the feature test will use the installed gem, therefore if you are running the feature test in the docker using
-the `dlf` script, you must rebuild the docker image or ensure that the gem is updated with your changes. 
+Note that the feature test needs to be wrapped in `bundle exec`, or else it
+will use the gem version installed inside the docker image.
 
 ## Useful Tips
 
