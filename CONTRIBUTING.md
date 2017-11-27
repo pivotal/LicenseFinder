@@ -37,9 +37,14 @@ docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -l
 ## Adding Package Managers
 
 There are a few steps to adding a new package manager.
+The main things which need to be implemented are mentioned in [Package Manager](https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/package_manager.rb).
+
 [Here](https://github.com/pivotal/LicenseFinder/compare/v2.0.0...v2.0.1) is how
 support was added for `rebar`, an `erlang` package manager.
 
+There are feature tests and unit tests for each currently supported package manager.
+* [Feature test example](https://github.com/pivotal/LicenseFinder/blob/master/features/features/package_managers/gvt_spec.rb)
+* [Unit test example](https://github.com/pivotal/LicenseFinder/blob/master/spec/lib/license_finder/package_managers/gvt_spec.rb)
 
 ## Adding Licenses
 
