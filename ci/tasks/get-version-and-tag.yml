@@ -7,14 +7,8 @@ image_resource:
 platform: linux
 inputs:
 - name: lf-git
+- name: lf-release
 outputs:
 - name: version
 run:
-  path: bash
-  args:
-  - -elc
-  - |
-    version=$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")
-    echo "v$version" > version/tag.txt
-    echo "$version" > version/version.txt
-
+  path: lf-git/ci/scripts/check-version-and-get-tags.sh

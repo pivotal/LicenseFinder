@@ -11,5 +11,4 @@ if [ -z "$(gem fetch license_finder -v $build_version 2>&1 | grep ERROR)" ]; the
   exit 0
 fi
 
-rake build
-gem push ${built_gem}
+rake release
