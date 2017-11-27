@@ -33,6 +33,11 @@ jobs:
   - task: get-version-and-tag
     image: lf-image
     file: lf-git/ci/tasks/get-version-and-tag.yml
+  - put: lf-image
+    params:
+      build: lf-git
+      tag: version/version.txt
+      tag_as_latest: true
   - task: build-and-push-gem
     image: lf-image
     params:
@@ -42,10 +47,6 @@ jobs:
     params:
       repository: lf-git
       tag: version/tag.txt
-  - put: lf-image
-    params:
-      load: lf-image
-      tag: version/version.txt
   - put: lf-release
     params:
       name: version/tag.txt
