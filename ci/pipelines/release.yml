@@ -44,6 +44,7 @@ jobs:
   - get: lf-image
     params:
       save: true
+  - get: lf-release
   - task: get-version-and-tag
     image: lf-image
     file: lf-git/ci/tasks/get-version-and-tag.yml
@@ -64,3 +65,4 @@ jobs:
     params:
       name: version/tag.txt
       tag: version/tag.txt
+      body: version/changelog.txt
