@@ -79,6 +79,5 @@ module LicenseFinder
         expect(described_class.prepare_command).to eq('mix deps.get')
       end
     end
-
   end
 end
