@@ -21,6 +21,10 @@ module LicenseFinder
       'mix'
     end
 
+    def self.prepare_command
+      'mix deps.get'
+    end
+
     private
 
     def mix_output
