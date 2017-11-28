@@ -6,14 +6,6 @@ resources:
     private_key: ((CfOslBotPrivateKey))
     branch: master
 
-- name: lf-dockerfile
-  type: git
-  source:
-    uri: git@github.com:pivotal/LicenseFinder.git
-    private_key: ((CfOslBotPrivateKey))
-    branch: master
-    paths: ["Dockerfile"]
-
 - name: lf-image
   type: docker-image
   source:
@@ -30,13 +22,6 @@ resources:
     access_token: ((GithubApiTokenProduction))
 
 jobs:
-- name: docker
-  plan:
-  - get: lf-dockerfile
-    trigger: true
-  - put: lf-image
-    params:
-     build: lf-dockerfile
 
 - name: release
   plan:
@@ -44,9 +29,15 @@ jobs:
   - get: lf-image
     params:
       save: true
+  - get: lf-release
   - task: get-version-and-tag
     image: lf-image
     file: lf-git/ci/tasks/get-version-and-tag.yml
+  - put: lf-image
+    params:
+      build: lf-git
+      tag: version/version.txt
+      tag_as_latest: true
   - task: build-and-push-gem
     image: lf-image
     params:
@@ -56,11 +47,8 @@ jobs:
     params:
       repository: lf-git
       tag: version/tag.txt
-  - put: lf-image
-    params:
-      load: lf-image
-      tag: version/version.txt
   - put: lf-release
     params:
       name: version/tag.txt
       tag: version/tag.txt
+      body: version/changelog.txt

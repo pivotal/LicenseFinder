@@ -10,23 +10,41 @@
 
 ## Running Tests
 
-You can use the [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) to run the tests.
+You can use the [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) to run the tests by using the `dlf` script.
+There are 2 sets of tests to run in order to confirm that License Finder is working as intended:
 
 ```
-$ docker run -it licensefinder/license_finder /bin/bash --login
-
-# inside the container...
-
-$ cd /LicenseFinder
-$ rake
+./dlf rake spec
+./dlf bundle exec rake features
 ```
+
+The `spec` task runs all the unit test and the `features` task will run all the feature test.
+Note that the feature test needs to be wrapped in `bundle exec`, or else it
+will use the gem version installed inside the docker image.
+
+## Useful Tips
+
+To build the docker image simply call `docker build .` or explicitly pass the `Dockerfile`. Prebuilt versions of the 
+dockerfile can also be found on [Dockerhub](https://hub.docker.com/r/licensefinder/license_finder/tags/).  
+
+To launch the docker image and interact with it via bash:
+```
+docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -l
+
+```
+`-v $PWD:/scan` will mount the current working directory to the /scan path.
 
 ## Adding Package Managers
 
 There are a few steps to adding a new package manager.
+The main things which need to be implemented are mentioned in [Package Manager](https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/package_manager.rb).
+
 [Here](https://github.com/pivotal/LicenseFinder/compare/v2.0.0...v2.0.1) is how
 support was added for `rebar`, an `erlang` package manager.
 
+There are feature tests and unit tests for each currently supported package manager.
+* [Feature test example](https://github.com/pivotal/LicenseFinder/blob/master/features/features/package_managers/gvt_spec.rb)
+* [Unit test example](https://github.com/pivotal/LicenseFinder/blob/master/spec/lib/license_finder/package_managers/gvt_spec.rb)
 
 ## Adding Licenses
 

@@ -1,3 +1,16 @@
+# [4.0.2] / 2017-11-16
+
+### Fixed
+
+* Fixed --quiet not being available on the report task
+* Fixed --recursive not being available on the action_items task
+
+# [4.0.1] / 2017-11-14
+
+### Fixed
+
+* Add missing toml dependency to gemspec
+
 # [4.0.0] / 2017-11-10
 
 ### Changed
@@ -497,7 +510,9 @@ Bugfixes:
   * Fix blow up if there's not `ignore_groups` setting in the config file.
 
 
-[Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...HEAD
+[Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...HEAD
+[4.0.2]: https://github.com/pivotal/LicenseFinder/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/pivotal/LicenseFinder/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/pivotal/LicenseFinder/compare/v3.1.0...v4.0.0
 [3.1.0]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...v3.1.0
 [3.0.4]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...v3.0.4

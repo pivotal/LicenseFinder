@@ -143,6 +143,11 @@ You can better understand the way this script works by looking at its source, bu
 reference it will mount your current directory at the path `/scan` and run any commands
 passed to it from that directory.
 
+Note that the docker image will run the gem which is installed within it. 
+So the docker image tagged `4.0.2` will run *License Finder Version 4.0.2*
+
+See the [contibuting guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
+
 ### Activation
 
 `license_finder` will find and include packages for all supported
@@ -394,7 +399,7 @@ downloadLicenses {
 }
 ```
 
-### Conan rojects
+### Conan Projects
 
 `license_finder` supports Conan. You need to have the following lines in your conanfile.txt for `license_finder` to retrieve dependencies' licenses.
 Ensure that `conan install` does not generate an error. 
