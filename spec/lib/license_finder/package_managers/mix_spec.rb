@@ -73,5 +73,11 @@ module LicenseFinder
         expect(current_packages.map(&:install_path)).to eq([Pathname('foo/fs'), Pathname('foo/gettext'), Pathname('foo/uuid-refknown'), Pathname('foo/uuid')])
       end
     end
+
+    describe '.prepare_command' do
+      it 'returns the correct prepare method' do
+        expect(described_class.prepare_command).to eq('mix deps.get')
+      end
+    end
   end
 end
