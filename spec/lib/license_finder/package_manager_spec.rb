@@ -147,10 +147,13 @@ module LicenseFinder
           expect { subject.prepare }.to_not raise_error
         end
 
-        it 'raises exception when prepare command runs into failure' do
-          expect(SharedHelpers::Cmd).to receive(:run).with('sh commands').and_return(['output', nil, cmd_failure])
-
-          expect { subject.prepare }.to raise_error("Prepare command 'sh commands' failed")
+        it 'logs warning and exception when prepare command runs into failure' do
+          logger = double(:logger)
+          expect(SharedHelpers::Cmd).to receive(:run).with('sh commands').and_return(['output', 'failure error msg', cmd_failure])
+          expect(logger).to receive(:info).with('sh commands', 'did not succeed.', color: :red)
+          expect(logger).to receive(:info).with('sh commands', 'failure error msg', color: :red)
+          subject = described_class.new logger: logger
+          expect { subject.prepare }.to_not raise_error
         end
       end
 
