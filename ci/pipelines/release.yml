@@ -33,22 +33,25 @@ jobs:
   - task: get-version-and-tag
     image: lf-image
     file: lf-git/ci/tasks/get-version-and-tag.yml
-  - put: lf-image
-    params:
-      build: lf-git
-      tag: version/version.txt
-      tag_as_latest: true
-  - task: build-and-push-gem
+  - task: update-changelog
     image: lf-image
-    params:
-      GEM_API_KEY: ((LicenseFinderGemApiKey))
-    file: lf-git/ci/tasks/build-and-push-gem.yml
+    file: lf-git/ci/tasks/update-changelog.yml
+#  - put: lf-image
+#    params:
+#      build: lf-git
+#      tag: version/version.txt
+#      tag_as_latest: true
+#  - task: build-and-push-gem
+#    image: lf-image
+#    params:
+#      GEM_API_KEY: ((LicenseFinderGemApiKey))
+#    file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-git
     params:
       repository: lf-git
       tag: version/tag.txt
-  - put: lf-release
-    params:
-      name: version/tag.txt
-      tag: version/tag.txt
-      body: version/changelog.txt
+#  - put: lf-release
+#    params:
+#      name: version/tag.txt
+#      tag: version/tag.txt
+#      body: version/changelog.txt
