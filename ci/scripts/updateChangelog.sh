@@ -4,6 +4,7 @@ set -e
 
 CHANGELOG_FILE="CHANGELOG.md"
 COMMIT_URL="https://github.com/pivotal/LicenseFinder/commit/"
+BRANCH=$(git branch | grep \* | sed "s/* //g")
 
 TAGS=( "Added" "Fixed" "Changed" "Deprecated" "Removed" "Security" )
 CONTRIBUTORS=( "Shane Lattanzio" "Daniil Kouznetsov" "Andy Shen" "Li Sheng Tai" "Ryan Collins" "Vikram Yadav" )
@@ -42,6 +43,7 @@ git config --global user.name $GIT_USERNAME
 
 git add $CHANGELOG_FILE
 git commit -m "Update changelog for version: $VERSION"
+git push origin $BRANCH
 
 echo "New version: $VERSION"
 echo "Current version: $OLD"
