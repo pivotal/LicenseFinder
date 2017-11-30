@@ -1,8 +1,6 @@
 #!/bin/bash --login
 
 set -e
-mkdir ~/.ssh
-echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 git clone lf-git lf-git-changed
 
@@ -20,11 +18,9 @@ VERSION_TAG="v$VERSION"
 LOG=$(echo "# [$VERSION] / $(date +%Y-%m-%d)\n")
 
 cd lf-git-changed
-BRANCH=$(git branch | sed -e "/[*]/g" | xargs)
-git checkout $BRANCH
 
 for i in ${TAGS[@]}; do
-    GIT_LOG=$'\n'$(git log $OLD...HEAD --pretty=format:"%H%n%b - [%h]($COMMIT_URL%H) - %an%n%n"| grep -E -i "\[$i\] .*" | sort | sed -e "s/\[$i\]/\*/g")
+    GIT_LOG=$'\n'$(git log "$OLD"...HEAD --pretty=format:"%H%n%b - [%h]($COMMIT_URL%H) - %an%n%n"| grep -E -i "\[$i\] .*" | sort | sed -e "s/\[$i\]/\*/g")
 
     # Only add section information if it has content
     if [[ $GIT_LOG =~ "." ]]; then
@@ -48,7 +44,6 @@ git config --global user.name $GIT_USERNAME
 
 git add $CHANGELOG_FILE
 git commit -m "Update changelog for version: $VERSION"
-#git push origin $BRANCH
 
 echo "New version: $VERSION"
 echo "Current version: $OLD"
