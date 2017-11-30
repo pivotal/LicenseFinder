@@ -10,7 +10,7 @@ inputs:
 - name: lf-release
 outputs:
 - name: version
-- name: new-git
-  path: lf-git
+caches:
+- path: lf-git/CHANGELOG.md
 run:
   path: lf-git/ci/scripts/updateChangelog.sh

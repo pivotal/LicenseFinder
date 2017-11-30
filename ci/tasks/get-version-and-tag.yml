@@ -6,9 +6,9 @@ image_resource:
     tag: latest
 platform: linux
 inputs:
-- name: new-git
+- name: lf-git
 - name: lf-release
 outputs:
 - name: version
 run:
-  path: new-git/ci/scripts/check-version-and-get-tags.sh
+  path: lf-git/ci/scripts/check-version-and-get-tags.sh
