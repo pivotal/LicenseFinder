@@ -9,7 +9,7 @@ TAGS=( "Added" "Fixed" "Changed" "Deprecated" "Removed" "Security" )
 CONTRIBUTORS=( "Shane Lattanzio" "Daniil Kouznetsov" "Andy Shen" "Li Sheng Tai" "Ryan Collins" "Vikram Yadav" )
 
 OLD="v$(cat ./lf-release/version)"
-VERSION="v$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")"
+VERSION="$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")"
 
 # Add version title information
 LOG=$(echo "# [$VERSION] / $(date +%Y-%m-%d)\n")
@@ -36,7 +36,10 @@ done
 echo -e "$LOG\n$(cat $CHANGELOG_FILE)" > $CHANGELOG_FILE
 
 # Append version hyperlink to the end of the file
-echo -e "[$VERSION]: https://github.com/pivotal/LicenseFinder/compare/$OLD...$VERSION" >> $CHANGELOG_FILE
+echo -e "[$VERSION]: https://github.com/pivotal/LicenseFinder/compare/$OLD...v$VERSION" >> $CHANGELOG_FILE
+
+git config --global user.email $GIT_EMAIL
+git config --global user.name $GIT_USERNAME
 
 git add $CHANGELOG_FILE
 git commit -m "Update changelog for version: $VERSION"
