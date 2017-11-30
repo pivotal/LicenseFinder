@@ -51,7 +51,7 @@ if [ "$VERSION" == "$OLD" ]; then
     exit 1
 fi
 
-body=$(cat ./lf-git/CHANGELOG.md | sed -n "/# \[$VERSION\]/,/# \[[\d\.]*/p" | sed '$d' | tail -n +2)
+body=$(cat "$CHANGELOG_FILE" | sed -n "/# \[$VERSION\]/,/# \[[\d\.]*/p" | sed '$d' | tail -n +2)
 
 echo "$VERSION_TAG" > version/tag.txt
 echo "$VERSION" > version/version.txt
