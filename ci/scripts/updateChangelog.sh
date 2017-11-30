@@ -20,7 +20,7 @@ LOG=$(echo "# [$VERSION] / $(date +%Y-%m-%d)\n")
 
 cd lf-git
 BRANCH=$(git branch | grep \* | sed "s/* //g")
-
+git branch | grep \* | sed "s/* //g"
 for i in ${TAGS[@]}; do
     GIT_LOG=$'\n'$(git log $OLD...HEAD --pretty=format:"%H%n%b - [%h]($COMMIT_URL%H) - %an%n%n"| grep -E -i "\[$i\] .*" | sort | sed -e "s/\[$i\]/\*/g")
 
@@ -40,12 +40,14 @@ echo -e "$LOG\n$(cat $CHANGELOG_FILE)" > $CHANGELOG_FILE
 
 # Append version hyperlink to the end of the file
 echo -e "[$VERSION]: https://github.com/pivotal/LicenseFinder/compare/$OLD...$VERSION_TAG" >> $CHANGELOG_FILE
-
+git branch | grep \* | sed "s/* //g"
 git config --global user.email $GIT_EMAIL
 git config --global user.name $GIT_USERNAME
-
+git branch | grep \* | sed "s/* //g"
 git add $CHANGELOG_FILE
+git branch | grep \* | sed "s/* //g"
 git commit -m "Update changelog for version: $VERSION"
+git branch | grep \* | sed "s/* //g"
 git push origin $BRANCH
 
 echo "New version: $VERSION"
