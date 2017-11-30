@@ -10,7 +10,5 @@ inputs:
 - name: lf-release
 outputs:
 - name: version
-caches:
-- path: lf-git
 run:
   path: lf-git/ci/scripts/updateChangelog.sh
