@@ -8,8 +8,8 @@ COMMIT_URL="https://github.com/pivotal/LicenseFinder/commit/"
 TAGS=( "Added" "Fixed" "Changed" "Deprecated" "Removed" "Security" )
 CONTRIBUTORS=( "Shane Lattanzio" "Daniil Kouznetsov" "Andy Shen" "Li Sheng Tai" "Ryan Collins" "Vikram Yadav" )
 
-OLD=$(cat ./lf-release/version)
-VERSION=$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")
+OLD="v$(cat ./lf-release/version)"
+VERSION="v$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")"
 
 # Add version title information
 LOG=$(echo "# [$VERSION] / $(date +%Y-%m-%d)\n")
