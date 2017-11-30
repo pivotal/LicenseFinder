@@ -1,19 +1,3 @@
-# [4.0.3] / 2017-11-30
-
-### Added
-[ADDED] Added prepare step for elixir projects - [ebcb7e5](https://github.com/pivotal/LicenseFinder/commit/ebcb7e5fdcac9deb7fcb3c4ac73b512b6d8d8b48) 
-
-### Fixed
-[FIXED] Support for array "license" field in npm packages - [92fc976](https://github.com/pivotal/LicenseFinder/commit/92fc9763f1f7f8a15a5939c0177390c9a7fbb764) 
-
-# [4.0.3] / 2017-11-30
-
-### Added
-[ADDED] Added prepare step for elixir projects - [ebcb7e5](https://github.com/pivotal/LicenseFinder/commit/ebcb7e5fdcac9deb7fcb3c4ac73b512b6d8d8b48) 
-
-### Fixed
-[FIXED] Support for array "license" field in npm packages - [92fc976](https://github.com/pivotal/LicenseFinder/commit/92fc9763f1f7f8a15a5939c0177390c9a7fbb764) 
-
 # [4.0.2] / 2017-11-16
 
 ### Fixed
@@ -535,5 +519,4 @@ Bugfixes:
 [3.0.2]: https://github.com/pivotal/LicenseFinder/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/pivotal/LicenseFinder/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/pivotal/LicenseFinder/compare/v2.1.2...v3.0.0
-[4.0.3]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...v4.0.3
-[4.0.3]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...v4.0.3
+
