@@ -46,7 +46,7 @@ git config --global user.name $GIT_USERNAME
 
 git add $CHANGELOG_FILE
 git commit -m "Update changelog for version: $VERSION"
-git push origin $BRANCH
+#git push origin $BRANCH
 
 echo "New version: $VERSION"
 echo "Current version: $OLD"
