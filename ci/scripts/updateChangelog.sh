@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash --login
+
+set -e
 
 CHANGELOG_FILE="CHANGELOG.md"
 COMMIT_URL="https://github.com/pivotal/LicenseFinder/commit/"
@@ -7,7 +9,7 @@ TAGS=( "Added" "Fixed" "Changed" "Deprecated" "Removed" "Security" )
 CONTRIBUTORS=( "Shane Lattanzio" "Daniil Kouznetsov" "Andy Shen" "Li Sheng Tai" "Ryan Collins" "Vikram Yadav" )
 
 OLD=$(cat ./lf-release/version)
-VERSION=$(ruby -r ./lf-git/lib/license_finder/version.rb)
+VERSION=$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")
 
 # Add version title information
 LOG=$(echo "# [$VERSION] / $(date +%Y-%m-%d)\n")
@@ -30,10 +32,10 @@ LOG=$(echo "$LOG" | sed -e "s/-* ${CONTRIBUTORS[$i]}//g")
 done
 
 # Prepend new version information at the top of the file
-echo -e "$LOG\n$(cat $CHANGELOG_FILE)" > $CHANGELOG_FILE
+echo -e "$LOG\n$(cat $CHANGELOG_FILE)" > ./lf-git/$CHANGELOG_FILE
 
 # Append version hyperlink to the end of the file
-echo -e "[$VERSION]: https://github.com/pivotal/LicenseFinder/compare/$OLD...$VERSION" >> $CHANGELOG_FILE
+echo -e "[$VERSION]: https://github.com/pivotal/LicenseFinder/compare/$OLD...$VERSION" >> ./lf-git/$CHANGELOG_FILE
 
 git add ./lf-git/$CHANGELOG_FILE
 git commit -m "Update changelog for version: $VERSION"
