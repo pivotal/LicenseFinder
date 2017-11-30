@@ -4,6 +4,8 @@ set -e
 mkdir ~/.ssh
 echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
+git clone lf-git lf-git-changed
+
 CHANGELOG_FILE="CHANGELOG.md"
 COMMIT_URL="https://github.com/pivotal/LicenseFinder/commit/"
 
@@ -11,13 +13,13 @@ TAGS=( "Added" "Fixed" "Changed" "Deprecated" "Removed" "Security" )
 CONTRIBUTORS=( "Shane Lattanzio" "Daniil Kouznetsov" "Andy Shen" "Li Sheng Tai" "Ryan Collins" "Vikram Yadav" )
 
 OLD="v$(cat ./lf-release/version)"
-VERSION="$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")"
+VERSION="$(ruby -r ./lf-git-changed/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")"
 VERSION_TAG="v$VERSION"
 
 # Add version title information
 LOG=$(echo "# [$VERSION] / $(date +%Y-%m-%d)\n")
 
-cd lf-git
+cd lf-git-changed
 BRANCH=$(git branch | sed -e "/[*]/g" | xargs)
 git checkout $BRANCH
 
