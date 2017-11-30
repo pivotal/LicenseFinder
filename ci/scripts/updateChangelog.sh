@@ -39,12 +39,12 @@ echo -e "$LOG\n$(cat $CHANGELOG_FILE)" > $CHANGELOG_FILE
 # Append version hyperlink to the end of the file
 echo -e "[$VERSION]: https://github.com/pivotal/LicenseFinder/compare/$OLD...$VERSION_TAG" >> $CHANGELOG_FILE
 
-echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 git config --global user.email $GIT_EMAIL
 git config --global user.name $GIT_USERNAME
 
 git add $CHANGELOG_FILE
 git commit -m "Update changelog for version: $VERSION"
+echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 git push origin $BRANCH
 
 echo "New version: $VERSION"
