@@ -1,7 +1,6 @@
 #!/bin/bash --login
 
 set -e
-git branch | grep \* | sed "s/* //g"
 mkdir ~/.ssh
 echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
@@ -10,16 +9,17 @@ COMMIT_URL="https://github.com/pivotal/LicenseFinder/commit/"
 
 TAGS=( "Added" "Fixed" "Changed" "Deprecated" "Removed" "Security" )
 CONTRIBUTORS=( "Shane Lattanzio" "Daniil Kouznetsov" "Andy Shen" "Li Sheng Tai" "Ryan Collins" "Vikram Yadav" )
-git branch | grep \* | sed "s/* //g"
+
 OLD="v$(cat ./lf-release/version)"
 VERSION="$(ruby -r ./lf-git/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")"
 VERSION_TAG="v$VERSION"
-git branch | grep \* | sed "s/* //g"
+
 # Add version title information
 LOG=$(echo "# [$VERSION] / $(date +%Y-%m-%d)\n")
 
 cd lf-git
-BRANCH=$(git branch | grep \* | sed "s/* //g")
+BRANCH=$(git branch | sed -e "/[*]/g" | xargs)
+git checkout $BRANCH
 
 for i in ${TAGS[@]}; do
     GIT_LOG=$'\n'$(git log $OLD...HEAD --pretty=format:"%H%n%b - [%h]($COMMIT_URL%H) - %an%n%n"| grep -E -i "\[$i\] .*" | sort | sed -e "s/\[$i\]/\*/g")
