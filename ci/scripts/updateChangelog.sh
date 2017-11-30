@@ -53,9 +53,9 @@ fi
 
 body=$(cat "$CHANGELOG_FILE" | sed -n "/# \[$VERSION\]/,/# \[[\d\.]*/p" | sed '$d' | tail -n +2)
 
-echo "$VERSION_TAG" > version/tag.txt
-echo "$VERSION" > version/version.txt
-echo "$body" > version/changelog.txt
+echo "$VERSION_TAG" > ../version/tag.txt
+echo "$VERSION" > ../version/version.txt
+echo "$body" > ../version/changelog.txt
 
 echo "Tag: $VERSION_TAG"
 echo "Version: $VERSION"
