@@ -35,7 +35,7 @@ module LicenseFinder
       end
 
       before do
-        allow(Decisions).to receive(:fetch_saved) { decisions }
+        allow(DecisionsFactory).to receive(:decisions) { decisions }
         allow(DecisionApplier).to receive(:new) { decision_applier }
       end
 

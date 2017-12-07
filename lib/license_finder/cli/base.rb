@@ -10,7 +10,7 @@ module LicenseFinder
 
       no_commands do
         def decisions
-          license_finder.decisions
+          @decisions ||= DecisionsFactory.decisions(Configuration.with_optional_saved_config(license_finder_config).decisions_file_path)
         end
       end
 

@@ -48,7 +48,7 @@ module LicenseFinder
     end
 
     def decisions
-      @decisions ||= Decisions.fetch_saved(config.decisions_file_path)
+      @decisions ||= DecisionsFactory.decisions(config.decisions_file_path)
     end
 
     def prepare_projects
