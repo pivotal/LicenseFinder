@@ -24,8 +24,9 @@ module LicenseFinder
         }
       end
 
-      def modifying(&block)
-        license_finder.modifying(&block)
+      def modifying
+        yield
+        decisions.save!(config.decisions_file_path)
       end
     end
   end

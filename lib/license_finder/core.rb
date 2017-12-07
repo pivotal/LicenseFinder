@@ -6,6 +6,7 @@ require 'license_finder/license'
 require 'license_finder/configuration'
 require 'license_finder/package_manager'
 require 'license_finder/decisions'
+require 'license_finder/decisions_factory'
 require 'license_finder/decision_applier'
 
 module LicenseFinder

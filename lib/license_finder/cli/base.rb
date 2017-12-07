@@ -10,17 +10,15 @@ module LicenseFinder
 
       no_commands do
         def decisions
-          @decisions ||= DecisionsFactory.decisions(Configuration.with_optional_saved_config(license_finder_config).decisions_file_path)
+          @decisions ||= DecisionsFactory.decisions(config.decisions_file_path)
+        end
+
+        def config
+          @config ||= Configuration.with_optional_saved_config(license_finder_config)
         end
       end
 
       private
-
-      def license_finder
-        @lf ||= LicenseFinder::Core.new(license_finder_config)
-        fail "Project path '#{@lf.config.project_path}' does not exist!" unless @lf.config.valid_project_path?
-        @lf
-      end
 
       def fail(message)
         say(message) && exit(1)

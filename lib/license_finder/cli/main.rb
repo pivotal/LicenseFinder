@@ -150,7 +150,12 @@ module LicenseFinder
 
       private
 
+      def check_valid_project_path
+        raise "Project path '#{config.project_path}' does not exist!" unless config.valid_project_path?
+      end
+
       def aggregate_paths
+        check_valid_project_path
         aggregate_paths = options[:aggregate_paths]
         project_path = license_finder_config[:project_path] || Pathname.pwd
         aggregate_paths = ProjectFinder.new(project_path).find_projects if options[:recursive]
@@ -167,7 +172,7 @@ module LicenseFinder
       def report_of(content)
         report = FORMATS[options[:format]] || FORMATS['text']
         if report == CsvReport && options[:aggregate_paths] then report = MergedReport end
-        report.of(content, columns: options[:columns], project_name: license_finder.project_name)
+        report.of(content, columns: options[:columns], project_name: decisions.project_name || config.project_path.basename.to_s)
       end
 
       def save?
