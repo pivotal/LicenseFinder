@@ -18,8 +18,6 @@ module LicenseFinder
         'csv' => CsvReport
       }.freeze
 
-      class_option :format, desc: 'The desired output format.', default: 'text', enum: FORMATS.keys
-      class_option :columns, type: :array, desc: "For text or CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}"
       class_option :go_full_version, desc: 'Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false.'
       class_option :gradle_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Java/gradle project. Defaults to false.'
       class_option :gradle_command,
@@ -34,6 +32,13 @@ module LicenseFinder
       class_option :mix_deps_dir, desc: "Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'."
 
       # Method options which are shared between report and action_item
+      def self.format_option
+        method_option :format,
+                      desc: 'Emit detailed info about what LicenseFinder is doing',
+                      default: 'text',
+                      enum: FORMATS.keys
+      end
+
       def self.shared_options
         method_option :debug,
                       aliases: '-d',
@@ -63,10 +68,15 @@ module LicenseFinder
                       type: :boolean,
                       desc: 'Silences progress report',
                       required: false
+
+        method_option :columns,
+                      desc: "For text or CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}",
+                      type: :array
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
       shared_options
+      format_option
       def action_items
         finder = LicenseAggregator.new(license_finder_config, aggregate_paths)
         any_packages = finder.any_packages?
@@ -103,6 +113,7 @@ module LicenseFinder
 
       desc 'report', "Print a report of the project's dependencies to stdout"
       shared_options
+      format_option
       method_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
 
       def report
@@ -119,6 +130,7 @@ module LicenseFinder
       end
 
       desc 'diff OLDFILE NEWFILE', 'Command to view the differences between two generated reports (csv).'
+      format_option
       method_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
       def diff(file1, file2)
         f1 = IO.read(file1)
@@ -153,7 +165,7 @@ module LicenseFinder
       end
 
       def report_of(content)
-        report = FORMATS[options[:format]]
+        report = FORMATS[options[:format]] || FORMATS['text']
         if report == CsvReport && options[:aggregate_paths] then report = MergedReport end
         report.of(content, columns: options[:columns], project_name: license_finder.project_name)
       end
