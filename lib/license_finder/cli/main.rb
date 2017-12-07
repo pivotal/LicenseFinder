@@ -5,7 +5,6 @@ require 'license_finder/package_delta'
 require 'license_finder/license_aggregator'
 require 'license_finder/project_finder'
 require 'license_finder/logger'
-
 module LicenseFinder
   module CLI
     class Main < Base
@@ -157,10 +156,10 @@ module LicenseFinder
       def aggregate_paths
         check_valid_project_path
         aggregate_paths = options[:aggregate_paths]
-        project_path = license_finder_config[:project_path] || Pathname.pwd
+        project_path = config.project_path || Pathname.pwd
         aggregate_paths = ProjectFinder.new(project_path).find_projects if options[:recursive]
         return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
-        [license_finder_config[:project_path]] unless license_finder_config[:project_path].nil?
+        [config.project_path] unless config.project_path.nil?
       end
 
       def save_report(content, file_name)
@@ -181,10 +180,6 @@ module LicenseFinder
 
       def prepare?
         options[:prepare]
-      end
-
-      def run_prepare_phase
-        license_finder_config[:prepare_projects]
       end
     end
   end
