@@ -12,6 +12,10 @@ module LicenseFinder
       'bower'
     end
 
+    def prepare_command
+      'bower install'
+    end
+
     private
 
     def bower_output
