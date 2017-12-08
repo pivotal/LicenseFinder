@@ -77,7 +77,7 @@ module LicenseFinder
       shared_options
       format_option
       def action_items
-        finder = LicenseAggregator.new(license_finder_config, aggregate_paths)
+        finder = LicenseAggregator.new(config, aggregate_paths)
         any_packages = finder.any_packages?
         unapproved = finder.unapproved
         blacklisted = finder.blacklisted
@@ -116,9 +116,7 @@ module LicenseFinder
       method_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
 
       def report
-        logger_config[:mode] = Logger::MODE_QUIET
-
-        finder = LicenseAggregator.new(license_finder_config, aggregate_paths)
+        finder = LicenseAggregator.new(config, aggregate_paths)
         report = report_of(finder.dependencies)
         save? ? save_report(report, options[:save]) : say(report)
       end

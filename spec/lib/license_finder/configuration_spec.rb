@@ -167,5 +167,16 @@ module LicenseFinder
         expect(subject.mix_command.to_s).to eq 'newmix'
       end
     end
+
+    describe '#merge' do
+      it 'should return a new config with an altered project path' do
+        subject = described_class.with_optional_saved_config(project_path: '/path/to/project')
+        duped_subject = subject.merge(project_path: '/path/to/other/project')
+
+        expect(duped_subject.project_path.to_s).to eq '/path/to/other/project'
+        expect(subject.project_path.to_s).to eq '/path/to/project'
+        expect(subject.project_path).to_not eq duped_subject.project_path
+      end
+    end
   end
 end

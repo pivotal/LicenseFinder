@@ -19,6 +19,10 @@ module LicenseFinder
       true
     end
 
+    def logger_mode
+      get(:logger)
+    end
+
     def gradle_command
       get(:gradle_command)
     end
@@ -51,6 +55,10 @@ module LicenseFinder
       get(:mix_command) || 'mix'
     end
 
+    def merge(other_hash)
+      dup_with other_hash
+    end
+
     def rebar_deps_dir
       path = get(:rebar_deps_dir) || 'deps'
       project_path.join(path).expand_path
@@ -74,12 +82,26 @@ module LicenseFinder
       get(:prepare)
     end
 
+    protected
+
+    attr_accessor :primary_config
+    def dup_with(other_hash)
+      dup.tap do |dup|
+        dup.primary_config.merge!(other_hash)
+      end
+    end
+
     private
 
     attr_reader :saved_config
 
     def get(key)
       @primary_config[key.to_sym] || @saved_config[key.to_s]
+    end
+
+    def initialize_copy(orig)
+      super
+      @primary_config = @primary_config.dup
     end
 
     def path_prefix

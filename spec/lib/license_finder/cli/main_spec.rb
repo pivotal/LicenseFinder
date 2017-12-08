@@ -88,7 +88,7 @@ module LicenseFinder
         it 'passes the config options to the new LicenseFinder::LicenseAggregator instance' do
           configuration = double(:configuration, valid_project_path?: true, project_path: Pathname('../other_project'), decisions_file_path: Pathname('../other_project'))
           allow(LicenseFinder::Configuration).to receive(:with_optional_saved_config).and_return(configuration)
-          expect(LicenseFinder::LicenseAggregator).to receive(:new).with(parsed_config, anything).and_return(license_finder_instance)
+          expect(LicenseFinder::LicenseAggregator).to receive(:new).with(configuration, anything).and_return(license_finder_instance)
           expect { described_class.start(config_options) }.to raise_error(SystemExit)
           silence_stdout do
           end

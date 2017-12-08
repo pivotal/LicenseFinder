@@ -41,21 +41,21 @@ module LicenseFinder
           :save,
           :prepare
         ).merge(
-          logger: logger_config
+          logger: logger_mode
         )
       end
 
-      def logger_config
+      def logger_mode
         quiet = LicenseFinder::Logger::MODE_QUIET
         debug = LicenseFinder::Logger::MODE_DEBUG
         info = LicenseFinder::Logger::MODE_INFO
         mode = extract_options(quiet, debug)
         if mode[quiet]
-          { mode: quiet }
+          quiet
         elsif mode[debug]
-          { mode: debug }
+          debug
         else
-          { mode: info }
+          info
         end
       end
 

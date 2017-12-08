@@ -27,9 +27,9 @@ module LicenseFinder
     #   rebar_command: "rebar",
     #   rebar_deps_dir: "deps",
     # }
-    def initialize(options = {})
-      @logger = Logger.new(options.fetch(:logger, {}))
-      @config = Configuration.with_optional_saved_config(options)
+    def initialize(configuration)
+      @logger = Logger.new(configuration.logger_mode)
+      @config = configuration
     end
 
     def modifying
