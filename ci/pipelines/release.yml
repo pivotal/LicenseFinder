@@ -30,9 +30,12 @@ jobs:
     params:
       save: true
   - get: lf-release
-  - task: get-version-and-tag
+  - task: update-changelog
     image: lf-image
-    file: lf-git/ci/tasks/get-version-and-tag.yml
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+    file: lf-git/ci/tasks/update-changelog.yml
   - put: lf-image
     params:
       build: lf-git
@@ -45,7 +48,7 @@ jobs:
     file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-git
     params:
-      repository: lf-git
+      repository: lf-git-changed
       tag: version/tag.txt
   - put: lf-release
     params:
