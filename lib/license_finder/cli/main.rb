@@ -140,7 +140,8 @@ module LicenseFinder
 
       def aggregate_paths
         aggregate_paths = options[:aggregate_paths]
-        aggregate_paths = ProjectFinder.new(license_finder.config.project_path).find_projects if options[:recursive]
+        project_path = license_finder_config[:project_path] || Pathname.pwd
+        aggregate_paths = ProjectFinder.new(project_path).find_projects if options[:recursive]
         return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
         [license_finder_config[:project_path]] unless license_finder_config[:project_path].nil?
       end
@@ -166,7 +167,7 @@ module LicenseFinder
       end
 
       def run_prepare_phase
-        license_finder.prepare_projects
+        license_finder_config[:prepare_projects]
       end
     end
   end
