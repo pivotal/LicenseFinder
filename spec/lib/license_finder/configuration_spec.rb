@@ -178,5 +178,26 @@ module LicenseFinder
         expect(subject.project_path).to_not eq duped_subject.project_path
       end
     end
+
+    describe '#save_file' do
+      context 'when there is no save file present' do
+        it 'returns the save file path' do
+          subject = described_class.with_optional_saved_config(project_path: '/path/to/project', save: '/path/to/save_file')
+
+          expect(subject.save_file).to eq '/path/to/save_file'
+        end
+      end
+
+      context 'when there is a save file present' do
+        it 'returns the save file path when no primary ' do
+          allow(Pathname).to receive(:expand_path).and_return Pathname('/path/to/project').expand_path
+          allow(YAML).to receive(:safe_load).and_return(project_path: '/path/to/project', save: '/path/to/save_file')
+
+          subject = described_class.with_optional_saved_config(project_path: '/path/to/project', save: '/path/to/save_file')
+
+          expect(subject.save_file).to eq '/path/to/save_file'
+        end
+      end
+    end
   end
 end

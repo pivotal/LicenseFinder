@@ -82,6 +82,10 @@ module LicenseFinder
       get(:prepare)
     end
 
+    def save_file
+      get(:save)
+    end
+
     protected
 
     attr_accessor :primary_config

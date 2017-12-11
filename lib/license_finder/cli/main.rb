@@ -118,7 +118,7 @@ module LicenseFinder
       def report
         finder = LicenseAggregator.new(config, aggregate_paths)
         report = report_of(finder.dependencies)
-        save? ? save_report(report, options[:save]) : say(report)
+        save? ? save_report(report, config.save_file) : say(report)
       end
 
       desc 'version', 'Print the version of LicenseFinder'
@@ -133,7 +133,7 @@ module LicenseFinder
         f1 = IO.read(file1)
         f2 = IO.read(file2)
         report = DiffReport.new(Diff.compare(f1, f2))
-        save? ? save_report(report, options[:save]) : say(report)
+        save? ? save_report(report, config.save_file) : say(report)
       end
 
       subcommand 'dependencies', Dependencies, 'Add or remove dependencies that your package managers are not aware of'
@@ -167,17 +167,13 @@ module LicenseFinder
       end
 
       def report_of(content)
-        report = FORMATS[options[:format]] || FORMATS['text']
+        report = FORMATS[license_finder_config[:format]] || FORMATS['text']
         if report == CsvReport && options[:aggregate_paths] then report = MergedReport end
-        report.of(content, columns: options[:columns], project_name: decisions.project_name || config.project_path.basename.to_s)
+        report.of(content, columns: license_finder_config[:columns], project_name: decisions.project_name || config.project_path.basename.to_s)
       end
 
       def save?
-        !!options[:save]
-      end
-
-      def prepare?
-        options[:prepare]
+        !!config.save_file
       end
     end
   end

@@ -39,7 +39,9 @@ module LicenseFinder
           :mix_command,
           :mix_deps_dir,
           :save,
-          :prepare
+          :prepare,
+          :format,
+          :columns
         ).merge(
           logger: logger_mode
         )
