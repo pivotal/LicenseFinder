@@ -167,5 +167,37 @@ module LicenseFinder
         expect(subject.mix_command.to_s).to eq 'newmix'
       end
     end
+
+    describe '#merge' do
+      it 'should return a new config with an altered project path' do
+        subject = described_class.with_optional_saved_config(project_path: '/path/to/project')
+        duped_subject = subject.merge(project_path: '/path/to/other/project')
+
+        expect(duped_subject.project_path.to_s).to eq '/path/to/other/project'
+        expect(subject.project_path.to_s).to eq '/path/to/project'
+        expect(subject.project_path).to_not eq duped_subject.project_path
+      end
+    end
+
+    describe '#save_file' do
+      context 'when there is no save file present' do
+        it 'returns the save file path' do
+          subject = described_class.with_optional_saved_config(project_path: '/path/to/project', save: '/path/to/save_file')
+
+          expect(subject.save_file).to eq '/path/to/save_file'
+        end
+      end
+
+      context 'when there is a save file present' do
+        it 'returns the save file path when no primary ' do
+          allow(Pathname).to receive(:expand_path).and_return Pathname('/path/to/project').expand_path
+          allow(YAML).to receive(:safe_load).and_return(project_path: '/path/to/project', save: '/path/to/save_file')
+
+          subject = described_class.with_optional_saved_config(project_path: '/path/to/project', save: '/path/to/save_file')
+
+          expect(subject.save_file).to eq '/path/to/save_file'
+        end
+      end
+    end
   end
 end

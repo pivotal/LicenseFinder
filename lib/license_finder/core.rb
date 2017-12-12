@@ -6,6 +6,7 @@ require 'license_finder/license'
 require 'license_finder/configuration'
 require 'license_finder/package_manager'
 require 'license_finder/decisions'
+require 'license_finder/decisions_factory'
 require 'license_finder/decision_applier'
 
 module LicenseFinder
@@ -26,9 +27,9 @@ module LicenseFinder
     #   rebar_command: "rebar",
     #   rebar_deps_dir: "deps",
     # }
-    def initialize(options = {})
-      @logger = Logger.new(options.fetch(:logger, {}))
-      @config = Configuration.with_optional_saved_config(options)
+    def initialize(configuration)
+      @logger = Logger.new(configuration.logger_mode)
+      @config = configuration
     end
 
     def modifying
@@ -48,7 +49,7 @@ module LicenseFinder
     end
 
     def decisions
-      @decisions ||= Decisions.fetch_saved(config.decisions_file_path)
+      @decisions ||= DecisionsFactory.decisions(config.decisions_file_path)
     end
 
     def prepare_projects

@@ -1,7 +1,7 @@
 module LicenseFinder
   class LicenseAggregator
-    def initialize(license_finder_config, aggregate_paths)
-      @license_finder_config = license_finder_config
+    def initialize(config, aggregate_paths)
+      @config = config
       @aggregate_paths = aggregate_paths
     end
 
@@ -11,7 +11,7 @@ module LicenseFinder
 
     def any_packages?
       finders.map do |finder|
-        finder.prepare_projects if @license_finder_config[:prepare]
+        finder.prepare_projects if @config.prepare
         finder.any_packages?
       end.reduce(:|)
     end
@@ -29,10 +29,10 @@ module LicenseFinder
     def finders
       return @finders unless @finders.nil?
       @finders = if @aggregate_paths.nil?
-                   [LicenseFinder::Core.new(@license_finder_config)]
+                   [LicenseFinder::Core.new(@config)]
                  else
                    @aggregate_paths.map do |path|
-                     LicenseFinder::Core.new(@license_finder_config.merge(project_path: path))
+                     LicenseFinder::Core.new(@config.merge(project_path: path))
                    end
                  end
     end
@@ -40,7 +40,7 @@ module LicenseFinder
     def aggregate_packages
       return @packages unless @packages.nil?
       all_packages = finders.flat_map do |finder|
-        finder.prepare_projects if @license_finder_config[:prepare]
+        finder.prepare_projects if @config.prepare
         finder.acknowledged.map { |dep| MergedPackage.new(dep, [finder.project_path]) }
       end
       @packages = all_packages.group_by { |package| [package.name, package.version] }

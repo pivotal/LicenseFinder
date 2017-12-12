@@ -2,10 +2,9 @@ require 'spec_helper'
 
 module LicenseFinder
   describe Core do
-    let(:options) { {} }
-    let(:license_finder) { described_class.new(options) }
-    let(:logger) { LicenseFinder::Logger.new(options[:logger]) }
+    let(:logger) { LicenseFinder::Logger.new }
     let(:configuration) { LicenseFinder::Configuration.new(options, {}) }
+    let(:license_finder) { described_class.new(configuration) }
     let(:pathname) { Pathname.pwd + Pathname(options[:project_path]) }
 
     before do

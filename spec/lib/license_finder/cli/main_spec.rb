@@ -1,5 +1,4 @@
 require 'spec_helper'
-
 module LicenseFinder
   module CLI
     describe Main do
@@ -35,7 +34,7 @@ module LicenseFinder
       end
 
       before do
-        allow(Decisions).to receive(:fetch_saved) { decisions }
+        allow(DecisionsFactory).to receive(:decisions) { decisions }
         allow(DecisionApplier).to receive(:new) { decision_applier }
       end
 
@@ -86,7 +85,11 @@ module LicenseFinder
         end
 
         it 'passes the config options to the new LicenseFinder::LicenseAggregator instance' do
-          expect(LicenseFinder::LicenseAggregator).to receive(:new).with(parsed_config, anything).and_return(license_finder_instance)
+          stubs = { valid_project_path?: true, project_path: Pathname('../other_project'),
+                    decisions_file_path: Pathname('../other_project'), aggregate_paths: nil, recursive: false, format: nil, columns: nil }
+          configuration = double(:configuration, stubs)
+          allow(LicenseFinder::Configuration).to receive(:with_optional_saved_config).and_return(configuration)
+          expect(LicenseFinder::LicenseAggregator).to receive(:new).with(configuration, anything).and_return(license_finder_instance)
           silence_stdout do
             expect { described_class.start(config_options) }.to raise_error(SystemExit)
           end
@@ -105,13 +108,12 @@ module LicenseFinder
         end
 
         it 'will output a specific format' do
-          subject.options = { format: 'markdown' }
-
+          subject.options = { 'format' => 'markdown' }
           expect(report).to include '## Action'
         end
 
         it 'will output a custom csv' do
-          subject.options = { format: 'csv', columns: %w[name version] }
+          subject.options = { 'format' => 'csv', 'columns' => %w[name version] }
 
           expect(report).to eq "one dependency,1.1\n"
         end
@@ -120,7 +122,7 @@ module LicenseFinder
           let(:packages) { [NugetPackage.new('one dependency', '1.1')] }
 
           it 'will includes package_manager for csv report' do
-            subject.options = { format: 'csv', columns: %w[name version package_manager] }
+            subject.options = { 'format' => 'csv', 'columns' => %w[name version package_manager] }
 
             expect(report).to eq "one dependency,1.1,Nuget\n"
           end
@@ -128,7 +130,7 @@ module LicenseFinder
 
         context 'in html reports' do
           before do
-            subject.options = { format: 'html' }
+            subject.options = { 'format' => 'html' }
           end
 
           context 'when the project has a name' do
@@ -150,7 +152,7 @@ module LicenseFinder
 
         context 'when the --save option is passed' do
           it 'calls report method and calls save_report' do
-            subject.options = { save: 'license_report', format: 'text' }
+            subject.options = { 'save' => 'license_report', 'format' => 'text' }
             expect(subject).to receive(:report).and_call_original
             expect(subject).to receive(:save_report)
 
@@ -160,7 +162,7 @@ module LicenseFinder
           context 'when file name is not specified (--save)' do
             it 'creates report that is called the default file name' do
               provided_by_thor_as_default_name = 'license_report' # ####FIX ME
-              subject.options = { save: provided_by_thor_as_default_name, format: 'text' }
+              subject.options = { 'save' => provided_by_thor_as_default_name, 'format' => 'text' }
               expect(subject).to receive(:report).and_call_original
               expect(subject).to receive(:save_report).with(instance_of(String), 'license_report')
 
@@ -178,7 +180,7 @@ module LicenseFinder
 
           context "when file name is specified (--save='FILENAME')" do
             it 'saves with a specified file name' do
-              subject.options = { save: 'my_report', format: 'text' }
+              subject.options = { 'save' => 'my_report', 'format' => 'text' }
               expect(subject).to receive(:report).and_call_original
               expect(subject).to receive(:save_report).with(instance_of(String), 'my_report')
 
@@ -189,7 +191,7 @@ module LicenseFinder
 
         context 'when the --save option is not passed' do
           it 'calls report method and does not call save_report' do
-            subject.options = { format: 'text' }
+            subject.options = { 'format' => 'text' }
             expect(subject).to receive(:report).and_call_original
             expect(subject).not_to receive(:save_report)
             expect(subject).to receive(:report_of)
@@ -201,7 +203,7 @@ module LicenseFinder
 
       describe '#action_items' do
         def action_items
-          subject.options = { quiet: true, format: 'text' }
+          subject.options = { 'quiet' => true, 'format' => 'text' }
           subject.action_items
         end
 

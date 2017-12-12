@@ -10,17 +10,15 @@ module LicenseFinder
 
       no_commands do
         def decisions
-          license_finder.decisions
+          @decisions ||= DecisionsFactory.decisions(config.decisions_file_path)
+        end
+
+        def config
+          @config ||= Configuration.with_optional_saved_config(license_finder_config)
         end
       end
 
       private
-
-      def license_finder
-        @lf ||= LicenseFinder::Core.new(license_finder_config)
-        fail "Project path '#{@lf.config.project_path}' does not exist!" unless @lf.config.valid_project_path?
-        @lf
-      end
 
       def fail(message)
         say(message) && exit(1)
@@ -41,23 +39,27 @@ module LicenseFinder
           :mix_command,
           :mix_deps_dir,
           :save,
-          :prepare
+          :prepare,
+          :format,
+          :columns,
+          :aggregate_paths,
+          :recursive
         ).merge(
-          logger: logger_config
+          logger: logger_mode
         )
       end
 
-      def logger_config
+      def logger_mode
         quiet = LicenseFinder::Logger::MODE_QUIET
         debug = LicenseFinder::Logger::MODE_DEBUG
         info = LicenseFinder::Logger::MODE_INFO
         mode = extract_options(quiet, debug)
         if mode[quiet]
-          { mode: quiet }
+          quiet
         elsif mode[debug]
-          { mode: debug }
+          debug
         else
-          { mode: info }
+          info
         end
       end
 

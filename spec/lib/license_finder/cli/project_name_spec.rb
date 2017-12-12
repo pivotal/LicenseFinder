@@ -1,18 +1,16 @@
 require 'spec_helper'
-
 module LicenseFinder
   module CLI
     describe ProjectName do
       let(:decisions) { Decisions.new }
 
       before do
-        allow(Decisions).to receive(:fetch_saved) { decisions }
+        allow(DecisionsFactory).to receive(:decisions) { decisions }
       end
 
       describe 'show' do
         it 'shows the configured project name' do
           decisions.name_project('test')
-
           expect(capture_stdout { subject.show }).to match /test/
         end
       end
