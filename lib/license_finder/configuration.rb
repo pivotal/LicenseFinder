@@ -86,6 +86,14 @@ module LicenseFinder
       get(:save)
     end
 
+    def aggregate_paths
+      get(:aggregate_paths)
+    end
+
+    def recursive
+      get(:recursive)
+    end
+
     protected
 
     attr_accessor :primary_config
