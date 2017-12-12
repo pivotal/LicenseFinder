@@ -98,6 +98,7 @@ module LicenseFinder
         unless status.success?
           logger.info self.class.prepare_command, 'did not succeed.', color: :red
           logger.info self.class.prepare_command, stderr, color: :red
+          raise "Prepare command '#{self.class.prepare_command}' failed"
         end
       else
         logger.debug self.class, 'no prepare step provided', color: :red

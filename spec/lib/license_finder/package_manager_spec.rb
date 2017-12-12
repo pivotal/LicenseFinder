@@ -153,7 +153,7 @@ module LicenseFinder
           expect(logger).to receive(:info).with('sh commands', 'did not succeed.', color: :red)
           expect(logger).to receive(:info).with('sh commands', 'failure error msg', color: :red)
           subject = described_class.new logger: logger
-          expect { subject.prepare }.to_not raise_error
+          expect { subject.prepare }.to raise_error(/Prepare command .* failed/)
         end
       end
 
