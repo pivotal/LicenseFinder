@@ -107,7 +107,7 @@ module LicenseFinder
           expect(report).to eq "\"one dependency\", 1.1, unknown\n"
         end
 
-        it 'will output a specific format', :focus do
+        it 'will output a specific format' do
           subject.options = { 'format' => 'markdown' }
           expect(report).to include '## Action'
         end
