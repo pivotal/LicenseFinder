@@ -19,6 +19,33 @@ module LicenseFinder
       true
     end
 
+    def mix_command
+      get(:mix_command) || 'mix'
+    end
+
+    def merge(other_hash)
+      dup_with other_hash
+    end
+
+    def rebar_deps_dir
+      path = get(:rebar_deps_dir) || 'deps'
+      project_path.join(path).expand_path
+    end
+
+    def mix_deps_dir
+      path = get(:mix_deps_dir) || 'deps'
+      project_path.join(path).expand_path
+    end
+
+    def decisions_file_path
+      path = get(:decisions_file) || 'doc/dependency_decisions.yml'
+      project_path.join(path).expand_path
+    end
+
+    def project_path
+      Pathname(path_prefix).expand_path
+    end
+
     def logger_mode
       get(:logger)
     end
@@ -51,35 +78,12 @@ module LicenseFinder
       get(:rebar_command)
     end
 
-    def mix_command
-      get(:mix_command) || 'mix'
-    end
-
-    def merge(other_hash)
-      dup_with other_hash
-    end
-
-    def rebar_deps_dir
-      path = get(:rebar_deps_dir) || 'deps'
-      project_path.join(path).expand_path
-    end
-
-    def mix_deps_dir
-      path = get(:mix_deps_dir) || 'deps'
-      project_path.join(path).expand_path
-    end
-
-    def decisions_file_path
-      path = get(:decisions_file) || 'doc/dependency_decisions.yml'
-      project_path.join(path).expand_path
-    end
-
-    def project_path
-      Pathname(path_prefix).expand_path
-    end
-
     def prepare
-      get(:prepare)
+      get(:prepare) || prepare_no_fail
+    end
+
+    def prepare_no_fail
+      get(:prepare_no_fail)
     end
 
     def save_file

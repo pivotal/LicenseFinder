@@ -40,6 +40,7 @@ module LicenseFinder
           :mix_deps_dir,
           :save,
           :prepare,
+          :prepare_no_fail,
           :format,
           :columns,
           :aggregate_paths,

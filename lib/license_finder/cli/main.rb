@@ -51,6 +51,13 @@ module LicenseFinder
                       default: false,
                       required: false
 
+        method_option :prepare_no_fail,
+                      aliases: '-pnf',
+                      type: :boolean,
+                      desc: 'Prepares the project first for license_finder but carries on despite any potential failures',
+                      default: false,
+                      required: false
+
         method_option :recursive,
                       aliases: '-r',
                       type: :boolean,
