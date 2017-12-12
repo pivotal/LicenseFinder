@@ -153,9 +153,9 @@ module LicenseFinder
 
       def aggregate_paths
         check_valid_project_path
-        aggregate_paths = license_finder_config[:aggregate_paths]
+        aggregate_paths = config.aggregate_paths
         project_path = config.project_path || Pathname.pwd
-        aggregate_paths = ProjectFinder.new(project_path).find_projects if license_finder_config[:recursive]
+        aggregate_paths = ProjectFinder.new(project_path).find_projects if config.recursive
         return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
         [config.project_path] unless config.project_path.nil?
       end
@@ -167,9 +167,9 @@ module LicenseFinder
       end
 
       def report_of(content)
-        report = FORMATS[license_finder_config[:format]] || FORMATS['text']
-        if report == CsvReport && license_finder_config[:aggregate_paths] then report = MergedReport end
-        report.of(content, columns: license_finder_config[:columns], project_name: decisions.project_name || config.project_path.basename.to_s)
+        report = FORMATS[config.format] || FORMATS['text']
+        report = MergedReport if report == CsvReport && config.aggregate_paths
+        report.of(content, columns: config.columns, project_name: decisions.project_name || config.project_path.basename.to_s)
       end
 
       def save?

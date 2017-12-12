@@ -94,6 +94,14 @@ module LicenseFinder
       get(:recursive)
     end
 
+    def format
+      get(:format)
+    end
+
+    def columns
+      get(:columns)
+    end
+
     protected
 
     attr_accessor :primary_config
