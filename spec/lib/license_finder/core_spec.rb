@@ -41,7 +41,8 @@ module LicenseFinder
           rebar_deps_dir: configuration.rebar_deps_dir,
           mix_command: configuration.mix_command,
           mix_deps_dir: configuration.mix_deps_dir,
-          prepare: configuration.prepare
+          prepare: configuration.prepare,
+          prepare_no_fail: nil
         }
       end
 

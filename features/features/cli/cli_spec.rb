@@ -54,7 +54,7 @@ describe 'License Finder command line executable' do
     expect(developer).to be_seeing_something_like %r{ERROR: .*my_app/gopath_dep/src/foo-dep/vendor/a/b/LICENSE does not exists}
   end
 
-  specify 'displays a warning if no package managers are active/installed', :focus do
+  specify 'displays a warning if no package managers are active/installed' do
     developer.create_empty_project
     developer.execute_command('license_finder')
     expect(developer).to be_seeing('No active and installed package managers found for project.')

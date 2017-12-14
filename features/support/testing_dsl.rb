@@ -124,6 +124,16 @@ module LicenseFinder
       end
     end
 
+    class NpmProjectWithInvalidDependency < Project
+      def add_dep
+        add_to_file('package.json', '{"dependencies" : {"gertie-watch": "0.6.1"}}')
+      end
+
+      def install
+        #no install since this should crash.
+      end
+    end
+
     class BowerProject < Project
       def add_dep
         add_to_file('bower.json', '{"name": "my_app", "dependencies" : {"gmaps": "0.2.30"}}')

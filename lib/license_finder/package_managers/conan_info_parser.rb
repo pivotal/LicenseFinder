@@ -53,7 +53,7 @@ module LicenseFinder
     end
 
     def wrap_up
-      if @current_vals.count && @current_key then @current_project[@current_key] = @current_vals end
+      @current_project[@current_key] = @current_vals if @current_vals.count && @current_key
       @projects << @current_project
     end
 

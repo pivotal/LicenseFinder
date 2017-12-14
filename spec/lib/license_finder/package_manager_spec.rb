@@ -19,6 +19,15 @@ module LicenseFinder
                                                                           ['parent'].to_set
                                                                         ])
       end
+
+      context 'when --prepare-no-fail flag is set' do
+        let(:subject) { described_class.new(logger: logger, prepare_no_fail: true) }
+
+        it 'does not throw an error when current packages fails' do
+          allow(subject).to receive(:current_package).and_raise
+          expect { subject.current_packages_with_relations }.to_not raise_error
+        end
+      end
     end
 
     describe '.package_management_command' do
@@ -154,6 +163,16 @@ module LicenseFinder
           expect(logger).to receive(:info).with('sh commands', 'failure error msg', color: :red)
           subject = described_class.new logger: logger
           expect { subject.prepare }.to raise_error(/Prepare command .* failed/)
+        end
+
+        context 'with prepare_no_fail' do
+          let(:subject) { described_class.new logger: logger, prepare_no_fail: true }
+
+          it 'should not throw an error when prepare_command fails' do
+            expect(SharedHelpers::Cmd).to receive(:run).with('sh commands')
+                                              .and_return(['output', 'failure error msg', cmd_failure])
+            expect { subject.prepare }.to_not raise_error
+          end
         end
       end
 

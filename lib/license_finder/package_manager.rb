@@ -42,9 +42,7 @@ module LicenseFinder
           end
         end
 
-        if active_pm_classes.empty?
-          logger.info 'License Finder', 'No active and installed package managers found for project.', color: :red
-        end
+        logger.info 'License Finder', 'No active and installed package managers found for project.', color: :red if active_pm_classes.empty?
 
         active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
         active_pm_classes.map { |pm_class| pm_class.new(options) }
@@ -79,6 +77,7 @@ module LicenseFinder
     end
 
     def initialize(options = {})
+      @prepare_no_fail = options[:prepare_no_fail]
       @logger       = options[:logger] || Core.default_logger
       @project_path = options[:project_path]
     end
@@ -98,7 +97,7 @@ module LicenseFinder
         unless status.success?
           logger.info self.class.prepare_command, 'did not succeed.', color: :red
           logger.info self.class.prepare_command, stderr, color: :red
-          raise "Prepare command '#{self.class.prepare_command}' failed"
+          raise "Prepare command '#{self.class.prepare_command}' failed" unless @prepare_no_fail
         end
       else
         logger.debug self.class, 'no prepare step provided', color: :red
@@ -106,7 +105,16 @@ module LicenseFinder
     end
 
     def current_packages_with_relations
-      packages = current_packages
+      begin
+        packages = current_packages
+      rescue => e
+        if @prepare_no_fail
+          packages = []
+        else
+          raise e
+        end
+      end
+
       packages.each do |parent|
         parent.children.each do |child_name|
           child = packages.detect { |child_package| child_package.name == child_name }
