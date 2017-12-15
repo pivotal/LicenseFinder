@@ -171,21 +171,21 @@ module LicenseFinder
     describe '#prepare' do
       it 'should return true as long as --prepare or --prepare_no_fail' do
         subject = described_class.new(
-            { prepare: true },
-            {}
+          { prepare: true },
+          {}
         )
         expect(subject.prepare).to be_truthy
         subject = described_class.new(
-                                     { prepare_no_fail: true },
-                                     {}
+          { prepare_no_fail: true },
+          {}
         )
         expect(subject.prepare).to be_truthy
       end
 
       it 'should return false if no --prepare AND no --prepare_no_fail' do
         subject = described_class.new(
-            {},
-            {}
+          {},
+          {}
         )
         expect(subject.prepare).to be_falsey
       end
@@ -194,16 +194,16 @@ module LicenseFinder
     describe '#prepare_no_fail' do
       it 'returns true if --prepare_no_fail' do
         subject = described_class.new(
-            { prepare_no_fail: true },
-            {}
+          { prepare_no_fail: true },
+          {}
         )
         expect(subject.prepare).to be_truthy
       end
 
       it 'returns false if --prepare_no_fail is not set' do
         subject = described_class.new(
-            {},
-            {}
+          {},
+          {}
         )
         expect(subject.prepare).to be_falsey
       end

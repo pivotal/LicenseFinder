@@ -107,12 +107,9 @@ module LicenseFinder
     def current_packages_with_relations
       begin
         packages = current_packages
-      rescue => e
-        if @prepare_no_fail
-          packages = []
-        else
-          raise e
-        end
+      rescue StandardError => e
+        raise e unless @prepare_no_fail
+        packages = []
       end
 
       packages.each do |parent|

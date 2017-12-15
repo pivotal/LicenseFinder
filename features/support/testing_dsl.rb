@@ -130,7 +130,7 @@ module LicenseFinder
       end
 
       def install
-        #no install since this should crash.
+        # no install since this should crash.
       end
     end
 

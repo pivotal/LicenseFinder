@@ -170,7 +170,7 @@ module LicenseFinder
 
           it 'should not throw an error when prepare_command fails' do
             expect(SharedHelpers::Cmd).to receive(:run).with('sh commands')
-                                              .and_return(['output', 'failure error msg', cmd_failure])
+                                                       .and_return(['output', 'failure error msg', cmd_failure])
             expect { subject.prepare }.to_not raise_error
           end
         end
