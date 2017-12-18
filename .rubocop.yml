@@ -1,6 +1,8 @@
 #Layout Cops
 IndentHeredoc:
   Enabled: false
+EmptyLinesAroundArguments:
+  Enabled: false
 
 #Linting Cops
 AmbiguousRegexpLiteral:
@@ -43,7 +45,7 @@ MethodMissing:
   Enabled: false
 ModuleFunction:
   Enabled: false
-
+  EnforcedStyle: extend_self
 AllCops:
   Include:
     - 'bin/license_finder'
