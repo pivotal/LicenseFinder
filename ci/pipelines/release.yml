@@ -19,7 +19,7 @@ resources:
   source:
     owner: pivotal
     repository: LicenseFinder
-    access_token: ((GithubApiTokenProduction))
+    access_token: ((GithubApiRootToken))
 
 jobs:
 

@@ -25,7 +25,7 @@ resources:
   source:
     repo: pivotal/LicenseFinder
     base: master
-    access_token: ((GithubApiTokenLicenseFinder))
+    access_token: ((GithubApiPullRequestToken))
 
 <% if setup_slack %>
 - name: slack-alert
