@@ -25,8 +25,6 @@ module LicenseFinder
       'pip'
     end
 
-    private
-
     def possible_package_paths
       if project_path.nil?
         [@requirements_path]
@@ -34,6 +32,8 @@ module LicenseFinder
         [project_path.join(@requirements_path)]
       end
     end
+
+    private
 
     def pip_output
       output = `#{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} #{detected_package_path}`

@@ -11,11 +11,11 @@ module LicenseFinder
       'npm'
     end
 
-    private
-
     def possible_package_paths
       [project_path.join('package.json')]
     end
+
+    private
 
     def npm_json
       command = "#{NPM.package_management_command} list --json --long"

@@ -8,6 +8,7 @@ require 'license_finder/package_manager'
 require 'license_finder/decisions'
 require 'license_finder/decisions_factory'
 require 'license_finder/decision_applier'
+require 'license_finder/scanner'
 
 module LicenseFinder
   # Coordinates setup
@@ -30,6 +31,7 @@ module LicenseFinder
     def initialize(configuration)
       @logger = Logger.new(configuration.logger_mode)
       @config = configuration
+      @scanner = Scanner.new(options)
     end
 
     def modifying
@@ -53,7 +55,7 @@ module LicenseFinder
     end
 
     def prepare_projects
-      package_managers = PackageManager.active_package_managers options
+      package_managers = @scanner.active_package_managers
       package_managers.each do |manager|
         logger.debug manager.class, 'Running prepare on project'
         manager.prepare
@@ -75,7 +77,7 @@ module LicenseFinder
 
     def current_packages
       # lazy, do not move to `initialize`
-      PackageManager.active_packages options
+      @scanner.active_packages
     end
 
     def options

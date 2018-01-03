@@ -25,6 +25,10 @@ module LicenseFinder
       'bundle install'
     end
 
+    def possible_package_paths
+      [project_path.join('Gemfile')]
+    end
+
     private
 
     attr_reader :ignored_groups
@@ -54,10 +58,6 @@ module LicenseFinder
 
     def included_groups
       definition.groups - ignored_groups.map(&:to_sym)
-    end
-
-    def possible_package_paths
-      [project_path.join('Gemfile')]
     end
 
     def lockfile_path
