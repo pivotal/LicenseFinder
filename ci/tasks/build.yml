@@ -4,7 +4,7 @@ image_resource:
   type: docker-image
   source:
     repository: concourse/docker-image-resource
-    tag: pr-141
+    tag: pr-144
 
 inputs:
 - name: LicenseFinder
