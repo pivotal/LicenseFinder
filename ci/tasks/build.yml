@@ -3,8 +3,8 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: xtreme-shane-lattanzio/docker-image-resource
-    tag: test_version_tag
+    repository: concourse/docker-image-resource
+    tag: pr-141
 
 inputs:
 - name: LicenseFinder
