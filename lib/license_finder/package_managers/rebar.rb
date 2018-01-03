@@ -22,6 +22,10 @@ module LicenseFinder
       'rebar'
     end
 
+    def possible_package_paths
+      [project_path.join('rebar.config')]
+    end
+
     private
 
     def rebar_ouput
@@ -33,10 +37,6 @@ module LicenseFinder
         .each_line
         .reject { |line| line.start_with?('=') }
         .map { |line| line.split(' ') }
-    end
-
-    def possible_package_paths
-      [project_path.join('rebar.config')]
     end
   end
 end

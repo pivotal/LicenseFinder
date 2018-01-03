@@ -35,7 +35,7 @@ desc 'Check for non-Ruby development dependencies.'
 task :check_dependencies do
   require './lib/license_finder'
   satisfied = true
-  LicenseFinder::PackageManager.package_managers.each do |package_manager|
+  LicenseFinder::Scanner::PACKAGE_MANAGERS.each do |package_manager|
     satisfied = false unless package_manager.installed?(LicenseFinder::Logger.new(LicenseFinder::Logger::MODE_INFO))
   end
   STDOUT.flush

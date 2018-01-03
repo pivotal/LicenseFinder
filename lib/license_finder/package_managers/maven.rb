@@ -42,8 +42,6 @@ module LicenseFinder
       File.exist?(File.join(project_path, wrapper)) ? wrapper : maven
     end
 
-    private
-
     def possible_package_paths
       [project_path.join('pom.xml')]
     end

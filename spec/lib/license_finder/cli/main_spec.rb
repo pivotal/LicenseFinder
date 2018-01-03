@@ -28,6 +28,7 @@ module LicenseFinder
       let(:license) { double(:license, name: 'thing') }
       let(:unapproved_dependencies) { [double(:dependency, name: 'a dependency', version: '2.4.1', missing?: false, licenses: [license])] }
       let(:blacklisted) { [] }
+
       before do
         logger = double('Logger', info: true, debug: true)
         allow(LicenseFinder::Logger).to receive(:new).and_return(logger)
@@ -65,11 +66,13 @@ module LicenseFinder
             '--prepare'
           ]
         end
+
         let(:logger_options) do
           [
             '--debug'
           ]
         end
+
         let(:parsed_config) do
           {
             decisions_file: 'whatever.yml',

@@ -3,7 +3,7 @@ module LicenseFinder
     let(:all_pms) { fixture_path('all_pms') }
 
     it { expect(described_class.ancestors).to include PackageManager }
-    it { expect(PackageManager.package_managers).to include described_class }
+    it { expect(Scanner::PACKAGE_MANAGERS).to include described_class }
     describe '.active?' do
       before do
         allow_any_instance_of(described_class).to receive(:go_files_exist?).and_return(true)

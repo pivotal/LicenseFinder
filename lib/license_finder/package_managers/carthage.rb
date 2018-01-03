@@ -22,6 +22,10 @@ module LicenseFinder
       LicenseFinder::Platform.darwin? ? 'carthage' : nil
     end
 
+    def possible_package_paths
+      [public_dependency_path]
+    end
+
     private
 
     def cartfile
@@ -31,10 +35,6 @@ module LicenseFinder
         raise CarthageError, 'No Cartfile.resolved found.
           Please install your dependencies first.'
       end
-    end
-
-    def possible_package_paths
-      [public_dependency_path]
     end
 
     def public_dependency_path

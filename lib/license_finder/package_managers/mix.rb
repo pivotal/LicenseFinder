@@ -25,6 +25,10 @@ module LicenseFinder
       'mix deps.get'
     end
 
+    def possible_package_paths
+      [project_path.join('mix.exs')]
+    end
+
     private
 
     def mix_output
@@ -46,10 +50,6 @@ module LicenseFinder
 
     def resolve_version(line)
       line =~ /locked at ([^\s]+)/ ? Regexp.last_match(1) : line
-    end
-
-    def possible_package_paths
-      [project_path.join('mix.exs')]
     end
   end
 end

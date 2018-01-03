@@ -17,37 +17,6 @@ module LicenseFinder
     include LicenseFinder::SharedHelpers
 
     class << self
-      def package_managers
-        [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
-         Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan]
-      end
-
-      def active_packages(options = { project_path: Pathname.new('') })
-        package_managers = active_package_managers(options)
-        installed_package_managers = package_managers.select { |pm| pm.class.installed?(options[:logger]) }
-        installed_package_managers.flat_map(&:current_packages_with_relations)
-      end
-
-      def active_package_managers(options = { project_path: Pathname.new('') })
-        logger = options[:logger]
-
-        active_pm_classes = []
-        package_managers.each do |pm_class|
-          active = pm_class.new(options).active?
-          if active
-            logger.info pm_class, 'is active', color: :green
-            active_pm_classes << pm_class
-          else
-            logger.debug pm_class, 'is not active', color: :red
-          end
-        end
-
-        logger.info 'License Finder', 'No active and installed package managers found for project.', color: :red if active_pm_classes.empty?
-
-        active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
-        active_pm_classes.map { |pm_class| pm_class.new(options) }
-      end
-
       def takes_priority_over
         nil
       end
@@ -74,6 +43,17 @@ module LicenseFinder
       def prepare_command
         nil
       end
+    end
+
+    def self.command_exists?(command)
+      _stdout, _stderr, status =
+        if LicenseFinder::Platform.windows?
+          Cmd.run("where #{command}")
+        else
+          Cmd.run("which #{command}")
+        end
+
+      status.success?
     end
 
     def initialize(options = {})
@@ -119,17 +99,6 @@ module LicenseFinder
         end
       end
       packages
-    end
-
-    def self.command_exists?(command)
-      _stdout, _stderr, status =
-        if LicenseFinder::Platform.windows?
-          Cmd.run("where #{command}")
-        else
-          Cmd.run("which #{command}")
-        end
-
-      status.success?
     end
 
     private

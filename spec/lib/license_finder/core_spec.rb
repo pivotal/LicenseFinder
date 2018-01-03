@@ -6,11 +6,13 @@ module LicenseFinder
     let(:configuration) { LicenseFinder::Configuration.new(options, {}) }
     let(:license_finder) { described_class.new(configuration) }
     let(:pathname) { Pathname.pwd + Pathname(options[:project_path]) }
+    let(:scanner) { Scanner.new }
 
     before do
       allow(logger).to receive(LicenseFinder::Logger::MODE_INFO)
       allow(logger).to receive(LicenseFinder::Logger::MODE_DEBUG)
       allow(Logger).to receive(:new).and_return(logger)
+      allow(Scanner).to receive(:new).and_return(scanner)
     end
 
     describe '#unapproved' do
@@ -54,7 +56,7 @@ module LicenseFinder
       end
 
       it 'passes through options when fetching current packages' do
-        expect(PackageManager).to receive(:active_packages).with(package_options).and_return([])
+        expect(scanner).to receive(:active_packages).and_return([])
         license_finder.unapproved
       end
     end

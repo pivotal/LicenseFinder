@@ -23,11 +23,11 @@ module LicenseFinder
       LicenseFinder::Platform.darwin? ? 'pod' : nil
     end
 
-    private
-
     def possible_package_paths
       [project_path.join('Podfile')]
     end
+
+    private
 
     def lockfile_path
       project_path.join('Podfile.lock')

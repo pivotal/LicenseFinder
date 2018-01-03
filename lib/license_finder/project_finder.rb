@@ -1,7 +1,7 @@
 module LicenseFinder
   class ProjectFinder
     def initialize(main_project_path)
-      @package_managers = LicenseFinder::PackageManager.package_managers
+      @package_managers = LicenseFinder::Scanner::PACKAGE_MANAGERS
       @main_project_path = main_project_path
     end
 

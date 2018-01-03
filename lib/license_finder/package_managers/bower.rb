@@ -16,6 +16,10 @@ module LicenseFinder
       'bower install'
     end
 
+    def possible_package_paths
+      [project_path.join('bower.json')]
+    end
+
     private
 
     def bower_output
@@ -26,10 +30,6 @@ module LicenseFinder
       JSON(stdout)
         .fetch('dependencies', {})
         .values
-    end
-
-    def possible_package_paths
-      [project_path.join('bower.json')]
     end
   end
 end
