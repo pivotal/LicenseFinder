@@ -1,5 +1,5 @@
 require 'xmlsimple'
-require_relative 'maven_dependency_finder'
+require 'license_finder/package_utils/maven_dependency_finder'
 
 module LicenseFinder
   class Maven < PackageManager

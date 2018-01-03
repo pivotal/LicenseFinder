@@ -24,7 +24,7 @@ module LicenseFinder
       json_objects.each do |json_object|
         match = /(?<name>[\w,\-]+)@(?<version>(\d+\.?)+)/ =~ json_object['data'].to_s
         if match
-          package = Package.new(name, version, spec_licenses: ['unknown'])
+          package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
           incompatible_packages.push(package)
         end
       end
@@ -55,7 +55,7 @@ module LicenseFinder
       end
 
       packages.map do |package_hash|
-        Package.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl'])
+        YarnPackage.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl'])
       end
     end
   end

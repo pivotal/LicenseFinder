@@ -1,4 +1,4 @@
-require_relative 'conan_info_parser'
+require 'license_finder/package_utils/conan_info_parser'
 
 module LicenseFinder
   class Conan < PackageManager
