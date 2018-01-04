@@ -75,8 +75,7 @@ module LicenseFinder
       if self.class.prepare_command
         _stdout, stderr, status = Cmd.run(self.class.prepare_command)
         unless status.success?
-          logger.info self.class.prepare_command, 'did not succeed.', color: :red
-          logger.info self.class.prepare_command, stderr, color: :red
+          log_errors stderr
           raise "Prepare command '#{self.class.prepare_command}' failed" unless @prepare_no_fail
         end
       else
@@ -104,6 +103,20 @@ module LicenseFinder
     private
 
     attr_reader :logger, :project_path
+
+    def log_errors(stderr)
+      logger.info self.class.prepare_command, 'did not succeed.', color: :red
+      logger.info self.class.prepare_command, stderr, color: :red
+
+      log_dir = File.join(@project_path, 'lf_logs')
+      log_file_path = File.join(log_dir, 'error.log')
+
+      FileUtils.mkdir_p(log_dir)
+      File.open(log_file_path, 'w') do |f|
+        f.write("Prepare command \"#{self.class.prepare_command}\" failed with:\n")
+        f.write("#{stderr}\n\n")
+      end
+    end
   end
 end
 
