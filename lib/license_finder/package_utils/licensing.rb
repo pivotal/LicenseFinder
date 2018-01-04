@@ -1,4 +1,4 @@
-require 'license_finder/packages/activation'
+require 'license_finder/package_utils/activation'
 
 module LicenseFinder
   Licensing = Struct.new(:package, :decided_licenses, :licenses_from_spec, :license_files) do

@@ -1,6 +1,6 @@
 require 'xmlsimple'
 require 'with_env'
-require_relative 'gradle_dependency_finder'
+require 'license_finder/package_utils/gradle_dependency_finder'
 
 module LicenseFinder
   class Gradle < PackageManager

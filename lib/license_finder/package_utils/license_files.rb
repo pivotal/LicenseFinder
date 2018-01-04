@@ -1,4 +1,4 @@
-require 'license_finder/packages/possible_license_file'
+require 'license_finder/package_utils/possible_license_file'
 
 module LicenseFinder
   class LicenseFiles
