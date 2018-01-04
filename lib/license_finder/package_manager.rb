@@ -107,14 +107,17 @@ module LicenseFinder
     def log_errors(stderr)
       logger.info self.class.prepare_command, 'did not succeed.', color: :red
       logger.info self.class.prepare_command, stderr, color: :red
+      log_to_file stderr
+    end
 
+    def log_to_file(contents)
       log_dir = File.join(@project_path, 'lf_logs')
       log_file_path = File.join(log_dir, 'error.log')
 
       FileUtils.mkdir_p(log_dir)
       File.open(log_file_path, 'w') do |f|
         f.write("Prepare command \"#{self.class.prepare_command}\" failed with:\n")
-        f.write("#{stderr}\n\n")
+        f.write("#{contents}\n\n")
       end
     end
   end

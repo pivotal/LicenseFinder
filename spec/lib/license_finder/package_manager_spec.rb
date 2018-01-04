@@ -101,15 +101,8 @@ module LicenseFinder
         end
 
         describe 'logging prepare errors into log file' do
-
           let(:subject) { described_class.new logger: logger, project_path: project_path }
-          let(:error_msg) do
-            <<~msg
-              Prepare command "sh commands" failed with:
-              failure error msg
-
-            msg
-          end
+          let(:error_msg) { "Prepare command \"sh commands\" failed with:\nfailure error msg\n\n" }
 
           let(:log_dir_path) { File.join(project_path, 'lf_logs') }
           let(:log_path) { File.join(log_dir_path, 'error.log') }
@@ -125,12 +118,11 @@ module LicenseFinder
 
           it 'discards previous logs and starts logging new logs' do
             FileUtils.mkdir_p log_dir_path
-            File.open(log_path, 'w') { |f| f.write("previous logs")}
+            File.open(log_path, 'w') { |f| f.write('previous logs') }
             expect { subject.prepare }.to raise_error(prepare_error)
             expect(File.read(log_path)).to eq error_msg
           end
         end
-
 
         context 'with prepare_no_fail' do
           let(:subject) { described_class.new logger: logger, prepare_no_fail: true, project_path: project_path }
