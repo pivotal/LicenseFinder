@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe PackageManager do
@@ -73,8 +74,16 @@ module LicenseFinder
     describe '#prepare' do
       context 'when there is a prepare_command' do
         before do
+          FakeFS.activate!
           allow(described_class).to receive(:prepare_command).and_return('sh commands')
         end
+
+        after do
+          FakeFS.deactivate!
+        end
+
+        let(:prepare_error) { /Prepare command .* failed/ }
+        let(:project_path) { '/path/to/project' }
 
         it 'succeeds when prepare command runs successfully' do
           expect(SharedHelpers::Cmd).to receive(:run).with('sh commands').and_return(['output', nil, cmd_success])
@@ -87,12 +96,36 @@ module LicenseFinder
           expect(SharedHelpers::Cmd).to receive(:run).with('sh commands').and_return(['output', 'failure error msg', cmd_failure])
           expect(logger).to receive(:info).with('sh commands', 'did not succeed.', color: :red)
           expect(logger).to receive(:info).with('sh commands', 'failure error msg', color: :red)
-          subject = described_class.new logger: logger
-          expect { subject.prepare }.to raise_error(/Prepare command .* failed/)
+          subject = described_class.new logger: logger, project_path: project_path
+          expect { subject.prepare }.to raise_error(prepare_error)
+        end
+
+        describe 'logging prepare errors into log file' do
+          let(:subject) { described_class.new logger: logger, project_path: project_path }
+          let(:error_msg) { "Prepare command \"sh commands\" failed with:\nfailure error msg\n\n" }
+
+          let(:log_dir_path) { File.join(project_path, 'lf_logs') }
+          let(:log_path) { File.join(log_dir_path, 'error.log') }
+
+          before do
+            expect(SharedHelpers::Cmd).to receive(:run).with('sh commands').and_return(['output', 'failure error msg', cmd_failure])
+          end
+
+          it 'logs package manager failure messages in lf_logs/error.log inside project path' do
+            expect { subject.prepare }.to raise_error(prepare_error)
+            expect(File.read(log_path)).to eq error_msg
+          end
+
+          it 'discards previous logs and starts logging new logs' do
+            FileUtils.mkdir_p log_dir_path
+            File.open(log_path, 'w') { |f| f.write('previous logs') }
+            expect { subject.prepare }.to raise_error(prepare_error)
+            expect(File.read(log_path)).to eq error_msg
+          end
         end
 
         context 'with prepare_no_fail' do
-          let(:subject) { described_class.new logger: logger, prepare_no_fail: true }
+          let(:subject) { described_class.new logger: logger, prepare_no_fail: true, project_path: project_path }
 
           it 'should not throw an error when prepare_command fails' do
             expect(SharedHelpers::Cmd).to receive(:run).with('sh commands')
