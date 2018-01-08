@@ -32,7 +32,9 @@ module LicenseFinder
                    [LicenseFinder::Core.new(@config)]
                  else
                    @aggregate_paths.map do |path|
-                     LicenseFinder::Core.new(@config.merge(project_path: path))
+                     # Passing file paths as values instead of allowing them to evaluate in config
+                     LicenseFinder::Core.new(@config.merge(project_path: path,
+                                                           decisions_file: @config.decisions_file_path))
                    end
                  end
     end

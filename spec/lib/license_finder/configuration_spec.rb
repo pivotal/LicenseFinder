@@ -49,7 +49,15 @@ module LicenseFinder
       end
     end
 
-    describe 'decisions_file' do
+    describe '#decisions_file' do
+      it 'has default' do
+        subject = described_class.new(
+          { decisions_file: nil },
+          'decisions_file' => nil
+        )
+        expect(subject.decisions_file_path.to_s).to end_with 'doc/dependency_decisions.yml'
+      end
+
       it 'prefers primary value' do
         subject = described_class.new(
           { decisions_file: 'primary' },
@@ -66,24 +74,18 @@ module LicenseFinder
         expect(subject.decisions_file_path.to_s).to end_with 'secondary'
       end
 
-      it 'has default' do
-        subject = described_class.new(
-          { decisions_file: nil },
-          'decisions_file' => nil
-        )
-        expect(subject.decisions_file_path.to_s).to end_with 'doc/dependency_decisions.yml'
-      end
-
       it 'prepends project path to default path if project_path option is set' do
         subject = described_class.new({ project_path: 'magic_path' }, {})
         expect(subject.decisions_file_path.to_s).to end_with 'magic_path/doc/dependency_decisions.yml'
       end
 
-      it 'prepends project path to provided value' do
-        subject = described_class.new({ decisions_file: 'primary',
-                                        project_path: 'magic_path' },
-                                      'decisions_file' => 'secondary')
-        expect(subject.decisions_file_path.to_s).to end_with 'magic_path/primary'
+      it 'prefers decisions_file over project_path' do
+        subject = described_class.new(
+          { project_path: 'magic_path',
+            decisions_file: 'better_path' },
+          'decisions_file' => nil
+        )
+        expect(subject.decisions_file_path.to_s).to end_with 'better_path'
       end
     end
 
