@@ -63,7 +63,8 @@ module LicenseFinder
             '--rebar_deps_dir=rebar_dir',
             '--mix_command=surprise_me',
             '--mix_deps_dir=mix_dir',
-            '--prepare'
+            '--prepare',
+            '--log_directory=some_logs'
           ]
         end
 
@@ -83,6 +84,7 @@ module LicenseFinder
             mix_command: 'surprise_me',
             mix_deps_dir: 'mix_dir',
             prepare: true,
+            log_directory: 'some_logs',
             logger: { mode: LicenseFinder::Logger::MODE_INFO }
           }
         end

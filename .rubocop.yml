@@ -10,7 +10,7 @@ AmbiguousRegexpLiteral:
 
 # Metrics Cops
 AbcSize:
-  Max: 30
+  Max: 35
 BlockLength:
   Enabled: false # TODO: enable and refactor long methods
 #  ExcludedMethods: ['describe', 'context', 'it', 'shared_examples']  # uncomment once enabled

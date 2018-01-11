@@ -55,6 +55,7 @@ module LicenseFinder
     end
 
     def prepare_projects
+      clear_logs
       package_managers = @scanner.active_package_managers
       package_managers.each do |manager|
         logger.debug manager.class, 'Running prepare on project'
@@ -80,10 +81,15 @@ module LicenseFinder
       @scanner.active_packages
     end
 
+    def clear_logs
+      FileUtils.rm config.log_directory if File.directory? config.log_directory
+    end
+
     def options
       {
         logger: logger,
         project_path: config.project_path,
+        log_directory: File.join(config.log_directory, project_name),
         ignored_groups: decisions.ignored_groups,
         go_full_version: config.go_full_version,
         gradle_command: config.gradle_command,

@@ -87,6 +87,44 @@ module LicenseFinder
       end
     end
 
+    describe 'log_directory' do
+      it 'prefers primary value' do
+        subject = described_class.new(
+          { log_directory: 'primary' },
+          'log_directory' => 'secondary'
+        )
+        expect(subject.log_directory.to_s).to end_with 'primary'
+      end
+
+      it 'accepts saved value' do
+        subject = described_class.new(
+          { log_directory: nil },
+          'log_directory' => 'secondary'
+        )
+        expect(subject.log_directory.to_s).to end_with 'secondary'
+      end
+
+      it 'has default' do
+        subject = described_class.new(
+          { log_directory: nil },
+          'log_directory' => nil
+        )
+        expect(subject.log_directory.to_s).to end_with 'lf_logs'
+      end
+
+      it 'prepends project path to default path if project_path option is set' do
+        subject = described_class.new({ project_path: 'magic_path' }, {})
+        expect(subject.log_directory.to_s).to end_with 'magic_path/lf_logs'
+      end
+
+      it 'prepends project path to provided value' do
+        subject = described_class.new({ log_directory: 'primary',
+                                        project_path: 'magic_path' },
+                                      'log_directory' => 'secondary')
+        expect(subject.log_directory.to_s).to end_with 'magic_path/primary'
+      end
+    end
+
     describe 'rebar_deps_dir' do
       it 'has default' do
         subject = described_class.new(
