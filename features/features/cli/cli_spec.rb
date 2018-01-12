@@ -60,4 +60,42 @@ describe 'License Finder command line executable' do
     expect(developer).to be_seeing('No active and installed package managers found for project.')
     expect(developer).to be_receiving_exit_code(0)
   end
+
+  context 'running action_items --recursive' do
+    let(:action_items) { 'license_finder action_items --recursive' }
+    let(:action_items_prepare) { 'license_finder action_items --prepare --recursive' }
+    let(:whitelist) { 'license_finder whitelist add MIT' }
+    let(:approvals) { 'license_finder approvals add objenesis' }
+    let(:relative_decisions_path) { ' --decisions-file=folder-name/dependency_decisions.yml' }
+    let(:absolute_decisions_path) { ' --decisions-file=/folder-name/dependency_decisions.yml' }
+
+    before do
+      LicenseFinder::TestingDSL::CompositeProject.create
+      developer.execute_command(action_items_prepare)
+    end
+
+    specify 'uses default decisions-file' do
+      developer.execute_command(whitelist)
+      developer.execute_command(approvals)
+      developer.execute_command(action_items)
+      expect(developer).to_not be_seeing('objenesis')
+      expect(developer).to_not be_seeing('MIT')
+    end
+
+    specify 'uses decisions-file with relative path' do
+      developer.execute_command(whitelist + relative_decisions_path)
+      developer.execute_command(approvals + relative_decisions_path)
+      developer.execute_command(action_items + relative_decisions_path)
+      expect(developer).to_not be_seeing('objenesis')
+      expect(developer).to_not be_seeing('MIT')
+    end
+
+    specify 'uses decisions-file with absolute path' do
+      developer.execute_command(whitelist + absolute_decisions_path)
+      developer.execute_command(approvals + absolute_decisions_path)
+      developer.execute_command(action_items + absolute_decisions_path)
+      expect(developer).to_not be_seeing('objenesis')
+      expect(developer).to_not be_seeing('MIT')
+    end
+  end
 end
