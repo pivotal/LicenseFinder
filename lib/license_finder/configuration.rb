@@ -38,8 +38,10 @@ module LicenseFinder
     end
 
     def decisions_file_path
-      path = get(:decisions_file) || 'doc/dependency_decisions.yml'
-      project_path.join(path).expand_path
+      path = File.join(project_path, 'doc/dependency_decisions.yml') unless project_path.nil?
+      path = get(:decisions_file) unless get(:decisions_file).nil?
+      path = 'doc/dependency_decisions.yml' if path.nil?
+      Pathname.new(path)
     end
 
     def log_directory
