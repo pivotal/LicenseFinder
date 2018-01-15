@@ -82,7 +82,7 @@ module LicenseFinder
     end
 
     def clear_logs
-      FileUtils.rm config.log_directory if File.directory? config.log_directory
+      FileUtils.rmdir config.log_directory if File.directory? config.log_directory
     end
 
     def options
