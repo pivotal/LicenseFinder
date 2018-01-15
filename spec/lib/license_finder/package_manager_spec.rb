@@ -77,7 +77,7 @@ module LicenseFinder
         let(:project_path) { '/path/to/project' }
         let(:log_directory) { '/path/to/project/logs/project' }
         let(:log_file_path) { File.join(log_directory, 'prepare_errors.log') }
-        let(:quiet_logger) { double(:logger)
+        let(:quiet_logger) { double(:logger) }
         let(:subject) { described_class.new logger: quiet_logger, project_path: project_path, log_directory: log_directory }
 
         before do
@@ -125,13 +125,13 @@ module LicenseFinder
 
           it 'uses default package_management_command as the file name' do
             expect { subject.prepare }.to raise_error(prepare_error)
-            expect(File.exists? log_file_path)
+            expect(File.exist?(log_file_path))
           end
 
           it 'uses defined package_management_command as the file name' do
             allow(LicenseFinder::PackageManager).to receive(:package_management_command).and_return('foobar')
             expect { subject.prepare }.to raise_error(prepare_error)
-            expect(File.exists? File.join(log_directory, 'prepare_foobar.log')).to be_truthy
+            expect(File.exist?(File.join(log_directory, 'prepare_foobar.log'))).to be_truthy
           end
         end
 
@@ -152,7 +152,7 @@ module LicenseFinder
           expect(logger).to receive(:debug).with(described_class, 'no prepare step provided', color: :red)
           expect(SharedHelpers::Cmd).to_not receive(:run).with('sh commands')
 
-          subject = described_class.new logger: logger
+          subject = described_class.new(logger: logger)
           subject.prepare
         end
       end
