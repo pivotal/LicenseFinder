@@ -60,6 +60,7 @@ module LicenseFinder
       @prepare_no_fail = options[:prepare_no_fail]
       @logger       = options[:logger] || Core.default_logger
       @project_path = options[:project_path]
+      @log_directory = options[:log_directory]
     end
 
     def active?
@@ -111,11 +112,9 @@ module LicenseFinder
     end
 
     def log_to_file(contents)
-      log_dir = File.join(@project_path, 'lf_logs')
-      log_file_path = File.join(log_dir, 'error.log')
-
-      FileUtils.mkdir_p(log_dir)
-      File.open(log_file_path, 'w') do |f|
+      FileUtils.mkdir_p @log_directory
+      log_file = File.join(@log_directory, "prepare_#{self.class.package_management_command || 'errors'}.log")
+      File.open(log_file, 'w') do |f|
         f.write("Prepare command \"#{self.class.prepare_command}\" failed with:\n")
         f.write("#{contents}\n\n")
       end

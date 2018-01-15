@@ -44,6 +44,11 @@ module LicenseFinder
       Pathname.new(path)
     end
 
+    def log_directory
+      path = get(:log_directory) || 'lf_logs'
+      project_path.join(path).expand_path
+    end
+
     def project_path
       Pathname(path_prefix).expand_path
     end

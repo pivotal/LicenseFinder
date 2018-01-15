@@ -3,10 +3,10 @@ module LicenseFinder
     PACKAGE_MANAGERS = [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
                         Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan].freeze
 
-    def initialize(options = { project_path: Pathname.new('') })
-      @options = options
-      @project_path = options[:project_path]
-      @logger = options[:logger]
+    def initialize(config = { project_path: Pathname.new('') })
+      @config = config
+      @project_path = @config[:project_path]
+      @logger = @config[:logger]
     end
 
     def active_packages
@@ -20,7 +20,7 @@ module LicenseFinder
 
       active_pm_classes = []
       PACKAGE_MANAGERS.each do |pm_class|
-        active = pm_class.new(@options).active?
+        active = pm_class.new(@config).active?
         if active
           @logger.info pm_class, 'is active', color: :green
           active_pm_classes << pm_class
@@ -32,7 +32,7 @@ module LicenseFinder
       @logger.info 'License Finder', 'No active and installed package managers found for project.', color: :red if active_pm_classes.empty?
 
       active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
-      @package_managers = active_pm_classes.map { |pm_class| pm_class.new(@options) }
+      @package_managers = active_pm_classes.map { |pm_class| pm_class.new(@config) }
     end
   end
 end
