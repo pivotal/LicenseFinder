@@ -7,8 +7,8 @@ module LicenseFinder
     end
 
     def current_packages
-      install_command = 'conan install'
-      info_command = 'conan info'
+      install_command = 'conan install .'
+      info_command = 'conan info .'
       Dir.chdir(project_path) { Cmd.run(install_command) }
       info_output, _stderr, _status = Dir.chdir(project_path) { Cmd.run(info_command) }
 
