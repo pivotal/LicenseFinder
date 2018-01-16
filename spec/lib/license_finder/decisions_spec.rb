@@ -300,7 +300,6 @@ module LicenseFinder
         expect(licenses).to eq [License.find_by_name('GPL')].to_set
       end
 
-
       it 'can restore approvals without versions' do
         time = Time.now.getutc
         roundtrip(subject.approve('dep', who: 'Somebody', why: 'Some reason', when: time))

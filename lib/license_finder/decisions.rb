@@ -52,8 +52,8 @@ module LicenseFinder
 
     TXN = Struct.new(:who, :why, :safe_when, :safe_versions) do
       def self.from_hash(txn, versions)
-      new(txn[:who], txn[:why], txn[:when], versions || [])
-    end
+        new(txn[:who], txn[:why], txn[:when], versions || [])
+      end
     end
 
     def initialize
