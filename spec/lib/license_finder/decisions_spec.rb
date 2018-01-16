@@ -300,14 +300,29 @@ module LicenseFinder
         expect(licenses).to eq [License.find_by_name('GPL')].to_set
       end
 
-      it 'can restore approvals' do
+
+      it 'can restore approvals without versions' do
         time = Time.now.getutc
-        decisions = roundtrip(subject.approve('dep', who: 'Somebody', why: 'Some reason', when: time))
-        expect(decisions).to be_approved('dep')
-        approval = decisions.approval_of('dep')
+        roundtrip(subject.approve('dep', who: 'Somebody', why: 'Some reason', when: time))
+
+        approval = subject.approval_of('dep')
         expect(approval.who).to eq 'Somebody'
         expect(approval.why).to eq 'Some reason'
         expect(approval.safe_when).to eq time
+        expect(approval.safe_versions).to eq []
+      end
+
+      it 'can restore approvals with versions' do
+        time = Time.now.getutc
+        roundtrip(subject.approve('dep', who: 'Somebody', why: 'Some reason', when: time, versions: ['1.0']))
+        roundtrip(subject.approve('dep', who: 'Somebody', why: 'Some reason', when: time, versions: ['2.0']))
+        roundtrip(subject.approve('dep', who: 'Somebody', why: 'Some reason', when: time, versions: ['3.0']))
+
+        approval = subject.approval_of('dep', '1.0')
+        expect(approval.who).to eq 'Somebody'
+        expect(approval.why).to eq 'Some reason'
+        expect(approval.safe_when).to eq time
+        expect(approval.safe_versions).to eq ['1.0', '2.0', '3.0']
       end
 
       it 'can restore unapprovals' do
