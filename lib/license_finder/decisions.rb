@@ -51,8 +51,8 @@ module LicenseFinder
     #######
 
     TXN = Struct.new(:who, :why, :safe_when, :safe_versions) do
-      def self.from_hash(txn)
-        new(txn[:who], txn[:why], txn[:when], txn[:versions].nil? ? [] : txn[:versions])
+      def self.from_hash(txn, versions)
+        new(txn[:who], txn[:why], txn[:when], versions || [])
       end
     end
 
@@ -96,10 +96,8 @@ module LicenseFinder
 
       versions = []
       versions = @approvals[name][:safe_versions] if @approvals.key?(name)
-
-      @approvals[name] = TXN.from_hash(txn)
-
-      @approvals[name][:safe_versions].concat(versions)
+      @approvals[name] = TXN.from_hash(txn, versions)
+      @approvals[name][:safe_versions].concat(txn[:versions]) unless txn[:versions].nil?
       self
     end
 

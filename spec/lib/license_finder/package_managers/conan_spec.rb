@@ -86,8 +86,8 @@ zlib/1.2.11@conan/stable
             File.write('/fake/path/licenses/zlib/license/LICENSE', 'zlib license')
             File.write('/fake/path/licenses/OpenSSL/LICENSE', 'OpenSSL license')
             File.write('/fake/path/licenses/Poco/license/LICENSE', 'Poco license')
-            expect(SharedHelpers::Cmd).to receive(:run).with('conan install').ordered
-            expect(SharedHelpers::Cmd).to receive(:run).with('conan info').ordered.and_return([conaninfo, '', cmd_success])
+            expect(SharedHelpers::Cmd).to receive(:run).with('conan install .').ordered
+            expect(SharedHelpers::Cmd).to receive(:run).with('conan info .').ordered.and_return([conaninfo, '', cmd_success])
           end
 
           it 'should list all the current packages name and version' do

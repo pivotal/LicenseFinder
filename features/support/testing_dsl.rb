@@ -343,7 +343,7 @@ module LicenseFinder
       end
 
       def install
-        shell_out('conan install')
+        shell_out('conan install .')
       end
     end
 
