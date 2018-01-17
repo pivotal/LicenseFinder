@@ -74,7 +74,7 @@ module LicenseFinder
 
     def prepare
       if self.class.prepare_command
-        _stdout, stderr, status = Cmd.run(self.class.prepare_command)
+        _stdout, stderr, status =  Dir.chdir(project_path) { Cmd.run(self.class.prepare_command) }
         unless status.success?
           log_errors stderr
           raise "Prepare command '#{self.class.prepare_command}' failed" unless @prepare_no_fail
