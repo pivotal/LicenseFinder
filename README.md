@@ -3,11 +3,11 @@
 [![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
 
 Build status
-* Ruby 2.1.5 [![Ruby 2.1.5 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.1.5/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.2.0 [![Ruby 2.2.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.2.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.3.0 [![Ruby 2.3.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.4.1 [![Ruby 2.4.1 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.1/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
-* JRuby 9.0.4.0 [![JRuby 9.0.4.0 build status](https://osl.ci.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.0.4.0/badge)](https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.1.5 [![Ruby 2.1.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.1.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.2.0 [![Ruby 2.2.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.2.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.3.0 [![Ruby 2.3.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.4.1 [![Ruby 2.4.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.0.4.0 [![JRuby 9.0.4.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.0.4.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
@@ -16,7 +16,7 @@ against a user-defined whitelist, and give you an actionable exception
 report.
 
 * code: https://github.com/pivotal/LicenseFinder
-* ci: https://osl.ci.cf-app.com/teams/main/pipelines/LicenseFinder
+* ci: https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder
 * docker: [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
   * the docker image contains all the package managers needed to run `license_finder`
 * support:
