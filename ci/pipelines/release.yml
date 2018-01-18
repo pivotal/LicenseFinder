@@ -37,6 +37,9 @@ jobs:
   - get: lf-time
     trigger: true
   - task: bump-version
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
     file: lf-git/ci/tasks/bump-patch-version.yml
   - put: lf-git
     params:
