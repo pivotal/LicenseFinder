@@ -1,0 +1,8 @@
+---
+platform: linux
+inputs:
+- name: lf-git
+outputs:
+- name: lf-git-changed
+run:
+  path: lf-git/ci/scripts/bump-patch-version.sh
