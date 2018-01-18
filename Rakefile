@@ -62,6 +62,13 @@ task :update_pipeline, [:slack_url, :slack_channel] do |_, args|
   system(cmd)
 end
 
+desc 'Configure release pipeline'
+task :update_release_pipeline do
+  cmd = 'bash -c "fly -t osl set-pipeline -n -p LicenseFinder-release --config ci/pipelines/release.yml"'
+
+  system(cmd)
+end
+
 task spec: :check_dependencies
 task features: :check_dependencies
 
