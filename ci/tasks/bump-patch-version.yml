@@ -1,4 +1,9 @@
 ---
+image_resource:
+  type: docker-image
+  source:
+    repository: licensefinder/license_finder
+    tag: latest
 platform: linux
 inputs:
 - name: lf-git
