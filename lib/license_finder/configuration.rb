@@ -46,7 +46,12 @@ module LicenseFinder
 
     def log_directory
       path = get(:log_directory) || 'lf_logs'
-      project_path.join(path).expand_path
+
+      if (aggregate_paths || recursive) && project_path == ''
+        Pathname(path).expand_path
+      else
+        project_path.join(path).expand_path
+      end
     end
 
     def project_path
