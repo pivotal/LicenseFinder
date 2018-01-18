@@ -36,15 +36,18 @@ jobs:
   - get: lf-git
   - get: lf-time
     trigger: true
+  - get: lf-image
+    params:
+      save: true
   - task: bump-version
     params:
+      image: lf-image
       GIT_USERNAME: ((GithubApiUser))
       GIT_EMAIL: ((GithubApiEmail))
     file: lf-git/ci/tasks/bump-patch-version.yml
   - put: lf-git
     params:
       repository: lf-git-changed
-      tag: version/tag.txt
 
 - name: release
   plan:
