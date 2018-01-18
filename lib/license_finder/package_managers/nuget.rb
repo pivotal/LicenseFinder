@@ -53,7 +53,7 @@ module LicenseFinder
       Zip::File.open file do |zipfile|
         content = zipfile.read(dep.name + '.nuspec')
         xml = REXML::Document.new(content)
-        REXML::XPath.match(xml, '//metadata//licenseUrl').map(&:get_text)
+        REXML::XPath.match(xml, '//metadata//licenseUrl').map(&:get_text).map(&:to_s)
       end
     end
 
