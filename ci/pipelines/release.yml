@@ -21,21 +21,11 @@ resources:
     repository: LicenseFinder
     access_token: ((GithubApiRootToken))
 
-- name: lf-time
-  type: time
-  source:
-    start: 12:00 AM
-    stop: 1:00 AM
-    days: [Wednesday]
-    location: America/Toronto
-
 jobs:
 
 - name: patch-version
   plan:
   - get: lf-git
-  - get: lf-time
-    trigger: true
   - get: lf-image
     params:
       save: true
