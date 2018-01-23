@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
 apk update && apk add git
-source /docker-lib.sh
-start_docker
+source /opt/resource/common.sh
+start_docker 3 3
 
 pushd LicenseFinder
   if [ ! -z "$(git diff master Dockerfile)" ]; then

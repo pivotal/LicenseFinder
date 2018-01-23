@@ -3,7 +3,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: amidos/dcind
+    repository: concourse/docker-image-resource
     tag: latest
 
 inputs:
