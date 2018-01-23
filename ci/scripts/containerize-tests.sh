@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
 apk update && apk add git
-source /opt/resource/common.sh
+source /docker-lib.sh
 start_docker
 
 pushd LicenseFinder
