@@ -8,7 +8,7 @@ module LicenseFinder
       class_option :decisions_file,
                    desc: 'Where decisions are saved. Defaults to doc/dependency_decisions.yml.'
       class_option :log_directory,
-                   desc: 'Where logs are saved. Defaults to ./lf_logs/$PROJECT/$PACKAGE_MANAGER.log'
+                   desc: 'Where logs are saved. Defaults to ./lf_logs/$PROJECT/prepare_$PACKAGE_MANAGER.log'
 
       no_commands do
         def decisions
