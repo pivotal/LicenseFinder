@@ -439,6 +439,15 @@ end
 
 And save a `LICENSE` file which contains your license text in your repo.
 
+## Known issues with specific package managers
+
+* Bundler
+   * When using `--project-path`, Bundler cannot find the Gemfile.
+   
+* Yarn
+   * A module that is incompatible with the platform on which 
+     license_finder is run will always be reported to have a license type
+     of "unknown". (#456)
 
 ## Support
 
