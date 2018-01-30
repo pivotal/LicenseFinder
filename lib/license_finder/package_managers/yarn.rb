@@ -7,7 +7,7 @@ module LicenseFinder
     end
 
     def current_packages
-      stdout, _stderr, status = Cmd.run(Yarn::SHELL_COMMAND)
+      stdout, _stderr, status = Cmd.run(Yarn::SHELL_COMMAND + " --cwd #{project_path}")
       return [] unless status.success?
 
       packages = []
