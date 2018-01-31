@@ -7,10 +7,9 @@ module LicenseFinder
     end
 
     def current_packages
-
       cmd = Yarn::SHELL_COMMAND
       suffix = " --cwd #{project_path}" unless project_path.nil?
-      cmd = cmd + suffix unless suffix.nil?
+      cmd += suffix unless suffix.nil?
 
       stdout, _stderr, status = Cmd.run(cmd)
       return [] unless status.success?
