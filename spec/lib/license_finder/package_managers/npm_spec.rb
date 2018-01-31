@@ -26,6 +26,32 @@ module LicenseFinder
       end
     end
 
+    describe '.prepare' do
+      include FakeFS::SpecHelpers
+      before do
+        NPM.instance_variable_set(:@modules, nil)
+        FileUtils.mkdir_p(Dir.tmpdir)
+        FileUtils.mkdir_p(root)
+        File.write(File.join(root, 'package.json'), package_json)
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
+                                                  .and_return([dependency_json, '', cmd_success])
+      end
+
+      it 'should call npm install' do
+        expect(SharedHelpers::Cmd).to receive(:run).with('npm install')
+                                                   .and_return([dependency_json, '', cmd_success])
+        npm.prepare
+      end
+      context 'ignored_groups contains devDependencies' do
+        let(:npm) { NPM.new project_path: Pathname.new(root), ignored_groups: 'devDependencies' }
+        it 'should include a production flag' do
+          expect(SharedHelpers::Cmd).to receive(:run).with('npm install --production')
+                                                     .and_return([dependency_json, '', cmd_success])
+          npm.prepare
+        end
+      end
+    end
+
     describe '.current_packages' do
       include FakeFS::SpecHelpers
       before do
@@ -33,9 +59,6 @@ module LicenseFinder
         FileUtils.mkdir_p(Dir.tmpdir)
         FileUtils.mkdir_p(root)
         File.write(File.join(root, 'package.json'), package_json)
-      end
-
-      before do
         allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
                                                   .and_return([dependency_json, '', cmd_success])
       end
@@ -80,6 +103,15 @@ module LicenseFinder
       it 'does not fail when command fails but produces output' do
         allow(npm).to receive(:npm_json).and_return('foo' => 'bar')
         silence_stderr { npm.current_packages }
+      end
+
+      context 'ignored_groups contains devDependencies' do
+        let(:npm) { NPM.new project_path: Pathname.new(root), ignored_groups: 'devDependencies' }
+        it 'should include a production flag' do
+          expect(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --production')
+                                                     .and_return([dependency_json, '', cmd_success])
+          npm.current_packages
+        end
       end
 
       context 'npm recursive dependency edge case - GH#211' do
