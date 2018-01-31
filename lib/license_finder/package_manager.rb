@@ -61,6 +61,7 @@ module LicenseFinder
       @logger       = options[:logger] || Core.default_logger
       @project_path = options[:project_path]
       @log_directory = options[:log_directory]
+      @ignored_groups = options[:ignored_groups]
     end
 
     def active?
