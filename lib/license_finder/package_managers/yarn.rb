@@ -7,7 +7,12 @@ module LicenseFinder
     end
 
     def current_packages
-      stdout, _stderr, status = Cmd.run(Yarn::SHELL_COMMAND + " --cwd #{project_path}")
+
+      cmd = Yarn::SHELL_COMMAND
+      suffix = " --cwd #{project_path}" unless project_path.nil?
+      cmd = cmd + suffix unless suffix.nil?
+
+      stdout, _stderr, status = Cmd.run(cmd)
       return [] unless status.success?
 
       packages = []
