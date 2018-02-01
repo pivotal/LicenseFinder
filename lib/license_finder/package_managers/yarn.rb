@@ -7,7 +7,7 @@ module LicenseFinder
     end
 
     def current_packages
-      cmd = Yarn::SHELL_COMMAND
+      cmd = "#{Yarn::SHELL_COMMAND}#{production_flag}"
       suffix = " --cwd #{project_path}" unless project_path.nil?
       cmd += suffix unless suffix.nil?
 
@@ -36,6 +36,14 @@ module LicenseFinder
       packages + incompatible_packages.uniq
     end
 
+    def prepare
+      prep_cmd = "#{Yarn.prepare_command}#{production_flag}"
+      _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
+      return if status.success?
+      log_errors stderr
+      raise "Prepare command '#{prep_cmd}' failed" unless @prepare_no_fail
+    end
+
     def self.takes_priority_over
       NPM
     end
@@ -61,6 +69,11 @@ module LicenseFinder
       packages.map do |package_hash|
         YarnPackage.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl'])
       end
+    end
+
+    def production_flag
+      return '' if @ignored_groups.nil?
+      @ignored_groups.include?('devDependencies') ? ' --production' : ''
     end
   end
 end
