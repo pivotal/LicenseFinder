@@ -10,6 +10,8 @@ built_gem="pkg/license_finder-$build_version.gem"
 git config --global user.email $GIT_EMAIL
 git config --global user.name $GIT_USERNAME
 
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
 if [ -z "$(gem fetch license_finder -v $build_version 2>&1 | grep ERROR)" ]; then
   echo "LicenseFinder-$build_version already exists on Rubygems"
   exit 0
