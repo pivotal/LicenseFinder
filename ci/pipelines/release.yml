@@ -62,6 +62,8 @@ jobs:
   - task: build-and-push-gem
     image: lf-image
     params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
       GEM_API_KEY: ((LicenseFinderGemApiKey))
     file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-git
