@@ -14,7 +14,7 @@ mkdir ~/.ssh
 ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 eval "$(ssh-agent -s)"
-echo $GIT_PRIVATE_KEY > ~/.ssh/id_rsa
+echo "$GIT_PRIVATE_KEY" > ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
 ssh-add -k ~/.ssh/id_rsa
 
