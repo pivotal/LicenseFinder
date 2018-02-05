@@ -24,3 +24,5 @@ if [ -z "$(gem fetch license_finder -v $build_version 2>&1 | grep ERROR)" ]; the
 fi
 
 rake release
+
+exit 0
