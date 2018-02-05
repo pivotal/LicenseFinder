@@ -64,6 +64,7 @@ jobs:
     params:
       GIT_USERNAME: ((GithubApiUser))
       GIT_EMAIL: ((GithubApiEmail))
+      GIT_PRIVATE_KEY: ((CfOslBotPrivateKey))
       GEM_API_KEY: ((LicenseFinderGemApiKey))
     file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-git
