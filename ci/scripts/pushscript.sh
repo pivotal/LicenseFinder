@@ -12,7 +12,6 @@ git config --global user.name $GIT_USERNAME
 
 mkdir ~/.ssh
 ssh-keyscan github.com >> ~/.ssh/known_hosts
-
 eval "$(ssh-agent -s)"
 echo "$GIT_PRIVATE_KEY" > ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
@@ -20,9 +19,10 @@ ssh-add -k ~/.ssh/id_rsa
 
 if [ -z "$(gem fetch license_finder -v $build_version 2>&1 | grep ERROR)" ]; then
   echo "LicenseFinder-$build_version already exists on Rubygems"
-  exit 0
+else
+  rake release
 fi
 
-rake release
-
-exit 0
+export EXIT_STATUS=$?
+kill $(ps aux | grep ssh-agent | head -n 1 | awk '{print $2}')
+exit $EXIT_STATUS
