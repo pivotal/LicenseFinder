@@ -77,8 +77,8 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
 #install rvm
-RUN gpg --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 && \
-    curl -sSL https://raw.githubusercontent.com/wayneeseguin/rvm/stable/binscripts/rvm-installer | sudo bash -s stable --ruby=2.4.1
+RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
+    curl -sSL https://get.rvm.io | sudo bash -s stable --ruby=2.4.1
 ENV PATH=/usr/local/rvm/bin:$PATH
 
 #install mix
