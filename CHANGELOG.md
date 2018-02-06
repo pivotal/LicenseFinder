@@ -1,13 +1,3 @@
-# [5.0.1] / 2018-02-05
-
-### Fixed
-* Add conditional production flag to npm - [533f9b8](https://github.com/pivotal/LicenseFinder/commit/533f9b8fda250655f3613444da49fdce60215237) 
-* conan install & info commands - [322e64c](https://github.com/pivotal/LicenseFinder/commit/322e64c402f4e45d97c6f3bf67c3ffdaabbb359f) 
-* Duplicate approvals in decisions file - [a8e6141](https://github.com/pivotal/LicenseFinder/commit/a8e6141cd7ac7ed2aa10b35c55954a48bacf3523) 
-* log path issues - [9f1bae1](https://github.com/pivotal/LicenseFinder/commit/9f1bae12c88771229e0a919876f4de6bcad31677) 
-
-* Fix yarn not working with --project_path option - [c6ed08d](https://github.com/pivotal/LicenseFinder/commit/c6ed08dd8342dec9fcc3e6377f88d5ef01600928) 
-
 # [5.0.0] / 2018-01-15
 
 ### Added
@@ -546,4 +536,3 @@ Bugfixes:
 [3.0.1]: https://github.com/pivotal/LicenseFinder/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/pivotal/LicenseFinder/compare/v2.1.2...v3.0.0
 [5.0.0]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...v5.0.0
-[5.0.1]: https://github.com/pivotal/LicenseFinder/compare/v5.0.0...v5.0.1
