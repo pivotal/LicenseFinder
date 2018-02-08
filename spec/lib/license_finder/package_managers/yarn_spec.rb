@@ -4,6 +4,7 @@ require 'json'
 
 module LicenseFinder
   describe Yarn do
+    let(:root) { '/fake-node-project' }
     it_behaves_like 'a PackageManager'
 
     let(:yarn_shell_command_output) do
@@ -15,11 +16,36 @@ module LicenseFinder
         }
       }.to_json
     end
+
+    describe '.prepare' do
+      subject { Yarn.new(project_path: Pathname(root), logger: double(:logger, active: nil)) }
+
+      include FakeFS::SpecHelpers
+      before do
+        FileUtils.mkdir_p(Dir.tmpdir)
+        FileUtils.mkdir_p(root)
+      end
+
+      it 'should call yarn install' do
+        expect(SharedHelpers::Cmd).to receive(:run).with('yarn install')
+                                                   .and_return([yarn_shell_command_output, '', cmd_success])
+        subject.prepare
+      end
+      context 'ignored_groups contains devDependencies' do
+        subject { Yarn.new(project_path: Pathname(root), ignored_groups: 'devDependencies') }
+        it 'should include a production flag' do
+          expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --production')
+                                                     .and_return([yarn_shell_command_output, '', cmd_success])
+          subject.prepare
+        end
+      end
+    end
+
     describe '#current_packages' do
-      subject { Yarn.new(project_path: Pathname('/app'), logger: double(:logger, active: nil)) }
+      subject { Yarn.new(project_path: Pathname(root), logger: double(:logger, active: nil)) }
 
       it 'displays packages as returned from "yarn list"' do
-        allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname('/app')}") do
+        allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}") do
           [yarn_shell_command_output, '', cmd_success]
         end
 
@@ -31,7 +57,7 @@ module LicenseFinder
       end
 
       it 'displays incompatible packages with license type unknown' do
-        allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname('/app')}") do
+        allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}") do
           ['{"type":"info","data":"fsevents@1.1.1: The platform \"linux\" is incompatible with this module."}
             {"type":"info","data":"\"fsevents@1.1.1\" is an optional dependency and failed compatibility check. Excluding it from installation."}', '', cmd_success]
         end
@@ -40,6 +66,15 @@ module LicenseFinder
         expect(subject.current_packages.last.name).to eq 'fsevents'
         expect(subject.current_packages.last.version).to eq '1.1.1'
         expect(subject.current_packages.last.license_names_from_spec).to eq ['unknown']
+      end
+
+      context 'ignored_groups contains devDependencies' do
+        subject { Yarn.new(project_path: Pathname(root), ignored_groups: 'devDependencies') }
+        it 'should include a production flag' do
+          expect(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + ' --production' + " --cwd #{Pathname(root)}")
+                                                     .and_return([yarn_shell_command_output, '', cmd_success])
+          subject.current_packages
+        end
       end
     end
 
