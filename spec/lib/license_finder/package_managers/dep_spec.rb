@@ -32,7 +32,7 @@ module LicenseFinder
 
     describe '.prepare_command' do
       it 'returns the correct prepare method' do
-        expect(described_class.prepare_command).to eq('dep ensure')
+        expect(described_class.prepare_command).to eq('dep ensure -vendor-only')
       end
     end
 
