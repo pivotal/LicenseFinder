@@ -23,7 +23,7 @@ module LicenseFinder
     end
 
     def self.prepare_command
-      'dep ensure'
+      'dep ensure -vendor-only'
     end
 
     def self.package_management_command
