@@ -1,3 +1,8 @@
+# [5.0.2] / 2018-02-13
+
+### Changed
+* Add the -vendor-only flag to dep-ensure calls - [e305bd1](https://github.com/pivotal/LicenseFinder/commit/e305bd1d5b2d9653f828c3940b59a12903904699) 
+
 # [5.0.3] / 2018-02-13
 
 ### Changed
@@ -553,3 +558,4 @@ Bugfixes:
 [5.0.0]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...v5.0.0
 [5.0.1]: https://github.com/pivotal/LicenseFinder/compare/v5.0.0...v5.0.1
 [5.0.3]: https://github.com/pivotal/LicenseFinder/compare/v5.0.2...v5.0.3
+[5.0.2]: https://github.com/pivotal/LicenseFinder/compare/v5.0.2...v5.0.2
