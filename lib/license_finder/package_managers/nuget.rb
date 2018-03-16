@@ -25,7 +25,8 @@ module LicenseFinder
     def possible_package_paths
       path = project_path.join('vendor/*.nupkg')
       nuget_dir = Dir[path].map { |pkg| File.dirname(pkg) }.uniq
-      possible_paths = [project_path.join('.nuget'), project_path.join('packages')]
+
+      possible_paths = [project_path.join('packages.config'), project_path.join('.nuget')]
       possible_paths.unshift(Pathname(nuget_dir.first)) unless nuget_dir.empty?
       possible_paths
     end

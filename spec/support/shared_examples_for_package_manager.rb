@@ -4,6 +4,7 @@ module LicenseFinder
 
     it { expect(described_class.ancestors).to include PackageManager }
     it { expect(Scanner::PACKAGE_MANAGERS).to include described_class }
+
     describe '.active?' do
       before do
         allow_any_instance_of(described_class).to receive(:go_files_exist?).and_return(true)

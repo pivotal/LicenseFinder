@@ -58,14 +58,26 @@ module LicenseFinder
         end
       end
 
-      context 'when vendor and .nuget are not present but a packages directory exists' do
+      context 'when .nuget exists' do
         before do
-          FileUtils.mkdir_p 'app/packages'
+          FileUtils.mkdir_p 'app/.nuget'
         end
 
-        it 'returns the packages directory' do
+        it 'returns the packages.config file path' do
           nuget = Nuget.new project_path: Pathname.new('app')
-          expect(nuget.detected_package_path).to eq Pathname('app/packages')
+          expect(nuget.detected_package_path).to eq Pathname('app/.nuget')
+        end
+      end
+
+      context 'when vendor/*.nupkg and .nuget/ are not present but packages.config file exists' do
+        before do
+          FileUtils.mkdir_p 'app'
+          FileUtils.touch 'app/packages.config'
+        end
+
+        it 'returns the packages.config file' do
+          nuget = Nuget.new project_path: Pathname.new('app')
+          expect(nuget.detected_package_path).to eq Pathname('app/packages.config')
         end
       end
     end
