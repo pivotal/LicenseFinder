@@ -29,6 +29,7 @@ module LicenseFinder
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
       class_option :mix_command, desc: "Command to use when fetching packages through Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'mix'."
       class_option :mix_deps_dir, desc: "Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'."
+      class_option :sbt_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Scala/sbt project. Defaults to false.'
 
       # Method options which are shared between report and action_item
       def self.format_option

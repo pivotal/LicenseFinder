@@ -47,7 +47,8 @@ module LicenseFinder
           :format,
           :columns,
           :aggregate_paths,
-          :recursive
+          :recursive,
+          :sbt_include_groups
         ).merge(
           logger: logger_mode
         )

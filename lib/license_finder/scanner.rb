@@ -1,7 +1,7 @@
 module LicenseFinder
   class Scanner
     PACKAGE_MANAGERS = [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
-                        Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan].freeze
+                        Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan, Sbt].freeze
 
     def initialize(config = { project_path: Pathname.new('') })
       @config = config

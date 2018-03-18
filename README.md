@@ -48,6 +48,7 @@ report.
 * Golang (via `gvt`, `glide`,`dep`, and `govendor`)
 * JavaScript (via `yarn`)
 * C++/C (via `conan`)
+* Scala (via `sbt`)
 
 ## Installation
 
@@ -171,6 +172,7 @@ languages, as long as that language has a package definition in the project dire
 * `Gopkg.lock` file (for `dep`)
 * `yarn.lock` file (for `yarn`)
 * `conanfile.txt` file (for `conan`)
+* `build.sbt` file (for `sbt`)
 
 
 ### Continuous Integration
@@ -407,6 +409,19 @@ Ensure that `conan install` does not generate an error.
 ``` 
 [imports]
 ., license* -> ./licenses @ folder=True, ignore_case=True
+```
+
+### SBT Projects
+
+`license_finder` supports SBT. You need to have installed the sbt-license-report in your project:
+[https://github.com/sbt/sbt-license-report](https://github.com/sbt/sbt-license-report)
+
+By default, `license_finder` will report on SBT's "compile" and "test" dependencies. If
+you want to generate a report for some other dependency configuration, you can specify
+it in your projects's `build.sbt`
+
+```
+licenseConfigurations := Set("compile", "provided")
 ```
 
 ## Requirements
