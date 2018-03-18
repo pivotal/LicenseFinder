@@ -161,6 +161,20 @@ module LicenseFinder
       end
     end
 
+    class SbtProject < Project
+      def add_dep
+        install_fixture('sbt')
+      end
+
+      def install
+        shell_out('sbt update')
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'sbt')).shell_out(command)
+      end
+    end
+
     class BareGradleProject < Project
       def add_dep
         install_fixture('build.gradle')

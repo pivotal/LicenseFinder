@@ -118,6 +118,10 @@ module LicenseFinder
       get(:columns)
     end
 
+    def sbt_include_groups
+      get(:sbt_include_groups)
+    end
+
     protected
 
     attr_accessor :primary_config

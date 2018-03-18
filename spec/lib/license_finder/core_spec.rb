@@ -44,7 +44,8 @@ module LicenseFinder
           mix_command: configuration.mix_command,
           mix_deps_dir: configuration.mix_deps_dir,
           prepare: configuration.prepare,
-          prepare_no_fail: nil
+          prepare_no_fail: nil,
+          sbt_include_groups: nil
         }
       end
 
