@@ -16,7 +16,7 @@ describe 'HTML report' do
       summary:     'gem is cool',
       description: 'seriously',
       version:     '0.0.1',
-      homepage:    'http://a_gem.github.com'
+      homepage:    'http://a-gem.github.com'
     }
 
     project = developer.create_ruby_app
