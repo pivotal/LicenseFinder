@@ -1,3 +1,4 @@
+require 'license_finder/shared_helpers/common_path'
 module LicenseFinder
   class Gvt < PackageManager
     def possible_package_paths
@@ -47,12 +48,32 @@ module LicenseFinder
 
     def packages_from_output(output, path)
       package_lines = output.split("\n")
-      package_lines.map do |package_line|
-        import_path, revision, repo = package_line.split
+      packages_by_sha = {}
+      package_lines.each do |p|
+        package_path, sha, repo = p.split
+        if packages_by_sha[sha].nil?
+          packages_by_sha[sha] = {}
+          packages_by_sha[sha]['paths'] = [package_path]
+          packages_by_sha[sha]['repo'] = repo
+        else
+          packages_by_sha[sha]['paths'] << package_path
+        end
+      end
+
+      result = []
+      packages_by_sha.each do |sha, info|
+        paths = CommonPathHelper.shortest_common_paths(info['paths'])
+
+        paths.each { |p| result << [sha, p, info['repo']] }
+      end
+
+      result.map do |package_info|
+        sha, import_path, repo = package_info
+
         GoPackage.from_dependency({
                                     'ImportPath' => import_path,
                                     'InstallPath' => path.join(import_path),
-                                    'Rev' => revision,
+                                    'Rev' => sha,
                                     'Homepage' => repo
                                   }, nil, true)
       end
