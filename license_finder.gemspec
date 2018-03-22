@@ -66,6 +66,7 @@ Gem::Specification.new do |s|
 
   # to preserve ruby < 2.2.2 support.
   s.add_development_dependency 'rack', (RUBY_VERSION < '2.2.2' ? '1.6.0' : '> 1.6')
+  s.add_development_dependency 'rack-test', (RUBY_VERSION < '2.2.2' ? '0.7.0' : '> 0.7')
 
   # temporary to preserve ruby 1.9.3 support.
   s.add_development_dependency 'addressable', '< 2.5.0'
