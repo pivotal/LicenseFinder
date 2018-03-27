@@ -5,6 +5,7 @@ require 'license_finder/package_delta'
 require 'license_finder/license_aggregator'
 require 'license_finder/project_finder'
 require 'license_finder/logger'
+require 'license_finder/reports/json_report'
 module LicenseFinder
   module CLI
     class Main < Base
@@ -14,7 +15,8 @@ module LicenseFinder
         'text' => TextReport,
         'html' => HtmlReport,
         'markdown' => MarkdownReport,
-        'csv' => CsvReport
+        'csv' => CsvReport,
+        'json' => JsonReport
       }.freeze
 
       class_option :go_full_version, desc: 'Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false.'
