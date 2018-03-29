@@ -1,7 +1,9 @@
 module LicenseFinder
   class JsonReport < CsvReport
     def initialize(dependencies, options)
+      options[:columns] ||= %w[name version licenses approved]
       super
+      @columns = Array(options[:columns]) & self.class::AVAILABLE_COLUMNS
     end
 
     def to_s
