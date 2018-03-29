@@ -6,9 +6,8 @@ module LicenseFinder
     let(:pip) { Pip.new(project_path: Pathname(root)) }
     it_behaves_like 'a PackageManager'
 
-
     let(:requirements_txt) do
-<<eos
+      <<INPUT
 tox>=2.3.1,<3.0.0
 docutils>=0.10
 # botocore and the awscli packages are typically developed
@@ -23,7 +22,7 @@ mock==1.3.0
 rsa>=3.1.2,<=3.5.0
 wheel==0.24.0
 PyYAML>=3.10,<=3.12"
-eos
+INPUT
     end
 
     let(:dependency_json) do
@@ -46,7 +45,7 @@ eos
 
       it 'should call pip install with the requirements file' do
         expect(SharedHelpers::Cmd).to receive(:run).with('pip install -r requirements.txt')
-                                          .and_return([dependency_json, '', cmd_success])
+                                                   .and_return([dependency_json, '', cmd_success])
         pip.prepare
       end
 
@@ -55,12 +54,11 @@ eos
 
         it 'should use the provided requirements file' do
           expect(SharedHelpers::Cmd).to receive(:run).with("pip install -r #{@user_provided_requirements}")
-                                            .and_return([dependency_json, '', cmd_success])
+                                                     .and_return([dependency_json, '', cmd_success])
           pip.prepare
         end
       end
     end
-
 
     describe '.current_packages' do
       def stub_pip(stdout)
