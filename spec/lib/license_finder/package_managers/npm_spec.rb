@@ -42,6 +42,7 @@ module LicenseFinder
                                                    .and_return([dependency_json, '', cmd_success])
         npm.prepare
       end
+
       context 'ignored_groups contains devDependencies' do
         let(:npm) { NPM.new project_path: Pathname.new(root), ignored_groups: 'devDependencies' }
         it 'should include a production flag' do
