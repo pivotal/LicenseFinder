@@ -1,0 +1,121 @@
+[{
+  "version": "3.12",
+  "name": "PyYAML",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "0.24.0",
+  "name": "wheel",
+  "dependencies": [],
+  "location": "/usr/lib/python2.7/dist-packages"
+}, {
+  "version": "3.4.2",
+  "name": "rsa",
+  "dependencies": ["pyasn1"],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "1.3.0",
+  "name": "mock",
+  "dependencies": ["six", "funcsigs", "pbr"],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "0.3.7",
+  "name": "colorama",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "1.3.0",
+  "name": "nose",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "0.9.3",
+  "name": "jmespath",
+  "dependencies": [],
+  "location": "/workspace/LicenseFinder/bin/src/jmespath"
+}, {
+  "version": "0.1.13",
+  "name": "s3transfer",
+  "dependencies": ["botocore", "futures", "futures"],
+  "location": "/workspace/LicenseFinder/bin/src/s3transfer"
+}, {
+  "version": "1.9.19",
+  "name": "botocore",
+  "dependencies": ["jmespath", "python-dateutil", "docutils"],
+  "location": "/workspace/LicenseFinder/bin/src/botocore"
+}, {
+  "version": "0.14",
+  "name": "docutils",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "2.9.1",
+  "name": "tox",
+  "dependencies": ["py", "pluggy", "six", "virtualenv"],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "0.4.2",
+  "name": "pyasn1",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "4.0.0",
+  "name": "pbr",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "1.0.2",
+  "name": "funcsigs",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "1.11.0",
+  "name": "six",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "3.2.0",
+  "name": "futures",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "1.9.19",
+  "name": "botocore",
+  "dependencies": ["jmespath", "python-dateutil", "docutils"],
+  "location": "/workspace/LicenseFinder/bin/src/botocore"
+}, {
+  "version": "2.6.1",
+  "name": "python-dateutil",
+  "dependencies": ["six"],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "0.9.3",
+  "name": "jmespath",
+  "dependencies": [],
+  "location": "/workspace/LicenseFinder/bin/src/jmespath"
+}, {
+  "version": "15.2.0",
+  "name": "virtualenv",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "1.11.0",
+  "name": "six",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "0.6.0",
+  "name": "pluggy",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "1.5.3",
+  "name": "py",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}, {
+  "version": "1.11.0",
+  "name": "six",
+  "dependencies": [],
+  "location": "/usr/local/lib/python2.7/dist-packages"
+}]
