@@ -1,3 +1,15 @@
+# [5.1.0] / 2018-04-02
+
+### Added
+* Support for Ruby 2.5.1 [Deprecated] Support for Ruby 2.1 [Deprecated] Support for Ruby 2.2 [Deprecated] Support for jruby - [9c82a84](https://github.com/pivotal/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
+
+### Fixed
+* Added back the pip prepare commands [#156376451 finish] - [fdd63fb](https://github.com/pivotal/LicenseFinder/commit/fdd63fb38332230e0cce0ee1b47aa5ccd0eebc36) 
+* Govendor not consolidating common paths from the same SHA - [bdd23c9](https://github.com/pivotal/LicenseFinder/commit/bdd23c94ae6ff09a2466c8875e554de60db6603c) 
+
+### Deprecated
+[Added] Support for Ruby 2.5.1 * Support for Ruby 2.1 * Support for Ruby 2.2 * Support for jruby - [9c82a84](https://github.com/pivotal/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
+
 # [5.0.3] / 2018-02-13
 
 ### Changed
@@ -553,3 +565,4 @@ Bugfixes:
 [5.0.0]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...v5.0.0
 [5.0.2]: https://github.com/pivotal/LicenseFinder/compare/v5.0.0...v5.0.2
 [5.0.3]: https://github.com/pivotal/LicenseFinder/compare/v5.0.2...v5.0.3
+[5.1.0]: https://github.com/pivotal/LicenseFinder/compare/v5.0.3...v5.1.0
