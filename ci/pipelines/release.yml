@@ -76,3 +76,39 @@ jobs:
       name: version/tag.txt
       tag: version/tag.txt
       body: version/changelog.txt
+
+- name: manual-release
+  plan:
+  - get: lf-git
+  - get: lf-image
+    params:
+      save: true
+  - get: lf-release
+  - task: update-changelog
+    image: lf-image
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+    file: lf-git/ci/tasks/update-changelog.yml
+  - put: lf-image
+    params:
+      build: lf-git
+      tag: version/version.txt
+      tag_as_latest: true
+  - task: build-and-push-gem
+    image: lf-image
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+      GIT_PRIVATE_KEY: ((CfOslBotPrivateKey))
+      GEM_API_KEY: ((LicenseFinderGemApiKey))
+    file: lf-git/ci/tasks/build-and-push-gem.yml
+  - put: lf-git
+    params:
+      repository: lf-git-changed
+      tag: version/tag.txt
+  - put: lf-release
+    params:
+      name: version/tag.txt
+      tag: version/tag.txt
+      body: version/changelog.txt
