@@ -106,7 +106,6 @@ jobs:
   - put: lf-git
     params:
       repository: lf-git-changed
-      tag: version/tag.txt
   - put: lf-release
     params:
       name: version/tag.txt
