@@ -82,7 +82,7 @@ module LicenseFinder
     end
 
     def clear_logs
-      FileUtils.rmdir config.log_directory if File.directory? config.log_directory
+      FileUtils.rmtree config.log_directory, :secure => true if File.directory? config.log_directory
     end
 
     def options

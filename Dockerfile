@@ -90,7 +90,7 @@ ENV LC_ALL=en_US.UTF-8
 
 #install rvm
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
-    curl -sSL https://get.rvm.io | sudo bash -s stable --ruby=2.4.1
+    curl -sSL https://get.rvm.io | sudo bash -s stable --ruby=2.5.1
 ENV PATH=/usr/local/rvm/bin:$PATH
 
 #install mix
