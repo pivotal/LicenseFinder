@@ -5,7 +5,7 @@ require 'license_finder/platform'
 require 'license_finder/version'
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.1.0'
   s.name        = 'license_finder'
   s.version     = LicenseFinder::VERSION
 
@@ -51,13 +51,13 @@ Gem::Specification.new do |s|
   s.add_dependency 'thor'
   s.add_dependency 'toml', '0.2.0'
   s.add_dependency 'xml-simple'
+  s.add_dependency 'with_env', '1.1.0'
 
-  # to preserve ruby 1.9.3 support
-  s.add_dependency 'with_env', (RUBY_VERSION <= '1.9.3' ? '1.0.0' : '> 1.0')
-
+  s.add_development_dependency 'addressable', '2.5.2'
   s.add_development_dependency 'capybara', '~> 2.0.0'
   s.add_development_dependency 'cocoapods', '0.34.0' if LicenseFinder::Platform.darwin?
   s.add_development_dependency 'fakefs', '~> 0.11.3'
+  s.add_development_dependency 'mime-types', '3.1'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3'
@@ -67,10 +67,6 @@ Gem::Specification.new do |s|
   # to preserve ruby < 2.2.2 support.
   s.add_development_dependency 'rack', (RUBY_VERSION < '2.2.2' ? '1.6.0' : '> 1.6')
   s.add_development_dependency 'rack-test', (RUBY_VERSION < '2.2.2' ? '0.7.0' : '> 0.7')
-
-  # temporary to preserve ruby 1.9.3 support.
-  s.add_development_dependency 'addressable', '< 2.5.0'
-  s.add_development_dependency 'mime-types', '< 3.0'
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.start_with?('spec', 'features') }
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
