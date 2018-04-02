@@ -50,8 +50,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'rubyzip'
   s.add_dependency 'thor'
   s.add_dependency 'toml', '0.2.0'
-  s.add_dependency 'xml-simple'
   s.add_dependency 'with_env', '1.1.0'
+  s.add_dependency 'xml-simple'
 
   s.add_development_dependency 'addressable', '2.5.2'
   s.add_development_dependency 'capybara', '~> 2.0.0'
