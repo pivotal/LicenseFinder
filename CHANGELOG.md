@@ -2,7 +2,7 @@
 
 ### Added
 * Support for Ruby 2.5.1 - [9c82a84](https://github.com/pivotal/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
-* Support for Scala build Tool (sbt ) - [2115ddf](https://github.com/pivotal/LicenseFinder/commit/2115ddfe9481d17e6b1d0ac63d6ae1c6143f370c) 
+* Support for Scala build Tool (sbt ) - [2115ddf](https://github.com/pivotal/LicenseFinder/commit/2115ddfe9481d17e6b1d0ac63d6ae1c6143f370c) - Bradford D. Boyle
 * Condense gvt paths with identical shas into their common path - [9e1071d](https://github.com/pivotal/LicenseFinder/commit/9e1071d3c92405a8605727ad1164d6581dc50533)
 
 ### Fixed
