@@ -384,6 +384,12 @@ module LicenseFinder
       end
     end
 
+    class MixUmbrellaProject < MixProject
+      def add_dep
+        FileUtils.copy_entry(Paths.fixtures.join('mix_umbrella'), Paths.my_app)
+      end
+    end
+
     class NugetProject < Project
       def add_dep
         clone('nuget')
