@@ -22,6 +22,12 @@ describe LicenseFinder::License, 'BSD' do
   end
 end
 
+describe LicenseFinder::License, 'cc01' do
+  it 'should be recognized' do |_e|
+    expect(described_class.find_by_name('CC0 1.0').url).to be
+  end
+end
+
 describe LicenseFinder::License, 'GPLv2' do
   it 'should be recognized' do
     expect(described_class.find_by_name('GPLv2').url).to be
