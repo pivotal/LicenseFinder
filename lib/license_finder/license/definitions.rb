@@ -60,10 +60,10 @@ module LicenseFinder
 
       def cc01
         License.new(
-            short_name:  'CC01',
-            pretty_name: 'CC0 1.0 Universal',
-            other_names: ['CC0 1.0'],
-            url:         'http://creativecommons.org/publicdomain/zero/1.0'
+          short_name:  'CC01',
+          pretty_name: 'CC0 1.0 Universal',
+          other_names: ['CC0 1.0'],
+          url:         'http://creativecommons.org/publicdomain/zero/1.0'
         )
       end
 
