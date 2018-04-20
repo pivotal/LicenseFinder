@@ -31,25 +31,46 @@ module LicenseFinder
 
     private
 
+    def end_of_package_lines?(line)
+      line == 'ok'
+    end
+
     def mix_output
       command = "#{@command} deps"
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
-      stdout
-        .each_line
-        .map(&:strip)
-        .select { |line| line_of_interest? line }
-        .each_slice(2).to_a
-        .map { |line1, line2| [line1.split(' ')[1], resolve_version(line2)] }
+      packages_lines(stdout)
+        .reject { |package_lines| package_lines.length == 1 } # in_umbrella: true dependencies
+        .map { |package_lines| [package_lines[0].split(' ')[1], resolve_version(package_lines[1])] }
     end
 
-    def line_of_interest?(line)
-      line.start_with?('* ', 'locked at', 'the dependency is not available')
+    def packages_lines(stdout)
+      packages_lines, last_package_lines =
+        stdout
+        .each_line
+        .map(&:strip)
+        .reject { |line| end_of_package_lines?(line) }
+        .reduce([[], []]) do |(packages_lines, package_lines), line|
+        if start_of_package_lines?(line)
+          packages_lines.push(package_lines) unless package_lines.empty?
+
+          [packages_lines, [line]]
+        else
+          package_lines.push(line)
+          [packages_lines, package_lines]
+        end
+      end
+
+      packages_lines.push(last_package_lines)
     end
 
     def resolve_version(line)
       line =~ /locked at ([^\s]+)/ ? Regexp.last_match(1) : line
+    end
+
+    def start_of_package_lines?(line)
+      line.start_with?('* ')
     end
   end
 end
