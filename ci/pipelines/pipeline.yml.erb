@@ -18,12 +18,12 @@ resources:
 - name: LicenseFinder
   type: git
   source:
-    uri: https://github.com/pivotal/LicenseFinder.git
+    uri: https://github.com/pivotal-legacy/LicenseFinder.git
     branch: master
 - name: pull-request
   type: pull-request
   source:
-    repo: pivotal/LicenseFinder
+    repo: pivotal-legacy/LicenseFinder
     base: master
     access_token: ((GithubApiPullRequestToken))
 

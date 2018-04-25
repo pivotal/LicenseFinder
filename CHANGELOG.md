@@ -1,50 +1,50 @@
 # [5.1.0] / 2018-04-02
 
 ### Added
-* Support for Ruby 2.5.1 - [9c82a84](https://github.com/pivotal/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
-* Support for Scala build Tool (sbt ) - [2115ddf](https://github.com/pivotal/LicenseFinder/commit/2115ddfe9481d17e6b1d0ac63d6ae1c6143f370c) - Bradford D. Boyle
-* Condense gvt paths with identical shas into their common path - [9e1071d](https://github.com/pivotal/LicenseFinder/commit/9e1071d3c92405a8605727ad1164d6581dc50533)
+* Support for Ruby 2.5.1 - [9c82a84](https://github.com/pivotal-legacy/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
+* Support for Scala build Tool (sbt ) - [2115ddf](https://github.com/pivotal-legacy/LicenseFinder/commit/2115ddfe9481d17e6b1d0ac63d6ae1c6143f370c) - Bradford D. Boyle
+* Condense gvt paths with identical shas into their common path - [9e1071d](https://github.com/pivotal-legacy/LicenseFinder/commit/9e1071d3c92405a8605727ad1164d6581dc50533)
 
 ### Fixed
-* Added back the pip prepare commands [#156376451 finish] - [fdd63fb](https://github.com/pivotal/LicenseFinder/commit/fdd63fb38332230e0cce0ee1b47aa5ccd0eebc36) 
-* Govendor not consolidating common paths from the same SHA - [bdd23c9](https://github.com/pivotal/LicenseFinder/commit/bdd23c94ae6ff09a2466c8875e554de60db6603c) 
+* Added back the pip prepare commands [#156376451 finish] - [fdd63fb](https://github.com/pivotal-legacy/LicenseFinder/commit/fdd63fb38332230e0cce0ee1b47aa5ccd0eebc36) 
+* Govendor not consolidating common paths from the same SHA - [bdd23c9](https://github.com/pivotal-legacy/LicenseFinder/commit/bdd23c94ae6ff09a2466c8875e554de60db6603c) 
 
 ### Deprecated
 * Support for Ruby 2.1 
 * Support for Ruby 2.2 
-* Support for jruby - [9c82a84](https://github.com/pivotal/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
+* Support for jruby - [9c82a84](https://github.com/pivotal-legacy/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
 
 # [5.0.3] / 2018-02-13
 
 ### Changed
-* Add the -vendor-only flag to dep-ensure calls - [e305bd1](https://github.com/pivotal/LicenseFinder/commit/e305bd1d5b2d9653f828c3940b59a12903904699) 
-* Update detected paths for Nuget - [3fe8995](https://github.com/pivotal/LicenseFinder/commit/3fe89955d82c3467628abbd2ca9ba159bfeb7df6)
+* Add the -vendor-only flag to dep-ensure calls - [e305bd1](https://github.com/pivotal-legacy/LicenseFinder/commit/e305bd1d5b2d9653f828c3940b59a12903904699) 
+* Update detected paths for Nuget - [3fe8995](https://github.com/pivotal-legacy/LicenseFinder/commit/3fe89955d82c3467628abbd2ca9ba159bfeb7df6)
 
 # [5.0.2] / 2018-02-06
 
 ### Fixed
-* Add conditional production flag to npm - [533f9b8](https://github.com/pivotal/LicenseFinder/commit/533f9b8fda250655f3613444da49fdce60215237) 
-* conan install & info commands - [322e64c](https://github.com/pivotal/LicenseFinder/commit/322e64c402f4e45d97c6f3bf67c3ffdaabbb359f) 
-* Duplicate approvals in decisions file - [a8e6141](https://github.com/pivotal/LicenseFinder/commit/a8e6141cd7ac7ed2aa10b35c55954a48bacf3523) 
-* log path issues - [9f1bae1](https://github.com/pivotal/LicenseFinder/commit/9f1bae12c88771229e0a919876f4de6bcad31677) 
+* Add conditional production flag to npm - [533f9b8](https://github.com/pivotal-legacy/LicenseFinder/commit/533f9b8fda250655f3613444da49fdce60215237) 
+* conan install & info commands - [322e64c](https://github.com/pivotal-legacy/LicenseFinder/commit/322e64c402f4e45d97c6f3bf67c3ffdaabbb359f) 
+* Duplicate approvals in decisions file - [a8e6141](https://github.com/pivotal-legacy/LicenseFinder/commit/a8e6141cd7ac7ed2aa10b35c55954a48bacf3523) 
+* log path issues - [9f1bae1](https://github.com/pivotal-legacy/LicenseFinder/commit/9f1bae12c88771229e0a919876f4de6bcad31677) 
 
-* Fix yarn not working with --project_path option - [c6ed08d](https://github.com/pivotal/LicenseFinder/commit/c6ed08dd8342dec9fcc3e6377f88d5ef01600928) 
+* Fix yarn not working with --project_path option - [c6ed08d](https://github.com/pivotal-legacy/LicenseFinder/commit/c6ed08dd8342dec9fcc3e6377f88d5ef01600928) 
 
 # [5.0.0] / 2018-01-15
 
 ### Added
-* NPM prepare - [e7a0d30](https://github.com/pivotal/LicenseFinder/commit/e7a0d30cb77e5503b5a934b26dbd3dc272dc5605) 
-* Specify log directory for prepare - [b9a5991](https://github.com/pivotal/LicenseFinder/commit/b9a599171f3fda2affa9381d998e2158a2bf7fac) 
+* NPM prepare - [e7a0d30](https://github.com/pivotal-legacy/LicenseFinder/commit/e7a0d30cb77e5503b5a934b26dbd3dc272dc5605) 
+* Specify log directory for prepare - [b9a5991](https://github.com/pivotal-legacy/LicenseFinder/commit/b9a599171f3fda2affa9381d998e2158a2bf7fac) 
 
-* Added prepare step for elixir projects - [38b08ea](https://github.com/pivotal/LicenseFinder/commit/38b08eae23b6b0c2bbaa3aea7845ab6a8d9b028b) 
+* Added prepare step for elixir projects - [38b08ea](https://github.com/pivotal-legacy/LicenseFinder/commit/38b08eae23b6b0c2bbaa3aea7845ab6a8d9b028b) 
 
 ### Fixed
-* Action_items resolves decisions file path - [c2a92ab](https://github.com/pivotal/LicenseFinder/commit/c2a92ab62203efb890dfeb1798d377c8d835feb6) 
+* Action_items resolves decisions file path - [c2a92ab](https://github.com/pivotal-legacy/LicenseFinder/commit/c2a92ab62203efb890dfeb1798d377c8d835feb6) 
 
-* Bower prepare step - [bb11d7f](https://github.com/pivotal/LicenseFinder/commit/bb11d7f07cc5e436381f01245a46033af6bb2d3b) 
+* Bower prepare step - [bb11d7f](https://github.com/pivotal-legacy/LicenseFinder/commit/bb11d7f07cc5e436381f01245a46033af6bb2d3b) 
 
 ### Changed
-* Package Manager will now log if prepare step fails. Instead of erroring out - [54da71e](https://github.com/pivotal/LicenseFinder/commit/54da71e98f14cd199c39dfd7b762030fcac60ccb) 
+* Package Manager will now log if prepare step fails. Instead of erroring out - [54da71e](https://github.com/pivotal-legacy/LicenseFinder/commit/54da71e98f14cd199c39dfd7b762030fcac60ccb) 
 
 # [4.0.2] / 2017-11-16
 
@@ -309,7 +309,7 @@ Bugfixes:
 * Bugfixes
 
   * Process incorrectly-defined dependencies.
-    [Original issue.](https://github.com/pivotal/LicenseFinder/issues/108)
+    [Original issue.](https://github.com/pivotal-legacy/LicenseFinder/issues/108)
   * Allow license_finder to process incorrectly-defined dependencies.
 
 
@@ -558,16 +558,16 @@ Bugfixes:
   * Fix blow up if there's not `ignore_groups` setting in the config file.
 
 
-[Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...HEAD
-[4.0.2]: https://github.com/pivotal/LicenseFinder/compare/v4.0.1...v4.0.2
-[4.0.1]: https://github.com/pivotal/LicenseFinder/compare/v4.0.0...v4.0.1
-[4.0.0]: https://github.com/pivotal/LicenseFinder/compare/v3.1.0...v4.0.0
-[3.1.0]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...v3.1.0
-[3.0.4]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...v3.0.4
-[3.0.2]: https://github.com/pivotal/LicenseFinder/compare/v3.0.1...v3.0.2
-[3.0.1]: https://github.com/pivotal/LicenseFinder/compare/v3.0.0...v3.0.1
-[3.0.0]: https://github.com/pivotal/LicenseFinder/compare/v2.1.2...v3.0.0
-[5.0.0]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...v5.0.0
-[5.0.2]: https://github.com/pivotal/LicenseFinder/compare/v5.0.0...v5.0.2
-[5.0.3]: https://github.com/pivotal/LicenseFinder/compare/v5.0.2...v5.0.3
-[5.1.0]: https://github.com/pivotal/LicenseFinder/compare/v5.0.3...v5.1.0
+[Unreleased]: https://github.com/pivotal-legacy/LicenseFinder/compare/v4.0.2...HEAD
+[4.0.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.1.0...v4.0.0
+[3.1.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.0.4...v3.1.0
+[3.0.4]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.0.2...v3.0.4
+[3.0.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v2.1.2...v3.0.0
+[5.0.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v4.0.2...v5.0.0
+[5.0.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.0.0...v5.0.2
+[5.0.3]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.0.2...v5.0.3
+[5.1.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.0.3...v5.1.0

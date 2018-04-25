@@ -2,7 +2,7 @@ resources:
 - name: lf-git
   type: git
   source:
-    uri: git@github.com:pivotal/LicenseFinder.git
+    uri: git@github.com:pivotal-legacy/LicenseFinder.git
     private_key: ((CfOslBotPrivateKey))
     branch: master
 
