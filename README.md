@@ -1,6 +1,6 @@
 # License Finder
 
-[![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
+[![Code Climate](https://codeclimate.com/github/pivotal-legacy/LicenseFinder.png)](https://codeclimate.com/github/pivotal-legacy/LicenseFinder)
 
 Build status
 * Ruby 2.1.5 [![Ruby 2.1.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.1.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
@@ -16,7 +16,7 @@ detect the licenses of the packages in them, compare those licenses
 against a user-defined whitelist, and give you an actionable exception
 report.
 
-* code: https://github.com/pivotal/LicenseFinder
+* code: https://github.com/pivotal-legacy/LicenseFinder
 * ci: https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder
 * docker: [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
   * the docker image contains all the package managers needed to run `license_finder`
@@ -148,7 +148,7 @@ passed to it from that directory.
 Note that the docker image will run the gem which is installed within it. 
 So the docker image tagged `4.0.2` will run *License Finder Version 4.0.2*
 
-See the [contibuting guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
+See the [contibuting guide](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
 
 ### Activation
 
@@ -279,7 +279,7 @@ all of your project's dependencies and includes information about which need to
 be approved. The project name at the top of the report can be set with
 `license_finder project_name add`.
 
-See [CONTRIBUTING.md](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md#adding-reports)
+See [CONTRIBUTING.md](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md#adding-reports)
 for advice about adding and customizing reports.
 
 
@@ -473,7 +473,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md).
 
 
 ## License

@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-* Fork the project from https://github.com/pivotal/LicenseFinder
+* Fork the project from https://github.com/pivotal-legacy/LicenseFinder
 * Create a feature branch.
 * Make your feature addition or bug fix. Please make sure there is appropriate test coverage.
 * Rebase on top of master.
@@ -37,14 +37,14 @@ docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -l
 ## Adding Package Managers
 
 There are a few steps to adding a new package manager.
-The main things which need to be implemented are mentioned in [Package Manager](https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/package_manager.rb).
+The main things which need to be implemented are mentioned in [Package Manager](https://github.com/pivotal-legacy/LicenseFinder/blob/master/lib/license_finder/package_manager.rb).
 
-[Here](https://github.com/pivotal/LicenseFinder/compare/v2.0.0...v2.0.1) is how
+[Here](https://github.com/pivotal-legacy/LicenseFinder/compare/v2.0.0...v2.0.1) is how
 support was added for `rebar`, an `erlang` package manager.
 
 There are feature tests and unit tests for each currently supported package manager.
-* [Feature test example](https://github.com/pivotal/LicenseFinder/blob/master/features/features/package_managers/gvt_spec.rb)
-* [Unit test example](https://github.com/pivotal/LicenseFinder/blob/master/spec/lib/license_finder/package_managers/gvt_spec.rb)
+* [Feature test example](https://github.com/pivotal-legacy/LicenseFinder/blob/master/features/features/package_managers/gvt_spec.rb)
+* [Unit test example](https://github.com/pivotal-legacy/LicenseFinder/blob/master/spec/lib/license_finder/package_managers/gvt_spec.rb)
 
 ## Adding Licenses
 
@@ -62,7 +62,7 @@ submitting a pull request which adds new columns to
 It is also possible to generate a custom report from an ERB template.  Use this
 [example](https://gist.github.com/mainej/b190d2f138c2b9e2e20a) as a starting
 point.  These reports will have access to the helpers in
-[`LicenseFinder::ErbReport`](https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/reports/erb_report.rb).
+[`LicenseFinder::ErbReport`](https://github.com/pivotal-legacy/LicenseFinder/blob/master/lib/license_finder/reports/erb_report.rb).
 
 If you need a report with more detailed data or in a different format, we
 recommend writing a custom ruby script.  This
