@@ -7,6 +7,7 @@ module LicenseFinder
         [
           apache2,
           bsd,
+          cc01,
           gplv2,
           gplv3,
           isc,
@@ -54,6 +55,15 @@ module LicenseFinder
           short_name:  'BSD',
           other_names: ['BSD4', 'bsd-old', '4-clause BSD', 'BSD-4-Clause', 'BSD License'],
           url:         'http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29'
+        )
+      end
+
+      def cc01
+        License.new(
+          short_name:  'CC01',
+          pretty_name: 'CC0 1.0 Universal',
+          other_names: ['CC0 1.0'],
+          url:         'http://creativecommons.org/publicdomain/zero/1.0'
         )
       end
 
