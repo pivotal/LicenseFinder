@@ -17,7 +17,7 @@ module LicenseFinder
       packages = []
       incompatible_packages = []
 
-      json_strings = stdout.split("\n")
+      json_strings = stdout.encode('ASCII', invalid: :replace, undef: :replace, replace: '?').split("\n")
       json_objects = json_strings.map { |json_object| JSON.parse(json_object) }
 
       if json_objects.last['type'] == 'table'
