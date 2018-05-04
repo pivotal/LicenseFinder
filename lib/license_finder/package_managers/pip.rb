@@ -1,5 +1,4 @@
 require 'json'
-require 'httparty'
 
 module LicenseFinder
   class Pip < PackageManager
@@ -55,12 +54,11 @@ module LicenseFinder
     end
 
     def pypi_def(name, version)
-      response = HTTParty.get("https://pypi.python.org/pypi/#{name}/#{version}/json")
-      if response.code == 200
-        JSON.parse(response.body).fetch('info', {})
-      else
-        {}
-      end
+      uri = URI("https://pypi.python.org/pypi/#{name}/#{version}/json")
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      response = http.get(uri.request_uri).response
+      response.is_a?(Net::HTTPSuccess) ? JSON.parse(response.body).fetch('info', {}) : {}
     end
   end
 end
