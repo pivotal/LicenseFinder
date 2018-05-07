@@ -175,7 +175,7 @@ languages, as long as that language has a package definition in the project dire
 * `yarn.lock` file (for `yarn`)
 * `conanfile.txt` file (for `conan`)
 * `build.sbt` file (for `sbt`)
-* `Cargo.locl` file (for `cargo`)
+* `Cargo.lock` file (for `cargo`)
 
 
 ### Continuous Integration
