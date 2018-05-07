@@ -4,7 +4,7 @@ module LicenseFinder
   class Cargo < PackageManager
     def current_packages
       cargo_output.map do |package|
-        CargoPackage.new(package, logger: logger)      
+        CargoPackage.new(package, logger: logger)
       end
     end
 
@@ -26,7 +26,7 @@ module LicenseFinder
       command = "#{Cargo.package_management_command} metadata --format-version=1"
 
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
-      puts "STDOUT: #{stdout}"
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
       JSON(stdout)
         .fetch('packages', [])
     end

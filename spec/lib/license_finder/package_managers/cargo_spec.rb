@@ -15,8 +15,7 @@ module LicenseFinder
           .with('cargo metadata --format-version=1')
           .and_return([json, '', cmd_success])
 
-        expect(subject.current_packages.map { |p| p.name }).to eq %w[license-finder log simple_logger]
-
+        expect(subject.current_packages.map(&:name)).to eq %w[license-finder log simple_logger]
       end
     end
 

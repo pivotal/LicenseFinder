@@ -2,7 +2,7 @@ module LicenseFinder
   class CargoPackage < Package
     def initialize(crate, options = {})
       crate.compact!
-      children = crate.fetch('dependencies', []).map{|p| p['name']}
+      children = crate.fetch('dependencies', []).map { |p| p['name'] }
       licenses = crate.fetch('license', '').split('/')
       super(
         crate['name'],
@@ -10,7 +10,7 @@ module LicenseFinder
         options.merge(
           summary: crate.fetch('description', '').strip,
           spec_licenses: licenses.compact,
-          children: children,
+          children: children
         )
       )
     end
