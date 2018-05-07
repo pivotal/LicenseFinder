@@ -117,7 +117,7 @@ RUN apt-get install -y python-dev && \
 	pip install conan
 
 # install Cargo
-RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh
+RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --disable-sudo
 
 # install license_finder
 COPY . /LicenseFinder
