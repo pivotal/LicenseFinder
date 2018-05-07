@@ -1,7 +1,7 @@
 module LicenseFinder
   class CargoPackage < Package
     def initialize(crate, options = {})
-      crate.compact!
+      crate = crate.compact
       children = crate.fetch('dependencies', []).map { |p| p['name'] }
       licenses = crate.fetch('license', '').split('/')
       super(
