@@ -2,8 +2,8 @@
 
 import json
 import sys
-from pip.req import parse_requirements
-from pip.download import PipSession
+from pip._internal.req import parse_requirements
+from pip._internal.download import PipSession
 from pip._vendor import pkg_resources
 from pip._vendor.six import print_
 

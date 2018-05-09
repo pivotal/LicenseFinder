@@ -37,7 +37,7 @@ RUN apt-get install -y python rebar
 
 # install and update python-pip
 RUN apt-get install -y python-pip && \
-    pip install --upgrade pip
+    pip install --upgrade pip==10.0.1
 
 # install maven
 RUN curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz && \
