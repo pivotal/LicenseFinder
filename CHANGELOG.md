@@ -1,6 +1,17 @@
 # [5.2.0] / 2018-05-09
 
+### Fixed
+* Support for pip 10.0.1 - [286f679](https://github.com/pivotal-legacy/LicenseFinder/commit/286f6790dc71c97c0e93ecdfe0c6fddad75165cc)
+
 # [5.1.1] / 2018-05-08
+
+### Added
+* CC License detection
+
+### Fixed
+* Yarn package manager now handles non-ASCII characters
+* in_umbrella: true dependencies for Mix
+* Pivotal Repo Renamed to Pivotal-legacy
 
 # [5.1.0] / 2018-04-02
 
