@@ -1,3 +1,8 @@
+# [5.2.1] / 2018-05-14
+
+### Changed
+* Updated go-lang to 1.10.2 in the Docker * Updated Maven to 3.5.3 in the Docker - [1decf6a](https://github.com/pivotal-legacy/LicenseFinder/commit/1decf6ad27c9edf96b4f5cccd9a7ca0955fed9f2) - Mark Fioravanti
+
 # [5.2.0] / 2018-05-09
 
 ### Fixed
@@ -589,3 +594,4 @@ Bugfixes:
 [5.1.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.1.0...v5.1.1
 [5.1.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.1.0...v5.1.1
 [5.2.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.1.1...v5.2.0
+[5.2.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.0...v5.2.1
