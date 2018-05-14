@@ -62,7 +62,6 @@ jobs:
   - put: lf-git
     params:
       repository: lf-git-changed
-      tag: version/tag.txt
   - task: build-and-push-gem
     image: lf-image
     params:
