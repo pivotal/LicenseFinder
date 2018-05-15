@@ -38,6 +38,7 @@ jobs:
   - put: lf-git
     params:
       repository: lf-git-changed
+      tag: version/tag.txt
 
 - name: release
   plan:
