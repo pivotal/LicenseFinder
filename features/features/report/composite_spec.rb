@@ -22,6 +22,6 @@ describe 'Composite project' do
     project = LicenseFinder::TestingDSL::BundlerProject.create
     project.install
     developer.execute_command('license_finder report --recursive --format csv --columns name version install_path licenses')
-    expect(developer).to be_seeing_something_like(%r{multi_xml,0.\d+.\d+,.*\/gems\/multi_xml-0.\d+.\d+,MIT})
+    expect(developer).to be_seeing_something_like(%r{toml,0.\d+.\d+,.*\/gems\/toml-0.\d+.\d+,MIT})
   end
 end
