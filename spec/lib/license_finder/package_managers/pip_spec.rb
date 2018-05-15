@@ -66,7 +66,7 @@ INPUT
       end
 
       def stub_pypi(name, version, response)
-        stub_request(:get, "https://pypi.python.org/pypi/#{name}/#{version}/json")
+        stub_request(:get, "https://pypi.org/pypi/#{name}/#{version}/json")
           .to_return(response)
       end
 

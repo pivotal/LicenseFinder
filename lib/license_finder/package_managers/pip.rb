@@ -1,4 +1,5 @@
 require 'json'
+require 'net/http'
 
 module LicenseFinder
   class Pip < PackageManager
@@ -54,7 +55,7 @@ module LicenseFinder
     end
 
     def pypi_def(name, version)
-      uri = URI("https://pypi.python.org/pypi/#{name}/#{version}/json")
+      uri = URI("https://pypi.org/pypi/#{name}/#{version}/json")
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       response = http.get(uri.request_uri).response
