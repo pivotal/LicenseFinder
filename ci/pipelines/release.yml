@@ -3,7 +3,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-legacy/LicenseFinder.git
-    private_key: ((CfOslBotPrivateKey))
+    private_key: ((CfOslBot.private_key))
     branch: master
 
 - name: lf-image
@@ -11,8 +11,8 @@ resources:
   source:
     repository: licensefinder/license_finder
     email: ((LicenseFinderDockerEmail))
-    username: ((LicenseFinderDockerUserName))
-    password: ((LicenseFinderDockerPassword))
+    username: ((LicenseFinderDocker.username))
+    password: ((LicenseFinderDocker.password))
 
 - name: lf-release
   type: github-release
@@ -67,7 +67,7 @@ jobs:
     params:
       GIT_USERNAME: ((GithubApiUser))
       GIT_EMAIL: ((GithubApiEmail))
-      GIT_PRIVATE_KEY: ((CfOslBotPrivateKey))
+      GIT_PRIVATE_KEY: ((CfOslBot.private_key))
       GEM_API_KEY: ((LicenseFinderGemApiKey))
     file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-release
@@ -99,7 +99,7 @@ jobs:
     params:
       GIT_USERNAME: ((GithubApiUser))
       GIT_EMAIL: ((GithubApiEmail))
-      GIT_PRIVATE_KEY: ((CfOslBotPrivateKey))
+      GIT_PRIVATE_KEY: ((CfOslBot.private_key))
       GEM_API_KEY: ((LicenseFinderGemApiKey))
     file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-git
