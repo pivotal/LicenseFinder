@@ -50,6 +50,7 @@ report.
 * JavaScript (via `yarn`)
 * C++/C (via `conan`)
 * Scala (via `sbt`)
+* Rust (via `cargo`)
 
 ## Installation
 
@@ -174,6 +175,7 @@ languages, as long as that language has a package definition in the project dire
 * `yarn.lock` file (for `yarn`)
 * `conanfile.txt` file (for `conan`)
 * `build.sbt` file (for `sbt`)
+* `Cargo.lock` file (for `cargo`)
 
 
 ### Continuous Integration

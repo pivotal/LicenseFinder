@@ -144,5 +144,6 @@ require 'license_finder/package_managers/nuget'
 require 'license_finder/package_managers/dep'
 require 'license_finder/package_managers/conan'
 require 'license_finder/package_managers/sbt'
+require 'license_finder/package_managers/cargo'
 
 require 'license_finder/package'
