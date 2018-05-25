@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 FROM ubuntu:trusty
 RUN apt-get update && apt-get install -y curl git-core build-essential wget unzip
 
@@ -10,13 +9,6 @@ ENV SBT_VERSION 1.1.1
 ENV GRADLE_VERSION 4.2
 ENV RUBY_VERSION 2.5.1
 ENV MIX_VERSION 1.0
-||||||| merged common ancestors
-FROM ubuntu:xenial
-RUN apt-get update && apt-get install -y curl git-core build-essential wget unzip locales
-=======
-FROM ruby:2.5.1
-RUN apt-get update && apt-get install -y curl git-core build-essential wget unzip locales
->>>>>>> use ruby image rather than installing with RVM
 
 # nodejs seems to be required for the one of the gems
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
@@ -104,20 +96,11 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
-<<<<<<< HEAD
 #install rvm
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
     curl -sSL https://get.rvm.io | sudo bash -s stable --ruby=$RUBY_VERSION
 ENV PATH=/usr/local/rvm/bin:$PATH
 
-||||||| merged common ancestors
-#install rvm
-RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
-    curl -sSL https://get.rvm.io | bash -s stable --ruby=2.5.1
-ENV PATH=/usr/local/rvm/bin:$PATH
-
-=======
->>>>>>> use ruby image rather than installing with RVM
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
     sudo dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
