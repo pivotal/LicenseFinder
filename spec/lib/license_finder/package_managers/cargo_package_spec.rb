@@ -9,7 +9,7 @@ module LicenseFinder
         'id' => 'time 0.1.39 (registry+https://github.com/rust-lang/crates.io-index)',
         'license' => 'MIT/Apache-2.0',
         'license_file' => nil,
-        'description' => 'Utilities for working with time-related functions in Rust.\n',
+        'description' => "Utilities for working with time-related functions in Rust.\n",
         'source' => 'registry+https://github.com/rust-lang/crates.io-index',
         'dependencies' => [
           {
