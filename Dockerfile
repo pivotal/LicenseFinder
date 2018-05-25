@@ -1,5 +1,4 @@
-FROM ubuntu:trusty
-RUN apt-get update && apt-get install -y curl git-core build-essential wget unzip
+FROM ubuntu:xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 10.0.1
@@ -10,13 +9,21 @@ ENV GRADLE_VERSION 4.2
 ENV RUBY_VERSION 2.5.1
 ENV MIX_VERSION 1.0
 
+# programs needed for building
+RUN apt-get update && apt-get install -y \
+  curl \
+  git-core \
+  build-essential \
+  wget \
+  unzip
+
 # nodejs seems to be required for the one of the gems
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get -y install nodejs
 
 # install yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update && \
   apt-get install yarn
 
@@ -91,6 +98,7 @@ RUN mkdir /gopath && \
   go get github.com/golang/dep/cmd/dep
 
 # Fix the locale
+RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -98,15 +106,15 @@ ENV LC_ALL=en_US.UTF-8
 
 #install rvm
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
-    curl -sSL https://get.rvm.io | sudo bash -s stable --ruby=$RUBY_VERSION
+    curl -sSL https://get.rvm.io | bash -s stable --ruby=$RUBY_VERSION
 ENV PATH=/usr/local/rvm/bin:$PATH
 
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
-    sudo dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
-    sudo apt-get update && \
-    sudo apt-get install -y esl-erlang && \
-    sudo apt-get install -y elixir
+    dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
+    apt-get update && \
+    apt-get install -y esl-erlang && \
+    apt-get install -y elixir
 
 # install bundler
 RUN bash -lc "gem update --system && gem install bundler"
