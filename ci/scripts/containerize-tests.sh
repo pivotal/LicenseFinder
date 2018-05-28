@@ -7,7 +7,7 @@ source /opt/resource/common.sh
 start_docker 3 3
 
 pushd LicenseFinder
-  if [ ! -z "$(git diff master Dockerfile)" ]; then
+  if [ $USE_LOCAL_DOCKERFILE ]; then
     docker build . -t licensefinder/license_finder
   fi
 

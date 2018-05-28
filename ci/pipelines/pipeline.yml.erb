@@ -46,6 +46,7 @@ jobs:
     file: LicenseFinder/ci/tasks/build.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
+      USE_LOCAL_DOCKERFILE: true
 <% if setup_slack %>
   on_failure:
     put: slack-alert
