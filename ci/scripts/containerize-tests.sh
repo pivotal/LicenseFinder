@@ -7,9 +7,7 @@ source /opt/resource/common.sh
 start_docker 3 3
 
 pushd LicenseFinder
-  if [ $USE_LOCAL_DOCKERFILE ]; then
-    docker build . -t licensefinder/license_finder
-  fi
+  docker build . -t licensefinder/license_finder
 
   docker run -v $PWD:/lf -it licensefinder/license_finder /bin/bash \
     -exlc "cd /lf && ci/scripts/run-tests.sh $RUBY_VERSION_UNDER_TEST"
