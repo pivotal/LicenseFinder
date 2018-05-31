@@ -100,7 +100,6 @@ describe 'License Finder command line executable' do
   end
 
   context 'running project_roots', :focus do
-
     before do
       LicenseFinder::TestingDSL::CompositeProject.create
     end
@@ -110,17 +109,17 @@ describe 'License Finder command line executable' do
 
       specify 'returns all project paths' do
         developer.execute_command(license_finder_command)
-        expect(developer).to be_seeing_something_like /"\/workspace\/LicenseFinder\/tmp\/projects\/my_app\/multi-module-gradle"/
-        expect(developer).to be_seeing_something_like /"\/workspace\/LicenseFinder\/tmp\/projects\/my_app\/single-module-gradle"/
+        expect(developer).to be_seeing_something_like %r{"\/workspace\/LicenseFinder\/tmp\/projects\/my_app\/multi-module-gradle"/}
+        expect(developer).to be_seeing_something_like %r{"\/workspace\/LicenseFinder\/tmp\/projects\/my_app\/single-module-gradle"/}
       end
     end
 
     context 'without flags' do
-      let(:license_finder_command) { 'license_finder project_roots'}
+      let(:license_finder_command) { 'license_finder project_roots' }
 
       specify 'returns current path' do
         developer.execute_command(license_finder_command)
-        expect(developer).to be_seeing_something_like(/^\/workspace\/LicenseFinder\/tmp\/projects\/my_app$/)
+        expect(developer).to be_seeing_something_like %r{^\/workspace\/LicenseFinder\/tmp\/projects\/my_app$/}
       end
     end
   end

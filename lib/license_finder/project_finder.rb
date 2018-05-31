@@ -1,6 +1,6 @@
 module LicenseFinder
   class ProjectFinder
-    def initialize(main_project_path, configurable=false)
+    def initialize(main_project_path, configurable = false)
       @package_managers = LicenseFinder::Scanner::PACKAGE_MANAGERS
       @configurable = configurable
       @main_project_path = main_project_path
@@ -14,7 +14,6 @@ module LicenseFinder
         all_paths.shift
       end
       project_paths.compact
-
     end
 
     def collect_project_path(all_paths)
