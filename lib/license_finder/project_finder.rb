@@ -1,8 +1,8 @@
 module LicenseFinder
   class ProjectFinder
-    def initialize(main_project_path, configurable = false)
+    def initialize(main_project_path, strict_matching = false)
       @package_managers = LicenseFinder::Scanner::PACKAGE_MANAGERS
-      @configurable = configurable
+      @strict_matching = strict_matching
       @main_project_path = main_project_path
     end
 
@@ -42,7 +42,7 @@ module LicenseFinder
 
     def active_project?(project_path)
       active_project = @package_managers.map do |pm|
-        pm.new(project_path: project_path).active? unless pm == GoWorkspace && @configurable
+        pm.new(project_path: project_path, strict_matching: @strict_matching).active?
       end
       active_project.include?(true)
     end

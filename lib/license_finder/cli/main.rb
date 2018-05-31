@@ -164,12 +164,12 @@ module LicenseFinder
         raise "Project path '#{config.project_path}' does not exist!" unless config.valid_project_path?
       end
 
-      def aggregate_paths(configurable = false)
+      def aggregate_paths(strict_matching = false)
         check_valid_project_path
         aggregate_paths = config.aggregate_paths
         project_path = config.project_path || Pathname.pwd
-        aggregate_paths = ProjectFinder.new(project_path, configurable).find_projects if config.recursive
-        say(aggregate_paths || project_path) if configurable
+        aggregate_paths = ProjectFinder.new(project_path, strict_matching).find_projects if config.recursive
+        say(aggregate_paths || project_path) if strict_matching
         return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
         [config.project_path] unless config.project_path.nil?
       end
