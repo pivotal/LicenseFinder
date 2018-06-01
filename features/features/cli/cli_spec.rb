@@ -120,7 +120,7 @@ describe 'License Finder command line executable' do
 
       specify 'returns current path' do
         developer.execute_command(license_finder_command)
-        expect(developer).to be_seeing_something_like %r{^#{Regexp.escape(@project.project_dir.to_s)}$}
+        expect(developer).to be_seeing_something_like /^#{Regexp.escape(@project.project_dir.to_s)}$/
       end
     end
   end
