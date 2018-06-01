@@ -12,5 +12,5 @@ pushd LicenseFinder
   fi
 
   docker run -v $PWD:/lf -it licensefinder/license_finder /bin/bash \
-    -exlc "cd /lf && ci/scripts/run-tests.sh $RUBY_VERSION_UNDER_TEST"
+    -exli /lf/ci/scripts/run-tests.sh "$RUBY_VERSION_UNDER_TEST"
 popd

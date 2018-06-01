@@ -14,11 +14,11 @@ bundle install
 if [ "$RUBY_VERSION_UNDER_TEST" == "jruby-9.0.4.0" ]
 then
   bundle update rack
-  DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common
+  apt-get -y install software-properties-common
   add-apt-repository -y ppa:webupd8team/java
   apt-get update
   echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
-  DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-set-default
+  apt-get -y install oracle-java8-set-default
 fi
 
 
