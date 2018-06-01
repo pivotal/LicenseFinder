@@ -99,9 +99,9 @@ describe 'License Finder command line executable' do
     end
   end
 
-  context 'running project_roots' do
+  context 'running project_roots', :focus do
     before do
-      LicenseFinder::TestingDSL::CompositeProject.create
+      @project = LicenseFinder::TestingDSL::CompositeProject.create
     end
 
     context 'with --recursive flag' do
@@ -109,8 +109,9 @@ describe 'License Finder command line executable' do
 
       specify 'returns all project paths' do
         developer.execute_command(license_finder_command)
-        expect(developer).to be_seeing_something_like %r{\"\/workspace\/LicenseFinder\/tmp\/projects\/my_app\/multi-module-gradle\"}
-        expect(developer).to be_seeing_something_like %r{\"\/workspace\/LicenseFinder\/tmp\/projects\/my_app\/single-module-gradle\"}
+
+        expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle\"}
+        expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/single-module-gradle\"}
       end
     end
 
@@ -119,7 +120,7 @@ describe 'License Finder command line executable' do
 
       specify 'returns current path' do
         developer.execute_command(license_finder_command)
-        expect(developer).to be_seeing_something_like %r{^\/workspace\/LicenseFinder\/tmp\/projects\/my_app$}
+        expect(developer).to be_seeing_something_like %r{^#{Regexp.escape(@project.project_dir.to_s)}$}
       end
     end
   end
