@@ -83,7 +83,8 @@ module LicenseFinder
       desc 'project_roots', 'List project directories to be scanned'
       shared_options
       def project_roots
-        aggregate_paths(true)
+        config.strict_matching = true
+        aggregate_paths
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
@@ -164,12 +165,12 @@ module LicenseFinder
         raise "Project path '#{config.project_path}' does not exist!" unless config.valid_project_path?
       end
 
-      def aggregate_paths(strict_matching = false)
+      def aggregate_paths
         check_valid_project_path
         aggregate_paths = config.aggregate_paths
         project_path = config.project_path || Pathname.pwd
-        aggregate_paths = ProjectFinder.new(project_path, strict_matching).find_projects if config.recursive
-        say(aggregate_paths || project_path) if strict_matching
+        aggregate_paths = ProjectFinder.new(project_path, config.strict_matching).find_projects if config.recursive
+        say(aggregate_paths || project_path) if config.strict_matching
         return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
         [config.project_path] unless config.project_path.nil?
       end

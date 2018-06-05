@@ -99,7 +99,7 @@ describe 'License Finder command line executable' do
     end
   end
 
-  context 'running project_roots', :focus do
+  describe 'running project_roots' do
     before do
       @project = LicenseFinder::TestingDSL::CompositeProject.create
     end
