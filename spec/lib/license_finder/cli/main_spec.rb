@@ -91,7 +91,7 @@ module LicenseFinder
 
         it 'passes the config options to the new LicenseFinder::LicenseAggregator instance' do
           stubs = { valid_project_path?: true, project_path: Pathname('../other_project'),
-                    decisions_file_path: Pathname('../other_project'), aggregate_paths: nil, recursive: false, format: nil, columns: nil }
+                    decisions_file_path: Pathname('../other_project'), aggregate_paths: nil, recursive: false, format: nil, columns: nil, strict_matching: false }
           configuration = double(:configuration, stubs)
           allow(LicenseFinder::Configuration).to receive(:with_optional_saved_config).and_return(configuration)
           expect(LicenseFinder::LicenseAggregator).to receive(:new).with(configuration, anything).and_return(license_finder_instance)
