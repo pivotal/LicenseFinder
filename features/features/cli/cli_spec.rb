@@ -98,4 +98,30 @@ describe 'License Finder command line executable' do
       expect(developer).to_not be_seeing('MIT')
     end
   end
+
+  describe 'running project_roots' do
+    before do
+      @project = LicenseFinder::TestingDSL::CompositeProject.create
+    end
+
+    context 'with --recursive flag' do
+      let(:license_finder_command) { 'license_finder project_roots --recursive' }
+
+      specify 'returns all project paths' do
+        developer.execute_command(license_finder_command)
+
+        expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle\"}
+        expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/single-module-gradle\"}
+      end
+    end
+
+    context 'without flags' do
+      let(:license_finder_command) { 'license_finder project_roots' }
+
+      specify 'returns current path' do
+        developer.execute_command(license_finder_command)
+        expect(developer).to be_seeing_something_like /^#{Regexp.escape(@project.project_dir.to_s)}$/
+      end
+    end
+  end
 end
