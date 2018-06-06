@@ -1,3 +1,12 @@
+# [5.3.0] / 2018-06-05
+
+### Added
+* Experimental support for Rust dependencies with Cargo - [2ef3129](https://github.com/pivotal-legacy/LicenseFinder/commit/2ef31290f7abf51db5b7173302d1e535508bbd7a)
+* Add project roots command to list paths to scan - [b7a22ea](https://github.com/pivotal-legacy/LicenseFinder/commit/b7a22eacfac0e1b9334998de606df69ec3156f77)
+
+### Removed
+* Remove HTTParty dependency - [c52d014](https://github.com/pivotal-legacy/LicenseFinder/commit/c52d014df1ca9cd3838d03c60daa6fad954c5579) 
+
 # [5.2.3] / 2018-05-14
 
 # [5.2.1] / 2018-05-14
@@ -598,3 +607,4 @@ Bugfixes:
 [5.2.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.1.1...v5.2.0
 [5.2.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.0...v5.2.1
 [5.2.3]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.1...v5.2.3
+[5.3.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.3...v5.3.0

@@ -8,7 +8,7 @@ CHANGELOG_FILE="CHANGELOG.md"
 COMMIT_URL="https://github.com/pivotal-legacy/LicenseFinder/commit/"
 
 TAGS=( "Added" "ADDED" "Fixed" "FIXED" "Changed" "CHANGED" "Deprecated" "DEPRECATED" "Removed" "REMOVED" "Security" "SECURITY" )
-CONTRIBUTORS=( "Shane Lattanzio" "Daniil Kouznetsov" "Andy Shen" "Li Tai" "Ryan Collins" "Vikram Yadav" )
+CONTRIBUTORS=( "Shane Lattanzio" "Daniil Kouznetsov" "Andy Shen" "Li Tai" "Ryan Collins" "Vikram Yadav" "Mark Fiorvanti" )
 
 OLD="v$(cat ./lf-release/version)"
 VERSION="$(ruby -r ./lf-git-changed/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")"

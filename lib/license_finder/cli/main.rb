@@ -80,6 +80,13 @@ module LicenseFinder
                       type: :array
       end
 
+      desc 'project_roots', 'List project directories to be scanned'
+      shared_options
+      def project_roots
+        config.strict_matching = true
+        aggregate_paths
+      end
+
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
       shared_options
       format_option
@@ -162,7 +169,8 @@ module LicenseFinder
         check_valid_project_path
         aggregate_paths = config.aggregate_paths
         project_path = config.project_path || Pathname.pwd
-        aggregate_paths = ProjectFinder.new(project_path).find_projects if config.recursive
+        aggregate_paths = ProjectFinder.new(project_path, config.strict_matching).find_projects if config.recursive
+        say(aggregate_paths || project_path) if config.strict_matching
         return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
         [config.project_path] unless config.project_path.nil?
       end

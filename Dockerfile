@@ -125,6 +125,9 @@ RUN apt-get install -y python-dev && \
 	pip install --ignore-installed six --ignore-installed colorama --ignore-installed requests --ignore-installed chardet --ignore-installed urllib3 --upgrade setuptools && \
 	pip install conan
 
+# install Cargo
+RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --disable-sudo
+
 # install license_finder
 COPY . /LicenseFinder
 RUN bash -lc "cd /LicenseFinder && bundle install -j4 && rake install"

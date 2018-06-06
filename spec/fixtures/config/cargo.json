@@ -1,0 +1,206 @@
+{
+    "packages": [
+        {
+            "name": "license-finder",
+            "version": "0.1.0",
+            "id": "license-finder 0.1.0 (path+file:///home/test/license-finder)",
+            "license": null,
+            "license_file": null,
+            "description": null,
+            "source": null,
+            "dependencies": [
+                {
+                    "name": "log",
+                    "source": "registry+https://github.com/rust-lang/crates.io-index",
+                    "req": "*",
+                    "kind": null,
+                    "optional": false,
+                    "uses_default_features": true,
+                    "features": [],
+                    "target": null
+                },
+                {
+                    "name": "simple_logger",
+                    "source": "registry+https://github.com/rust-lang/crates.io-index",
+                    "req": "*",
+                    "kind": null,
+                    "optional": false,
+                    "uses_default_features": true,
+                    "features": [],
+                    "target": null
+                }
+            ],
+            "targets": [
+                {
+                    "kind": [
+                        "bin"
+                    ],
+                    "crate_types": [
+                        "bin"
+                    ],
+                    "name": "deps-finder-test",
+                    "src_path": "/home/test/code/centauri/deps-finder-test/src/main.rs"
+                }
+            ],
+            "features": {},
+            "manifest_path": "/home/test/code/centauri/deps-finder-test/Cargo.toml"
+        },
+        {
+            "name": "log",
+            "version": "0.4.1",
+            "id": "log 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+            "license": "MIT/Apache-2.0",
+            "license_file": null,
+            "description": "A lightweight logging facade for Rust\n",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "dependencies": [],
+            "targets": [
+                {
+                    "kind": [
+                        "lib"
+                    ],
+                    "crate_types": [
+                        "lib"
+                    ],
+                    "name": "log",
+                    "src_path": "/home/test/.cargo/registry/src/github.com-1ecc6299db9ec823/log-0.4.1/src/lib.rs"
+                },
+                {
+                    "kind": [
+                        "test"
+                    ],
+                    "crate_types": [
+                        "bin"
+                    ],
+                    "name": "filters",
+                    "src_path": "/home/test/.cargo/registry/src/github.com-1ecc6299db9ec823/log-0.4.1/tests/filters.rs"
+                }
+            ],
+            "features": {},
+            "manifest_path": "/home/test/.cargo/registry/src/github.com-1ecc6299db9ec823/log-0.4.1/Cargo.toml"
+        },
+        {
+            "name": "simple_logger",
+            "version": "0.5.0",
+            "id": "simple_logger 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
+            "license": "MIT",
+            "license_file": null,
+            "description": "A logger that prints all messages with a readable output format",
+            "source": "registry+https://github.com/rust-lang/crates.io-index",
+            "dependencies": [
+                {
+                    "name": "log",
+                    "source": "registry+https://github.com/rust-lang/crates.io-index",
+                    "req": "^0.4.1",
+                    "kind": null,
+                    "optional": false,
+                    "uses_default_features": true,
+                    "features": [
+                        "std"
+                    ],
+                    "target": null
+                }
+            ],
+            "targets": [
+                {
+                    "kind": [
+                        "lib"
+                    ],
+                    "crate_types": [
+                        "lib"
+                    ],
+                    "name": "simple_logger",
+                    "src_path": "/home/test/.cargo/registry/src/github.com-1ecc6299db9ec823/simple_logger-0.5.0/src/lib.rs"
+                },
+                {
+                    "kind": [
+                        "example"
+                    ],
+                    "crate_types": [
+                        "bin"
+                    ],
+                    "name": "init",
+                    "src_path": "/home/test/.cargo/registry/src/github.com-1ecc6299db9ec823/simple_logger-0.5.0/examples/init.rs"
+                },
+                {
+                    "kind": [
+                        "example"
+                    ],
+                    "crate_types": [
+                        "bin"
+                    ],
+                    "name": "init_with_level",
+                    "src_path": "/home/test/.cargo/registry/src/github.com-1ecc6299db9ec823/simple_logger-0.5.0/examples/init_with_level.rs"
+                }
+            ],
+            "features": {},
+            "manifest_path": "/home/test/.cargo/registry/src/github.com-1ecc6299db9ec823/simple_logger-0.5.0/Cargo.toml"
+        }
+    ],
+    "workspace_members": [
+        "thing 0.1.0 (path+file:///path/to/thing)"
+    ],
+    "resolve": {
+        "nodes": [
+            {
+                "id": "log 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": [
+                    "cfg-if 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)"
+                ]
+            },
+            {
+                "id": "cfg-if 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": []
+            },
+            {
+                "id": "winapi-i686-pc-windows-gnu 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": []
+            },
+            {
+                "id": "winapi 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": [
+                    "winapi-i686-pc-windows-gnu 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+                    "winapi-x86_64-pc-windows-gnu 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)"
+                ]
+            },
+            {
+                "id": "time 0.1.39 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": [
+                    "libc 0.2.40 (registry+https://github.com/rust-lang/crates.io-index)",
+                    "redox_syscall 0.1.37 (registry+https://github.com/rust-lang/crates.io-index)",
+                    "winapi 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)"
+                ]
+            },
+            {
+                "id": "libc 0.2.40 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": []
+            },
+            {
+                "id": "redox_syscall 0.1.37 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": []
+            },
+            {
+                "id": "winapi-x86_64-pc-windows-gnu 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": []
+            },
+            {
+                "id": "simple_logger 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
+                "dependencies": [
+                    "time 0.1.39 (registry+https://github.com/rust-lang/crates.io-index)",
+                    "log 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)"
+                ]
+            },
+            {
+                "id": "deps-finder-test 0.1.0 (path+file:///path/to/thing)",
+                "dependencies": [
+                    "log 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+                    "simple_logger 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)"
+                ]
+            }
+        ],
+        "root": "deps-finder-test 0.1.0 (path+file:///path/to/thing)"
+    },
+    "target_directory": "/path/to/thing/target",
+    "version": 1,
+    "workspace_root": "/path/to/thing"
+}

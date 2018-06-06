@@ -1,5 +1,4 @@
 require 'json'
-
 module LicenseFinder
   class GoWorkspace < PackageManager
     Submodule = Struct.new :install_path, :revision
@@ -8,6 +7,7 @@ module LicenseFinder
     def initialize(options = {})
       super
       @full_version = options[:go_full_version]
+      @strict_matching = options[:strict_matching]
     end
 
     def self.package_management_command
@@ -38,6 +38,7 @@ module LicenseFinder
     end
 
     def active?
+      return false if @strict_matching
       godep = LicenseFinder::GoDep.new(project_path: Pathname(project_path))
       # go workspace is only active if GoDep wasn't. There are some projects
       # that will use the .envrc and have a Godep folder as well.

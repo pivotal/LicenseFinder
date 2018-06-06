@@ -122,6 +122,10 @@ module LicenseFinder
       get(:sbt_include_groups)
     end
 
+    attr_writer :strict_matching
+
+    attr_reader :strict_matching
+
     protected
 
     attr_accessor :primary_config
