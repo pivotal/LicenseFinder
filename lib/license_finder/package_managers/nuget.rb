@@ -26,8 +26,12 @@ module LicenseFinder
       path = project_path.join('vendor/*.nupkg')
       nuget_dir = Dir[path].map { |pkg| File.dirname(pkg) }.uniq
 
+      path = project_path.join('*.sln')
+      solution_file = Dir[path].first
+
       possible_paths = [project_path.join('packages.config'), project_path.join('.nuget')]
       possible_paths.unshift(Pathname(nuget_dir.first)) unless nuget_dir.empty?
+      possible_paths.unshift(Pathname(solution_file)) unless solution_file.nil?
       possible_paths
     end
 
@@ -60,6 +64,14 @@ module LicenseFinder
 
     def dependencies
       assemblies.flat_map(&:dependencies)
+    end
+
+    def self.package_management_command
+      'nuget'
+    end
+
+    def self.prepare_command
+      'nuget restore'
     end
   end
 end
