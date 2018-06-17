@@ -169,5 +169,37 @@ module LicenseFinder
         end
       end
     end
+
+    describe '.prepare_command' do
+      it 'returns the correct prepare method' do
+        expect(described_class.prepare_command).to eq('nuget restore')
+      end
+    end
+
+    describe '.package_management_command' do
+      it 'returns the correct package management command' do
+        expect(described_class.package_management_command).to eq('nuget')
+      end
+    end
+
+    describe '.prepare' do
+      nuget_restore_output = <<-CMDOUTPUT
+Restoring NuGet package ObscureDependency.1.3.15.
+Restoring NuGet package CoolNewDependency.2.4.2.
+        CMDOUTPUT
+
+      include FakeFS::SpecHelpers
+      before do
+        FileUtils.mkdir_p 'app'
+        FileUtils.touch 'app/MyApp.sln'
+      end
+
+      it 'should call nuget restore' do
+        nuget = Nuget.new project_path: Pathname.new('app')
+        expect(SharedHelpers::Cmd).to receive(:run).with('nuget restore')
+                                          .and_return([nuget_restore_output, '', cmd_success])
+        nuget.prepare
+      end
+    end
   end
 end
