@@ -196,9 +196,8 @@ Restoring NuGet package CoolNewDependency.2.4.2.
 
       it 'should call nuget restore' do
         nuget = Nuget.new project_path: Pathname.new('app')
-        expect(SharedHelpers::Cmd).to receive(:run)
-                                          .with('nuget restore')
-                                          .and_return([nuget_restore_output, '', cmd_success])
+        expect(SharedHelpers::Cmd).to receive(:run).with('nuget restore')
+                                                   .and_return([nuget_restore_output, '', cmd_success])
         nuget.prepare
       end
     end
