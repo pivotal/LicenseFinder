@@ -26,12 +26,14 @@ module LicenseFinder
       path = project_path.join('vendor/*.nupkg')
       nuget_dir = Dir[path].map { |pkg| File.dirname(pkg) }.uniq
 
+      # Presence of a .sln is a good indicator for a dotnet solution
+      # cf.: https://docs.microsoft.com/en-us/nuget/tools/cli-ref-restore#remarks
       path = project_path.join('*.sln')
       solution_file = Dir[path].first
 
       possible_paths = [project_path.join('packages.config'), project_path.join('.nuget')]
-      possible_paths.unshift(Pathname(nuget_dir.first)) unless nuget_dir.empty?
       possible_paths.unshift(Pathname(solution_file)) unless solution_file.nil?
+      possible_paths.unshift(Pathname(nuget_dir.first)) unless nuget_dir.empty?
       possible_paths
     end
 
