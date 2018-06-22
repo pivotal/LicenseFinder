@@ -176,12 +176,6 @@ module LicenseFinder
       end
     end
 
-    describe '.package_management_command' do
-      it 'returns the correct package management command' do
-        expect(described_class.package_management_command).to eq('nuget')
-      end
-    end
-
     describe '.prepare' do
       nuget_restore_output = <<-CMDOUTPUT
 Restoring NuGet package ObscureDependency.1.3.15.

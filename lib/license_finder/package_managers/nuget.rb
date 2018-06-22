@@ -66,10 +66,6 @@ module LicenseFinder
       assemblies.flat_map(&:dependencies)
     end
 
-    def self.package_management_command
-      'nuget'
-    end
-
     def self.prepare_command
       'nuget restore'
     end
