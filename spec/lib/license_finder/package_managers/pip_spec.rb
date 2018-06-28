@@ -97,6 +97,14 @@ INPUT
 
         expect(pip.current_packages.first.summary).to eq ''
       end
+
+      it 'follows pypi redirects' do
+        stub_pip [{ 'name' => 'cycler', 'version' => '0.10.0', 'location' => 'cycler/path' }].to_json
+        stub_pypi('cycler', '0.10.0', status: 301, headers: { 'location' => 'https://pypi.org/pypi/Cycler/0.10.0/json' })
+        stub_pypi('Cycler', '0.10.0', status: 200, body: JSON.generate(info: { summary: 'Cycler summary' }))
+
+        expect(pip.current_packages.first.summary).to eq 'Cycler summary'
+      end
     end
   end
 end
