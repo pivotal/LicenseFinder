@@ -55,11 +55,17 @@ module LicenseFinder
     end
 
     def pypi_def(name, version)
-      uri = URI("https://pypi.org/pypi/#{name}/#{version}/json")
+      response = pypi_request("https://pypi.org/pypi/#{name}/#{version}/json")
+      response.is_a?(Net::HTTPSuccess) ? JSON.parse(response.body).fetch('info', {}) : {}
+    end
+
+    def pypi_request(location, limit = 10)
+      uri = URI(location)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       response = http.get(uri.request_uri).response
-      response.is_a?(Net::HTTPSuccess) ? JSON.parse(response.body).fetch('info', {}) : {}
+
+      response.is_a?(Net::HTTPRedirection) && limit > 0 ? pypi_request(response['location'], limit - 1) : response
     end
   end
 end
