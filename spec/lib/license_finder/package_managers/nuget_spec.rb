@@ -222,7 +222,7 @@ Restoring NuGet package CoolNewDependency.2.4.2.
         it 'should call nuget restore' do
           nuget = Nuget.new project_path: Pathname.new('app')
           expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
-                                            .and_return([nuget_restore_output, '', cmd_success])
+                                                     .and_return([nuget_restore_output, '', cmd_success])
           nuget.prepare
         end
       end
@@ -247,7 +247,7 @@ Restoring NuGet package CoolNewDependency.2.4.2.
 
       let(:nuget_cmd) { 'nuget' }
       let(:nuget_check) { 'where nuget' }
-      let(:nuget_location) { "C:\\ProgramData\\chocolatey\\bin\\NuGet.exe" }
+      let(:nuget_location) { 'C:\\ProgramData\\chocolatey\\bin\\NuGet.exe' }
 
       it_behaves_like 'a NuGet package manager'
     end

@@ -75,11 +75,11 @@ module LicenseFinder
     end
 
     def self.prepare_command
-      "#{self.package_management_command} restore"
+      "#{package_management_command} restore"
     end
 
     def self.installed?(logger = Core.default_logger)
-      _stdout, _stderr, status = Cmd.run(self.nuget_check)
+      _stdout, _stderr, status = Cmd.run(nuget_check)
       if status.success?
         logger.debug self, 'is installed', color: :green
       else
