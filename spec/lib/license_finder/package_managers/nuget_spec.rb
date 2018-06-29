@@ -80,6 +80,18 @@ module LicenseFinder
           expect(nuget.detected_package_path).to eq Pathname('app/packages.config')
         end
       end
+
+      context 'when *.sln file exists' do
+        before do
+          FileUtils.mkdir_p 'app'
+          FileUtils.touch 'app/MyApp.sln'
+        end
+
+        it 'returns the solution file' do
+          nuget = Nuget.new project_path: Pathname.new('app')
+          expect(nuget.detected_package_path).to eq Pathname('/app/MyApp.sln')
+        end
+      end
     end
 
     describe '#current_packages' do
@@ -122,7 +134,7 @@ module LicenseFinder
           <package id="ObscureDependency" version="1.3.15" targetFramework="net45" />
           <package id="CoolNewDependency" version="2.4.2" targetFramework="net45" />
         </packages>
-      ONE
+        ONE
       end
 
       before do
@@ -176,11 +188,34 @@ module LicenseFinder
       end
     end
 
+    describe '.package_management_command' do
+      it 'returns the correct package management command' do
+        expect(described_class.package_management_command).to eq('nuget')
+      end
+
+      context 'linux' do
+        before do
+          expect(LicenseFinder::Platform).to receive(:windows?).twice.and_return(false)
+        end
+
+        it "uses 'type nuget' to detect nuget as a bash alias for mono" do
+          expect(SharedHelpers::Cmd).to receive(:run).with('type nuget')
+                                            .and_return(['', '', cmd_failure])
+          expect(Nuget.installed?).to eq(false)
+
+          type_nuget_output = "nuget is aliased to `mono /usr/local/bin/nuget.exe'"
+          expect(SharedHelpers::Cmd).to receive(:run).with('type nuget')
+                                            .and_return([type_nuget_output, '', cmd_success])
+          expect(Nuget.installed?).to eq(true)
+        end
+      end
+    end
+
     describe '.prepare' do
       nuget_restore_output = <<-CMDOUTPUT
 Restoring NuGet package ObscureDependency.1.3.15.
 Restoring NuGet package CoolNewDependency.2.4.2.
-        CMDOUTPUT
+      CMDOUTPUT
 
       include FakeFS::SpecHelpers
       before do
@@ -191,7 +226,7 @@ Restoring NuGet package CoolNewDependency.2.4.2.
       it 'should call nuget restore' do
         nuget = Nuget.new project_path: Pathname.new('app')
         expect(SharedHelpers::Cmd).to receive(:run).with('nuget restore')
-                                                   .and_return([nuget_restore_output, '', cmd_success])
+                                          .and_return([nuget_restore_output, '', cmd_success])
         nuget.prepare
       end
     end

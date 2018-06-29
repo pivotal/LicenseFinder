@@ -5,6 +5,7 @@ module LicenseFinder
   class Nuget < PackageManager
     class Assembly
       attr_reader :name, :path
+
       def initialize(path, name)
         @path = path
         @name = name
@@ -68,8 +69,20 @@ module LicenseFinder
       assemblies.flat_map(&:dependencies)
     end
 
+    def self.package_management_command
+      'nuget'
+    end
+
     def self.prepare_command
       'nuget restore'
+    end
+
+    def self.installed?(logger = Core.default_logger)
+      return super(logger) if LicenseFinder::Platform.windows?
+      #  How to use `which` on an aliased command? (SO):
+      # - https://unix.stackexchange.com/a/10529/278711
+      _stdout, _stderr, status = Cmd.run("type #{package_management_command}")
+      status.success?
     end
   end
 end
