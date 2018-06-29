@@ -182,53 +182,74 @@ module LicenseFinder
       end
     end
 
-    describe '.prepare_command' do
-      it 'returns the correct prepare method' do
-        expect(described_class.prepare_command).to eq('nuget restore')
-      end
-    end
-
-    describe '.package_management_command' do
-      it 'returns the correct package management command' do
-        expect(described_class.package_management_command).to eq('nuget')
-      end
-
-      context 'linux' do
-        before do
-          expect(LicenseFinder::Platform).to receive(:windows?).twice.and_return(false)
+    shared_examples 'a NuGet package manager' do
+      describe '.prepare_command' do
+        it 'returns the correct prepare method' do
+          expect(described_class.prepare_command).to eq("#{nuget_cmd} restore")
         end
+      end
 
-        it "uses 'type nuget' to detect nuget as a bash alias for mono" do
-          expect(SharedHelpers::Cmd).to receive(:run).with('type nuget')
-                                            .and_return(['', '', cmd_failure])
-          expect(Nuget.installed?).to eq(false)
+      describe '.package_management_command' do
+        it 'returns the correct package management command' do
+          expect(described_class.package_management_command).to eq(nuget_cmd)
+        end
+      end
 
-          type_nuget_output = "nuget is aliased to `mono /usr/local/bin/nuget.exe'"
-          expect(SharedHelpers::Cmd).to receive(:run).with('type nuget')
-                                            .and_return([type_nuget_output, '', cmd_success])
+      describe '.installed?' do
+        it 'returns true if nuget installed' do
+          expect(SharedHelpers::Cmd).to receive(:run).with(nuget_check).and_return([nuget_location, '', cmd_success])
           expect(Nuget.installed?).to eq(true)
         end
+
+        it 'returns false if no nuget' do
+          expect(SharedHelpers::Cmd).to receive(:run).with(nuget_check).and_return(['', '', cmd_failure])
+          expect(Nuget.installed?).to eq(false)
+        end
+      end
+
+      describe '.prepare' do
+        nuget_restore_output = <<-CMDOUTPUT
+Restoring NuGet package ObscureDependency.1.3.15.
+Restoring NuGet package CoolNewDependency.2.4.2.
+        CMDOUTPUT
+
+        include FakeFS::SpecHelpers
+        before do
+          FileUtils.mkdir_p 'app'
+          FileUtils.touch 'app/MyApp.sln'
+        end
+
+        it 'should call nuget restore' do
+          nuget = Nuget.new project_path: Pathname.new('app')
+          expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
+                                            .and_return([nuget_restore_output, '', cmd_success])
+          nuget.prepare
+        end
       end
     end
 
-    describe '.prepare' do
-      nuget_restore_output = <<-CMDOUTPUT
-Restoring NuGet package ObscureDependency.1.3.15.
-Restoring NuGet package CoolNewDependency.2.4.2.
-      CMDOUTPUT
-
-      include FakeFS::SpecHelpers
-      before do
-        FileUtils.mkdir_p 'app'
-        FileUtils.touch 'app/MyApp.sln'
+    context 'linux' do
+      before(:each) do
+        allow(LicenseFinder::Platform).to receive(:windows?).and_return(false)
       end
 
-      it 'should call nuget restore' do
-        nuget = Nuget.new project_path: Pathname.new('app')
-        expect(SharedHelpers::Cmd).to receive(:run).with('nuget restore')
-                                          .and_return([nuget_restore_output, '', cmd_success])
-        nuget.prepare
+      let(:nuget_cmd) { 'mono /usr/local/bin/nuget.exe' }
+      let(:nuget_check) { 'which mono && ls /usr/local/bin/nuget.exe' }
+      let(:nuget_location) { "/usr/local/mono\n/usr/local/bin/nuget.exe" }
+
+      it_behaves_like 'a NuGet package manager'
+    end
+
+    context 'windows' do
+      before(:each) do
+        allow(LicenseFinder::Platform).to receive(:windows?).and_return(true)
       end
+
+      let(:nuget_cmd) { 'nuget' }
+      let(:nuget_check) { 'where nuget' }
+      let(:nuget_location) { "C:\\ProgramData\\chocolatey\\bin\\NuGet.exe" }
+
+      it_behaves_like 'a NuGet package manager'
     end
   end
 end

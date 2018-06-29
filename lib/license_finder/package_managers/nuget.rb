@@ -70,19 +70,27 @@ module LicenseFinder
     end
 
     def self.package_management_command
-      'nuget'
+      return 'nuget' if LicenseFinder::Platform.windows?
+      'mono /usr/local/bin/nuget.exe'
     end
 
     def self.prepare_command
-      'nuget restore'
+      "#{self.package_management_command} restore"
     end
 
     def self.installed?(logger = Core.default_logger)
-      return super(logger) if LicenseFinder::Platform.windows?
-      #  How to use `which` on an aliased command? (SO):
-      # - https://unix.stackexchange.com/a/10529/278711
-      _stdout, _stderr, status = Cmd.run("type #{package_management_command}")
+      _stdout, _stderr, status = Cmd.run(self.nuget_check)
+      if status.success?
+        logger.debug self, 'is installed', color: :green
+      else
+        logger.info self, 'is not installed', color: :red
+      end
       status.success?
+    end
+
+    def self.nuget_check
+      return 'where nuget' if LicenseFinder::Platform.windows?
+      'which mono && ls /usr/local/bin/nuget.exe'
     end
   end
 end
