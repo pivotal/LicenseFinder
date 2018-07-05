@@ -5,7 +5,9 @@ module LicenseFinder
     end
 
     def self.windows?
-      RUBY_PLATFORM =~ /mswin|cygwin|mingw/
+      # SO: What is the correct way to detect if ruby is running on Windows?,
+      # cf. https://stackoverflow.com/a/21468976/2592915
+      Gem.win_platform? || RUBY_PLATFORM =~ /mswin|cygwin|mingw/
     end
   end
 end
