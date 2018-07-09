@@ -80,6 +80,18 @@ module LicenseFinder
           expect(nuget.detected_package_path).to eq Pathname('app/packages.config')
         end
       end
+
+      context 'when *.sln file exists' do
+        before do
+          FileUtils.mkdir_p 'app'
+          FileUtils.touch 'app/MyApp.sln'
+        end
+
+        it 'returns the solution file' do
+          nuget = Nuget.new project_path: Pathname.new('app')
+          expect(nuget.detected_package_path).to eq Pathname('/app/MyApp.sln')
+        end
+      end
     end
 
     describe '#current_packages' do
@@ -122,7 +134,7 @@ module LicenseFinder
           <package id="ObscureDependency" version="1.3.15" targetFramework="net45" />
           <package id="CoolNewDependency" version="2.4.2" targetFramework="net45" />
         </packages>
-      ONE
+        ONE
       end
 
       before do
@@ -168,6 +180,76 @@ module LicenseFinder
           expect(obscure_dep.license_names_from_spec).to eq(['http://www.opensource.org/licenses/mit-license.php'])
         end
       end
+    end
+
+    shared_examples 'a NuGet package manager' do
+      describe '.prepare_command' do
+        it 'returns the correct prepare method' do
+          expect(described_class.prepare_command).to eq("#{nuget_cmd} restore")
+        end
+      end
+
+      describe '.package_management_command' do
+        it 'returns the correct package management command' do
+          expect(described_class.package_management_command).to eq(nuget_cmd)
+        end
+      end
+
+      describe '.installed?' do
+        it 'returns true if nuget installed' do
+          expect(SharedHelpers::Cmd).to receive(:run).with(nuget_check).and_return([nuget_location, '', cmd_success])
+          expect(Nuget.installed?).to eq(true)
+        end
+
+        it 'returns false if no nuget' do
+          expect(SharedHelpers::Cmd).to receive(:run).with(nuget_check).and_return(['', '', cmd_failure])
+          expect(Nuget.installed?).to eq(false)
+        end
+      end
+
+      describe '.prepare' do
+        nuget_restore_output = <<-CMDOUTPUT
+Restoring NuGet package ObscureDependency.1.3.15.
+Restoring NuGet package CoolNewDependency.2.4.2.
+        CMDOUTPUT
+
+        include FakeFS::SpecHelpers
+        before do
+          FileUtils.mkdir_p 'app'
+          FileUtils.touch 'app/MyApp.sln'
+        end
+
+        it 'should call nuget restore' do
+          nuget = Nuget.new project_path: Pathname.new('app')
+          expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
+                                                     .and_return([nuget_restore_output, '', cmd_success])
+          nuget.prepare
+        end
+      end
+    end
+
+    context 'linux' do
+      before(:each) do
+        allow(LicenseFinder::Platform).to receive(:windows?).and_return(false)
+      end
+
+      let(:nuget_cmd) { 'mono /usr/local/bin/nuget.exe' }
+      let(:nuget_check) { 'which mono && ls /usr/local/bin/nuget.exe' }
+      let(:nuget_location) { "/usr/local/mono\n/usr/local/bin/nuget.exe" }
+
+      it_behaves_like 'a NuGet package manager'
+    end
+
+    context 'windows' do
+      before(:each) do
+        allow(LicenseFinder::Platform).to receive(:windows?).and_return(true)
+      end
+
+      let(:nuget_cmd) { 'nuget' }
+      let(:nuget_check) { 'where nuget' }
+      let(:nuget_location) { 'C:\\ProgramData\\chocolatey\\bin\\NuGet.exe' }
+
+      it_behaves_like 'a NuGet package manager'
     end
   end
 end

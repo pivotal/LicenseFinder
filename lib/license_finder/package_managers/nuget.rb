@@ -5,6 +5,7 @@ module LicenseFinder
   class Nuget < PackageManager
     class Assembly
       attr_reader :name, :path
+
       def initialize(path, name)
         @path = path
         @name = name
@@ -26,7 +27,13 @@ module LicenseFinder
       path = project_path.join('vendor/*.nupkg')
       nuget_dir = Dir[path].map { |pkg| File.dirname(pkg) }.uniq
 
+      # Presence of a .sln is a good indicator for a dotnet solution
+      # cf.: https://docs.microsoft.com/en-us/nuget/tools/cli-ref-restore#remarks
+      path = project_path.join('*.sln')
+      solution_file = Dir[path].first
+
       possible_paths = [project_path.join('packages.config'), project_path.join('.nuget')]
+      possible_paths.unshift(Pathname(solution_file)) unless solution_file.nil?
       possible_paths.unshift(Pathname(nuget_dir.first)) unless nuget_dir.empty?
       possible_paths
     end
@@ -60,6 +67,30 @@ module LicenseFinder
 
     def dependencies
       assemblies.flat_map(&:dependencies)
+    end
+
+    def self.package_management_command
+      return 'nuget' if LicenseFinder::Platform.windows?
+      'mono /usr/local/bin/nuget.exe'
+    end
+
+    def self.prepare_command
+      "#{package_management_command} restore"
+    end
+
+    def self.installed?(logger = Core.default_logger)
+      _stdout, _stderr, status = Cmd.run(nuget_check)
+      if status.success?
+        logger.debug self, 'is installed', color: :green
+      else
+        logger.info self, 'is not installed', color: :red
+      end
+      status.success?
+    end
+
+    def self.nuget_check
+      return 'where nuget' if LicenseFinder::Platform.windows?
+      'which mono && ls /usr/local/bin/nuget.exe'
     end
   end
 end
