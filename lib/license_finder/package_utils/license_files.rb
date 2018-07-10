@@ -2,7 +2,7 @@ require 'license_finder/package_utils/possible_license_file'
 
 module LicenseFinder
   class LicenseFiles
-    CANDIDATE_FILE_NAMES = %w[LICENSE License Licence COPYING README Readme ReadMe].freeze
+    CANDIDATE_FILE_NAMES = %w[LICENSE License LICENCE Licence COPYING README Readme ReadMe].freeze
     CANDIDATE_PATH_WILDCARD = "*{#{CANDIDATE_FILE_NAMES.join(',')}}*".freeze
 
     def self.find(install_path, options = {})
