@@ -1,5 +1,4 @@
-FROM ubuntu:trusty
-RUN apt-get update && apt-get install -y curl git-core build-essential wget unzip
+FROM ubuntu:xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 10.0.1
@@ -9,6 +8,15 @@ ENV SBT_VERSION 1.1.1
 ENV GRADLE_VERSION 4.2
 ENV RUBY_VERSION 2.5.1
 ENV MIX_VERSION 1.0
+
+# programs needed for building
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  curl \
+  git-core \
+  sudo \
+  unzip \
+  wget
 
 # nodejs seems to be required for the one of the gems
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
@@ -91,6 +99,7 @@ RUN mkdir /gopath && \
   go get github.com/golang/dep/cmd/dep
 
 # Fix the locale
+RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -122,7 +131,7 @@ RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --disable-sudo
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &&\
-  echo "deb https://download.mono-project.com/repo/ubuntu stable-trusty main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
+  echo "deb https://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
   apt-get update &&\ 
   apt-get install -y mono-complete &&\
   curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe &&\
