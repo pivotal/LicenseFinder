@@ -1,5 +1,4 @@
-FROM ubuntu:trusty
-RUN apt-get update && apt-get install -y curl git-core build-essential wget unzip
+FROM ubuntu:xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 10.0.1
@@ -9,6 +8,15 @@ ENV SBT_VERSION 1.1.1
 ENV GRADLE_VERSION 4.2
 ENV RUBY_VERSION 2.5.1
 ENV MIX_VERSION 1.0
+
+# programs needed for building
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  curl \
+  git-core \
+  sudo \
+  unzip \
+  wget
 
 # nodejs seems to be required for the one of the gems
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
@@ -91,6 +99,7 @@ RUN mkdir /gopath && \
   go get github.com/golang/dep/cmd/dep
 
 # Fix the locale
+RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
