@@ -57,7 +57,7 @@ RUN apt-get install -y python-pip && \
     pip install --upgrade pip==$PIP_INSTALL_VERSION
 
 # install maven
-RUN curl -O http://www-us.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
     tar -xf apache-maven-$MAVEN_VERSION-bin.tar.gz; rm -rf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
     mv apache-maven-$MAVEN_VERSION /usr/local/lib/maven && \
     ln -s /usr/local/lib/maven/bin/mvn /usr/local/bin/mvn
