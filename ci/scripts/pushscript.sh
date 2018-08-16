@@ -12,6 +12,8 @@ git config --global user.name $GIT_USERNAME
 
 git config --global push.default simple
 
+git chekcout master
+
 mkdir ~/.ssh
 ssh-keyscan github.com >> ~/.ssh/known_hosts
 eval "$(ssh-agent -s)"
