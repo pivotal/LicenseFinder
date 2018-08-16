@@ -10,6 +10,8 @@ built_gem="pkg/license_finder-$build_version.gem"
 git config --global user.email $GIT_EMAIL
 git config --global user.name $GIT_USERNAME
 
+git config --global push.default simple
+
 mkdir ~/.ssh
 ssh-keyscan github.com >> ~/.ssh/known_hosts
 eval "$(ssh-agent -s)"
