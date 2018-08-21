@@ -1,5 +1,12 @@
 # [5.4.0] / 2018-08-20
 
+### Added
+* NuGet + mono installation to Dockerfile
+* Add An all caps version of the 'LICENCE' spelling as a candidate file
+
+### Changed
+* Upgrades Dockerfile base to Xenial
+
 # [5.3.0] / 2018-06-05
 
 ### Added
