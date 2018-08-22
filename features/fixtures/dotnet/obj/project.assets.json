@@ -1,0 +1,6 @@
+{
+  "libraries": {
+    "Microsoft.AspNet.WebApi.Client/5.2.6": {
+    }
+  }
+}

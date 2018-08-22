@@ -412,6 +412,12 @@ module LicenseFinder
       end
     end
 
+    class DotnetProject < Project
+      def add_dep
+        clone('dotnet')
+      end
+    end
+
     class BundlerProject < Project
       def add_dep
         add_to_gemfile("source 'https://rubygems.org'")
