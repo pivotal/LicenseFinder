@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'fakefs/spec_helpers'
+require 'set'
 
 module LicenseFinder
   def self.broken_fakefs?
@@ -43,8 +44,14 @@ module LicenseFinder
         <<-EOF
         {
           "libraries": {
-            "Thing1/5.2.6": {},
-            "Thing2/1.2.3": {}
+            "Thing1/5.2.6": {
+              "path": "",
+              "files": []
+            },
+            "Thing2/1.2.3": {
+              "path": "",
+              "files": []
+            }
           }
         }
         EOF
@@ -54,8 +61,14 @@ module LicenseFinder
         <<-EOF
         {
           "libraries": {
-            "Thing3/5.2.6": {},
-            "Thing2/1.2.3": {}
+            "Thing3/5.2.6": {
+              "path": "",
+              "files": []
+            },
+            "Thing2/1.2.3": {
+              "path": "",
+              "files": []
+            }
           }
         }
         EOF
@@ -77,6 +90,60 @@ module LicenseFinder
         expect(actual.map(&:name)).to match_array ['Thing1', 'Thing2', 'Thing3']
         expect(actual.map(&:version)).to match_array ['5.2.6', '1.2.3', '5.2.6']
       end
+
+      describe 'When a package has a license URL' do
+        let(:assets_json1) do
+          <<-EOF
+          {
+            "libraries": {
+              "Thing1/5.2.6": {
+                "path": "thing1 path/5.2.6",
+                "files": [
+                  "not a nuspec",
+                  "thing1 spec.nuspec"
+                ]
+              }
+            },
+            "packageFolders": {
+              "packages1": {},
+              "packages2": {}
+            }
+          }
+          EOF
+        end
+
+        let(:assets_json2) do
+          <<-EOF
+          {
+            "libraries": {}
+          }
+          EOF
+        end
+
+        let(:thing1_spec) do
+          <<-EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+            <metadata minClientVersion="3.6">
+              <licenseUrl>https://example.com</licenseUrl>
+            </metadata>
+          </package>
+          EOF
+        end
+
+        before do
+          FileUtils.mkdir_p('packages1')
+          FileUtils.mkdir_p('packages2/thing1 path/5.2.6/')
+          File.write('packages2/thing1 path/5.2.6/thing1 spec.nuspec', thing1_spec)
+        end
+
+        it 'uses the license URL as the license' do
+          dotnet = Dotnet.new project_path: Pathname.new('app')
+          licenses = dotnet.current_packages[0].license_names_from_spec
+
+          expect(licenses).to eq(['https://example.com'])
+        end
+      end
     end
   end
 
@@ -90,10 +157,12 @@ module LicenseFinder
           "version": 3,
           "libraries": {
             "Thing1/5.2.6": {
-              "path": "thing1/5.2.6"
+              "path": "thing1/5.2.6",
+              "files": ["foo.nuspec"]
             },
             "Thing2/1.2.3": {
-              "path": "thing1/5.2.6"
+              "path": "thing1/5.2.6",
+              "files": ["foo"]
             }
           },
           "packageFolders": {
@@ -111,11 +180,17 @@ module LicenseFinder
       it 'returns the list of packages' do
         assetFile = Dotnet::AssetFile.new('project.assets.json')
         actual = assetFile.dependencies
-        expect(actual.length).to eq(2)
-        expect(actual[0].name).to eq('Thing1')
-        expect(actual[0].version).to eq('5.2.6')
-        expect(actual[1].name).to eq('Thing2')
-        expect(actual[1].version).to eq('1.2.3')
+        expected = [
+            Dotnet::PackageMetadata.new(
+                'Thing1',
+                '5.2.6',
+                [
+                    'packageFolder1/thing1/5.2.6/foo.nuspec',
+                    'packageFolder2/thing1/5.2.6/foo.nuspec'
+                ]),
+            Dotnet::PackageMetadata.new('Thing2', '1.2.3', []),
+        ]
+        expect(actual).to eq(expected)
       end
     end
   end

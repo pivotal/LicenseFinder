@@ -1,6 +1,11 @@
 {
   "libraries": {
     "Microsoft.AspNet.WebApi.Client/5.2.6": {
+      "path": "microsoft.aspnet.webapi.client/5.2.6",
+      "files": ["microsoft.aspnet.webapi.client.nuspec"]
     }
+  },
+  "packageFolders": {
+    "packages": {}
   }
 }

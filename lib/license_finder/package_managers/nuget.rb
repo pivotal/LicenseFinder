@@ -63,8 +63,7 @@ module LicenseFinder
       file = files.first
       Zip::File.open file do |zipfile|
         content = zipfile.read(dep.name + '.nuspec')
-        xml = REXML::Document.new(content)
-        REXML::XPath.match(xml, '//metadata//licenseUrl').map(&:get_text).map(&:to_s)
+        Nuget.nuspec_license_urls(content)
       end
     end
 
@@ -96,6 +95,13 @@ module LicenseFinder
       return 'where nuget' if LicenseFinder::Platform.windows?
 
       'which mono && ls /usr/local/bin/nuget.exe'
+    end
+
+    def self.nuspec_license_urls(specfile_content)
+      xml = REXML::Document.new(specfile_content)
+      REXML::XPath.match(xml, '//metadata//licenseUrl')
+          .map(&:get_text)
+          .map(&:to_s)
     end
   end
 end
