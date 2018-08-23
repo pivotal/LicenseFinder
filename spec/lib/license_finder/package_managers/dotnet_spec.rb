@@ -32,7 +32,7 @@ module LicenseFinder
       it 'calls dotnet restore' do
         dotnet = Dotnet.new project_path: Pathname.new('app')
         expect(SharedHelpers::Cmd).to receive(:run).with('dotnet restore')
-                                          .and_return(['', '', cmd_success])
+                                                   .and_return(['', '', cmd_success])
         dotnet.prepare
       end
     end
@@ -41,7 +41,7 @@ module LicenseFinder
       include FakeFS::SpecHelpers
 
       let(:assets_json1) do
-        <<-EOF
+        <<-A1
         {
           "libraries": {
             "Thing1/5.2.6": {
@@ -54,11 +54,11 @@ module LicenseFinder
             }
           }
         }
-        EOF
+        A1
       end
 
       let(:assets_json2) do
-        <<-EOF
+        <<-A2
         {
           "libraries": {
             "Thing3/5.2.6": {
@@ -71,7 +71,7 @@ module LicenseFinder
             }
           }
         }
-        EOF
+        A2
       end
 
       before do
@@ -87,13 +87,13 @@ module LicenseFinder
         dotnet = Dotnet.new project_path: Pathname.new('app')
         actual = dotnet.current_packages
 
-        expect(actual.map(&:name)).to match_array ['Thing1', 'Thing2', 'Thing3']
+        expect(actual.map(&:name)).to match_array %w[Thing1 Thing2 Thing3]
         expect(actual.map(&:version)).to match_array ['5.2.6', '1.2.3', '5.2.6']
       end
 
       describe 'When a package has a license URL' do
         let(:assets_json1) do
-          <<-EOF
+          <<-A1
           {
             "libraries": {
               "Thing1/5.2.6": {
@@ -109,26 +109,26 @@ module LicenseFinder
               "packages2": {}
             }
           }
-          EOF
+          A1
         end
 
         let(:assets_json2) do
-          <<-EOF
+          <<-A2
           {
             "libraries": {}
           }
-          EOF
+          A2
         end
 
         let(:thing1_spec) do
-          <<-EOF
+          <<-XML
           <?xml version="1.0" encoding="utf-8"?>
           <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
             <metadata minClientVersion="3.6">
               <licenseUrl>https://example.com</licenseUrl>
             </metadata>
           </package>
-          EOF
+          XML
         end
 
         before do
@@ -152,7 +152,7 @@ module LicenseFinder
       include FakeFS::SpecHelpers
 
       let(:assets_json) do
-        <<-EOF
+        <<-AJ
         {
           "version": 3,
           "libraries": {
@@ -170,7 +170,7 @@ module LicenseFinder
             "packageFolder2": {}
           }
         }
-        EOF
+        AJ
       end
 
       before do
@@ -178,17 +178,18 @@ module LicenseFinder
       end
 
       it 'returns the list of packages' do
-        assetFile = Dotnet::AssetFile.new('project.assets.json')
-        actual = assetFile.dependencies
+        asset_file = Dotnet::AssetFile.new('project.assets.json')
+        actual = asset_file.dependencies
         expected = [
-            Dotnet::PackageMetadata.new(
-                'Thing1',
-                '5.2.6',
-                [
-                    'packageFolder1/thing1/5.2.6/foo.nuspec',
-                    'packageFolder2/thing1/5.2.6/foo.nuspec'
-                ]),
-            Dotnet::PackageMetadata.new('Thing2', '1.2.3', []),
+          Dotnet::PackageMetadata.new(
+            'Thing1',
+            '5.2.6',
+            [
+              'packageFolder1/thing1/5.2.6/foo.nuspec',
+              'packageFolder2/thing1/5.2.6/foo.nuspec'
+            ]
+          ),
+          Dotnet::PackageMetadata.new('Thing2', '1.2.3', [])
         ]
         expect(actual).to eq(expected)
       end

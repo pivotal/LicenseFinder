@@ -100,8 +100,8 @@ module LicenseFinder
     def self.nuspec_license_urls(specfile_content)
       xml = REXML::Document.new(specfile_content)
       REXML::XPath.match(xml, '//metadata//licenseUrl')
-          .map(&:get_text)
-          .map(&:to_s)
+                  .map(&:get_text)
+                  .map(&:to_s)
     end
   end
 end

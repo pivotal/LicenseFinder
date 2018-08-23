@@ -17,7 +17,7 @@ module LicenseFinder
 
       def possible_spec_paths(package_key)
         lib = @manifest.fetch('libraries').fetch(package_key)
-        spec_filename = lib.fetch('files').find {|f| f.end_with?('.nuspec')}
+        spec_filename = lib.fetch('files').find { |f| f.end_with?('.nuspec') }
         return [] if spec_filename.nil?
 
         @manifest.fetch('packageFolders').keys.map do |root|
@@ -37,7 +37,7 @@ module LicenseFinder
 
       def read_license_urls
         possible_spec_paths.flat_map do |path|
-          Nuget.nuspec_license_urls(File.read path) if File.exist? path
+          Nuget.nuspec_license_urls(File.read(path)) if File.exist? path
         end.compact
       end
 
@@ -48,13 +48,13 @@ module LicenseFinder
 
     def possible_package_paths
       paths = Dir[project_path.join('**/*.csproj')]
-      paths.map {|p| Pathname(p)}
+      paths.map { |p| Pathname(p) }
     end
 
     def current_packages
       package_metadatas = asset_files
-                              .flat_map {|path| AssetFile.new(path).dependencies}
-                              .uniq {|d| [d.name, d.version]}
+                          .flat_map { |path| AssetFile.new(path).dependencies }
+                          .uniq { |d| [d.name, d.version] }
 
       package_metadatas.map do |d|
         NugetPackage.new(d.name, d.version, spec_licenses: d.read_license_urls)
