@@ -66,9 +66,19 @@ module LicenseFinder
         Hash[head.zip(json_package)]
       end
 
-      packages.map do |package_hash|
-        YarnPackage.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl'])
+      valid_packages = filter_yarn_internal_package(packages)
+
+      valid_packages.map do |package_hash|
+        YarnPackage.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']],
+                        homepage: package_hash['VendorUrl'])
       end
+    end
+
+    # remove fake package created by yarn [Yarn Bug]
+    def filter_yarn_internal_package(all_packages)
+      internal_package_pattern = /workspace-aggregator-[a-zA-z0-9]{8}-[a-zA-z0-9]{4}-[a-zA-z0-9]{4}-[a-zA-z0-9]{4}-[a-zA-z0-9]{12}/
+      yarn_internal_package = all_packages.find { |package| internal_package_pattern.match(package['Name']) }
+      all_packages - [yarn_internal_package]
     end
 
     def production_flag
