@@ -33,6 +33,10 @@ module LicenseFinder
       end.compact
     end
 
+    def self.takes_priority_over
+      Go15VendorExperiment
+    end
+
     def possible_package_paths
       [envrc_path.dirname]
     end

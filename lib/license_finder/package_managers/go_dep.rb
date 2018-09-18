@@ -24,6 +24,10 @@ module LicenseFinder
       end
     end
 
+    def self.takes_priority_over
+      Go15VendorExperiment
+    end
+
     def possible_package_paths
       [project_path.join('Godeps/Godeps.json')]
     end
