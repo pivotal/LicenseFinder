@@ -1,3 +1,9 @@
+# [5.4.1] / 2018-09-18
+
+### Fixed
+* Extra dependencies showing up for some go projects [#160438065] - [dfb1367](https://github.com/pivotal-legacy/LicenseFinder/commit/dfb136724721843c1196e74a6b4c762538af62ba) 
+* remove workspace-aggregator as a yarn dependency [#159612717 finish] - [4e0afd0](https://github.com/pivotal-legacy/LicenseFinder/commit/4e0afd0ba79623f5bb4c055d42a76ba77ce1c785) 
+
 # [5.4.0] / 2018-08-20
 
 ### Added
@@ -618,3 +624,4 @@ Bugfixes:
 [5.2.3]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.1...v5.2.3
 [5.3.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.3...v5.3.0
 [5.4.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.3.0...v5.4.0
+[5.4.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.0...v5.4.1
