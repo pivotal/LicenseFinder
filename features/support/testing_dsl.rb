@@ -222,6 +222,20 @@ module LicenseFinder
       end
     end
 
+    class GoModulesProject < Project
+      def add_dep
+        clone('go_modules')
+      end
+
+      def install
+        shell_out('go mod vendor')
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'go_modules')).shell_out(command)
+      end
+    end
+
     class GlideProject < Project
       def add_dep
         clone('gopath_glide')

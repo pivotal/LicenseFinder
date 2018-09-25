@@ -4,6 +4,7 @@ describe 'Dep Dependencies' do
   let(:go_developer) { LicenseFinder::TestingDSL::User.new }
 
   specify 'are shown in reports for a project' do
+    ENV['DEPNOLOCK'] = '1'
     project = LicenseFinder::TestingDSL::DepProject.create
     ENV['GOPATH'] = "#{project.project_dir}/gopath_dep"
 
