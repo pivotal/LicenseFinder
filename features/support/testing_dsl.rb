@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'delegate'
 require 'English'
 
@@ -573,7 +575,7 @@ module LicenseFinder
     end
 
     module Shell
-      ERROR_MESSAGE_FORMAT = <<ERRORFORMAT.freeze
+      ERROR_MESSAGE_FORMAT = <<ERRORFORMAT
 Command failed: `%s`
 output: %s
 exit: %d

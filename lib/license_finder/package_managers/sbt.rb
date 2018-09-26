@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 require 'license_finder/package_utils/sbt_dependency_finder'
 

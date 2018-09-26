@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'fakefs/spec_helpers'
 module LicenseFinder
@@ -162,7 +164,7 @@ BUILD SUCCESSFUL in 0s
 
       context "when there's a settings.gradle" do
         it 'uses the build.gradle referenced inside' do
-          SETTINGS_DOT_GRADLE = <<-GRADLE.freeze
+          SETTINGS_DOT_GRADLE = <<-GRADLE
 rootProject.buildFileName = 'build-alt.gradle'
           GRADLE
 

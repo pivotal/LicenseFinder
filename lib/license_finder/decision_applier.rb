@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class DecisionApplier
     def initialize(options)

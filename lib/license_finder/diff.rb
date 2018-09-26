@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class Diff
     class << self
-      def compare(f1, f2)
-        p1 = Set.new(build_packages(f1))
-        p2 = Set.new(build_packages(f2))
+      def compare(file1, file2)
+        p1 = Set.new(build_packages(file1))
+        p2 = Set.new(build_packages(file2))
 
         added = p2.difference(p1).to_a
         removed = p1.difference(p2).to_a

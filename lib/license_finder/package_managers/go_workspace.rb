@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 module LicenseFinder
   class GoWorkspace < PackageManager
@@ -23,6 +25,7 @@ module LicenseFinder
           submodule.install_path =~ /#{repo_name(gp)}$/
         end.first
         next unless import_path
+
         dependency_info = {
           'ImportPath' => repo_name(import_path),
           'Homepage' => repo_name(import_path),
@@ -43,6 +46,7 @@ module LicenseFinder
 
     def active?
       return false if @strict_matching
+
       godep = LicenseFinder::GoDep.new(project_path: Pathname(project_path))
       # go workspace is only active if GoDep wasn't. There are some projects
       # that will use the .envrc and have a Godep folder as well.
@@ -76,6 +80,7 @@ module LicenseFinder
         val, _stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
         ENV['GOPATH'] = orig_gopath
         raise 'go list failed' unless status.success?
+
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
         # dependencies.
@@ -93,6 +98,7 @@ module LicenseFinder
       Dir.chdir(detected_package_path) do |_d|
         result, _stderr, status = Cmd.run('git submodule status')
         raise 'git submodule status failed' unless status.success?
+
         result.lines.map do |l|
           columns = l.split.map(&:strip)
           Submodule.new File.join(detected_package_path, columns[1]), columns[0]

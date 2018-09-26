@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class Yarn < PackageManager
-    SHELL_COMMAND = 'yarn licenses list --no-progress --json'.freeze
+    SHELL_COMMAND = 'yarn licenses list --no-progress --json'
 
     def possible_package_paths
       [project_path.join('yarn.lock')]
@@ -40,6 +42,7 @@ module LicenseFinder
       prep_cmd = "#{Yarn.prepare_command}#{production_flag}"
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
       return if status.success?
+
       log_errors stderr
       raise "Prepare command '#{prep_cmd}' failed" unless @prepare_no_fail
     end
@@ -83,6 +86,7 @@ module LicenseFinder
 
     def production_flag
       return '' if @ignored_groups.nil?
+
       @ignored_groups.include?('devDependencies') ? ' --production' : ''
     end
   end

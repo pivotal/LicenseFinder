@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'platform'
 
 module LicenseFinder
@@ -16,6 +18,7 @@ module LicenseFinder
 
     def valid_project_path?
       return project_path.exist? if get(:project_path)
+
       true
     end
 

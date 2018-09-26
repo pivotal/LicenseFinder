@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class NpmPackage < Package
     attr_accessor :identifier, :dependencies, :groups, :json
@@ -36,6 +38,7 @@ module LicenseFinder
           group.package_names.each do |package_name|
             @packages.each_key do |identifier|
               next unless identifier.name == package_name
+
               dependency = @packages[identifier]
               dependency.groups |= [group.name]
               populate_child_groups(dependency, @packages)
@@ -47,6 +50,7 @@ module LicenseFinder
       def populate_child_groups(dependency, packages, populated_ids = [])
         dependency.dependencies.each do |id|
           next if populated_ids.include? id
+
           populated_ids.push id
           packages[id].groups |= dependency.groups
           populate_child_groups(packages[id], packages, populated_ids)
@@ -97,6 +101,7 @@ module LicenseFinder
         name = hash['name']
         version = hash['version']
         return nil if name.nil? || version.nil?
+
         Identifier.new(name, version)
       end
 

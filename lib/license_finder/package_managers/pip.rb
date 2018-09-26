@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'net/http'
 
@@ -33,6 +35,7 @@ module LicenseFinder
       prep_cmd = "#{Pip.prepare_command} -r #{@requirements_path}"
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
       return if status.success?
+
       log_errors stderr
       raise "Prepare command '#{prep_cmd}' failed" unless @prepare_no_fail
     end
@@ -65,7 +68,7 @@ module LicenseFinder
       http.use_ssl = true
       response = http.get(uri.request_uri).response
 
-      response.is_a?(Net::HTTPRedirection) && limit > 0 ? pypi_request(response['location'], limit - 1) : response
+      response.is_a?(Net::HTTPRedirection) && limit.positive? ? pypi_request(response['location'], limit - 1) : response
     end
   end
 end

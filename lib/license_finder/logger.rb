@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'logger'
 
 module LicenseFinder
@@ -39,16 +41,18 @@ module LicenseFinder
       end
     end
 
-    def mode=(v)
-      @mode = v
+    def mode=(verbose)
+      @mode = verbose
 
       return if quiet?
+
       level = @mode.equal?(MODE_DEBUG) ? ::Logger::DEBUG : ::Logger::INFO
       system_logger.level = level
     end
 
     def log(msg, method)
       return if quiet?
+
       system_logger.send(method, msg)
     end
 

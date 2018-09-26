@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # These are integration tests, so reaching directly into LicenseFinder is forbidden
 # DO NOT:
 # require 'rubygems'

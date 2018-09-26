@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class PackageDelta
     STATUSES = %i[added removed unchanged].freeze
@@ -53,7 +55,7 @@ module LicenseFinder
     private
 
     def pick_package
-      @current_package ? @current_package : @previous_package
+      @current_package || @previous_package
     end
   end
 end

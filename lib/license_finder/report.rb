@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class Report
     def self.of(dependencies, options)

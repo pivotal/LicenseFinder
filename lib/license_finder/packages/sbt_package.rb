@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class SbtPackage < Package
     def initialize(spec, options = {})

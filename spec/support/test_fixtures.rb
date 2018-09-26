@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   module TestFixtures
     def fixture_path(fixture)

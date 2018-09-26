@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CommonPathHelper
   def self.shortest_common_paths(paths)
     [].tap do |common_paths|
@@ -5,7 +7,7 @@ module CommonPathHelper
       paths_with_roots = paths.group_by { |path| path.split('/').first }
       paths_with_roots.each do |common_root, full_paths|
         # use the shortest path as the 'template'
-        shortest_path = full_paths.sort_by { |path| path.split('/').length }.first
+        shortest_path = full_paths.min_by { |path| path.split('/').length }
         shortest_common_path = common_root
 
         # iterate through each subpath of the 'template'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'license_finder/package_utils/licensing'
 require 'license_finder/package_utils/license_files'
 
@@ -102,6 +104,7 @@ module LicenseFinder
     def <=>(other)
       eq_name = name <=> other.name
       return eq_name unless eq_name.zero?
+
       version <=> other.version
     end
 

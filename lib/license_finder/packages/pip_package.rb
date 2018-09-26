@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class PipPackage < Package
     LICENSE_FORMAT = /^License.*::\s*(.*)$/

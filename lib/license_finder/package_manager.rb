@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   # Super-class for the different package managers
   # (Bundler, NPM, Pip, etc.)
@@ -66,7 +68,7 @@ module LicenseFinder
 
     def active?
       path = detected_package_path
-      path && path.exist?
+      path&.exist?
     end
 
     def detected_package_path
@@ -90,6 +92,7 @@ module LicenseFinder
         packages = current_packages
       rescue StandardError => e
         raise e unless @prepare_no_fail
+
         packages = []
       end
 

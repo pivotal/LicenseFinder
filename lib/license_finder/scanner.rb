@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class Scanner
     PACKAGE_MANAGERS = [GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,

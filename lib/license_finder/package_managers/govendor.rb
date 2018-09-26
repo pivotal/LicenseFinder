@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'license_finder/shared_helpers/common_path'
 require 'json'
 

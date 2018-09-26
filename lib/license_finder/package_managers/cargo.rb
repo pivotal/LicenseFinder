@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 module LicenseFinder
@@ -27,6 +29,7 @@ module LicenseFinder
 
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+
       JSON(stdout)
         .fetch('packages', [])
     end

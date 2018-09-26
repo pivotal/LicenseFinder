@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class ProjectFinder
     def initialize(main_project_path, strict_matching = false)
@@ -33,6 +35,7 @@ module LicenseFinder
 
     def remove_nested(pathname, paths)
       return if project_root?(pathname)
+
       paths.reject! { |path| nested_path?(path, pathname) }
     end
 

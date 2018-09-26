@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 module LicenseFinder
@@ -23,6 +25,7 @@ module LicenseFinder
       Dir.chdir(path) do
         stdout, _stderr, status = Cmd.run('git rev-list --max-count 1 HEAD')
         raise 'git rev-list failed' unless status.success?
+
         stdout.strip
       end
     end
@@ -55,6 +58,7 @@ module LicenseFinder
         val, _stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
         ENV['GOPATH'] = orig_gopath
         return [] unless status.success?
+
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
         # dependencies.

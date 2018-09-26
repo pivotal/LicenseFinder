@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   module Activation
     # An Activation reports that a license has been activated for a package, and

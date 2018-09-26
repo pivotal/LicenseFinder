@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class CarthagePackage < Package
     def initialize(name, version, license_text, options = {})
