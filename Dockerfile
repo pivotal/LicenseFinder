@@ -142,3 +142,5 @@ COPY . /LicenseFinder
 RUN bash -lc "cd /LicenseFinder && bundle install -j4 && rake install"
 
 WORKDIR /
+
+CMD bash -lc "cd /scan && /bin/bash -l"
