@@ -149,7 +149,7 @@ module LicenseFinder
 
         describe '.current_packages' do
           it 'correctly navigates the dependencies tree and pulls out valid information' do
-            FakeFS::FileSystem.clone(File.expand_path('../../../../../lib/license_finder/license/templates', __FILE__))
+            FakeFS::FileSystem.clone(File.expand_path('../../../../lib/license_finder/license/templates', __dir__))
             expect(npm.current_packages.find { |p| p.name == 'has' }.licenses.map(&:name)).to eq ['MIT']
             expect(npm.current_packages.find { |p| p.name == 'function-bind' }.licenses.map(&:name)).to eq ['MIT']
           end
@@ -170,7 +170,7 @@ module LicenseFinder
 
         describe '.current_packages' do
           it 'correctly reports the license type' do
-            FakeFS::FileSystem.clone(File.expand_path('../../../../../lib/license_finder/license/templates', __FILE__))
+            FakeFS::FileSystem.clone(File.expand_path('../../../../lib/license_finder/license/templates', __dir__))
             expect(npm.current_packages.find { |p| p.name == 'boolbase' }.licenses.map(&:name)).to eq ['ISC']
           end
         end

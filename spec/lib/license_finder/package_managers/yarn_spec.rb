@@ -99,13 +99,13 @@ module LicenseFinder
         it 'should remove the package' do
           allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}") do
             [{
-                 'type' => 'table',
-                 'data' => {
-                     'body' => [['workspace-aggregator-8e9c6710-d159-44a9-b7eb-78831eed0c59', '', 'UNKNOWN', 'Unknown', 'Unknown', 'Unknown'],
-                                ['stack-trace', '0.0.10', 'MIT', 'git://github.com/felixge/node-stack-trace.git', 'https://github.com/felixgö/node-stack-trace', 'Felix Geisendörfer']],
-                     'head' => %w[Name Version License URL VendorUrl VendorName]
-                 }
-             }.to_json, '', cmd_success]
+              'type' => 'table',
+              'data' => {
+                'body' => [['workspace-aggregator-8e9c6710-d159-44a9-b7eb-78831eed0c59', '', 'UNKNOWN', 'Unknown', 'Unknown', 'Unknown'],
+                           ['stack-trace', '0.0.10', 'MIT', 'git://github.com/felixge/node-stack-trace.git', 'https://github.com/felixgö/node-stack-trace', 'Felix Geisendörfer']],
+                'head' => %w[Name Version License URL VendorUrl VendorName]
+              }
+            }.to_json, '', cmd_success]
           end
 
           expect(subject.current_packages.length).to eq 1

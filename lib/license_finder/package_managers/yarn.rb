@@ -70,7 +70,7 @@ module LicenseFinder
 
       valid_packages.map do |package_hash|
         YarnPackage.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']],
-                        homepage: package_hash['VendorUrl'])
+                                                                       homepage: package_hash['VendorUrl'])
       end
     end
 
