@@ -122,3 +122,13 @@ jobs:
         path: pull-request
         status: failure
         context: run-rubocop
+- name: rubocop
+  public: true
+  plan:
+  - get: LicenseFinder
+    trigger: true
+    version: every
+  - task: run-rubocop
+    privileged: true
+    file: LicenseFinder/ci/tasks/rubocop.yml
+    input_mapping: { LicenseFinder: LicenseFinder }
