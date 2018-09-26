@@ -1,10 +1,9 @@
 #!/bin/bash
 if `which docker > /dev/null`; then
-	DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 	if [ $# -eq 0 ]; then
-  		docker run -v $DIR:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && /bin/bash -l"
+  		docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && /bin/bash -l"
 	else
-  		docker run -v $DIR:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && bundle install && `echo $@`"
+  		docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && bundle install && `echo $@`"
 	fi
 else
   echo "You do not have docker installed. Please install it:"
