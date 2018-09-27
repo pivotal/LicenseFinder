@@ -1,5 +1,5 @@
 <% setup_slack = defined?(slack_url) && defined?(slack_channel) %>
-<% ruby_versions = %w(2.5.1 2.4.4 2.3.7 jruby-9.1.17.0 jruby-9.2.0.0) %>
+<% ruby_versions = ruby_versions.split(',') %>
 
 resource_types:
 - name: pull-request
@@ -15,11 +15,6 @@ resource_types:
 <% end %>
 
 resources:
-- name: LicenseFinder
-  type: git
-  source:
-    uri: https://github.com/pivotal-legacy/LicenseFinder.git
-    branch: master
 - name: pull-request
   type: pull-request
   source:
@@ -35,36 +30,6 @@ resources:
 <% end %>
 
 jobs:
-<% ruby_versions.each do |ruby_version| %>
-- name: ruby-<%= ruby_version %>
-  public: true
-  plan:
-  - get: LicenseFinder
-    trigger: true
-  - task: ruby-<%= ruby_version %>
-    privileged: true
-    file: LicenseFinder/ci/tasks/build.yml
-    params:
-      RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
-<% if setup_slack %>
-  on_failure:
-    put: slack-alert
-    params:
-      channel: '<%= slack_channel %>'
-      icon_emoji: ':crying_cat_face:'
-      text: '<%= "License Finder build failed. Build: https://norsk.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
-<% end %>
-<% end %>
-
-<% if setup_slack %>
-  on_failure:
-    put: slack-alert
-    params:
-      channel: '<%= slack_channel %>'
-      icon_emoji: ':crying_cat_face:'
-      text: '<%= "License Finder build failed. Build: https://norsk.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
-<% end %>
-
 <% ruby_versions.each do |ruby_version| %>
 - name: PR-ruby-<%= ruby_version %>-linux
   public: true
@@ -122,13 +87,3 @@ jobs:
         path: pull-request
         status: failure
         context: run-rubocop
-- name: rubocop
-  public: true
-  plan:
-  - get: LicenseFinder
-    trigger: true
-    version: every
-  - task: run-rubocop
-    privileged: true
-    file: LicenseFinder/ci/tasks/rubocop.yml
-    input_mapping: { LicenseFinder: LicenseFinder }

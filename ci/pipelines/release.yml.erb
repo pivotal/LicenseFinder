@@ -1,0 +1,198 @@
+<% setup_slack = defined?(slack_url) && defined?(slack_channel) %>
+<% ruby_versions = ruby_versions.split(',') %>
+
+resource_types:
+<% if setup_slack %>
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+<% end %>
+
+resources:
+- name: git-master
+  type: git
+  source:
+    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    private_key: ((CfOslBot.private_key))
+    branch: master
+
+- name: git-master-dockerfile
+  type: git
+  source:
+    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    private_key: ((CfOslBot.private_key))
+    branch: master
+    paths: [Dockerfile]
+
+- name: dockerhub-edge
+  type: docker-image
+  source:
+    tag: edge
+    repository: licensefinder/license_finder
+    email: ((LicenseFinderDockerEmail))
+    username: ((LicenseFinderDocker.username))
+    password: ((LicenseFinderDocker.password))
+
+- name: dockerhub
+  type: docker-image
+  source:
+    repository: licensefinder/license_finder
+    email: ((LicenseFinderDockerEmail))
+    username: ((LicenseFinderDocker.username))
+    password: ((LicenseFinderDocker.password))
+
+- name: git-release
+  type: github-release
+  source:
+    owner: pivotal
+    repository: LicenseFinder
+    access_token: ((GithubApiRootToken))
+
+<% if setup_slack %>
+- name: slack-alert
+  type: slack-notification
+  source:
+    url: <%= slack_url %>
+<% end %>
+
+jobs:
+
+- name: patch-version
+  plan:
+  - get: git-master
+    passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
+  - get: dockerhub
+    params:
+      save: true
+  - task: bump-version
+    params:
+      image: docker-image
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+    file: git-master/ci/tasks/bump-patch-version.yml
+  - put: git-master
+    params:
+      repository: git-master-changed
+
+- name: release
+  plan:
+  - get: git-master
+    trigger: true
+    passed: [ patch-version ]
+  - get: dockerhub
+    params:
+      save: true
+  - get: git-release
+  - task: update-changelog
+    image: docker-image
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+    file: git-master/ci/tasks/update-changelog.yml
+  - put: dockerhub
+    params:
+      build: git-master
+      tag: version/version.txt
+      tag_as_latest: true
+  - put: git-master
+    params:
+      repository: git-master-changed
+  - task: build-and-push-gem
+    image: docker-image
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+      GIT_PRIVATE_KEY: ((CfOslBot.private_key))
+      GEM_API_KEY: ((LicenseFinderGemApiKey))
+    file: git-master/ci/tasks/build-and-push-gem.yml
+  - put: git-release
+    params:
+      name: version/tag.txt
+      tag: version/tag.txt
+      body: version/changelog.txt
+
+- name: manual-release
+  plan:
+  - get: git-master
+    passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
+  - get: dockerhub
+    params:
+      save: true
+  - get: git-release
+  - task: update-changelog
+    image: docker-image
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+    file: git-master/ci/tasks/update-changelog.yml
+  - put: dockerhub
+    params:
+      build: git-master
+      tag_file: version/version.txt
+      tag_as_latest: true
+  - task: build-and-push-gem
+    image: docker-image
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+      GIT_PRIVATE_KEY: ((CfOslBot.private_key))
+      GEM_API_KEY: ((LicenseFinderGemApiKey))
+    file: git-master/ci/tasks/build-and-push-gem.yml
+  - put: git-master
+    params:
+      repository: git-master-changed
+  - put: git-release
+    params:
+      name: version/tag.txt
+      tag: version/tag.txt
+      body: version/changelog.txt
+- name: edge-release
+  public: true
+  plan:
+    - get: git-master-dockerfile
+      trigger: true
+    - put: dockerhub-edge
+      params:
+        build: git-master-dockerfile
+<% ruby_versions.each do |ruby_version| %>
+- name: ruby-<%= ruby_version %>
+  public: true
+  plan:
+  - get: dockerhub-edge
+    passed: [edge-release]
+    trigger: true
+  - get: LicenseFinder
+    resource: git-master
+    trigger: true
+    version: every
+  - task: ruby-<%= ruby_version %>
+    privileged: true
+    file: LicenseFinder/ci/tasks/run-tests.sh
+    params:
+      RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
+<% if setup_slack %>
+  on_failure:
+    put: slack-alert
+    params:
+      channel: '<%= slack_channel %>'
+      icon_emoji: ':crying_cat_face:'
+      text: '<%= "License Finder build failed. Build: https://norsk.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
+<% end %>
+<% end %>
+
+- name: rubocop
+  public: true
+  plan:
+  - get: dockerhub-edge
+    passed: [edge-release]
+    trigger: true
+  - get: LicenseFinder
+    resource: git-master
+    trigger: true
+    version: every
+  - task: run-rubocop
+    privileged: true
+    file: LicenseFinder/ci/tasks/rubocop.yml
+    input_mapping: { LicenseFinder: LicenseFinder }

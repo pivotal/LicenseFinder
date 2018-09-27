@@ -52,13 +52,20 @@ task :update_pipeline, [:slack_url, :slack_channel] do |_, args|
     puts 'Warning: You should provide slack channel and url to receive slack notifications on build failures'
   end
 
+  ruby_versions = %w(2.5.1 2.4.4 2.3.7 jruby-9.1.17.0 jruby-9.2.0.0)
+
+
   params = []
+  params << "ruby_versions=#{ruby_versions.join(',')}"
   params << "slack_url=#{slack_url}" if slack_url
   params << "slack_channel=#{slack_channel}" if slack_channel
 
   vars = params.join(' ')
-  cmd = "bash -c \"fly -t osl set-pipeline -n -p LicenseFinder --config <(erb #{vars} ci/pipelines/pipeline.yml.erb)\""
 
+  cmd = "bash -c \"fly -t osl set-pipeline -n -p LicenseFinder --config <(erb #{vars} ci/pipelines/release.yml.erb)\""
+  system(cmd)
+
+  cmd = "bash -c \"fly -t osl set-pipeline -n -p LicenseFinder-pr --config <(erb #{vars} ci/pipelines/pull-request.yml.erb)\""
   system(cmd)
 end
 

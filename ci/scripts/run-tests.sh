@@ -5,8 +5,6 @@ set -o pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$( dirname "$( dirname $DIR )" )"
 
-RUBY_VERSION_UNDER_TEST=$1
-
 pushd "$PROJECT_ROOT"
 
   rvm install --default $RUBY_VERSION_UNDER_TEST
@@ -18,18 +16,6 @@ pushd "$PROJECT_ROOT"
   gem update --system
   gem install bundler
   bundle install
-
-  # jruby-9 specific: requires  >= rack 2.x
-  if [ "$RUBY_VERSION_UNDER_TEST" == "jruby-9.0.4.0" ]
-  then
-    bundle update rack
-    apt-get -y install software-properties-common
-    add-apt-repository -y ppa:webupd8team/java
-    apt-get update
-    echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
-    apt-get -y install oracle-java8-set-default
-  fi
-
 
   bundle exec rake install
   bundle exec rake spec
