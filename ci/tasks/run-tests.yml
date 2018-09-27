@@ -4,7 +4,7 @@ image_resource:
   type: docker-image
   source:
     repository: licensefinder/license_finder
-    tag: latest
+    tag: edge
 
 inputs:
 - name: LicenseFinder
