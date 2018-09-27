@@ -35,10 +35,10 @@ RUN npm install -g bower && \
 #install java 8
 #http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
 RUN cd /tmp && \
-    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -O jdk-8.tgz && \
+    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-linux-x64.tar.gz -O jdk-8.tgz && \
     tar xf /tmp/jdk-8.tgz && \
     mkdir -p /usr/lib/jvm && \
-    mv jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8 && \
+    mv jdk1.8.0_181 /usr/lib/jvm/oracle_jdk8 && \
     rm /tmp/jdk-8.tgz
 
 ENV J2SDKDIR=/usr/lib/jvm/oracle_jdk8
@@ -83,7 +83,7 @@ ENV PATH=/root/gradle/bin:$PATH
 
 #install go
 WORKDIR /go
-RUN wget https://storage.googleapis.com/golang/go$GO_LANG_VERSION.linux-amd64.tar.gz -O go.tar.gz && tar --strip-components=1 -xf go.tar.gz
+RUN wget https://storage.googleapis.com/golang/go$GO_LANG_VERSION.linux-amd64.tar.gz -O go.tar.gz && tar --strip-components=1 -xf go.tar.gz && rm -f go.tar.gz
 ENV GOROOT /go
 ENV PATH=$PATH:/go/bin
 
@@ -113,6 +113,7 @@ ENV PATH=/usr/local/rvm/bin:$PATH
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
     sudo dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
+    sudo rm -f erlang-solutions_${MIX_VERSION}_all.deb && \
     sudo apt-get update && \
     sudo apt-get install -y esl-erlang && \
     sudo apt-get install -y elixir
