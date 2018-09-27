@@ -169,7 +169,7 @@ jobs:
     version: every
   - task: ruby-<%= ruby_version %>
     privileged: true
-    file: LicenseFinder/ci/tasks/run-tests.sh
+    file: LicenseFinder/ci/tasks/run-tests.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
 <% if setup_slack %>
