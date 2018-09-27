@@ -169,6 +169,7 @@ jobs:
     version: every
   - task: ruby-<%= ruby_version %>
     privileged: true
+    image: dockerhub-edge
     file: LicenseFinder/ci/tasks/run-tests.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>

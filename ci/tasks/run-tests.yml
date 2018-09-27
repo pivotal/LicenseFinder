@@ -1,11 +1,5 @@
 platform: linux
 
-image_resource:
-  type: docker-image
-  source:
-    repository: licensefinder/license_finder
-    tag: edge
-
 inputs:
 - name: LicenseFinder
 

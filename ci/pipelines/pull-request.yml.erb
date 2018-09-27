@@ -6,6 +6,7 @@ resource_types:
   type: docker-image
   source:
     repository: jtarchie/pr
+
 <% if setup_slack %>
 - name: slack-notification
   type: docker-image
@@ -22,6 +23,15 @@ resources:
     base: master
     access_token: ((GithubApiPullRequestToken))
 
+- name: dockerhub-pr
+  type: docker-image
+  source:
+    tag: edge-pr
+    repository: licensefinder/license_finder
+    email: ((LicenseFinderDockerEmail))
+    username: ((LicenseFinderDocker.username))
+    password: ((LicenseFinderDocker.password))
+
 <% if setup_slack %>
 - name: slack-alert
   type: slack-notification
@@ -30,16 +40,28 @@ resources:
 <% end %>
 
 jobs:
+- name: build-docker-image
+  public: true
+  plan:
+    - get: pull-request
+      trigger: true
+    - put: dockerhub-pr
+      params:
+        build: pull-request
 <% ruby_versions.each do |ruby_version| %>
 - name: PR-ruby-<%= ruby_version %>-linux
   public: true
   plan:
   - get: pull-request
-    trigger: true
+    passed: [build-docker-image]
     version: every
+  - get: dockerhub-pr
+    passed: [build-docker-image]
+    trigger: true
   - task: ruby-<%= ruby_version %>
     privileged: true
-    file: pull-request/ci/tasks/build.yml
+    image: dockerhub-pr
+    file: pull-request/ci/tasks/run-tests.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
     input_mapping: { LicenseFinder: pull-request }
