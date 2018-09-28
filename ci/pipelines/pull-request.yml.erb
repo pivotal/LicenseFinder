@@ -44,6 +44,7 @@ jobs:
   public: true
   plan:
     - get: pull-request
+      version: every
       trigger: true
     - put: dockerhub-pr
       params:
