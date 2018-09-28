@@ -5,7 +5,7 @@ require 'license_finder/platform'
 require 'license_finder/version'
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 2.1.0'
+  s.required_ruby_version = '>= 2.3.7'
   s.name        = 'license_finder'
   s.version     = LicenseFinder::VERSION
 
