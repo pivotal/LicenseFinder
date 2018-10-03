@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class GoModules < PackageManager
-    PACKAGES_FILE = 'go.sum'.freeze
+    PACKAGES_FILE = 'go.sum'
 
     class << self
       def takes_priority_over
