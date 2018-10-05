@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rexml/document'
 require 'zip'
 
@@ -57,6 +59,7 @@ module LicenseFinder
     def license_urls(dep)
       files = Dir["**/#{dep.name}.#{dep.version}.nupkg"]
       return nil if files.empty?
+
       file = files.first
       Zip::File.open file do |zipfile|
         content = zipfile.read(dep.name + '.nuspec')
@@ -71,6 +74,7 @@ module LicenseFinder
 
     def self.package_management_command
       return 'nuget' if LicenseFinder::Platform.windows?
+
       'mono /usr/local/bin/nuget.exe'
     end
 
@@ -90,6 +94,7 @@ module LicenseFinder
 
     def self.nuget_check
       return 'where nuget' if LicenseFinder::Platform.windows?
+
       'which mono && ls /usr/local/bin/nuget.exe'
     end
   end

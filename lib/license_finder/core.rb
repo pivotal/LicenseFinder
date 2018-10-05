@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'forwardable'
 
 require 'license_finder/logger'
@@ -73,7 +75,7 @@ module LicenseFinder
     def decision_applier
       # lazy, do not move to `initialize`
       # Needs to be lazy loaded to prvent multiple decision appliers being created each time
-      @applier ||= DecisionApplier.new(decisions: decisions, packages: current_packages)
+      @decision_applier ||= DecisionApplier.new(decisions: decisions, packages: current_packages)
     end
 
     def current_packages

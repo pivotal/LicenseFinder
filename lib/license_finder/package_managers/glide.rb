@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class Glide < PackageManager
     def possible_package_paths

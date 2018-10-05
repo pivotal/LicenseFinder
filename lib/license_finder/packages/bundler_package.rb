@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class BundlerPackage < Package
     def initialize(spec, bundler_def, options = {})

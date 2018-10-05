@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'xmlsimple'
 require 'with_env'
 require 'license_finder/package_utils/gradle_dependency_finder'

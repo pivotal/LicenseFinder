@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'license_finder/report'
 require 'license_finder/version'
 require 'license_finder/diff'
@@ -172,6 +174,7 @@ module LicenseFinder
         aggregate_paths = ProjectFinder.new(project_path, config.strict_matching).find_projects if config.recursive
         say(aggregate_paths || project_path) if config.strict_matching
         return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
+
         [config.project_path] unless config.project_path.nil?
       end
 

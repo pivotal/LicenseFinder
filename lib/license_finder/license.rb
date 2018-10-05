@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'license_finder/license/text'
 require 'license_finder/license/template'
 

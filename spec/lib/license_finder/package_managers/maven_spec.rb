@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module LicenseFinder
@@ -63,7 +65,7 @@ module LicenseFinder
           Maven.new(options.merge(
                       project_path: Pathname('/fake/path'),
                       ignored_groups: Set.new(%w[system test provided import])
-          ))
+                    ))
         end
 
         let(:command) do

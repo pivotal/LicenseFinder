@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module LicenseFinder
@@ -119,7 +121,7 @@ module LicenseFinder
           { project_path: 'magic_path',
             recursive: false,
             aggregate_paths: false }, {}
-        )
+          )
         expect(subject.log_directory.to_s).to end_with 'magic_path/lf_logs'
       end
 
@@ -128,7 +130,7 @@ module LicenseFinder
           { project_path: nil,
             recursive: true,
             aggregate_paths: true }, {}
-        )
+          )
         expect(subject.log_directory.to_s).to_not end_with 'magic_path/lf_logs'
         expect(subject.log_directory.to_s).to end_with 'lf_logs'
       end
@@ -138,7 +140,7 @@ module LicenseFinder
           { project_path: 'magic_path',
             recursive: true,
             aggregate_paths: true }, {}
-        )
+          )
         expect(subject.log_directory.to_s).to end_with 'magic_path/lf_logs'
       end
 

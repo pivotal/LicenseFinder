@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   module CLI
     class Licenses < Base

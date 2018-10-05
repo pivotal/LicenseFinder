@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class ConanPackage < Package
     def initialize(name, version, license_text, url, options = {})

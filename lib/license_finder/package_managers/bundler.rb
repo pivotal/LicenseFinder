@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler'
 
 module LicenseFinder
@@ -47,6 +49,7 @@ module LicenseFinder
 
     def gem_details
       return @gem_details if @gem_details
+
       # clear gem paths before runninng specs_for
       Gem.clear_paths
       @gem_details = definition.specs_for(included_groups)
