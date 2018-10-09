@@ -66,7 +66,7 @@ module LicenseFinder
 
       result = []
       packages_by_sha.each do |sha, info|
-        paths = CommonPathHelper.shortest_common_paths(info['paths'])
+        paths = CommonPathHelper.longest_common_paths(info['paths'])
 
         paths.each { |p| result << [sha, p, info['repo']] }
       end
