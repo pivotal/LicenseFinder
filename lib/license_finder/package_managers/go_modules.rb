@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'license_finder/packages/go_package'
+
 module LicenseFinder
   class GoModules < PackageManager
     PACKAGES_FILE = 'go.sum'
@@ -48,7 +50,13 @@ module LicenseFinder
       name = parts[0]
       version = parts[1]
 
-      Package.new(name, version, install_path: install_path)
+      info = {
+        'ImportPath' => name,
+        'InstallPath' => install_path,
+        'Rev' => version
+      }
+
+      GoPackage.from_dependency(info, nil, true)
     end
   end
 end

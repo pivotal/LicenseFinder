@@ -16,6 +16,9 @@ module LicenseFinder
     describe '#current_packages' do
       before do
         FakeFS.activate!
+
+        FileUtils.mkdir_p(vendor_path)
+        File.write(sum_path, content)
       end
 
       after do
@@ -32,9 +35,6 @@ module LicenseFinder
       end
 
       it 'finds all the packages all go.sum files' do
-        FileUtils.mkdir_p(vendor_path)
-        File.write(sum_path, content)
-
         packages = subject.current_packages
 
         expect(packages.length).to eq 2
@@ -44,6 +44,12 @@ module LicenseFinder
 
         expect(packages.last.name).to eq 'gopkg.in/yaml.v2'
         expect(packages.last.version).to eq 'v2.2.1'
+      end
+
+      it 'list packages as Go packages' do
+        packages = subject.current_packages
+
+        expect(packages.first.package_manager).to eq 'Go'
       end
     end
 
