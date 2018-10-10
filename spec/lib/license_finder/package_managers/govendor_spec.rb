@@ -49,6 +49,47 @@ module LicenseFinder
           end
         end
       end
+
+      context 'when revisions are blank' do
+        let(:content) do
+          <<~PACKAGES
+            {
+              "package": [
+                {
+                  "path": "foo/Bowery/prompt",
+                  "revision": "",
+                  "revisionTime": "2017-02-19T07:16:37Z"
+                },
+                {
+                  "path": "foo/Bowery/safefile",
+                  "revision": "",
+                  "revisionTime": "2015-10-22T12:31:44+02:00"
+                }
+              ]
+            }
+          PACKAGES
+        end
+
+        before do
+          FakeFS.activate!
+          FileUtils.mkdir_p '/app/vendor'
+          File.write('/app/vendor/vendor.json', content)
+        end
+
+        after do
+          FakeFS.deactivate!
+        end
+
+        it 'should not mistake them as having common paths' do
+          expect(subject.current_packages.length).to eq 2
+
+          expect(subject.current_packages[0].name).to eq 'foo/Bowery/prompt'
+          expect(subject.current_packages[0].version).to eq ''
+
+          expect(subject.current_packages[1].name).to eq 'foo/Bowery/safefile'
+          expect(subject.current_packages[1].version).to eq ''
+        end
+      end
     end
 
     describe '.prepare_command' do
