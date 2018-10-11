@@ -28,15 +28,15 @@ report.
 
 | Project Type | Package Manager | Tested on Version |
 | ------------ | --------------- | -------:|
-| Ruby Gems    | bundler         | 1.15.4  |
-| Python Eggs  | pip             | 9.0.1   |
-| Node.js      | npm             | 5.3.0   |
-| Bower        | bower           | 1.8.0   |
-| Nuget (without license discovery) | nuget | N/A |
-| Godep        | Godep           | 79      |
-| Go workspace (via a `.envrc` file) | Go lang |    1.8.3 |
-| Go submodules | Go lang | 1.8.3 |
-| Java         | maven           | 3.5.0   |
+| Ruby Gems    | bundler         | 1.16.6  |
+| Python Eggs  | pip             | 10.0.1   |
+| Node.js      | npm             | 6.4.1   |
+| Bower        | bower           | 1.8.4   |
+| Nuget (without license discovery) | nuget | 4.7.1.5393 |
+| Godep        | Godep           | 80      |
+| Go workspace (via a `.envrc` file) | Go lang |    1.11 |
+| Go submodules | Go lang | 1.11 |
+| Java         | maven           | 3.5.3   |
 | Java         | gradle          | 4.2     |
 
 ### Experimental project types
@@ -50,6 +50,7 @@ report.
 * C++/C (via `conan`)
 * Scala (via `sbt`)
 * Rust (via `cargo`)
+* Go Modules (via `go mod`)
 
 ## Installation
 
@@ -171,6 +172,7 @@ languages, as long as that language has a package definition in the project dire
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
 * `Gopkg.lock` file (for `dep`)
+* `go.sum` file (for `go mod`)
 * `yarn.lock` file (for `yarn`)
 * `conanfile.txt` file (for `conan`)
 * `build.sbt` file (for `sbt`)
@@ -352,7 +354,7 @@ Be default, `license_finder` expects the decisions file to be stored at
 `doc/dependency_decisions.yml`.  All commands can be passed `--decisions_file`
 to override this location.
 
-### Of Package Managers
+### Package Manager Configuration
 
 If you have a gradle project, you can invoke gradle with a custom script by
 passing (for example) `--gradle_command gradlew` to `license_finder` or
