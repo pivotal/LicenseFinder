@@ -1,3 +1,13 @@
+# [5.5.0] / 2018-10-11
+
+### Fixed
+* 'dlf' with no-args should get a login shell - [2b019fb](https://github.com/pivotal-legacy/LicenseFinder/commit/2b019fb1126ec2fcb9cafa092cad6d27b875e5f9) - Kim Dykeman
+* Do not include godep dependencies with common paths - [23e951f](https://github.com/pivotal-legacy/LicenseFinder/commit/23e951fae56a43abde52ecefa73e8a5ff73bb688) 
+* Remove uneeded bundle install in dlf [#160758436] - [f44c73f](https://github.com/pivotal-legacy/LicenseFinder/commit/f44c73f6c06838a29ff9a75932e08fb1445557ca) 
+
+* dlf gemfile directory issues [#160758436 finish] - [2db3972](https://github.com/pivotal-legacy/LicenseFinder/commit/2db397261654bca89771e85984b4ae6819274e55) 
+Revert "* dlf gemfile directory issues [#160758436 finish]" - [6b17ddc](https://github.com/pivotal-legacy/LicenseFinder/commit/6b17ddc4202518ffd167c8d38a2045a36eb00144) 
+
 # [5.4.1] / 2018-09-18
 
 ### Fixed
@@ -625,3 +635,4 @@ Bugfixes:
 [5.3.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.3...v5.3.0
 [5.4.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.3.0...v5.4.0
 [5.4.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.0...v5.4.1
+[5.5.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.1...v5.5.0
