@@ -57,7 +57,7 @@ module LicenseFinder
 
       result = packages_with_no_sha
       packages_by_sha.each do |sha, paths|
-        common_paths = CommonPathHelper.shortest_common_paths(paths)
+        common_paths = CommonPathHelper.longest_common_paths(paths)
         common_paths.each { |cp| result << { sha: sha, path: cp } }
       end
 

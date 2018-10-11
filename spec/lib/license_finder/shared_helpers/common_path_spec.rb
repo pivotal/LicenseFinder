@@ -13,12 +13,12 @@ describe CommonPathHelper do
     end
 
     it 'only shows the entry with common base path once' do
-      paths = CommonPathHelper.shortest_common_paths gvt_output_with_common_paths
+      paths = CommonPathHelper.longest_common_paths gvt_output_with_common_paths
       expect(paths).to match_array %w[cloud.google.com/go]
     end
 
     it 'shows entries with same sha when they do not have a common base path' do
-      paths = CommonPathHelper.shortest_common_paths gvt_output_without_common_paths
+      paths = CommonPathHelper.longest_common_paths gvt_output_without_common_paths
       expect(paths).to match_array %w[cloud.google.com/go cloud.aws.com/go/metadata]
     end
   end
