@@ -1,5 +1,12 @@
 # [5.5.0] / 2018-10-11
 
+### Added
+* Go Module support - [8a20210](https://github.com/pivotal-legacy/LicenseFinder/commit/8a202109e942316434978befd33854aa985dd872)
+
+### Changed
+* Lowering gemspec ruby requirement to support jruby 9.1.x - [279bd25](https://github.com/pivotal-legacy/LicenseFinder/commit/279bd25bbebbd3851dcc0062c3c47f7c7063dad8)
+* Bumps rubocop to 0.59.2 - [291d335](https://github.com/pivotal-legacy/LicenseFinder/commit/291d3358921dbb47bc612b77656353da07e71a2b)
+
 ### Fixed
 * 'dlf' with no-args should get a login shell - [2b019fb](https://github.com/pivotal-legacy/LicenseFinder/commit/2b019fb1126ec2fcb9cafa092cad6d27b875e5f9) - Kim Dykeman
 * Do not include godep dependencies with common paths - [23e951f](https://github.com/pivotal-legacy/LicenseFinder/commit/23e951fae56a43abde52ecefa73e8a5ff73bb688) 
