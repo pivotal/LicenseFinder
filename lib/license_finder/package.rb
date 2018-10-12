@@ -2,6 +2,7 @@
 
 require 'license_finder/package_utils/licensing'
 require 'license_finder/package_utils/license_files'
+require 'license_finder/package_utils/notice_files'
 
 module LicenseFinder
   # Super-class that adapts data from different package management
@@ -147,6 +148,10 @@ module LicenseFinder
 
     def license_files
       LicenseFiles.find(install_path, logger: logger)
+    end
+
+    def notice_files
+      NoticeFiles.find(install_path, logger: logger)
     end
 
     def package_manager
