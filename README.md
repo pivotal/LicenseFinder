@@ -117,6 +117,13 @@ dependencies, and where and how each license was discovered. This can
 be useful when you need to track down an unexpected package or
 license.
 
+If you do not want to manually run an individual package manager's prepare
+command (ex: `bundle install`, `npm install`, etc) to ensure your project 
+is fully prepared to be scanned, use the `--prepare` or `-p` option which will run
+each active package manager's prepare command for you. If you would like to continue 
+running `license_finder` even if there is an issue with a prepare step, use the
+`--prepare-no-fail` option which prepares but carries on despite any potential failures.
+
 Run `license_finder help` to see other available commands, and
 `license_finder help [COMMAND]` for detailed help on a specific
 command.
