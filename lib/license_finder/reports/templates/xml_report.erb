@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<licenseSummary>
+  <dependencies>
+    <% sorted_dependencies.each do |dependency| -%>
+      <dependency>
+        <packageName><%= dependency.name %></packageName>
+        <version><%= dependency.version %></version>
+        <licenses>
+          <% dependency.licenses.each do |license| -%>
+            <license>
+              <name><%= license.name %></name>
+              <url><%= license.url %></url>
+            </license>
+          <% end -%>
+        </licenses>
+      </dependency>
+    <% end -%>
+  </dependencies>
+</licenseSummary>

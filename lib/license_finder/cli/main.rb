@@ -16,7 +16,8 @@ module LicenseFinder
         'text' => TextReport,
         'html' => HtmlReport,
         'markdown' => MarkdownReport,
-        'csv' => CsvReport
+        'csv' => CsvReport,
+        'xml' => XmlReport
       }.freeze
 
       class_option :go_full_version, desc: 'Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false.'
