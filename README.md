@@ -289,6 +289,12 @@ all of your project's dependencies and includes information about which need to
 be approved. The project name at the top of the report can be set with
 `license_finder project_name add`.
 
+### Note:
+When using the yarn package manager, when a node_module's package.json doesn't 
+explicitly declare a license, yarn indicates that it has inferred the license based
+on some keywords in other files by appending an asterisk to the license name. If you
+see a * at the end of the license name, this is intended.
+
 See [CONTRIBUTING.md](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md#adding-reports)
 for advice about adding and customizing reports.
 
