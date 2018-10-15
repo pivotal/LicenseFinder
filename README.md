@@ -7,7 +7,7 @@ Build status
 * Ruby 2.4.4 [![Ruby 2.4.4 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.4/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.5.1 [![Ruby 2.5.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * JRuby 9.1.17.0 [![JRuby 9.1.17.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.1.17.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* JRuby 9.2.4.0 [![JRuby 9.2.0.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.0.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.2.0.0 [![JRuby 9.2.0.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.0.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
@@ -163,11 +163,11 @@ languages, as long as that language has a package definition in the project dire
 * `build.gradle` (for `gradle`)
 * `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
-* `Podfile` (for CocoaPods)
-* `Cartfile` (for Carthage)
+* `Podfile` (for `pod`)
+* `Cartfile` (for `carthage`)
 * `rebar.config` (for `rebar`)
 * `mix.exs` (for `mix`)
-* `packages/` directory (for `Nuget`)
+* `packages/` directory (for `nuget`)
 * `vendor/manifest` or `*/vendor/manifest` file (for `gvt`)
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
@@ -430,7 +430,7 @@ licenseConfigurations := Set("compile", "provided")
 
 ## Requirements
 
-`license_finder` requires ruby >= 1.9, or jruby.
+`license_finder` requires ruby >= 1.9.3, or jruby.
 
 
 ## Upgrading
@@ -466,7 +466,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 * Yarn
    * A module that is incompatible with the platform on which 
      license_finder is run will always be reported to have a license type
-     of "unknown". (#456)
+     of "unknown". ([#456](https://github.com/pivotal-legacy/LicenseFinder/issues/456))
 
 ## Support
 
