@@ -1,3 +1,12 @@
+# [5.5.1] / 2018-10-16
+
+### Added
+* Documentation for asterisks being added to license names [#158960018] - [154b727](https://github.com/pivotal-legacy/LicenseFinder/commit/154b7273b1c18e64afa48799b50588251f99e982) 
+* Document the prepare option on the command line - [c283a38](https://github.com/pivotal-legacy/LicenseFinder/commit/c283a38d9e8b9feefc5afe32f1df55b357a33333) 
+
+### Fixed
+* Go modules are forced to be enabled on go mod package managers - [cf9123d](https://github.com/pivotal-legacy/LicenseFinder/commit/cf9123d654b98cdef872d3b21631e69960abe365) 
+
 # [5.5.0] / 2018-10-11
 
 ### Added
@@ -643,3 +652,4 @@ Bugfixes:
 [5.4.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.3.0...v5.4.0
 [5.4.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.0...v5.4.1
 [5.5.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.1...v5.5.0
+[5.5.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.0...v5.5.1
