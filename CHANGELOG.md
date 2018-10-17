@@ -1,3 +1,8 @@
+# [5.5.2] / 2018-10-17
+
+### Fixed
+* go mod prepare command being incorrect - [480c465](https://github.com/pivotal-legacy/LicenseFinder/commit/480c4654cde7342456318ed4e28b6cebd4a09e4b) 
+
 # [5.5.1] / 2018-10-16
 
 ### Added
@@ -653,3 +658,4 @@ Bugfixes:
 [5.4.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.0...v5.4.1
 [5.5.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.1...v5.5.0
 [5.5.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.0...v5.5.1
+[5.5.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.1...v5.5.2
