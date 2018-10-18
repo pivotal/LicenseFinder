@@ -43,11 +43,11 @@ module LicenseFinder
     end
 
     it 'returns the license files' do
-      expect(subject.license_files.map{ |lic| lic.path }).to eq(package.license_files.map{ |lic| lic.path })
+      expect(subject.license_files.map(&:path)).to eq(package.license_files.map(&:path))
     end
 
     it 'returns the notice files' do
-      expect(subject.notice_files.map{ |notice| notice.path }).to eq(package.notice_files.map{ |notice| notice.path })
+      expect(subject.notice_files.map(&:path)).to eq(package.notice_files.map(&:path))
     end
 
     it 'returns the homepage' do

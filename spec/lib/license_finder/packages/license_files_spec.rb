@@ -7,19 +7,19 @@ module LicenseFinder
     describe '#initialize' do
       it 'handles a nil install path' do
         subject = described_class.new nil
-        expect(subject.send :install_path).to eq(nil)
+        expect(subject.send(:install_path)).to eq(nil)
       end
 
       it 'handles a non-existant install path' do
         root_path = fixture_path('not/a/dir')
         subject = described_class.new root_path
-        expect(subject.send :install_path).to eq(root_path)
+        expect(subject.send(:install_path)).to eq(root_path)
       end
 
       it 'handles an existing install path' do
         root_path = fixture_path('license_names')
         subject = described_class.new root_path
-        expect(subject.send :install_path).to eq(root_path)
+        expect(subject.send(:install_path)).to eq(root_path)
       end
     end
 
