@@ -4,6 +4,25 @@ require 'spec_helper'
 
 module LicenseFinder
   describe NoticeFiles do
+    describe '#initialize' do
+      it 'handles a nil install path' do
+        subject = described_class.new nil
+        expect(subject.send :install_path).to eq(nil)
+      end
+
+      it 'handles a non-existant install path' do
+        root_path = fixture_path('not/a/dir')
+        subject = described_class.new root_path
+        expect(subject.send :install_path).to eq(root_path)
+      end
+
+      it 'handles an existing install path' do
+        root_path = fixture_path('notice_names')
+        subject = described_class.new root_path
+        expect(subject.send :install_path).to eq(root_path)
+      end
+    end
+
     describe '#find' do
       def files_in(fixture)
         root_path = fixture_path(fixture)
@@ -32,7 +51,7 @@ module LicenseFinder
       end
 
       it 'handles non UTF8 encodings' do
-        expect { files_in('utf8_gem') }.not_to raise_error
+        expect { files_in('non_utf8_gem') }.not_to raise_error
       end
     end
   end
