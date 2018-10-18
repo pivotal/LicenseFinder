@@ -12,7 +12,7 @@ module LicenseFinder
       end
 
       def prepare_command
-        'go mod vendor'
+        'GO111MODULE=on go mod vendor'
       end
     end
 

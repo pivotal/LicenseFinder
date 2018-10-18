@@ -1,4 +1,25 @@
+# [5.5.2] / 2018-10-17
+
+### Fixed
+* go mod prepare command being incorrect - [480c465](https://github.com/pivotal-legacy/LicenseFinder/commit/480c4654cde7342456318ed4e28b6cebd4a09e4b) 
+
+# [5.5.1] / 2018-10-16
+
+### Added
+* Documentation for asterisks being added to license names [#158960018] - [154b727](https://github.com/pivotal-legacy/LicenseFinder/commit/154b7273b1c18e64afa48799b50588251f99e982) 
+* Document the prepare option on the command line - [c283a38](https://github.com/pivotal-legacy/LicenseFinder/commit/c283a38d9e8b9feefc5afe32f1df55b357a33333) 
+
+### Fixed
+* Go modules are forced to be enabled on go mod package managers - [cf9123d](https://github.com/pivotal-legacy/LicenseFinder/commit/cf9123d654b98cdef872d3b21631e69960abe365) 
+
 # [5.5.0] / 2018-10-11
+
+### Added
+* Go Module support - [8a20210](https://github.com/pivotal-legacy/LicenseFinder/commit/8a202109e942316434978befd33854aa985dd872)
+
+### Changed
+* Lowering gemspec ruby requirement to support jruby 9.1.x - [279bd25](https://github.com/pivotal-legacy/LicenseFinder/commit/279bd25bbebbd3851dcc0062c3c47f7c7063dad8)
+* Bumps rubocop to 0.59.2 - [291d335](https://github.com/pivotal-legacy/LicenseFinder/commit/291d3358921dbb47bc612b77656353da07e71a2b)
 
 ### Fixed
 * 'dlf' with no-args should get a login shell - [2b019fb](https://github.com/pivotal-legacy/LicenseFinder/commit/2b019fb1126ec2fcb9cafa092cad6d27b875e5f9) - Kim Dykeman
@@ -636,3 +657,5 @@ Bugfixes:
 [5.4.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.3.0...v5.4.0
 [5.4.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.0...v5.4.1
 [5.5.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.1...v5.5.0
+[5.5.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.0...v5.5.1
+[5.5.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.1...v5.5.2
