@@ -15,7 +15,7 @@ module LicenseFinder
                    :groups, :whitelisted, :blacklisted, :manual_approval, :install_path, :licenses, :approved_manually?,
                    :approved_manually!, :approved?, :whitelisted!, :whitelisted?, :blacklisted!, :blacklisted?, :hash,
                    :activations, :missing, :license_names_from_spec, :decided_licenses, :licensing, :decide_on_license,
-                   :license_files, :package_manager, :missing?, :log_activation
+                   :license_files, :package_manager, :missing?, :log_activation, :notice_files
 
     def aggregate_paths
       @aggregate_paths.map { |p| p.expand_path.to_s }

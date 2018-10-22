@@ -8,7 +8,7 @@ module LicenseFinder
       Package.new(
         'foo', '1.0.0',
         spec_licenses: ['MIT'],
-        install_path: '/tmp/foo',
+        install_path: fixture_path('nested_gem'),
         authors: 'An author',
         description: 'A description',
         summary: 'A summary',
@@ -39,7 +39,15 @@ module LicenseFinder
     end
 
     it 'returns the install path' do
-      expect(subject.install_path).to eq('/tmp/foo')
+      expect(subject.install_path).to eq(package.install_path)
+    end
+
+    it 'returns the license files' do
+      expect(subject.license_files.map(&:path)).to eq(package.license_files.map(&:path))
+    end
+
+    it 'returns the notice files' do
+      expect(subject.notice_files.map(&:path)).to eq(package.notice_files.map(&:path))
     end
 
     it 'returns the homepage' do

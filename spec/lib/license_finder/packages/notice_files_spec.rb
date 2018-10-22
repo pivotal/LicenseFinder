@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 module LicenseFinder
-  describe LicenseFiles do
+  describe NoticeFiles do
     describe '#initialize' do
       it 'handles a nil install path' do
         subject = described_class.new nil
@@ -17,7 +17,7 @@ module LicenseFinder
       end
 
       it 'handles an existing install path' do
-        root_path = fixture_path('license_names')
+        root_path = fixture_path('notice_names')
         subject = described_class.new root_path
         expect(subject.send(:install_path)).to eq(root_path)
       end
@@ -42,21 +42,12 @@ module LicenseFinder
         expect(files_in('not/a/dir')).to eq([])
       end
 
-      it 'includes files with names like LICENSE, README or COPYING' do
-        expect(files_in('license_names')).to match_array(
-          %w[COPYING.txt LICENSE LICENCE.md Mit-License README.rdoc Licence.rdoc]
-        )
+      it 'includes files named Notice' do
+        expect(files_in('notice_names')).to match_array(['Notice'])
       end
 
       it 'includes files deep in the hierarchy' do
-        expect(files_in('nested_gem')).to eq(['vendor/LICENSE'])
-      end
-
-      it 'includes files nested inside LICENSE directory' do
-        expect(files_in('license_directory')).to match_array(%w[
-                                                               COPYING
-                                                               LICENSE/MIT.txt
-                                                             ])
+        expect(files_in('nested_gem')).to eq(['vendor/NOTICE'])
       end
 
       it 'handles non UTF8 encodings' do

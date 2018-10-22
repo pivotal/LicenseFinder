@@ -31,6 +31,20 @@ module LicenseFinder
       expect(subject.to_s).to eq("gem_a,1.0,/tmp/gems/gem_a-1.0\n")
     end
 
+    it 'supports texts and notice columns' do
+      install_path = fixture_path('nested_gem')
+      dep = Package.new('gem_a', '1.0', install_path: install_path)
+      subject = described_class.new([dep], columns: %w[name version texts notice])
+      expect(subject.to_s).to eq("gem_a,1.0,The MIT License,This is a notice.\n")
+    end
+
+    it 'supports multiple license texts' do
+      install_path = fixture_path('license_directory')
+      dep = Package.new('gem_a', '1.0', install_path: install_path)
+      subject = described_class.new([dep], columns: %w[name version texts])
+      expect(subject.to_s).to eq("gem_a,1.0,The MIT License\\@NLThe MIT License\n")
+    end
+
     it 'supports package_manager column' do
       dep = NugetPackage.new('gem_a', '1.0')
       subject = described_class.new([dep], columns: %w[name version package_manager])
