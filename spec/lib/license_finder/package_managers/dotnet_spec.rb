@@ -46,10 +46,12 @@ module LicenseFinder
           "libraries": {
             "Thing1/5.2.6": {
               "path": "",
+              "type": "package",
               "files": []
             },
             "Thing2/1.2.3": {
               "path": "",
+              "type": "package",
               "files": []
             }
           }
@@ -63,10 +65,12 @@ module LicenseFinder
           "libraries": {
             "Thing3/5.2.6": {
               "path": "",
+              "type": "package",
               "files": []
             },
             "Thing2/1.2.3": {
               "path": "",
+              "type": "package",
               "files": []
             }
           }
@@ -91,6 +95,27 @@ module LicenseFinder
         expect(actual.map(&:version)).to match_array ['5.2.6', '1.2.3', '5.2.6']
       end
 
+      describe 'When an assets file refers to a local project' do
+        let(:assets_json2) do
+          <<-A2
+          {
+            "libraries": {
+              "someLocalProject/1.0.0": {
+                "type": "project",
+                "path": ""
+              }
+            }
+          }
+          A2
+        end
+
+        it 'ignores the project' do
+          dotnet = Dotnet.new project_path: Pathname.new('app')
+          actual = dotnet.current_packages
+          expect(actual.map(&:name)).to match_array %w[Thing1 Thing2]
+        end
+      end
+
       describe 'When a package has a license URL' do
         let(:assets_json1) do
           <<-A1
@@ -98,6 +123,7 @@ module LicenseFinder
             "libraries": {
               "Thing1/5.2.6": {
                 "path": "thing1 path/5.2.6",
+                "type": "package",
                 "files": [
                   "not a nuspec",
                   "thing1 spec.nuspec"
@@ -158,10 +184,12 @@ module LicenseFinder
           "libraries": {
             "Thing1/5.2.6": {
               "path": "thing1/5.2.6",
+              "type": "package",
               "files": ["foo.nuspec"]
             },
             "Thing2/1.2.3": {
               "path": "thing1/5.2.6",
+              "type": "package",
               "files": ["foo"]
             }
           },

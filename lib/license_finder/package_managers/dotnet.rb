@@ -9,7 +9,11 @@ module LicenseFinder
       end
 
       def dependencies
-        @manifest.fetch('libraries').keys.map do |name|
+        libs = @manifest.fetch('libraries').select do |k, v|
+          v.fetch('type') != 'project'
+        end
+
+        libs.keys.map do |name|
           parts = name.split('/')
           PackageMetadata.new(parts[0], parts[1], possible_spec_paths(name))
         end
