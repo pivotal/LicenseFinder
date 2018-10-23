@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'fakefs/spec_helpers'
 require 'set'
@@ -87,22 +89,22 @@ module LicenseFinder
         dotnet = Dotnet.new project_path: Pathname.new('app')
 
         expected = [
-            {
-                name: 'Thing1',
-                version: '5.2.6'
-            },
-            {
-                name: 'Thing2',
-                version: '1.2.3'
-            },
-            {
-                name: 'Thing3',
-                version: '5.2.6'
-            }
+          {
+            name: 'Thing1',
+            version: '5.2.6'
+          },
+          {
+            name: 'Thing2',
+            version: '1.2.3'
+          },
+          {
+            name: 'Thing3',
+            version: '5.2.6'
+          }
         ]
 
         actual = dotnet.current_packages.map do |package|
-          {name: package.name, version: package.version}
+          { name: package.name, version: package.version }
         end
 
         expect(actual).to contain_exactly(*expected)
@@ -165,12 +167,12 @@ module LicenseFinder
 
       let(:expected_dependencies) do
         [
-            Dotnet::PackageMetadata.new(
-                'Thing1',
-                '5.2.6',
-                %w(packageFolder1/thing1/5.2.6/foo.nuspec packageFolder2/thing1/5.2.6/foo.nuspec)
-            ),
-            Dotnet::PackageMetadata.new('Thing2', '1.2.3', [])
+          Dotnet::PackageMetadata.new(
+            'Thing1',
+            '5.2.6',
+            %w[packageFolder1/thing1/5.2.6/foo.nuspec packageFolder2/thing1/5.2.6/foo.nuspec]
+          ),
+          Dotnet::PackageMetadata.new('Thing2', '1.2.3', [])
         ]
       end
 
@@ -203,7 +205,7 @@ module LicenseFinder
 
         it 'returns the nuspec file in each package folder' do
           asset_file = Dotnet::AssetFile.new('project.assets.json')
-          expected = %w(packageFolder1/thing1/5.2.6/foo.nuspec packageFolder2/thing1/5.2.6/foo.nuspec)
+          expected = %w[packageFolder1/thing1/5.2.6/foo.nuspec packageFolder2/thing1/5.2.6/foo.nuspec]
           expect(asset_file.possible_spec_paths('Thing1/5.2.6')).to eq(expected)
         end
       end
@@ -255,7 +257,7 @@ module LicenseFinder
       end
 
       it 'returns the license URL from each file that exists' do
-        possible_paths = %w(bar.nuspec foo.nuspec)
+        possible_paths = %w[bar.nuspec foo.nuspec]
         package_metadata = Dotnet::PackageMetadata.new('arbitrary', 'arbitrary', possible_paths)
         expected_url = 'http://www.microsoft.com/web/webpi/eula/net_library_eula_ENU.htm'
         expect(package_metadata.read_license_urls).to eq([expected_url])
@@ -264,26 +266,26 @@ module LicenseFinder
 
     describe '#==' do
       it 'returns true when all attributes are equal' do
-        metadata1 = Dotnet::PackageMetadata.new('A', 1.2, %w(foo bar))
-        metadata2 = Dotnet::PackageMetadata.new('A', 1.2, %w(foo bar))
+        metadata1 = Dotnet::PackageMetadata.new('A', 1.2, %w[foo bar])
+        metadata2 = Dotnet::PackageMetadata.new('A', 1.2, %w[foo bar])
         expect(metadata1).to eq(metadata2)
       end
 
       it 'returns false when names are different' do
-        metadata1 = Dotnet::PackageMetadata.new('A', 1.2, %w(foo bar))
-        metadata2 = Dotnet::PackageMetadata.new('B', 1.2, %w(foo bar))
+        metadata1 = Dotnet::PackageMetadata.new('A', 1.2, %w[foo bar])
+        metadata2 = Dotnet::PackageMetadata.new('B', 1.2, %w[foo bar])
         expect(metadata1).to_not eq(metadata2)
       end
 
       it 'returns false when versions are different' do
-        metadata1 = Dotnet::PackageMetadata.new('A', 1.2, %w(foo bar))
-        metadata2 = Dotnet::PackageMetadata.new('A', 1.3, %w(foo bar))
+        metadata1 = Dotnet::PackageMetadata.new('A', 1.2, %w[foo bar])
+        metadata2 = Dotnet::PackageMetadata.new('A', 1.3, %w[foo bar])
         expect(metadata1).to_not eq(metadata2)
       end
 
       it 'returns false when possible_spec_paths are different' do
-        metadata1 = Dotnet::PackageMetadata.new('A', 1.2, %w(foo bar))
-        metadata2 = Dotnet::PackageMetadata.new('A', 1.2, %w(bar baz))
+        metadata1 = Dotnet::PackageMetadata.new('A', 1.2, %w[foo bar])
+        metadata2 = Dotnet::PackageMetadata.new('A', 1.2, %w[bar baz])
         expect(metadata1).to_not eq(metadata2)
       end
     end

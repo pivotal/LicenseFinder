@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 require 'json'
 
@@ -9,8 +11,8 @@ module LicenseFinder
       end
 
       def dependencies
-        libs = @manifest.fetch('libraries').select do |k, v|
-          v.fetch('type') != 'project'
+        libs = @manifest.fetch('libraries').reject do |_, v|
+          v.fetch('type') == 'project'
         end
 
         libs.keys.map do |name|
