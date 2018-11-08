@@ -48,6 +48,13 @@ module LicenseFinder
       alternate_build_file = build_file_from_settings(project_path)
       return alternate_build_file if alternate_build_file
 
+      build_gradle_file
+    end
+
+    def build_gradle_file
+      kotlin_gradle_path = project_path.join('build.gradle.kts')
+      return kotlin_gradle_path if File.exist? kotlin_gradle_path
+
       project_path.join('build.gradle')
     end
 

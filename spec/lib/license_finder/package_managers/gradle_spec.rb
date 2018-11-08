@@ -156,9 +156,20 @@ BUILD SUCCESSFUL in 0s
         end
       end
 
-      context "when there's no build.gradle" do
+      context "when there's no build.gradle or build.gradle.kts" do
         it 'returns false' do
           expect(subject.active?).to be false
+        end
+      end
+
+      context "when there's build.gradle.kts" do
+        it 'return true' do
+          FakeFS do
+            FileUtils.mkdir_p '/fake/path'
+            FileUtils.touch '/fake/path/build.gradle.kts'
+
+            expect(subject.active?).to be true
+          end
         end
       end
 
