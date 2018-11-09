@@ -80,7 +80,10 @@ module LicenseFinder
         _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(self.class.prepare_command) }
         unless status.success?
           log_errors stderr
-          raise "Prepare command '#{self.class.prepare_command}' failed" unless @prepare_no_fail
+
+          error_message = "Prepare command '#{self.class.prepare_command}' failed\n#{stderr}"
+
+          raise error_message unless @prepare_no_fail
         end
       else
         logger.debug self.class, 'no prepare step provided', color: :red
