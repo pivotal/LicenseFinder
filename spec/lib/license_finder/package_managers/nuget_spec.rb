@@ -5,10 +5,6 @@ require 'fakefs/spec_helpers'
 require 'zip'
 
 module LicenseFinder
-  def self.broken_fakefs?
-    RUBY_PLATFORM =~ /java/ || RUBY_VERSION =~ /^(1\.9|2\.0)/
-  end
-
   describe Nuget do
     it_behaves_like 'a PackageManager'
 
@@ -226,6 +222,23 @@ Restoring NuGet package CoolNewDependency.2.4.2.
           expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
                                                      .and_return([nuget_restore_output, '', cmd_success])
           nuget.prepare
+        end
+      end
+
+      describe '.nuspec_license_urls' do
+        let(:thing1_spec) do
+          <<-XML
+          <?xml version="1.0" encoding="utf-8"?>
+          <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+            <metadata minClientVersion="3.6">
+              <licenseUrl>https://example.com</licenseUrl>
+            </metadata>
+          </package>
+          XML
+        end
+
+        it 'should find defined license URL' do
+          expect(Nuget.nuspec_license_urls(thing1_spec)).to eq(['https://example.com'])
         end
       end
     end

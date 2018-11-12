@@ -138,6 +138,12 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
   curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe &&\
   echo "alias nuget=\"mono /usr/local/bin/nuget.exe\"" >> ~/.bash_aliases
 
+# install dotnet core
+RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
+  sudo dpkg -i packages-microsoft-prod.deb &&\
+  sudo apt-get update &&\
+  sudo apt-get install -y dotnet-runtime-2.1
+
 # install license_finder
 COPY . /LicenseFinder
 RUN bash -lc "cd /LicenseFinder && bundle install -j4 && rake install"

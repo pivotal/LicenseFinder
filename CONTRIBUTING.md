@@ -89,6 +89,8 @@ To successfully run the test suite, you will need the following installed:
 - Carthage (requires homebrew)
 - Mix (requires Elixir)
 - Conan
+- NuGet
+- dotnet
 
 The [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) already contains these dependencies.
 
