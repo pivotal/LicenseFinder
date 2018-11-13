@@ -207,6 +207,12 @@ module LicenseFinder
       end
     end
 
+    class KtsBuildFileGradleProject < Project
+      def add_dep
+        clone('kts-build-file-gradle')
+      end
+    end
+
     class GoProject < Project
       def add_dep
         clone('gopath')
