@@ -49,13 +49,9 @@ module LicenseFinder
       end
 
       it 'should log inactive states of package managers' do
-        bundler = double(:bundler, active?: true)
+        bundler = double(:bundler, active?: false)
         allow(Bundler).to receive(:new).and_return bundler
-        inactive_managers = described_class::PACKAGE_MANAGERS - [Bundler]
-
-        inactive_managers.each do |pm|
-          expect(logger).to receive(:debug).with(pm, 'is not active', color: :red)
-        end
+        expect(logger).to receive(:debug).with(Bundler, 'is not active', color: :red)
 
         subject.active_package_managers
       end
@@ -73,8 +69,10 @@ module LicenseFinder
 
       context 'when there are no active package managers' do
         it 'should show an appropriate error message' do
-          bundler = double(:bundler, active?: false, class: Bundler)
-          allow(Bundler).to receive(:new).and_return bundler
+          described_class::PACKAGE_MANAGERS.each do |pm|
+            d = double(pm.name, active?: false, class: pm)
+            allow(pm).to receive(:new).and_return d
+          end
           expect(logger).to receive(:info).with('License Finder', 'No active and installed package managers found for project.', color: :red)
           subject.active_package_managers
         end

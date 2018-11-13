@@ -5,7 +5,7 @@ ENV PIP_INSTALL_VERSION 10.0.1
 ENV GO_LANG_VERSION 1.11
 ENV MAVEN_VERSION 3.5.3
 ENV SBT_VERSION 1.1.1
-ENV GRADLE_VERSION 4.2
+ENV GRADLE_VERSION 4.10
 ENV RUBY_VERSION 2.5.1
 ENV MIX_VERSION 1.0
 
@@ -35,10 +35,10 @@ RUN npm install -g bower && \
 #install java 8
 #http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
 RUN cd /tmp && \
-    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-linux-x64.tar.gz -O jdk-8.tgz && \
+    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u192-b12/750e1c8617c5452694857ad95c3ee230/jdk-8u192-linux-x64.tar.gz -O jdk-8.tgz && \
     tar xf /tmp/jdk-8.tgz && \
     mkdir -p /usr/lib/jvm && \
-    mv jdk1.8.0_191 /usr/lib/jvm/oracle_jdk8 && \
+    mv jdk1.8.0_192 /usr/lib/jvm/oracle_jdk8 && \
     rm /tmp/jdk-8.tgz
 
 ENV J2SDKDIR=/usr/lib/jvm/oracle_jdk8
@@ -137,6 +137,12 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
   apt-get install -y mono-complete &&\
   curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe &&\
   echo "alias nuget=\"mono /usr/local/bin/nuget.exe\"" >> ~/.bash_aliases
+
+# install dotnet core
+RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
+  sudo dpkg -i packages-microsoft-prod.deb &&\
+  sudo apt-get update &&\
+  sudo apt-get install -y dotnet-runtime-2.1
 
 # install license_finder
 COPY . /LicenseFinder

@@ -207,6 +207,12 @@ module LicenseFinder
       end
     end
 
+    class KtsBuildFileGradleProject < Project
+      def add_dep
+        clone('kts-build-file-gradle')
+      end
+    end
+
     class GoProject < Project
       def add_dep
         clone('gopath')
@@ -409,6 +415,12 @@ module LicenseFinder
     class NugetProject < Project
       def add_dep
         clone('nuget')
+      end
+    end
+
+    class DotnetProject < Project
+      def add_dep
+        clone('dotnet')
       end
     end
 
