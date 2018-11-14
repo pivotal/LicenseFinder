@@ -120,7 +120,11 @@ module LicenseFinder
 
     def log_to_file(contents)
       FileUtils.mkdir_p @log_directory
-      log_file = File.join(@log_directory, "prepare_#{self.class.package_management_command || 'errors'}.log")
+
+      # replace whitespace with underscores and remove slashes
+      log_file_name = self.class.package_management_command&.gsub(/\s/, '_')&.gsub(/\//,'')
+      log_file = File.join(@log_directory, "prepare_#{log_file_name || 'errors'}.log")
+
       File.open(log_file, 'w') do |f|
         f.write("Prepare command \"#{self.class.prepare_command}\" failed with:\n")
         f.write("#{contents}\n\n")
