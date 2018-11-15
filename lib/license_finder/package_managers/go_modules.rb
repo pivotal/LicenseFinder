@@ -17,46 +17,52 @@ module LicenseFinder
     end
 
     def active?
-      sum_files?
+      sum_file?
     end
 
     def current_packages
-      sum_file_paths.uniq.map do |file_path|
-        read_sum(file_path)
-      end.flatten
+      [read_sum(sum_file_path)].flatten
     end
 
     private
 
-    def sum_files?
-      sum_file_paths.any?
+    def sum_file?
+      !sum_file_path.nil?
     end
 
-    def sum_file_paths
-      Dir[project_path.join(PACKAGES_FILE)]
+    def sum_file_path
+      Dir[project_path.join(PACKAGES_FILE)].first
     end
 
     def read_sum(file_path)
       contents = File.read(file_path)
       contents.each_line.map do |line|
-        line.include?('go.mod') ? nil : read_package(file_path, line)
+        line.include?('go.mod') ? nil : read_package(line)
       end.compact
     end
 
-    def read_package(file_path, line)
+    def read_package(line)
       parts = line.split(' ')
-      install_path = File.dirname(file_path)
 
       name = parts[0]
       version = parts[1]
 
       info = {
         'ImportPath' => name,
-        'InstallPath' => install_path,
         'Rev' => version
       }
 
-      GoPackage.from_dependency(info, nil, true)
+      GoPackage.from_dependency(info, install_prefix(name), true)
+    end
+
+    def install_prefix(name)
+      return vendor_dir if Dir.exist?(File.join(vendor_dir, name))
+
+      Pathname(ENV['GOPATH'] || ENV['HOME'] + '/go').join('src')
+    end
+
+    def vendor_dir
+      File.join(project_path, 'vendor')
     end
   end
 end
