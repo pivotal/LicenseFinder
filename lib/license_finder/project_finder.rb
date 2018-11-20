@@ -23,7 +23,6 @@ module LicenseFinder
       is_active_project = active_project?(potential_project_path)
       return unless is_active_project
 
-      remove_nested(potential_project_path, all_paths)
       potential_project_path.to_s
     end
 

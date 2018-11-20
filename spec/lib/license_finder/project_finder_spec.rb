@@ -20,11 +20,11 @@ module LicenseFinder
         ProjectFinder.new('/path/to/projects').find_projects
       end
 
-      it 'rejects nested dependencies' do
+      it 'finds nested dependencies' do
         finder = ProjectFinder.new('spec/fixtures/composite')
 
         active_projects = finder.find_projects
-        expect(has_project_path?(active_projects, 'pivotal/foo')).to be false
+        expect(has_project_path?(active_projects, 'pivotal/foo')).to be true
       end
     end
 
