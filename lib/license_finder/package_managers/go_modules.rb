@@ -21,9 +21,16 @@ module LicenseFinder
     end
 
     def current_packages
-      sum_file_paths.uniq.map do |file_path|
-        read_sum(file_path)
-      end.flatten
+      info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -m -mod=vendor -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+      packages_info = info_output.split("\n")
+      packages = packages_info.map do |package|
+        name, version, install_path = package.split(',')
+        read_package(install_path, name, version)
+      end
+      packages.reject do |package|
+        Pathname(package.install_path).cleanpath == Pathname(project_path).cleanpath
+      end
+      # binding.pry
     end
 
     private
@@ -36,20 +43,7 @@ module LicenseFinder
       Dir[project_path.join(PACKAGES_FILE)]
     end
 
-    def read_sum(file_path)
-      contents = File.read(file_path)
-      contents.each_line.map do |line|
-        line.include?('go.mod') ? nil : read_package(file_path, line)
-      end.compact
-    end
-
-    def read_package(file_path, line)
-      parts = line.split(' ')
-      install_path = File.dirname(file_path)
-
-      name = parts[0]
-      version = parts[1]
-
+    def read_package(install_path, name, version)
       info = {
         'ImportPath' => name,
         'InstallPath' => install_path,

@@ -2,6 +2,9 @@
 
 require 'json'
 module LicenseFinder
+  class GoWorkspacePackageManagerError < ::StandardError
+  end
+
   class GoWorkspace < PackageManager
     Submodule = Struct.new :install_path, :revision
     ENVRC_REGEXP = /GOPATH|GO15VENDOREXPERIMENT/
@@ -77,9 +80,9 @@ module LicenseFinder
         # with status code 1. Setting GOPATH to nil removes those warnings.
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = nil
-        val, _stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
+        val, stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
         ENV['GOPATH'] = orig_gopath
-        raise 'go list failed' unless status.success?
+        raise GoWorkspacePackageManagerError, "go list failed:\n#{stderr}" unless status.success?
 
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
