@@ -4,7 +4,7 @@ gradle.startParameter.excludedTaskNames += "licenseTest"
 plugins {
     application
     kotlin("jvm") version "1.2.61"
-    id ("com.github.hierynomus.license") version "0.14.0"
+    id ("com.github.hierynomus.license") version "0.15.0"
 }
 
 application {
