@@ -40,7 +40,7 @@ module LicenseFinder
       end
 
       it 'should call npm install' do
-        expect(SharedHelpers::Cmd).to receive(:run).with('npm install')
+        expect(SharedHelpers::Cmd).to receive(:run).with('npm install --no-save')
                                                    .and_return([dependency_json, '', cmd_success])
         npm.prepare
       end
@@ -48,7 +48,7 @@ module LicenseFinder
       context 'ignored_groups contains devDependencies' do
         let(:npm) { NPM.new project_path: Pathname.new(root), ignored_groups: 'devDependencies' }
         it 'should include a production flag' do
-          expect(SharedHelpers::Cmd).to receive(:run).with('npm install --production')
+          expect(SharedHelpers::Cmd).to receive(:run).with('npm install --no-save --production')
                                                      .and_return([dependency_json, '', cmd_success])
           npm.prepare
         end
