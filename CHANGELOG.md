@@ -1,3 +1,22 @@
+# [5.6.0] / 2018-12-19
+
+### Added
+* Add support for JSON reports [#161595251] - [5a1f735](https://github.com/pivotal-legacy/LicenseFinder/commit/5a1f73515c83cbf8ce17275c4c9d1af43d0db772) 
+* Removed the removal of nested projects - [6e1941c](https://github.com/pivotal-legacy/LicenseFinder/commit/6e1941c4d06676988ff8bdad81bd83a4bb5c17e9) 
+* Show verbose errors from prepare commands [#161462746] - [2b14299](https://github.com/pivotal-legacy/LicenseFinder/commit/2b142995d06572f772104c39437d0b64f9569f79) 
+
+* Support to find gradle.kts files [#161629958] - [f7cb587](https://github.com/pivotal-legacy/LicenseFinder/commit/f7cb587787f4de282c34afe66c0a2d0c1c72a84f) 
+
+### Fixed
+* Go modules reports incorrect install paths - [9ab5aa9](https://github.com/pivotal-legacy/LicenseFinder/commit/9ab5aa9aadc9432c5359ed2af2cb32e28fac277a) 
+Revert "* Go modules reports incorrect install paths" - [fcead98](https://github.com/pivotal-legacy/LicenseFinder/commit/fcead980ae2cc24f7193a1f38944f4df60a8c3fc) 
+
+* Fix install_paths for go mod now accurately report dependency installation directories  [#161943322 finish] - [ea28c06](https://github.com/pivotal-legacy/LicenseFinder/commit/ea28c06898964043f5849b64b4043bde81a2d7cd) 
+* Handle log file names created with whitespaces and slashes - [7d6f9da](https://github.com/pivotal-legacy/LicenseFinder/commit/7d6f9da5006e1e7bbb71f594188ab87ee76ddfbb) 
+
+### Changed
+* Updated go-lang to 1.11.2 in the Docker - [d720f9c](https://github.com/pivotal-legacy/LicenseFinder/commit/d720f9c16f82044b5024213bec41b8e9f34cf306) 
+
 # [5.5.2] / 2018-10-17
 
 ### Fixed
@@ -659,3 +678,4 @@ Bugfixes:
 [5.5.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.1...v5.5.0
 [5.5.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.0...v5.5.1
 [5.5.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.1...v5.5.2
+[5.6.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.2...v5.6.0
