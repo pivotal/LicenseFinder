@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 module LicenseFinder
   # Super-class for the different package managers
@@ -77,11 +77,13 @@ module LicenseFinder
 
     def prepare
       if self.class.prepare_command
-        _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(self.class.prepare_command) }
+        stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(self.class.prepare_command) }
         unless status.success?
           log_errors stderr
 
           error_message = "Prepare command '#{self.class.prepare_command}' failed\n#{stderr}"
+
+          error_message == error_message.concat("\n#{stdout}\n") if !stdout.nil? && !stdout.empty?
 
           raise error_message unless @prepare_no_fail
         end
