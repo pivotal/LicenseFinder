@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 10.0.1
-ENV GO_LANG_VERSION 1.11.2
+ENV GO_LANG_VERSION 1.11.4
 ENV MAVEN_VERSION 3.5.3
 ENV SBT_VERSION 1.1.1
 ENV GRADLE_VERSION 4.10
@@ -35,10 +35,10 @@ RUN npm install -g bower && \
 #install java 8
 #http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
 RUN cd /tmp && \
-    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u192-b12/750e1c8617c5452694857ad95c3ee230/jdk-8u192-linux-x64.tar.gz -O jdk-8.tgz && \
+    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz -O jdk-8.tgz && \
     tar xf /tmp/jdk-8.tgz && \
     mkdir -p /usr/lib/jvm && \
-    mv jdk1.8.0_192 /usr/lib/jvm/oracle_jdk8 && \
+    mv jdk1.8.0_201 /usr/lib/jvm/oracle_jdk8 && \
     rm /tmp/jdk-8.tgz
 
 ENV J2SDKDIR=/usr/lib/jvm/oracle_jdk8
@@ -134,7 +134,7 @@ RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --disable-sudo
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &&\
   echo "deb https://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
-  apt-get update &&\ 
+  apt-get update &&\
   apt-get install -y mono-complete &&\
   curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe &&\
   echo "alias nuget=\"mono /usr/local/bin/nuget.exe\"" >> ~/.bash_aliases
