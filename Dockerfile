@@ -128,7 +128,7 @@ RUN apt-get install -y python-dev && \
 	pip install conan
 
 # install Cargo
-RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --disable-sudo
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
