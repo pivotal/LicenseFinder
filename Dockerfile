@@ -8,6 +8,7 @@ ENV SBT_VERSION 1.1.1
 ENV GRADLE_VERSION 4.10
 ENV RUBY_VERSION 2.5.1
 ENV MIX_VERSION 1.0
+ENV BUNDLER_VERSION 1.17.2
 
 # programs needed for building
 RUN apt-get update && apt-get install -y \
@@ -120,7 +121,7 @@ RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_a
     sudo apt-get install -y elixir
 
 # install bundler
-RUN bash -lc "gem update --system && gem install bundler"
+RUN bash -lc "gem update --system && gem install bundler -v ${BUNDLER_VERSION}"
 
 # install conan
 RUN apt-get install -y python-dev && \
