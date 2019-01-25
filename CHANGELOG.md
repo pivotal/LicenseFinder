@@ -1,3 +1,5 @@
+# [5.6.1] / 2019-01-25
+
 # [5.6.0] / 2018-12-19
 
 ### Added
@@ -679,3 +681,4 @@ Bugfixes:
 [5.5.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.0...v5.5.1
 [5.5.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.1...v5.5.2
 [5.6.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.2...v5.6.0
+[5.6.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.0...v5.6.1
