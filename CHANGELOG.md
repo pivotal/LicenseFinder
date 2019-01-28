@@ -1,5 +1,8 @@
 # [5.6.1] / 2019-01-25
 
+### Changed
+* Updated GOLANG to 1.11.4 in Docker image [#163424880] - [67e5e1f](https://github.com/pivotal-legacy/LicenseFinder/commit/67e5e1ffef19acf3a63cac55c5aa3626fb4c7491)
+
 # [5.6.0] / 2018-12-19
 
 ### Added
