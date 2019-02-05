@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class Yarn < PackageManager
-    SHELL_COMMAND = 'yarn licenses list --no-progress --json'.freeze
+    SHELL_COMMAND = 'yarn licenses list --no-progress --json'
 
     def possible_package_paths
       [project_path.join('yarn.lock')]
@@ -40,6 +42,7 @@ module LicenseFinder
       prep_cmd = "#{Yarn.prepare_command}#{production_flag}"
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
       return if status.success?
+
       log_errors stderr
       raise "Prepare command '#{prep_cmd}' failed" unless @prepare_no_fail
     end
@@ -66,13 +69,24 @@ module LicenseFinder
         Hash[head.zip(json_package)]
       end
 
-      packages.map do |package_hash|
-        YarnPackage.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']], homepage: package_hash['VendorUrl'])
+      valid_packages = filter_yarn_internal_package(packages)
+
+      valid_packages.map do |package_hash|
+        YarnPackage.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']],
+                                                                       homepage: package_hash['VendorUrl'])
       end
+    end
+
+    # remove fake package created by yarn [Yarn Bug]
+    def filter_yarn_internal_package(all_packages)
+      internal_package_pattern = /workspace-aggregator-[a-zA-z0-9]{8}-[a-zA-z0-9]{4}-[a-zA-z0-9]{4}-[a-zA-z0-9]{4}-[a-zA-z0-9]{12}/
+      yarn_internal_package = all_packages.find { |package| internal_package_pattern.match(package['Name']) }
+      all_packages - [yarn_internal_package]
     end
 
     def production_flag
       return '' if @ignored_groups.nil?
+
       @ignored_groups.include?('devDependencies') ? ' --production' : ''
     end
   end

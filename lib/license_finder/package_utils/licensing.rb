@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'license_finder/package_utils/activation'
 
 module LicenseFinder
@@ -14,17 +16,17 @@ module LicenseFinder
     end
 
     def activations_from_decisions
-      @afd ||= decided_licenses
+      @activations_from_decisions ||= decided_licenses
                .map { |license| Activation::FromDecision.new(package, license) }
     end
 
     def activations_from_spec
-      @afs ||= licenses_from_spec
+      @activations_from_spec ||= licenses_from_spec
                .map { |license| Activation::FromSpec.new(package, license) }
     end
 
     def activations_from_files
-      @aff ||= license_files
+      @activations_from_files ||= license_files
                .group_by(&:license)
                .map { |license, files| Activation::FromFiles.new(package, license, files) }
     end

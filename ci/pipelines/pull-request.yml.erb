@@ -1,11 +1,12 @@
 <% setup_slack = defined?(slack_url) && defined?(slack_channel) %>
-<% ruby_versions = %w(2.5.1 2.4.4 2.3.0 2.2.0 2.1.5 jruby-9.0.4.0) %>
+<% ruby_versions = ruby_versions.split(',') %>
 
 resource_types:
 - name: pull-request
   type: docker-image
   source:
     repository: jtarchie/pr
+
 <% if setup_slack %>
 - name: slack-notification
   type: docker-image
@@ -15,17 +16,21 @@ resource_types:
 <% end %>
 
 resources:
-- name: LicenseFinder
-  type: git
-  source:
-    uri: https://github.com/pivotal-legacy/LicenseFinder.git
-    branch: master
 - name: pull-request
   type: pull-request
   source:
     repo: pivotal-legacy/LicenseFinder
     base: master
     access_token: ((GithubApiPullRequestToken))
+
+- name: dockerhub-pr
+  type: docker-image
+  source:
+    tag: edge-pr
+    repository: licensefinder/license_finder
+    email: ((LicenseFinderDockerEmail))
+    username: ((LicenseFinderDocker.username))
+    password: ((LicenseFinderDocker.password))
 
 <% if setup_slack %>
 - name: slack-alert
@@ -35,46 +40,29 @@ resources:
 <% end %>
 
 jobs:
-<% ruby_versions.each do |ruby_version| %>
-- name: ruby-<%= ruby_version %>
+- name: build-docker-image
   public: true
   plan:
-  - get: LicenseFinder
-    trigger: true
-  - task: ruby-<%= ruby_version %>
-    privileged: true
-    file: LicenseFinder/ci/tasks/build.yml
-    params:
-      RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
-<% if setup_slack %>
-  on_failure:
-    put: slack-alert
-    params:
-      channel: '<%= slack_channel %>'
-      icon_emoji: ':crying_cat_face:'
-      text: '<%= "License Finder build failed. Build: https://norsk.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
-<% end %>
-<% end %>
-
-<% if setup_slack %>
-  on_failure:
-    put: slack-alert
-    params:
-      channel: '<%= slack_channel %>'
-      icon_emoji: ':crying_cat_face:'
-      text: '<%= "License Finder build failed. Build: https://norsk.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME" %>'
-<% end %>
-
+    - get: pull-request
+      version: every
+      trigger: true
+    - put: dockerhub-pr
+      params:
+        build: pull-request
 <% ruby_versions.each do |ruby_version| %>
 - name: PR-ruby-<%= ruby_version %>-linux
   public: true
   plan:
   - get: pull-request
-    trigger: true
+    passed: [build-docker-image]
     version: every
+  - get: dockerhub-pr
+    passed: [build-docker-image]
+    trigger: true
   - task: ruby-<%= ruby_version %>
     privileged: true
-    file: pull-request/ci/tasks/build.yml
+    image: dockerhub-pr
+    file: pull-request/ci/tasks/run-tests.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
     input_mapping: { LicenseFinder: pull-request }

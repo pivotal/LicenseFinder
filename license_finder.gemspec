@@ -1,11 +1,13 @@
-lib = File.expand_path('../lib/', __FILE__)
+# frozen_string_literal: true
+
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
 require 'license_finder/platform'
 require 'license_finder/version'
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 2.1.0'
+  s.required_ruby_version = '>= 2.3.3'
   s.name        = 'license_finder'
   s.version     = LicenseFinder::VERSION
 
@@ -61,6 +63,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its'
+  s.add_development_dependency 'rubocop', '~> 0.59.2'
   s.add_development_dependency 'webmock', '~> 1.13'
 
   # to preserve ruby < 2.2.2 support.

@@ -1,3 +1,13 @@
+AllCops:
+  TargetRubyVersion: 2.3.3 
+  Exclude:
+    - 'lib/license_finder/reports/**/*'
+    - 'features/fixtures/**/*'
+    - 'releases/**/*'
+    - 'ci/**/*'
+    - 'tmp/**/*'
+    - 'Gemfile'
+
 #Layout Cops
 IndentHeredoc:
   Enabled: false
@@ -32,6 +42,14 @@ YAMLLoad:
   Enabled: false
 
 #Style Cops
+Style/MethodMissingSuper:
+  Enabled: false
+Style/MissingRespondToMissing:
+  Enabled: false
+Style/FormatStringToken:
+  EnforcedStyle: unannotated
+Layout/MultilineMethodCallIndentation:
+    Enabled: false
 DoubleNegation:
   Enabled: false
 Documentation:
@@ -41,18 +59,6 @@ FileName:
     - '**/Rakefile'
     - '**/Gemfile'
     - '**/Podfile'
-MethodMissing:
-  Enabled: false
 ModuleFunction:
   Enabled: false
   EnforcedStyle: extend_self
-AllCops:
-  Include:
-    - 'bin/license_finder'
-  Exclude:
-    - 'lib/license_finder/reports/**/*'
-    - 'features/fixtures/**/*'
-    - 'releases/**/*'
-    - 'ci/**/*'
-    - 'tmp/**/*'
-    - 'Gemfile'

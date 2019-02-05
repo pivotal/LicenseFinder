@@ -1,0 +1,10 @@
+platform: linux
+
+inputs:
+- name: LicenseFinder
+
+run:
+  path: ./LicenseFinder/ci/scripts/run-tests.sh
+
+params:
+  RUBY_VERSION_UNDER_TEST:

@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 module LicenseFinder
   # Super-class for the different package managers
   # (Bundler, NPM, Pip, etc.)
@@ -66,7 +68,7 @@ module LicenseFinder
 
     def active?
       path = detected_package_path
-      path && path.exist?
+      path&.exist?
     end
 
     def detected_package_path
@@ -75,10 +77,15 @@ module LicenseFinder
 
     def prepare
       if self.class.prepare_command
-        _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(self.class.prepare_command) }
+        stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(self.class.prepare_command) }
         unless status.success?
           log_errors stderr
-          raise "Prepare command '#{self.class.prepare_command}' failed" unless @prepare_no_fail
+
+          error_message = "Prepare command '#{self.class.prepare_command}' failed\n#{stderr}"
+
+          error_message == error_message.concat("\n#{stdout}\n") if !stdout.nil? && !stdout.empty?
+
+          raise error_message unless @prepare_no_fail
         end
       else
         logger.debug self.class, 'no prepare step provided', color: :red
@@ -90,6 +97,7 @@ module LicenseFinder
         packages = current_packages
       rescue StandardError => e
         raise e unless @prepare_no_fail
+
         packages = []
       end
 
@@ -114,7 +122,11 @@ module LicenseFinder
 
     def log_to_file(contents)
       FileUtils.mkdir_p @log_directory
-      log_file = File.join(@log_directory, "prepare_#{self.class.package_management_command || 'errors'}.log")
+
+      # replace whitespace with underscores and remove slashes
+      log_file_name = self.class.package_management_command&.gsub(/\s/, '_')&.gsub(%r{/}, '')
+      log_file = File.join(@log_directory, "prepare_#{log_file_name || 'errors'}.log")
+
       File.open(log_file, 'w') do |f|
         f.write("Prepare command \"#{self.class.prepare_command}\" failed with:\n")
         f.write("#{contents}\n\n")
@@ -130,6 +142,7 @@ require 'license_finder/package_managers/go_dep'
 require 'license_finder/package_managers/gvt'
 require 'license_finder/package_managers/glide'
 require 'license_finder/package_managers/govendor'
+require 'license_finder/package_managers/go_modules'
 require 'license_finder/package_managers/bundler'
 require 'license_finder/package_managers/npm'
 require 'license_finder/package_managers/yarn'
@@ -141,6 +154,7 @@ require 'license_finder/package_managers/carthage'
 require 'license_finder/package_managers/gradle'
 require 'license_finder/package_managers/rebar'
 require 'license_finder/package_managers/nuget'
+require 'license_finder/package_managers/dotnet'
 require 'license_finder/package_managers/dep'
 require 'license_finder/package_managers/conan'
 require 'license_finder/package_managers/sbt'

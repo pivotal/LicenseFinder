@@ -1,3 +1,66 @@
+# [5.6.2] / 2019-01-28
+
+# [5.6.1] / 2019-01-25
+
+### Changed
+* Updated GOLANG to 1.11.4 in Docker image [#163424880] - [67e5e1f](https://github.com/pivotal-legacy/LicenseFinder/commit/67e5e1ffef19acf3a63cac55c5aa3626fb4c7491)
+
+# [5.6.0] / 2018-12-19
+
+### Added
+* Add support for JSON reports [#161595251] - [5a1f735](https://github.com/pivotal-legacy/LicenseFinder/commit/5a1f73515c83cbf8ce17275c4c9d1af43d0db772) 
+* Removed the removal of nested projects - [6e1941c](https://github.com/pivotal-legacy/LicenseFinder/commit/6e1941c4d06676988ff8bdad81bd83a4bb5c17e9) 
+* Show verbose errors from prepare commands [#161462746] - [2b14299](https://github.com/pivotal-legacy/LicenseFinder/commit/2b142995d06572f772104c39437d0b64f9569f79) 
+
+* Support to find gradle.kts files [#161629958] - [f7cb587](https://github.com/pivotal-legacy/LicenseFinder/commit/f7cb587787f4de282c34afe66c0a2d0c1c72a84f) 
+
+### Fixed
+* Go modules reports incorrect install paths - [9ab5aa9](https://github.com/pivotal-legacy/LicenseFinder/commit/9ab5aa9aadc9432c5359ed2af2cb32e28fac277a) 
+Revert "* Go modules reports incorrect install paths" - [fcead98](https://github.com/pivotal-legacy/LicenseFinder/commit/fcead980ae2cc24f7193a1f38944f4df60a8c3fc) 
+
+* Fix install_paths for go mod now accurately report dependency installation directories  [#161943322 finish] - [ea28c06](https://github.com/pivotal-legacy/LicenseFinder/commit/ea28c06898964043f5849b64b4043bde81a2d7cd) 
+* Handle log file names created with whitespaces and slashes - [7d6f9da](https://github.com/pivotal-legacy/LicenseFinder/commit/7d6f9da5006e1e7bbb71f594188ab87ee76ddfbb) 
+
+### Changed
+* Updated go-lang to 1.11.2 in the Docker - [d720f9c](https://github.com/pivotal-legacy/LicenseFinder/commit/d720f9c16f82044b5024213bec41b8e9f34cf306) 
+
+# [5.5.2] / 2018-10-17
+
+### Fixed
+* go mod prepare command being incorrect - [480c465](https://github.com/pivotal-legacy/LicenseFinder/commit/480c4654cde7342456318ed4e28b6cebd4a09e4b) 
+
+# [5.5.1] / 2018-10-16
+
+### Added
+* Documentation for asterisks being added to license names [#158960018] - [154b727](https://github.com/pivotal-legacy/LicenseFinder/commit/154b7273b1c18e64afa48799b50588251f99e982) 
+* Document the prepare option on the command line - [c283a38](https://github.com/pivotal-legacy/LicenseFinder/commit/c283a38d9e8b9feefc5afe32f1df55b357a33333) 
+
+### Fixed
+* Go modules are forced to be enabled on go mod package managers - [cf9123d](https://github.com/pivotal-legacy/LicenseFinder/commit/cf9123d654b98cdef872d3b21631e69960abe365) 
+
+# [5.5.0] / 2018-10-11
+
+### Added
+* Go Module support - [8a20210](https://github.com/pivotal-legacy/LicenseFinder/commit/8a202109e942316434978befd33854aa985dd872)
+
+### Changed
+* Lowering gemspec ruby requirement to support jruby 9.1.x - [279bd25](https://github.com/pivotal-legacy/LicenseFinder/commit/279bd25bbebbd3851dcc0062c3c47f7c7063dad8)
+* Bumps rubocop to 0.59.2 - [291d335](https://github.com/pivotal-legacy/LicenseFinder/commit/291d3358921dbb47bc612b77656353da07e71a2b)
+
+### Fixed
+* 'dlf' with no-args should get a login shell - [2b019fb](https://github.com/pivotal-legacy/LicenseFinder/commit/2b019fb1126ec2fcb9cafa092cad6d27b875e5f9) - Kim Dykeman
+* Do not include godep dependencies with common paths - [23e951f](https://github.com/pivotal-legacy/LicenseFinder/commit/23e951fae56a43abde52ecefa73e8a5ff73bb688) 
+* Remove uneeded bundle install in dlf [#160758436] - [f44c73f](https://github.com/pivotal-legacy/LicenseFinder/commit/f44c73f6c06838a29ff9a75932e08fb1445557ca) 
+
+* dlf gemfile directory issues [#160758436 finish] - [2db3972](https://github.com/pivotal-legacy/LicenseFinder/commit/2db397261654bca89771e85984b4ae6819274e55) 
+Revert "* dlf gemfile directory issues [#160758436 finish]" - [6b17ddc](https://github.com/pivotal-legacy/LicenseFinder/commit/6b17ddc4202518ffd167c8d38a2045a36eb00144) 
+
+# [5.4.1] / 2018-09-18
+
+### Fixed
+* Extra dependencies showing up for some go projects [#160438065] - [dfb1367](https://github.com/pivotal-legacy/LicenseFinder/commit/dfb136724721843c1196e74a6b4c762538af62ba) 
+* remove workspace-aggregator as a yarn dependency [#159612717 finish] - [4e0afd0](https://github.com/pivotal-legacy/LicenseFinder/commit/4e0afd0ba79623f5bb4c055d42a76ba77ce1c785) 
+
 # [5.4.0] / 2018-08-20
 
 ### Added
@@ -618,3 +681,10 @@ Bugfixes:
 [5.2.3]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.1...v5.2.3
 [5.3.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.3...v5.3.0
 [5.4.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.3.0...v5.4.0
+[5.4.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.0...v5.4.1
+[5.5.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.1...v5.5.0
+[5.5.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.0...v5.5.1
+[5.5.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.1...v5.5.2
+[5.6.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.2...v5.6.0
+[5.6.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.0...v5.6.1
+[5.6.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.1...v5.6.2

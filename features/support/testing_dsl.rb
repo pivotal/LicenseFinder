@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'delegate'
 require 'English'
 
@@ -205,6 +207,12 @@ module LicenseFinder
       end
     end
 
+    class KtsBuildFileGradleProject < Project
+      def add_dep
+        clone('kts-build-file-gradle')
+      end
+    end
+
     class GoProject < Project
       def add_dep
         clone('gopath')
@@ -219,6 +227,20 @@ module LicenseFinder
 
       def shell_out(command)
         ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath', 'src', 'github.com', 'pivotal', 'foo')).shell_out(command)
+      end
+    end
+
+    class GoModulesProject < Project
+      def add_dep
+        clone('go_modules')
+      end
+
+      def install
+        shell_out('go mod vendor')
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'go_modules')).shell_out(command)
       end
     end
 
@@ -393,6 +415,12 @@ module LicenseFinder
     class NugetProject < Project
       def add_dep
         clone('nuget')
+      end
+    end
+
+    class DotnetProject < Project
+      def add_dep
+        clone('dotnet')
       end
     end
 
@@ -573,7 +601,7 @@ module LicenseFinder
     end
 
     module Shell
-      ERROR_MESSAGE_FORMAT = <<ERRORFORMAT.freeze
+      ERROR_MESSAGE_FORMAT = <<ERRORFORMAT
 Command failed: `%s`
 output: %s
 exit: %d

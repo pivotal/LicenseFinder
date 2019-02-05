@@ -1,5 +1,10 @@
+# frozen_string_literal: true
+
 require 'json'
 module LicenseFinder
+  class GoWorkspacePackageManagerError < ::StandardError
+  end
+
   class GoWorkspace < PackageManager
     Submodule = Struct.new :install_path, :revision
     ENVRC_REGEXP = /GOPATH|GO15VENDOREXPERIMENT/
@@ -23,6 +28,7 @@ module LicenseFinder
           submodule.install_path =~ /#{repo_name(gp)}$/
         end.first
         next unless import_path
+
         dependency_info = {
           'ImportPath' => repo_name(import_path),
           'Homepage' => repo_name(import_path),
@@ -33,12 +39,17 @@ module LicenseFinder
       end.compact
     end
 
+    def self.takes_priority_over
+      Go15VendorExperiment
+    end
+
     def possible_package_paths
       [envrc_path.dirname]
     end
 
     def active?
       return false if @strict_matching
+
       godep = LicenseFinder::GoDep.new(project_path: Pathname(project_path))
       # go workspace is only active if GoDep wasn't. There are some projects
       # that will use the .envrc and have a Godep folder as well.
@@ -69,9 +80,10 @@ module LicenseFinder
         # with status code 1. Setting GOPATH to nil removes those warnings.
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = nil
-        val, _stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
+        val, stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
         ENV['GOPATH'] = orig_gopath
-        raise 'go list failed' unless status.success?
+        raise GoWorkspacePackageManagerError, "go list failed:\n#{stderr}" unless status.success?
+
         # Select non-standard packages. `go list std` returns the list of standard
         # dependencies. We then filter those dependencies out of the full list of
         # dependencies.
@@ -89,6 +101,7 @@ module LicenseFinder
       Dir.chdir(detected_package_path) do |_d|
         result, _stderr, status = Cmd.run('git submodule status')
         raise 'git submodule status failed' unless status.success?
+
         result.lines.map do |l|
           columns = l.split.map(&:strip)
           Submodule.new File.join(detected_package_path, columns[1]), columns[0]

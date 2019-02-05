@@ -1,0 +1,16 @@
+{
+  "libraries": {
+    "Microsoft.AspNet.WebApi.Client/5.2.6": {
+      "path": "microsoft.aspnet.webapi.client/5.2.6",
+      "type": "package",
+      "files": ["microsoft.aspnet.webapi.client.nuspec"]
+    },
+    "SomeLocalProject/1.0.0": {
+      "path": "someLocalProject",
+      "type": "project"
+    }
+  },
+  "packageFolders": {
+    "packages": {"features/fixtures/dotnet/packages": {}}
+  }
+}

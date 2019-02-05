@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'xmlsimple'
 require 'with_env'
 require 'license_finder/package_utils/gradle_dependency_finder'
@@ -45,6 +47,13 @@ module LicenseFinder
     def detected_package_path
       alternate_build_file = build_file_from_settings(project_path)
       return alternate_build_file if alternate_build_file
+
+      build_gradle_file
+    end
+
+    def build_gradle_file
+      kotlin_gradle_path = project_path.join('build.gradle.kts')
+      return kotlin_gradle_path if File.exist? kotlin_gradle_path
 
       project_path.join('build.gradle')
     end

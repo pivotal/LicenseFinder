@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'license_finder/shared_helpers/common_path'
 module LicenseFinder
   class Gvt < PackageManager
@@ -22,6 +24,7 @@ module LicenseFinder
       split_package_path = detected_package_path.to_s.split('/')
       vendor_dir_depth = split_package_path.index('vendor')
       return [] if vendor_dir_depth.nil?
+
       vendor_dir_parent_depth = vendor_dir_depth - 1
 
       is_project_root_parent_of_vendor_dir = project_root_depth == vendor_dir_parent_depth
@@ -37,6 +40,7 @@ module LicenseFinder
 
       stdout, _stderr, status = Cmd.run(shell_command)
       return [] unless status.success?
+
       packages_from_output(stdout, path)
     end
 
@@ -62,7 +66,7 @@ module LicenseFinder
 
       result = []
       packages_by_sha.each do |sha, info|
-        paths = CommonPathHelper.shortest_common_paths(info['paths'])
+        paths = CommonPathHelper.longest_common_paths(info['paths'])
 
         paths.each { |p| result << [sha, p, info['repo']] }
       end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'fakefs/spec_helpers'
 
@@ -134,6 +136,20 @@ module LicenseFinder
             allow(LicenseFinder::PackageManager).to receive(:package_management_command).and_return('foobar')
             expect { subject.prepare }.to raise_error(prepare_error)
             expect(File.exist?(File.join(log_directory, 'prepare_foobar.log'))).to be_truthy
+          end
+
+          context 'when prepare command has whitespaces and slashes in it' do
+            before do
+              allow(described_class).to receive(:package_management_command)
+                                          .and_return('mono /usr/local/bin/nuget.exe')
+            end
+
+            let(:log_file_path) { File.join(log_directory, 'prepare_mono_usrlocalbinnuget.exe.log') }
+
+            it 'creates log files with whitespaces replaced by underscores and slashes removed' do
+              expect { subject.prepare }.to raise_error(prepare_error)
+              expect(File.read(log_file_path)).to eq error_msg
+            end
           end
         end
 

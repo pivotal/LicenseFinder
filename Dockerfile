@@ -2,10 +2,10 @@ FROM ubuntu:xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 10.0.1
-ENV GO_LANG_VERSION 1.10.2
+ENV GO_LANG_VERSION 1.11.4
 ENV MAVEN_VERSION 3.5.3
 ENV SBT_VERSION 1.1.1
-ENV GRADLE_VERSION 4.2
+ENV GRADLE_VERSION 4.10
 ENV RUBY_VERSION 2.5.1
 ENV MIX_VERSION 1.0
 
@@ -35,10 +35,10 @@ RUN npm install -g bower && \
 #install java 8
 #http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
 RUN cd /tmp && \
-    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -O jdk-8.tgz && \
+    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz -O jdk-8.tgz && \
     tar xf /tmp/jdk-8.tgz && \
     mkdir -p /usr/lib/jvm && \
-    mv jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8 && \
+    mv jdk1.8.0_201 /usr/lib/jvm/oracle_jdk8 && \
     rm /tmp/jdk-8.tgz
 
 ENV J2SDKDIR=/usr/lib/jvm/oracle_jdk8
@@ -83,7 +83,7 @@ ENV PATH=/root/gradle/bin:$PATH
 
 #install go
 WORKDIR /go
-RUN wget https://storage.googleapis.com/golang/go$GO_LANG_VERSION.linux-amd64.tar.gz -O go.tar.gz && tar --strip-components=1 -xf go.tar.gz
+RUN wget https://storage.googleapis.com/golang/go$GO_LANG_VERSION.linux-amd64.tar.gz -O go.tar.gz && tar --strip-components=1 -xf go.tar.gz && rm -f go.tar.gz
 ENV GOROOT /go
 ENV PATH=$PATH:/go/bin
 
@@ -106,13 +106,15 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
 #install rvm
-RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
+RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB && \
+    curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
     curl -sSL https://get.rvm.io | sudo bash -s stable --ruby=$RUBY_VERSION
 ENV PATH=/usr/local/rvm/bin:$PATH
 
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
     sudo dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
+    sudo rm -f erlang-solutions_${MIX_VERSION}_all.deb && \
     sudo apt-get update && \
     sudo apt-get install -y esl-erlang && \
     sudo apt-get install -y elixir
@@ -126,19 +128,27 @@ RUN apt-get install -y python-dev && \
 	pip install conan
 
 # install Cargo
-RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --disable-sudo
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &&\
   echo "deb https://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
-  apt-get update &&\ 
+  apt-get update &&\
   apt-get install -y mono-complete &&\
   curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe &&\
   echo "alias nuget=\"mono /usr/local/bin/nuget.exe\"" >> ~/.bash_aliases
+
+# install dotnet core
+RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
+  sudo dpkg -i packages-microsoft-prod.deb &&\
+  sudo apt-get update &&\
+  sudo apt-get install -y dotnet-runtime-2.1
 
 # install license_finder
 COPY . /LicenseFinder
 RUN bash -lc "cd /LicenseFinder && bundle install -j4 && rake install"
 
 WORKDIR /
+
+CMD cd /scan && /bin/bash -l

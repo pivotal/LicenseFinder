@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class LicenseAggregator
     def initialize(config, aggregate_paths)
@@ -28,6 +30,7 @@ module LicenseFinder
 
     def finders
       return @finders unless @finders.nil?
+
       @finders = if @aggregate_paths.nil?
                    [LicenseFinder::Core.new(@config)]
                  else
@@ -42,6 +45,7 @@ module LicenseFinder
 
     def aggregate_packages
       return @packages unless @packages.nil?
+
       all_packages = finders.flat_map do |finder|
         finder.prepare_projects if @config.prepare
         finder.acknowledged.map { |dep| MergedPackage.new(dep, [finder.project_path]) }

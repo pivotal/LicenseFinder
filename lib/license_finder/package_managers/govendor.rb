@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'license_finder/shared_helpers/common_path'
 require 'json'
 
@@ -38,24 +40,34 @@ module LicenseFinder
       packages = data['package']
 
       packages_by_sha = {}
+      packages_with_no_sha = []
 
       packages.each do |package|
         package_path = package['path']
         package_revision = package['revision']
-        if packages_by_sha[package_revision].nil?
+
+        if !package_is_versioned?(package)
+          packages_with_no_sha << { sha: '', path: package_path }
+        elsif packages_by_sha[package_revision].nil?
           packages_by_sha[package_revision] = [package_path]
         else
           packages_by_sha[package_revision] << package_path
         end
       end
 
-      result = []
+      result = packages_with_no_sha
       packages_by_sha.each do |sha, paths|
-        common_paths = CommonPathHelper.shortest_common_paths(paths)
+        common_paths = CommonPathHelper.longest_common_paths(paths)
         common_paths.each { |cp| result << { sha: sha, path: cp } }
       end
 
       result
+    end
+
+    def package_is_versioned?(package)
+      package_revision = package['revision']
+
+      !package_revision.nil? && !package_revision.empty?
     end
   end
 end

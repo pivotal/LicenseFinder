@@ -3,12 +3,11 @@
 [![Code Climate](https://codeclimate.com/github/pivotal-legacy/LicenseFinder.png)](https://codeclimate.com/github/pivotal-legacy/LicenseFinder)
 
 Build status
-* Ruby 2.1.5 [![Ruby 2.1.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.1.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.2.0 [![Ruby 2.2.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.2.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.3.0 [![Ruby 2.3.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.3.3 [![Ruby 2.3.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.4.4 [![Ruby 2.4.4 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.4/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.5.1 [![Ruby 2.5.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* JRuby 9.0.4.0 [![JRuby 9.0.4.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.0.4.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.1.17.0 [![JRuby 9.1.17.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.1.17.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.2.0.0 [![JRuby 9.2.0.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.0.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
@@ -29,15 +28,15 @@ report.
 
 | Project Type | Package Manager | Tested on Version |
 | ------------ | --------------- | -------:|
-| Ruby Gems    | bundler         | 1.15.4  |
-| Python Eggs  | pip             | 9.0.1   |
-| Node.js      | npm             | 5.3.0   |
-| Bower        | bower           | 1.8.0   |
-| Nuget (without license discovery) | nuget | N/A |
-| Godep        | Godep           | 79      |
-| Go workspace (via a `.envrc` file) | Go lang |    1.8.3 |
-| Go submodules | Go lang | 1.8.3 |
-| Java         | maven           | 3.5.0   |
+| Ruby Gems    | bundler         | 1.16.6  |
+| Python Eggs  | pip             | 10.0.1   |
+| Node.js      | npm             | 6.4.1   |
+| Bower        | bower           | 1.8.4   |
+| Nuget (without license discovery) | nuget | 4.7.1.5393 |
+| Godep        | Godep           | 80      |
+| Go workspace (via a `.envrc` file) | Go lang |    1.11 |
+| Go submodules | Go lang | 1.11 |
+| Java         | maven           | 3.5.3   |
 | Java         | gradle          | 4.2     |
 
 ### Experimental project types
@@ -51,10 +50,11 @@ report.
 * C++/C (via `conan`)
 * Scala (via `sbt`)
 * Rust (via `cargo`)
+* Go Modules (via `go mod`)
 
 ## Installation
 
-License Finder requires Ruby 1.9.3 or greater to run. If you have an older
+License Finder requires Ruby 2.3.3 or greater to run. If you have an older
 version of Ruby installed, you can update via Homebrew:
 
 ```sh
@@ -117,6 +117,13 @@ dependencies, and where and how each license was discovered. This can
 be useful when you need to track down an unexpected package or
 license.
 
+If you do not want to manually run an individual package manager's prepare
+command (ex: `bundle install`, `npm install`, etc) to ensure your project 
+is fully prepared to be scanned, use the `--prepare` or `-p` option which will run
+each active package manager's prepare command for you. If you would like to continue 
+running `license_finder` even if there is an issue with a prepare step, use the
+`--prepare-no-fail` option which prepares but carries on despite any potential failures.
+
 Run `license_finder help` to see other available commands, and
 `license_finder help [COMMAND]` for detailed help on a specific
 command.
@@ -163,15 +170,16 @@ languages, as long as that language has a package definition in the project dire
 * `build.gradle` (for `gradle`)
 * `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
-* `Podfile` (for CocoaPods)
-* `Cartfile` (for Carthage)
+* `Podfile` (for `pod`)
+* `Cartfile` (for `carthage`)
 * `rebar.config` (for `rebar`)
 * `mix.exs` (for `mix`)
-* `packages/` directory (for `Nuget`)
+* `packages/` directory (for `nuget`)
 * `vendor/manifest` or `*/vendor/manifest` file (for `gvt`)
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
 * `Gopkg.lock` file (for `dep`)
+* `go.sum` file (for `go mod`)
 * `yarn.lock` file (for `yarn`)
 * `conanfile.txt` file (for `conan`)
 * `build.sbt` file (for `sbt`)
@@ -281,6 +289,12 @@ all of your project's dependencies and includes information about which need to
 be approved. The project name at the top of the report can be set with
 `license_finder project_name add`.
 
+### Note:
+When using the yarn package manager, when a node_module's package.json doesn't 
+explicitly declare a license, yarn indicates that it has inferred the license based
+on some keywords in other files by appending an asterisk to the license name. If you
+see a * at the end of the license name, this is intended.
+
 See [CONTRIBUTING.md](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md#adding-reports)
 for advice about adding and customizing reports.
 
@@ -353,7 +367,7 @@ Be default, `license_finder` expects the decisions file to be stored at
 `doc/dependency_decisions.yml`.  All commands can be passed `--decisions_file`
 to override this location.
 
-### Of Package Managers
+### Package Manager Configuration
 
 If you have a gradle project, you can invoke gradle with a custom script by
 passing (for example) `--gradle_command gradlew` to `license_finder` or
@@ -429,7 +443,7 @@ licenseConfigurations := Set("compile", "provided")
 
 ## Requirements
 
-`license_finder` requires ruby >= 1.9, or jruby.
+`license_finder` requires ruby >= 1.9.3, or jruby.
 
 
 ## Upgrading
@@ -465,7 +479,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 * Yarn
    * A module that is incompatible with the platform on which 
      license_finder is run will always be reported to have a license type
-     of "unknown". (#456)
+     of "unknown". ([#456](https://github.com/pivotal-legacy/LicenseFinder/issues/456))
 
 ## Support
 

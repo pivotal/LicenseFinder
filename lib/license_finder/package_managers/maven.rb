@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'xmlsimple'
 require 'license_finder/package_utils/maven_dependency_finder'
 

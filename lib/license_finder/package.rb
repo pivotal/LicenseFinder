@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'license_finder/package_utils/licensing'
 require 'license_finder/package_utils/license_files'
+require 'license_finder/package_utils/notice_files'
 
 module LicenseFinder
   # Super-class that adapts data from different package management
@@ -102,6 +105,7 @@ module LicenseFinder
     def <=>(other)
       eq_name = name <=> other.name
       return eq_name unless eq_name.zero?
+
       version <=> other.version
     end
 
@@ -144,6 +148,10 @@ module LicenseFinder
 
     def license_files
       LicenseFiles.find(install_path, logger: logger)
+    end
+
+    def notice_files
+      NoticeFiles.find(install_path, logger: logger)
     end
 
     def package_manager

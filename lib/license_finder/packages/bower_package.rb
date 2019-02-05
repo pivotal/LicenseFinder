@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class BowerPackage < Package
     def initialize(bower_module, options = {})

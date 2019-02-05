@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LicenseFinder
   class ConanInfoParser
     def parse(info)
@@ -9,6 +11,7 @@ module LicenseFinder
       @current_key = nil # current key to be associated with the current val
       while (line = @lines.shift)
         next if line == ''
+
         case @state
         when :project_level
           @current_project = {}

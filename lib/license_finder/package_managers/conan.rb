@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'license_finder/package_utils/conan_info_parser'
 
 module LicenseFinder

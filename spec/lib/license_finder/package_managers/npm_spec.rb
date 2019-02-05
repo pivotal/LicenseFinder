@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'fakefs/spec_helpers'
 
@@ -38,7 +40,7 @@ module LicenseFinder
       end
 
       it 'should call npm install' do
-        expect(SharedHelpers::Cmd).to receive(:run).with('npm install')
+        expect(SharedHelpers::Cmd).to receive(:run).with('npm install --no-save')
                                                    .and_return([dependency_json, '', cmd_success])
         npm.prepare
       end
@@ -46,7 +48,7 @@ module LicenseFinder
       context 'ignored_groups contains devDependencies' do
         let(:npm) { NPM.new project_path: Pathname.new(root), ignored_groups: 'devDependencies' }
         it 'should include a production flag' do
-          expect(SharedHelpers::Cmd).to receive(:run).with('npm install --production')
+          expect(SharedHelpers::Cmd).to receive(:run).with('npm install --no-save --production')
                                                      .and_return([dependency_json, '', cmd_success])
           npm.prepare
         end
@@ -149,7 +151,7 @@ module LicenseFinder
 
         describe '.current_packages' do
           it 'correctly navigates the dependencies tree and pulls out valid information' do
-            FakeFS::FileSystem.clone(File.expand_path('../../../../../lib/license_finder/license/templates', __FILE__))
+            FakeFS::FileSystem.clone(File.expand_path('../../../../lib/license_finder/license/templates', __dir__))
             expect(npm.current_packages.find { |p| p.name == 'has' }.licenses.map(&:name)).to eq ['MIT']
             expect(npm.current_packages.find { |p| p.name == 'function-bind' }.licenses.map(&:name)).to eq ['MIT']
           end
@@ -170,7 +172,7 @@ module LicenseFinder
 
         describe '.current_packages' do
           it 'correctly reports the license type' do
-            FakeFS::FileSystem.clone(File.expand_path('../../../../../lib/license_finder/license/templates', __FILE__))
+            FakeFS::FileSystem.clone(File.expand_path('../../../../lib/license_finder/license/templates', __dir__))
             expect(npm.current_packages.find { |p| p.name == 'boolbase' }.licenses.map(&:name)).to eq ['ISC']
           end
         end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StdoutHelpers
   def capture_stderr
     orig_stderr = $stderr
