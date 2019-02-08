@@ -125,7 +125,7 @@ RUN bash -lc "gem update --system && gem install bundler"
 # install conan
 RUN apt-get install -y python-dev && \
 	pip install --ignore-installed six --ignore-installed colorama --ignore-installed requests --ignore-installed chardet --ignore-installed urllib3 --upgrade setuptools && \
-	pip install conan
+    pip install -Iv conan==1.11.2
 
 # install Cargo
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
