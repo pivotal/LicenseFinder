@@ -26,6 +26,16 @@ resources:
     branch: master
     paths: [Dockerfile]
 
+- name: version
+  type: semver
+  source:
+    driver: git
+    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    branch: master
+    file: lf-git/VERSION
+    private_key: ((CfOslBot.private_key))
+    commit_message: "Updates version to: %version"
+
 - name: dockerhub-edge
   type: docker-image
   source:
@@ -58,24 +68,6 @@ resources:
 <% end %>
 
 jobs:
-
-- name: patch-version
-  plan:
-  - get: lf-git
-    passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
-  - get: dockerhub
-    params:
-      save: true
-  - task: bump-version
-    image: dockerhub
-    params:
-      GIT_USERNAME: ((GithubApiUser))
-      GIT_EMAIL: ((GithubApiEmail))
-    file: lf-git/ci/tasks/bump-patch-version.yml
-  - put: lf-git
-    params:
-      repository: lf-git-changed
-
 - name: release
   plan:
   - get: lf-git
@@ -197,3 +189,19 @@ jobs:
     privileged: true
     file: LicenseFinder/ci/tasks/rubocop.yml
     input_mapping: { LicenseFinder: LicenseFinder }
+
+- name: bump-patch
+  plan:
+    - put: version
+      params: {bump: patch}
+
+- name: bump-minor
+  plan:
+    - put: version
+      params: {bump: minor}
+
+- name: bump-major
+  plan:
+    - put: version
+      params: {bump: major}
+
