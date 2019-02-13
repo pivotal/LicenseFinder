@@ -118,19 +118,3 @@ JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1' JRUBY_OPTS='-
 ### Gradle
 
 You'll need a gradle version >= 1.8.
-
-### CocoaPods
-LicenseFinder supports CocoaPods 0.39 and below. If you are using a later version of CocoaPods, you will need to downgrade CocoaPods/Specs repository in order to use LicenseFinder. [This article](http://blog.cocoapods.org/Sharding/) describes the breaking change between CocoaPods 0.39 and 1.0. You will need to use an older, archived CocoaPods/Specs repo. 
-
-If you see the following error, try switching to the archived repo. 
-
-```bash
-[!] The `master` repo requires CocoaPods 1.0.0 -  (currently using 0.34.0)
- ```
-
-Example of how to switch to the archived repo: 
-
-```bash 
-mv ~/.cocoapods/repos/master ~/.cocoapods/repos/master.bak
-git clone https://github.com/CocoaPods/Old-Specs.git ~/.cocoapods/repos/master
-```
