@@ -14,9 +14,23 @@ module LicenseFinder
           name,
           version,
           install_path: @deps_path.join(name),
-          logger: logger
+          logger: logger,
+          spec_licenses: licenses(name)
         )
       end
+    end
+
+    # Adapted from licenser: https://github.com/unnawut/licensir/blob/71f96f8734adc73c0651050bd9f0e20ff52c61a8/lib/licensir/scanner.ex#L61
+    def licenses(name)
+      config_path = @deps_path.join(name).join('hex_metadata.config')
+      # rubocop:disable Metrics/LineLength
+      args = "\\\"#{config_path}\\\" |> :file.consult() |> case do {:ok, metadata} -> metadata; {:error, _} -> [] end |> List.keyfind(\\\"licenses\\\", 0) |> case do {_, licenses} -> licenses; _ -> [] end |> Enum.join(\\\"\\t\\\") |> IO.puts()"
+      # rubocop:enable Metrics/LineLength
+      command = "#{@command} run --no-start --no-compile -e \"#{args}\""
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+
+      stdout.strip.split("\t")
     end
 
     def self.package_management_command

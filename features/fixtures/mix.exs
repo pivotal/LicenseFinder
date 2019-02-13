@@ -17,6 +17,7 @@ defmodule Awesome.Mixfile do
 
   defp deps do
     [{:fs, "0.9.1"},
-     {:uuid, "1.1.5"}]
+     {:uuid, "1.1.5"},
+     {:plug, "1.7.2"}]
   end
 end
