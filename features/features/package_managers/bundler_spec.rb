@@ -17,6 +17,6 @@ describe 'Bundler Dependencies' do
     LicenseFinder::TestingDSL::VendorBundlerProject.create
     puts 'bundler project created'
     bundler_developer.run_license_finder
-    expect(bundler_developer).to be_seeing_line "rake, 12.3.0, MIT"
+    expect(bundler_developer).to be_seeing_line 'rake, 12.3.0, MIT'
   end
 end

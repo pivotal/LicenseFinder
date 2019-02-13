@@ -6,7 +6,7 @@ module LicenseFinder
   class Bundler < PackageManager
     def initialize(options = {})
       super
-      if project_path && project_path.exist?
+      if project_path&.exist?
         Dir.chdir(project_path) { ::Bundler.configure }
       else
         ::Bundler.configure
