@@ -26,7 +26,8 @@ defmodule Awesomer.MixProject do
   defp deps do
     [
       {:awesome, in_umbrella: true},
-      {:uuid, "1.1.5"}
+      {:uuid, "1.1.5"},
+      {:plug, "1.7.2"}
     ]
   end
 end

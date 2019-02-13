@@ -6,7 +6,7 @@ ENV GO_LANG_VERSION 1.11.4
 ENV MAVEN_VERSION 3.5.3
 ENV SBT_VERSION 1.1.1
 ENV GRADLE_VERSION 4.10
-ENV RUBY_VERSION 2.5.1
+ENV RUBY_VERSION 2.6.1
 ENV MIX_VERSION 1.0
 
 # programs needed for building
@@ -125,7 +125,7 @@ RUN bash -lc "gem update --system && gem install bundler"
 # install conan
 RUN apt-get install -y python-dev && \
 	pip install --ignore-installed six --ignore-installed colorama --ignore-installed requests --ignore-installed chardet --ignore-installed urllib3 --upgrade setuptools && \
-	pip install conan
+    pip install -Iv conan==1.11.2
 
 # install Cargo
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
