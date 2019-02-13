@@ -450,6 +450,27 @@ module LicenseFinder
       end
     end
 
+    class VendorBundlerProject < Project
+      def add_dep
+        add_to_gemfile("source 'https://rubygems.org'")
+        add_gem_to_gemfile('rake', '12.3.0')
+      end
+
+      def install
+        shell_out('bundle install --path="vendor/bundler"')
+      end
+
+      private
+
+      def add_gem_to_gemfile(gem_name, options)
+        add_to_gemfile("gem #{gem_name.inspect}, #{options.inspect}")
+      end
+
+      def add_to_gemfile(content)
+        add_to_file('Gemfile', content)
+      end
+    end
+
     # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
     class GemProject
       def self.create(name, options)
