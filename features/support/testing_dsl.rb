@@ -605,6 +605,14 @@ module LicenseFinder
         root.join('tmp', 'projects')
       end
 
+      def bundler_config
+        root.join('.bundle')
+      end
+
+      def bundler_vendor_path
+        root.join('vendor/bundler')
+      end
+
       def my_app
         root.join('tmp', 'projects', 'my_app')
       end
@@ -617,6 +625,8 @@ module LicenseFinder
         # only destroyed when a test starts, so you can poke around after a failure
         require 'fileutils'
         FileUtils.rmtree(projects) if projects.exist?
+        FileUtils.rmtree(bundler_config) if bundler_config.exist?
+        FileUtils.rmtree(bundler_vendor_path) if bundler_vendor_path.exist?
         projects.mkpath
       end
     end
