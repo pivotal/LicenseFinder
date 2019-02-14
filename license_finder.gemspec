@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
+version = File.read(File.expand_path('VERSION', __dir__)).strip
 lib = File.expand_path('lib', __dir__)
+
 $LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
 require 'license_finder/platform'
-require 'license_finder/version'
 
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.3.3'
   s.name        = 'license_finder'
-  s.version     = LicenseFinder::VERSION
+  s.version     = version
 
   s.authors = [
     'Ryan Collins',

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
 module LicenseFinder
-  VERSION = '5.6.2'
+  root    = File.expand_path('../..', __dir__)
+  VERSION = File.read("#{root}/VERSION").strip
 end

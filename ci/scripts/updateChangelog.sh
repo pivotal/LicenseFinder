@@ -11,7 +11,7 @@ TAGS=( "Added" "ADDED" "Fixed" "FIXED" "Changed" "CHANGED" "Deprecated" "DEPRECA
 CONTRIBUTORS=( "Shane Lattanzio" "Li Tai" "Vikram Yadav" "Mark Fiorvanti" "Serafima Ostrovskaya" "Yoon Jean Kim"  "Tony Wong" "Parv Mital" )
 
 OLD="v$(cat ./lf-release/version)"
-VERSION="$(ruby -r ./lf-git-changed/lib/license_finder/version.rb -e "puts LicenseFinder::VERSION")"
+VERSION="$(cat version/version)"
 VERSION_TAG="v$VERSION"
 
 # Add version title information
