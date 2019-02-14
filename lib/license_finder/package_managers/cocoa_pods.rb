@@ -46,7 +46,10 @@ module LicenseFinder
                       'Pods/Target Support Files/Pods/Pods-acknowledgements.plist',
                       'Pods/Target Support Files/Pods-*/Pods-*-acknowledgements.plist']
 
-      Dir[*search_paths.map { |path| File.join(project_path, path) }].first
+      result = Dir[*search_paths.map { |path| File.join(project_path, path) }].first
+      raise "Found a Podfile but no Pods directory in #{project_path}. Try running pod install before running license_finder." if result.nil?
+
+      result
     end
 
     def read_plist(pathname)

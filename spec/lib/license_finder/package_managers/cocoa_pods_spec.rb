@@ -18,6 +18,7 @@ module LicenseFinder
         ]
       }
 
+      expect(cocoa_pods).to receive(:acknowledgements_path).and_return('some.plist')
       expect(cocoa_pods).to receive(:read_plist).and_return(plist)
     end
 
@@ -55,6 +56,13 @@ module LicenseFinder
         stub_acknowledgments
 
         expect(cocoa_pods.current_packages.first.licenses.map(&:name)).to eq ['unknown']
+      end
+
+      it 'raises when no acknowledgements file is found' do
+        stub_lockfile(['Dependency Name (1.0)'])
+
+        expect { cocoa_pods.current_packages }.to raise_error("Found a Podfile but no Pods directory in \
+#{project_path}. Try running pod install before running license_finder.")
       end
     end
   end
