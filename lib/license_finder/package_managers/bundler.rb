@@ -6,11 +6,11 @@ module LicenseFinder
   class Bundler < PackageManager
     def initialize(options = {})
       super
-      if project_path&.exist?
-        Dir.chdir(project_path) { ::Bundler.configure }
-      else
-        ::Bundler.configure
-      end
+      # if project_path&.exist?
+      #   Dir.chdir(project_path) { ::Bundler.configure }
+      # else
+      #   ::Bundler.configure
+      # end
       @ignored_groups = options[:ignored_groups]
       @definition = options[:definition] # dependency injection for tests
     end
