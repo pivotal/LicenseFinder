@@ -359,7 +359,7 @@ module LicenseFinder
       end
 
       def install
-        shell_out('pod install --no-integrate')
+        shell_out('pod install')
       end
     end
 
