@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
-lib = File.expand_path('lib', __dir__)
-$LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
-
-require 'license_finder/platform'
-require 'license_finder/version'
+version = File.read(File.expand_path('VERSION', __dir__)).strip
 
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.3.3'
   s.name        = 'license_finder'
-  s.version     = LicenseFinder::VERSION
+  s.version     = version
 
   s.authors = [
     'Ryan Collins',
@@ -56,7 +52,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'addressable', '2.5.2'
   s.add_development_dependency 'capybara', '~> 2.0.0'
-  s.add_development_dependency 'cocoapods', '>= 1.0.0' if LicenseFinder::Platform.darwin?
+  s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM =~ /darwin/
   s.add_development_dependency 'fakefs', '~> 0.11.3'
   s.add_development_dependency 'mime-types', '3.1'
   s.add_development_dependency 'pry'

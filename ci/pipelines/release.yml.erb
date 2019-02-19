@@ -17,6 +17,7 @@ resources:
     uri: git@github.com:pivotal-legacy/LicenseFinder.git
     private_key: ((CfOslBot.private_key))
     branch: master
+    ignore_paths: [VERSION]
 
 - name: git-master-dockerfile
   type: git
@@ -25,6 +26,16 @@ resources:
     private_key: ((CfOslBot.private_key))
     branch: master
     paths: [Dockerfile]
+
+- name: version
+  type: semver
+  source:
+    driver: git
+    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    branch: master
+    file: lf-git/VERSION
+    private_key: ((CfOslBot.private_key))
+    commit_message: "Updates version to: %version"
 
 - name: dockerhub-edge
   type: docker-image
@@ -58,96 +69,6 @@ resources:
 <% end %>
 
 jobs:
-
-- name: patch-version
-  plan:
-  - get: lf-git
-    passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
-  - get: dockerhub
-    params:
-      save: true
-  - task: bump-version
-    image: dockerhub
-    params:
-      GIT_USERNAME: ((GithubApiUser))
-      GIT_EMAIL: ((GithubApiEmail))
-    file: lf-git/ci/tasks/bump-patch-version.yml
-  - put: lf-git
-    params:
-      repository: lf-git-changed
-
-- name: release
-  plan:
-  - get: lf-git
-    trigger: true
-    passed: [ patch-version ]
-  - get: dockerhub
-    params:
-      save: true
-  - get: lf-release
-  - task: update-changelog
-    image: dockerhub
-    params:
-      GIT_USERNAME: ((GithubApiUser))
-      GIT_EMAIL: ((GithubApiEmail))
-    file: lf-git/ci/tasks/update-changelog.yml
-  - put: dockerhub
-    params:
-      build: lf-git
-      tag: version/version.txt
-      tag_as_latest: true
-  - put: lf-git
-    params:
-      repository: lf-git-changed
-  - task: build-and-push-gem
-    image: dockerhub
-    params:
-      GIT_USERNAME: ((GithubApiUser))
-      GIT_EMAIL: ((GithubApiEmail))
-      GIT_PRIVATE_KEY: ((CfOslBot.private_key))
-      GEM_API_KEY: ((LicenseFinderGemApiKey))
-    file: lf-git/ci/tasks/build-and-push-gem.yml
-  - put: lf-release
-    params:
-      name: version/tag.txt
-      tag: version/tag.txt
-      body: version/changelog.txt
-
-- name: manual-release
-  plan:
-  - get: lf-git
-    passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
-  - get: dockerhub
-    params:
-      save: true
-  - get: lf-release
-  - task: update-changelog
-    image: dockerhub
-    params:
-      GIT_USERNAME: ((GithubApiUser))
-      GIT_EMAIL: ((GithubApiEmail))
-    file: lf-git/ci/tasks/update-changelog.yml
-  - put: dockerhub
-    params:
-      build: lf-git
-      tag_file: version/version.txt
-      tag_as_latest: true
-  - task: build-and-push-gem
-    image: dockerhub
-    params:
-      GIT_USERNAME: ((GithubApiUser))
-      GIT_EMAIL: ((GithubApiEmail))
-      GIT_PRIVATE_KEY: ((CfOslBot.private_key))
-      GEM_API_KEY: ((LicenseFinderGemApiKey))
-    file: lf-git/ci/tasks/build-and-push-gem.yml
-  - put: lf-git
-    params:
-      repository: lf-git-changed
-  - put: lf-release
-    params:
-      name: version/tag.txt
-      tag: version/tag.txt
-      body: version/changelog.txt
 - name: build-docker-image
   public: true
   plan:
@@ -156,6 +77,7 @@ jobs:
     - put: dockerhub-edge
       params:
         build: git-master-dockerfile
+
 <% ruby_versions.each do |ruby_version| %>
 - name: ruby-<%= ruby_version %>
   public: true
@@ -197,3 +119,62 @@ jobs:
     privileged: true
     file: LicenseFinder/ci/tasks/rubocop.yml
     input_mapping: { LicenseFinder: LicenseFinder }
+
+- name: bump-major
+  plan:
+    - get: lf-git
+      passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
+    - put: version
+      params: {bump: major}
+
+- name: bump-minor
+  plan:
+    - get: lf-git
+      passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
+    - put: version
+      params: {bump: minor}
+
+- name: bump-patch
+  plan:
+    - get: lf-git
+      passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
+    - put: version
+      params: {bump: patch}
+
+- name: release
+  plan:
+  - get: lf-git
+  - get: version
+    trigger: true
+    passed: [bump-major, bump-minor, bump-patch]
+  - get: dockerhub
+    params:
+      save: true
+  - get: lf-release
+  - task: update-changelog
+    image: dockerhub
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+    file: lf-git/ci/tasks/update-changelog.yml
+  - put: dockerhub
+    params:
+      build: lf-git
+      tag: version/version.txt
+      tag_as_latest: true
+  - put: lf-git
+    params:
+      repository: lf-git-changed
+  - task: build-and-push-gem
+    image: dockerhub
+    params:
+      GIT_USERNAME: ((GithubApiUser))
+      GIT_EMAIL: ((GithubApiEmail))
+      GIT_PRIVATE_KEY: ((CfOslBot.private_key))
+      GEM_API_KEY: ((LicenseFinderGemApiKey))
+    file: lf-git/ci/tasks/build-and-push-gem.yml
+  - put: lf-release
+    params:
+      name: version/tag.txt
+      tag: version/tag.txt
+      body: version/changelog.txt
