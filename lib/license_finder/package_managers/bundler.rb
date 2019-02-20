@@ -6,11 +6,6 @@ module LicenseFinder
   class Bundler < PackageManager
     def initialize(options = {})
       super
-      if project_path&.exist?
-        Dir.chdir(project_path) { ::Bundler.configure }
-      else
-        ::Bundler.configure
-      end
       @ignored_groups = options[:ignored_groups]
       @definition = options[:definition] # dependency injection for tests
     end
@@ -57,7 +52,18 @@ module LicenseFinder
 
       # clear gem paths before runninng specs_for
       Gem.clear_paths
-      @gem_details = definition.specs_for(included_groups)
+
+      ::Bundler.with_clean_env do
+        if project_path&.exist?
+          Dir.chdir(project_path) do
+            ::Bundler.configure
+            @gem_details = definition.specs_for(included_groups)
+          end
+        else
+          ::Bundler.configure
+          @gem_details = definition.specs_for(included_groups)
+        end
+      end
     end
 
     def bundler_details

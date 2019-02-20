@@ -564,6 +564,7 @@ module LicenseFinder
       # delegates to a Pathname
 
       # when running tests with bundle exec rspec, you need to clean the env.
+      # https://bundler.io/man/bundle-exec.1.html#Shelling-out
       def shell_out(command, allow_failures = false)
         if defined?(::Bundler)
           ::Bundler.with_clean_env do
