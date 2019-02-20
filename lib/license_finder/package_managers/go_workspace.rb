@@ -7,7 +7,7 @@ module LicenseFinder
 
   class GoWorkspace < PackageManager
     Submodule = Struct.new :install_path, :revision
-    ENVRC_REGEXP = /GOPATH|GO15VENDOREXPERIMENT/
+    ENVRC_REGEXP = /GOPATH|GO15VENDOREXPERIMENT/.freeze
 
     def initialize(options = {})
       super
