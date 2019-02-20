@@ -14,11 +14,11 @@ describe 'HTML report' do
     gem_name = 'a_gem'
     gem_group = 'test'
     gem_attributes = {
-      license:     'MIT',
-      summary:     'gem is cool',
+      license: 'MIT',
+      summary: 'gem is cool',
       description: 'seriously',
-      version:     '0.0.1',
-      homepage:    'http://a-gem.github.com'
+      version: '0.0.1',
+      homepage: 'http://a-gem.github.com'
     }
 
     project = developer.create_ruby_app
