@@ -53,7 +53,7 @@ module LicenseFinder
       # clear gem paths before runninng specs_for
       Gem.clear_paths
 
-      ::Bundler.with_clean_env do
+      ::Bundler.with_original_env do
         if project_path&.exist?
           Dir.chdir(project_path) do
             ::Bundler.configure

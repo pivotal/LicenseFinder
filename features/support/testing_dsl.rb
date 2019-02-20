@@ -567,7 +567,7 @@ module LicenseFinder
       # https://bundler.io/man/bundle-exec.1.html#Shelling-out
       def shell_out(command, allow_failures = false)
         if defined?(::Bundler)
-          ::Bundler.with_clean_env do
+          ::Bundler.with_original_env do
             Dir.chdir(self) { Shell.run(command, allow_failures) }
           end
         else
