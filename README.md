@@ -30,15 +30,15 @@ report.
 | Project Type | Package Manager | Tested on Version |
 | ------------ | --------------- | -------:|
 | Ruby Gems    | bundler         | 1.16.6  |
-| Python Eggs  | pip             | 10.0.1   |
+| Python Eggs  | pip             | 19.0.2  |
 | Node.js      | npm             | 6.4.1   |
 | Bower        | bower           | 1.8.4   |
 | Nuget (without license discovery) | nuget | 4.7.1.5393 |
 | Godep        | Godep           | 80      |
 | Go workspace (via a `.envrc` file) | Go lang |    1.11.5 |
 | Go submodules | Go lang | 1.11.5 |
-| Java         | maven           | 3.5.3   |
-| Java         | gradle          | 4.2     |
+| Java         | maven           | 3.6.0   |
+| Java         | gradle          | 4.10.3     |
 
 ### Experimental project types
 

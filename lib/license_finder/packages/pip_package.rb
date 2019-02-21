@@ -4,7 +4,7 @@ require 'set'
 
 module LicenseFinder
   class PipPackage < Package
-    LICENSE_FORMAT = /^License.*::\s*(.*)$/
+    LICENSE_FORMAT = /^License.*::\s*(.*)$/.freeze
     INVALID_LICENSES = ['', 'UNKNOWN'].to_set
 
     def self.license_names_from_spec(spec)
