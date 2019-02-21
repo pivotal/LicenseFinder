@@ -30,7 +30,7 @@ report.
 | Project Type | Package Manager | Tested on Version |
 | ------------ | --------------- | -------:|
 | Ruby Gems    | bundler         | 1.16.6  |
-| Python Eggs  | pip             | 10.0.1   |
+| Python Eggs  | pip             | 19.0.2  |
 | Node.js      | npm             | 6.4.1   |
 | Bower        | bower           | 1.8.4   |
 | Nuget (without license discovery) | nuget | 4.7.1.5393 |
