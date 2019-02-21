@@ -3,9 +3,9 @@
 module LicenseFinder
   class License
     module Text
-      SPACES = /\s+/
-      QUOTES = /['`"]{1,2}/
-      PLACEHOLDERS = /<[^<>]+>/
+      SPACES = /\s+/.freeze
+      QUOTES = /['`"]{1,2}/.freeze
+      PLACEHOLDERS = /<[^<>]+>/.freeze
 
       def self.normalize_punctuation(text)
         text.gsub(SPACES, ' ')

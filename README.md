@@ -37,8 +37,8 @@ report.
 | Godep        | Godep           | 80      |
 | Go workspace (via a `.envrc` file) | Go lang |    1.11 |
 | Go submodules | Go lang | 1.11 |
-| Java         | maven           | 3.5.3   |
 | Java         | gradle          | 4.10.3  |
+| Java         | maven           | 3.6.0   |
 
 ### Experimental project types
 
