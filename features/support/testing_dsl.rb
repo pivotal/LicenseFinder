@@ -412,6 +412,16 @@ module LicenseFinder
       end
     end
 
+    class ComposerProject < Project
+      def add_dep
+        add_to_file("composer.json", '{"require" : {"vlucas/phpdotenv": "2.3.0"}}')
+      end
+
+      def install
+        shell_out("composer install")
+      end
+    end
+
     class NugetProject < Project
       def add_dep
         clone('nuget')
