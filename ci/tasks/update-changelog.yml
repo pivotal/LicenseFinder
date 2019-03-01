@@ -10,7 +10,6 @@ inputs:
 - name: lf-release
 - name: version
 outputs:
-- name: version
 - name: lf-git-changed
 run:
   path: lf-git/ci/scripts/updateChangelog.sh

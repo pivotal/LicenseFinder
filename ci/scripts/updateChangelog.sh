@@ -60,7 +60,7 @@ echo "New version: $VERSION"
 echo "Current version: $OLD"
 
 if [ "$VERSION" == "$OLD" ]; then
-    echo "Error: Version in version.rb is identical to latest release on github"
+    echo "Error: Version in VERSION file is identical to latest release on github"
     exit 1
 fi
 
