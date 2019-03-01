@@ -4,7 +4,7 @@ echo -e "---\n:rubygems_api_key: $GEM_API_KEY" > ~/.gem/credentials
 chmod 0600 ~/.gem/credentials
 
 cd lf-git
-build_version="$(cat version/version)"
+build_version="$(cat semver-version/version)"
 built_gem="pkg/license_finder-$build_version.gem"
 
 git config --global user.email $GIT_EMAIL

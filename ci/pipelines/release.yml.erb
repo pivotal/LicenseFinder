@@ -27,7 +27,7 @@ resources:
     branch: master
     paths: [Dockerfile]
 
-- name: version
+- name: semver-version
   type: semver
   source:
     driver: git
@@ -35,7 +35,7 @@ resources:
     branch: master
     file: VERSION
     private_key: ((CfOslBot.private_key))
-    commit_message: "Updates version to: %version"
+    commit_message: "Updates version to: %version%"
 
 - name: dockerhub-edge
   type: docker-image
@@ -124,27 +124,27 @@ jobs:
   plan:
     - get: lf-git
       passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
-    - put: version
+    - put: semver-version
       params: {bump: major}
 
 - name: bump-minor
   plan:
     - get: lf-git
       passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
-    - put: version
+    - put: semver-version
       params: {bump: minor}
 
 - name: bump-patch
   plan:
     - get: lf-git
       passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
-    - put: version
+    - put: semver-version
       params: {bump: patch}
 
 - name: release
   plan:
   - get: lf-git
-  - get: version
+  - get: semver-version
     trigger: true
     passed: [bump-major, bump-minor, bump-patch]
   - get: dockerhub
