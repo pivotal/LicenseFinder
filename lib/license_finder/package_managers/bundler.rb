@@ -52,18 +52,19 @@ module LicenseFinder
 
       # clear gem paths before runninng specs_for
       Gem.clear_paths
+      @gem_details = definition.specs_for(included_groups)
 
-      ::Bundler.with_original_env do
-        if project_path&.exist?
-          Dir.chdir(project_path) do
-            ::Bundler.configure
-            @gem_details = definition.specs_for(included_groups)
-          end
-        else
-          ::Bundler.configure
-          @gem_details = definition.specs_for(included_groups)
-        end
-      end
+      # ::Bundler.with_original_env do
+      #   if project_path&.exist?
+      #     Dir.chdir(project_path) do
+      #       ::Bundler.configure
+      #       @gem_details = definition.specs_for(included_groups)
+      #     end
+      #   else
+      #     ::Bundler.configure
+      #     @gem_details = definition.specs_for(included_groups)
+      #   end
+      # end
     end
 
     def bundler_details

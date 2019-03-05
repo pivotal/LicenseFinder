@@ -566,13 +566,14 @@ module LicenseFinder
       # when running tests with bundle exec rspec, you need to clean the env.
       # https://bundler.io/man/bundle-exec.1.html#Shelling-out
       def shell_out(command, allow_failures = false)
-        if defined?(::Bundler)
-          ::Bundler.with_original_env do
-            Dir.chdir(self) { Shell.run(command, allow_failures) }
-          end
-        else
-          Dir.chdir(self) { Shell.run(command, allow_failures) }
-        end
+        Dir.chdir(self) { Shell.run(command, allow_failures) }
+        # if defined?(::Bundler)
+        #   ::Bundler.with_original_env do
+        #     Dir.chdir(self) { Shell.run(command, allow_failures) }
+        #   end
+        # else
+        #   Dir.chdir(self) { Shell.run(command, allow_failures) }
+        # end
       end
 
       def add_to_file(filename, content)
