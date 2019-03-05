@@ -37,7 +37,7 @@ module LicenseFinder
         end
       end
 
-      it 'finds all the packages all go.sum files', :focus do
+      it 'finds all the packages all go.sum files' do
         packages = subject.current_packages
 
         expect(packages.length).to eq 2

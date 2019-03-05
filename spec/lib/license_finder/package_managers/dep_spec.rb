@@ -30,6 +30,16 @@ module LicenseFinder
           expect(subject.current_packages.last.version).to eq 'ebfc5b4631820b793c9010c87fd8fef0f39eb082'
         end
       end
+
+      context 'the package does not have any projects in its toml' do
+        before do
+          allow(TOML).to receive(:load_file).and_return({})
+        end
+
+        it 'should return an empty array' do
+          expect(subject.current_packages).to eq([])
+        end
+      end
     end
 
     describe '.prepare_command' do

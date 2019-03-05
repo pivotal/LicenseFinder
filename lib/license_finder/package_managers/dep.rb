@@ -11,12 +11,15 @@ module LicenseFinder
     def current_packages
       toml = TOML.load_file(detected_package_path)
       projects = toml['projects']
+
+      return [] if projects.nil?
+
       projects.map do |project|
         GoPackage.from_dependency({
-                                    'ImportPath' => project['name'],
-                                    'InstallPath' => project_path.join('vendor', project['name']),
-                                    'Rev' => project['revision']
-                                  }, nil, true)
+            'ImportPath' => project['name'],
+            'InstallPath' => project_path.join('vendor', project['name']),
+            'Rev' => project['revision']
+        }, nil, true)
       end
     end
 
