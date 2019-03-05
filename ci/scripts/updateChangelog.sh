@@ -11,7 +11,7 @@ TAGS=( "Added" "ADDED" "Fixed" "FIXED" "Changed" "CHANGED" "Deprecated" "DEPRECA
 CONTRIBUTORS=( "Shane Lattanzio" "Li Tai" "Vikram Yadav" "Mark Fiorvanti" "Serafima Ostrovskaya" "Yoon Jean Kim"  "Tony Wong" "Parv Mital" )
 
 OLD="v$(cat ./lf-release/version)"
-VERSION="$(cat version/version)"
+VERSION="$(cat semver-version/version)"
 VERSION_TAG="v$VERSION"
 
 # Add version title information
@@ -60,7 +60,7 @@ echo "New version: $VERSION"
 echo "Current version: $OLD"
 
 if [ "$VERSION" == "$OLD" ]; then
-    echo "Error: Version in version.rb is identical to latest release on github"
+    echo "Error: Version in VERSION file is identical to latest release on github"
     exit 1
 fi
 

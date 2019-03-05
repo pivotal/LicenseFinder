@@ -1,3 +1,11 @@
+# [5.7.0] / 2019-03-01
+
+### Added
+* Ruby 2.6.1 support - [8d60ed1](https://github.com/pivotal-legacy/LicenseFinder/commit/8d60ed13f99b830cc1352900f90e2b298105f518) 
+
+### Changed
+* Conan version is locked to 1.11.2 to avoid breaking changes - [72b766a](https://github.com/pivotal-legacy/LicenseFinder/commit/72b766a948be5b0f8eade75e716796f50ea9ebf3) 
+
 # [5.6.2] / 2019-01-28
 
 # [5.6.1] / 2019-01-25
@@ -688,3 +696,4 @@ Bugfixes:
 [5.6.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.2...v5.6.0
 [5.6.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.0...v5.6.1
 [5.6.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.1...v5.6.2
+[5.7.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.2...v5.7.0

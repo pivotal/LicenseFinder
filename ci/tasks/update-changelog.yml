@@ -8,9 +8,9 @@ platform: linux
 inputs:
 - name: lf-git
 - name: lf-release
-- name: version
+- name: semver-version
 outputs:
-- name: version
 - name: lf-git-changed
+- name: version
 run:
   path: lf-git/ci/scripts/updateChangelog.sh

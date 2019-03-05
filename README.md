@@ -3,12 +3,12 @@
 [![Code Climate](https://codeclimate.com/github/pivotal-legacy/LicenseFinder.png)](https://codeclimate.com/github/pivotal-legacy/LicenseFinder)
 
 Build status
-* Ruby 2.3.3 [![Ruby 2.3.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.4.4 [![Ruby 2.4.4 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.4/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.5.1 [![Ruby 2.5.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.3.8 [![Ruby 2.3.8 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.8/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.4.5 [![Ruby 2.4.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.5.3 [![Ruby 2.5.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.6.1 [![Ruby 2.6.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * JRuby 9.1.17.0 [![JRuby 9.1.17.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.1.17.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* JRuby 9.2.0.0 [![JRuby 9.2.0.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.0.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.2.6.0 [![JRuby 9.2.6.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.6.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
@@ -30,15 +30,15 @@ report.
 | Project Type | Package Manager | Tested on Version |
 | ------------ | --------------- | -------:|
 | Ruby Gems    | bundler         | 1.16.6  |
-| Python Eggs  | pip             | 10.0.1   |
+| Python Eggs  | pip             | 19.0.2  |
 | Node.js      | npm             | 6.4.1   |
 | Bower        | bower           | 1.8.4   |
 | Nuget (without license discovery) | nuget | 4.7.1.5393 |
 | Godep        | Godep           | 80      |
-| Go workspace (via a `.envrc` file) | Go lang |    1.11 |
-| Go submodules | Go lang | 1.11 |
-| Java         | maven           | 3.5.3   |
-| Java         | gradle          | 4.2     |
+| Go workspace (via a `.envrc` file) | Go lang | 1.11.5 |
+| Go submodules | Go lang | 1.11.5 |
+| Java         | maven           | 3.6.0   |
+| Java         | gradle          | 4.10.3  |
 
 ### Experimental project types
 
