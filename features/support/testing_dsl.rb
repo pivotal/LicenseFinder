@@ -98,8 +98,8 @@ module LicenseFinder
       end
 
       def clone(fixture_name)
-        FileUtils.mkpath(Paths.my_app.join(fixture_name))
-        FileUtils.cp_r(Paths.fixtures.join(fixture_name), Paths.my_app)
+        FileUtils.mkpath(Paths.project.join(fixture_name))
+        FileUtils.cp_r(Paths.fixtures.join(fixture_name), Paths.project)
       end
     end
 
@@ -173,7 +173,7 @@ module LicenseFinder
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'sbt')).shell_out(command)
+        ProjectDir.new(Paths.project.join('sbt')).shell_out(command)
       end
     end
 
@@ -226,7 +226,7 @@ module LicenseFinder
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath', 'src', 'github.com', 'pivotal', 'foo')).shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath', 'src', 'github.com', 'pivotal', 'foo')).shell_out(command)
       end
     end
 
@@ -240,7 +240,7 @@ module LicenseFinder
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'go_modules')).shell_out(command)
+        ProjectDir.new(Paths.project.join('go_modules')).shell_out(command)
       end
     end
 
@@ -257,7 +257,7 @@ module LicenseFinder
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_glide', 'src')).shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_glide', 'src')).shell_out(command)
       end
     end
 
@@ -279,7 +279,7 @@ module LicenseFinder
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_glide_without_src')).shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_glide_without_src')).shell_out(command)
       end
     end
 
@@ -296,7 +296,7 @@ module LicenseFinder
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_gvt', 'src')).shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_gvt', 'src')).shell_out(command)
       end
     end
 
@@ -313,7 +313,7 @@ module LicenseFinder
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_dep', 'src', 'foo-dep')).shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_dep', 'src', 'foo-dep')).shell_out(command)
       end
     end
 
@@ -325,7 +325,7 @@ module LicenseFinder
       def install; end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_dep', 'src', 'foo-dep')).shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_dep', 'src', 'foo-dep')).shell_out(command)
       end
     end
 
@@ -342,7 +342,7 @@ module LicenseFinder
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.root.join('tmp', 'projects', 'my_app', 'gopath_govendor', 'src')).shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_govendor', 'src')).shell_out(command)
       end
     end
 
@@ -408,7 +408,7 @@ module LicenseFinder
 
     class MixUmbrellaProject < MixProject
       def add_dep
-        FileUtils.copy_entry(Paths.fixtures.join('mix_umbrella'), Paths.my_app)
+        FileUtils.copy_entry(Paths.fixtures.join('mix_umbrella'), Paths.project)
       end
     end
 
@@ -568,6 +568,7 @@ module LicenseFinder
     end
 
     require 'pathname'
+    require 'tmpdir'
     module Paths
       extend self
 
@@ -581,11 +582,7 @@ module LicenseFinder
       end
 
       def projects
-        root.join('tmp', 'projects')
-      end
-
-      def my_app
-        root.join('tmp', 'projects', 'my_app')
+        ProjectDir.new(Pathname.new(Dir.tmpdir)).join('projects')
       end
 
       def project(name = 'my_app')
