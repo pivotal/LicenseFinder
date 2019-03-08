@@ -7,4 +7,4 @@ run:
   path: bash
   args:
   - "-lc"
-  - lf-git/ci/scripts/pushscript.sh
+  - lf-git-version/ci/scripts/pushscript.sh
