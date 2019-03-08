@@ -6,7 +6,7 @@ image_resource:
     tag: latest
 platform: linux
 inputs:
-- name: lf-git
+- name: lf-git-version
 - name: lf-release
 - name: semver-version
 outputs:
