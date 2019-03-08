@@ -1,7 +1,7 @@
 ---
 platform: linux
 inputs:
-- name: lf-git
+- name: lf-git-version
 - name: semver-version
 run:
   path: bash
