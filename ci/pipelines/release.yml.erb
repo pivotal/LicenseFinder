@@ -19,6 +19,13 @@ resources:
     branch: master
     ignore_paths: [VERSION]
 
+- name: lf-git-version
+  type: git
+  source:
+    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    private_key: ((CfOslBot.private_key))
+    branch: master
+
 - name: git-master-dockerfile
   type: git
   source:
@@ -143,7 +150,7 @@ jobs:
 
 - name: release
   plan:
-  - get: lf-git
+  - get: lf-git-version
   - get: semver-version
     trigger: true
     passed: [bump-major, bump-minor, bump-patch]
@@ -156,13 +163,13 @@ jobs:
     params:
       GIT_USERNAME: ((GithubApiUser))
       GIT_EMAIL: ((GithubApiEmail))
-    file: lf-git/ci/tasks/update-changelog.yml
+    file: lf-git-version/ci/tasks/update-changelog.yml
   - put: dockerhub
     params:
-      build: lf-git
+      build: lf-git-version
       tag: version/version.txt
       tag_as_latest: true
-  - put: lf-git
+  - put: lf-git-version
     params:
       repository: lf-git-changed
   - task: build-and-push-gem
@@ -172,7 +179,7 @@ jobs:
       GIT_EMAIL: ((GithubApiEmail))
       GIT_PRIVATE_KEY: ((CfOslBot.private_key))
       GEM_API_KEY: ((LicenseFinderGemApiKey))
-    file: lf-git/ci/tasks/build-and-push-gem.yml
+    file: lf-git-version/ci/tasks/build-and-push-gem.yml
   - put: lf-release
     params:
       name: version/tag.txt
