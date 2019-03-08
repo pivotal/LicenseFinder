@@ -13,4 +13,4 @@ outputs:
 - name: lf-git-changed
 - name: version
 run:
-  path: lf-git/ci/scripts/updateChangelog.sh
+  path: lf-git-version/ci/scripts/updateChangelog.sh
