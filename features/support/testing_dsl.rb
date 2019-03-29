@@ -35,7 +35,7 @@ module LicenseFinder
       end
 
       def execute_command_outside_project(command)
-        execute_command_in_path(command, Paths.root)
+        execute_command_in_path(command, Paths.tmpdir)
       end
 
       def seeing?(content)
@@ -431,12 +431,37 @@ module LicenseFinder
       end
 
       def install
-        shell_out('bundle install')
+        ::Bundler.with_original_env do
+          shell_out('bundle install')
+        end
       end
 
       def depend_on(gem, bundler_options = {})
         add_gem_to_gemfile(gem.name, bundler_options.merge(path: gem.project_dir.to_s))
         install
+      end
+
+      private
+
+      def add_gem_to_gemfile(gem_name, options)
+        add_to_gemfile("gem #{gem_name.inspect}, #{options.inspect}")
+      end
+
+      def add_to_gemfile(content)
+        add_to_file('Gemfile', content)
+      end
+    end
+
+    class VendorBundlerProject < Project
+      def add_dep
+        add_to_gemfile("source 'https://rubygems.org'")
+        add_gem_to_gemfile('rake', '12.3.0')
+      end
+
+      def install
+        ::Bundler.with_original_env do
+          shell_out('bundle install --path="vendor/bundle"')
+        end
       end
 
       private
@@ -581,8 +606,12 @@ module LicenseFinder
         root.join('features', 'fixtures')
       end
 
+      def tmpdir
+        ProjectDir.new(Pathname.new(Dir.tmpdir))
+      end
+
       def projects
-        ProjectDir.new(Pathname.new(Dir.tmpdir)).join('projects')
+        tmpdir.join('projects')
       end
 
       def project(name = 'my_app')

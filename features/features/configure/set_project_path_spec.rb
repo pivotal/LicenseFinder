@@ -16,4 +16,10 @@ describe 'Project path' do
     developer.execute_command_outside_project("license_finder --quiet --project_path #{project.project_dir}")
     expect(developer).to be_seeing 'mitlicensed_dep, 1.2.3, MIT'
   end
+
+  specify 'works with vendored bundle and a project_path' do
+    project = LicenseFinder::TestingDSL::VendorBundlerProject.create
+    developer.execute_command_outside_project("license_finder --quiet --project_path #{project.project_dir}")
+    expect(developer).to be_seeing_line 'rake, 12.3.0, MIT'
+  end
 end
