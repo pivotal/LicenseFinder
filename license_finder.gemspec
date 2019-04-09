@@ -60,7 +60,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its'
   s.add_development_dependency 'rubocop', '~> 0.67.2'
-  s.add_development_dependency 'webmock', '~> 1.13'
+  s.add_development_dependency 'webmock', '~> 3.5'
 
   # to preserve ruby < 2.2.2 support.
   s.add_development_dependency 'rack', (RUBY_VERSION < '2.2.2' ? '1.6.0' : '> 1.6')
