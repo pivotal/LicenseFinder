@@ -36,7 +36,7 @@ report.
 | Nuget (without license discovery) | nuget | 4.7.1.5393 |
 | Godep        | Godep           | 80      |
 | Go workspace (via a `.envrc` file) | Go lang | 1.11.5 |
-| Go submodules | Go lang | 1.11.5 |
+| Go modules   | Go lang         | 1.11.5  |
 | Java         | maven           | 3.6.0   |
 | Java         | gradle          | 4.10.3  |
 
