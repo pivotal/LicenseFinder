@@ -53,7 +53,7 @@ module LicenseFinder
     def gem_details
       return @gem_details if @gem_details
 
-      # clear gem paths before runninng specs_for
+      # clear gem paths before running specs_for
       Gem.clear_paths
       if File.exist?(bundler_config_path)
         ::Bundler.reset!
