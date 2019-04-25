@@ -28,7 +28,7 @@ module LicenseFinder
     end
 
     def possible_package_paths
-      [project_path.join('Gemfile')]
+      [project_path.join(gemfile)]
     end
 
     private
@@ -71,7 +71,7 @@ module LicenseFinder
     end
 
     def lockfile_path
-      project_path.join('Gemfile.lock')
+      project_path.join(lockfile)
     end
 
     def bundler_config_path
@@ -88,6 +88,14 @@ module LicenseFinder
           logger.debug self.class, format('- %s', dep)
         end
       end
+    end
+
+    def gemfile
+      File.basename(ENV['BUNDLE_GEMFILE'])
+    end
+
+    def lockfile
+      "#{gemfile}.lock"
     end
   end
 end
