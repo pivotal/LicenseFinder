@@ -11,6 +11,6 @@ describe 'NPM Dependencies' do
   specify 'are shown in reports' do
     LicenseFinder::TestingDSL::NpmProject.create
     node_developer.run_license_finder
-    expect(node_developer).to be_seeing_line 'http-server, 0.6.1, MIT'
+    expect(node_developer).to be_seeing_line 'http-server, 0.11.1, MIT'
   end
 end

@@ -11,6 +11,6 @@ describe 'Yarn Dependencies' do
   specify 'are shown in reports' do
     LicenseFinder::TestingDSL::YarnProject.create
     yarn_developer.run_license_finder
-    expect(yarn_developer).to be_seeing_line 'http-server, 0.6.1, MIT'
+    expect(yarn_developer).to be_seeing_line 'http-server, 0.11.1, MIT'
   end
 end
