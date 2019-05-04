@@ -59,7 +59,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its'
-  s.add_development_dependency 'rubocop', '~> 0.67.2'
+  s.add_development_dependency 'rubocop', '~> 0.68.1'
   s.add_development_dependency 'webmock', '~> 3.5'
 
   # to preserve ruby < 2.2.2 support.
