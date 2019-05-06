@@ -10,13 +10,13 @@ describe 'Bundler Dependencies' do
     LicenseFinder::TestingDSL::BundlerProject.create
     puts 'bundler project created'
     bundler_developer.run_license_finder
-    expect(bundler_developer).to be_seeing_line "license_finder, #{LicenseFinder::VERSION}, MIT"
+    expect(bundler_developer).to be_seeing_something_like /bundler.*MIT/
   end
 
   specify 'works with vendored bundle' do
     LicenseFinder::TestingDSL::VendorBundlerProject.create
     puts 'bundler project created'
     bundler_developer.run_license_finder
-    expect(bundler_developer).to be_seeing_line 'rake, 12.3.0, MIT'
+    expect(bundler_developer).to be_seeing_something_like /rake.*MIT/
   end
 end
