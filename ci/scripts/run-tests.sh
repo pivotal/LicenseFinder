@@ -19,6 +19,6 @@ pushd "$PROJECT_ROOT"
 
   bundle exec rake install
   bundle exec rake spec
-  bundle exec rake features
 
+  bundle exec rake features
 popd
