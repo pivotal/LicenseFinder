@@ -30,7 +30,6 @@ module LicenseFinder
       packages.reject do |package|
         Pathname(package.install_path).cleanpath == Pathname(project_path).cleanpath
       end
-      # binding.pry
     end
 
     private
