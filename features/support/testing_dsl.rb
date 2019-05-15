@@ -118,7 +118,7 @@ module LicenseFinder
 
     class NpmProject < Project
       def add_dep
-        add_to_file('package.json', '{"dependencies" : {"http-server": "0.6.1"}}')
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.11.1"}}')
       end
 
       def install
@@ -128,7 +128,7 @@ module LicenseFinder
 
     class NpmProjectWithInvalidDependency < Project
       def add_dep
-        add_to_file('package.json', '{"dependencies" : {"gertie-watch": "0.6.1"}}')
+        add_to_file('package.json', '{"dependencies" : {"gertie-watch": "0.11.1"}}')
       end
 
       def install
@@ -149,7 +149,7 @@ module LicenseFinder
     class YarnProject < Project
       def add_dep
         add_to_file('yarn.lock', '')
-        add_to_file('package.json', '{"dependencies" : {"http-server": "0.6.1"}}')
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.11.1"}}')
       end
     end
 
