@@ -92,7 +92,8 @@ RUN mkdir /gopath && \
   go get github.com/FiloSottile/gvt && \
   go get github.com/Masterminds/glide && \
   go get github.com/kardianos/govendor && \
-  go get github.com/golang/dep/cmd/dep
+  go get github.com/golang/dep/cmd/dep && \
+  go get -u github.com/rancher/trash
 
 # Fix the locale
 RUN apt-get install -y locales
