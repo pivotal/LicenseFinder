@@ -283,6 +283,26 @@ module LicenseFinder
       end
     end
 
+    class TrashProject < Project
+      def add_dep
+        clone('gopath_trash')
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_trash')).shell_out(command)
+      end
+    end
+
+    class PreparedTrashProject < Project
+      def add_dep
+        clone('gopath_trash_prepared')
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_trash_prepared')).shell_out(command)
+      end
+    end
+
     class GvtProject < Project
       def add_dep
         clone('gopath_gvt')
