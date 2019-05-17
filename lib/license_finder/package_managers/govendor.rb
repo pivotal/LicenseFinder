@@ -43,7 +43,7 @@ module LicenseFinder
       packages_with_no_sha = []
 
       packages.each do |package|
-        package_path = package['path']
+        package_path = package['origin'] || package['path']
         package_revision = package['revision']
 
         if !package_is_versioned?(package)
