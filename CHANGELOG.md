@@ -1,3 +1,11 @@
+# [5.8.0] / 2019-05-22
+
+### Added
+* Trash Package Manager - [3a3d854](https://github.com/pivotal-legacy/LicenseFinder/commit/3a3d8541c4ea64607df6b120111aff324f93778d) 
+
+### Fixed
+* Prefer to use `origin` over `path` for govendor - [31c6041](https://github.com/pivotal-legacy/LicenseFinder/commit/31c6041926a27b61c35c05c6433a87d0af78c1e5) 
+
 # [5.7.1] / 2019-03-08
 
 # [5.7.0] / 2019-03-01
@@ -700,3 +708,4 @@ Bugfixes:
 [5.6.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.1...v5.6.2
 [5.7.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.2...v5.7.0
 [5.7.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.7.0...v5.7.1
+[5.8.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.7.1...v5.8.0
