@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
   wget
 
 # nodejs seems to be required for the one of the gems
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get -y install nodejs
 
 # install yarn
