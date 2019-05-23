@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   ]
 
   s.email       = ['labs-commoncode@pivotal.io']
-  s.homepage    = 'https://github.com/pivotal-legacy/LicenseFinder'
+  s.homepage    = 'https://github.com/pivotal/LicenseFinder'
   s.summary     = "Audit the OSS licenses of your application's dependencies."
 
   s.description = <<-DESCRIPTION

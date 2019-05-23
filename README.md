@@ -1,6 +1,6 @@
 # License Finder
 
-[![Code Climate](https://codeclimate.com/github/pivotal-legacy/LicenseFinder.png)](https://codeclimate.com/github/pivotal-legacy/LicenseFinder)
+[![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
 
 Build status
 * Ruby 2.3.8 [![Ruby 2.3.8 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.8/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
@@ -16,7 +16,7 @@ detect the licenses of the packages in them, compare those licenses
 against a user-defined whitelist, and give you an actionable exception
 report.
 
-* code: https://github.com/pivotal-legacy/LicenseFinder
+* code: https://github.com/pivotal/LicenseFinder
 * ci: https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder
 * docker: [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
   * the docker image contains all the package managers needed to run `license_finder`
@@ -157,7 +157,7 @@ passed to it from that directory.
 Note that the docker image will run the gem which is installed within it. 
 So the docker image tagged `4.0.2` will run *License Finder Version 4.0.2*
 
-See the [contibuting guide](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
+See the [contibuting guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
 
 ### Activation
 
@@ -297,7 +297,7 @@ explicitly declare a license, yarn indicates that it has inferred the license ba
 on some keywords in other files by appending an asterisk to the license name. If you
 see a * at the end of the license name, this is intended.
 
-See [CONTRIBUTING.md](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md#adding-reports)
+See [CONTRIBUTING.md](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md#adding-reports)
 for advice about adding and customizing reports.
 
 
@@ -481,7 +481,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 * Yarn
    * A module that is incompatible with the platform on which 
      license_finder is run will always be reported to have a license type
-     of "unknown". ([#456](https://github.com/pivotal-legacy/LicenseFinder/issues/456))
+     of "unknown". ([#456](https://github.com/pivotal/LicenseFinder/issues/456))
 
 ## Support
 
@@ -491,7 +491,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md).
 
 
 ## License

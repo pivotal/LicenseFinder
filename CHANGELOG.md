@@ -1,83 +1,83 @@
 # [5.8.0] / 2019-05-22
 
 ### Added
-* Trash Package Manager - [3a3d854](https://github.com/pivotal-legacy/LicenseFinder/commit/3a3d8541c4ea64607df6b120111aff324f93778d) 
+* Trash Package Manager - [3a3d854](https://github.com/pivotal/LicenseFinder/commit/3a3d8541c4ea64607df6b120111aff324f93778d) 
 
 ### Fixed
-* Prefer to use `origin` over `path` for govendor - [31c6041](https://github.com/pivotal-legacy/LicenseFinder/commit/31c6041926a27b61c35c05c6433a87d0af78c1e5) 
+* Prefer to use `origin` over `path` for govendor - [31c6041](https://github.com/pivotal/LicenseFinder/commit/31c6041926a27b61c35c05c6433a87d0af78c1e5) 
 
 # [5.7.1] / 2019-03-08
 
 # [5.7.0] / 2019-03-01
 
 ### Added
-* Ruby 2.6.1 support - [8d60ed1](https://github.com/pivotal-legacy/LicenseFinder/commit/8d60ed13f99b830cc1352900f90e2b298105f518) 
+* Ruby 2.6.1 support - [8d60ed1](https://github.com/pivotal/LicenseFinder/commit/8d60ed13f99b830cc1352900f90e2b298105f518) 
 
 ### Changed
-* Conan version is locked to 1.11.2 to avoid breaking changes - [72b766a](https://github.com/pivotal-legacy/LicenseFinder/commit/72b766a948be5b0f8eade75e716796f50ea9ebf3) 
+* Conan version is locked to 1.11.2 to avoid breaking changes - [72b766a](https://github.com/pivotal/LicenseFinder/commit/72b766a948be5b0f8eade75e716796f50ea9ebf3) 
 
 # [5.6.2] / 2019-01-28
 
 # [5.6.1] / 2019-01-25
 
 ### Changed
-* Updated GOLANG to 1.11.4 in Docker image [#163424880] - [67e5e1f](https://github.com/pivotal-legacy/LicenseFinder/commit/67e5e1ffef19acf3a63cac55c5aa3626fb4c7491)
+* Updated GOLANG to 1.11.4 in Docker image [#163424880] - [67e5e1f](https://github.com/pivotal/LicenseFinder/commit/67e5e1ffef19acf3a63cac55c5aa3626fb4c7491)
 
 # [5.6.0] / 2018-12-19
 
 ### Added
-* Add support for JSON reports [#161595251] - [5a1f735](https://github.com/pivotal-legacy/LicenseFinder/commit/5a1f73515c83cbf8ce17275c4c9d1af43d0db772) 
-* Removed the removal of nested projects - [6e1941c](https://github.com/pivotal-legacy/LicenseFinder/commit/6e1941c4d06676988ff8bdad81bd83a4bb5c17e9) 
-* Show verbose errors from prepare commands [#161462746] - [2b14299](https://github.com/pivotal-legacy/LicenseFinder/commit/2b142995d06572f772104c39437d0b64f9569f79) 
+* Add support for JSON reports [#161595251] - [5a1f735](https://github.com/pivotal/LicenseFinder/commit/5a1f73515c83cbf8ce17275c4c9d1af43d0db772) 
+* Removed the removal of nested projects - [6e1941c](https://github.com/pivotal/LicenseFinder/commit/6e1941c4d06676988ff8bdad81bd83a4bb5c17e9) 
+* Show verbose errors from prepare commands [#161462746] - [2b14299](https://github.com/pivotal/LicenseFinder/commit/2b142995d06572f772104c39437d0b64f9569f79) 
 
-* Support to find gradle.kts files [#161629958] - [f7cb587](https://github.com/pivotal-legacy/LicenseFinder/commit/f7cb587787f4de282c34afe66c0a2d0c1c72a84f) 
+* Support to find gradle.kts files [#161629958] - [f7cb587](https://github.com/pivotal/LicenseFinder/commit/f7cb587787f4de282c34afe66c0a2d0c1c72a84f) 
 
 ### Fixed
-* Go modules reports incorrect install paths - [9ab5aa9](https://github.com/pivotal-legacy/LicenseFinder/commit/9ab5aa9aadc9432c5359ed2af2cb32e28fac277a) 
-Revert "* Go modules reports incorrect install paths" - [fcead98](https://github.com/pivotal-legacy/LicenseFinder/commit/fcead980ae2cc24f7193a1f38944f4df60a8c3fc) 
+* Go modules reports incorrect install paths - [9ab5aa9](https://github.com/pivotal/LicenseFinder/commit/9ab5aa9aadc9432c5359ed2af2cb32e28fac277a) 
+Revert "* Go modules reports incorrect install paths" - [fcead98](https://github.com/pivotal/LicenseFinder/commit/fcead980ae2cc24f7193a1f38944f4df60a8c3fc) 
 
-* Fix install_paths for go mod now accurately report dependency installation directories  [#161943322 finish] - [ea28c06](https://github.com/pivotal-legacy/LicenseFinder/commit/ea28c06898964043f5849b64b4043bde81a2d7cd) 
-* Handle log file names created with whitespaces and slashes - [7d6f9da](https://github.com/pivotal-legacy/LicenseFinder/commit/7d6f9da5006e1e7bbb71f594188ab87ee76ddfbb) 
+* Fix install_paths for go mod now accurately report dependency installation directories  [#161943322 finish] - [ea28c06](https://github.com/pivotal/LicenseFinder/commit/ea28c06898964043f5849b64b4043bde81a2d7cd) 
+* Handle log file names created with whitespaces and slashes - [7d6f9da](https://github.com/pivotal/LicenseFinder/commit/7d6f9da5006e1e7bbb71f594188ab87ee76ddfbb) 
 
 ### Changed
-* Updated go-lang to 1.11.2 in the Docker - [d720f9c](https://github.com/pivotal-legacy/LicenseFinder/commit/d720f9c16f82044b5024213bec41b8e9f34cf306) 
+* Updated go-lang to 1.11.2 in the Docker - [d720f9c](https://github.com/pivotal/LicenseFinder/commit/d720f9c16f82044b5024213bec41b8e9f34cf306) 
 
 # [5.5.2] / 2018-10-17
 
 ### Fixed
-* go mod prepare command being incorrect - [480c465](https://github.com/pivotal-legacy/LicenseFinder/commit/480c4654cde7342456318ed4e28b6cebd4a09e4b) 
+* go mod prepare command being incorrect - [480c465](https://github.com/pivotal/LicenseFinder/commit/480c4654cde7342456318ed4e28b6cebd4a09e4b) 
 
 # [5.5.1] / 2018-10-16
 
 ### Added
-* Documentation for asterisks being added to license names [#158960018] - [154b727](https://github.com/pivotal-legacy/LicenseFinder/commit/154b7273b1c18e64afa48799b50588251f99e982) 
-* Document the prepare option on the command line - [c283a38](https://github.com/pivotal-legacy/LicenseFinder/commit/c283a38d9e8b9feefc5afe32f1df55b357a33333) 
+* Documentation for asterisks being added to license names [#158960018] - [154b727](https://github.com/pivotal/LicenseFinder/commit/154b7273b1c18e64afa48799b50588251f99e982) 
+* Document the prepare option on the command line - [c283a38](https://github.com/pivotal/LicenseFinder/commit/c283a38d9e8b9feefc5afe32f1df55b357a33333) 
 
 ### Fixed
-* Go modules are forced to be enabled on go mod package managers - [cf9123d](https://github.com/pivotal-legacy/LicenseFinder/commit/cf9123d654b98cdef872d3b21631e69960abe365) 
+* Go modules are forced to be enabled on go mod package managers - [cf9123d](https://github.com/pivotal/LicenseFinder/commit/cf9123d654b98cdef872d3b21631e69960abe365) 
 
 # [5.5.0] / 2018-10-11
 
 ### Added
-* Go Module support - [8a20210](https://github.com/pivotal-legacy/LicenseFinder/commit/8a202109e942316434978befd33854aa985dd872)
+* Go Module support - [8a20210](https://github.com/pivotal/LicenseFinder/commit/8a202109e942316434978befd33854aa985dd872)
 
 ### Changed
-* Lowering gemspec ruby requirement to support jruby 9.1.x - [279bd25](https://github.com/pivotal-legacy/LicenseFinder/commit/279bd25bbebbd3851dcc0062c3c47f7c7063dad8)
-* Bumps rubocop to 0.59.2 - [291d335](https://github.com/pivotal-legacy/LicenseFinder/commit/291d3358921dbb47bc612b77656353da07e71a2b)
+* Lowering gemspec ruby requirement to support jruby 9.1.x - [279bd25](https://github.com/pivotal/LicenseFinder/commit/279bd25bbebbd3851dcc0062c3c47f7c7063dad8)
+* Bumps rubocop to 0.59.2 - [291d335](https://github.com/pivotal/LicenseFinder/commit/291d3358921dbb47bc612b77656353da07e71a2b)
 
 ### Fixed
-* 'dlf' with no-args should get a login shell - [2b019fb](https://github.com/pivotal-legacy/LicenseFinder/commit/2b019fb1126ec2fcb9cafa092cad6d27b875e5f9) - Kim Dykeman
-* Do not include godep dependencies with common paths - [23e951f](https://github.com/pivotal-legacy/LicenseFinder/commit/23e951fae56a43abde52ecefa73e8a5ff73bb688) 
-* Remove uneeded bundle install in dlf [#160758436] - [f44c73f](https://github.com/pivotal-legacy/LicenseFinder/commit/f44c73f6c06838a29ff9a75932e08fb1445557ca) 
+* 'dlf' with no-args should get a login shell - [2b019fb](https://github.com/pivotal/LicenseFinder/commit/2b019fb1126ec2fcb9cafa092cad6d27b875e5f9) - Kim Dykeman
+* Do not include godep dependencies with common paths - [23e951f](https://github.com/pivotal/LicenseFinder/commit/23e951fae56a43abde52ecefa73e8a5ff73bb688) 
+* Remove uneeded bundle install in dlf [#160758436] - [f44c73f](https://github.com/pivotal/LicenseFinder/commit/f44c73f6c06838a29ff9a75932e08fb1445557ca) 
 
-* dlf gemfile directory issues [#160758436 finish] - [2db3972](https://github.com/pivotal-legacy/LicenseFinder/commit/2db397261654bca89771e85984b4ae6819274e55) 
-Revert "* dlf gemfile directory issues [#160758436 finish]" - [6b17ddc](https://github.com/pivotal-legacy/LicenseFinder/commit/6b17ddc4202518ffd167c8d38a2045a36eb00144) 
+* dlf gemfile directory issues [#160758436 finish] - [2db3972](https://github.com/pivotal/LicenseFinder/commit/2db397261654bca89771e85984b4ae6819274e55) 
+Revert "* dlf gemfile directory issues [#160758436 finish]" - [6b17ddc](https://github.com/pivotal/LicenseFinder/commit/6b17ddc4202518ffd167c8d38a2045a36eb00144) 
 
 # [5.4.1] / 2018-09-18
 
 ### Fixed
-* Extra dependencies showing up for some go projects [#160438065] - [dfb1367](https://github.com/pivotal-legacy/LicenseFinder/commit/dfb136724721843c1196e74a6b4c762538af62ba) 
-* remove workspace-aggregator as a yarn dependency [#159612717 finish] - [4e0afd0](https://github.com/pivotal-legacy/LicenseFinder/commit/4e0afd0ba79623f5bb4c055d42a76ba77ce1c785) 
+* Extra dependencies showing up for some go projects [#160438065] - [dfb1367](https://github.com/pivotal/LicenseFinder/commit/dfb136724721843c1196e74a6b4c762538af62ba) 
+* remove workspace-aggregator as a yarn dependency [#159612717 finish] - [4e0afd0](https://github.com/pivotal/LicenseFinder/commit/4e0afd0ba79623f5bb4c055d42a76ba77ce1c785) 
 
 # [5.4.0] / 2018-08-20
 
@@ -91,23 +91,23 @@ Revert "* dlf gemfile directory issues [#160758436 finish]" - [6b17ddc](https://
 # [5.3.0] / 2018-06-05
 
 ### Added
-* Experimental support for Rust dependencies with Cargo - [2ef3129](https://github.com/pivotal-legacy/LicenseFinder/commit/2ef31290f7abf51db5b7173302d1e535508bbd7a)
-* Add project roots command to list paths to scan - [b7a22ea](https://github.com/pivotal-legacy/LicenseFinder/commit/b7a22eacfac0e1b9334998de606df69ec3156f77)
+* Experimental support for Rust dependencies with Cargo - [2ef3129](https://github.com/pivotal/LicenseFinder/commit/2ef31290f7abf51db5b7173302d1e535508bbd7a)
+* Add project roots command to list paths to scan - [b7a22ea](https://github.com/pivotal/LicenseFinder/commit/b7a22eacfac0e1b9334998de606df69ec3156f77)
 
 ### Removed
-* Remove HTTParty dependency - [c52d014](https://github.com/pivotal-legacy/LicenseFinder/commit/c52d014df1ca9cd3838d03c60daa6fad954c5579) 
+* Remove HTTParty dependency - [c52d014](https://github.com/pivotal/LicenseFinder/commit/c52d014df1ca9cd3838d03c60daa6fad954c5579) 
 
 # [5.2.3] / 2018-05-14
 
 # [5.2.1] / 2018-05-14
 
 ### Changed
-* Updated go-lang to 1.10.2 in the Docker * Updated Maven to 3.5.3 in the Docker - [1decf6a](https://github.com/pivotal-legacy/LicenseFinder/commit/1decf6ad27c9edf96b4f5cccd9a7ca0955fed9f2) - Mark Fioravanti
+* Updated go-lang to 1.10.2 in the Docker * Updated Maven to 3.5.3 in the Docker - [1decf6a](https://github.com/pivotal/LicenseFinder/commit/1decf6ad27c9edf96b4f5cccd9a7ca0955fed9f2) - Mark Fioravanti
 
 # [5.2.0] / 2018-05-09
 
 ### Fixed
-* Support for pip 10.0.1 - [286f679](https://github.com/pivotal-legacy/LicenseFinder/commit/286f6790dc71c97c0e93ecdfe0c6fddad75165cc)
+* Support for pip 10.0.1 - [286f679](https://github.com/pivotal/LicenseFinder/commit/286f6790dc71c97c0e93ecdfe0c6fddad75165cc)
 
 # [5.1.1] / 2018-05-08
 
@@ -117,55 +117,55 @@ Revert "* dlf gemfile directory issues [#160758436 finish]" - [6b17ddc](https://
 ### Fixed
 * Yarn package manager now handles non-ASCII characters
 * in_umbrella: true dependencies for Mix
-* Pivotal Repo Renamed to Pivotal-legacy
+* Pivotal Repo Renamed to pivotal
 
 # [5.1.0] / 2018-04-02
 
 ### Added
-* Support for Ruby 2.5.1 - [9c82a84](https://github.com/pivotal-legacy/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
-* Support for Scala build Tool (sbt ) - [2115ddf](https://github.com/pivotal-legacy/LicenseFinder/commit/2115ddfe9481d17e6b1d0ac63d6ae1c6143f370c) - Bradford D. Boyle
-* Condense gvt paths with identical shas into their common path - [9e1071d](https://github.com/pivotal-legacy/LicenseFinder/commit/9e1071d3c92405a8605727ad1164d6581dc50533)
+* Support for Ruby 2.5.1 - [9c82a84](https://github.com/pivotal/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
+* Support for Scala build Tool (sbt ) - [2115ddf](https://github.com/pivotal/LicenseFinder/commit/2115ddfe9481d17e6b1d0ac63d6ae1c6143f370c) - Bradford D. Boyle
+* Condense gvt paths with identical shas into their common path - [9e1071d](https://github.com/pivotal/LicenseFinder/commit/9e1071d3c92405a8605727ad1164d6581dc50533)
 
 ### Fixed
-* Added back the pip prepare commands [#156376451 finish] - [fdd63fb](https://github.com/pivotal-legacy/LicenseFinder/commit/fdd63fb38332230e0cce0ee1b47aa5ccd0eebc36) 
-* Govendor not consolidating common paths from the same SHA - [bdd23c9](https://github.com/pivotal-legacy/LicenseFinder/commit/bdd23c94ae6ff09a2466c8875e554de60db6603c) 
+* Added back the pip prepare commands [#156376451 finish] - [fdd63fb](https://github.com/pivotal/LicenseFinder/commit/fdd63fb38332230e0cce0ee1b47aa5ccd0eebc36) 
+* Govendor not consolidating common paths from the same SHA - [bdd23c9](https://github.com/pivotal/LicenseFinder/commit/bdd23c94ae6ff09a2466c8875e554de60db6603c) 
 
 ### Deprecated
 * Support for Ruby 2.1 
 * Support for Ruby 2.2 
-* Support for jruby - [9c82a84](https://github.com/pivotal-legacy/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
+* Support for jruby - [9c82a84](https://github.com/pivotal/LicenseFinder/commit/9c82a84a3cff0765a45fa28dc2b05ab32880fb00) 
 
 # [5.0.3] / 2018-02-13
 
 ### Changed
-* Add the -vendor-only flag to dep-ensure calls - [e305bd1](https://github.com/pivotal-legacy/LicenseFinder/commit/e305bd1d5b2d9653f828c3940b59a12903904699) 
-* Update detected paths for Nuget - [3fe8995](https://github.com/pivotal-legacy/LicenseFinder/commit/3fe89955d82c3467628abbd2ca9ba159bfeb7df6)
+* Add the -vendor-only flag to dep-ensure calls - [e305bd1](https://github.com/pivotal/LicenseFinder/commit/e305bd1d5b2d9653f828c3940b59a12903904699) 
+* Update detected paths for Nuget - [3fe8995](https://github.com/pivotal/LicenseFinder/commit/3fe89955d82c3467628abbd2ca9ba159bfeb7df6)
 
 # [5.0.2] / 2018-02-06
 
 ### Fixed
-* Add conditional production flag to npm - [533f9b8](https://github.com/pivotal-legacy/LicenseFinder/commit/533f9b8fda250655f3613444da49fdce60215237) 
-* conan install & info commands - [322e64c](https://github.com/pivotal-legacy/LicenseFinder/commit/322e64c402f4e45d97c6f3bf67c3ffdaabbb359f) 
-* Duplicate approvals in decisions file - [a8e6141](https://github.com/pivotal-legacy/LicenseFinder/commit/a8e6141cd7ac7ed2aa10b35c55954a48bacf3523) 
-* log path issues - [9f1bae1](https://github.com/pivotal-legacy/LicenseFinder/commit/9f1bae12c88771229e0a919876f4de6bcad31677) 
+* Add conditional production flag to npm - [533f9b8](https://github.com/pivotal/LicenseFinder/commit/533f9b8fda250655f3613444da49fdce60215237) 
+* conan install & info commands - [322e64c](https://github.com/pivotal/LicenseFinder/commit/322e64c402f4e45d97c6f3bf67c3ffdaabbb359f) 
+* Duplicate approvals in decisions file - [a8e6141](https://github.com/pivotal/LicenseFinder/commit/a8e6141cd7ac7ed2aa10b35c55954a48bacf3523) 
+* log path issues - [9f1bae1](https://github.com/pivotal/LicenseFinder/commit/9f1bae12c88771229e0a919876f4de6bcad31677) 
 
-* Fix yarn not working with --project_path option - [c6ed08d](https://github.com/pivotal-legacy/LicenseFinder/commit/c6ed08dd8342dec9fcc3e6377f88d5ef01600928) 
+* Fix yarn not working with --project_path option - [c6ed08d](https://github.com/pivotal/LicenseFinder/commit/c6ed08dd8342dec9fcc3e6377f88d5ef01600928) 
 
 # [5.0.0] / 2018-01-15
 
 ### Added
-* NPM prepare - [e7a0d30](https://github.com/pivotal-legacy/LicenseFinder/commit/e7a0d30cb77e5503b5a934b26dbd3dc272dc5605) 
-* Specify log directory for prepare - [b9a5991](https://github.com/pivotal-legacy/LicenseFinder/commit/b9a599171f3fda2affa9381d998e2158a2bf7fac) 
+* NPM prepare - [e7a0d30](https://github.com/pivotal/LicenseFinder/commit/e7a0d30cb77e5503b5a934b26dbd3dc272dc5605) 
+* Specify log directory for prepare - [b9a5991](https://github.com/pivotal/LicenseFinder/commit/b9a599171f3fda2affa9381d998e2158a2bf7fac) 
 
-* Added prepare step for elixir projects - [38b08ea](https://github.com/pivotal-legacy/LicenseFinder/commit/38b08eae23b6b0c2bbaa3aea7845ab6a8d9b028b) 
+* Added prepare step for elixir projects - [38b08ea](https://github.com/pivotal/LicenseFinder/commit/38b08eae23b6b0c2bbaa3aea7845ab6a8d9b028b) 
 
 ### Fixed
-* Action_items resolves decisions file path - [c2a92ab](https://github.com/pivotal-legacy/LicenseFinder/commit/c2a92ab62203efb890dfeb1798d377c8d835feb6) 
+* Action_items resolves decisions file path - [c2a92ab](https://github.com/pivotal/LicenseFinder/commit/c2a92ab62203efb890dfeb1798d377c8d835feb6) 
 
-* Bower prepare step - [bb11d7f](https://github.com/pivotal-legacy/LicenseFinder/commit/bb11d7f07cc5e436381f01245a46033af6bb2d3b) 
+* Bower prepare step - [bb11d7f](https://github.com/pivotal/LicenseFinder/commit/bb11d7f07cc5e436381f01245a46033af6bb2d3b) 
 
 ### Changed
-* Package Manager will now log if prepare step fails. Instead of erroring out - [54da71e](https://github.com/pivotal-legacy/LicenseFinder/commit/54da71e98f14cd199c39dfd7b762030fcac60ccb) 
+* Package Manager will now log if prepare step fails. Instead of erroring out - [54da71e](https://github.com/pivotal/LicenseFinder/commit/54da71e98f14cd199c39dfd7b762030fcac60ccb) 
 
 # [4.0.2] / 2017-11-16
 
@@ -430,7 +430,7 @@ Bugfixes:
 * Bugfixes
 
   * Process incorrectly-defined dependencies.
-    [Original issue.](https://github.com/pivotal-legacy/LicenseFinder/issues/108)
+    [Original issue.](https://github.com/pivotal/LicenseFinder/issues/108)
   * Allow license_finder to process incorrectly-defined dependencies.
 
 
@@ -679,33 +679,33 @@ Bugfixes:
   * Fix blow up if there's not `ignore_groups` setting in the config file.
 
 
-[Unreleased]: https://github.com/pivotal-legacy/LicenseFinder/compare/v4.0.2...HEAD
-[4.0.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v4.0.1...v4.0.2
-[4.0.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v4.0.0...v4.0.1
-[4.0.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.1.0...v4.0.0
-[3.1.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.0.4...v3.1.0
-[3.0.4]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.0.2...v3.0.4
-[3.0.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.0.1...v3.0.2
-[3.0.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v3.0.0...v3.0.1
-[3.0.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v2.1.2...v3.0.0
-[5.0.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v4.0.2...v5.0.0
-[5.0.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.0.0...v5.0.2
-[5.0.3]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.0.2...v5.0.3
-[5.1.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.0.3...v5.1.0
-[5.1.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.1.0...v5.1.1
-[5.1.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.1.0...v5.1.1
-[5.2.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.1.1...v5.2.0
-[5.2.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.0...v5.2.1
-[5.2.3]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.1...v5.2.3
-[5.3.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.2.3...v5.3.0
-[5.4.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.3.0...v5.4.0
-[5.4.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.0...v5.4.1
-[5.5.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.4.1...v5.5.0
-[5.5.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.0...v5.5.1
-[5.5.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.1...v5.5.2
-[5.6.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.5.2...v5.6.0
-[5.6.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.0...v5.6.1
-[5.6.2]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.1...v5.6.2
-[5.7.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.6.2...v5.7.0
-[5.7.1]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.7.0...v5.7.1
-[5.8.0]: https://github.com/pivotal-legacy/LicenseFinder/compare/v5.7.1...v5.8.0
+[Unreleased]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...HEAD
+[4.0.2]: https://github.com/pivotal/LicenseFinder/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/pivotal/LicenseFinder/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/pivotal/LicenseFinder/compare/v3.1.0...v4.0.0
+[3.1.0]: https://github.com/pivotal/LicenseFinder/compare/v3.0.4...v3.1.0
+[3.0.4]: https://github.com/pivotal/LicenseFinder/compare/v3.0.2...v3.0.4
+[3.0.2]: https://github.com/pivotal/LicenseFinder/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/pivotal/LicenseFinder/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/pivotal/LicenseFinder/compare/v2.1.2...v3.0.0
+[5.0.0]: https://github.com/pivotal/LicenseFinder/compare/v4.0.2...v5.0.0
+[5.0.2]: https://github.com/pivotal/LicenseFinder/compare/v5.0.0...v5.0.2
+[5.0.3]: https://github.com/pivotal/LicenseFinder/compare/v5.0.2...v5.0.3
+[5.1.0]: https://github.com/pivotal/LicenseFinder/compare/v5.0.3...v5.1.0
+[5.1.1]: https://github.com/pivotal/LicenseFinder/compare/v5.1.0...v5.1.1
+[5.1.1]: https://github.com/pivotal/LicenseFinder/compare/v5.1.0...v5.1.1
+[5.2.0]: https://github.com/pivotal/LicenseFinder/compare/v5.1.1...v5.2.0
+[5.2.1]: https://github.com/pivotal/LicenseFinder/compare/v5.2.0...v5.2.1
+[5.2.3]: https://github.com/pivotal/LicenseFinder/compare/v5.2.1...v5.2.3
+[5.3.0]: https://github.com/pivotal/LicenseFinder/compare/v5.2.3...v5.3.0
+[5.4.0]: https://github.com/pivotal/LicenseFinder/compare/v5.3.0...v5.4.0
+[5.4.1]: https://github.com/pivotal/LicenseFinder/compare/v5.4.0...v5.4.1
+[5.5.0]: https://github.com/pivotal/LicenseFinder/compare/v5.4.1...v5.5.0
+[5.5.1]: https://github.com/pivotal/LicenseFinder/compare/v5.5.0...v5.5.1
+[5.5.2]: https://github.com/pivotal/LicenseFinder/compare/v5.5.1...v5.5.2
+[5.6.0]: https://github.com/pivotal/LicenseFinder/compare/v5.5.2...v5.6.0
+[5.6.1]: https://github.com/pivotal/LicenseFinder/compare/v5.6.0...v5.6.1
+[5.6.2]: https://github.com/pivotal/LicenseFinder/compare/v5.6.1...v5.6.2
+[5.7.0]: https://github.com/pivotal/LicenseFinder/compare/v5.6.2...v5.7.0
+[5.7.1]: https://github.com/pivotal/LicenseFinder/compare/v5.7.0...v5.7.1
+[5.8.0]: https://github.com/pivotal/LicenseFinder/compare/v5.7.1...v5.8.0
