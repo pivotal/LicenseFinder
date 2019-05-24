@@ -9,6 +9,7 @@ ENV GRADLE_VERSION 4.10.3
 ENV RUBY_VERSION 2.6.1
 ENV MIX_VERSION 1.0
 ENV JDK_VERISON 8u211
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # programs needed for building
 RUN apt-get update && apt-get install -y \
@@ -141,6 +142,16 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsof
   sudo dpkg -i packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
   sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1
+
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
+    echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
+    apt-get update &&\
+    apt-get install -y php7.1-cli &&\
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
+    php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" &&\
+    php composer-setup.php &&\
+    php -r "unlink('composer-setup.php');" &&\
+    mv composer.phar /usr/bin/composer
 
 # install license_finder
 COPY . /LicenseFinder

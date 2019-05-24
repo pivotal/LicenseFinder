@@ -1,0 +1,12 @@
+{
+    "name": "license_finder/fixture",
+    "description": "A sample composer.json file.",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+      "vlucas/phpdotenv": "3.3.3"
+    },
+    "require-dev": {
+      "symfony/debug": "4.2.8"
+    }
+}

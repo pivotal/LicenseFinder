@@ -52,6 +52,7 @@ report.
 * Scala (via `sbt`)
 * Rust (via `cargo`)
 * Go Modules (via `go mod`)
+* PHP (via `composer`)
 
 ## Installation
 
@@ -187,6 +188,7 @@ languages, as long as that language has a package definition in the project dire
 * `conanfile.txt` file (for `conan`)
 * `build.sbt` file (for `sbt`)
 * `Cargo.lock` file (for `cargo`)
+* `composer.lock` file (for `composer`)
 
 
 ### Continuous Integration
