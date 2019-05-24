@@ -4,9 +4,8 @@ require 'license_finder/shared_helpers/common_path'
 module LicenseFinder
   class Gvt < PackageManager
     def possible_package_paths
-      potential_path_list = Dir.glob project_path.join('*', 'vendor', 'manifest')
-      potential_path_list << project_path.join('vendor', 'manifest')
-      potential_path_list.map { |path| Pathname path }
+      potential_path = project_path.join('vendor', 'manifest')
+      [Pathname(potential_path)]
     end
 
     def self.package_management_command
