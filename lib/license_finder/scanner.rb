@@ -23,6 +23,7 @@ module LicenseFinder
       active_pm_classes = []
       PACKAGE_MANAGERS.each do |pm_class|
         active = pm_class.new(@config).active?
+
         if active
           @logger.info pm_class, 'is active', color: :green
           active_pm_classes << pm_class

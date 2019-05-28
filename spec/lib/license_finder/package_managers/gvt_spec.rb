@@ -29,7 +29,7 @@ module LicenseFinder
         it "returns the packages described by 'gvt list'" do
           FileUtils.mkdir_p '/app/vendor'
           File.write('/app/vendor/manifest', content)
-          allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
+          allow(SharedHelpers::Cmd).to receive(:run).with('cd /app && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
           end
           expect(subject.current_packages.length).to eq 2
@@ -70,7 +70,7 @@ OUTPUT
         end
 
         it 'only shows the entry with common base path once' do
-          allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
+          allow(SharedHelpers::Cmd).to receive(:run).with('cd /app && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             [gvt_output_with_common_paths, '', cmd_success]
           end
           expect(subject.current_packages.length).to eq 1
@@ -83,7 +83,7 @@ OUTPUT
         end
 
         it 'shows entries with same sha when they do not have a common base path' do
-          allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
+          allow(SharedHelpers::Cmd).to receive(:run).with('cd /app && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             [gvt_output_without_common_paths, '', cmd_success]
           end
 
