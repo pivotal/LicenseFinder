@@ -12,6 +12,10 @@ module LicenseFinder
       @licenses[name]
     end
 
+    def homepage_of(name)
+      @homepages[name]
+    end
+
     def approval_of(name, version = nil)
       if !@approvals.key?(name)
         nil
@@ -62,6 +66,7 @@ module LicenseFinder
       @decisions = []
       @packages = Set.new
       @licenses = Hash.new { |h, k| h[k] = Set.new }
+      @homepages = {}
       @approvals = {}
       @whitelisted = Set.new
       @blacklisted = Set.new
@@ -90,6 +95,12 @@ module LicenseFinder
     def unlicense(name, lic, txn = {})
       @decisions << [:unlicense, name, lic, txn]
       @licenses[name].delete(License.find_by_name(lic))
+      self
+    end
+
+    def homepage(name, homepage, txn = {})
+      @decisions << [:homepage, name, homepage, txn]
+      @homepages[name] = homepage
       self
     end
 

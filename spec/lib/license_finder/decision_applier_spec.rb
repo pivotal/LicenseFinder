@@ -29,6 +29,14 @@ module LicenseFinder
         expect(decision_applier.acknowledged.last.licenses).to eq Set.new([License.find_by_name('MIT')])
       end
 
+      it 'applies decided homepage' do
+        decisions = Decisions.new
+                      .add_package('manual', nil)
+                      .homepage('manual', 'some-homepage')
+        decision_applier = described_class.new(decisions: decisions, packages: [])
+        expect(decision_applier.acknowledged.last.homepage).to eq 'some-homepage'
+      end
+
       it 'ignores specific packages' do
         decisions = Decisions.new
                              .add_package('manual', nil)

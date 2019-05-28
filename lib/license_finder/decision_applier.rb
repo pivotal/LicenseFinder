@@ -30,6 +30,7 @@ module LicenseFinder
       all_packages
         .map { |package| with_decided_licenses(package) }
         .map { |package| with_approval(package) }
+        .map { |package| with_homepage(package) }
         .reject { |package| ignored?(package) }
     end
 
@@ -42,6 +43,12 @@ module LicenseFinder
       decisions.licenses_of(package.name).each do |license|
         package.decide_on_license license
       end
+      package
+    end
+
+    def with_homepage(package)
+      homepage = decisions.homepage_of(package.name)
+      package.homepage = homepage if homepage
       package
     end
 
