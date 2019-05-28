@@ -2,7 +2,7 @@
 
 require_relative '../../support/feature_helper'
 
-describe 'Trash Dependencies', :focus do
+describe 'Trash Dependencies' do
   let(:go_developer) { LicenseFinder::TestingDSL::User.new }
 
   context 'when the project does not contain trash.lock' do

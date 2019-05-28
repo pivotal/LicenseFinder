@@ -24,36 +24,12 @@ module LicenseFinder
         FakeFS.deactivate!
       end
 
-      context 'when the \'vendor\' folder is nested in another folder' do
-        include FakeFS::SpecHelpers
-        it 'returns the packages described by \'gvt list\'' do
-          FileUtils.mkdir_p '/app/anything/vendor'
-          File.write('/app/anything/vendor/manifest', content)
-          allow(SharedHelpers::Cmd).to receive(:run).with('cd anything && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
-            ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
-          end
-          expect(subject.current_packages.length).to eq 2
-
-          first = subject.current_packages.first
-          expect(first.name).to eq 'my-package-name'
-          expect(first.install_path).to eq Pathname('/app/anything/vendor/my-package-name')
-          expect(first.version).to eq '123abc'
-          expect(first.homepage).to eq 'example.com'
-
-          last = subject.current_packages.last
-          expect(last.name).to eq 'package-name-2'
-          expect(last.install_path).to eq Pathname('/app/anything/vendor/package-name-2')
-          expect(last.version).to eq '456xyz'
-          expect(last.homepage).to eq 'anotherurl.com'
-        end
-      end
-
       context 'when the \'vendor\' folder is not nested in another folder' do
         include FakeFS::SpecHelpers
         it "returns the packages described by 'gvt list'" do
           FileUtils.mkdir_p '/app/vendor'
           File.write('/app/vendor/manifest', content)
-          allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
+          allow(SharedHelpers::Cmd).to receive(:run).with('cd /app && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             ["my-package-name 123abc example.com\npackage-name-2 456xyz anotherurl.com", '', cmd_success]
           end
           expect(subject.current_packages.length).to eq 2
@@ -94,7 +70,7 @@ OUTPUT
         end
 
         it 'only shows the entry with common base path once' do
-          allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
+          allow(SharedHelpers::Cmd).to receive(:run).with('cd /app && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             [gvt_output_with_common_paths, '', cmd_success]
           end
           expect(subject.current_packages.length).to eq 1
@@ -107,7 +83,7 @@ OUTPUT
         end
 
         it 'shows entries with same sha when they do not have a common base path' do
-          allow(SharedHelpers::Cmd).to receive(:run).with('gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
+          allow(SharedHelpers::Cmd).to receive(:run).with('cd /app && gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"') do
             [gvt_output_without_common_paths, '', cmd_success]
           end
 
