@@ -176,6 +176,7 @@ languages, as long as that language has a package definition in the project dire
 * `rebar.config` (for `rebar`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `nuget`)
+* `*.csproj` (for `dotnet`)
 * `vendor/manifest` or `*/vendor/manifest` file (for `gvt`)
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
