@@ -5,6 +5,7 @@ module LicenseFinder
     def initialize(options = {})
       super
       @command = options[:mix_command] || Mix.package_management_command
+      @elixir_command = options[:elixir_command] || 'elixir'
       @deps_path = Pathname(options[:mix_deps_dir] || 'deps')
     end
 
@@ -26,7 +27,7 @@ module LicenseFinder
       # rubocop:disable Metrics/LineLength
       args = "\\\"#{config_path}\\\" |> :file.consult() |> case do {:ok, metadata} -> metadata; {:error, _} -> [] end |> List.keyfind(\\\"licenses\\\", 0) |> case do {_, licenses} -> licenses; _ -> [] end |> Enum.join(\\\"\\t\\\") |> IO.puts()"
       # rubocop:enable Metrics/LineLength
-      command = "#{@command} run --no-start --no-compile -e \"#{args}\""
+      command = "#{@elixir_command} -e \"#{args}\""
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
