@@ -7,6 +7,7 @@ module LicenseFinder
       @command = options[:mix_command] || Mix.package_management_command
       @elixir_command = options[:elixir_command] || 'elixir'
       @deps_path = Pathname(options[:mix_deps_dir] || 'deps')
+      @licenses_by_package = load_all_licenses
     end
 
     def current_packages
@@ -21,21 +22,16 @@ module LicenseFinder
       end
     end
 
-    # Adapted from licenser: https://github.com/unnawut/licensir/blob/71f96f8734adc73c0651050bd9f0e20ff52c61a8/lib/licensir/scanner.ex#L61
     def licenses(name)
-      config_path = @deps_path.join(name).join('hex_metadata.config')
-      # rubocop:disable Metrics/LineLength
-      args = "\\\"#{config_path}\\\" |> :file.consult() |> case do {:ok, metadata} -> metadata; {:error, _} -> [] end |> List.keyfind(\\\"licenses\\\", 0) |> case do {_, licenses} -> licenses; _ -> [] end |> Enum.join(\\\"\\t\\\") |> IO.puts()"
-      # rubocop:enable Metrics/LineLength
-      command = "#{@elixir_command} -e \"#{args}\""
-      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
-      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
-
-      stdout.strip.split("\t")
+      @licenses_by_package.fetch(name, ['license is not in deps'])
     end
 
     def self.package_management_command
       'mix'
+    end
+
+    def self.package_lock_file
+      'mix.lock'
     end
 
     def self.prepare_command
@@ -47,6 +43,35 @@ module LicenseFinder
     end
 
     private
+
+    def load_all_licenses
+      elixir_code = <<-ELIXIR
+      deps_path = "#{@deps_path}"
+
+      case File.ls(deps_path) do
+        {:ok, dirs} ->
+          Enum.reduce(dirs, [], fn name, acc ->
+            with hexmetadata_file <- Path.join([deps_path, name, "hex_metadata.config"]),
+                {:ok, metadata} <- :file.consult(hexmetadata_file),
+                {"licenses", licenses} <- List.keyfind(metadata, "licenses", 0) do
+              [[name, licenses] | acc]
+            else
+              _ -> acc
+            end
+          end)
+        {:error, _} ->
+          []
+      end
+      |> IO.inspect(limit: :infinity)
+      ELIXIR
+      command = "#{@elixir_command} -e '#{elixir_code}'"
+      return {} unless File.directory?(project_path)
+
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+
+      Hash[JSON.parse(stdout)]
+    end
 
     def end_of_package_lines?(line)
       line == 'ok'
