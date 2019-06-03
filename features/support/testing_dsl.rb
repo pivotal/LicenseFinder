@@ -146,6 +146,16 @@ module LicenseFinder
       end
     end
 
+    class ComposerProject < Project
+      def add_dep
+        install_fixture('composer.json')
+      end
+
+      def install
+        shell_out('composer install')
+      end
+    end
+
     class YarnProject < Project
       def add_dep
         add_to_file('yarn.lock', '')
