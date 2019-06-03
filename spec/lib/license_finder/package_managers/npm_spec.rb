@@ -7,6 +7,8 @@ module LicenseFinder
   describe NPM do
     let(:root) { '/fake-node-project' }
     let(:npm) { NPM.new project_path: Pathname.new(root) }
+    let(:cmd_fail_random_status) { double('StatusFailure', exitstatus: 2234234, success?: false) }
+    let(:cmd_fail_unmet_status) { double('StatusFailure', exitstatus: 1, success?: false) }
 
     it_behaves_like 'a PackageManager'
 
@@ -99,8 +101,13 @@ module LicenseFinder
       end
 
       it 'fails when command fails' do
-        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long').and_return ['', 'error', cmd_failure]
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long').and_return ['', 'error', cmd_fail_random_status]
         expect { npm.current_packages }.to raise_error("Command 'npm list --json --long' failed to execute: error")
+      end
+
+      it 'continues when command fails with exitstatus 1' do
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long').and_return ['{}', 'error', cmd_fail_unmet_status]
+        expect { npm.current_packages }.not_to raise_error
       end
 
       it 'does not fail when command fails but produces output' do
