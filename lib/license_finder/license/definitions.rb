@@ -38,7 +38,7 @@ module LicenseFinder
 
       def apache1_1
         License.new(
-          short_name:  'Apache1.1',
+          short_name:  'Apache1_1',
           pretty_name: 'Apache 1.1',
           other_names: [
             'Apache-1.1',
@@ -133,7 +133,7 @@ module LicenseFinder
 
       def lgpl2_1
         License.new(
-          short_name:  'LGPL2.1',
+          short_name:  'LGPL2_1',
           pretty_name: 'GNU Lesser General Public License version 2.1',
           other_names: [
             'LGPL-2.1-only',
