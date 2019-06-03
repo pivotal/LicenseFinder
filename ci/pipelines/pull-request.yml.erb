@@ -51,10 +51,10 @@ jobs:
       params:
         build: github-pull-request
     - put: github-pull-request
-    params:
-      path: github-pull-request
-      context: build-docker-image
-      status: pending
+      params:
+        path: github-pull-request
+        context: build-docker-image
+        status: pending
   on_success:
     put: github-pull-request
     params:
