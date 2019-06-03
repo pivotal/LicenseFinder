@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install -y \
   git-core \
   sudo \
   unzip \
-  wget
+  wget \
+  gnupg2 \ 
+  software-properties-common
 
 # nodejs seems to be required for the one of the gems
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
@@ -103,10 +105,10 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
 #install rvm
-RUN gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB && \
-    curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
-    curl -sSL https://get.rvm.io | sudo bash -s stable --ruby=$RUBY_VERSION
-ENV PATH=/usr/local/rvm/bin:$PATH
+RUN apt-add-repository -y ppa:rael-gc/rvm && \
+    apt update && apt install -y rvm && \
+    /usr/share/rvm/bin/rvm install --default $RUBY_VERSION
+ENV PATH=/usr/share/rvm/bin:$PATH
 
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
