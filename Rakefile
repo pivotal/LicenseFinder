@@ -53,7 +53,7 @@ task :check_dependencies do
   exit 1 unless satisfied
 end
 
-desc 'Configure ci pipeline'
+desc 'Configure LF and LF PR pipeline'
 task :update_pipeline, [:slack_url, :slack_channel] do |_, args|
   slack_url = args[:slack_url]
   slack_channel = args[:slack_channel]
@@ -79,12 +79,6 @@ task :update_pipeline, [:slack_url, :slack_channel] do |_, args|
   system(cmd)
 end
 
-desc 'Configure release pipeline'
-task :update_release_pipeline do
-  cmd = 'bash -c "fly -t osl set-pipeline -n -p LicenseFinder-release --config ci/pipelines/release.yml"'
-
-  system(cmd)
-end
 
 task default: %i[spec features]
 task spec: :check_dependencies
