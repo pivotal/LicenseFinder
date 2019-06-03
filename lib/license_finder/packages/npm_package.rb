@@ -9,7 +9,7 @@ module LicenseFinder
         @packages = flattened_dependencies(npm_json)
         package_json = PackageJson.new(package_path)
         populate_groups(package_json)
-        @packages.values
+        @packages.values.reject { |value| value.dependencies == [] }
       end
 
       private
