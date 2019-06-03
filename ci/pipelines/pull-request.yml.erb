@@ -50,6 +50,11 @@ jobs:
     - put: dockerhub-pr
       params:
         build: github-pull-request
+    - put: github-pull-request
+      params:
+        path: github-pull-request
+        context: build-docker-image
+        status: pending
   on_success:
     put: github-pull-request
     params:
@@ -72,11 +77,6 @@ jobs:
   - get: dockerhub-pr
     passed: [build-docker-image]
     trigger: true
-  - put: github-pull-request
-    params:
-      path: github-pull-request
-      context: build-docker-image
-      status: pending
   - put: github-pull-request
     params:
       path: github-pull-request
