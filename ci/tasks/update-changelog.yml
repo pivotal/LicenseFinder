@@ -6,11 +6,11 @@ image_resource:
     tag: latest
 platform: linux
 inputs:
-- name: lf-git
+- name: lf-git-version
 - name: lf-release
 - name: semver-version
 outputs:
 - name: lf-git-changed
 - name: version
 run:
-  path: lf-git/ci/scripts/updateChangelog.sh
+  path: lf-git-version/ci/scripts/updateChangelog.sh

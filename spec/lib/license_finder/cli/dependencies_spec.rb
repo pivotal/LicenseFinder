@@ -52,6 +52,15 @@ module LicenseFinder
           expect(approval.why).to eq 'We really need this'
           expect(approval.safe_versions).to eq ['1.0.0.RELEASE']
         end
+
+        it 'has a --homepage=HOMEPAGE option to add a homepage to the added dependency' do
+          subject.options = { homepage: 'some-homepage' }
+          silence_stdout do
+            subject.add('js_dep', 'MIT')
+          end
+          homepage = subject.decisions.homepage_of('js_dep')
+          expect(homepage).to eq 'some-homepage'
+        end
       end
 
       describe 'remove' do

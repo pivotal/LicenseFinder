@@ -25,6 +25,13 @@ describe 'Manually Added Dependencies' do
     expect(developer).not_to be_seeing 'manual_dep'
   end
 
+  specify 'can be simultaneously homepaged' do
+    developer.execute_command 'license_finder dependencies add manual Whatever --homepage=some-homepage'
+
+    developer.run_license_finder(nil, '--columns="name" "homepage"')
+    expect(developer).to be_seeing 'manual, some-homepage'
+  end
+
   specify 'appear in the CLI' do
     developer.execute_command 'license_finder dependencies add manual_dep Whatever'
     expect(developer).to be_seeing 'manual_dep'
