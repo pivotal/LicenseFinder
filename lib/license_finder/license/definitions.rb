@@ -38,13 +38,13 @@ module LicenseFinder
 
       def apache1_1
         License.new(
-          short_name:  'Apache1_1',
+          short_name: 'Apache1_1',
           pretty_name: 'Apache 1.1',
           other_names: [
             'Apache-1.1',
             'The Apache Software License, Version 1.1'
           ],
-          url:         'http://www.apache.org/licenses/LICENSE-1.1.txt'
+          url: 'http://www.apache.org/licenses/LICENSE-1.1.txt'
         )
       end
 
@@ -74,7 +74,7 @@ module LicenseFinder
         License.new(
           short_name: 'BSD',
           other_names: ['BSD4', 'bsd-old', '4-clause BSD', 'BSD-4-Clause', 'BSD 4-Clause', 'BSD License'],
-          url:         'http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29'
+          url: 'http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29'
         )
       end
 
@@ -89,14 +89,14 @@ module LicenseFinder
 
       def eclipse1
         License.new(
-          short_name:  'EPL1',
+          short_name: 'EPL1',
           pretty_name: 'Eclipse Public License 1.0',
           other_names: [
             'EPL-1.0',
             'EPL 1.0',
             'Eclipse Public License - v 1.0'
           ],
-          url:         'https://www.eclipse.org/legal/epl-v10.html'
+          url: 'https://www.eclipse.org/legal/epl-v10.html'
         )
       end
 
@@ -133,7 +133,7 @@ module LicenseFinder
 
       def lgpl2_1
         License.new(
-          short_name:  'LGPL2_1',
+          short_name: 'LGPL2_1',
           pretty_name: 'GNU Lesser General Public License version 2.1',
           other_names: [
             'LGPL-2.1-only',
@@ -141,7 +141,7 @@ module LicenseFinder
             'LGPL v2.1',
             'GNU Lesser General Public License 2.1'
           ],
-          url:         'https://opensource.org/licenses/LGPL-2.1'
+          url: 'https://opensource.org/licenses/LGPL-2.1'
         )
       end
 
@@ -160,8 +160,8 @@ module LicenseFinder
         License.new(
           short_name: 'MIT',
           other_names: ['Expat', 'MIT license', 'MIT License', 'The MIT License (MIT)'],
-          url:         'http://opensource.org/licenses/mit-license',
-          matcher:     matcher
+          url: 'http://opensource.org/licenses/mit-license',
+          matcher: matcher
         )
       end
 
@@ -201,7 +201,6 @@ module LicenseFinder
         License.new(
           short_name: 'NewBSD',
           pretty_name: 'New BSD',
-          other_names: ['Modified BSD', 'BSD3', 'BSD-3', '3-clause BSD', 'BSD-3-Clause'],
           other_names: [
             'Modified BSD',
             'BSD3',
@@ -214,8 +213,8 @@ module LicenseFinder
             'New BSD License',
             'BSD New license'
           ],
-          url:         'http://opensource.org/licenses/BSD-3-Clause',
-          matcher:     matcher
+          url: 'http://opensource.org/licenses/BSD-3-Clause',
+          matcher: matcher
         )
       end
 
@@ -255,7 +254,7 @@ module LicenseFinder
             'BSD 2-Clause',
             'The BSD 2-Clause License'
           ],
-          url:         'http://opensource.org/licenses/bsd-license'
+          url: 'http://opensource.org/licenses/bsd-license'
         )
       end
     end
