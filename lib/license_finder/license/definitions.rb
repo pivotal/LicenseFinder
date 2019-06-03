@@ -7,13 +7,16 @@ module LicenseFinder
 
       def all
         [
+          apache1_1,
           apache2,
           bsd,
           cc01,
+          eclipse1,
           gplv2,
           gplv3,
           isc,
           lgpl,
+          lgpl2_1,
           mit,
           mpl2,
           newbsd,
@@ -33,6 +36,18 @@ module LicenseFinder
 
       private
 
+      def apache1_1
+        License.new(
+          short_name: 'Apache1_1',
+          pretty_name: 'Apache 1.1',
+          other_names: [
+            'Apache-1.1',
+            'The Apache Software License, Version 1.1'
+          ],
+          url: 'http://www.apache.org/licenses/LICENSE-1.1.txt'
+        )
+      end
+
       def apache2
         License.new(
           short_name: 'Apache2',
@@ -44,9 +59,12 @@ module LicenseFinder
             'Apache License Version 2.0',
             'Apache Public License 2.0',
             'Apache Software License, Version 2.0',
+            'Apache Software License - Version 2.0',
             'Apache 2',
             'Apache License',
-            'Apache License, Version 2.0'
+            'Apache License, Version 2.0',
+            'ASL 2.0',
+            'ASF 2.0'
           ],
           url: 'http://www.apache.org/licenses/LICENSE-2.0.txt'
         )
@@ -55,7 +73,7 @@ module LicenseFinder
       def bsd
         License.new(
           short_name: 'BSD',
-          other_names: ['BSD4', 'bsd-old', '4-clause BSD', 'BSD-4-Clause', 'BSD License'],
+          other_names: ['BSD4', 'bsd-old', '4-clause BSD', 'BSD-4-Clause', 'BSD 4-Clause', 'BSD License'],
           url: 'http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29'
         )
       end
@@ -66,6 +84,19 @@ module LicenseFinder
           pretty_name: 'CC0 1.0 Universal',
           other_names: ['CC0 1.0'],
           url: 'http://creativecommons.org/publicdomain/zero/1.0'
+        )
+      end
+
+      def eclipse1
+        License.new(
+          short_name: 'EPL1',
+          pretty_name: 'Eclipse Public License 1.0',
+          other_names: [
+            'EPL-1.0',
+            'EPL 1.0',
+            'Eclipse Public License - v 1.0'
+          ],
+          url: 'https://www.eclipse.org/legal/epl-v10.html'
         )
       end
 
@@ -100,6 +131,20 @@ module LicenseFinder
         )
       end
 
+      def lgpl2_1
+        License.new(
+          short_name: 'LGPL2_1',
+          pretty_name: 'GNU Lesser General Public License version 2.1',
+          other_names: [
+            'LGPL-2.1-only',
+            'LGPL 2.1',
+            'LGPL v2.1',
+            'GNU Lesser General Public License 2.1'
+          ],
+          url: 'https://opensource.org/licenses/LGPL-2.1'
+        )
+      end
+
       def mit
         url_regexp = %r{MIT Licen[sc]e.*http://(?:www\.)?opensource\.org/licenses/mit-license}
         header_regexp = /The MIT Licen[sc]e/
@@ -114,7 +159,7 @@ module LicenseFinder
 
         License.new(
           short_name: 'MIT',
-          other_names: ['Expat', 'MIT license', 'MIT License'],
+          other_names: ['Expat', 'MIT license', 'MIT License', 'The MIT License (MIT)'],
           url: 'http://opensource.org/licenses/mit-license',
           matcher: matcher
         )
@@ -133,7 +178,8 @@ module LicenseFinder
           pretty_name: 'Mozilla Public License 2.0',
           other_names: [
             'MPL-2.0',
-            'Mozilla Public License, Version 2.0'
+            'Mozilla Public License, Version 2.0',
+            'Mozilla Public License version 2.0'
           ],
           url: 'https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt',
           matcher: matcher
@@ -155,7 +201,18 @@ module LicenseFinder
         License.new(
           short_name: 'NewBSD',
           pretty_name: 'New BSD',
-          other_names: ['Modified BSD', 'BSD3', 'BSD-3', '3-clause BSD', 'BSD-3-Clause'],
+          other_names: [
+            'Modified BSD',
+            'BSD3',
+            'BSD-3',
+            '3-clause BSD',
+            'BSD-3-Clause',
+            'BSD 3-Clause License',
+            'The 3-Clause BSD License',
+            'BSD 3-clause New License',
+            'New BSD License',
+            'BSD New license'
+          ],
           url: 'http://opensource.org/licenses/BSD-3-Clause',
           matcher: matcher
         )
@@ -190,7 +247,13 @@ module LicenseFinder
         License.new(
           short_name: 'SimplifiedBSD',
           pretty_name: 'Simplified BSD',
-          other_names: ['FreeBSD', '2-clause BSD', 'BSD-2-Clause', 'BSD 2-Clause'],
+          other_names: [
+            'FreeBSD',
+            '2-clause BSD',
+            'BSD-2-Clause',
+            'BSD 2-Clause',
+            'The BSD 2-Clause License'
+          ],
           url: 'http://opensource.org/licenses/bsd-license'
         )
       end
