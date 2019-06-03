@@ -21,7 +21,7 @@ module LicenseFinder
       return if status.success?
 
       log_errors stderr
-      raise "Prepare command '#{prep_cmd}' failed" unless @prepare_no_fail
+      raise "Prepare command '#{Composer.prepare_command}' failed" unless @prepare_no_fail
     end
 
     def self.package_management_command
@@ -46,12 +46,10 @@ module LicenseFinder
     end
 
     def composer_json
-      stdout, _stderr, status = Cmd.run(Composer::SHELL_COMMAND)
-      return [] unless status.success?
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(Composer::SHELL_COMMAND) }
+      raise "Command '#{Composer::SHELL_COMMAND}' failed to execute: #{stderr}" unless status.success?
 
-      json = JSON(stdout)
-
-      json
+      JSON(stdout)
     end
   end
 end
