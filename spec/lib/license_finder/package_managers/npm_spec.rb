@@ -7,7 +7,7 @@ module LicenseFinder
   describe NPM do
     let(:root) { '/fake-node-project' }
     let(:npm) { NPM.new project_path: Pathname.new(root) }
-    let(:cmd_fail_random_status) { double('StatusFailure', exitstatus: 2234234, success?: false) }
+    let(:cmd_fail_random_status) { double('StatusFailure', exitstatus: 2_234_234, success?: false) }
     let(:cmd_fail_unmet_status) { double('StatusFailure', exitstatus: 1, success?: false) }
 
     it_behaves_like 'a PackageManager'
