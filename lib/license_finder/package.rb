@@ -61,8 +61,10 @@ module LicenseFinder
 
     ## DESCRIPTION
 
+    attr_accessor :homepage
+
     attr_reader :name, :version, :authors,
-                :summary, :description, :homepage,
+                :summary, :description,
                 :children, :parents, :groups
 
     ## APPROVAL
@@ -193,3 +195,4 @@ require 'license_finder/packages/conan_package'
 require 'license_finder/packages/yarn_package'
 require 'license_finder/packages/sbt_package'
 require 'license_finder/packages/cargo_package'
+require 'license_finder/packages/composer_package'

@@ -90,6 +90,31 @@ module LicenseFinder
           expect(subject.current_packages[1].version).to eq ''
         end
       end
+
+      context 'when origin is defined for a package' do
+        let(:content) do
+          FakeFS.without do
+            fixture_from('govendor_with_origin.json')
+          end
+        end
+
+        before do
+          FakeFS.activate!
+          FileUtils.mkdir_p '/app/vendor'
+          File.write('/app/vendor/vendor.json', content)
+        end
+
+        after do
+          FakeFS.deactivate!
+        end
+
+        it 'uses origin as path' do
+          expect(subject.current_packages.length).to eq 2
+
+          expect(subject.current_packages[0].name).to eq 'foo/Bowery/prompt/origin'
+          expect(subject.current_packages[1].name).to eq 'foo/dchest/safefile'
+        end
+      end
     end
 
     describe '.prepare_command' do

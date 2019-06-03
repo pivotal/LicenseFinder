@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   ]
 
   s.email       = ['labs-commoncode@pivotal.io']
-  s.homepage    = 'https://github.com/pivotal-legacy/LicenseFinder'
+  s.homepage    = 'https://github.com/pivotal/LicenseFinder'
   s.summary     = "Audit the OSS licenses of your application's dependencies."
 
   s.description = <<-DESCRIPTION
@@ -59,7 +59,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its'
-  s.add_development_dependency 'rubocop', '~> 0.67.2'
+  s.add_development_dependency 'rubocop', '~> 0.71.0'
+  s.add_development_dependency 'rubocop-performance', '~> 1.3.0'
   s.add_development_dependency 'webmock', '~> 3.5'
 
   # to preserve ruby < 2.2.2 support.

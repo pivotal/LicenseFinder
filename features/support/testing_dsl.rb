@@ -118,7 +118,7 @@ module LicenseFinder
 
     class NpmProject < Project
       def add_dep
-        add_to_file('package.json', '{"dependencies" : {"http-server": "0.6.1"}}')
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.11.1"}}')
       end
 
       def install
@@ -128,7 +128,7 @@ module LicenseFinder
 
     class NpmProjectWithInvalidDependency < Project
       def add_dep
-        add_to_file('package.json', '{"dependencies" : {"gertie-watch": "0.6.1"}}')
+        add_to_file('package.json', '{"dependencies" : {"gertie-watch": "0.11.1"}}')
       end
 
       def install
@@ -146,10 +146,20 @@ module LicenseFinder
       end
     end
 
+    class ComposerProject < Project
+      def add_dep
+        install_fixture('composer.json')
+      end
+
+      def install
+        shell_out('composer install')
+      end
+    end
+
     class YarnProject < Project
       def add_dep
         add_to_file('yarn.lock', '')
-        add_to_file('package.json', '{"dependencies" : {"http-server": "0.6.1"}}')
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.11.1"}}')
       end
     end
 
@@ -280,6 +290,26 @@ module LicenseFinder
 
       def shell_out(command)
         ProjectDir.new(Paths.project.join('gopath_glide_without_src')).shell_out(command)
+      end
+    end
+
+    class TrashProject < Project
+      def add_dep
+        clone('gopath_trash')
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_trash')).shell_out(command)
+      end
+    end
+
+    class PreparedTrashProject < Project
+      def add_dep
+        clone('gopath_trash_prepared')
+      end
+
+      def shell_out(command)
+        ProjectDir.new(Paths.project.join('gopath_trash_prepared')).shell_out(command)
       end
     end
 

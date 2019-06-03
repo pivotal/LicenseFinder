@@ -12,7 +12,7 @@ module LicenseFinder
       end
 
       def prepare_command
-        'GO111MODULE=on go mod vendor'
+        'GO111MODULE=on go mod tidy && GO111MODULE=on go mod vendor'
       end
     end
 
@@ -30,7 +30,6 @@ module LicenseFinder
       packages.reject do |package|
         Pathname(package.install_path).cleanpath == Pathname(project_path).cleanpath
       end
-      # binding.pry
     end
 
     private

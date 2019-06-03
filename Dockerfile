@@ -9,6 +9,7 @@ ENV GRADLE_VERSION 4.10.3
 ENV RUBY_VERSION 2.6.1
 ENV MIX_VERSION 1.0
 ENV JDK_VERISON 8u211
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # programs needed for building
 RUN apt-get update && apt-get install -y \
@@ -17,10 +18,12 @@ RUN apt-get update && apt-get install -y \
   git-core \
   sudo \
   unzip \
-  wget
+  wget \
+  gnupg2 \ 
+  software-properties-common
 
 # nodejs seems to be required for the one of the gems
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get -y install nodejs
 
 # install yarn
@@ -92,7 +95,8 @@ RUN mkdir /gopath && \
   go get github.com/FiloSottile/gvt && \
   go get github.com/Masterminds/glide && \
   go get github.com/kardianos/govendor && \
-  go get github.com/golang/dep/cmd/dep
+  go get github.com/golang/dep/cmd/dep && \
+  go get -u github.com/rancher/trash
 
 # Fix the locale
 RUN apt-get install -y locales
@@ -102,10 +106,10 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
 #install rvm
-RUN gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB && \
-    curl -sSL https://rvm.io/mpapis.asc | gpg --import && \
-    curl -sSL https://get.rvm.io | sudo bash -s stable --ruby=$RUBY_VERSION
-ENV PATH=/usr/local/rvm/bin:$PATH
+RUN apt-add-repository -y ppa:rael-gc/rvm && \
+    apt update && apt install -y rvm && \
+    /usr/share/rvm/bin/rvm install --default $RUBY_VERSION
+ENV PATH=/usr/share/rvm/bin:$PATH
 
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
@@ -139,7 +143,17 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
   sudo dpkg -i packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
-  sudo apt-get install -y dotnet-runtime-2.1
+  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1
+
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
+    echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
+    apt-get update &&\
+    apt-get install -y php7.1-cli &&\
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
+    php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" &&\
+    php composer-setup.php &&\
+    php -r "unlink('composer-setup.php');" &&\
+    mv composer.phar /usr/bin/composer
 
 # install license_finder
 COPY . /LicenseFinder

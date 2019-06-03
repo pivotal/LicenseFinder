@@ -21,7 +21,7 @@ resources:
   check_every: 24h
   webhook_token: ((GithubPullRequestWebhookToken))
   source:
-    repository: pivotal-legacy/LicenseFinder
+    repository: pivotal/LicenseFinder
     access_token: ((GithubApiPullRequestToken))
 
 - name: dockerhub-pr
@@ -50,6 +50,11 @@ jobs:
     - put: dockerhub-pr
       params:
         build: github-pull-request
+    - put: github-pull-request
+      params:
+        path: github-pull-request
+        context: build-docker-image
+        status: pending
   on_success:
     put: github-pull-request
     params:
@@ -72,6 +77,11 @@ jobs:
   - get: dockerhub-pr
     passed: [build-docker-image]
     trigger: true
+  - put: github-pull-request
+    params:
+      path: github-pull-request
+      context: ruby-<%= ruby_version %>
+      status: pending
   - task: ruby-<%= ruby_version %>
     privileged: true
     image: dockerhub-pr
@@ -107,6 +117,11 @@ jobs:
   - get: github-pull-request
     trigger: true
     version: every
+  - put: github-pull-request
+    params:
+      path: github-pull-request
+      context: run-rubocop
+      status: pending
   - task: run-rubocop
     privileged: true
     file: github-pull-request/ci/tasks/rubocop.yml

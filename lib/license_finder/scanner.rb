@@ -2,8 +2,8 @@
 
 module LicenseFinder
   class Scanner
-    PACKAGE_MANAGERS = [GoModules, GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Dep, Bundler, NPM, Pip,
-                        Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan, Sbt, Cargo, Dotnet].freeze
+    PACKAGE_MANAGERS = [GoModules, GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Trash, Dep, Bundler, NPM, Pip,
+                        Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan, Sbt, Cargo, Dotnet, Composer].freeze
 
     def initialize(config = { project_path: Pathname.new('') })
       @config = config
@@ -23,6 +23,7 @@ module LicenseFinder
       active_pm_classes = []
       PACKAGE_MANAGERS.each do |pm_class|
         active = pm_class.new(@config).active?
+
         if active
           @logger.info pm_class, 'is active', color: :green
           active_pm_classes << pm_class
