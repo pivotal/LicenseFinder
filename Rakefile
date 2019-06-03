@@ -79,7 +79,6 @@ task :update_pipeline, [:slack_url, :slack_channel] do |_, args|
   system(cmd)
 end
 
-
 task default: %i[spec features]
 task spec: :check_dependencies
 task features: :check_dependencies
