@@ -1,0 +1,6 @@
+package: github.com/rancher/trash
+import:
+- package: some-package-name
+  version: 123abc
+- package: another-package-name
+  version: 456xyz

@@ -1,14 +1,14 @@
 # License Finder
 
-[![Code Climate](https://codeclimate.com/github/pivotal-legacy/LicenseFinder.png)](https://codeclimate.com/github/pivotal-legacy/LicenseFinder)
+[![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
 
 Build status
-* Ruby 2.3.3 [![Ruby 2.3.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.4.4 [![Ruby 2.4.4 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.4/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.5.1 [![Ruby 2.5.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.3.8 [![Ruby 2.3.8 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.8/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.4.5 [![Ruby 2.4.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.5.3 [![Ruby 2.5.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.6.1 [![Ruby 2.6.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * JRuby 9.1.17.0 [![JRuby 9.1.17.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.1.17.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* JRuby 9.2.0.0 [![JRuby 9.2.0.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.0.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.2.6.0 [![JRuby 9.2.6.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.6.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
@@ -16,7 +16,7 @@ detect the licenses of the packages in them, compare those licenses
 against a user-defined whitelist, and give you an actionable exception
 report.
 
-* code: https://github.com/pivotal-legacy/LicenseFinder
+* code: https://github.com/pivotal/LicenseFinder
 * ci: https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder
 * docker: [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
   * the docker image contains all the package managers needed to run `license_finder`
@@ -30,15 +30,15 @@ report.
 | Project Type | Package Manager | Tested on Version |
 | ------------ | --------------- | -------:|
 | Ruby Gems    | bundler         | 1.16.6  |
-| Python Eggs  | pip             | 10.0.1   |
+| Python Eggs  | pip             | 19.0.2  |
 | Node.js      | npm             | 6.4.1   |
 | Bower        | bower           | 1.8.4   |
 | Nuget (without license discovery) | nuget | 4.7.1.5393 |
 | Godep        | Godep           | 80      |
-| Go workspace (via a `.envrc` file) | Go lang |    1.11 |
-| Go submodules | Go lang | 1.11 |
-| Java         | maven           | 3.5.3   |
-| Java         | gradle          | 4.2     |
+| Go workspace (via a `.envrc` file) | Go lang | 1.11.5 |
+| Go modules   | Go lang         | 1.11.5  |
+| Java         | maven           | 3.6.0   |
+| Java         | gradle          | 4.10.3  |
 
 ### Experimental project types
 
@@ -46,7 +46,7 @@ report.
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
-* Golang (via `gvt`, `glide`,`dep`, and `govendor`)
+* Golang (via `gvt`, `glide`,`dep`, `trash` and `govendor`)
 * JavaScript (via `yarn`)
 * C++/C (via `conan`)
 * Scala (via `sbt`)
@@ -157,7 +157,7 @@ passed to it from that directory.
 Note that the docker image will run the gem which is installed within it. 
 So the docker image tagged `4.0.2` will run *License Finder Version 4.0.2*
 
-See the [contibuting guide](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
+See the [contibuting guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
 
 ### Activation
 
@@ -176,11 +176,13 @@ languages, as long as that language has a package definition in the project dire
 * `rebar.config` (for `rebar`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `nuget`)
+* `*.csproj` (for `dotnet`)
 * `vendor/manifest` or `*/vendor/manifest` file (for `gvt`)
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
 * `Gopkg.lock` file (for `dep`)
 * `go.sum` file (for `go mod`)
+* `vendor.conf` file (for `trash`)
 * `yarn.lock` file (for `yarn`)
 * `conanfile.txt` file (for `conan`)
 * `build.sbt` file (for `sbt`)
@@ -296,7 +298,7 @@ explicitly declare a license, yarn indicates that it has inferred the license ba
 on some keywords in other files by appending an asterisk to the license name. If you
 see a * at the end of the license name, this is intended.
 
-See [CONTRIBUTING.md](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md#adding-reports)
+See [CONTRIBUTING.md](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md#adding-reports)
 for advice about adding and customizing reports.
 
 
@@ -309,11 +311,11 @@ you should manually research what the actual license is.  When you
 have established the real license, you can record it with:
 
 ```sh
-$ license_finder licenses add my_unknown_dependency MIT
+$ license_finder dependencies add my_unknown_dependency MIT --homepage="www.unknown-code.org"
 ```
 
 This command would assign the MIT license to the dependency
-`my_unknown_dependency`.
+`my_unknown_dependency`. It will also set its homepage to `wwww.unknown-code.org`.
 
 
 ### Adding Hidden Dependencies
@@ -480,7 +482,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 * Yarn
    * A module that is incompatible with the platform on which 
      license_finder is run will always be reported to have a license type
-     of "unknown". ([#456](https://github.com/pivotal-legacy/LicenseFinder/issues/456))
+     of "unknown". ([#456](https://github.com/pivotal/LicenseFinder/issues/456))
 
 ## Support
 
@@ -490,7 +492,7 @@ And save a `LICENSE` file which contains your license text in your repo.
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/pivotal-legacy/LicenseFinder/blob/master/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md).
 
 
 ## License

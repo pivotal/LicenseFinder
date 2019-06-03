@@ -5,7 +5,7 @@ resource_types:
 - name: pull-request
   type: docker-image
   source:
-    repository: jtarchie/pr
+    repository: teliaoss/github-pr-resource
 
 <% if setup_slack %>
 - name: slack-notification
@@ -16,11 +16,12 @@ resource_types:
 <% end %>
 
 resources:
-- name: pull-request
+- name: github-pull-request
   type: pull-request
+  check_every: 24h
+  webhook_token: ((GithubPullRequestWebhookToken))
   source:
-    repo: pivotal-legacy/LicenseFinder
-    base: master
+    repository: pivotal/LicenseFinder
     access_token: ((GithubApiPullRequestToken))
 
 - name: dockerhub-pr
@@ -43,17 +44,29 @@ jobs:
 - name: build-docker-image
   public: true
   plan:
-    - get: pull-request
+    - get: github-pull-request
       version: every
       trigger: true
     - put: dockerhub-pr
       params:
-        build: pull-request
+        build: github-pull-request
+  on_success:
+    put: github-pull-request
+    params:
+      path: github-pull-request
+      status: success
+      context: build-docker-image
+  on_failure:
+    put: github-pull-request
+    params:
+      path: github-pull-request
+      status: failure
+      context: build-docker-image
 <% ruby_versions.each do |ruby_version| %>
 - name: PR-ruby-<%= ruby_version %>-linux
   public: true
   plan:
-  - get: pull-request
+  - get: github-pull-request
     passed: [build-docker-image]
     version: every
   - get: dockerhub-pr
@@ -62,20 +75,20 @@ jobs:
   - task: ruby-<%= ruby_version %>
     privileged: true
     image: dockerhub-pr
-    file: pull-request/ci/tasks/run-tests.yml
+    file: github-pull-request/ci/tasks/run-tests.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
-    input_mapping: { LicenseFinder: pull-request }
+    input_mapping: { LicenseFinder: github-pull-request }
     on_success:
-      put: pull-request
+      put: github-pull-request
       params:
-        path: pull-request
+        path: github-pull-request
         status: success
         context: ruby-<%= ruby_version %>
     on_failure:
-      put: pull-request
+      put: github-pull-request
       params:
-        path: pull-request
+        path: github-pull-request
         status: failure
         context: ruby-<%= ruby_version %>
 <% if setup_slack %>
@@ -91,22 +104,22 @@ jobs:
 - name: PR-rubocop
   public: true
   plan:
-  - get: pull-request
+  - get: github-pull-request
     trigger: true
     version: every
   - task: run-rubocop
     privileged: true
-    file: pull-request/ci/tasks/rubocop.yml
-    input_mapping: { LicenseFinder: pull-request }
+    file: github-pull-request/ci/tasks/rubocop.yml
+    input_mapping: { LicenseFinder: github-pull-request }
     on_success:
-      put: pull-request
+      put: github-pull-request
       params:
-        path: pull-request
+        path: github-pull-request
         status: success
         context: run-rubocop
     on_failure:
-      put: pull-request
+      put: github-pull-request
       params:
-        path: pull-request
+        path: github-pull-request
         status: failure
         context: run-rubocop

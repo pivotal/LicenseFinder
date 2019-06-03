@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require 'license_finder/shared_helpers/common_path'
+
 module LicenseFinder
   class Gvt < PackageManager
     def possible_package_paths
-      potential_path_list = Dir.glob project_path.join('*', 'vendor', 'manifest')
-      potential_path_list << project_path.join('vendor', 'manifest')
-      potential_path_list.map { |path| Pathname path }
+      potential_path = project_path.join('vendor', 'manifest')
+      [Pathname(potential_path)]
     end
 
     def self.package_management_command
@@ -18,25 +18,8 @@ module LicenseFinder
     end
 
     def current_packages
-      split_project_path = project_path.to_s.split('/')
-      project_root_depth = split_project_path.length - 1
-
-      split_package_path = detected_package_path.to_s.split('/')
-      vendor_dir_depth = split_package_path.index('vendor')
-      return [] if vendor_dir_depth.nil?
-
-      vendor_dir_parent_depth = vendor_dir_depth - 1
-
-      is_project_root_parent_of_vendor_dir = project_root_depth == vendor_dir_parent_depth
-
-      if is_project_root_parent_of_vendor_dir
-        shell_command = 'gvt list -f "{{.Importpath}} {{.Revision}} {{.Repository}}"'
-        path = project_path.join('vendor')
-      else
-        vendor_dir_parent = split_package_path[vendor_dir_parent_depth]
-        shell_command = "cd #{vendor_dir_parent} && gvt list -f \"{{.Importpath}} {{.Revision}} {{.Repository}}\""
-        path = project_path.join(vendor_dir_parent, 'vendor')
-      end
+      shell_command = "cd #{project_path} && gvt list -f \"{{.Importpath}} {{.Revision}} {{.Repository}}\""
+      path = project_path.join(project_path, 'vendor')
 
       stdout, _stderr, status = Cmd.run(shell_command)
       return [] unless status.success?

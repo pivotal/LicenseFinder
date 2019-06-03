@@ -37,6 +37,9 @@ module LicenseFinder
 
     def definition
       # DI
+      ENV['BUNDLE_PATH'] = project_path.to_s
+      ENV['BUNDLE_GEMFILE'] = "#{project_path}/Gemfile"
+
       @definition ||= ::Bundler::Definition.build(detected_package_path, lockfile_path, nil)
     end
 
@@ -52,6 +55,10 @@ module LicenseFinder
 
       # clear gem paths before runninng specs_for
       Gem.clear_paths
+      if File.exist?(bundler_config_path)
+        ::Bundler.reset!
+        ::Bundler.configure
+      end
       @gem_details = definition.specs_for(included_groups)
     end
 
@@ -65,6 +72,10 @@ module LicenseFinder
 
     def lockfile_path
       project_path.join('Gemfile.lock')
+    end
+
+    def bundler_config_path
+      project_path.join('.bundle')
     end
 
     def log_package_dependencies(package)

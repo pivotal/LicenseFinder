@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
-lib = File.expand_path('lib', __dir__)
-$LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
-
-require 'license_finder/platform'
-require 'license_finder/version'
+version = File.read(File.expand_path('VERSION', __dir__)).strip
 
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.3.3'
   s.name        = 'license_finder'
-  s.version     = LicenseFinder::VERSION
+  s.version     = version
 
   s.authors = [
     'Ryan Collins',
@@ -35,7 +31,7 @@ Gem::Specification.new do |s|
   ]
 
   s.email       = ['labs-commoncode@pivotal.io']
-  s.homepage    = 'https://github.com/pivotal-legacy/LicenseFinder'
+  s.homepage    = 'https://github.com/pivotal/LicenseFinder'
   s.summary     = "Audit the OSS licenses of your application's dependencies."
 
   s.description = <<-DESCRIPTION
@@ -54,17 +50,18 @@ Gem::Specification.new do |s|
   s.add_dependency 'with_env', '1.1.0'
   s.add_dependency 'xml-simple'
 
-  s.add_development_dependency 'addressable', '2.5.2'
-  s.add_development_dependency 'capybara', '~> 2.0.0'
-  s.add_development_dependency 'cocoapods', '0.34.0' if LicenseFinder::Platform.darwin?
-  s.add_development_dependency 'fakefs', '~> 0.11.3'
-  s.add_development_dependency 'mime-types', '3.1'
+  s.add_development_dependency 'addressable', '2.6.0'
+  s.add_development_dependency 'capybara', '~> 3.15.0'
+  s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM =~ /darwin/
+  s.add_development_dependency 'fakefs', '~> 0.20.0'
+  s.add_development_dependency 'mime-types', '3.2.2'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its'
-  s.add_development_dependency 'rubocop', '~> 0.59.2'
-  s.add_development_dependency 'webmock', '~> 1.13'
+  s.add_development_dependency 'rubocop', '~> 0.71.0'
+  s.add_development_dependency 'rubocop-performance', '~> 1.3.0'
+  s.add_development_dependency 'webmock', '~> 3.5'
 
   # to preserve ruby < 2.2.2 support.
   s.add_development_dependency 'rack', (RUBY_VERSION < '2.2.2' ? '1.6.0' : '> 1.6')
