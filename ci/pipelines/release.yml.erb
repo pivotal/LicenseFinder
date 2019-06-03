@@ -14,7 +14,7 @@ resources:
 - name: lf-git
   type: git
   source:
-    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    uri: git@github.com:pivotal/LicenseFinder.git
     private_key: ((CfOslBot.private_key))
     branch: master
     ignore_paths: [VERSION]
@@ -22,14 +22,14 @@ resources:
 - name: lf-git-version
   type: git
   source:
-    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    uri: git@github.com:pivotal/LicenseFinder.git
     private_key: ((CfOslBot.private_key))
     branch: master
 
 - name: git-master-dockerfile
   type: git
   source:
-    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    uri: git@github.com:pivotal/LicenseFinder.git
     private_key: ((CfOslBot.private_key))
     branch: master
     paths: [Dockerfile, Gemfile, license_finder.gemspec]
@@ -38,7 +38,7 @@ resources:
   type: semver
   source:
     driver: git
-    uri: git@github.com:pivotal-legacy/LicenseFinder.git
+    uri: git@github.com:pivotal/LicenseFinder.git
     branch: master
     file: VERSION
     private_key: ((CfOslBot.private_key))

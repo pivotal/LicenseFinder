@@ -91,6 +91,23 @@ module LicenseFinder
       end
     end
 
+    describe '.homepage' do
+      it 'will report homepage for a dependency' do
+        homepage = subject
+                     .homepage('dep', 'home-page/dep')
+                     .homepage_of('dep')
+        expect(homepage).to eq 'home-page/dep'
+      end
+
+      it 'will report overwritten homepages' do
+        homepages = subject
+                      .homepage('dep', 'home-page/dep')
+                      .homepage('dep', 'other-page/dep')
+                      .homepage_of('dep')
+        expect(homepages).to eq 'other-page/dep'
+      end
+    end
+
     describe '.approve' do
       it 'will report a dependency as approved' do
         decisions = subject.approve('dep')
@@ -300,6 +317,22 @@ module LicenseFinder
             .unlicense('dep', 'MIT')
         ).licenses_of('dep')
         expect(licenses).to eq [License.find_by_name('GPL')].to_set
+      end
+
+      it 'can restore homepage' do
+        homepage = roundtrip(
+          subject.homepage('dep', 'home-page/dep')
+        ).homepage_of('dep')
+        expect(homepage).to eq 'home-page/dep'
+      end
+
+      it 'can restore overwritten homepages' do
+        homepage = roundtrip(
+          subject
+            .homepage('dep', 'home-page/dep')
+            .homepage('dep', 'other-page/dep')
+        ).homepage_of('dep')
+        expect(homepage).to eq 'other-page/dep'
       end
 
       it 'can restore approvals without versions' do

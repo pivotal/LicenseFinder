@@ -8,6 +8,7 @@ ENV SBT_VERSION 1.1.1
 ENV GRADLE_VERSION 4.10.3
 ENV RUBY_VERSION 2.6.1
 ENV MIX_VERSION 1.0
+ENV JDK_VERISON 8u211
 
 # programs needed for building
 RUN apt-get update && apt-get install -y \
@@ -19,7 +20,7 @@ RUN apt-get update && apt-get install -y \
   wget
 
 # nodejs seems to be required for the one of the gems
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get -y install nodejs
 
 # install yarn
@@ -34,18 +35,13 @@ RUN npm install -g bower && \
 
 #install java 8
 #http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
-RUN cd /tmp && \
-    wget --quiet --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz -O jdk-8.tgz && \
-    tar xf /tmp/jdk-8.tgz && \
-    mkdir -p /usr/lib/jvm && \
-    mv jdk1.8.0_201 /usr/lib/jvm/oracle_jdk8 && \
-    rm /tmp/jdk-8.tgz
+RUN apt-get install -y openjdk-8-jdk
+RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-ENV J2SDKDIR=/usr/lib/jvm/oracle_jdk8
-ENV J2REDIR=/usr/lib/jvm/oracle_jdk8/jre
-ENV PATH=$PATH:/usr/lib/jvm/oracle_jdk8/bin:/usr/lib/jvm/oracle_jdk8/db/bin:/usr/lib/jvm/oracle_jdk8/jre/bin
-ENV JAVA_HOME=/usr/lib/jvm/oracle_jdk8
-ENV DERBY_HOME=/usr/lib/jvm/oracle_jdk8/db
+ENV J2SDKDIR=/usr/lib/jvm/java-8-openjdk-amd64
+ENV J2REDIR=/usr/lib/jvm/java-8-openjdk-amd64/jre
+ENV PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 RUN java -version
 
@@ -96,7 +92,8 @@ RUN mkdir /gopath && \
   go get github.com/FiloSottile/gvt && \
   go get github.com/Masterminds/glide && \
   go get github.com/kardianos/govendor && \
-  go get github.com/golang/dep/cmd/dep
+  go get github.com/golang/dep/cmd/dep && \
+  go get -u github.com/rancher/trash
 
 # Fix the locale
 RUN apt-get install -y locales
@@ -143,7 +140,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
   sudo dpkg -i packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
-  sudo apt-get install -y dotnet-runtime-2.1
+  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1
 
 # install license_finder
 COPY . /LicenseFinder

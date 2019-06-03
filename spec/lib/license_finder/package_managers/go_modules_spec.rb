@@ -58,7 +58,7 @@ module LicenseFinder
 
     describe '.prepare_command' do
       it 'returns the correct package management command' do
-        expect(described_class.prepare_command).to eq('GO111MODULE=on go mod vendor')
+        expect(described_class.prepare_command).to eq('GO111MODULE=on go mod tidy && GO111MODULE=on go mod vendor')
       end
     end
 

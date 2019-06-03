@@ -61,8 +61,10 @@ module LicenseFinder
 
     ## DESCRIPTION
 
+    attr_accessor :homepage
+
     attr_reader :name, :version, :authors,
-                :summary, :description, :homepage,
+                :summary, :description,
                 :children, :parents, :groups
 
     ## APPROVAL

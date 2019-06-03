@@ -7,6 +7,7 @@ require 'license_finder/package_delta'
 require 'license_finder/license_aggregator'
 require 'license_finder/project_finder'
 require 'license_finder/logger'
+
 module LicenseFinder
   module CLI
     class Main < Base
