@@ -24,6 +24,7 @@ module LicenseFinder
     def prepare
       prep_cmd = "#{NPM.prepare_command}#{production_flag}"
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
+
       return if status.success?
 
       log_errors stderr
@@ -35,7 +36,8 @@ module LicenseFinder
     def npm_json
       command = "#{NPM.package_management_command} list --json --long#{production_flag}"
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
-      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+      # we can try and continue if we got an exit status 1 - unmet peer dependency
+      raise "Command '#{command}' failed to execute: #{stderr}" if !status.success? && status.exitstatus != 1
 
       JSON.parse(stdout)
     end

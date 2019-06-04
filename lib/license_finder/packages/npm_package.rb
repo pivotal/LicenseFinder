@@ -9,6 +9,12 @@ module LicenseFinder
         @packages = flattened_dependencies(npm_json)
         package_json = PackageJson.new(package_path)
         populate_groups(package_json)
+        @packages.reject! do |_identifier, package|
+          package.name.empty? &&
+            package.version.empty? &&
+            package.licenses.length == 1 &&
+            package.licenses.first.name == 'unknown'
+        end
         @packages.values
       end
 
