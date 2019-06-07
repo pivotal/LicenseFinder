@@ -56,5 +56,32 @@ module LicenseFinder
         end
       end
     end
+
+    describe 'specifying a custom gemfile' do
+      let(:custom_gemfile) { fixture_path('custom_gemfile') }
+
+      subject do
+        Bundler.new(project_path: custom_gemfile, ignored_groups: %w[dev test])
+      end
+
+      it 'defaults to Gemfile/Gemfile.lock' do
+        expect(::Bundler::Definition).to receive(:build).with(custom_gemfile.join('Gemfile'), custom_gemfile.join('Gemfile.lock'), nil).and_return(definition)
+        expect(subject.current_packages).to_not be_empty
+      end
+
+      context 'with the BUNDLE_GEMFILE environment variable set' do
+        around do |example|
+          old_var = ENV['BUNDLE_GEMFILE']
+          ENV['BUNDLE_GEMFILE'] = 'Gemfile-other'
+          example.run
+          ENV['BUNDLE_GEMFILE'] = old_var
+        end
+
+        it 'uses the BUNDLE_GEMFILE variable to identify the gemfile' do
+          expect(::Bundler::Definition).to receive(:build).with(custom_gemfile.join('Gemfile-other'), custom_gemfile.join('Gemfile-other.lock'), nil).and_return(definition)
+          expect(subject.current_packages).to_not be_empty
+        end
+      end
+    end
   end
 end
