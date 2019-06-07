@@ -38,7 +38,7 @@ module LicenseFinder
     def definition
       # DI
       ENV['BUNDLE_PATH'] = project_path.to_s
-      ENV['BUNDLE_GEMFILE'] = "#{project_path}/Gemfile"
+      ENV['BUNDLE_GEMFILE'] = "#{project_path}/#{gemfile}"
 
       @definition ||= ::Bundler::Definition.build(detected_package_path, lockfile_path, nil)
     end
