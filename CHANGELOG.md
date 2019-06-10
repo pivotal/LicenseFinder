@@ -1,3 +1,5 @@
+# [5.9.1] / 2019-06-10
+
 # [5.9.0] / 2019-06-10
 
 ### Added
@@ -724,3 +726,4 @@ Bugfixes:
 [5.7.1]: https://github.com/pivotal/LicenseFinder/compare/v5.7.0...v5.7.1
 [5.8.0]: https://github.com/pivotal/LicenseFinder/compare/v5.7.1...v5.8.0
 [5.9.0]: https://github.com/pivotal/LicenseFinder/compare/v5.8.0...v5.9.0
+[5.9.1]: https://github.com/pivotal/LicenseFinder/compare/v5.9.0...v5.9.1
