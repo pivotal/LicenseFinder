@@ -1,3 +1,17 @@
+# [5.9.0] / 2019-06-10
+
+### Added
+* composer PHP support - [c671309](https://github.com/pivotal/LicenseFinder/commit/c671309d89c54a4dfac3ac40aab1bf70e3c3f6a2) 
+* composer support - [13ecaab](https://github.com/pivotal/LicenseFinder/commit/13ecaab7ee55c95ca973b74950fb10c3daea0784) - Zachary Knight
+* --homepage option to `dependencies add` - [b7f7ef8](https://github.com/pivotal/LicenseFinder/commit/b7f7ef8b81d193b5535cb3c48b9244ecd446057f) 
+
+### Fixed
+* 'dotnet restore' failing - [dee1045](https://github.com/pivotal/LicenseFinder/commit/dee104517e0cf8ce769405910f46607a66017f40) 
+* Reporting extra paths for gvt projects - [ba7d1bd](https://github.com/pivotal/LicenseFinder/commit/ba7d1bdd90282e7d127c3ddaf68b51f98b402000) 
+
+### Changed
+* Fix license definition tests - [15b524f](https://github.com/pivotal/LicenseFinder/commit/15b524fa52f63e04a82d160a7fc3d49c288d01e8) 
+
 # [5.8.0] / 2019-05-22
 
 ### Added
@@ -709,3 +723,4 @@ Bugfixes:
 [5.7.0]: https://github.com/pivotal/LicenseFinder/compare/v5.6.2...v5.7.0
 [5.7.1]: https://github.com/pivotal/LicenseFinder/compare/v5.7.0...v5.7.1
 [5.8.0]: https://github.com/pivotal/LicenseFinder/compare/v5.7.1...v5.8.0
+[5.9.0]: https://github.com/pivotal/LicenseFinder/compare/v5.8.0...v5.9.0
