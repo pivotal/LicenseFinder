@@ -91,7 +91,7 @@ module LicenseFinder
     end
 
     def gemfile
-      File.basename(ENV['BUNDLE_GEMFILE'])
+      File.basename(ENV['BUNDLE_GEMFILE'] || 'Gemfile')
     end
 
     def lockfile
