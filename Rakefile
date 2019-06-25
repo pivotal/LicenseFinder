@@ -63,7 +63,7 @@ task :update_pipeline, [:slack_url, :slack_channel] do |_, args|
     puts 'Warning: You should provide slack channel and url to receive slack notifications on build failures'
   end
 
-  ruby_versions = %w[2.6.1 2.5.3 2.4.5 2.3.8 jruby-9.1.17.0 jruby-9.2.6.0]
+  ruby_versions = %w[2.6.3 2.5.3 2.4.5 2.3.8 jruby-9.1.17.0 jruby-9.2.6.0]
 
   params = []
   params << "ruby_versions=#{ruby_versions.join(',')}"
