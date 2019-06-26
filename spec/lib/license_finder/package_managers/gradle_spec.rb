@@ -63,7 +63,7 @@ BUILD SUCCESSFUL in 0s
         end
 
         it 'lists all dependencies' do
-          expect(subject.current_packages.map(&:name)).to eq ['spring-aop', 'spring-core']
+          expect(subject.current_packages.map(&:name)).to eq %w[spring-aop spring-core]
         end
 
         context 'when gradle group ids option is enabled' do
@@ -119,7 +119,7 @@ BUILD SUCCESSFUL in 0s
         end
 
         it 'lists all dependencies' do
-          expect(subject.current_packages.map(&:name)).to eq ['junit', 'mockito-core']
+          expect(subject.current_packages.map(&:name)).to eq %w[junit mockito-core]
         end
 
         context 'and there are duplicate dependencies' do
@@ -138,7 +138,7 @@ BUILD SUCCESSFUL in 0s
           end
 
           it 'removes duplicates' do
-            expect(subject.current_packages.map(&:name)).to eq ['junit', 'mockito-core']
+            expect(subject.current_packages.map(&:name)).to eq %w[junit mockito-core]
           end
         end
       end

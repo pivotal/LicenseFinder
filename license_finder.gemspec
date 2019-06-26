@@ -63,9 +63,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop-performance', '~> 1.4.0'
   s.add_development_dependency 'webmock', '~> 3.5'
 
-  # to preserve ruby < 2.2.2 support.
-  s.add_development_dependency 'rack', (RUBY_VERSION < '2.2.2' ? '1.6.0' : '> 1.6')
-  s.add_development_dependency 'rack-test', (RUBY_VERSION < '2.2.2' ? '0.7.0' : '> 0.7')
+  s.add_development_dependency 'rack', '> 1.6'
+  s.add_development_dependency 'rack-test', '> 0.7'
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.start_with?('spec', 'features') }
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
