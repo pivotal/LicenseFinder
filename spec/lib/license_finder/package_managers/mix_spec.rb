@@ -50,7 +50,7 @@ module LicenseFinder
         allow(SharedHelpers::Cmd).to receive(:run).with(/mix run --no-start --no-compile -e/).and_return(['MIT', '', cmd_success])
 
         current_packages = subject.current_packages
-        expect(current_packages.map(&:name)).to eq(['fs', 'gettext', 'uuid-refknown', 'uuid'])
+        expect(current_packages.map(&:name)).to eq(%w[fs gettext uuid-refknown uuid])
         expect(current_packages.map(&:version)).to eq(['0.9.2', '0.12.1', '15bd767', 'the dependency is not available, run "mix deps.get"'])
         expect(current_packages.map(&:install_path)).to eq([Pathname('deps/fs'), Pathname('deps/gettext'), Pathname('deps/uuid-refknown'), Pathname('deps/uuid')])
       end
@@ -65,7 +65,7 @@ module LicenseFinder
         allow(SharedHelpers::Cmd).to receive(:run).with(/mixfoo/).and_return([output, '', cmd_success])
 
         current_packages = mix.current_packages
-        expect(current_packages.map(&:name)).to eq(['fs', 'gettext', 'uuid-refknown', 'uuid'])
+        expect(current_packages.map(&:name)).to eq(%w[fs gettext uuid-refknown uuid])
       end
 
       it 'uses custom mix_deps_dir, if provided' do
