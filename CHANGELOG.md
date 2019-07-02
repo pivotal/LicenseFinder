@@ -1,3 +1,8 @@
+# [5.9.2] / 2019-07-02
+
+### Changed
+* Bump ruby version to 2.6.3 - [dcdcc1c](https://github.com/pivotal/LicenseFinder/commit/dcdcc1c3e4fd29ec4d180a54fb67b2aa07e932de) 
+
 # [5.9.1] / 2019-06-10
 
 # [5.9.0] / 2019-06-10
@@ -727,3 +732,4 @@ Bugfixes:
 [5.8.0]: https://github.com/pivotal/LicenseFinder/compare/v5.7.1...v5.8.0
 [5.9.0]: https://github.com/pivotal/LicenseFinder/compare/v5.8.0...v5.9.0
 [5.9.1]: https://github.com/pivotal/LicenseFinder/compare/v5.9.0...v5.9.1
+[5.9.2]: https://github.com/pivotal/LicenseFinder/compare/v5.9.1...v5.9.2
