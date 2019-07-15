@@ -47,7 +47,7 @@ module LicenseFinder
 
       it 'lists all the current packages' do
         allow(SharedHelpers::Cmd).to receive(:run).with('mix deps').and_return([output, '', cmd_success])
-        allow(SharedHelpers::Cmd).to receive(:run).with(/mix run --no-start --no-compile -e/).and_return(['MIT', '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run).with(/elixir -e/).and_return(['[["fs", "MIT"]]', '', cmd_success])
 
         current_packages = subject.current_packages
         expect(current_packages.map(&:name)).to eq(%w[fs gettext uuid-refknown uuid])

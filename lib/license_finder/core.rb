@@ -87,7 +87,7 @@ module LicenseFinder
       FileUtils.rmtree config.log_directory, secure: true if File.directory? config.log_directory
     end
 
-    def options
+    def options # rubocop:disable Metrics/AbcSize
       {
         logger: logger,
         project_path: config.project_path,
@@ -101,6 +101,7 @@ module LicenseFinder
         pip_requirements_path: config.pip_requirements_path,
         rebar_command: config.rebar_command,
         rebar_deps_dir: config.rebar_deps_dir,
+        elixir_command: config.elixir_command,
         mix_command: config.mix_command,
         mix_deps_dir: config.mix_deps_dir,
         prepare: config.prepare,

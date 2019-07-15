@@ -40,6 +40,7 @@ module LicenseFinder
           :pip_requirements_path,
           :rebar_command,
           :rebar_deps_dir,
+          :elixir_command,
           :mix_command,
           :mix_deps_dir,
           :save,
