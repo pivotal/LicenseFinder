@@ -32,6 +32,7 @@ module LicenseFinder
       class_option :pip_requirements_path, desc: 'Path to python requirements file. Defaults to requirements.txt.'
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
+      class_option :elixir_command, desc: "Command to use when parsing package metadata for Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'elixir'."
       class_option :mix_command, desc: "Command to use when fetching packages through Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'mix'."
       class_option :mix_deps_dir, desc: "Path to Mix dependencies directory. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'deps'."
       class_option :sbt_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Scala/sbt project. Defaults to false.'

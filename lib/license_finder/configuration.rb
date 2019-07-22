@@ -22,6 +22,10 @@ module LicenseFinder
       true
     end
 
+    def elixir_command
+      get(:elixir_command) || 'elixir'
+    end
+
     def mix_command
       get(:mix_command) || 'mix'
     end
