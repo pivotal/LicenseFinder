@@ -29,14 +29,14 @@ module LicenseFinder
       end
 
       it 'should call yarn install' do
-        expect(SharedHelpers::Cmd).to receive(:run).with('yarn install')
+        expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --ignore-engines')
                                                    .and_return([yarn_shell_command_output, '', cmd_success])
         subject.prepare
       end
       context 'ignored_groups contains devDependencies' do
         subject { Yarn.new(project_path: Pathname(root), ignored_groups: 'devDependencies') }
         it 'should include a production flag' do
-          expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --production')
+          expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --ignore-engines --production')
                                                      .and_return([yarn_shell_command_output, '', cmd_success])
           subject.prepare
         end
@@ -121,7 +121,7 @@ module LicenseFinder
 
     describe '.prepare_command' do
       it 'returns the correct prepare method' do
-        expect(described_class.prepare_command).to eq('yarn install')
+        expect(described_class.prepare_command).to eq('yarn install --ignore-engines')
       end
     end
 
