@@ -55,7 +55,7 @@ module LicenseFinder
 
       # clear gem paths before running specs_for
       Gem.clear_paths
-      if File.exist?(bundler_config_path)
+      if bundler_config_path_found
         ::Bundler.reset!
         ::Bundler.configure
       end
@@ -74,8 +74,13 @@ module LicenseFinder
       project_path.join(lockfile)
     end
 
-    def bundler_config_path
-      project_path.join('.bundle')
+    def bundler_config_path_found
+      config_file = project_path.join('.bundle/config')
+
+      return false unless File.exist?(config_file)
+
+      content = File.readlines(config_file)
+      content.grep(/BUNDLE_PATH/).count.positive?
     end
 
     def log_package_dependencies(package)

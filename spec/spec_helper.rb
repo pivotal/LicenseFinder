@@ -4,7 +4,6 @@ require 'rubygems'
 require 'bundler/setup'
 require 'license_finder'
 
-require 'pry'
 require 'rspec'
 require 'webmock/rspec'
 require 'rspec/its'
