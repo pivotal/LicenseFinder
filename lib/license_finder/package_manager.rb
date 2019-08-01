@@ -60,7 +60,7 @@ module LicenseFinder
 
     def initialize(options = {})
       @prepare_no_fail = options[:prepare_no_fail]
-      @logger       = options[:logger] || Core.default_logger
+      @logger = options[:logger] || Core.default_logger
       @project_path = options[:project_path]
       @log_directory = options[:log_directory]
       @ignored_groups = options[:ignored_groups]
