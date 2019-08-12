@@ -53,7 +53,7 @@ module LicenseFinder
     end
 
     def possible_package_paths
-      paths = Dir[project_path.join('**/*.csproj')]
+      paths = Dir[project_path.join('*.csproj')]
       paths.map { |p| Pathname(p) }
     end
 
