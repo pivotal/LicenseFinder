@@ -135,6 +135,7 @@ module LicenseFinder
   end
 end
 
+require 'license_finder/package_managers/flat_file'
 require 'license_finder/package_managers/bower'
 require 'license_finder/package_managers/go_workspace'
 require 'license_finder/package_managers/go_15vendorexperiment'

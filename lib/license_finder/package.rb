@@ -177,6 +177,7 @@ module LicenseFinder
   end
 end
 
+require 'license_finder/packages/flat_file_package'
 require 'license_finder/packages/manual_package'
 require 'license_finder/packages/bower_package'
 require 'license_finder/packages/go_package'

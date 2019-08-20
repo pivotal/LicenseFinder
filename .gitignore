@@ -11,3 +11,4 @@ features/fixtures/maven-wrapper/target
 features/fixtures/sbt/target
 features/fixtures/sbt/project/target
 features/fixtures/sbt/project/project
+*.gem
