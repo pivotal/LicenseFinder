@@ -1,3 +1,9 @@
+# [5.10.0] / 2019-08-26
+
+### Changed
+* Dotnet projects only detected if csproj is at root level - [b9f810d](https://github.com/pivotal/LicenseFinder/commit/b9f810d96f92f458fcfe4855307fdddfb7f1082b) 
+* sha for composer-setup.php - [64b782a](https://github.com/pivotal/LicenseFinder/commit/64b782a137a287980a317fcb48f595b6e93f85d0) - Debbie Chen
+
 # [5.9.2] / 2019-07-02
 
 ### Changed
@@ -733,3 +739,4 @@ Bugfixes:
 [5.9.0]: https://github.com/pivotal/LicenseFinder/compare/v5.8.0...v5.9.0
 [5.9.1]: https://github.com/pivotal/LicenseFinder/compare/v5.9.0...v5.9.1
 [5.9.2]: https://github.com/pivotal/LicenseFinder/compare/v5.9.1...v5.9.2
+[5.10.0]: https://github.com/pivotal/LicenseFinder/compare/v5.9.2...v5.10.0
