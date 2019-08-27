@@ -15,12 +15,13 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN apt-get update && apt-get install -y \
   build-essential \
   curl \
-  git-core \
   sudo \
   unzip \
   wget \
   gnupg2 \ 
   software-properties-common
+
+RUN add-apt-repository ppa:git-core/ppa && apt-get update && apt-get install -y git
 
 # nodejs seems to be required for the one of the gems
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
