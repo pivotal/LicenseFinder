@@ -7,7 +7,6 @@ module LicenseFinder
       @command = options[:mix_command] || Mix.package_management_command
       @elixir_command = options[:elixir_command] || 'elixir'
       @deps_path = Pathname(options[:mix_deps_dir] || 'deps')
-      @licenses_by_package = load_all_licenses
     end
 
     def current_packages
@@ -23,7 +22,8 @@ module LicenseFinder
     end
 
     def licenses(name)
-      @licenses_by_package.fetch(name, ['license is not in deps'])
+      licenses_by_package = load_all_licenses
+      licenses_by_package.fetch(name, ['license is not in deps'])
     end
 
     def self.package_management_command
@@ -40,6 +40,19 @@ module LicenseFinder
 
     def possible_package_paths
       [project_path.join('mix.exs')]
+    end
+
+    def self.installed?(logger = Core.default_logger)
+      if package_management_command.nil?
+        logger.debug self, 'no command defined'
+        true
+      elsif command_exists?('elixir') && command_exists?('mix')
+        logger.debug self, 'is installed', color: :green
+        true
+      else
+        logger.info self, '(elixir) is not installed', color: :red
+        false
+      end
     end
 
     private
