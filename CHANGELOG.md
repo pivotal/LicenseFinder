@@ -1,3 +1,8 @@
+# [5.10.1] / 2019-08-28
+
+### Fixed
+* Mix bailing early when elixir is not installed - [13b120e](https://github.com/pivotal/LicenseFinder/commit/13b120ed7c121243be987f449cc29d00ec6e6450) 
+
 # [5.10.0] / 2019-08-26
 
 ### Changed
@@ -740,3 +745,4 @@ Bugfixes:
 [5.9.1]: https://github.com/pivotal/LicenseFinder/compare/v5.9.0...v5.9.1
 [5.9.2]: https://github.com/pivotal/LicenseFinder/compare/v5.9.1...v5.9.2
 [5.10.0]: https://github.com/pivotal/LicenseFinder/compare/v5.9.2...v5.10.0
+[5.10.1]: https://github.com/pivotal/LicenseFinder/compare/v5.10.0...v5.10.1
