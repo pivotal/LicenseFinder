@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -y \
   unzip \
   wget \
   gnupg2 \ 
-  software-properties-common
+  software-properties-common \
+  bzr
 
 RUN add-apt-repository ppa:git-core/ppa && apt-get update && apt-get install -y git
 
