@@ -1,3 +1,8 @@
+# [5.10.2] / 2019-09-03
+
+### Added
+* Added bzr app to image - [8fd43f01](https://github.com/pivotal/LicenseFinder/commit/8fd43f01a5de575596c92bcfc38a5e9ba7bf6b3d) 
+
 # [5.10.1] / 2019-08-28
 
 ### Fixed
@@ -746,3 +751,4 @@ Bugfixes:
 [5.9.2]: https://github.com/pivotal/LicenseFinder/compare/v5.9.1...v5.9.2
 [5.10.0]: https://github.com/pivotal/LicenseFinder/compare/v5.9.2...v5.10.0
 [5.10.1]: https://github.com/pivotal/LicenseFinder/compare/v5.10.0...v5.10.1
+[5.10.2]: https://github.com/pivotal/LicenseFinder/compare/v5.10.1...v5.10.2
