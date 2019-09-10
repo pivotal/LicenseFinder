@@ -1,0 +1,700 @@
+Desired=Unknown/Install/Remove/Purge/Hold
+| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
+|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
+||/ Name                                                   Version                          Architecture                     Description
++++-======================================================-================================-================================-=================================================================================================================
+ii  acl                                                    2.2.52-3                         amd64                            Access control list utilities
+ii  adduser                                                3.113+nmu3ubuntu4                all                              add and remove users and groups
+ii  adwaita-icon-theme                                     3.18.0-2ubuntu3.1                all                              default icon theme of GNOME (small subset)
+ii  apt                                                    1.2.32                           amd64                            commandline package manager
+ii  apt-transport-https                                    1.2.32                           amd64                            https download transport for APT
+ii  aspnetcore-runtime-2.1                                 2.1.12-1                         amd64                            Microsoft ASP.NET Core 2.1.12 Shared Framework
+ii  at-spi2-core                                           2.18.3-4ubuntu1                  amd64                            Assistive Technology Service Provider Interface (dbus core)
+ii  autoconf                                               2.69-9                           all                              automatic configure script builder
+ii  automake                                               1:1.15-4ubuntu1                  all                              Tool for generating GNU Standards-compliant Makefiles
+ii  autotools-dev                                          20150820.1                       all                              Update infrastructure for config.{guess,sub} files
+ii  base-files                                             9.4ubuntu4.8                     amd64                            Debian base system miscellaneous files
+ii  base-passwd                                            3.5.39                           amd64                            Debian base system master password and group files
+ii  bash                                                   4.3-14ubuntu1.4                  amd64                            GNU Bourne Again SHell
+ii  binfmt-support                                         2.1.6-1                          amd64                            Support for extra binary formats
+ii  binutils                                               2.26.1-1ubuntu1~16.04.8          amd64                            GNU assembler, linker and binary utilities
+ii  bison                                                  2:3.0.4.dfsg-1                   amd64                            YACC-compatible parser generator
+ii  bsdutils                                               1:2.27.1-6ubuntu3.7              amd64                            basic utilities from 4.4BSD-Lite
+ii  build-essential                                        12.1ubuntu2                      amd64                            Informational list of build-essential packages
+ii  bzip2                                                  1.0.6-8ubuntu0.2                 amd64                            high-quality block-sorting file compressor - utilities
+ii  ca-certificates                                        20170717~16.04.2                 all                              Common CA certificates
+ii  ca-certificates-java                                   20160321ubuntu1                  all                              Common CA certificates (JKS keystore)
+ii  ca-certificates-mono                                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Common CA certificates (Mono keystore)
+ii  cli-common                                             0.10xamarin3+ubuntu1604b1        all                              common files between all CLI packages
+ii  colord                                                 1.2.12-1ubuntu1                  amd64                            system service to manage device colour profiles -- system daemon
+ii  colord-data                                            1.2.12-1ubuntu1                  all                              system service to manage device colour profiles -- data files
+ii  coreutils                                              8.25-2ubuntu3~16.04              amd64                            GNU core utilities
+ii  cpp                                                    4:5.3.1-1ubuntu1                 amd64                            GNU C preprocessor (cpp)
+ii  cpp-5                                                  5.4.0-6ubuntu1~16.04.11          amd64                            GNU C preprocessor
+ii  cron                                                   3.0pl1-128ubuntu2                amd64                            process scheduling daemon
+ii  curl                                                   7.47.0-1ubuntu2.13               amd64                            command line tool for transferring data with URL syntax
+ii  dash                                                   0.5.8-2.1ubuntu2                 amd64                            POSIX-compliant shell
+ii  dbus                                                   1.10.6-1ubuntu3.4                amd64                            simple interprocess messaging system (daemon and utilities)
+ii  dconf-gsettings-backend:amd64                          0.24.0-2                         amd64                            simple configuration storage system - GSettings back-end
+ii  dconf-service                                          0.24.0-2                         amd64                            simple configuration storage system - D-Bus service
+ii  debconf                                                1.5.58ubuntu2                    all                              Debian configuration management system
+ii  debianutils                                            4.7                              amd64                            Miscellaneous utilities specific to Debian
+ii  dh-python                                              2.20151103ubuntu1.2              all                              Debian helper tools for packaging Python libraries and applications
+ii  diffutils                                              1:3.3-3                          amd64                            File comparison utilities
+ii  dirmngr                                                2.1.11-6ubuntu2.1                amd64                            server for managing certificate revocation lists
+ii  distro-info-data                                       0.28ubuntu0.12                   all                              information about the distributions' releases (data files)
+ii  dotnet-host                                            2.2.6-1                          amd64                            Microsoft .NET Core Host - 2.2.6
+ii  dotnet-hostfxr-2.1                                     2.1.12-1                         amd64                            Microsoft .NET Core Host FX Resolver - 2.1.12 2.1.12
+ii  dotnet-runtime-2.1                                     2.1.12-1                         amd64                            Microsoft .NET Core Runtime - 2.1.12 Microsoft.NETCore.App 2.1.12
+ii  dotnet-runtime-deps-2.1                                2.1.12-1                         amd64                            dotnet-runtime-deps-2.1 2.1.12
+ii  dotnet-sdk-2.1                                         2.1.801-1                        amd64                            Microsoft .NET Core SDK 2.1.801
+ii  dpkg                                                   1.18.4ubuntu1.5                  amd64                            Debian package management system
+ii  dpkg-dev                                               1.18.4ubuntu1.6                  all                              Debian package development tools
+ii  e2fslibs:amd64                                         1.42.13-1ubuntu1                 amd64                            ext2/ext3/ext4 file system libraries
+ii  e2fsprogs                                              1.42.13-1ubuntu1                 amd64                            ext2/ext3/ext4 file system utilities
+ii  elixir                                                 1.9.1-1                          all                              Elixir functional meta-programming language
+ii  emacsen-common                                         2.0.8                            all                              Common facilities for all emacsen
+rc  erlang-base                                            1:18.3-dfsg-1ubuntu3.1           amd64                            Erlang/OTP virtual machine and base applications
+ii  erlang-mode                                            1:22.0.7-1                       all                              Erlang major editing mode for Emacs
+ii  erlang-solutions                                       1.0                              all                              A package to add repository.
+ii  esl-erlang                                             1:22.0.7-1                       amd64                            Erlang
+ii  fakeroot                                               1.20.2-1ubuntu1                  amd64                            tool for simulating superuser privileges
+ii  file                                                   1:5.25-2ubuntu1.2                amd64                            Determines file type using "magic" numbers
+ii  findutils                                              4.6.0+git+20160126-2             amd64                            utilities for finding files--find, xargs
+ii  fontconfig                                             2.11.94-0ubuntu1.1               amd64                            generic font configuration library - support binaries
+ii  fontconfig-config                                      2.11.94-0ubuntu1.1               all                              generic font configuration library - configuration
+ii  fonts-dejavu-core                                      2.35-1                           all                              Vera font family derivate with additional characters
+ii  fonts-dejavu-extra                                     2.35-1                           all                              Vera font family derivate with additional characters (extra variants)
+ii  g++                                                    4:5.3.1-1ubuntu1                 amd64                            GNU C++ compiler
+ii  g++-5                                                  5.4.0-6ubuntu1~16.04.11          amd64                            GNU C++ compiler
+ii  gawk                                                   1:4.1.3+dfsg-0.1                 amd64                            GNU awk, a pattern scanning and processing language
+ii  gcc                                                    4:5.3.1-1ubuntu1                 amd64                            GNU C compiler
+ii  gcc-5                                                  5.4.0-6ubuntu1~16.04.11          amd64                            GNU C compiler
+ii  gcc-5-base:amd64                                       5.4.0-6ubuntu1~16.04.11          amd64                            GCC, the GNU Compiler Collection (base package)
+ii  gcc-6-base:amd64                                       6.0.1-0ubuntu1                   amd64                            GCC, the GNU Compiler Collection (base package)
+ii  gir1.2-glib-2.0:amd64                                  1.46.0-3ubuntu1                  amd64                            Introspection data for GLib, GObject, Gio and GModule
+ii  git                                                    1:2.7.4-0ubuntu1.6               amd64                            fast, scalable, distributed revision control system
+ii  git-core                                               1:2.7.4-0ubuntu1.6               all                              fast, scalable, distributed revision control system (obsolete)
+ii  git-man                                                1:2.7.4-0ubuntu1.6               all                              fast, scalable, distributed revision control system (manual pages)
+ii  glib-networking:amd64                                  2.48.2-1~ubuntu16.04.1           amd64                            network-related giomodules for GLib
+ii  glib-networking-common                                 2.48.2-1~ubuntu16.04.1           all                              network-related giomodules for GLib - data files
+ii  glib-networking-services                               2.48.2-1~ubuntu16.04.1           amd64                            network-related giomodules for GLib - D-Bus services
+ii  gnupg                                                  1.4.20-1ubuntu3.3                amd64                            GNU privacy guard - a free PGP replacement
+ii  gnupg-agent                                            2.1.11-6ubuntu2.1                amd64                            GNU privacy guard - cryptographic agent
+ii  gnupg2                                                 2.1.11-6ubuntu2.1                amd64                            GNU privacy guard - a free PGP replacement (new v2.x)
+ii  gpgv                                                   1.4.20-1ubuntu3.3                amd64                            GNU privacy guard - signature verification tool
+ii  grep                                                   2.25-1~16.04.1                   amd64                            GNU grep, egrep and fgrep
+ii  gsettings-desktop-schemas                              3.18.1-1ubuntu1                  all                              GSettings desktop-wide schemas
+ii  gzip                                                   1.6-4ubuntu1                     amd64                            GNU compression utilities
+ii  hicolor-icon-theme                                     0.15-0ubuntu1.1                  all                              default fallback theme for FreeDesktop.org icon themes
+ii  hostname                                               3.16ubuntu2                      amd64                            utility to set/show the host name or domain name
+ii  humanity-icon-theme                                    0.6.10.1                         all                              Humanity Icon theme
+ii  ifupdown                                               0.8.10ubuntu1.4                  amd64                            high level tools to configure network interfaces
+ii  init                                                   1.29ubuntu4                      amd64                            System-V-like init utilities - metapackage
+ii  init-system-helpers                                    1.29ubuntu4                      all                              helper tools for all init systems
+ii  initscripts                                            2.88dsf-59.3ubuntu2              amd64                            scripts for initializing and shutting down the system
+ii  insserv                                                1.14.0-5ubuntu3                  amd64                            boot sequence organizer using LSB init.d script dependency information
+ii  iproute2                                               4.3.0-1ubuntu3.16.04.5           amd64                            networking and traffic control tools
+ii  isc-dhcp-client                                        4.3.3-5ubuntu12.10               amd64                            DHCP client for automatically obtaining an IP address
+ii  isc-dhcp-common                                        4.3.3-5ubuntu12.10               amd64                            common files used by all of the isc-dhcp packages
+ii  iso-codes                                              3.65-1                           all                              ISO language, territory, currency, script codes and their translations
+ii  java-common                                            0.56ubuntu2                      all                              Base package for Java runtimes
+ii  javascript-common                                      11                               all                              Base support for JavaScript library packages
+ii  krb5-locales                                           1.13.2+dfsg-5ubuntu2.1           all                              Internationalization support for MIT Kerberos
+ii  less                                                   481-2.1ubuntu0.2                 amd64                            pager program similar to more
+ii  libacl1:amd64                                          2.2.52-3                         amd64                            Access control list shared library
+ii  libalgorithm-diff-perl                                 1.19.03-1                        all                              module to find differences between files
+ii  libalgorithm-diff-xs-perl                              0.04-4build1                     amd64                            module to find differences between files (XS accelerated)
+ii  libalgorithm-merge-perl                                0.08-3                           all                              Perl module for three-way merge of textual data
+ii  libapparmor1:amd64                                     2.10.95-0ubuntu2.11              amd64                            changehat AppArmor library
+ii  libapt-inst2.0:amd64                                   1.2.32                           amd64                            deb package format runtime library
+ii  libapt-pkg5.0:amd64                                    1.2.32                           amd64                            package management runtime library
+ii  libasan2:amd64                                         5.4.0-6ubuntu1~16.04.11          amd64                            AddressSanitizer -- a fast memory error detector
+ii  libasn1-8-heimdal:amd64                                1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - ASN.1 library
+ii  libasound2:amd64                                       1.1.0-0ubuntu1                   amd64                            shared library for ALSA applications
+ii  libasound2-data                                        1.1.0-0ubuntu1                   all                              Configuration files and profiles for ALSA drivers
+ii  libassuan0:amd64                                       2.4.2-2                          amd64                            IPC library for the GnuPG components
+ii  libasyncns0:amd64                                      0.8-5build1                      amd64                            Asynchronous name service query library
+ii  libatk-bridge2.0-0:amd64                               2.18.1-2ubuntu1                  amd64                            AT-SPI 2 toolkit bridge - shared library
+ii  libatk1.0-0:amd64                                      2.18.0-1                         amd64                            ATK accessibility toolkit
+ii  libatk1.0-data                                         2.18.0-1                         all                              Common files for the ATK accessibility toolkit
+ii  libatm1:amd64                                          1:2.5.1-1.5                      amd64                            shared library for ATM (Asynchronous Transfer Mode)
+ii  libatomic1:amd64                                       5.4.0-6ubuntu1~16.04.11          amd64                            support library providing __atomic built-in functions
+ii  libatspi2.0-0:amd64                                    2.18.3-4ubuntu1                  amd64                            Assistive Technology Service Provider Interface - shared library
+ii  libattr1:amd64                                         1:2.4.47-2                       amd64                            Extended attribute shared library
+ii  libaudit-common                                        1:2.4.5-1ubuntu2.1               all                              Dynamic library for security auditing - common files
+ii  libaudit1:amd64                                        1:2.4.5-1ubuntu2.1               amd64                            Dynamic library for security auditing
+ii  libavahi-client3:amd64                                 0.6.32~rc+dfsg-1ubuntu2.3        amd64                            Avahi client library
+ii  libavahi-common-data:amd64                             0.6.32~rc+dfsg-1ubuntu2.3        amd64                            Avahi common data files
+ii  libavahi-common3:amd64                                 0.6.32~rc+dfsg-1ubuntu2.3        amd64                            Avahi common library
+ii  libbison-dev:amd64                                     2:3.0.4.dfsg-1                   amd64                            YACC-compatible parser generator - development library
+ii  libblkid1:amd64                                        2.27.1-6ubuntu3.7                amd64                            block device ID library
+ii  libboost-filesystem1.58.0:amd64                        1.58.0+dfsg-5ubuntu3.1           amd64                            filesystem operations (portable paths, iteration over directories, etc) in C++
+ii  libboost-system1.58.0:amd64                            1.58.0+dfsg-5ubuntu3.1           amd64                            Operating system (e.g. diagnostics support) library
+ii  libbsd0:amd64                                          0.8.2-1                          amd64                            utility functions from BSD systems - shared library
+ii  libbz2-1.0:amd64                                       1.0.6-8ubuntu0.2                 amd64                            high-quality block-sorting file compressor library - runtime
+ii  libc-bin                                               2.23-0ubuntu11                   amd64                            GNU C Library: Binaries
+ii  libc-dev-bin                                           2.23-0ubuntu11                   amd64                            GNU C Library: Development binaries
+ii  libc6:amd64                                            2.23-0ubuntu11                   amd64                            GNU C Library: Shared libraries
+ii  libc6-dev:amd64                                        2.23-0ubuntu11                   amd64                            GNU C Library: Development Libraries and Header Files
+ii  libcairo-gobject2:amd64                                1.14.6-1                         amd64                            Cairo 2D vector graphics library (GObject library)
+ii  libcairo2:amd64                                        1.14.6-1                         amd64                            Cairo 2D vector graphics library
+ii  libcap-ng0:amd64                                       0.7.7-1                          amd64                            An alternate POSIX capabilities library
+ii  libcap2:amd64                                          1:2.24-12                        amd64                            POSIX 1003.1e capabilities (library)
+ii  libcap2-bin                                            1:2.24-12                        amd64                            POSIX 1003.1e capabilities (utilities)
+ii  libcapnp-0.5.3:amd64                                   0.5.3-2ubuntu1.1                 amd64                            Cap'n Proto C++ library
+ii  libcc1-0:amd64                                         5.4.0-6ubuntu1~16.04.11          amd64                            GCC cc1 plugin for GDB
+ii  libcilkrts5:amd64                                      5.4.0-6ubuntu1~16.04.11          amd64                            Intel Cilk Plus language extensions (runtime)
+ii  libcolord2:amd64                                       1.2.12-1ubuntu1                  amd64                            system service to manage device colour profiles -- runtime
+ii  libcolorhug2:amd64                                     1.2.12-1ubuntu1                  amd64                            library to access the ColorHug colourimeter -- runtime
+ii  libcomerr2:amd64                                       1.42.13-1ubuntu1                 amd64                            common error description library
+ii  libcroco3:amd64                                        0.6.11-1                         amd64                            Cascading Style Sheet (CSS) parsing and manipulation toolkit
+ii  libcryptsetup4:amd64                                   2:1.6.6-5ubuntu2.1               amd64                            disk encryption support - shared library
+ii  libcups2:amd64                                         2.1.3-4ubuntu0.10                amd64                            Common UNIX Printing System(tm) - Core library
+ii  libcurl3-gnutls:amd64                                  7.47.0-1ubuntu2.13               amd64                            easy-to-use client-side URL transfer library (GnuTLS flavour)
+ii  libdatrie1:amd64                                       0.2.10-2                         amd64                            Double-array trie library
+ii  libdb5.3:amd64                                         5.3.28-11ubuntu0.2               amd64                            Berkeley v5.3 Database Libraries [runtime]
+ii  libdbus-1-3:amd64                                      1.10.6-1ubuntu3.4                amd64                            simple interprocess messaging system (library)
+ii  libdbus-glib-1-2:amd64                                 0.106-1                          amd64                            simple interprocess messaging system (GLib-based shared library)
+ii  libdconf1:amd64                                        0.24.0-2                         amd64                            simple configuration storage system - runtime library
+ii  libdebconfclient0:amd64                                0.198ubuntu1                     amd64                            Debian Configuration Management System (C-implementation library)
+ii  libdevmapper1.02.1:amd64                               2:1.02.110-1ubuntu10             amd64                            Linux Kernel Device Mapper userspace library
+ii  libdns-export162                                       1:9.10.3.dfsg.P4-8ubuntu1.14     amd64                            Exported DNS Shared Library
+ii  libdpkg-perl                                           1.18.4ubuntu1.6                  all                              Dpkg perl modules
+ii  libdrm-amdgpu1:amd64                                   2.4.91-2~16.04.1                 amd64                            Userspace interface to amdgpu-specific kernel DRM services -- runtime
+ii  libdrm-common                                          2.4.91-2~16.04.1                 all                              Userspace interface to kernel DRM services -- common files
+ii  libdrm-intel1:amd64                                    2.4.91-2~16.04.1                 amd64                            Userspace interface to intel-specific kernel DRM services -- runtime
+ii  libdrm-nouveau2:amd64                                  2.4.91-2~16.04.1                 amd64                            Userspace interface to nouveau-specific kernel DRM services -- runtime
+ii  libdrm-radeon1:amd64                                   2.4.91-2~16.04.1                 amd64                            Userspace interface to radeon-specific kernel DRM services -- runtime
+ii  libdrm2:amd64                                          2.4.91-2~16.04.1                 amd64                            Userspace interface to kernel DRM services -- runtime
+ii  libedit2:amd64                                         3.1-20150325-1ubuntu2            amd64                            BSD editline and history libraries
+ii  libegl1-mesa:amd64                                     18.0.5-0ubuntu0~16.04.1          amd64                            free implementation of the EGL API -- runtime
+ii  libelf1:amd64                                          0.165-3ubuntu1.2                 amd64                            library to read and write ELF files
+ii  libepoxy0:amd64                                        1.3.1-1ubuntu0.16.04.2           amd64                            OpenGL function pointer management library
+ii  liberror-perl                                          0.17-1.2                         all                              Perl module for error/exception handling in an OO-ish way
+ii  libexif12:amd64                                        0.6.21-2                         amd64                            library to parse EXIF files
+ii  libexpat1:amd64                                        2.1.0-7ubuntu0.16.04.4           amd64                            XML parsing C library - runtime library
+ii  libexpat1-dev:amd64                                    2.1.0-7ubuntu0.16.04.4           amd64                            XML parsing C library - development kit
+ii  libfakeroot:amd64                                      1.20.2-1ubuntu1                  amd64                            tool for simulating superuser privileges - shared libraries
+ii  libfdisk1:amd64                                        2.27.1-6ubuntu3.7                amd64                            fdisk partitioning library
+ii  libffi-dev:amd64                                       3.2.1-4                          amd64                            Foreign Function Interface library (development files)
+ii  libffi6:amd64                                          3.2.1-4                          amd64                            Foreign Function Interface library runtime
+ii  libfile-fcntllock-perl                                 0.22-3                           amd64                            Perl module for file locking with fcntl(2)
+ii  libflac8:amd64                                         1.3.1-4                          amd64                            Free Lossless Audio Codec - runtime C library
+ii  libfontconfig1:amd64                                   2.11.94-0ubuntu1.1               amd64                            generic font configuration library - runtime
+ii  libfreetype6:amd64                                     2.6.1-0.1ubuntu2.3               amd64                            FreeType 2 font engine, shared library files
+ii  libgbm1:amd64                                          18.0.5-0ubuntu0~16.04.1          amd64                            generic buffer management API -- runtime
+ii  libgcc-5-dev:amd64                                     5.4.0-6ubuntu1~16.04.11          amd64                            GCC support library (development files)
+ii  libgcc1:amd64                                          1:6.0.1-0ubuntu1                 amd64                            GCC support library
+ii  libgcrypt20:amd64                                      1.6.5-2ubuntu0.5                 amd64                            LGPL Crypto library - runtime library
+ii  libgd3:amd64                                           2.1.1-4ubuntu0.16.04.11          amd64                            GD Graphics Library
+ii  libgdbm-dev                                            1.8.3-13.1                       amd64                            GNU dbm database routines (development files)
+ii  libgdbm3:amd64                                         1.8.3-13.1                       amd64                            GNU dbm database routines (runtime version)
+ii  libgdiplus                                             5.6.1-0xamarin6+ubuntu1604b1     amd64                            interface library for System.Drawing of Mono
+ii  libgdk-pixbuf2.0-0:amd64                               2.32.2-1ubuntu1.6                amd64                            GDK Pixbuf library
+ii  libgdk-pixbuf2.0-common                                2.32.2-1ubuntu1.6                all                              GDK Pixbuf library - data files
+ii  libgif7:amd64                                          5.1.4-0.3~16.04.1                amd64                            library for GIF images (library)
+ii  libgirepository-1.0-1:amd64                            1.46.0-3ubuntu1                  amd64                            Library for handling GObject introspection data (runtime library)
+ii  libgl1-mesa-dri:amd64                                  18.0.5-0ubuntu0~16.04.1          amd64                            free implementation of the OpenGL API -- DRI modules
+ii  libgl1-mesa-glx:amd64                                  18.0.5-0ubuntu0~16.04.1          amd64                            free implementation of the OpenGL API -- GLX runtime
+ii  libglade2-0:amd64                                      1:2.6.4-2                        amd64                            library to load .glade files at runtime
+ii  libglade2.0-cil                                        2.12.45-0xamarin17+ubuntu1604b1  amd64                            CLI binding for the Glade libraries 2.6
+ii  libglapi-mesa:amd64                                    18.0.5-0ubuntu0~16.04.1          amd64                            free implementation of the GL API -- shared library
+ii  libglib2.0-0:amd64                                     2.48.2-0ubuntu4.4                amd64                            GLib library of C routines
+ii  libglib2.0-cil                                         2.12.45-0xamarin17+ubuntu1604b1  amd64                            CLI binding for the GLib utility library 2.12
+ii  libglib2.0-data                                        2.48.2-0ubuntu4.4                all                              Common files for GLib library
+ii  libgmp-dev:amd64                                       2:6.1.0+dfsg-2                   amd64                            Multiprecision arithmetic library developers tools
+ii  libgmp10:amd64                                         2:6.1.0+dfsg-2                   amd64                            Multiprecision arithmetic library
+ii  libgmpxx4ldbl:amd64                                    2:6.1.0+dfsg-2                   amd64                            Multiprecision arithmetic library (C++ bindings)
+ii  libgnutls30:amd64                                      3.4.10-4ubuntu1.5                amd64                            GNU TLS library - main runtime library
+ii  libgomp1:amd64                                         5.4.0-6ubuntu1~16.04.11          amd64                            GCC OpenMP (GOMP) support library
+ii  libgpg-error0:amd64                                    1.21-2ubuntu1                    amd64                            library for common error values and messages in GnuPG components
+ii  libgphoto2-6:amd64                                     2.5.9-3                          amd64                            gphoto2 digital camera library
+ii  libgphoto2-l10n                                        2.5.9-3                          all                              gphoto2 digital camera library - localized messages
+ii  libgphoto2-port12:amd64                                2.5.9-3                          amd64                            gphoto2 digital camera port library
+ii  libgraphite2-3:amd64                                   1.3.10-0ubuntu0.16.04.1          amd64                            Font rendering engine for Complex Scripts -- library
+ii  libgssapi-krb5-2:amd64                                 1.13.2+dfsg-5ubuntu2.1           amd64                            MIT Kerberos runtime libraries - krb5 GSS-API Mechanism
+ii  libgssapi3-heimdal:amd64                               1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - GSSAPI support library
+ii  libgtk-3-0:amd64                                       3.18.9-1ubuntu3.3                amd64                            GTK+ graphical user interface library
+ii  libgtk-3-bin                                           3.18.9-1ubuntu3.3                amd64                            programs for the GTK+ graphical user interface library
+ii  libgtk-3-common                                        3.18.9-1ubuntu3.3                all                              common files for the GTK+ graphical user interface library
+ii  libgtk2.0-0:amd64                                      2.24.30-1ubuntu1.16.04.2         amd64                            GTK+ graphical user interface library
+ii  libgtk2.0-bin                                          2.24.30-1ubuntu1.16.04.2         amd64                            programs for the GTK+ graphical user interface library
+ii  libgtk2.0-cil                                          2.12.45-0xamarin17+ubuntu1604b1  amd64                            CLI binding for the GTK+ toolkit 2.12
+ii  libgtk2.0-common                                       2.24.30-1ubuntu1.16.04.2         all                              common files for the GTK+ graphical user interface library
+ii  libgudev-1.0-0:amd64                                   1:230-2                          amd64                            GObject-based wrapper library for libudev
+ii  libgusb2:amd64                                         0.2.9-0ubuntu1                   amd64                            GLib wrapper around libusb1
+ii  libharfbuzz0b:amd64                                    1.0.1-1ubuntu0.1                 amd64                            OpenType text shaping engine (shared library)
+ii  libhcrypto4-heimdal:amd64                              1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - crypto library
+ii  libheimbase1-heimdal:amd64                             1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - Base library
+ii  libheimntlm0-heimdal:amd64                             1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - NTLM support library
+ii  libhogweed4:amd64                                      3.2-1ubuntu0.16.04.1             amd64                            low level cryptographic library (public-key cryptos)
+ii  libhx509-5-heimdal:amd64                               1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - X509 support library
+ii  libice-dev:amd64                                       2:1.0.9-1                        amd64                            X11 Inter-Client Exchange library (development headers)
+ii  libice6:amd64                                          2:1.0.9-1                        amd64                            X11 Inter-Client Exchange library
+ii  libicu55:amd64                                         55.1-7ubuntu0.4                  amd64                            International Components for Unicode
+ii  libidn11:amd64                                         1.32-3ubuntu1.2                  amd64                            GNU Libidn library, implementation of IETF IDN specifications
+ii  libieee1284-3:amd64                                    0.2.11-12                        amd64                            cross-platform library for parallel port access
+ii  libisc-export160                                       1:9.10.3.dfsg.P4-8ubuntu1.14     amd64                            Exported ISC Shared Library
+ii  libisl15:amd64                                         0.16.1-1                         amd64                            manipulating sets and relations of integer points bounded by linear constraints
+ii  libitm1:amd64                                          5.4.0-6ubuntu1~16.04.11          amd64                            GNU Transactional Memory Library
+ii  libjbig0:amd64                                         2.1-3.1                          amd64                            JBIGkit libraries
+ii  libjpeg-turbo8:amd64                                   1.4.2-0ubuntu3.1                 amd64                            IJG JPEG compliant runtime library.
+ii  libjpeg8:amd64                                         8c-2ubuntu8                      amd64                            Independent JPEG Group's JPEG runtime library (dependency package)
+ii  libjs-excanvas                                         0.r3-4                           all                              HTML5 Canvas for Internet Explorer
+ii  libjson-c2:amd64                                       0.11-4ubuntu2                    amd64                            JSON manipulation library - shared library
+ii  libjson-glib-1.0-0:amd64                               1.1.2-0ubuntu1                   amd64                            GLib JSON manipulation library
+ii  libjson-glib-1.0-common                                1.1.2-0ubuntu1                   all                              GLib JSON manipulation library (common files)
+ii  libk5crypto3:amd64                                     1.13.2+dfsg-5ubuntu2.1           amd64                            MIT Kerberos runtime libraries - Crypto Library
+ii  libkeyutils1:amd64                                     1.5.9-8ubuntu1                   amd64                            Linux Key Management Utilities (library)
+ii  libkmod2:amd64                                         22-1ubuntu5.2                    amd64                            libkmod shared library
+ii  libkrb5-26-heimdal:amd64                               1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - libraries
+ii  libkrb5-3:amd64                                        1.13.2+dfsg-5ubuntu2.1           amd64                            MIT Kerberos runtime libraries
+ii  libkrb5support0:amd64                                  1.13.2+dfsg-5ubuntu2.1           amd64                            MIT Kerberos runtime libraries - Support library
+ii  libksba8:amd64                                         1.3.3-1ubuntu0.16.04.1           amd64                            X.509 and CMS support library
+ii  liblcms2-2:amd64                                       2.6-3ubuntu2.1                   amd64                            Little CMS 2 color management library
+ii  libldap-2.4-2:amd64                                    2.4.42+dfsg-2ubuntu3.6           amd64                            OpenLDAP libraries
+ii  libllvm6.0:amd64                                       1:6.0-1ubuntu2~16.04.1           amd64                            Modular compiler and toolchain technologies, runtime library
+ii  liblsan0:amd64                                         5.4.0-6ubuntu1~16.04.11          amd64                            LeakSanitizer -- a memory leak detector (runtime)
+ii  libltdl-dev:amd64                                      2.4.6-0.1                        amd64                            System independent dlopen wrapper for GNU libtool
+ii  libltdl7:amd64                                         2.4.6-0.1                        amd64                            System independent dlopen wrapper for GNU libtool
+ii  liblttng-ust-ctl2:amd64                                2.7.1-1                          amd64                            LTTng 2.0 Userspace Tracer (trace control library)
+ii  liblttng-ust0:amd64                                    2.7.1-1                          amd64                            LTTng 2.0 Userspace Tracer (tracing libraries)
+ii  liblz4-1:amd64                                         0.0~r131-2ubuntu2                amd64                            Fast LZ compression algorithm library - runtime
+ii  liblzma5:amd64                                         5.1.1alpha+20120614-2ubuntu2     amd64                            XZ-format compression library
+ii  libmagic1:amd64                                        1:5.25-2ubuntu1.2                amd64                            File type determination library using "magic" numbers
+ii  libmirclient9:amd64                                    0.26.3+16.04.20170605-0ubuntu1.1 amd64                            Display server for Ubuntu - client library
+ii  libmircommon7:amd64                                    0.26.3+16.04.20170605-0ubuntu1.1 amd64                            Display server for Ubuntu - shared library
+ii  libmircore1:amd64                                      0.26.3+16.04.20170605-0ubuntu1.1 amd64                            Display server for Ubuntu - shared library
+ii  libmirprotobuf3:amd64                                  0.26.3+16.04.20170605-0ubuntu1.1 amd64                            Display server for Ubuntu - RPC definitions
+ii  libmnl0:amd64                                          1.0.3-5                          amd64                            minimalistic Netlink communication library
+ii  libmono-2.0-1                                          6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono JIT library (Default version)
+ii  libmono-2.0-dev                                        6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono JIT library - Development files (Default version)
+ii  libmono-accessibility4.0-cil                           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Accessibility library (for CLI 4.0)
+ii  libmono-btls-interface4.0-cil                          6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono Mono.Btls.Interface library (for CLI 4.0)
+ii  libmono-cairo4.0-cil                                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Cairo library (for CLI 4.0)
+ii  libmono-cecil-private-cil                              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono.Cecil library
+ii  libmono-cil-dev                                        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Base Class Libraries (BCL) - Development files
+ii  libmono-codecontracts4.0-cil                           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono.CodeContracts library (for CLI 4.0)
+ii  libmono-compilerservices-symbolwriter4.0-cil           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono.CompilerServices.SymbolWriter library (for CLI 4.0)
+ii  libmono-corlib4.5-cil                                  6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono core library (for CLI 4.5)
+ii  libmono-cscompmgd0.0-cil                               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono cscompmgd library (for CLI 4.0)
+ii  libmono-csharp4.0c-cil                                 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono.CSharp library (for CLI 4.0)
+ii  libmono-custommarshalers4.0-cil                        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono CustomMarshalers library (for CLI 4.0)
+ii  libmono-data-tds4.0-cil                                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Data Library (for CLI 4.0)
+ii  libmono-db2-1.0-cil                                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono DB2 library
+ii  libmono-debugger-soft4.0a-cil                          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Soft Debugger library (for CLI 4.0)
+ii  libmono-http4.0-cil                                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono.Http library (for CLI 4.0)
+ii  libmono-i18n-cjk4.0-cil                                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono I18N.CJK library (for CLI 4.0)
+ii  libmono-i18n-mideast4.0-cil                            6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono I18N.MidEast library (for CLI 4.0)
+ii  libmono-i18n-other4.0-cil                              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono I18N.Other library (for CLI 4.0)
+ii  libmono-i18n-rare4.0-cil                               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono I18N.Rare library (for CLI 4.0)
+ii  libmono-i18n-west4.0-cil                               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono I18N.West library (for CLI 4.0)
+ii  libmono-i18n4.0-all                                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono I18N libraries metapackage (for CLI 4.0)
+ii  libmono-i18n4.0-cil                                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono I18N base library (for CLI 4.0)
+ii  libmono-ldap4.0-cil                                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono LDAP library (for CLI 4.0)
+ii  libmono-management4.0-cil                              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Management library (for CLI 4.0)
+ii  libmono-messaging-rabbitmq4.0-cil                      6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Messaging RabbitMQ library (for CLI 4.0)
+ii  libmono-messaging4.0-cil                               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Messaging library (for CLI 4.0)
+ii  libmono-microsoft-build-engine4.0-cil                  6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Microsoft.Build.Engine library (for CLI 4.0)
+ii  libmono-microsoft-build-framework4.0-cil               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Microsoft.Build.Framework library (for CLI 4.0)
+ii  libmono-microsoft-build-tasks-v4.0-4.0-cil             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Microsoft.Build.Tasks.v4.0 library (for CLI 4.0)
+ii  libmono-microsoft-build-utilities-v4.0-4.0-cil         6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Microsoft.Build.Utilities.v4.0 library (for CLI 4.0)
+ii  libmono-microsoft-build4.0-cil                         6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Microsoft.Build library (for CLI 4.0)
+ii  libmono-microsoft-csharp4.0-cil                        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Microsoft.CSharp library (for CLI 4.0)
+ii  libmono-microsoft-visualc10.0-cil                      6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Microsoft.VisualC library (for CLI 4.0)
+ii  libmono-microsoft-web-infrastructure1.0-cil            6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Microsoft.Web.Infrastructure library (for CLI 4.0)
+ii  libmono-oracle4.0-cil                                  6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Oracle library (for CLI 4.0)
+ii  libmono-parallel4.0-cil                                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono.Parallel library (for CLI 4.0)
+ii  libmono-peapi4.0a-cil                                  6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono PEAPI library (for CLI 4.0)
+ii  libmono-posix4.0-cil                                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono.Posix library (for CLI 4.0)
+ii  libmono-profiler                                       6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono profiler libraries
+ii  libmono-rabbitmq4.0-cil                                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono RabbitMQ.Client library (for CLI 4.0)
+ii  libmono-relaxng4.0-cil                                 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Relaxng library (for CLI 4.0)
+ii  libmono-security4.0-cil                                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Security library (for CLI 4.0)
+ii  libmono-sharpzip4.84-cil                               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono SharpZipLib library (for CLI 4.0)
+ii  libmono-simd4.0-cil                                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono SIMD (for CLI 4.0)
+ii  libmono-smdiagnostics0.0-cil                           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono SMDiagnostics Library (for CLI 4.0)
+ii  libmono-sqlite4.0-cil                                  6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Sqlite library (for CLI 4.0)
+ii  libmono-system-componentmodel-composition4.0-cil       6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ComponentModel.Composition library (for CLI 4.0)
+ii  libmono-system-componentmodel-dataannotations4.0-cil   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ComponentModel.DataAnnotations library (for CLI 4.0)
+ii  libmono-system-configuration-install4.0-cil            6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Configuration.Install library (for CLI 4.0)
+ii  libmono-system-configuration4.0-cil                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Configuration library (for CLI 4.0)
+ii  libmono-system-core4.0-cil                             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Core library (for CLI 4.0)
+ii  libmono-system-data-datasetextensions4.0-cil           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Data.DataSetExtensions library (for CLI 4.0)
+ii  libmono-system-data-entity4.0-cil                      6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Data.Entity library (for CLI 4.0)
+ii  libmono-system-data-linq4.0-cil                        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Data.Linq Library (for CLI 4.0)
+ii  libmono-system-data-services-client4.0-cil             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Data.Services.Client library (for CLI 4.0)
+ii  libmono-system-data-services4.0-cil                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Data.Services library (for CLI 4.0)
+ii  libmono-system-data4.0-cil                             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Data library (for CLI 4.0)
+ii  libmono-system-deployment4.0-cil                       6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Deployment library (for CLI 4.0)
+ii  libmono-system-design4.0-cil                           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Design Library (for CLI 4.0)
+ii  libmono-system-drawing-design4.0-cil                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Drawing.Design (for CLI 4.0)
+ii  libmono-system-drawing4.0-cil                          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Drawing library (for CLI 4.0)
+ii  libmono-system-dynamic4.0-cil                          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Dynamic library (for CLI 4.0)
+ii  libmono-system-enterpriseservices4.0-cil               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.EnterpriseServices library (for CLI 4.0)
+ii  libmono-system-identitymodel-selectors4.0-cil          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.IdentityModel.Selectors Library (for CLI 4.0)
+ii  libmono-system-identitymodel4.0-cil                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.IdentityModel Library (for CLI 4.0)
+ii  libmono-system-io-compression-filesystem4.0-cil        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.IO.Compresion.FileSystem library (for CLI 4.0)
+ii  libmono-system-io-compression4.0-cil                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.IO.Compression library (for CLI 4.0)
+ii  libmono-system-json-microsoft4.0-cil                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Json.Microsoft library (for CLI 4.0)
+ii  libmono-system-json4.0-cil                             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Json library (for CLI 4.0)
+ii  libmono-system-ldap-protocols4.0-cil                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.DirectoryServices.Protocols library (for CLI 4.0)
+ii  libmono-system-ldap4.0-cil                             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.DirectoryServices library (for CLI 4.0)
+ii  libmono-system-management4.0-cil                       6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Management library (for CLI 4.0)
+ii  libmono-system-messaging4.0-cil                        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Messaging library (for CLI 4.0)
+ii  libmono-system-net-http-formatting4.0-cil              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Net.Http.Formatting library (for CLI 4.0)
+ii  libmono-system-net-http-webrequest4.0-cil              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Net.Http.WebRequest library (for CLI 4.0)
+ii  libmono-system-net-http4.0-cil                         6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Net.Http library (for CLI 4.0)
+ii  libmono-system-net4.0-cil                              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Net library (for CLI 4.0)
+ii  libmono-system-numerics-vectors4.0-cil                 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Numerics.Vectors library (for CLI 4.0)
+ii  libmono-system-numerics4.0-cil                         6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Numerics library (for CLI 4.0)
+ii  libmono-system-reactive-core2.2-cil                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Core Library (for CLI 4.5)
+ii  libmono-system-reactive-debugger2.2-cil                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Debugger Library (for CLI 4.5)
+ii  libmono-system-reactive-experimental2.2-cil            6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Experimental Library (for CLI 4.5)
+ii  libmono-system-reactive-interfaces2.2-cil              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Interfaces Library (for CLI 4.5)
+ii  libmono-system-reactive-linq2.2-cil                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Linq Library (for CLI 4.5)
+ii  libmono-system-reactive-observable-aliases0.0-cil      6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Linq Library (for CLI 4.5)
+ii  libmono-system-reactive-platformservices2.2-cil        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.PlatformServices Library (for CLI 4.5)
+ii  libmono-system-reactive-providers2.2-cil               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Providers Library (for CLI 4.5)
+ii  libmono-system-reactive-runtime-remoting2.2-cil        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Runtime.Remoting Library (for CLI 4.5)
+ii  libmono-system-reactive-windows-forms2.2-cil           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Windows.Forms Library (for CLI 4.5)
+ii  libmono-system-reactive-windows-threading2.2-cil       6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reactive.Windows.Threading Library (for CLI 4.5)
+ii  libmono-system-reflection-context4.0-cil               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Reflection.Context library (for CLI 4.0)
+ii  libmono-system-runtime-caching4.0-cil                  6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Runtime.Caching Library (for CLI 4.0)
+ii  libmono-system-runtime-durableinstancing4.0-cil        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Runtime.DurableInstancing Library (for CLI 4.0)
+ii  libmono-system-runtime-serialization-formatters-soap4. 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Runtime.Serialization.Formatters.Soap Library (for CLI 4.0)
+ii  libmono-system-runtime-serialization4.0-cil            6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Runtime.Serialization Library (for CLI 4.0)
+ii  libmono-system-runtime4.0-cil                          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Runtime library (for CLI 4.0)
+ii  libmono-system-security4.0-cil                         6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Security library (for CLI 4.0)
+ii  libmono-system-servicemodel-activation4.0-cil          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ServiceModel.Activation Library (for CLI 4.0)
+ii  libmono-system-servicemodel-discovery4.0-cil           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ServiceModel.Discovery Library (for CLI 4.0)
+ii  libmono-system-servicemodel-internals0.0-cil           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ServiceModel.Internals Library (for CLI 4.0)
+ii  libmono-system-servicemodel-routing4.0-cil             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ServiceModel.Routing Library (for CLI 4.0)
+ii  libmono-system-servicemodel-web4.0-cil                 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ServiceModel.Web Library (for CLI 4.0)
+ii  libmono-system-servicemodel4.0a-cil                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ServiceModel Library (for CLI 4.0)
+ii  libmono-system-serviceprocess4.0-cil                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.ServiceProcess library (for CLI 4.0)
+ii  libmono-system-threading-tasks-dataflow4.0-cil         6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Threading.Tasks.Dataflow library (for CLI 4.0)
+ii  libmono-system-transactions4.0-cil                     6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Transactions library (for CLI 4.0)
+ii  libmono-system-web-abstractions4.0-cil                 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Abstractions library (for CLI 4.0)
+ii  libmono-system-web-applicationservices4.0-cil          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.ApplicationServices library (for CLI 4.0)
+ii  libmono-system-web-dynamicdata4.0-cil                  6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.DynamicData library (for CLI 4.0)
+ii  libmono-system-web-extensions-design4.0-cil            6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Extensions.Design library (for CLI 4.0)
+ii  libmono-system-web-extensions4.0-cil                   6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Extensions library (for CLI 4.0)
+ii  libmono-system-web-http-selfhost4.0-cil                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Http.SelfHost library (for CLI 4.0)
+ii  libmono-system-web-http-webhost4.0-cil                 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Http.WebHost library (for CLI 4.0)
+ii  libmono-system-web-http4.0-cil                         6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Http library (for CLI 4.0)
+ii  libmono-system-web-mobile4.0-cil                       6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Mobile library (for CLI 4.0)
+ii  libmono-system-web-mvc3.0-cil                          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono ASP.NET MVC 3.0 Library (for CLI 4.0)
+ii  libmono-system-web-razor2.0-cil                        6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Razor (for CLI 4.0)
+ii  libmono-system-web-regularexpressions4.0-cil           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.RegularExpressions library (for CLI 4.0)
+ii  libmono-system-web-routing4.0-cil                      6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Routing (for CLI 4.0)
+ii  libmono-system-web-services4.0-cil                     6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.Services (for CLI 4.0)
+ii  libmono-system-web-webpages-deployment2.0-cil          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.WebPages.Deployment (for CLI 4.0)
+ii  libmono-system-web-webpages-razor2.0-cil               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.WebPages.Razor (for CLI 4.0)
+ii  libmono-system-web-webpages2.0-cil                     6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web.WebPages (for CLI 4.0)
+ii  libmono-system-web4.0-cil                              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Web library (for CLI 4.0)
+ii  libmono-system-windows-forms-datavisualization4.0a-cil 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Windows.Forms.DataVisualization Library (for CLI 4.0)
+ii  libmono-system-windows-forms4.0-cil                    6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Windows.Forms Library (for CLI 4.0)
+ii  libmono-system-windows4.0-cil                          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Windows library (for CLI 4.0)
+ii  libmono-system-workflow-activities4.0-cil              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Workflow.Activities library (for CLI 4.0)
+ii  libmono-system-workflow-componentmodel4.0-cil          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Workflow.ComponentModel library (for CLI 4.0)
+ii  libmono-system-workflow-runtime4.0-cil                 6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Workflow.Runtime library (for CLI 4.0)
+ii  libmono-system-xaml4.0-cil                             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Xaml Library (for CLI 4.0)
+ii  libmono-system-xml-linq4.0-cil                         6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Xml.Linq library (for CLI 4.0)
+ii  libmono-system-xml-serialization4.0-cil                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Xml.Serialization library (for CLI 4.0)
+ii  libmono-system-xml4.0-cil                              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System.Xml library (for CLI 4.0)
+ii  libmono-system4.0-cil                                  6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono System libraries (for CLI 4.0)
+ii  libmono-tasklets4.0-cil                                6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Tasklets library (for CLI 4.0)
+ii  libmono-webbrowser4.0-cil                              6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Web Browser library (for CLI 4.0)
+ii  libmono-webmatrix-data4.0-cil                          6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono WebMatrix.Data Library (for CLI 4.0)
+ii  libmono-windowsbase4.0-cil                             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono WindowsBase library (for CLI 4.0)
+ii  libmono-xbuild-tasks4.0-cil                            6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono Mono.XBuild.Tasks library (for CLI 4.0)
+ii  libmonoboehm-2.0-1                                     6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono JIT library (Boehm GC)
+ii  libmonosgen-2.0-1                                      6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono JIT library (SGen GC)
+ii  libmonosgen-2.0-dev                                    6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono JIT library - Development files (SGen GC)
+ii  libmount1:amd64                                        2.27.1-6ubuntu3.7                amd64                            device mounting library
+ii  libmpc3:amd64                                          1.0.3-1                          amd64                            multiple precision complex floating-point library
+ii  libmpdec2:amd64                                        2.4.2-1                          amd64                            library for decimal floating point arithmetic (runtime library)
+ii  libmpfr4:amd64                                         3.1.4-1                          amd64                            multiple precision floating-point computation
+ii  libmpx0:amd64                                          5.4.0-6ubuntu1~16.04.11          amd64                            Intel memory protection extensions (runtime)
+ii  libncurses5:amd64                                      6.0+20160213-1ubuntu1            amd64                            shared libraries for terminal handling
+ii  libncurses5-dev:amd64                                  6.0+20160213-1ubuntu1            amd64                            developer's libraries for ncurses
+ii  libncursesw5:amd64                                     6.0+20160213-1ubuntu1            amd64                            shared libraries for terminal handling (wide character support)
+ii  libnettle6:amd64                                       3.2-1ubuntu0.16.04.1             amd64                            low level cryptographic library (symmetric and one-way cryptos)
+ii  libnotify4:amd64                                       0.7.6-2svn1                      amd64                            sends desktop notifications to a notification daemon
+ii  libnpth0:amd64                                         1.2-3                            amd64                            replacement for GNU Pth using system threads
+ii  libnspr4:amd64                                         2:4.13.1-0ubuntu0.16.04.1        amd64                            NetScape Portable Runtime Library
+ii  libnss3:amd64                                          2:3.28.4-0ubuntu0.16.04.6        amd64                            Network Security Service libraries
+ii  libnss3-nssdb                                          2:3.28.4-0ubuntu0.16.04.6        all                              Network Security Security libraries - shared databases
+ii  libogg0:amd64                                          1.3.2-1                          amd64                            Ogg bitstream library
+ii  libp11-kit0:amd64                                      0.23.2-5~ubuntu16.04.1           amd64                            library for loading and coordinating access to PKCS#11 modules - runtime
+ii  libpam-modules:amd64                                   1.1.8-3.2ubuntu2.1               amd64                            Pluggable Authentication Modules for PAM
+ii  libpam-modules-bin                                     1.1.8-3.2ubuntu2.1               amd64                            Pluggable Authentication Modules for PAM - helper binaries
+ii  libpam-runtime                                         1.1.8-3.2ubuntu2.1               all                              Runtime support for the PAM library
+ii  libpam-systemd:amd64                                   229-4ubuntu21.22                 amd64                            system and service manager - PAM module
+ii  libpam0g:amd64                                         1.1.8-3.2ubuntu2.1               amd64                            Pluggable Authentication Modules library
+ii  libpango-1.0-0:amd64                                   1.38.1-1                         amd64                            Layout and rendering of internationalized text
+ii  libpangocairo-1.0-0:amd64                              1.38.1-1                         amd64                            Layout and rendering of internationalized text
+ii  libpangoft2-1.0-0:amd64                                1.38.1-1                         amd64                            Layout and rendering of internationalized text
+ii  libpciaccess0:amd64                                    0.13.4-1                         amd64                            Generic PCI access library for X
+ii  libpcre3:amd64                                         2:8.43-1+ubuntu16.04.1+deb.sury. amd64                            Perl 5 Compatible Regular Expression Library - runtime files
+ii  libpcsclite1:amd64                                     1.8.14-1ubuntu1.16.04.1          amd64                            Middleware to access a smart card using PC/SC (library)
+ii  libperl5.22:amd64                                      5.22.1-9ubuntu0.6                amd64                            shared Perl library
+ii  libpipeline1:amd64                                     1.4.1-2                          amd64                            pipeline manipulation library
+ii  libpixman-1-0:amd64                                    0.33.6-1                         amd64                            pixel-manipulation library for X and cairo
+ii  libpng12-0:amd64                                       1.2.54-1ubuntu1.1                amd64                            PNG library - runtime
+ii  libpolkit-agent-1-0:amd64                              0.105-14.1ubuntu0.5              amd64                            PolicyKit Authentication Agent API
+ii  libpolkit-backend-1-0:amd64                            0.105-14.1ubuntu0.5              amd64                            PolicyKit backend API
+ii  libpolkit-gobject-1-0:amd64                            0.105-14.1ubuntu0.5              amd64                            PolicyKit Authorization API
+ii  libpopt0:amd64                                         1.16-10                          amd64                            lib for parsing cmdline parameters
+ii  libprocps4:amd64                                       2:3.3.10-4ubuntu2.4              amd64                            library for accessing process information from /proc
+ii  libprotobuf-lite9v5:amd64                              2.6.1-1.3                        amd64                            protocol buffers C++ library (lite version)
+ii  libproxy1v5:amd64                                      0.4.11-5ubuntu1                  amd64                            automatic proxy configuration management library (shared)
+ii  libpthread-stubs0-dev:amd64                            0.3-4                            amd64                            pthread stubs not provided by native libc, development files
+ii  libpulse0:amd64                                        1:8.0-0ubuntu3.10                amd64                            PulseAudio client libraries
+ii  libpython-all-dev:amd64                                2.7.12-1~16.04                   amd64                            package depending on all supported Python development packages
+ii  libpython-dev:amd64                                    2.7.12-1~16.04                   amd64                            header files and a static library for Python (default)
+ii  libpython-stdlib:amd64                                 2.7.12-1~16.04                   amd64                            interactive high-level object-oriented language (default python version)
+ii  libpython2.7:amd64                                     2.7.12-1ubuntu0~16.04.4          amd64                            Shared Python runtime library (version 2.7)
+ii  libpython2.7-dev:amd64                                 2.7.12-1ubuntu0~16.04.4          amd64                            Header files and a static library for Python (v2.7)
+ii  libpython2.7-minimal:amd64                             2.7.12-1ubuntu0~16.04.4          amd64                            Minimal subset of the Python language (version 2.7)
+ii  libpython2.7-stdlib:amd64                              2.7.12-1ubuntu0~16.04.4          amd64                            Interactive high-level object-oriented language (standard library, version 2.7)
+ii  libpython3-stdlib:amd64                                3.5.1-3                          amd64                            interactive high-level object-oriented language (default python3 version)
+ii  libpython3.5-minimal:amd64                             3.5.2-2ubuntu0~16.04.5           amd64                            Minimal subset of the Python language (version 3.5)
+ii  libpython3.5-stdlib:amd64                              3.5.2-2ubuntu0~16.04.5           amd64                            Interactive high-level object-oriented language (standard library, version 3.5)
+ii  libquadmath0:amd64                                     5.4.0-6ubuntu1~16.04.11          amd64                            GCC Quad-Precision Math Library
+ii  libreadline-dev:amd64                                  6.3-8ubuntu2                     amd64                            GNU readline and history libraries, development files
+ii  libreadline6:amd64                                     6.3-8ubuntu2                     amd64                            GNU readline and history libraries, run-time libraries
+ii  libreadline6-dev:amd64                                 6.3-8ubuntu2                     amd64                            GNU readline and history libraries, development files
+ii  librest-0.7-0:amd64                                    0.7.93-1                         amd64                            REST service access library
+ii  libroken18-heimdal:amd64                               1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - roken support library
+ii  librsvg2-2:amd64                                       2.40.13-3                        amd64                            SAX-based renderer library for SVG files (runtime)
+ii  librsvg2-common:amd64                                  2.40.13-3                        amd64                            SAX-based renderer library for SVG files (extra runtime)
+ii  librtmp1:amd64                                         2.4+20151223.gitfa8646d-1ubuntu0 amd64                            toolkit for RTMP streams (shared library)
+ii  libsane:amd64                                          1.0.25+git20150528-1ubuntu2.16.0 amd64                            API library for scanners
+ii  libsane-common                                         1.0.25+git20150528-1ubuntu2.16.0 all                              API library for scanners -- documentation and support files
+ii  libsasl2-2:amd64                                       2.1.26.dfsg1-14ubuntu0.1         amd64                            Cyrus SASL - authentication abstraction library
+ii  libsasl2-modules:amd64                                 2.1.26.dfsg1-14ubuntu0.1         amd64                            Cyrus SASL - pluggable authentication modules
+ii  libsasl2-modules-db:amd64                              2.1.26.dfsg1-14ubuntu0.1         amd64                            Cyrus SASL - pluggable authentication modules (DB)
+ii  libsctp1:amd64                                         1.0.16+dfsg-3                    amd64                            user-space access to Linux kernel SCTP - shared library
+ii  libseccomp2:amd64                                      2.4.1-0ubuntu0.16.04.2           amd64                            high level interface to Linux seccomp filter
+ii  libselinux1:amd64                                      2.4-3build2                      amd64                            SELinux runtime shared libraries
+ii  libsemanage-common                                     2.3-1build3                      all                              Common files for SELinux policy management libraries
+ii  libsemanage1:amd64                                     2.3-1build3                      amd64                            SELinux policy management library
+ii  libsensors4:amd64                                      1:3.4.0-2                        amd64                            library to read temperature/voltage/fan sensors
+ii  libsepol1:amd64                                        2.4-2                            amd64                            SELinux library for manipulating binary security policies
+ii  libsigsegv2:amd64                                      2.10-4                           amd64                            Library for handling page faults in a portable way
+ii  libsm-dev:amd64                                        2:1.2.2-1                        amd64                            X11 Session Management library (development headers)
+ii  libsm6:amd64                                           2:1.2.2-1                        amd64                            X11 Session Management library
+ii  libsmartcols1:amd64                                    2.27.1-6ubuntu3.7                amd64                            smart column output alignment library
+ii  libsndfile1:amd64                                      1.0.25-10ubuntu0.16.04.2         amd64                            Library for reading/writing audio files
+ii  libsoup-gnome2.4-1:amd64                               2.52.2-1ubuntu0.3                amd64                            HTTP library implementation in C -- GNOME support library
+ii  libsoup2.4-1:amd64                                     2.52.2-1ubuntu0.3                amd64                            HTTP library implementation in C -- Shared library
+ii  libsqlite3-0:amd64                                     3.11.0-1ubuntu1.2                amd64                            SQLite 3 shared library
+ii  libsqlite3-dev:amd64                                   3.11.0-1ubuntu1.2                amd64                            SQLite 3 development files
+ii  libss2:amd64                                           1.42.13-1ubuntu1                 amd64                            command-line interface parsing library
+ii  libssl-dev:amd64                                       1.0.2g-1ubuntu4.15               amd64                            Secure Sockets Layer toolkit - development files
+ii  libssl1.0.0:amd64                                      1.0.2g-1ubuntu4.15               amd64                            Secure Sockets Layer toolkit - shared libraries
+ii  libssl1.1:amd64                                        1.1.1c-1+ubuntu16.04.1+deb.sury. amd64                            Secure Sockets Layer toolkit - shared libraries
+ii  libstdc++-5-dev:amd64                                  5.4.0-6ubuntu1~16.04.11          amd64                            GNU Standard C++ Library v3 (development files)
+ii  libstdc++6:amd64                                       5.4.0-6ubuntu1~16.04.11          amd64                            GNU Standard C++ Library v3
+ii  libsystemd0:amd64                                      229-4ubuntu21.22                 amd64                            systemd utility library
+ii  libtasn1-6:amd64                                       4.7-3ubuntu0.16.04.3             amd64                            Manage ASN.1 structures (runtime)
+ii  libthai-data                                           0.1.24-2                         all                              Data files for Thai language support library
+ii  libthai0:amd64                                         0.1.24-2                         amd64                            Thai language support library
+ii  libtiff5:amd64                                         4.0.6-1ubuntu0.6                 amd64                            Tag Image File Format (TIFF) library
+ii  libtinfo-dev:amd64                                     6.0+20160213-1ubuntu1            amd64                            developer's library for the low-level terminfo library
+ii  libtinfo5:amd64                                        6.0+20160213-1ubuntu1            amd64                            shared low-level terminfo library for terminal handling
+ii  libtool                                                2.4.6-0.1                        all                              Generic library support script
+ii  libtsan0:amd64                                         5.4.0-6ubuntu1~16.04.11          amd64                            ThreadSanitizer -- a Valgrind-based detector of data races (runtime)
+ii  libtxc-dxtn-s2tc0:amd64                                0~git20131104-1.1                amd64                            Texture compression library for Mesa
+ii  libubsan0:amd64                                        5.4.0-6ubuntu1~16.04.11          amd64                            UBSan -- undefined behaviour sanitizer (runtime)
+ii  libudev1:amd64                                         229-4ubuntu21.22                 amd64                            libudev shared library
+ii  liburcu4:amd64                                         0.9.1-3                          amd64                            userspace RCU (read-copy-update) library
+ii  libusb-0.1-4:amd64                                     2:0.1.12-28                      amd64                            userspace USB programming library
+ii  libusb-1.0-0:amd64                                     2:1.0.20-1                       amd64                            userspace USB programming library
+ii  libustr-1.0-1:amd64                                    1.0.4-5                          amd64                            Micro string library: shared library
+ii  libuuid1:amd64                                         2.27.1-6ubuntu3.7                amd64                            Universally Unique ID library
+ii  libvorbis0a:amd64                                      1.3.5-3ubuntu0.2                 amd64                            decoder library for Vorbis General Audio Compression Codec
+ii  libvorbisenc2:amd64                                    1.3.5-3ubuntu0.2                 amd64                            encoder library for Vorbis General Audio Compression Codec
+ii  libvpx3:amd64                                          1.5.0-2ubuntu1                   amd64                            VP8 and VP9 video codec (shared library)
+ii  libwayland-client0:amd64                               1.12.0-1~ubuntu16.04.3           amd64                            wayland compositor infrastructure - client library
+ii  libwayland-cursor0:amd64                               1.12.0-1~ubuntu16.04.3           amd64                            wayland compositor infrastructure - cursor library
+ii  libwayland-egl1-mesa:amd64                             18.0.5-0ubuntu0~16.04.1          amd64                            implementation of the Wayland EGL platform -- runtime
+ii  libwayland-server0:amd64                               1.12.0-1~ubuntu16.04.3           amd64                            wayland compositor infrastructure - server library
+ii  libwind0-heimdal:amd64                                 1.7~git20150920+dfsg-4ubuntu1.16 amd64                            Heimdal Kerberos - stringprep implementation
+ii  libwrap0:amd64                                         7.6.q-25                         amd64                            Wietse Venema's TCP wrappers library
+ii  libwxbase3.0-0v5:amd64                                 3.0.2+dfsg-1.3ubuntu0.1          amd64                            wxBase library (runtime) - non-GUI support classes of wxWidgets toolkit
+ii  libwxgtk3.0-0v5:amd64                                  3.0.2+dfsg-1.3ubuntu0.1          amd64                            wxWidgets Cross-platform C++ GUI toolkit (GTK+ runtime)
+ii  libx11-6:amd64                                         2:1.6.3-1ubuntu2.1               amd64                            X11 client-side library
+ii  libx11-data                                            2:1.6.3-1ubuntu2.1               all                              X11 client-side library
+ii  libx11-dev:amd64                                       2:1.6.3-1ubuntu2.1               amd64                            X11 client-side library (development headers)
+ii  libx11-doc                                             2:1.6.3-1ubuntu2.1               all                              X11 client-side library (development documentation)
+ii  libx11-xcb1:amd64                                      2:1.6.3-1ubuntu2.1               amd64                            Xlib/XCB interface library
+ii  libxau-dev:amd64                                       1:1.0.8-1                        amd64                            X11 authorisation library (development headers)
+ii  libxau6:amd64                                          1:1.0.8-1                        amd64                            X11 authorisation library
+ii  libxcb-dri2-0:amd64                                    1.11.1-1ubuntu1                  amd64                            X C Binding, dri2 extension
+ii  libxcb-dri3-0:amd64                                    1.11.1-1ubuntu1                  amd64                            X C Binding, dri3 extension
+ii  libxcb-glx0:amd64                                      1.11.1-1ubuntu1                  amd64                            X C Binding, glx extension
+ii  libxcb-present0:amd64                                  1.11.1-1ubuntu1                  amd64                            X C Binding, present extension
+ii  libxcb-render0:amd64                                   1.11.1-1ubuntu1                  amd64                            X C Binding, render extension
+ii  libxcb-shm0:amd64                                      1.11.1-1ubuntu1                  amd64                            X C Binding, shm extension
+ii  libxcb-sync1:amd64                                     1.11.1-1ubuntu1                  amd64                            X C Binding, sync extension
+ii  libxcb-xfixes0:amd64                                   1.11.1-1ubuntu1                  amd64                            X C Binding, xfixes extension
+ii  libxcb1:amd64                                          1.11.1-1ubuntu1                  amd64                            X C Binding
+ii  libxcb1-dev:amd64                                      1.11.1-1ubuntu1                  amd64                            X C Binding, development files
+ii  libxcomposite1:amd64                                   1:0.4.4-1                        amd64                            X11 Composite extension library
+ii  libxcursor1:amd64                                      1:1.1.14-1ubuntu0.16.04.2        amd64                            X cursor management library
+ii  libxdamage1:amd64                                      1:1.1.4-2                        amd64                            X11 damaged region extension library
+ii  libxdmcp-dev:amd64                                     1:1.1.2-1.1                      amd64                            X11 authorisation library (development headers)
+ii  libxdmcp6:amd64                                        1:1.1.2-1.1                      amd64                            X11 Display Manager Control Protocol library
+ii  libxext6:amd64                                         2:1.3.3-1                        amd64                            X11 miscellaneous extension library
+ii  libxfixes3:amd64                                       1:5.0.1-2                        amd64                            X11 miscellaneous 'fixes' extension library
+ii  libxi6:amd64                                           2:1.7.6-1                        amd64                            X11 Input extension library
+ii  libxinerama1:amd64                                     2:1.1.3-1                        amd64                            X11 Xinerama extension library
+ii  libxkbcommon0:amd64                                    0.5.0-1ubuntu2.1                 amd64                            library interface to the XKB compiler - shared library
+ii  libxml2:amd64                                          2.9.3+dfsg1-1ubuntu0.6           amd64                            GNOME XML library
+ii  libxmuu1:amd64                                         2:1.1.2-2                        amd64                            X11 miscellaneous micro-utility library
+ii  libxpm4:amd64                                          1:3.5.11-1ubuntu0.16.04.1        amd64                            X11 pixmap library
+ii  libxrandr2:amd64                                       2:1.5.0-1                        amd64                            X11 RandR extension library
+ii  libxrender1:amd64                                      1:0.9.9-0ubuntu1                 amd64                            X Rendering Extension client library
+ii  libxshmfence1:amd64                                    1.2-1                            amd64                            X shared memory fences - shared library
+ii  libxt-dev:amd64                                        1:1.1.5-0ubuntu1                 amd64                            X11 toolkit intrinsics library (development headers)
+ii  libxt6:amd64                                           1:1.1.5-0ubuntu1                 amd64                            X11 toolkit intrinsics library
+ii  libxtables11:amd64                                     1.6.0-2ubuntu3                   amd64                            netfilter xtables library
+ii  libxtst6:amd64                                         2:1.2.2-1                        amd64                            X11 Testing -- Record extension library
+ii  libxxf86vm1:amd64                                      1:1.1.4-1                        amd64                            X11 XFree86 video mode extension library
+ii  libyaml-0-2:amd64                                      0.1.6-3                          amd64                            Fast YAML 1.1 parser and emitter library
+ii  libyaml-dev:amd64                                      0.1.6-3                          amd64                            Fast YAML 1.1 parser and emitter library (development)
+ii  linux-libc-dev:amd64                                   4.4.0-159.187                    amd64                            Linux Kernel Headers for development
+ii  locales                                                2.23-0ubuntu11                   all                              GNU C Library: National Language (locale) data [support]
+ii  login                                                  1:4.2-3.1ubuntu5.4               amd64                            system login tools
+ii  lsb-base                                               9.20160110ubuntu0.2              all                              Linux Standard Base init script functionality
+ii  lsb-release                                            9.20160110ubuntu0.2              all                              Linux Standard Base version reporting utility
+ii  m4                                                     1.4.17-5                         amd64                            macro processing language
+ii  make                                                   4.1-6                            amd64                            utility for directing compilation
+ii  makedev                                                2.3.1-93ubuntu2~ubuntu16.04.1    all                              creates device files in /dev
+ii  manpages                                               4.04-2                           all                              Manual pages about using a GNU/Linux system
+ii  manpages-dev                                           4.04-2                           all                              Manual pages about using GNU/Linux for development
+ii  mawk                                                   1.3.3-17ubuntu2                  amd64                            a pattern scanning and text processing language
+ii  mercurial                                              3.7.3-1ubuntu1.2                 amd64                            easy-to-use, scalable distributed version control system
+ii  mercurial-common                                       3.7.3-1ubuntu1.2                 all                              easy-to-use, scalable distributed version control system (common files)
+ii  mime-support                                           3.59ubuntu1                      all                              MIME files 'mime.types' & 'mailcap', and support programs
+ii  mono-4.0-gac                                           6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono GAC tool (for CLI 4.0)
+ii  mono-4.0-service                                       6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono service manager for CLI 4.0
+ii  mono-complete                                          6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            complete Mono runtime, development tools and all libraries
+ii  mono-csharp-shell                                      6.0.0.319-0xamarin4+ubuntu1604b1 all                              interactive C# shell
+ii  mono-devel                                             6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono development tools
+ii  mono-gac                                               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono GAC tool
+ii  mono-jay                                               6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            LALR(1) parser generator oriented to Java/CLI
+ii  mono-llvm-support                                      6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono runtime - SGen
+ii  mono-llvm-tools                                        6.0+mono20181128173919-0xamarin4 amd64                            opt and llc for Mono llvm mode
+ii  mono-mcs                                               6.0.0.319-0xamarin4+ubuntu1604b1 all                              Mono C# 2.0 / 3.0 / 4.0 / 5.0  compiler for CLI 2.0 / 4.0 / 4.5
+ii  mono-roslyn                                            6.0.0.319-0xamarin4+ubuntu1604b1 all                              Microsoft C# compiler
+ii  mono-runtime                                           6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono runtime - default version
+ii  mono-runtime-common                                    6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono runtime - common files
+ii  mono-runtime-sgen                                      6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono runtime - SGen
+ii  mono-utils                                             6.0.0.319-0xamarin4+ubuntu1604b1 amd64                            Mono utilities
+ii  mono-xbuild                                            6.0.0.319-0xamarin4+ubuntu1604b1 all                              MSBuild-compatible build system for Mono
+ii  monodoc-base                                           6.0.0.319-0xamarin4+ubuntu1604b1 all                              shared MonoDoc binaries
+ii  monodoc-browser                                        4.2-2xamarin12+ubuntu1604b1      all                              MonoDoc GTK+ based viewer
+ii  monodoc-manual                                         6.0.0.319-0xamarin4+ubuntu1604b1 all                              compiled XML documentation from the Mono project
+ii  mount                                                  2.27.1-6ubuntu3.7                amd64                            tools for mounting and manipulating filesystems
+ii  msbuild                                                1:16.1+xamarinxplat.2019.06.05.1 all                              build platform for .NET and Visual Studio
+ii  msbuild-libhostfxr                                     3.0.0.2019.04.16.02.13-0xamarin3 amd64                            Helper library for MSbuild .NET Core support
+ii  msbuild-sdkresolver                                    1:16.1+xamarinxplat.2019.06.05.1 all                              build platform for .NET and Visual Studio
+ii  multiarch-support                                      2.23-0ubuntu11                   amd64                            Transitional package to ensure multiarch compatibility
+ii  ncurses-base                                           6.0+20160213-1ubuntu1            all                              basic terminal type definitions
+ii  ncurses-bin                                            6.0+20160213-1ubuntu1            amd64                            terminal-related programs and man pages
+ii  netbase                                                5.3                              all                              Basic TCP/IP networking system
+ii  nodejs                                                 10.16.3-1nodesource1             amd64                            Node.js event-based server-side javascript engine
+ii  notification-daemon                                    3.18.2-1                         amd64                            daemon for displaying passive pop-up notifications
+ii  openjdk-8-jdk:amd64                                    8u222-b10-1ubuntu1~16.04.1       amd64                            OpenJDK Development Kit (JDK)
+ii  openjdk-8-jdk-headless:amd64                           8u222-b10-1ubuntu1~16.04.1       amd64                            OpenJDK Development Kit (JDK) (headless)
+ii  openjdk-8-jre:amd64                                    8u222-b10-1ubuntu1~16.04.1       amd64                            OpenJDK Java runtime, using Hotspot JIT
+ii  openjdk-8-jre-headless:amd64                           8u222-b10-1ubuntu1~16.04.1       amd64                            OpenJDK Java runtime, using Hotspot JIT (headless)
+ii  openssh-client                                         1:7.2p2-4ubuntu2.8               amd64                            secure shell (SSH) client, for secure access to remote machines
+ii  openssl                                                1.0.2g-1ubuntu4.15               amd64                            Secure Sockets Layer toolkit - cryptographic utility
+ii  packages-microsoft-prod                                1.0-3                            all                              Apt configuration for packages.microsoft.com
+ii  passwd                                                 1:4.2-3.1ubuntu5.4               amd64                            change and administer password and group data
+ii  patch                                                  2.7.5-1ubuntu0.16.04.2           amd64                            Apply a diff file to an original
+ii  perl                                                   5.22.1-9ubuntu0.6                amd64                            Larry Wall's Practical Extraction and Report Language
+ii  perl-base                                              5.22.1-9ubuntu0.6                amd64                            minimal Perl system
+ii  perl-modules-5.22                                      5.22.1-9ubuntu0.6                all                              Core Perl modules
+ii  php-common                                             2:69+ubuntu16.04.1+deb.sury.org+ all                              Common files for PHP packages
+ii  php7.1-cli                                             7.1.31-1+ubuntu16.04.1+deb.sury. amd64                            command-line interpreter for the PHP scripting language
+ii  php7.1-common                                          7.1.31-1+ubuntu16.04.1+deb.sury. amd64                            documentation, examples and common module for PHP
+ii  php7.1-json                                            7.1.31-1+ubuntu16.04.1+deb.sury. amd64                            JSON module for PHP
+ii  php7.1-opcache                                         7.1.31-1+ubuntu16.04.1+deb.sury. amd64                            Zend OpCache module for PHP
+ii  php7.1-readline                                        7.1.31-1+ubuntu16.04.1+deb.sury. amd64                            readline module for PHP
+ii  pinentry-curses                                        0.9.7-3                          amd64                            curses-based PIN or pass-phrase entry dialog for GnuPG
+ii  pkg-config                                             0.29.1-0ubuntu1                  amd64                            manage compile and link flags for libraries
+ii  policykit-1                                            0.105-14.1ubuntu0.5              amd64                            framework for managing administrative policies and privileges
+ii  powermgmt-base                                         1.31+nmu1                        all                              Common utils and configs for power management
+ii  procps                                                 2:3.3.10-4ubuntu2.4              amd64                            /proc file system utilities
+ii  psmisc                                                 22.21-2.1build1                  amd64                            utilities that use the proc file system
+ii  python                                                 2.7.12-1~16.04                   amd64                            interactive high-level object-oriented language (default version)
+ii  python-all                                             2.7.12-1~16.04                   amd64                            package depending on all supported Python runtime versions
+ii  python-all-dev                                         2.7.12-1~16.04                   amd64                            package depending on all supported Python development packages
+ii  python-apt-common                                      1.1.0~beta1ubuntu0.16.04.5       all                              Python interface to libapt-pkg (locales)
+ii  python-dev                                             2.7.12-1~16.04                   amd64                            header files and a static library for Python (default)
+ii  python-minimal                                         2.7.12-1~16.04                   amd64                            minimal subset of the Python language (default version)
+ii  python-pip                                             8.1.1-2ubuntu0.4                 all                              alternative Python package installer
+ii  python-pip-whl                                         8.1.1-2ubuntu0.4                 all                              alternative Python package installer
+ii  python-pkg-resources                                   20.7.0-1                         all                              Package Discovery and Resource Access using pkg_resources
+ii  python-setuptools                                      20.7.0-1                         all                              Python Distutils Enhancements
+ii  python-wheel                                           0.29.0-1                         all                              built-package format for Python
+ii  python2.7                                              2.7.12-1ubuntu0~16.04.4          amd64                            Interactive high-level object-oriented language (version 2.7)
+ii  python2.7-dev                                          2.7.12-1ubuntu0~16.04.4          amd64                            Header files and a static library for Python (v2.7)
+ii  python2.7-minimal                                      2.7.12-1ubuntu0~16.04.4          amd64                            Minimal subset of the Python language (version 2.7)
+ii  python3                                                3.5.1-3                          amd64                            interactive high-level object-oriented language (default python3 version)
+ii  python3-apt                                            1.1.0~beta1ubuntu0.16.04.5       amd64                            Python 3 interface to libapt-pkg
+ii  python3-dbus                                           1.2.0-3                          amd64                            simple interprocess messaging system (Python 3 interface)
+ii  python3-gi                                             3.20.0-0ubuntu1                  amd64                            Python 3 bindings for gobject-introspection libraries
+ii  python3-minimal                                        3.5.1-3                          amd64                            minimal subset of the Python language (default python3 version)
+ii  python3-pycurl                                         7.43.0-1ubuntu1                  amd64                            Python bindings to libcurl (Python 3)
+ii  python3-software-properties                            0.96.20.9                        all                              manage the repositories that you install software from
+ii  python3.5                                              3.5.2-2ubuntu0~16.04.5           amd64                            Interactive high-level object-oriented language (version 3.5)
+ii  python3.5-minimal                                      3.5.2-2ubuntu0~16.04.5           amd64                            Minimal subset of the Python language (version 3.5)
+ii  readline-common                                        6.3-8ubuntu2                     all                              GNU readline and history libraries, common files
+ii  rebar                                                  2.6.0-2                          amd64                            Sophisticated build-tool for Erlang projects that follows OTP principles
+ii  referenceassemblies-pcl                                2014.04.14-1xamarin6+ubuntu1604b all                              Portable Library Reference Assemblies for .NET
+ii  rename                                                 0.20-4                           all                              Perl extension for renaming multiple files
+ii  rsync                                                  3.1.1-3ubuntu1.2                 amd64                            fast, versatile, remote (and local) file-copying tool
+ii  rvm                                                    1.29.9-3                         all                              Ruby Version Manager (RVM)
+ii  sed                                                    4.2.2-7                          amd64                            The GNU sed stream editor
+ii  sensible-utils                                         0.0.9ubuntu0.16.04.1             all                              Utilities for sensible alternative selection
+ii  sgml-base                                              1.26+nmu4ubuntu1                 all                              SGML infrastructure and SGML catalog file support
+ii  shared-mime-info                                       1.5-2ubuntu0.2                   amd64                            FreeDesktop.org shared MIME database and spec
+ii  software-properties-common                             0.96.20.9                        all                              manage the repositories that you install software from (common)
+ii  sqlite3                                                3.11.0-1ubuntu1.2                amd64                            Command line interface for SQLite 3
+ii  sudo                                                   1.8.16-0ubuntu1.7                amd64                            Provide limited super user privileges to specific users
+ii  systemd                                                229-4ubuntu21.22                 amd64                            system and service manager
+ii  systemd-sysv                                           229-4ubuntu21.22                 amd64                            system and service manager - SysV links
+ii  sysv-rc                                                2.88dsf-59.3ubuntu2              all                              System-V-like runlevel change mechanism
+ii  sysvinit-utils                                         2.88dsf-59.3ubuntu2              amd64                            System-V-like utilities
+ii  tar                                                    1.28-2.1ubuntu0.1                amd64                            GNU version of the tar archiving utility
+ii  tcpd                                                   7.6.q-25                         amd64                            Wietse Venema's TCP wrapper utilities
+ii  tzdata                                                 2019b-0ubuntu0.16.04             all                              time zone and daylight-saving time data
+ii  ubuntu-keyring                                         2012.05.19                       all                              GnuPG keys of the Ubuntu archive
+ii  ubuntu-mono                                            14.04+16.04.20180326-0ubuntu1    all                              Ubuntu Mono Icon theme
+ii  ucf                                                    3.0036                           all                              Update Configuration File(s): preserve user changes to config files
+ii  unattended-upgrades                                    1.1ubuntu1.18.04.7~16.04.3       all                              automatic installation of security upgrades
+ii  unzip                                                  6.0-20ubuntu1                    amd64                            De-archiver for .zip files
+ii  util-linux                                             2.27.1-6ubuntu3.7                amd64                            miscellaneous system utilities
+ii  wget                                                   1.17.1-1ubuntu1.5                amd64                            retrieves files from the web
+ii  x11-common                                             1:7.7+13ubuntu3.1                all                              X Window System (X.Org) infrastructure
+ii  x11proto-core-dev                                      7.0.31-1~ubuntu16.04.2           all                              X11 core wire protocol and auxiliary headers
+ii  x11proto-input-dev                                     2.3.1-1                          all                              X11 Input extension wire protocol
+ii  x11proto-kb-dev                                        1.0.7-0ubuntu1                   all                              X11 XKB extension wire protocol
+ii  xauth                                                  1:1.0.9-1ubuntu2                 amd64                            X authentication utility
+ii  xdg-user-dirs                                          0.15-2ubuntu6.16.04.1            amd64                            tool to manage well known user directories
+ii  xkb-data                                               2.16-1ubuntu1                    all                              X Keyboard Extension (XKB) configuration data
+ii  xml-core                                               0.13+nmu2                        all                              XML infrastructure and XML catalog file support
+ii  xorg-sgml-doctools                                     1:1.11-1                         all                              Common tools for building X.Org SGML documentation
+ii  xtrans-dev                                             1.3.5-1                          all                              X transport library (development files)
+ii  xz-utils                                               5.1.1alpha+20120614-2ubuntu2     amd64                            XZ-format compression utilities
+ii  yarn                                                   1.17.3-1                         all                              Fast, reliable, and secure dependency management.
+ii  zlib1g:amd64                                           1:1.2.8.dfsg-2ubuntu4.1          amd64                            compression library - runtime
+ii  zlib1g-dev:amd64                                       1:1.2.8.dfsg-2ubuntu4.1          amd64                            compression library - development
