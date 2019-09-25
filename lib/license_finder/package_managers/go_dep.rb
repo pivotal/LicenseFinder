@@ -43,9 +43,12 @@ module LicenseFinder
 
     def packages_from_json(json_string)
       all_packages = JSON.parse(json_string)['Deps']
-      packages_grouped_by_revision = all_packages.group_by { |package| package['Rev'] }
 
+      return [] unless all_packages
+
+      packages_grouped_by_revision = all_packages.group_by { |package| package['Rev'] }
       result = []
+
       packages_grouped_by_revision.each do |_sha, packages_in_group|
         all_paths_in_group = packages_in_group.map { |p| p['ImportPath'] }
         common_paths = CommonPathHelper.longest_common_paths(all_paths_in_group)
@@ -64,7 +67,6 @@ module LicenseFinder
                                               @full_version)
         end
       end
-
       result
     end
   end
