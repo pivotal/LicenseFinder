@@ -5,8 +5,8 @@ require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe GoDep do
-    let(:options) {{}}
-    subject {GoDep.new(options.merge(project_path: Pathname('/fake/path')))}
+    let(:options) { {} }
+    subject { GoDep.new(options.merge(project_path: Pathname('/fake/path'))) }
 
     it_behaves_like 'a PackageManager'
 
@@ -64,7 +64,6 @@ module LicenseFinder
           ENV['GOPATH'] = @orig_gopath
         end
 
-
         it 'sets the homepage for packages' do
           packages = subject.current_packages
 
@@ -74,8 +73,8 @@ module LicenseFinder
         end
 
         context 'when the GoDep returns entries with same sha and common base path' do
-          let(:options) {{go_full_version: true}}
-          let(:all_packages) {subject.current_packages}
+          let(:options) { { go_full_version: true } }
+          let(:all_packages) { subject.current_packages }
 
           before do
             File.write('/fake/path/Godeps/Godeps.json', content_with_duplicates)
@@ -129,14 +128,14 @@ module LicenseFinder
           end
 
           context 'when requesting the full version' do
-            let(:options) {{go_full_version: true}}
+            let(:options) { { go_full_version: true } }
 
             it 'list the dependencies with full version' do
               expect(subject.current_packages.map(&:version)).to eq %w[
-              61164e49940b423ba1f12ddbdf01632ac793e5e9
-              3245708abcdef234589450649872346783298736
-              3245708abcdef234589450649872346783298735
-            ]
+                61164e49940b423ba1f12ddbdf01632ac793e5e9
+                3245708abcdef234589450649872346783298736
+                3245708abcdef234589450649872346783298735
+              ]
             end
           end
         end
