@@ -23,7 +23,7 @@ module LicenseFinder
       'bundle'
     end
 
-    def self.prepare_command
+    def prepare_command
       'bundle install'
     end
 

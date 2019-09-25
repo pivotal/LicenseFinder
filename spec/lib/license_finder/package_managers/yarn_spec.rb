@@ -121,7 +121,8 @@ module LicenseFinder
 
     describe '.prepare_command' do
       it 'returns the correct prepare method' do
-        expect(described_class.prepare_command).to eq('yarn install --ignore-engines')
+        yarn = Yarn.new(project_path: Pathname(root), logger: double(:logger, active: nil))
+        expect(yarn.prepare_command).to eq('yarn install --ignore-engines')
       end
     end
 

@@ -16,7 +16,8 @@ module LicenseFinder
 
     describe '.prepare_command' do
       it 'returns the correct prepare command' do
-        expect(described_class.prepare_command).to eq('dotnet restore')
+        dotnet = Dotnet.new project_path: Pathname.new('app')
+        expect(dotnet.prepare_command).to eq('dotnet restore')
       end
     end
 

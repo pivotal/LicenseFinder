@@ -183,7 +183,8 @@ module LicenseFinder
     shared_examples 'a NuGet package manager' do
       describe '.prepare_command' do
         it 'returns the correct prepare method' do
-          expect(described_class.prepare_command).to eq("#{nuget_cmd} restore")
+          nuget = Nuget.new project_path: Pathname.new('app')
+          expect(nuget.prepare_command).to eq("#{nuget_cmd} restore")
         end
       end
 

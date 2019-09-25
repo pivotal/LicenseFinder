@@ -14,7 +14,7 @@ module LicenseFinder
       'cargo'
     end
 
-    def self.prepare_command
+    def prepare_command
       'cargo fetch'
     end
 

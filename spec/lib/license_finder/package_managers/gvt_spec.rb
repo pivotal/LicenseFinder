@@ -113,7 +113,8 @@ OUTPUT
 
     describe '.prepare_command' do
       it 'returns the correct gvt restore command' do
-        expect(described_class.prepare_command).to eq('gvt restore')
+        gvt = Gvt.new(project_path: Pathname('/app'), logger: double(:logger, active: nil))
+        expect(gvt.prepare_command).to eq('gvt restore')
       end
     end
 

@@ -119,7 +119,8 @@ module LicenseFinder
 
     describe '.prepare_command' do
       it 'returns the correct prepare method' do
-        expect(described_class.prepare_command).to eq('govendor sync')
+        govendor = Govendor.new(project_path: Pathname('/app'), logger: double(:logger, active: nil))
+        expect(govendor.prepare_command).to eq('govendor sync')
       end
     end
 
