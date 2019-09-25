@@ -74,9 +74,8 @@ INPUT
 
       context 'pip configured with a unknown python version' do
         it 'should error out' do
-          expect {
-            Pip.new(project_path: Pathname(root), pip_requirements_path: @user_provided_requirements, python_version: '100')
-          }.to raise_error("Invalid python version '100'. Valid versions are '2' or '3'.")
+          expect Pip.new(project_path: Pathname(root), pip_requirements_path: @user_provided_requirements, python_version: '100')
+          .to raise_error("Invalid python version '100'. Valid versions are '2' or '3'.")
         end
       end
     end

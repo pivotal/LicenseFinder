@@ -9,9 +9,7 @@ module LicenseFinder
       super
       @requirements_path = options[:pip_requirements_path] || Pathname('requirements.txt')
       @python_version = options[:python_version] || '2'
-      unless ['2', '3'].include?(@python_version)
-        raise "Invalid python version \'#{@python_version}\'. Valid versions are '2' or '3'."
-      end
+      raise "Invalid python version \'#{@python_version}\'. Valid versions are '2' or '3'." if %w[2 3].include?(@python_version)
     end
 
     def current_packages
