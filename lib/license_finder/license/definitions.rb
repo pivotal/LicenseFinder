@@ -11,6 +11,7 @@ module LicenseFinder
           apache2,
           bsd,
           cc01,
+          cddl1,
           eclipse1,
           gplv2,
           gplv3,
@@ -84,6 +85,19 @@ module LicenseFinder
           pretty_name: 'CC0 1.0 Universal',
           other_names: ['CC0 1.0'],
           url: 'http://creativecommons.org/publicdomain/zero/1.0'
+        )
+      end
+
+      def cddl1
+        License.new(
+          short_name: 'CDDL1',
+          pretty_name: 'Common Development and Distribution License 1.0',
+          other_names: [
+            'CDDL-1.0',
+            'Common Development and Distribution License (CDDL) v1.0',
+            'COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0'
+          ],
+          url: 'https://spdx.org/licenses/CDDL-1.0.html'
         )
       end
 
@@ -204,6 +218,7 @@ module LicenseFinder
           other_names: [
             'Modified BSD',
             'BSD3',
+            'BSD 3',
             'BSD-3',
             '3-clause BSD',
             'BSD-3-Clause',
@@ -211,7 +226,8 @@ module LicenseFinder
             'The 3-Clause BSD License',
             'BSD 3-clause New License',
             'New BSD License',
-            'BSD New license'
+            'BSD New license',
+            'BSD Licence 3'
           ],
           url: 'http://opensource.org/licenses/BSD-3-Clause',
           matcher: matcher
@@ -222,7 +238,11 @@ module LicenseFinder
         License.new(
           short_name: 'Python',
           pretty_name: 'Python Software Foundation License',
-          other_names: ['PSF'],
+          other_names: [
+            'PSF',
+            'PSFL',
+            'PSF License'
+          ],
           url: 'http://hg.python.org/cpython/raw-file/89ce323357db/LICENSE'
         )
       end
