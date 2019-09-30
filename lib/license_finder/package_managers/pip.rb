@@ -38,7 +38,7 @@ module LicenseFinder
     end
 
     def prepare
-      prep_cmd = "pip#{@python_version} install -r #{@requirements_path}"
+      prep_cmd = "#{prepare_command} -r #{@requirements_path}"
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
       return if status.success?
 

@@ -56,8 +56,8 @@ RUN apt-get install -y python rebar
 
 # install and update python-pip
 RUN apt-get install -y python-pip python3-pip && \
-    pip install --upgrade pip==$PIP_INSTALL_VERSION
-RUN pip3 install --upgrade pip==$PIP3_INSTALL_VERSION
+    pip install --upgrade pip==$PIP_INSTALL_VERSION && \
+    pip3 install --upgrade pip==$PIP3_INSTALL_VERSION
 
 # install maven
 RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
