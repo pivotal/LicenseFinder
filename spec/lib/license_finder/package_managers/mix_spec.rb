@@ -79,7 +79,7 @@ module LicenseFinder
 
     describe '.prepare_command' do
       it 'returns the correct prepare method' do
-        expect(described_class.prepare_command).to eq('mix deps.get')
+        expect(subject.prepare_command).to eq('mix deps.get')
       end
     end
   end

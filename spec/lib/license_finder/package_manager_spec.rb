@@ -85,8 +85,8 @@ module LicenseFinder
         before do
           FakeFS.activate!
           FileUtils.mkdir_p project_path
-          allow(described_class).to receive(:prepare_command).and_return('sh commands')
-          allow(described_class).to receive(:prepare_command).and_return('sh commands')
+          allow(subject).to receive(:prepare_command).and_return('sh commands')
+          allow(subject).to receive(:prepare_command).and_return('sh commands')
         end
 
         after do

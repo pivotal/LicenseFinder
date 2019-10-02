@@ -38,6 +38,7 @@ module LicenseFinder
           :maven_include_groups,
           :maven_options,
           :pip_requirements_path,
+          :python_version,
           :rebar_command,
           :rebar_deps_dir,
           :elixir_command,

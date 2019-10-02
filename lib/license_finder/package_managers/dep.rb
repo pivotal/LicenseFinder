@@ -27,7 +27,7 @@ module LicenseFinder
       Go15VendorExperiment
     end
 
-    def self.prepare_command
+    def prepare_command
       'dep ensure -vendor-only'
     end
 

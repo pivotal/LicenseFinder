@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe Pip do
@@ -45,19 +46,37 @@ INPUT
         File.write(@user_provided_requirements, requirements_txt)
       end
 
-      it 'should call pip install with the requirements file' do
-        expect(SharedHelpers::Cmd).to receive(:run).with('pip install -r requirements.txt')
-                                                   .and_return([dependency_json, '', cmd_success])
-        pip.prepare
-      end
-
-      context 'user provides a requirements file' do
-        let(:pip) { Pip.new(project_path: Pathname(root), pip_requirements_path: @user_provided_requirements) }
-
-        it 'should use the provided requirements file' do
-          expect(SharedHelpers::Cmd).to receive(:run).with("pip install -r #{@user_provided_requirements}")
+      context 'using default python version (python2)' do
+        it 'should call pip install with the requirements file' do
+          expect(SharedHelpers::Cmd).to receive(:run).with('pip2 install -r requirements.txt')
                                                      .and_return([dependency_json, '', cmd_success])
           pip.prepare
+        end
+
+        context 'user provides a requirements file' do
+          let(:pip) { Pip.new(project_path: Pathname(root), pip_requirements_path: @user_provided_requirements) }
+
+          it 'should use the provided requirements file' do
+            expect(SharedHelpers::Cmd).to receive(:run).with("pip2 install -r #{@user_provided_requirements}")
+                                                       .and_return([dependency_json, '', cmd_success])
+            pip.prepare
+          end
+        end
+      end
+
+      context 'explicitly using python3' do
+        let(:pip) { Pip.new(project_path: Pathname(root), pip_requirements_path: @user_provided_requirements, python_version: '3') }
+        it 'should call the pip3 binary' do
+          expect(SharedHelpers::Cmd).to receive(:run).with("pip3 install -r #{@user_provided_requirements}")
+                                                     .and_return([dependency_json, '', cmd_success])
+          pip.prepare
+        end
+      end
+
+      context 'pip configured with a unknown python version' do
+        it 'should error out' do
+          expect { Pip.new(project_path: Pathname(root), pip_requirements_path: @user_provided_requirements, python_version: '100') }
+          .to raise_error("Invalid python version '100'. Valid versions are '2' or '3'.")
         end
       end
     end

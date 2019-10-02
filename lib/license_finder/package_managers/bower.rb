@@ -14,7 +14,7 @@ module LicenseFinder
       'bower'
     end
 
-    def self.prepare_command
+    def prepare_command
       'bower install'
     end
 

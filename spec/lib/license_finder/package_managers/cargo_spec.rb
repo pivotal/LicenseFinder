@@ -22,7 +22,7 @@ module LicenseFinder
     end
 
     it 'should return the correct prepare command' do
-      expect(Cargo.prepare_command).to eq('cargo fetch')
+      expect(subject.prepare_command).to eq('cargo fetch')
     end
   end
 end

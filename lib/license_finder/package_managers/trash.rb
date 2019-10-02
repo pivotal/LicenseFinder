@@ -7,13 +7,13 @@ module LicenseFinder
         'trash'
       end
 
-      def prepare_command
-        'trash'
-      end
-
       def takes_priority_over
         Go15VendorExperiment
       end
+    end
+
+    def prepare_command
+      'trash'
     end
 
     def possible_package_paths

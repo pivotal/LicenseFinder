@@ -10,10 +10,10 @@ module LicenseFinder
       def takes_priority_over
         Go15VendorExperiment
       end
+    end
 
-      def prepare_command
-        'GO111MODULE=on go mod tidy && GO111MODULE=on go mod vendor'
-      end
+    def prepare_command
+      'GO111MODULE=on go mod tidy && GO111MODULE=on go mod vendor'
     end
 
     def active?

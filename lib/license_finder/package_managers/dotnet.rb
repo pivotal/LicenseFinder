@@ -75,8 +75,8 @@ module LicenseFinder
       'dotnet'
     end
 
-    def self.prepare_command
-      "#{package_management_command} restore"
+    def prepare_command
+      "#{Dotnet.package_management_command} restore"
     end
   end
 end

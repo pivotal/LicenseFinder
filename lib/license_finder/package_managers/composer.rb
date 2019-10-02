@@ -17,7 +17,7 @@ module LicenseFinder
     end
 
     def prepare
-      _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(Composer.prepare_command) }
+      _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prepare_command) }
       return if status.success?
 
       log_errors stderr
@@ -28,7 +28,7 @@ module LicenseFinder
       'composer'
     end
 
-    def self.prepare_command
+    def prepare_command
       'composer install'
     end
 
