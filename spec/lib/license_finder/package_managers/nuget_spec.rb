@@ -174,7 +174,7 @@ module LicenseFinder
 
         it 'include the licenseUrl from the nuspec file' do
           nuget = Nuget.new project_path: Pathname.new('app')
-          obscure_dep = nuget.current_packages.select { |dep| dep.name == 'ObscureDependency' }.first
+          obscure_dep = nuget.current_packages.find { |dep| dep.name == 'ObscureDependency' }
           expect(obscure_dep.license_names_from_spec).to eq(['http://www.opensource.org/licenses/mit-license.php'])
         end
       end
