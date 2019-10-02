@@ -201,8 +201,8 @@ module LicenseFinder
           it 'should return package tree successfully' do
             packages = npm.current_packages
             expect(packages.count).to be > 1
-            expect(packages.select { |p| p.name == 'babel-register' }.count).to eq(1)
-            expect(packages.select { |p| p.name == 'babel-core' }.count).to eq(1)
+            expect(packages.count { |p| p.name == 'babel-register' }).to eq(1)
+            expect(packages.count { |p| p.name == 'babel-core' }).to eq(1)
             expect(packages.find { |p| p.name == 'babel-register' }.dependencies.count).to be > 0
           end
         end
@@ -224,9 +224,9 @@ module LicenseFinder
           it 'should return package tree successfully' do
             packages = npm.current_packages
             expect(packages.count).to be > 1
-            expect(packages.select { |p| p.name == 'es6-iterator' }.count).to eq(1)
-            expect(packages.select { |p| p.name == 'es5-ext' }.count).to eq(1)
-            expect(packages.select { |p| p.name == 'd' }.count).to eq(1)
+            expect(packages.count { |p| p.name == 'es6-iterator' }).to eq(1)
+            expect(packages.count { |p| p.name == 'es5-ext' }).to eq(1)
+            expect(packages.count { |p| p.name == 'd' }).to eq(1)
             expect(packages.find { |p| p.name == 'es6-iterator' }.dependencies.count).to be > 0
             expect(packages.find { |p| p.name == 'es5-ext' }.dependencies.count).to be > 0
             expect(packages.find { |p| p.name == 'd' }.dependencies.count).to be > 0
