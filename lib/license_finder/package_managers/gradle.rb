@@ -43,10 +43,10 @@ module LicenseFinder
     end
 
     def active?
-      result=super
+      result = super
 
-      #If it is a valid gradle module, is it a root module?
-      result=root_module? if result
+      # If it is a valid gradle module, is it a root module?
+      result = root_module? if result
 
       result
     end
@@ -58,7 +58,7 @@ module LicenseFinder
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
-      root_project_name=stdout.gsub(%r{\s|parent:|\n},'')
+      root_project_name = stdout.gsub(/\s|parent:|\n/, '')
       root_project_name == 'null'
     end
 

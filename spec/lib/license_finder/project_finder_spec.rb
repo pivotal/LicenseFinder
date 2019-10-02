@@ -38,7 +38,6 @@ module LicenseFinder
         end
 
         context 'and includes another package manager config' do
-
           it 'includes gradle subproject in the result' do
             active_projects = subject.find_projects
             expect(has_project_path?(active_projects, 'gradle-with-subprojects')).to be_truthy
@@ -46,8 +45,6 @@ module LicenseFinder
           end
         end
       end
-
-
     end
 
     def has_project_path?(projects, path)

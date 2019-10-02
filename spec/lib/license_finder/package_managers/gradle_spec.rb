@@ -71,7 +71,7 @@ BUILD SUCCESSFUL in 0s
           let(:options) { { gradle_include_groups: true } }
 
           it 'lists the dependencies with the group id' do
-            expect(subject.current_packages.map(&:name)).to eq ['org.springframework:spring-aop', 'org.springframework:spring-core']
+            expect(subject.current_packages.map(&:name)).to eq %w[org.springframework:spring-aop org.springframework:spring-core]
           end
         end
       end
@@ -224,7 +224,7 @@ BUILD SUCCESSFUL in 0s
 
             expect(SharedHelpers::Cmd).to receive(:run).with("gradle properties | grep 'parent: '").and_return([nil, 'error', cmd_failure])
 
-            expect { subject.active? }.to raise_error(%r{Command 'gradle properties \| grep 'parent: '' failed to execute: error})
+            expect { subject.active? }.to raise_error(/Command 'gradle properties \| grep 'parent: '' failed to execute: error/)
           end
         end
       end
