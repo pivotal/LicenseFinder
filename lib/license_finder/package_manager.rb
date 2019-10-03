@@ -71,6 +71,10 @@ module LicenseFinder
       path&.exist?
     end
 
+    def project_root?
+      active?
+    end
+
     def detected_package_path
       possible_package_paths.find(&:exist?)
     end

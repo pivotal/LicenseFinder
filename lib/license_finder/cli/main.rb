@@ -91,7 +91,13 @@ module LicenseFinder
       shared_options
       def project_roots
         config.strict_matching = true
-        aggregate_paths
+        project_path = config.project_path.to_s || Pathname.pwd.to_s
+        paths = aggregate_paths
+        filtered_project_roots = Scanner.remove_subprojects(paths)
+
+        filtered_project_roots << project_path if aggregate_paths.include?(project_path) && !filtered_project_roots.include?(project_path)
+
+        say(filtered_project_roots)
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
@@ -175,12 +181,14 @@ module LicenseFinder
       def aggregate_paths
         check_valid_project_path
         aggregate_paths = config.aggregate_paths
-        project_path = config.project_path || Pathname.pwd
+        project_path = config.project_path.to_s || Pathname.pwd.to_s
         aggregate_paths = ProjectFinder.new(project_path, config.strict_matching).find_projects if config.recursive
-        say(aggregate_paths || project_path) if config.strict_matching
-        return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
 
-        [config.project_path] unless config.project_path.nil?
+        if aggregate_paths.nil? || aggregate_paths.empty?
+          [project_path]
+        else
+          aggregate_paths
+        end
       end
 
       def save_report(content, file_name)
