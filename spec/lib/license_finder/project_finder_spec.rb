@@ -26,6 +26,28 @@ module LicenseFinder
         active_projects = finder.find_projects
         expect(has_project_path?(active_projects, 'pivotal/foo')).to be true
       end
+
+      context 'when a directory is a sub gradle project' do
+        subject { ProjectFinder.new('spec/fixtures/gradle-with-subprojects') }
+
+        it 'does not include gradle subproject in the result' do
+          active_projects = subject.find_projects
+          expect(has_project_path?(active_projects, 'gradle-with-subprojects')).to be_truthy
+          expect(has_project_path?(active_projects, 'submodule-1')).to be_falsey
+          expect(has_project_path?(active_projects, 'kotlin-submodule-1')).to be_falsey
+        end
+
+        context 'and includes another package manager config' do
+
+          it 'includes gradle subproject in the result' do
+            active_projects = subject.find_projects
+            expect(has_project_path?(active_projects, 'gradle-with-subprojects')).to be_truthy
+            expect(has_project_path?(active_projects, 'submodule-2')).to be_truthy
+          end
+        end
+      end
+
+
     end
 
     def has_project_path?(projects, path)

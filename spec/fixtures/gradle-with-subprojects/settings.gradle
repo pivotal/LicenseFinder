@@ -1,0 +1,5 @@
+rootProject.name = 'olso-test'
+include 'submodule-1'
+include 'submodule-2'
+include 'kotlin-submodule-1'
+

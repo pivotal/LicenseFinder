@@ -42,7 +42,25 @@ module LicenseFinder
       File.exist?(File.join(project_path, wrapper)) ? wrapper : gradle
     end
 
+    def active?
+      result=super
+
+      #If it is a valid gradle module, is it a root module?
+      result=root_module? if result
+
+      result
+    end
+
     private
+
+    def root_module?
+      command = "#{package_management_command} properties | grep 'parent: '"
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+
+      root_project_name=stdout.gsub(%r{\s|parent:|\n},'')
+      root_project_name == 'null'
+    end
 
     def detected_package_path
       alternate_build_file = build_file_from_settings(project_path)

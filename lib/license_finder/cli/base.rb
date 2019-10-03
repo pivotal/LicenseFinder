@@ -4,8 +4,8 @@ require 'thor'
 
 module LicenseFinder
   module CLI
-    class Base < Thor
-      class_option :project_path,
+      class Base < Thor
+        class_option :project_path,
                    desc: 'Path to the project. Defaults to current working directory.'
       class_option :decisions_file,
                    desc: 'Where decisions are saved. Defaults to doc/dependency_decisions.yml.'
