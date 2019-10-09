@@ -287,6 +287,13 @@ xml-simple, 1.1.1, unknown
 You can customize the format of the output in the same way that you customize
 [output from `report`](#output-from-report).
 
+### Output from `project_roots`
+
+The `license_finder project_roots` command will output the current working directory as a string in an array.
+
+Using the `--recursive` option means the array will include subdirectories that contain a known package manager. With the exception that Gradle and Maven subprojects will not be included.
+
+
 ### Output from `report`
 
 The `license_finder report` command will output human-readable reports that you
@@ -429,8 +436,6 @@ downloadLicenses {
   dependencyConfiguration "compile"
 }
 ```
-
-**A note on Gradle Subprojects**: `license_finder` does not report Gradle subprojects as project roots when generating reports. However, if there is a non-Gradle package definition file in a subproject, then it will be included in the report.
 
 ### Conan Projects
 

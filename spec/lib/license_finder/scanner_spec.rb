@@ -80,38 +80,48 @@ module LicenseFinder
     end
 
     describe '#remove_subprojects' do
+      let!(:project_root) { fixture_path('project-with-subprojects') }
+      let!(:subproject_1) { fixture_path('project-with-subprojects/submodule-1') }
+      let!(:non_subproject_1) { fixture_path('project-with-subprojects/not-submodule-1') }
+
       context 'receives a list of directories where some are subprojects' do
         it 'returns a list of project roots only' do
           project_roots = [
-            fixture_path('gradle-with-subprojects').to_s,
-            fixture_path('gradle-with-subprojects/submodule-1').to_s,
-            fixture_path('gradle-with-subprojects/kotlin-submodule-1').to_s
+            project_root.to_s,
+            subproject_1.to_s
           ]
-          expect(Scanner.remove_subprojects(project_roots)).to eq([fixture_path('gradle-with-subprojects').to_s])
+          allow(Scanner).to receive(:subproject?).with(project_root).and_return(false)
+          allow(Scanner).to receive(:subproject?).with(subproject_1).and_return(true)
+
+          expect(Scanner.remove_subprojects(project_roots)).to eq([project_root.to_s])
         end
       end
 
-      context 'receives a list of directories where some contain multiple package managers and is a project root' do
+      context 'when a directory has multiple package managers and at least one of them is a project root' do
+        let!(:subproject_with_two_package_managers) { fixture_path('gradle-with-subprojects/submodule-2') }
+
         it 'returns a list of project roots including it' do
           project_roots = [
             fixture_path('gradle-with-subprojects').to_s,
             fixture_path('gradle-with-subprojects/submodule-1').to_s,
-            fixture_path('gradle-with-subprojects/submodule-2').to_s,
-            fixture_path('gradle-with-subprojects/kotlin-submodule-1').to_s
+            subproject_with_two_package_managers.to_s
           ]
           expect(Scanner.remove_subprojects(project_roots))
-            .to eq([fixture_path('gradle-with-subprojects').to_s, fixture_path('gradle-with-subprojects/submodule-2').to_s])
+            .to eq([fixture_path('gradle-with-subprojects').to_s, subproject_with_two_package_managers.to_s])
         end
       end
 
       context 'there are no subprojects' do
         it 'does not remove anything' do
           project_roots = [
-            fixture_path('gradle-with-subprojects').to_s,
-            fixture_path('gradle-with-subprojects/submodule-2').to_s
+            project_root.to_s,
+            non_subproject_1.to_s
           ]
+          allow(Scanner).to receive(:subproject?).with(project_root).and_return(false)
+          allow(Scanner).to receive(:subproject?).with(non_subproject_1).and_return(false)
+
           expect(Scanner.remove_subprojects(project_roots))
-            .to eq([fixture_path('gradle-with-subprojects').to_s, fixture_path('gradle-with-subprojects/submodule-2').to_s])
+            .to eq([project_root.to_s, non_subproject_1.to_s])
         end
       end
     end

@@ -74,8 +74,8 @@ module LicenseFinder
 
         before do
           expect(SharedHelpers::Cmd).to receive(:run)
-            .with(command)
-            .and_return(['', '', cmd_success])
+                                          .with(command)
+                                          .and_return(['', '', cmd_success])
         end
 
         it 'uses skips the specified groups' do
@@ -131,6 +131,37 @@ module LicenseFinder
         ")
 
         expect(subject.current_packages.first.licenses.map(&:name)).to eq ['unknown']
+      end
+    end
+    describe '.project_root?' do
+      context 'when dealing with root maven project' do
+        subject { Maven.new(options.merge(project_path: Pathname(fixture_path('maven-with-subprojects').to_s))) }
+
+        it 'returns true' do
+          expect(subject.project_root?).to be true
+        end
+      end
+      context 'when dealing with a maven subproject' do
+        subject { Maven.new(options.merge(project_path: Pathname(fixture_path('maven-with-subprojects/subprojectB').to_s))) }
+
+        it 'returns false' do
+          expect(subject.project_root?).to eq(false)
+        end
+      end
+      context 'when fetching module properties fail' do
+        it 'raises an error' do
+          FakeFS do
+            FileUtils.mkdir_p '/fake/path'
+            FileUtils.touch '/fake/path/pom.xml'
+
+            expect(SharedHelpers::Cmd).to receive(:run)
+              .with('mvn help:evaluate -Dexpression=project.parent -q -DforceStdout')
+              .and_return([nil, 'error', cmd_failure])
+
+            expect { subject.project_root? }
+              .to raise_error(/Command 'mvn help:evaluate -Dexpression=project.parent -q -DforceStdout' failed to execute: error/)
+          end
+        end
       end
     end
   end
