@@ -92,10 +92,10 @@ module LicenseFinder
 
       def cddl
         License.new(
-            short_name: 'CDDL',
-            pretty_name: 'Common Development and Distribution License 1.0',
-            other_names: ['Common Development and Distribution License (CDDL) v1.0', 'Common Development and Distribution License (CDDL) version 1.0'],
-            url: 'https://opensource.org/licenses/CDDL-1.0'
+          short_name: 'CDDL',
+          pretty_name: 'Common Development and Distribution License 1.0',
+          other_names: ['Common Development and Distribution License (CDDL) v1.0', 'Common Development and Distribution License (CDDL) version 1.0'],
+          url: 'https://opensource.org/licenses/CDDL-1.0'
         )
       end
 
