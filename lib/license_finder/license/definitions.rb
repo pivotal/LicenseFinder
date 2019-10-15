@@ -10,6 +10,7 @@ module LicenseFinder
           apache1_1,
           apache2,
           bsd,
+          cddl,
           cc01,
           eclipse1,
           gplv2,
@@ -55,6 +56,8 @@ module LicenseFinder
           other_names: [
             'Apache-2.0',
             'Apache Software License',
+            'Apache Software License 2.0',
+            'Apache 2.0 License',
             'Apache License 2.0',
             'Apache License Version 2.0',
             'Apache Public License 2.0',
@@ -84,6 +87,15 @@ module LicenseFinder
           pretty_name: 'CC0 1.0 Universal',
           other_names: ['CC0 1.0'],
           url: 'http://creativecommons.org/publicdomain/zero/1.0'
+        )
+      end
+
+      def cddl
+        License.new(
+            short_name: 'CDDL',
+            pretty_name: 'Common Development and Distribution License 1.0',
+            other_names: ['Common Development and Distribution License (CDDL) v1.0', 'Common Development and Distribution License (CDDL) version 1.0'],
+            url: 'https://opensource.org/licenses/CDDL-1.0'
         )
       end
 
@@ -119,7 +131,7 @@ module LicenseFinder
       def isc
         License.new(
           short_name: 'ISC',
-          url: 'http://en.wikipedia.org/wiki/ISC_license'
+          url: 'https://opensource.org/licenses/ISC'
         )
       end
 
@@ -159,7 +171,7 @@ module LicenseFinder
 
         License.new(
           short_name: 'MIT',
-          other_names: ['Expat', 'MIT license', 'MIT License', 'The MIT License (MIT)'],
+          other_names: ['Expat', 'MIT license', 'MIT License', 'The MIT License', 'The MIT License (MIT)'],
           url: 'http://opensource.org/licenses/mit-license',
           matcher: matcher
         )
@@ -206,6 +218,7 @@ module LicenseFinder
             'BSD3',
             'BSD-3',
             '3-clause BSD',
+            'BSD 3-clause',
             'BSD-3-Clause',
             'BSD 3-Clause License',
             'The 3-Clause BSD License',
@@ -252,6 +265,7 @@ module LicenseFinder
             '2-clause BSD',
             'BSD-2-Clause',
             'BSD 2-Clause',
+            'BSD 2-Clause License',
             'The BSD 2-Clause License'
           ],
           url: 'http://opensource.org/licenses/bsd-license'
