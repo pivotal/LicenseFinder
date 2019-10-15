@@ -102,27 +102,52 @@ describe 'License Finder command line executable' do
   end
 
   describe 'running project_roots' do
-    before do
-      @project = LicenseFinder::TestingDSL::CompositeProject.create
-    end
-
     context 'with --recursive flag' do
-      let(:license_finder_command) { 'license_finder project_roots --recursive' }
+      context 'when called in root project' do
+        let(:license_finder_command) { 'license_finder project_roots --recursive' }
 
-      specify 'returns all project paths' do
-        developer.execute_command(license_finder_command)
+        before do
+          @project = LicenseFinder::TestingDSL::GradleProject::MultiModule.create
+        end
 
-        expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle\"}
-        expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/single-module-gradle\"}
+        it 'returns all project paths excluding subprojects' do
+          developer.execute_command(license_finder_command)
+
+          expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle\"}
+          expect(developer).to_not be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1\"}
+          expect(developer).to_not be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module2\"}
+          expect(developer).to_not be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module3\"}
+          expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1/module4/src/github.com/pivotal/foo\"}
+        end
+      end
+
+      context 'when called in subproject directory' do
+        let(:license_finder_command) { "license_finder project_roots --project_path=#{@project.project_dir}/multi-module-gradle/module1 --recursive" }
+
+        before do
+          @project = LicenseFinder::TestingDSL::GradleProject::MultiModule.create
+        end
+
+        it 'returns all project paths excluding subprojects including current directory' do
+          developer.execute_command(license_finder_command)
+
+          expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1\"}
+          expect(developer).to_not be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module3\"}
+          expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1/module4/src/github.com/pivotal/foo\"}
+        end
       end
     end
 
     context 'without flags' do
       let(:license_finder_command) { 'license_finder project_roots' }
 
+      before do
+        @project = LicenseFinder::TestingDSL::CompositeProject.create
+      end
+
       specify 'returns current path' do
         developer.execute_command(license_finder_command)
-        expect(developer).to be_seeing_something_like /^#{Regexp.escape(@project.project_dir.to_s)}$/
+        expect(developer).to be_seeing_something_like /^\["#{Regexp.escape(@project.project_dir.to_s)}"\]\n$/
       end
     end
   end

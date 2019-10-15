@@ -22,7 +22,7 @@ module LicenseFinder
       end
     end
 
-    describe '#current_packages', :focus do
+    describe '#current_packages' do
       context 'when the godep json is empty' do
         let(:content) do
           FakeFS.without do

@@ -43,9 +43,11 @@ module LicenseFinder
     end
 
     def active_project?(project_path)
-      active_project = @package_managers.map do |pm|
-        pm.new(project_path: project_path, strict_matching: @strict_matching).active?
+      active_project = @package_managers.map do |pm_class|
+        pm = pm_class.new(project_path: project_path, strict_matching: @strict_matching)
+        pm.active?
       end
+
       active_project.include?(true)
     end
 

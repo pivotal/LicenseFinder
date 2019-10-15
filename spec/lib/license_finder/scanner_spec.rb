@@ -78,5 +78,42 @@ module LicenseFinder
         end
       end
     end
+
+    describe '#remove_subprojects' do
+      context 'receives a list of directories where some are subprojects' do
+        it 'returns a list of project roots only' do
+          project_roots = [
+            fixture_path('gradle-with-subprojects').to_s,
+            fixture_path('gradle-with-subprojects/submodule-1').to_s,
+            fixture_path('gradle-with-subprojects/kotlin-submodule-1').to_s
+          ]
+          expect(Scanner.remove_subprojects(project_roots)).to eq([fixture_path('gradle-with-subprojects').to_s])
+        end
+      end
+
+      context 'receives a list of directories where some contain multiple package managers and is a project root' do
+        it 'returns a list of project roots including it' do
+          project_roots = [
+            fixture_path('gradle-with-subprojects').to_s,
+            fixture_path('gradle-with-subprojects/submodule-1').to_s,
+            fixture_path('gradle-with-subprojects/submodule-2').to_s,
+            fixture_path('gradle-with-subprojects/kotlin-submodule-1').to_s
+          ]
+          expect(Scanner.remove_subprojects(project_roots))
+            .to eq([fixture_path('gradle-with-subprojects').to_s, fixture_path('gradle-with-subprojects/submodule-2').to_s])
+        end
+      end
+
+      context 'there are no subprojects' do
+        it 'does not remove anything' do
+          project_roots = [
+            fixture_path('gradle-with-subprojects').to_s,
+            fixture_path('gradle-with-subprojects/submodule-2').to_s
+          ]
+          expect(Scanner.remove_subprojects(project_roots))
+            .to eq([fixture_path('gradle-with-subprojects').to_s, fixture_path('gradle-with-subprojects/submodule-2').to_s])
+        end
+      end
+    end
   end
 end

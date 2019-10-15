@@ -5,6 +5,23 @@ module LicenseFinder
     PACKAGE_MANAGERS = [GoModules, GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Trash, Dep, Bundler, NPM, Pip,
                         Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan, Sbt, Cargo, Dotnet, Composer].freeze
 
+    class << self
+      def remove_subprojects(paths)
+        paths.reject { |path| subproject?(Pathname(path)) }
+      end
+
+      private
+
+      def subproject?(path)
+        subproject = true
+        PACKAGE_MANAGERS.each do |package_manager_class|
+          package_manager = package_manager_class.new(project_path: path)
+          subproject &&= !package_manager.project_root?
+        end
+        subproject
+      end
+    end
+
     def initialize(config = { project_path: Pathname.new('') })
       @config = config
       @project_path = @config[:project_path]

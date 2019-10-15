@@ -430,6 +430,8 @@ downloadLicenses {
 }
 ```
 
+**A note on Gradle Subprojects**: `license_finder` does not report Gradle subprojects as project roots when generating reports. However, if there is a non-Gradle package definition file in a subproject, then it will be included in the report.
+
 ### Conan Projects
 
 `license_finder` supports Conan. You need to have the following lines in your conanfile.txt for `license_finder` to retrieve dependencies' licenses.
