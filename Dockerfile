@@ -147,7 +147,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
   sudo dpkg -i packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
-  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1
+  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-runtime-2.2 dotnet-sdk-2.2
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
     echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
