@@ -192,6 +192,12 @@ module LicenseFinder
       end
 
       def save_report(content, file_name)
+        require 'fileutils'
+        dir = File.dirname(file_name)
+        unless Dir.exist?(dir)
+          FileUtils.mkdir_p(dir)
+        end
+
         File.open(file_name, 'w') do |f|
           f.write(content)
         end

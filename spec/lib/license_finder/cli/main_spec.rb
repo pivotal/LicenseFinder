@@ -196,6 +196,22 @@ module LicenseFinder
               subject.report
             end
           end
+
+          context 'when folder does not exist, it is being created' do
+            let(:save) { 'output/subfolder/license_report.txt' }
+
+            after do
+              # cleanup to remove the created directory again
+              FileUtils.rm_rf('output')
+            end
+
+            it 'calls `FileUtils` which creates the directory' do
+              subject.options = { 'save' => save }
+              expect(FileUtils).to receive(:mkdir_p).with('output/subfolder').and_call_original
+
+              subject.report
+            end
+          end
         end
 
         context 'when the --save option is not passed' do
