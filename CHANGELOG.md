@@ -1,3 +1,12 @@
+# [5.11.0] / 2019-10-24
+
+### Fixed
+* Fix crash in LF for null deps in godep - [aec335e5](https://github.com/pivotal/LicenseFinder/commit/aec335e574b65c1e9927787e88fb95f1296cdd26) 
+
+### Changed
+* Exclude Gradle subprojects from project roots - [4efea4c8](https://github.com/pivotal/LicenseFinder/commit/4efea4c8892f48c24ed6ec46a4be85cb06dc6672) - Jason Smith
+* project_roots will skip maven subprojects - [61b88513](https://github.com/pivotal/LicenseFinder/commit/61b885135bd02cf2b5c6be4bc1fba85020d42f6a) - Peter Tran
+
 # [5.10.2] / 2019-09-03
 
 ### Added
@@ -752,3 +761,4 @@ Bugfixes:
 [5.10.0]: https://github.com/pivotal/LicenseFinder/compare/v5.9.2...v5.10.0
 [5.10.1]: https://github.com/pivotal/LicenseFinder/compare/v5.10.0...v5.10.1
 [5.10.2]: https://github.com/pivotal/LicenseFinder/compare/v5.10.1...v5.10.2
+[5.11.0]: https://github.com/pivotal/LicenseFinder/compare/v5.10.2...v5.11.0
