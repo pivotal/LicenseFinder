@@ -207,7 +207,7 @@ BUILD SUCCESSFUL in 0s
               FileUtils.mkdir_p '/fake/path'
               FileUtils.touch '/fake/path/build.gradle'
 
-              expect(SharedHelpers::Cmd).to receive(:run).with("gradle properties | grep 'parent: '").and_call_original
+              expect(SharedHelpers::Cmd).to receive(:run).with("gradle -Dorg.gradle.jvmargs=-Xmx6144m properties | grep 'parent: '").and_call_original
 
               expect(subject.project_root?).to be true
             end
@@ -218,7 +218,7 @@ BUILD SUCCESSFUL in 0s
           it 'returns false' do
             FakeFS do
               FileUtils.mkdir_p '/fake/path'
-              expect(SharedHelpers::Cmd).not_to receive(:run).with("gradle properties | grep 'parent: '")
+              expect(SharedHelpers::Cmd).not_to receive(:run).with("gradle -Dorg.gradle.jvmargs=-Xmx6144m properties | grep 'parent: '")
               expect(subject.project_root?).to be false
             end
           end
@@ -230,7 +230,7 @@ BUILD SUCCESSFUL in 0s
               FileUtils.mkdir_p '/fake/path'
               FileUtils.touch '/fake/path/build.gradle.kts'
 
-              expect(SharedHelpers::Cmd).to receive(:run).with("gradle properties | grep 'parent: '").and_call_original
+              expect(SharedHelpers::Cmd).to receive(:run).with("gradle -Dorg.gradle.jvmargs=-Xmx6144m properties | grep 'parent: '").and_call_original
 
               expect(subject.project_root?).to be true
             end
@@ -250,7 +250,7 @@ BUILD SUCCESSFUL in 0s
               end
               FileUtils.touch '/fake/path/build-alt.gradle'
 
-              expect(SharedHelpers::Cmd).to receive(:run).with("gradle properties | grep 'parent: '").and_call_original
+              expect(SharedHelpers::Cmd).to receive(:run).with("gradle -Dorg.gradle.jvmargs=-Xmx6144m properties | grep 'parent: '").and_call_original
 
               expect(subject.project_root?).to be true
             end
@@ -264,7 +264,7 @@ BUILD SUCCESSFUL in 0s
             FileUtils.mkdir_p '/fake/path'
             FileUtils.touch '/fake/path/build.gradle'
 
-            expect(SharedHelpers::Cmd).to receive(:run).with("gradle properties | grep 'parent: '")
+            expect(SharedHelpers::Cmd).to receive(:run).with("gradle -Dorg.gradle.jvmargs=-Xmx6144m properties | grep 'parent: '")
                                             .and_return(["parent: root project 'parent-gradle-project'\n", nil, cmd_success])
             expect(subject.project_root?).to eq(false)
           end
@@ -277,9 +277,9 @@ BUILD SUCCESSFUL in 0s
             FileUtils.mkdir_p '/fake/path'
             FileUtils.touch '/fake/path/build.gradle'
 
-            expect(SharedHelpers::Cmd).to receive(:run).with("gradle properties | grep 'parent: '").and_return([nil, 'error', cmd_failure])
+            expect(SharedHelpers::Cmd).to receive(:run).with("gradle -Dorg.gradle.jvmargs=-Xmx6144m properties | grep 'parent: '").and_return([nil, 'error', cmd_failure])
 
-            expect { subject.project_root? }.to raise_error(/Command 'gradle properties \| grep 'parent: '' failed to execute: error/)
+            expect { subject.project_root? }.to raise_error(/Command 'gradle -Dorg.gradle.jvmargs=-Xmx6144m properties \| grep 'parent: '' failed to execute: error/)
           end
         end
       end
