@@ -6,7 +6,7 @@ Build status
 * Ruby 2.3.8 [![Ruby 2.3.8 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.8/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.4.5 [![Ruby 2.4.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.5.3 [![Ruby 2.5.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.6.3 [![Ruby 2.6.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.6.5 [![Ruby 2.6.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * JRuby 9.1.17.0 [![JRuby 9.1.17.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.1.17.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * JRuby 9.2.6.0 [![JRuby 9.2.6.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.6.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
