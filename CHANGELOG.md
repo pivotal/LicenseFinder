@@ -1,3 +1,12 @@
+# [5.11.1] / 2019-11-05
+
+### Fixed
+* Crash when gradle runs with project roots recursive [#169465210] - [08e0df85](https://github.com/pivotal/LicenseFinder/commit/08e0df857c7fa4273eb6e2e4a7c01bb46550a91f) 
+
+### Changed
+* Bump docker ruby version to 2.6.5 [#169539985] - [26b6d4b2](https://github.com/pivotal/LicenseFinder/commit/26b6d4b25133fa50dbf92265a20bed2350305245) 
+* Gradle version updated to 5.6.4 - [9e32228f](https://github.com/pivotal/LicenseFinder/commit/9e32228fae3dacae38e7827946a0e0412a20ccb0) 
+
 # [5.11.0] / 2019-10-24
 
 ### Fixed
@@ -762,3 +771,4 @@ Bugfixes:
 [5.10.1]: https://github.com/pivotal/LicenseFinder/compare/v5.10.0...v5.10.1
 [5.10.2]: https://github.com/pivotal/LicenseFinder/compare/v5.10.1...v5.10.2
 [5.11.0]: https://github.com/pivotal/LicenseFinder/compare/v5.10.2...v5.11.0
+[5.11.1]: https://github.com/pivotal/LicenseFinder/compare/v5.11.0...v5.11.1
