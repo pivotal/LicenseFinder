@@ -9,7 +9,6 @@ ENV SBT_VERSION 1.1.1
 ENV GRADLE_VERSION 5.6.4
 ENV RUBY_VERSION 2.6.5
 ENV MIX_VERSION 1.0
-ENV JDK_VERISON 8u211
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # programs needed for building
@@ -39,16 +38,12 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
 RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
-#install java 8
-#http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
-RUN apt-get install -y openjdk-8-jdk
-RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
-ENV J2SDKDIR=/usr/lib/jvm/java-8-openjdk-amd64
-ENV J2REDIR=/usr/lib/jvm/java-8-openjdk-amd64/jre
-ENV PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
+# install jdk 13
+RUN curl -L -o openjdk13.0.1.tar.gz https://download.java.net/java/GA/jdk13.0.1/cec27d702aa74d5a8630c65ae61e4305/9/GPL/openjdk-13.0.1_linux-x64_bin.tar.gz && \
+    tar xvf openjdk13.0.1.tar.gz && \
+    sudo mv jdk-13.0.1 /opt/
+ENV JAVA_HOME=/opt/jdk-13.0.1
+ENV PATH=$PATH:$JAVA_HOME/bin
 RUN java -version
 
 # install python and rebar
