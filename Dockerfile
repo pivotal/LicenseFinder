@@ -38,11 +38,11 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
 RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
-# install jdk 13
-RUN curl -L -o openjdk13.0.1.tar.gz https://download.java.net/java/GA/jdk13.0.1/cec27d702aa74d5a8630c65ae61e4305/9/GPL/openjdk-13.0.1_linux-x64_bin.tar.gz && \
-    tar xvf openjdk13.0.1.tar.gz && \
-    sudo mv jdk-13.0.1 /opt/
-ENV JAVA_HOME=/opt/jdk-13.0.1
+# install jdk 12
+RUN curl -L -o openjdk12.tar.gz https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz && \
+    tar xvf openjdk12.tar.gz && \
+    sudo mv jdk-12.0.2 /opt/
+ENV JAVA_HOME=/opt/jdk-12.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 RUN java -version
 
