@@ -5,7 +5,7 @@ ENV PIP_INSTALL_VERSION 19.0.2
 ENV PIP3_INSTALL_VERSION 8.1.1
 ENV GO_LANG_VERSION 1.11.5
 ENV MAVEN_VERSION 3.6.0
-ENV SBT_VERSION 1.1.1
+ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
 ENV RUBY_VERSION 2.6.5
 ENV MIX_VERSION 1.0
@@ -39,10 +39,10 @@ RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
 # install jdk 11
-RUN curl -L -o openjdk11.tar.gz https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz && \
-    tar xvf openjdk11.tar.gz && \
-    sudo mv jdk-11.0.2 /opt/
-ENV JAVA_HOME=/opt/jdk-11.0.2
+RUN curl -L -o openjdk12.tar.gz https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz && \
+    tar xvf openjdk12.tar.gz && \
+    sudo mv jdk-12.0.2 /opt/
+ENV JAVA_HOME=/opt/jdk-12.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 RUN java -version
 
