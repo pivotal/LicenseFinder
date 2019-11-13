@@ -27,9 +27,18 @@ module LicenseFinder
     end
 
     describe '.prepare_command' do
-      subject { Bundler.new(ignored_groups: %w[dev test], project_path: Pathname.new('.'), definition: definition) }
-      it 'returns the correct prepare method' do
-        expect(subject.prepare_command).to eq('bundle install')
+      context 'with ignored groups' do
+        subject { Bundler.new(ignored_groups: %w[dev test], project_path: Pathname.new('.'), definition: definition) }
+        it 'returns the correct prepare method' do
+          expect(subject.prepare_command).to eq('bundle install --without dev --without test')
+        end
+      end
+
+      context 'without ignored groups' do
+        subject { Bundler.new(ignored_groups: %w[], project_path: Pathname.new('.'), definition: definition) }
+        it 'returns the correct prepare method' do
+          expect(subject.prepare_command).to eq('bundle install')
+        end
       end
     end
 
