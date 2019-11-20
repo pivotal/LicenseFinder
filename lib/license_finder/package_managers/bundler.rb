@@ -24,12 +24,9 @@ module LicenseFinder
     end
 
     def prepare_command
-      ignored_groups_array = []
-      ignored_groups_array.tap do
-        ignored_groups.each { |group| ignored_groups_array << "--without #{group}" }
-      end
+      ignored_groups_argument = ignored_groups.length > 0 ? "--without #{ignored_groups.join(" ")}" : ""
 
-      "bundle install #{ignored_groups_array.join(' ')}".strip
+      "bundle install #{ignored_groups_argument}".strip
     end
 
     def possible_package_paths
