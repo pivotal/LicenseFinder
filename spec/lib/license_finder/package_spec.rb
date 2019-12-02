@@ -65,7 +65,7 @@ module LicenseFinder
           subject = described_class.new(nil, nil)
           subject.decide_on_license(License.find_by_name('MIT'))
           subject.decide_on_license(License.find_by_name('GPL'))
-          expect(subject.licenses.map(&:name)).to match_array %w[MIT GPL]
+          expect(subject.licenses.map(&:name)).to match_array %w[GPL MIT]
         end
 
         it 'de-duplicates across license aliases' do

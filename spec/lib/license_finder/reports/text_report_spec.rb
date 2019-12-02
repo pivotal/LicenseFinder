@@ -27,7 +27,7 @@ module LicenseFinder
       subject { described_class.new([dep3, dep2, dep1]).to_s }
 
       it 'should generate a text report with the name, version and license of each dependency, sorted by name' do
-        is_expected.to eq("gem_a, 1.0, MIT\ngem_b, 1.0, MIT\ngem_c, 2.0, \"MIT, BSD\"\n")
+        is_expected.to eq("gem_a, 1.0, MIT\ngem_b, 1.0, MIT\ngem_c, 2.0, \"BSD, MIT\"\n")
       end
 
       it 'should generate a text report with the name, version of each dependency, use --columns option' do
