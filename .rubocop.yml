@@ -9,7 +9,7 @@ AllCops:
     - 'Gemfile'
 
 #Layout Cops
-IndentHeredoc:
+HeredocIndentation:
   Enabled: false
 EmptyLinesAroundArguments:
   Enabled: false
