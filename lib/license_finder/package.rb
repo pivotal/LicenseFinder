@@ -125,7 +125,7 @@ module LicenseFinder
     attr_reader :install_path # checked in tests, otherwise private
 
     def licenses
-      @licenses ||= activations.map(&:license).to_set.sort
+      @licenses ||= activations.map(&:license).to_set.sort { |first, second| first.names.first <=> second.names.first }
     end
 
     def activations
