@@ -17,7 +17,7 @@ module LicenseFinder
         dependencies:
            [
              {
-               name: 'gem_a', version: '1.0', authors: 'the authors', licenses: %w[MIT GPL],
+               name: 'gem_a', version: '1.0', authors: 'the authors', licenses: %w[GPL MIT],
                approved: 'Approved', summary: 'A summary', description: 'A description', homepage: 'http://homepage.example.com'
              }
            ]
