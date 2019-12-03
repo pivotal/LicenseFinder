@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
 
   s.authors = [
     'Ryan Collins',
-    'Vikram Yadav',
     'Daniil Kouznetsov',
     'Andy Shen',
     'Shane Lattanzio',
