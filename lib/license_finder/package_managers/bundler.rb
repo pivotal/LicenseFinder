@@ -24,7 +24,7 @@ module LicenseFinder
     end
 
     def prepare_command
-      ignored_groups_argument = !ignored_groups.empty? ? "--without #{ignored_groups.join(' ')}" : ''
+      ignored_groups_argument = !ignored_groups.empty? ? "--without #{ignored_groups.to_a.join(' ')}" : ''
 
       "bundle install #{ignored_groups_argument}".strip
     end

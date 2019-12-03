@@ -28,14 +28,14 @@ module LicenseFinder
 
     describe '.prepare_command' do
       context 'with ignored groups' do
-        subject { Bundler.new(ignored_groups: %w[dev test], project_path: Pathname.new('.'), definition: definition) }
+        subject { Bundler.new(ignored_groups: Set.new(%w[dev test]), project_path: Pathname.new('.'), definition: definition) }
         it 'returns the correct prepare method' do
           expect(subject.prepare_command).to eq('bundle install --without dev test')
         end
       end
 
       context 'without ignored groups' do
-        subject { Bundler.new(ignored_groups: %w[], project_path: Pathname.new('.'), definition: definition) }
+        subject { Bundler.new(ignored_groups: Set.new, project_path: Pathname.new('.'), definition: definition) }
         it 'returns the correct prepare method' do
           expect(subject.prepare_command).to eq('bundle install')
         end
@@ -44,7 +44,7 @@ module LicenseFinder
 
     describe '.current_packages' do
       subject do
-        Bundler.new(ignored_groups: %w[dev test], project_path: Pathname.new('.'), definition: definition).current_packages
+        Bundler.new(ignored_groups: Set.new(%w[dev test]), project_path: Pathname.new('.'), definition: definition).current_packages
       end
 
       it 'should have 2 dependencies' do
@@ -71,7 +71,7 @@ module LicenseFinder
       let(:custom_gemfile) { fixture_path('custom_gemfile') }
 
       subject do
-        Bundler.new(project_path: custom_gemfile, ignored_groups: %w[dev test])
+        Bundler.new(project_path: custom_gemfile, ignored_groups: Set.new(%w[dev test]))
       end
 
       it 'defaults to Gemfile/Gemfile.lock' do
