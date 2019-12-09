@@ -20,7 +20,9 @@ module CommonPathHelper
 
           longest_common_path = potential_path
         end
-        common_paths << longest_common_path
+
+        longest_common_path = full_paths if longest_common_path.split('/').length == 1
+        (common_paths << longest_common_path).flatten!
       end
     end
   end
