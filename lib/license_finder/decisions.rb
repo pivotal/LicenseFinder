@@ -6,7 +6,7 @@ module LicenseFinder
     # READ
     ######
 
-    attr_reader :packages, :permitted, :blacklisted, :ignored, :ignored_groups, :project_name
+    attr_reader :packages, :permitted, :restricted, :ignored, :ignored_groups, :project_name
 
     def licenses_of(name)
       @licenses[name]
@@ -40,8 +40,8 @@ module LicenseFinder
       @permitted.include?(lic)
     end
 
-    def blacklisted?(lic)
-      @blacklisted.include?(lic)
+    def restricted?(lic)
+      @restricted.include?(lic)
     end
 
     def ignored?(name)
@@ -69,7 +69,7 @@ module LicenseFinder
       @homepages = {}
       @approvals = {}
       @permitted = Set.new
-      @blacklisted = Set.new
+      @restricted = Set.new
       @ignored = Set.new
       @ignored_groups = Set.new
     end
@@ -132,15 +132,15 @@ module LicenseFinder
       self
     end
 
-    def blacklist(lic, txn = {})
-      @decisions << [:blacklist, lic, txn]
-      @blacklisted << License.find_by_name(lic)
+    def restrict(lic, txn = {})
+      @decisions << [:restrict, lic, txn]
+      @restricted << License.find_by_name(lic)
       self
     end
 
-    def unblacklist(lic, txn = {})
-      @decisions << [:unblacklist, lic, txn]
-      @blacklisted.delete(License.find_by_name(lic))
+    def unrestrict(lic, txn = {})
+      @decisions << [:unrestrict, lic, txn]
+      @restricted.delete(License.find_by_name(lic))
       self
     end
 

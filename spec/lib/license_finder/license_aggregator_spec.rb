@@ -42,14 +42,14 @@ module LicenseFinder
         end
       end
 
-      describe '#blacklisted' do
+      describe '#restricted' do
         before do
-          hammer.blacklisted!
+          hammer.restricted!
         end
         let(:merged_1_expected) { MergedPackage.new(hammer, [project_1_path]) }
-        it 'should return list of blacklisted packages' do
+        it 'should return list of restricted packages' do
           aggregator = described_class.new(configuration, [project_1_path, project_2_path])
-          expect(aggregator.blacklisted).to eq([merged_1_expected])
+          expect(aggregator.restricted).to eq([merged_1_expected])
         end
       end
     end
@@ -80,14 +80,14 @@ module LicenseFinder
         end
       end
 
-      describe '#blacklisted' do
+      describe '#restricted' do
         before do
-          hammer.blacklisted!
+          hammer.restricted!
         end
         let(:merged_1_expected) { MergedPackage.new(hammer, [project_1_path, project_2_path]) }
-        it 'should return list of blacklisted packages' do
+        it 'should return list of restricted packages' do
           aggregator = described_class.new(configuration, [project_1_path, project_2_path])
-          expect(aggregator.blacklisted).to eq([merged_1_expected])
+          expect(aggregator.restricted).to eq([merged_1_expected])
         end
       end
     end
@@ -118,14 +118,14 @@ module LicenseFinder
         end
       end
 
-      describe '#blacklisted' do
+      describe '#restricted' do
         before do
-          hammer1.blacklisted!
+          hammer1.restricted!
         end
         let(:merged_1_expected) { MergedPackage.new(hammer1, [project_1_path, project_2_path]) }
-        it 'should return list of blacklisted packages' do
+        it 'should return list of restricted packages' do
           aggregator = described_class.new(configuration, [project_1_path, project_2_path])
-          expect(aggregator.blacklisted).to eq([merged_1_expected])
+          expect(aggregator.restricted).to eq([merged_1_expected])
         end
       end
     end

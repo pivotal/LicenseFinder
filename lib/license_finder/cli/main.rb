@@ -107,7 +107,7 @@ module LicenseFinder
         finder = LicenseAggregator.new(config, aggregate_paths)
         any_packages = finder.any_packages?
         unapproved = finder.unapproved
-        blacklisted = finder.blacklisted
+        restricted = finder.restricted
 
         # Ensure to start output on a new line even with dot progress indicators.
         say "\n"
@@ -120,12 +120,12 @@ module LicenseFinder
         if unapproved.empty?
           say 'All dependencies are approved for use', :green
         else
-          unless blacklisted.empty?
-            say 'Blacklisted dependencies:', :red
-            say report_of(blacklisted)
+          unless restricted.empty?
+            say 'Restricted dependencies:', :red
+            say report_of(restricted)
           end
 
-          other_unapproved = unapproved - blacklisted
+          other_unapproved = unapproved - restricted
           unless other_unapproved.empty?
             say 'Dependencies that need approval:', :yellow
             say report_of(other_unapproved)
@@ -169,7 +169,7 @@ module LicenseFinder
       subcommand 'ignored_groups', IgnoredGroups, 'Exclude test and development dependencies from action items and reports'
       subcommand 'ignored_dependencies', IgnoredDependencies, 'Exclude individual dependencies from action items and reports'
       subcommand 'permitted_licenses', PermittedLicenses, 'Automatically approve any dependency that has a permitted license'
-      subcommand 'blacklist', Blacklist, 'Forbid approval of any dependency whose licenses are all blacklisted'
+      subcommand 'restricted_licenses', RestrictedLicenses, 'Forbid approval of any dependency whose licenses are all restricted'
       subcommand 'project_name', ProjectName, 'Set the project name, for display in reports'
 
       private
