@@ -90,22 +90,22 @@ module LicenseFinder
         expect(dep.manual_approval.why).to eq 'Because'
       end
 
-      it 'adds whitelist approvals to packages' do
+      it 'adds permitted license approvals to packages' do
         decisions = Decisions.new
                              .add_package('manual', nil)
                              .license('manual', 'MIT')
-                             .whitelist('MIT')
+                             .permit('MIT')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
-        expect(dep).to be_whitelisted
+        expect(dep).to be_permitted
       end
 
       it 'forbids approval of packages with only blacklisted license' do
         decisions = Decisions.new
                              .add_package('manual', nil)
                              .license('manual', 'ABC')
-                             .whitelist('ABC')
+                             .permit('ABC')
                              .approve('manual')
                              .blacklist('ABC')
         decision_applier = described_class.new(decisions: decisions, packages: [])
@@ -118,12 +118,12 @@ module LicenseFinder
                              .add_package('manual', nil)
                              .license('manual', 'ABC')
                              .license('manual', 'DEF')
-                             .whitelist('ABC')
+                             .permit('ABC')
                              .blacklist('DEF')
         decision_applier = described_class.new(decisions: decisions, packages: [])
         dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
-        expect(dep).to be_whitelisted
+        expect(dep).to be_permitted
 
         decisions = Decisions.new
                              .add_package('manual', nil)
@@ -187,12 +187,12 @@ module LicenseFinder
     describe '#unapproved' do
       it 'returns all acknowledged packages that are not approved' do
         packages = [
-          Package.new('foo', '0.0.1', spec_licenses: ['whitelist']),
+          Package.new('foo', '0.0.1', spec_licenses: ['permitted_licenses']),
           Package.new('bar', '0.0.1', spec_licenses: ['blacklist'])
         ]
         decisions = Decisions.new
                              .add_package('baz', '0.0.1')
-                             .whitelist('whitelist')
+                             .permit('permitted_licenses')
                              .blacklist('blacklist')
         decision_applier = described_class.new(decisions: decisions, packages: packages)
 

@@ -48,7 +48,7 @@ module LicenseFinder
       @groups = options[:groups] || []
 
       ## APPROVAL
-      @whitelisted = false
+      @permitted = false
       @blacklisted = false
       @manual_approval = nil
 
@@ -79,17 +79,17 @@ module LicenseFinder
 
     def approved?
       # Question: is `!blacklisted?` redundant?
-      # DecisionApplier does not call `whitelisted!` or `approved_manually!`
+      # DecisionApplier does not call `permitted!` or `approved_manually!`
       # if a Package has been blacklisted.
-      (approved_manually? || whitelisted?) && !blacklisted?
+      (approved_manually? || permitted?) && !blacklisted?
     end
 
-    def whitelisted!
-      @whitelisted = true
+    def permitted!
+      @permitted = true
     end
 
-    def whitelisted?
-      @whitelisted
+    def permitted?
+      @permitted
     end
 
     def blacklisted!

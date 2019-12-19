@@ -23,8 +23,8 @@ describe 'Blacklisted licenses' do
     expect(lawyer).to be_seeing 'blacklisted_dep'
   end
 
-  specify 'override the whitelist' do
-    developer.execute_command 'license_finder whitelist add BSD'
+  specify 'override the permitted licenses' do
+    developer.execute_command 'license_finder permitted_licenses add BSD'
 
     lawyer.run_license_finder
     expect(lawyer).to be_seeing 'blacklisted_dep'

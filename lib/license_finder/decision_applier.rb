@@ -57,8 +57,8 @@ module LicenseFinder
         package.blacklisted!
       elsif decisions.approved?(package.name, package.version)
         package.approved_manually!(decisions.approval_of(package.name, package.version))
-      elsif package.licenses.any? { |license| decisions.whitelisted?(license) }
-        package.whitelisted!
+      elsif package.licenses.any? { |license| decisions.permitted?(license) }
+        package.permitted!
       end
       package
     end

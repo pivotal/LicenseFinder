@@ -165,10 +165,10 @@ module LicenseFinder
 
       subcommand 'dependencies', Dependencies, 'Add or remove dependencies that your package managers are not aware of'
       subcommand 'licenses', Licenses, "Set a dependency's licenses, if the licenses found by license_finder are missing or wrong"
-      subcommand 'approvals', Approvals, 'Manually approve dependencies, even if their licenses are not whitelisted'
+      subcommand 'approvals', Approvals, 'Manually approve dependencies, even if their licenses are not permitted'
       subcommand 'ignored_groups', IgnoredGroups, 'Exclude test and development dependencies from action items and reports'
       subcommand 'ignored_dependencies', IgnoredDependencies, 'Exclude individual dependencies from action items and reports'
-      subcommand 'whitelist', Whitelist, 'Automatically approve any dependency that has a whitelisted license'
+      subcommand 'permitted_licenses', PermittedLicenses, 'Automatically approve any dependency that has a permitted license'
       subcommand 'blacklist', Blacklist, 'Forbid approval of any dependency whose licenses are all blacklisted'
       subcommand 'project_name', ProjectName, 'Set the project name, for display in reports'
 

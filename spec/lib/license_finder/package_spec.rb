@@ -143,8 +143,8 @@ module LicenseFinder
         expect(subject.approved?).to eq(true)
       end
 
-      it 'returns true when whitelisted' do
-        subject.whitelisted!
+      it 'returns true when permitted' do
+        subject.permitted!
         expect(subject.approved?).to eq(true)
       end
 

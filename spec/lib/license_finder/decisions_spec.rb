@@ -134,44 +134,44 @@ module LicenseFinder
       end
     end
 
-    describe '.whitelist' do
-      it 'will report the given license as approved' do
-        decisions = subject.whitelist('MIT')
-        expect(decisions).to be_whitelisted(License.find_by_name('MIT'))
+    describe '.permit' do
+      it 'will report the given license as permitted' do
+        decisions = subject.permit('MIT')
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
 
       it 'adapts names' do
-        decisions = subject.whitelist('Expat')
-        expect(decisions).to be_whitelisted(License.find_by_name('MIT'))
+        decisions = subject.permit('Expat')
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
 
       it 'adds to list' do
-        decisions = subject.whitelist('MIT')
-        expect(decisions.whitelisted).to eq(Set.new([License.find_by_name('MIT')]))
+        decisions = subject.permit('MIT')
+        expect(decisions.permitted).to eq(Set.new([License.find_by_name('MIT')]))
       end
     end
 
-    describe '.unwhitelist' do
-      it 'will not report the given license as approved' do
+    describe '.unpermit' do
+      it 'will not report the given license as permitted' do
         decisions = subject
-                    .whitelist('MIT')
-                    .unwhitelist('MIT')
-        expect(decisions).not_to be_whitelisted(License.find_by_name('MIT'))
+                    .permit('MIT')
+                    .unpermit('MIT')
+        expect(decisions).not_to be_permitted(License.find_by_name('MIT'))
       end
 
       it 'is cumulative' do
         decisions = subject
-                    .whitelist('MIT')
-                    .unwhitelist('MIT')
-                    .whitelist('MIT')
-        expect(decisions).to be_whitelisted(License.find_by_name('MIT'))
+                    .permit('MIT')
+                    .unpermit('MIT')
+                    .permit('MIT')
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
 
       it 'adapts names' do
         decisions = subject
-                    .whitelist('MIT')
-                    .unwhitelist('Expat')
-        expect(decisions).not_to be_whitelisted(License.find_by_name('MIT'))
+                    .permit('MIT')
+                    .unpermit('Expat')
+        expect(decisions).not_to be_permitted(License.find_by_name('MIT'))
       end
     end
 
@@ -368,20 +368,20 @@ module LicenseFinder
         expect(decisions).not_to be_approved('dep')
       end
 
-      it 'can restore whitelists' do
+      it 'can restore permitted licenses' do
         decisions = roundtrip(
-          subject.whitelist('MIT')
+          subject.permit('MIT')
         )
-        expect(decisions).to be_whitelisted(License.find_by_name('MIT'))
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
 
-      it 'can restore un-whitelists' do
+      it 'can restore un-permitted licenses' do
         decisions = roundtrip(
           subject
-            .whitelist('MIT')
-            .unwhitelist('MIT')
+            .permit('MIT')
+            .unpermit('MIT')
         )
-        expect(decisions).not_to be_whitelisted(License.find_by_name('MIT'))
+        expect(decisions).not_to be_permitted(License.find_by_name('MIT'))
       end
 
       it 'can restore blacklists' do
