@@ -15,11 +15,6 @@ pushd "$PROJECT_ROOT"
 
   gem update --system
   gem install bundler
-
-  # Install bundler v1 for older projects
-  # https://bundler.io/guides/bundler_2_upgrade.html#version-autoswitch
-  gem install bundler -v 1.17.3
-
   bundle install
 
   bundle exec rake install
