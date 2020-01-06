@@ -65,10 +65,10 @@
               <% end -%>
               <time datetime="<%= dependency.manual_approval.safe_when.utc.iso8601 %>"><%= dependency.manual_approval.safe_when.to_date %></time>
             </small>
-          <% elsif dependency.whitelisted? -%>
+          <% elsif dependency.permitted? -%>
             <p>
               <%= license_links(dependency) %>
-              whitelisted
+              permitted
               <span class="badge badge-success">&#x2713;</span>
             </p>
           <% else -%>

@@ -36,8 +36,8 @@ Gem::Specification.new do |s|
   s.description = <<-DESCRIPTION
     LicenseFinder works with your package managers to find
     dependencies, detect the licenses of the packages in them, compare
-    those licenses against a user-defined whitelist, and give you an
-    actionable exception report.
+    those licenses against a user-defined list of permitted licenses,
+    and give you an actionable exception report.
   DESCRIPTION
 
   s.license = 'MIT'

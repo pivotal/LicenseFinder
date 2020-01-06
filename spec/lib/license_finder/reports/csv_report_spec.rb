@@ -14,7 +14,7 @@ module LicenseFinder
       dep = Package.new('gem_a', '1.0', authors: 'the authors', description: 'A description', summary: 'A summary', homepage: 'http://homepage.example.com')
       dep.decide_on_license(License.find_by_name('MIT'))
       dep.decide_on_license(License.find_by_name('GPL'))
-      dep.whitelisted!
+      dep.permitted!
       subject = described_class.new([dep], columns: %w[name version authors licenses approved summary description homepage])
       expect(subject.to_s).to eq("gem_a,1.0,the authors,\"GPL,MIT\",Approved,A summary,A description,http://homepage.example.com\n")
     end

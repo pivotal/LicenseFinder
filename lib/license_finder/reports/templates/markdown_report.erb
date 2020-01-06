@@ -37,8 +37,8 @@ As of <%= Time.now.strftime("%B %e, %Y %l:%M%P") %>. <%= dependencies.size %> to
 ><%= dependency.manual_approval.why %>
 
 ><cite> <%= dependency.manual_approval.who %> <%= dependency.manual_approval.safe_when.to_date %></cite>
-<% elsif dependency.whitelisted? -%>
-<%= license_links(dependency) %> whitelisted
+<% elsif dependency.permitted? -%>
+<%= license_links(dependency) %> permitted
 <% else -%>
 <%= license_links(dependency) %> _**unapproved**_
 <% end -%>

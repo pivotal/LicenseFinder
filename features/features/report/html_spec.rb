@@ -39,7 +39,7 @@ describe 'HTML report' do
     developer.create_empty_project
     developer.execute_command 'license_finder dependencies add gpl_dep GPL'
     developer.execute_command 'license_finder dependencies add mit_dep MIT'
-    developer.execute_command 'license_finder whitelist add MIT'
+    developer.execute_command 'license_finder permitted_licenses add MIT'
 
     html = product_owner.view_html
     expect(html).to be_unapproved 'gpl_dep'

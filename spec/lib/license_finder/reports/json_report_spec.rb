@@ -11,7 +11,7 @@ module LicenseFinder
                                         homepage: 'http://homepage.example.com')
       dep.decide_on_license(License.find_by_name('MIT'))
       dep.decide_on_license(License.find_by_name('GPL'))
-      dep.whitelisted!
+      dep.permitted!
       subject = described_class.new([dep], columns: %w[name version authors licenses approved summary description homepage])
       expected = {
         dependencies:
