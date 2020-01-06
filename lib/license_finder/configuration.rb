@@ -5,7 +5,7 @@ require_relative 'platform'
 module LicenseFinder
   class Configuration
     def self.with_optional_saved_config(primary_config)
-      project_path = Pathname(primary_config.fetch(:project_path, Pathname.pwd)).expand_path
+      project_path = Pathname.pwd.expand_path
       config_file =  project_path.join('config', 'license_finder.yml')
       saved_config = config_file.exist? ? YAML.safe_load(config_file.read) : {}
       new(primary_config, saved_config)
@@ -62,7 +62,7 @@ module LicenseFinder
     end
 
     def project_path
-      Pathname(path_prefix).expand_path
+      Pathname.pwd.expand_path
     end
 
     def logger_mode
@@ -157,10 +157,6 @@ module LicenseFinder
     def initialize_copy(orig)
       super
       @primary_config = @primary_config.dup
-    end
-
-    def path_prefix
-      get(:project_path) || ''
     end
   end
 end

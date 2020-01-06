@@ -5,8 +5,6 @@ require 'thor'
 module LicenseFinder
   module CLI
     class Base < Thor
-      class_option :project_path,
-                   desc: 'Path to the project. Defaults to current working directory.'
       class_option :decisions_file,
                    desc: 'Where decisions are saved. Defaults to doc/dependency_decisions.yml.'
       class_option :log_directory,
@@ -30,7 +28,6 @@ module LicenseFinder
 
       def license_finder_config
         extract_options(
-          :project_path,
           :decisions_file,
           :go_full_version,
           :gradle_command,

@@ -59,7 +59,6 @@ module LicenseFinder
         let(:config_options) do
           [
             '--decisions_file=whatever.yml',
-            '--project_path=../other_project',
             '--gradle_command=do_things',
             '--rebar_command=do_other_things',
             '--rebar_deps_dir=rebar_dir',
@@ -80,7 +79,6 @@ module LicenseFinder
         let(:parsed_config) do
           {
             decisions_file: 'whatever.yml',
-            project_path: '../other_project',
             gradle_command: 'do_things',
             rebar_command: 'do_other_things',
             rebar_deps_dir: 'rebar_dir',
