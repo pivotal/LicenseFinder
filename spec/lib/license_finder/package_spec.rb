@@ -122,14 +122,14 @@ module LicenseFinder
       end
     end
 
-    describe '#blacklisted?' do
+    describe '#restricted?' do
       it 'defaults to false' do
-        expect(subject.blacklisted?).to eq(false)
+        expect(subject.restricted?).to eq(false)
       end
 
-      it 'can be set by blacklisted!' do
-        subject.blacklisted!
-        expect(subject.blacklisted?).to eq(true)
+      it 'can be set by restricted!' do
+        subject.restricted!
+        expect(subject.restricted?).to eq(true)
       end
     end
 
@@ -143,13 +143,13 @@ module LicenseFinder
         expect(subject.approved?).to eq(true)
       end
 
-      it 'returns true when whitelisted' do
-        subject.whitelisted!
+      it 'returns true when permitted' do
+        subject.permitted!
         expect(subject.approved?).to eq(true)
       end
 
-      it 'returns false when blacklisted' do
-        subject.blacklisted!
+      it 'returns false when restricted' do
+        subject.restricted!
         expect(subject.approved?).to eq(false)
       end
     end

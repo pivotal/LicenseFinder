@@ -48,8 +48,8 @@ module LicenseFinder
       @groups = options[:groups] || []
 
       ## APPROVAL
-      @whitelisted = false
-      @blacklisted = false
+      @permitted = false
+      @restricted = false
       @manual_approval = nil
 
       ## LICENSING
@@ -78,26 +78,26 @@ module LicenseFinder
     end
 
     def approved?
-      # Question: is `!blacklisted?` redundant?
-      # DecisionApplier does not call `whitelisted!` or `approved_manually!`
-      # if a Package has been blacklisted.
-      (approved_manually? || whitelisted?) && !blacklisted?
+      # Question: is `!restricted?` redundant?
+      # DecisionApplier does not call `permitted!` or `approved_manually!`
+      # if a Package has been restricted.
+      (approved_manually? || permitted?) && !restricted?
     end
 
-    def whitelisted!
-      @whitelisted = true
+    def permitted!
+      @permitted = true
     end
 
-    def whitelisted?
-      @whitelisted
+    def permitted?
+      @permitted
     end
 
-    def blacklisted!
-      @blacklisted = true
+    def restricted!
+      @restricted = true
     end
 
-    def blacklisted?
-      @blacklisted
+    def restricted?
+      @restricted
     end
 
     attr_reader :manual_approval
