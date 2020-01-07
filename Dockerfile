@@ -2,13 +2,13 @@ FROM ubuntu:xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 19.0.2
+ENV PIP3_INSTALL_VERSION 8.1.1
 ENV GO_LANG_VERSION 1.11.5
 ENV MAVEN_VERSION 3.6.0
-ENV SBT_VERSION 1.1.1
-ENV GRADLE_VERSION 4.10.3
-ENV RUBY_VERSION 2.6.3
+ENV SBT_VERSION 1.3.3
+ENV GRADLE_VERSION 5.6.4
+ENV RUBY_VERSION 2.6.5
 ENV MIX_VERSION 1.0
-ENV JDK_VERISON 8u211
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # programs needed for building
@@ -38,24 +38,21 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
 RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
-#install java 8
-#http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04
-RUN apt-get install -y openjdk-8-jdk
-RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
-ENV J2SDKDIR=/usr/lib/jvm/java-8-openjdk-amd64
-ENV J2REDIR=/usr/lib/jvm/java-8-openjdk-amd64/jre
-ENV PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
+# install jdk 11
+RUN curl -L -o openjdk12.tar.gz https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz && \
+    tar xvf openjdk12.tar.gz && \
+    sudo mv jdk-12.0.2 /opt/
+ENV JAVA_HOME=/opt/jdk-12.0.2
+ENV PATH=$PATH:$JAVA_HOME/bin
 RUN java -version
 
 # install python and rebar
 RUN apt-get install -y python rebar
 
 # install and update python-pip
-RUN apt-get install -y python-pip && \
-    pip install --upgrade pip==$PIP_INSTALL_VERSION
+RUN apt-get install -y python-pip python3-pip && \
+    pip install --upgrade pip==$PIP_INSTALL_VERSION && \
+    pip3 install --upgrade pip==$PIP3_INSTALL_VERSION
 
 # install maven
 RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
@@ -145,14 +142,14 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
   sudo dpkg -i packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
-  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1
+  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
     echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
     apt-get update &&\
     apt-get install -y php7.1-cli &&\
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
-    php -r "if (hash_file('sha384', 'composer-setup.php') === 'a5c698ffe4b8e849a443b120cd5ba38043260d5c4023dbf93e1558871f1f07f58274fc6f4c93bcfd858c6bd0775cd8d1') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" &&\
+    php -r "if (hash_file('sha384', 'composer-setup.php') === 'baf1608c33254d00611ac1705c1d9958c817a1a33bce370c0595974b342601bd80b92a3f46067da89e3b06bff421f182') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" &&\
     php composer-setup.php &&\
     php -r "unlink('composer-setup.php');" &&\
     mv composer.phar /usr/bin/composer

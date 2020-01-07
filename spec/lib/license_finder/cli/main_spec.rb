@@ -15,21 +15,21 @@ module LicenseFinder
       let(:configuration) { double(:configuration, valid_project_path?: true) }
       let(:found_any_packages) { true }
       let(:license_finder_instance) do
-        methods = { unapproved: unapproved_dependencies, blacklisted: [],
+        methods = { unapproved: unapproved_dependencies, restricted: [],
                     project_name: 'taco stand', config: configuration,
                     any_packages?: found_any_packages, prepare_projects: nil }
         double(:license_finder, methods)
       end
 
       let(:license_aggregator_instance) do
-        methods = { unapproved: unapproved_dependencies, blacklisted: blacklisted,
+        methods = { unapproved: unapproved_dependencies, restricted: restricted,
                     any_packages?: found_any_packages }
         double(:license_aggregator, methods)
       end
 
       let(:license) { double(:license, name: 'thing') }
       let(:unapproved_dependencies) { [double(:dependency, name: 'a dependency', version: '2.4.1', missing?: false, licenses: [license])] }
-      let(:blacklisted) { [] }
+      let(:restricted) { [] }
 
       before do
         logger = double('Logger', info: true, debug: true)
@@ -46,7 +46,7 @@ module LicenseFinder
           decisions.add_package('a dependency', nil)
           aggregator = double(:license_aggregator)
           expect(aggregator).to receive(:unapproved)
-          expect(aggregator).to receive(:blacklisted)
+          expect(aggregator).to receive(:restricted)
           expect(aggregator).to receive(:any_packages?)
           allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(aggregator)
           silence_stdout do
@@ -196,6 +196,22 @@ module LicenseFinder
               subject.report
             end
           end
+
+          context 'when folder does not exist, it is being created' do
+            let(:save) { 'output/subfolder/license_report.txt' }
+
+            after do
+              # cleanup to remove the created directory again
+              FileUtils.rm_rf('output')
+            end
+
+            it 'calls `FileUtils` which creates the directory' do
+              subject.options = { 'save' => save }
+              expect(FileUtils).to receive(:mkdir_p).with('output/subfolder').and_call_original
+
+              subject.report
+            end
+          end
         end
 
         context 'when the --save option is not passed' do
@@ -245,17 +261,17 @@ module LicenseFinder
           end
         end
 
-        context 'with blacklisted dependencies' do
-          let(:blacklisted) { [Package.new('blacklisted', '1.0', spec_licenses: ['GPLv3'])] }
+        context 'with restricted dependencies' do
+          let(:restricted) { [Package.new('restricted', '1.0', spec_licenses: ['GPLv3'])] }
           before do
             allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(license_aggregator_instance)
           end
 
-          it 'reports blacklisted dependencies' do
+          it 'reports restricted dependencies' do
             result = capture_stdout do
               expect { action_items }.to raise_error(SystemExit)
             end
-            expect(result).to include "Blacklisted dependencies:\nblacklisted, 1.0, GPLv3"
+            expect(result).to include "Restricted dependencies:\nrestricted, 1.0, GPLv3"
           end
         end
 

@@ -23,8 +23,10 @@ module LicenseFinder
       'bundle'
     end
 
-    def self.prepare_command
-      'bundle install'
+    def prepare_command
+      ignored_groups_argument = !ignored_groups.empty? ? "--without #{ignored_groups.to_a.join(' ')}" : ''
+
+      "bundle install #{ignored_groups_argument}".strip
     end
 
     def possible_package_paths

@@ -10,8 +10,8 @@ module LicenseFinder
     describe '#current_packages_with_relations' do
       it "sets packages' parents" do
         grandparent = Package.new('grandparent', nil, children: ['parent'])
-        parent      = Package.new('parent',      nil, children: ['child'])
-        child       = Package.new('child')
+        parent = Package.new('parent', nil, children: ['child'])
+        child = Package.new('child')
 
         pm = described_class.new
         allow(pm).to receive(:current_packages) { [grandparent, parent, child] }
@@ -85,8 +85,8 @@ module LicenseFinder
         before do
           FakeFS.activate!
           FileUtils.mkdir_p project_path
-          allow(described_class).to receive(:prepare_command).and_return('sh commands')
-          allow(described_class).to receive(:prepare_command).and_return('sh commands')
+          allow(subject).to receive(:prepare_command).and_return('sh commands')
+          allow(subject).to receive(:prepare_command).and_return('sh commands')
         end
 
         after do
@@ -158,7 +158,7 @@ module LicenseFinder
 
           it 'should not throw an error when prepare_command fails' do
             expect(SharedHelpers::Cmd).to receive(:run).with('sh commands')
-                                                       .and_return(['output', 'failure error msg', cmd_failure])
+                                            .and_return(['output', 'failure error msg', cmd_failure])
             expect { subject.prepare }.to_not raise_error
           end
         end
@@ -172,6 +172,23 @@ module LicenseFinder
 
           subject = described_class.new(logger: logger)
           subject.prepare
+        end
+      end
+    end
+
+    describe '.project_root?' do
+      let(:subject) { described_class.new }
+
+      context 'when active? is true' do
+        it 'returns true' do
+          allow(subject).to receive(:active?).and_return(true)
+          expect(subject.project_root?).to be_truthy
+        end
+      end
+      context 'when active? is false' do
+        it 'returns false' do
+          allow(subject).to receive(:active?).and_return(false)
+          expect(subject.project_root?).to be_falsey
         end
       end
     end

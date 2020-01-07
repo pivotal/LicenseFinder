@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
 
   s.authors = [
     'Ryan Collins',
-    'Vikram Yadav',
     'Daniil Kouznetsov',
     'Andy Shen',
     'Shane Lattanzio',
@@ -37,14 +36,14 @@ Gem::Specification.new do |s|
   s.description = <<-DESCRIPTION
     LicenseFinder works with your package managers to find
     dependencies, detect the licenses of the packages in them, compare
-    those licenses against a user-defined whitelist, and give you an
-    actionable exception report.
+    those licenses against a user-defined list of permitted licenses,
+    and give you an actionable exception report.
   DESCRIPTION
 
   s.license = 'MIT'
 
   s.add_dependency 'bundler'
-  s.add_dependency 'rubyzip'
+  s.add_dependency 'rubyzip', '>=1', '<3'
   s.add_dependency 'thor'
   s.add_dependency 'toml', '0.2.0'
   s.add_dependency 'with_env', '1.1.0'
@@ -54,13 +53,13 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara', '~> 3.15.0'
   s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM =~ /darwin/
   s.add_development_dependency 'fakefs', '~> 0.20.0'
-  s.add_development_dependency 'mime-types', '3.3'
+  s.add_development_dependency 'mime-types', '3.3.1'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its'
-  s.add_development_dependency 'rubocop', '~> 0.74.0'
-  s.add_development_dependency 'rubocop-performance', '~> 1.4.0'
+  s.add_development_dependency 'rubocop', '~> 0.79.0'
+  s.add_development_dependency 'rubocop-performance', '~> 1.5.0'
   s.add_development_dependency 'webmock', '~> 3.5'
 
   s.add_development_dependency 'rack', '> 1.6'

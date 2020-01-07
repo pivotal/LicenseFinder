@@ -42,7 +42,31 @@ module LicenseFinder
       File.exist?(File.join(project_path, wrapper)) ? wrapper : gradle
     end
 
+    def project_root?
+      active? && root_module?
+    end
+
     private
+
+    def root_module?
+      return false if project_path.to_s.include?('buildSrc')
+
+      command = "#{package_management_command} -Dorg.gradle.jvmargs=-Xmx6144m properties | grep 'parent: '"
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+
+      if stderr&.include?('not part of the build defined by settings file')
+        Dir.chdir(project_path) do
+          Cmd.run('touch settings.gradle')
+          stdout, stderr, status = Cmd.run(command)
+          Cmd.run('rm settings.gradle')
+        end
+      end
+
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+
+      root_project_name = stdout.gsub(/\s|parent:|\n/, '')
+      root_project_name == 'null'
+    end
 
     def detected_package_path
       alternate_build_file = build_file_from_settings(project_path)

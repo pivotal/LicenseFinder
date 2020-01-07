@@ -24,9 +24,9 @@ module LicenseFinder
       git_modules.map do |submodule|
         # We are filtering the non-standard packages because the word "net"
         # seems to be common that can give false positive when filtering the git submodules
-        import_path = go_list_packages.select do |gp|
+        import_path = go_list_packages.find do |gp|
           submodule.install_path =~ /#{repo_name(gp)}$/
-        end.first
+        end
         next unless import_path
 
         dependency_info = {
@@ -68,7 +68,7 @@ module LicenseFinder
 
     def envrc_path
       p = Pathname.new project_path
-      4.times.reduce([p]) { |memo, _| memo << memo.last.parent }.map { |path| path.join('.envrc') }.select(&:exist?).first
+      4.times.reduce([p]) { |memo, _| memo << memo.last.parent }.map { |path| path.join('.envrc') }.find(&:exist?)
     end
 
     def go_list

@@ -6,15 +6,14 @@ Build status
 * Ruby 2.3.8 [![Ruby 2.3.8 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.8/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.4.5 [![Ruby 2.4.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.5.3 [![Ruby 2.5.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.6.3 [![Ruby 2.6.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* JRuby 9.1.17.0 [![JRuby 9.1.17.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.1.17.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* JRuby 9.2.6.0 [![JRuby 9.2.6.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.6.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.6.5 [![Ruby 2.6.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* JRuby 9.2.9.0 [![JRuby 9.2.9.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.2.9.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
 detect the licenses of the packages in them, compare those licenses
-against a user-defined whitelist, and give you an actionable exception
-report.
+against a user-defined list of permitted licenses,
+and give you an actionable exception report.
 
 * code: https://github.com/pivotal/LicenseFinder
 * ci: https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder
@@ -30,7 +29,8 @@ report.
 | Project Type | Package Manager | Tested on Version |
 | ------------ | --------------- | -------:|
 | Ruby Gems    | bundler         | 1.16.6  |
-| Python Eggs  | pip             | 19.0.2  |
+| Python 2.7 Eggs  | pip2             | 19.0.2  |
+| Python 3.5 Eggs  | pip3             | 8.1.1  |
 | Node.js      | npm             | 6.4.1   |
 | Bower        | bower           | 1.8.4   |
 | Nuget (without license discovery) | nuget | 4.7.1.5393 |
@@ -202,7 +202,7 @@ if someone adds an unapproved dependency to the project.
 
 `license_finder` will inform you whenever you have an unapproved dependency.
 If your business decides this is an acceptable risk, the easiest way to approve
-the dependency is by running `license_finder approval add`.
+the dependency is by running `license_finder approvals add`.
 
 For example, let's assume you've added the `awesome_gpl_gem`
 to your Gemfile, which `license_finder` reports is unapproved:
@@ -217,33 +217,39 @@ Your business tells you that in this case, it's acceptable to use this
 gem. You now run:
 
 ```sh
-$ license_finder approval add awesome_gpl_gem
+$ license_finder approvals add awesome_gpl_gem
 ```
 
 If you rerun `license_finder`, you should no longer see
 `awesome_gpl_gem` in the output.
 
+To approve specific version
+
+```sh
+$ license_finder approvals add awesome_gpl_gem --version=1.0.0
+```
+
 To record who approved the dependency and why:
 
 ```sh
-$ license_finder approval add awesome_gpl_gem --who CTO --why "Go ahead"
+$ license_finder approvals add awesome_gpl_gem --who CTO --why "Go ahead"
 ```
 
-### Whitelisting
+### Permitting Licenses
 
 Approving packages one-by-one can be tedious.  Usually your business has
 blanket policies about which packages are approved.  To tell `license_finder`
 that any package with the MIT license should be approved, run:
 
 ``` sh
-$ license_finder whitelist add MIT
+$ license_finder permitted_licenses add MIT
 ```
 
 Any current or future packages with the MIT license will be excluded from the
 output of `license_finder`.
 
-You can also record `--who` and `--why` when changing the whitelist, or making
-any other decision about your project.
+You can also record `--who` and `--why` when changing permitted licenses,
+or making any other decision about your project.
 
 
 ## Output and Artifacts
@@ -263,7 +269,7 @@ decisions.
 
 You could expect `license_finder`, which is an alias for `license_finder
 action_items` to output something like the following on a Rails project where
-MIT had been whitelisted:
+MIT had been permitted:
 
 ```
 Dependencies that need approval:
@@ -279,6 +285,13 @@ xml-simple, 1.1.1, unknown
 
 You can customize the format of the output in the same way that you customize
 [output from `report`](#output-from-report).
+
+### Output from `project_roots`
+
+The `license_finder project_roots` command will output the current working directory as a string in an array.
+
+Using the `--recursive` option means the array will include subdirectories that contain a known package manager. With the exception that Gradle and Maven subprojects will not be included.
+
 
 ### Output from `report`
 
@@ -356,14 +369,14 @@ since it is a common dependency whose version changes from machine to
 machine.  Adding it to the `ignored_dependencies` would prevent it
 (and its oscillating versions) from appearing in reports.
 
-### Blacklisting Licenses
+### Restricting Licenses
 
-Some projects will have a list of licenses that cannot be used.  You can add
-these licenses to the blacklist `license_finder blacklist add`.  Any dependency
-that has exclusively blacklisted licenses will always appear in the action
-items, even if someone attempts to manually approve or whitelist it.  However,
-if a dependency has even one license outside of the blacklist, it can still be
-manually approved or whitelisted.
+Some projects will have a list of licenses that cannot be used.  You can
+restrict these licenses with `license_finder restricted_licenses add`.  Any dependency
+that has exclusively restricted licenses will always appear in the action
+items, even if someone attempts to manually approve or permit it.  However,
+if a dependency has even one license that is not restricted, it can still be
+manually approved or permitted.
 
 
 ## Configuration

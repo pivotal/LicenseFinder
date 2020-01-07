@@ -11,7 +11,7 @@ module LicenseFinder
 
     describe '.prepare_command' do
       it 'returns the correct prepare method' do
-        expect(described_class.prepare_command).to eq('trash')
+        expect(subject.prepare_command).to eq('trash')
       end
     end
 

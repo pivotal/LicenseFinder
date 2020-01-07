@@ -77,8 +77,8 @@ module LicenseFinder
       'mono /usr/local/bin/nuget.exe'
     end
 
-    def self.prepare_command
-      "#{package_management_command} restore"
+    def prepare_command
+      "#{Nuget.package_management_command} restore"
     end
 
     def self.installed?(logger = Core.default_logger)

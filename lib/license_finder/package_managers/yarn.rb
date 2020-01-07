@@ -39,7 +39,7 @@ module LicenseFinder
     end
 
     def prepare
-      prep_cmd = "#{Yarn.prepare_command}#{production_flag}"
+      prep_cmd = "#{prepare_command}#{production_flag}"
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
       return if status.success?
 
@@ -55,7 +55,7 @@ module LicenseFinder
       'yarn'
     end
 
-    def self.prepare_command
+    def prepare_command
       'yarn install --ignore-engines'
     end
 

@@ -43,8 +43,9 @@ module LicenseFinder
     end
 
     describe '.prepare_command' do
+      subject { Dep.new(project_path: Pathname('/app'), logger: double(:logger, active: nil)) }
       it 'returns the correct prepare method' do
-        expect(described_class.prepare_command).to eq('dep ensure -vendor-only')
+        expect(subject.prepare_command).to eq('dep ensure -vendor-only')
       end
     end
 

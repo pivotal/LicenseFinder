@@ -30,6 +30,7 @@ module LicenseFinder
       class_option :maven_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Java/maven project. Defaults to false.'
       class_option :maven_options, desc: 'Maven options to append to command. Defaults to empty.'
       class_option :pip_requirements_path, desc: 'Path to python requirements file. Defaults to requirements.txt.'
+      class_option :python_version, desc: 'Python version to invoke pip with. Valid versions: 2 or 3. Default: 2'
       class_option :rebar_command, desc: "Command to use when fetching rebar packages. Only meaningful if used with a Erlang/rebar project. Defaults to 'rebar'."
       class_option :rebar_deps_dir, desc: "Path to rebar dependencies directory. Only meaningful if used with a Erlang/rebar project. Defaults to 'deps'."
       class_option :elixir_command, desc: "Command to use when parsing package metadata for Mix. Only meaningful if used with a Mix project (i.e., Elixir or Erlang). Defaults to 'elixir'."
@@ -90,7 +91,13 @@ module LicenseFinder
       shared_options
       def project_roots
         config.strict_matching = true
-        aggregate_paths
+        project_path = config.project_path.to_s || Pathname.pwd.to_s
+        paths = aggregate_paths
+        filtered_project_roots = Scanner.remove_subprojects(paths)
+
+        filtered_project_roots << project_path if aggregate_paths.include?(project_path) && !filtered_project_roots.include?(project_path)
+
+        say(filtered_project_roots)
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
@@ -100,7 +107,7 @@ module LicenseFinder
         finder = LicenseAggregator.new(config, aggregate_paths)
         any_packages = finder.any_packages?
         unapproved = finder.unapproved
-        blacklisted = finder.blacklisted
+        restricted = finder.restricted
 
         # Ensure to start output on a new line even with dot progress indicators.
         say "\n"
@@ -113,12 +120,12 @@ module LicenseFinder
         if unapproved.empty?
           say 'All dependencies are approved for use', :green
         else
-          unless blacklisted.empty?
-            say 'Blacklisted dependencies:', :red
-            say report_of(blacklisted)
+          unless restricted.empty?
+            say 'Restricted dependencies:', :red
+            say report_of(restricted)
           end
 
-          other_unapproved = unapproved - blacklisted
+          other_unapproved = unapproved - restricted
           unless other_unapproved.empty?
             say 'Dependencies that need approval:', :yellow
             say report_of(other_unapproved)
@@ -158,11 +165,11 @@ module LicenseFinder
 
       subcommand 'dependencies', Dependencies, 'Add or remove dependencies that your package managers are not aware of'
       subcommand 'licenses', Licenses, "Set a dependency's licenses, if the licenses found by license_finder are missing or wrong"
-      subcommand 'approvals', Approvals, 'Manually approve dependencies, even if their licenses are not whitelisted'
+      subcommand 'approvals', Approvals, 'Manually approve dependencies, even if their licenses are not permitted'
       subcommand 'ignored_groups', IgnoredGroups, 'Exclude test and development dependencies from action items and reports'
       subcommand 'ignored_dependencies', IgnoredDependencies, 'Exclude individual dependencies from action items and reports'
-      subcommand 'whitelist', Whitelist, 'Automatically approve any dependency that has a whitelisted license'
-      subcommand 'blacklist', Blacklist, 'Forbid approval of any dependency whose licenses are all blacklisted'
+      subcommand 'permitted_licenses', PermittedLicenses, 'Automatically approve any dependency that has a permitted license'
+      subcommand 'restricted_licenses', RestrictedLicenses, 'Forbid approval of any dependency whose licenses are all restricted'
       subcommand 'project_name', ProjectName, 'Set the project name, for display in reports'
 
       private
@@ -174,15 +181,20 @@ module LicenseFinder
       def aggregate_paths
         check_valid_project_path
         aggregate_paths = config.aggregate_paths
-        project_path = config.project_path || Pathname.pwd
+        project_path = config.project_path.to_s || Pathname.pwd.to_s
         aggregate_paths = ProjectFinder.new(project_path, config.strict_matching).find_projects if config.recursive
-        say(aggregate_paths || project_path) if config.strict_matching
-        return aggregate_paths unless aggregate_paths.nil? || aggregate_paths.empty?
 
-        [config.project_path] unless config.project_path.nil?
+        if aggregate_paths.nil? || aggregate_paths.empty?
+          [project_path]
+        else
+          aggregate_paths
+        end
       end
 
       def save_report(content, file_name)
+        dir = File.dirname(file_name)
+        FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+
         File.open(file_name, 'w') do |f|
           f.write(content)
         end

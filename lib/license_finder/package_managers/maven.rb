@@ -47,5 +47,19 @@ module LicenseFinder
     def possible_package_paths
       [project_path.join('pom.xml')]
     end
+
+    def project_root?
+      active? && root_module?
+    end
+
+    private
+
+    def root_module?
+      command = "#{package_management_command} help:evaluate -Dexpression=project.parent -q -DforceStdout"
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+
+      stdout.include?('null object or invalid expression')
+    end
   end
 end

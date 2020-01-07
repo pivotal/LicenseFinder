@@ -174,7 +174,7 @@ module LicenseFinder
 
         it 'include the licenseUrl from the nuspec file' do
           nuget = Nuget.new project_path: Pathname.new('app')
-          obscure_dep = nuget.current_packages.select { |dep| dep.name == 'ObscureDependency' }.first
+          obscure_dep = nuget.current_packages.find { |dep| dep.name == 'ObscureDependency' }
           expect(obscure_dep.license_names_from_spec).to eq(['http://www.opensource.org/licenses/mit-license.php'])
         end
       end
@@ -182,8 +182,9 @@ module LicenseFinder
 
     shared_examples 'a NuGet package manager' do
       describe '.prepare_command' do
+        subject { Nuget.new project_path: Pathname.new('app') }
         it 'returns the correct prepare method' do
-          expect(described_class.prepare_command).to eq("#{nuget_cmd} restore")
+          expect(subject.prepare_command).to eq("#{nuget_cmd} restore")
         end
       end
 

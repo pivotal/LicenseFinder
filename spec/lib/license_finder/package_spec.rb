@@ -65,7 +65,7 @@ module LicenseFinder
           subject = described_class.new(nil, nil)
           subject.decide_on_license(License.find_by_name('MIT'))
           subject.decide_on_license(License.find_by_name('GPL'))
-          expect(subject.licenses.map(&:name)).to match_array %w[MIT GPL]
+          expect(subject.licenses.map(&:name)).to match_array %w[GPL MIT]
         end
 
         it 'de-duplicates across license aliases' do
@@ -92,7 +92,7 @@ module LicenseFinder
       describe 'from the spec' do
         it 'converts the names to licenses' do
           subject = described_class.new(nil, nil, spec_licenses: %w[MIT GPL])
-          expect(subject.licenses.map(&:name)).to match_array %w[MIT GPL]
+          expect(subject.licenses.map(&:name)).to match_array %w[GPL MIT]
         end
 
         it 'de-duplicates across license aliases' do
@@ -111,7 +111,7 @@ module LicenseFinder
         it 'uses the licenses reported by files in the install path' do
           stub_license_files 'MIT', 'GPL'
           subject = described_class.new(nil, nil, install_path: 'some/package/path', logger: logger)
-          expect(subject.licenses.map(&:name)).to eq %w[MIT GPL]
+          expect(subject.licenses.map(&:name)).to eq %w[GPL MIT]
         end
 
         it 'de-duplicates across license aliases' do
@@ -122,14 +122,14 @@ module LicenseFinder
       end
     end
 
-    describe '#blacklisted?' do
+    describe '#restricted?' do
       it 'defaults to false' do
-        expect(subject.blacklisted?).to eq(false)
+        expect(subject.restricted?).to eq(false)
       end
 
-      it 'can be set by blacklisted!' do
-        subject.blacklisted!
-        expect(subject.blacklisted?).to eq(true)
+      it 'can be set by restricted!' do
+        subject.restricted!
+        expect(subject.restricted?).to eq(true)
       end
     end
 
@@ -143,13 +143,13 @@ module LicenseFinder
         expect(subject.approved?).to eq(true)
       end
 
-      it 'returns true when whitelisted' do
-        subject.whitelisted!
+      it 'returns true when permitted' do
+        subject.permitted!
         expect(subject.approved?).to eq(true)
       end
 
-      it 'returns false when blacklisted' do
-        subject.blacklisted!
+      it 'returns false when restricted' do
+        subject.restricted!
         expect(subject.approved?).to eq(false)
       end
     end

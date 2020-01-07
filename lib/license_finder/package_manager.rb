@@ -40,11 +40,11 @@ module LicenseFinder
       def package_management_command
         nil
       end
+    end
 
-      # see class description
-      def prepare_command
-        nil
-      end
+    # see class description
+    def prepare_command
+      nil
     end
 
     def self.command_exists?(command)
@@ -71,17 +71,21 @@ module LicenseFinder
       path&.exist?
     end
 
+    def project_root?
+      active?
+    end
+
     def detected_package_path
       possible_package_paths.find(&:exist?)
     end
 
     def prepare
-      if self.class.prepare_command
-        stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(self.class.prepare_command) }
+      if prepare_command
+        stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prepare_command) }
         unless status.success?
           log_errors stderr
 
-          error_message = "Prepare command '#{self.class.prepare_command}' failed\n#{stderr}"
+          error_message = "Prepare command '#{prepare_command}' failed\n#{stderr}"
 
           error_message == error_message.concat("\n#{stdout}\n") if !stdout.nil? && !stdout.empty?
 
@@ -115,8 +119,8 @@ module LicenseFinder
     attr_reader :logger, :project_path
 
     def log_errors(stderr)
-      logger.info self.class.prepare_command, 'did not succeed.', color: :red
-      logger.info self.class.prepare_command, stderr, color: :red
+      logger.info prepare_command, 'did not succeed.', color: :red
+      logger.info prepare_command, stderr, color: :red
       log_to_file stderr
     end
 
@@ -128,7 +132,7 @@ module LicenseFinder
       log_file = File.join(@log_directory, "prepare_#{log_file_name || 'errors'}.log")
 
       File.open(log_file, 'w') do |f|
-        f.write("Prepare command \"#{self.class.prepare_command}\" failed with:\n")
+        f.write("Prepare command \"#{prepare_command}\" failed with:\n")
         f.write("#{contents}\n\n")
       end
     end

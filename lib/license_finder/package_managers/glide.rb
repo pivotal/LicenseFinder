@@ -34,7 +34,7 @@ module LicenseFinder
       'glide'
     end
 
-    def self.prepare_command
+    def prepare_command
       'glide install'
     end
   end

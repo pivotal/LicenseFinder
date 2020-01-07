@@ -22,8 +22,8 @@ module LicenseFinder
       aggregate_packages.reject(&:approved?)
     end
 
-    def blacklisted
-      aggregate_packages.select(&:blacklisted?)
+    def restricted
+      aggregate_packages.select(&:restricted?)
     end
 
     private

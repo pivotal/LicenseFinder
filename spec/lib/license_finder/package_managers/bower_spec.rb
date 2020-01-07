@@ -24,7 +24,7 @@ module LicenseFinder
     end
 
     it 'should return the correct prepare command' do
-      expect(Bower.prepare_command).to eq('bower install')
+      expect(subject.prepare_command).to eq('bower install')
     end
   end
 end

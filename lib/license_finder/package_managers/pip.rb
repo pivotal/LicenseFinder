@@ -8,6 +8,8 @@ module LicenseFinder
     def initialize(options = {})
       super
       @requirements_path = options[:pip_requirements_path] || Pathname('requirements.txt')
+      @python_version = options[:python_version] || '2'
+      raise "Invalid python version \'#{@python_version}\'. Valid versions are '2' or '3'." unless %w[2 3].include?(@python_version)
     end
 
     def current_packages
@@ -23,16 +25,20 @@ module LicenseFinder
       end
     end
 
+    # Used to detect if installed, but this is a static method and the options aren't passed
+    # so we don't know which python version was specified. Will fail later if the expected version
+    # isn't installed. The Dockerfile now installs both versions so using the image is safe.
+    # TODO: Refactor PackageManager.installed?() to pass in the options?
     def self.package_management_command
-      'pip'
+      'pip2'
     end
 
-    def self.prepare_command
-      'pip install'
+    def prepare_command
+      "pip#{@python_version} install"
     end
 
     def prepare
-      prep_cmd = "#{Pip.prepare_command} -r #{@requirements_path}"
+      prep_cmd = "#{prepare_command} -r #{@requirements_path}"
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
       return if status.success?
 
@@ -51,7 +57,7 @@ module LicenseFinder
     private
 
     def pip_output
-      output = `#{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} #{detected_package_path}`
+      output = `python#{@python_version} #{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} #{detected_package_path}`
       JSON(output).map do |package|
         package.values_at('name', 'version', 'dependencies', 'location')
       end

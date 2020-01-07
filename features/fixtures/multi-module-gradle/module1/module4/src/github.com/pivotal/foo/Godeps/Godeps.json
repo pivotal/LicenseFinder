@@ -1,0 +1,16 @@
+{
+	"ImportPath": "github.com/pivotal/foo",
+	"GoVersion": "go1.4.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/onsi/ginkgo",
+			"Comment": "v1.2.0-6-gd981d36",
+			"Rev": "d981d36e9884231afa909627b9c275e4ba678f90"
+		},
+		{
+			"ImportPath": "github.com/onsi/gomega",
+			"Comment": "v1.0-50-gd6c945f",
+			"Rev": "d6c945f9fdbf6cad99e85b0feff591caa268e0db"
+		}
+	]
+}

@@ -13,7 +13,7 @@ module LicenseFinder
       'gvt'
     end
 
-    def self.prepare_command
+    def prepare_command
       'gvt restore'
     end
 
