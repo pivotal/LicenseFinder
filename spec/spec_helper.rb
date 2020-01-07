@@ -8,6 +8,8 @@ require 'rspec'
 require 'webmock/rspec'
 require 'rspec/its'
 
+require 'pry'
+
 Dir[File.join(File.dirname(__FILE__), 'support', '**', '*.rb')].sort.each do |file|
   require file
 end
