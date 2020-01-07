@@ -16,9 +16,8 @@ end
 
 RSpec.configure do |config|
   config.mock_with :rspec
-end
+  config.filter_run_when_matching :focus
 
-RSpec.configure do |config|
   config.include SharedDefinitions
 
   config.after(:suite) do
