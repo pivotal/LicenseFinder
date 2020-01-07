@@ -43,7 +43,7 @@ and give you an actionable exception report.
 
 ### Experimental project types
 
-* Erlang (via `rebar3`)
+* Erlang (via `rebar` and `Erlang.mk`)
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
@@ -175,7 +175,8 @@ languages, as long as that language has a package definition in the project dire
 * `bower.json` (for `bower`)
 * `Podfile` (for `pod`)
 * `Cartfile` (for `carthage`)
-* `rebar.config` (for `rebar3`)
+* `rebar.config` (for `rebar`)
+* `Erlang.mk` or `erlang.mk` file (for `Erlang.mk`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `nuget`)
 * `*.csproj` (for `dotnet`)
