@@ -29,7 +29,7 @@ module LicenseFinder
     end
 
     def prepare_command
-      'composer install'
+      'composer install --no-plugins --ignore-platform-reqs --no-interaction'
     end
 
     def package_path
