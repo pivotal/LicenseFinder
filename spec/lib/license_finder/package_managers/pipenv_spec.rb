@@ -39,7 +39,7 @@ module LicenseFinder
           .to_return(status: 200, body: response_body)
       end
 
-      it 'fetches data for pipenv' do
+      it 'fetches each package identified in a Pipfile.lock' do
         results = pipenv.current_packages.map do |package|
           [package.name, package.version, package.licenses.map { |x| x.send(:short_name) }]
         end
