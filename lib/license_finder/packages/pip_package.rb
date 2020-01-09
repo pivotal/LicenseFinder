@@ -18,7 +18,7 @@ module LicenseFinder
         .map { |c| c.gsub(LICENSE_FORMAT, '\1') }
     end
 
-    def initialize(name, version, spec, options = {})
+    def initialize(name, version, spec = PyPI.definition(name, version), options = {})
       super(
         name,
         version,

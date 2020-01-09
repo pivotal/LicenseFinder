@@ -11,16 +11,23 @@ module LicenseFinder
     end
 
     def current_packages
-      content = IO.read(detected_package_path)
-      dependencies = JSON.parse(content)
-      dependencies['default'].map do |name, value|
-        version = value['version'].sub(/^==/, '')
-        PipPackage.new(name, version, PyPI.definition(name, version))
+      dependencies['default'].map do |name, data|
+        PipPackage.new(name, canonicalize(data['version']))
       end
     end
 
     def possible_package_paths
       project_path ? [project_path.join(@lockfile)] : [@lockfile]
+    end
+
+    private
+
+    def dependencies
+      @dependencies ||= JSON.parse(IO.read(detected_package_path))
+    end
+
+    def canonicalize(version)
+      version.sub(/^==/, '')
     end
   end
 end
