@@ -5,7 +5,7 @@ require 'net/http'
 module LicenseFinder
   class PyPI
     class << self
-      def pypi_def(name, version)
+      def definition(name, version)
         response = pypi_request("https://pypi.org/pypi/#{name}/#{version}/json")
         response.is_a?(Net::HTTPSuccess) ? JSON.parse(response.body).fetch('info', {}) : {}
       end

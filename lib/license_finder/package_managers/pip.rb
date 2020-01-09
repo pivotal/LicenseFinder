@@ -16,7 +16,7 @@ module LicenseFinder
         PipPackage.new(
           name,
           version,
-          PyPI.pypi_def(name, version),
+          PyPI.definition(name, version),
           logger: logger,
           children: children,
           install_path: Pathname(location).join(name)

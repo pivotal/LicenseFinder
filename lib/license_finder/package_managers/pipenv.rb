@@ -15,7 +15,7 @@ module LicenseFinder
       dependencies = JSON.parse(content)
       dependencies['default'].map do |name, value|
         version = value['version'].sub(/^==/, '')
-        PipPackage.new(name, version, PyPI.pypi_def(name, version))
+        PipPackage.new(name, version, PyPI.definition(name, version))
       end
     end
 
