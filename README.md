@@ -242,7 +242,7 @@ blanket policies about which packages are approved.  To tell `license_finder`
 that any package with the MIT license should be approved, run:
 
 ``` sh
-$ license_finder permitted_licenses add MIT
+$ license_finder whitelist add MIT
 ```
 
 Any current or future packages with the MIT license will be excluded from the
