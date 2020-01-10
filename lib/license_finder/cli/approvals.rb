@@ -7,6 +7,7 @@ module LicenseFinder
       include MakesDecisions
 
       auditable
+      approvable
       desc 'add DEPENDENCY...', 'Approve one or more dependencies by name'
       def add(*names)
         assert_some names
