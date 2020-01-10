@@ -11,10 +11,20 @@ module LicenseFinder
     end
 
     def current_packages
-      dependencies['default'].map do |name, data|
+      packages = []
+      dependencies['default'].each do |name, data|
         version = canonicalize(data['version'])
-        PipPackage.new(name, version, PyPI.definition(name, version))
+        packages << PipPackage.new(name, version, PyPI.definition(name, version), groups: ['default'])
       end
+      dependencies['develop'].each do |name, data|
+        version = canonicalize(data['version'])
+        if package = packages.find { |x| x.name == name && x.version == version }
+          package.groups << 'develop'
+        else
+          packages << PipPackage.new(name, version, PyPI.definition(name, version), groups: ['develop'])
+        end
+      end
+      packages
     end
 
     def possible_package_paths
