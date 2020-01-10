@@ -35,7 +35,7 @@ module LicenseFinder
       end
 
       before do
-        stub_request(:get, "https://pypi.org/pypi/six/1.13.0/json")
+        stub_request(:get, 'https://pypi.org/pypi/six/1.13.0/json')
           .to_return(status: 200, body: response_body)
       end
 
@@ -43,7 +43,7 @@ module LicenseFinder
         results = pipenv.current_packages.map do |package|
           [package.name, package.version, package.licenses.map { |x| x.send(:short_name) }]
         end
-        expect(results).to match_array([ ['six', '1.13.0', ['MIT']] ])
+        expect(results).to match_array([['six', '1.13.0', ['MIT']]])
       end
     end
   end

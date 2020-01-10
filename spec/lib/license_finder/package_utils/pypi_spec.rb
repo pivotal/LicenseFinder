@@ -6,20 +6,20 @@ require 'securerandom'
 RSpec.describe LicenseFinder::PyPI do
   subject { described_class }
 
-  describe ".definition" do
+  describe '.definition' do
     let(:source) { 'pypi.org' }
     let(:package) { 'six' }
     let(:version) { '1.13.0' }
     let(:successful_response_body) do
-      JSON.generate({
+      JSON.generate(
         info: {
           name: package,
           version: version
         }
-      })
+      )
     end
 
-    context "when the default source is reachable" do
+    context 'when the default source is reachable' do
       before do
         stub_request(:get, "https://#{source}/pypi/#{package}/#{version}/json")
           .to_return(status: 200, body: successful_response_body)
@@ -33,7 +33,7 @@ RSpec.describe LicenseFinder::PyPI do
       end
     end
 
-    context "when the response redirects to a different location" do
+    context 'when the response redirects to a different location' do
       let(:redirect_url) { "https://#{source}/pypi/#{SecureRandom.uuid}" }
 
       before do
@@ -52,7 +52,7 @@ RSpec.describe LicenseFinder::PyPI do
       end
     end
 
-    context "when stuck in an infinite redirect loop" do
+    context 'when stuck in an infinite redirect loop' do
       before do
         url = "https://#{source}/pypi/#{package}/#{version}/json"
 
@@ -69,7 +69,7 @@ RSpec.describe LicenseFinder::PyPI do
       end
     end
 
-    context "when the source is not reachable" do
+    context 'when the source is not reachable' do
       before do
         stub_request(:get, "https://#{source}/pypi/#{package}/#{version}/json")
           .to_timeout
