@@ -20,7 +20,6 @@ RSpec.describe LicenseFinder::PyPI do
     end
 
     context "when the default source is reachable" do
-
       before do
         stub_request(:get, "https://#{source}/pypi/#{package}/#{version}/json")
           .to_return(status: 200, body: successful_response_body)
@@ -66,6 +65,17 @@ RSpec.describe LicenseFinder::PyPI do
       end
 
       it 'gives up after `n` attempts' do
+        expect(subject.definition(package, version)).to be_empty
+      end
+    end
+
+    context "when the source is not reachable" do
+      before do
+        stub_request(:get, "https://#{source}/pypi/#{package}/#{version}/json")
+          .to_timeout
+      end
+
+      it 'fails gracefully' do
         expect(subject.definition(package, version)).to be_empty
       end
     end
