@@ -12,11 +12,8 @@ module LicenseFinder
 
     def current_packages
       dependencies['default'].map do |name, data|
-        PipPackage.new(
-          name,
-          canonicalize(data['version']),
-          PyPI.definition(name, version)
-        )
+        version = canonicalize(data['version'])
+        PipPackage.new(name, version, PyPI.definition(name, version))
       end
     end
 
