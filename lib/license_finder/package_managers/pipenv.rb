@@ -17,7 +17,7 @@ module LicenseFinder
         if package = packages.find { |x| x.name == name && x.version == version }
           package.groups << group
         else
-          packages << PipPackage.new(name, version, PyPI.definition(name, version), groups: [group])
+          packages.push(build_package_for(name, version, [group]))
         end
       end
       packages
@@ -43,6 +43,10 @@ module LicenseFinder
 
     def canonicalize(version)
       version.sub(/^==/, '')
+    end
+
+    def build_package_for(name, version, groups)
+      PipPackage.new(name, version, PyPI.definition(name, version), groups: groups)
     end
   end
 end
