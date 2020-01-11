@@ -53,7 +53,7 @@ module LicenseFinder
     end
 
     def allowed_groups
-      ['default', 'develop'] - ignored_groups
+      %w[default develop] - ignored_groups
     end
 
     def ignored_groups

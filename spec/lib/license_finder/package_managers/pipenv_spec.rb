@@ -12,16 +12,16 @@ module LicenseFinder
 
     describe '#current_packages' do
       def definition_for(item)
-        JSON.pretty_generate({
+        JSON.pretty_generate(
           "info": {
-            "author": "",
-            "home_page":"",
+            "author": '',
+            "home_page": '',
             "license": item[:license],
             "name": item[:name],
-            "summary": "",
+            "summary": '',
             "version": item[:version]
           }
-        })
+        )
       end
 
       def url_for(name, version)
@@ -37,8 +37,8 @@ module LicenseFinder
           { name: 'py', version: '1.8.1', license: 'MIT', groups: ['develop'] },
           { name: 'pyparsing', version: '2.4.6', license: 'MIT', groups: ['develop'] },
           { name: 'pytest', version: '5.3.2', license: 'MIT', groups: ['develop'] },
-          { name: 'six', version: '1.13.0', license: 'MIT', groups: ['default', 'develop'] },
-          { name: 'wcwidth', version: '0.1.8', license: 'MIT', groups: ['develop'] },
+          { name: 'six', version: '1.13.0', license: 'MIT', groups: %w[default develop] },
+          { name: 'wcwidth', version: '0.1.8', license: 'MIT', groups: ['develop'] }
         ]
       end
 
@@ -60,7 +60,7 @@ module LicenseFinder
         expect(actual).to match_array(expected)
       end
 
-      context "when the development dependencies are ignored" do
+      context 'when the development dependencies are ignored' do
         before do
           options[:ignored_groups] = ['develop']
         end
