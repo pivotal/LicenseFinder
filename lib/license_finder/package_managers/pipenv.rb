@@ -12,16 +12,12 @@ module LicenseFinder
 
     def current_packages
       packages = []
-      dependencies['default'].each do |name, data|
-        version = canonicalize(data['version'])
-        packages << PipPackage.new(name, version, PyPI.definition(name, version), groups: ['default'])
-      end
-      dependencies['develop'].each do |name, data|
+      each_dependency do |name, data, group|
         version = canonicalize(data['version'])
         if package = packages.find { |x| x.name == name && x.version == version }
-          package.groups << 'develop'
+          package.groups << group
         else
-          packages << PipPackage.new(name, version, PyPI.definition(name, version), groups: ['develop'])
+          packages << PipPackage.new(name, version, PyPI.definition(name, version), groups: [group])
         end
       end
       packages
@@ -35,6 +31,14 @@ module LicenseFinder
 
     def dependencies
       @dependencies ||= JSON.parse(IO.read(detected_package_path))
+    end
+
+    def each_dependency(groups: ['default', 'develop'])
+      groups.each do |group|
+        dependencies[group].each do |name, data|
+          yield name, data, group
+        end
+      end
     end
 
     def canonicalize(version)
