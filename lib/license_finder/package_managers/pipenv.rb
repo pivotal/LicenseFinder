@@ -11,16 +11,18 @@ module LicenseFinder
     end
 
     def current_packages
-      packages = []
+      packages = {}
       each_dependency do |name, data, group|
         version = canonicalize(data['version'])
-        if package = packages.find { |x| x.name == name && x.version == version }
+        key = key_for(name, version)
+
+        if package = packages[key]
           package.groups << group
         else
-          packages.push(build_package_for(name, version, [group]))
+          packages[key] = build_package_for(name, version, [group])
         end
       end
-      packages
+      packages.values
     end
 
     def possible_package_paths
@@ -47,6 +49,10 @@ module LicenseFinder
 
     def build_package_for(name, version, groups)
       PipPackage.new(name, version, PyPI.definition(name, version), groups: groups)
+    end
+
+    def key_for(name, version)
+      [name, version].map(&:to_s).join('-')
     end
   end
 end
