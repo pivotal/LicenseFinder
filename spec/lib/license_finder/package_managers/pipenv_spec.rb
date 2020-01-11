@@ -5,8 +5,9 @@ require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe Pipenv do
-    let(:root) { fixture_path('pipenv-with-lockfile') }
-    let(:pipenv) { Pipenv.new(project_path: root) }
+    subject { Pipenv.new(options) }
+    let(:options) { { project_path: fixture_path('pipenv-with-lockfile') } }
+
     it_behaves_like 'a PackageManager'
 
     describe '#current_packages' do
@@ -50,13 +51,26 @@ module LicenseFinder
       end
 
       it 'fetches each package identified in a Pipfile.lock' do
-        actual = pipenv.current_packages.map do |package|
+        actual = subject.current_packages.map do |package|
           [package.name, package.version, package.licenses.map(&:name), package.groups]
         end
         expected = dependencies.map do |package|
           [package[:name], package[:version], [package[:license]], package[:groups]]
         end
         expect(actual).to match_array(expected)
+      end
+
+      context "when the development dependencies are ignored" do
+        before do
+          options[:ignored_groups] = ['develop']
+        end
+
+        it 'only returns the default dependencies' do
+          actual = subject.current_packages.map do |package|
+            [package.name, package.version, package.licenses.map(&:name), package.groups]
+          end
+          expect(actual).to match_array([['six', '1.13.0', ['MIT'], ['default']]])
+        end
       end
     end
   end

@@ -14,7 +14,7 @@ module LicenseFinder
       @current_packages ||=
         begin
           packages = {}
-          each_dependency do |name, data, group|
+          each_dependency(groups: allowed_groups) do |name, data, group|
             version = canonicalize(data['version'])
             package = packages.fetch(key_for(name, version)) do |key|
               packages[key] = build_package_for(name, version)
@@ -31,7 +31,7 @@ module LicenseFinder
 
     private
 
-    def each_dependency(groups: ['default', 'develop'])
+    def each_dependency(groups: [])
       dependencies = JSON.parse(IO.read(detected_package_path))
       groups.each do |group|
         dependencies[group].each do |name, data|
@@ -50,6 +50,14 @@ module LicenseFinder
 
     def key_for(name, version)
       "#{name}-#{version}"
+    end
+
+    def allowed_groups
+      ['default', 'develop'] - ignored_groups
+    end
+
+    def ignored_groups
+      @ignored_groups || []
     end
   end
 end
