@@ -8,9 +8,10 @@ module LicenseFinder
 
       method_option :approve, type: :boolean, desc: 'Approve the added dependency'
       method_option :homepage, type: :string, desc: 'Source of the added dependency'
+
       auditable
-      desc 'add DEPENDENCY LICENSE [VERSION] [--homepage=HOMEPAGE] [--approve]', 'Add a dependency that is not managed by a package manager, optionally approving it at the same time'
-      def add(name, license, version = nil)
+      desc 'add DEPENDENCY LICENSE VERSION [--homepage=HOMEPAGE] [--approve]', 'Add a dependency that is not managed by a package manager, optionally approving it at the same time'
+      def add(name, license, version)
         modifying do
           decisions
             .add_package(name, version, txn)

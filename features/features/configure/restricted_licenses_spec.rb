@@ -13,7 +13,7 @@ describe 'Restricted licenses' do
   before do
     developer.create_empty_project
     lawyer.execute_command 'license_finder restricted_licenses add BSD'
-    developer.execute_command 'license_finder dependencies add restricted_dep BSD'
+    developer.execute_command 'license_finder dependencies add restricted_dep BSD 1.2'
   end
 
   specify 'prevent packages from being approved' do

@@ -11,6 +11,9 @@ module LicenseFinder
         def auditable
           method_option :who, desc: 'The person making this decision'
           method_option :why, desc: 'The reason for making this decision'
+        end
+
+        def approvable
           method_option :version, desc: 'The version that will be approved'
         end
       end
