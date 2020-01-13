@@ -57,7 +57,7 @@ module LicenseFinder
     private
 
     def pip_output
-      output = `python#{@python_version == '2' ? "" : '3' } #{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} #{detected_package_path}`
+      output = `python#{@python_version == '2' ? '' : '3'} #{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} #{detected_package_path}`
       JSON(output).map do |package|
         package.values_at('name', 'version', 'dependencies', 'location')
       end
