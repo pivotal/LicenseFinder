@@ -37,8 +37,8 @@ describe 'HTML report' do
 
   specify 'shows approval status of dependencies' do
     developer.create_empty_project
-    developer.execute_command 'license_finder dependencies add gpl_dep GPL'
-    developer.execute_command 'license_finder dependencies add mit_dep MIT'
+    developer.execute_command 'license_finder dependencies add gpl_dep GPL 1.2'
+    developer.execute_command 'license_finder dependencies add mit_dep MIT 2.3'
     developer.execute_command 'license_finder permitted_licenses add MIT'
 
     html = product_owner.view_html
