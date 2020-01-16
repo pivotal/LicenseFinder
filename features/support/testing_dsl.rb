@@ -119,16 +119,16 @@ module LicenseFinder
 
     class PipenvProject < Project
       def add_dep
-        content = ::JSON.pretty_generate({
+        content = ::JSON.pretty_generate(
           "_meta": {
-            "hash": { "sha256": "" },
+            "hash": { "sha256": '' },
             "pipfile-spec": 6,
-            "requires": { "python_version": "3.8" },
-            "sources": [ { "name": "pypi", "url": "https://pypi.org/simple", "verify_ssl": true } ]
+            "requires": { "python_version": '3.8' },
+            "sources": [{ "name": 'pypi', "url": 'https://pypi.org/simple', "verify_ssl": true }]
           },
-          "default": { "six": { "hashes": ["", ""], "index": "pypi", "version": "==1.13.0" } },
-          "develop": { }
-        })
+          "default": { "six": { "hashes": ['', ''], "index": 'pypi', "version": '==1.13.0' } },
+          "develop": {}
+        )
         add_to_file('Pipfile.lock', content)
       end
 
