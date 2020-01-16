@@ -11,6 +11,6 @@ describe 'Pipenv Dependencies' do
   specify 'are shown in reports' do
     LicenseFinder::TestingDSL::PipenvProject.create
     python_developer.run_license_finder
-    expect(python_developer).to be_seeing_line 'six, 1.13.0, "MIT"'
+    expect(python_developer).to be_seeing_line 'six, 1.13.0, MIT'
   end
 end
