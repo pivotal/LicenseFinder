@@ -52,7 +52,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'addressable', '2.7.0'
   s.add_development_dependency 'capybara', '~> 3.15.0'
   s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM =~ /darwin/
-  s.add_development_dependency 'fakefs', '~> 0.20.0'
+  s.add_development_dependency 'fakefs', '~> 1.0.0'
   s.add_development_dependency 'mime-types', '3.3.1'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
