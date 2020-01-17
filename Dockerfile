@@ -73,7 +73,7 @@ RUN mkdir -p /usr/local/share/sbt-launcher-packaging && \
 
 # install gradle
 WORKDIR /tmp
-RUN curl -L -o gradle.zip http://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
+RUN curl -L -o gradle.zip https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
     unzip -q gradle.zip && \
     rm gradle.zip && \
     mv gradle-$GRADLE_VERSION /root/gradle
