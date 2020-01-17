@@ -27,11 +27,11 @@ describe 'Ignored Groups' do
     # with_clean_env allows jwt to be installed, despite the fact
     # that it isn't one of license_finder's own dependencies
 
-    if Bundler.respond_to?(:with_unbundled_env)
-      bundle_env_setup = :with_unbundled_env
-    else
-      bundle_env_setup = :with_clean_env
-    end
+    bundle_env_setup = if Bundler.respond_to?(:with_unbundled_env)
+                         :with_unbundled_env
+                       else
+                         :with_clean_env
+                       end
 
     ::Bundler.send(bundle_env_setup) do
       project.depend_on gem, groups: ['dev']
