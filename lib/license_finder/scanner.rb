@@ -2,8 +2,10 @@
 
 module LicenseFinder
   class Scanner
-    PACKAGE_MANAGERS = [GoModules, GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Trash, Dep, Bundler, NPM, Pip,
-                        Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan, Sbt, Cargo, Dotnet, Composer].freeze
+    PACKAGE_MANAGERS = [
+      GoModules, GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Trash, Dep, Bundler, NPM, Pip,
+      Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Nuget, Carthage, Mix, Conan, Sbt, Cargo, Dotnet, Composer, Pipenv
+    ].freeze
 
     class << self
       def remove_subprojects(paths)
