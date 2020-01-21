@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+
 module LicenseFinder
   module CLI
     describe Main do
@@ -34,9 +35,6 @@ module LicenseFinder
       before do
         logger = double('Logger', info: true, debug: true)
         allow(LicenseFinder::Logger).to receive(:new).and_return(logger)
-      end
-
-      before do
         allow(DecisionsFactory).to receive(:decisions) { decisions }
         allow(DecisionApplier).to receive(:new) { decision_applier }
       end

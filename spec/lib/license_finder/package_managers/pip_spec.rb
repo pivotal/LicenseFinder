@@ -82,13 +82,19 @@ INPUT
     end
 
     describe '.current_packages' do
+      let(:status) { double }
+
       def stub_pip(stdout)
-        allow(pip).to receive('`').with(/license_finder_pip.py/).and_return(stdout)
+        allow(LicenseFinder::SharedHelpers::Cmd).to receive(:run).with(/license_finder_pip.py/).and_return([stdout, 'some-error', status])
       end
 
       def stub_pypi(name, version, response)
         stub_request(:get, "https://pypi.org/pypi/#{name}/#{version}/json")
           .to_return(response)
+      end
+
+      before do
+        allow(status).to receive(:success?).and_return(true)
       end
 
       it 'fetches data from pip' do
@@ -125,6 +131,23 @@ INPUT
         stub_pypi('Cycler', '0.10.0', status: 200, body: JSON.generate(info: { summary: 'Cycler summary' }))
 
         expect(pip.current_packages.first.summary).to eq 'Cycler summary'
+      end
+
+      context 'raises and error when' do
+        before do
+          allow(status).to receive(:success?).and_return(false)
+          allow(pip).to receive(:detected_package_path).and_return('some-file.txt')
+        end
+
+        it 'fails to find a required distribution' do
+          stderr = 'some-error'
+          command = "python #{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} some-file.txt"
+          expected_error_message = "LicenseFinder command '#{command}' failed:\n\t#{stderr}"
+
+          allow(LicenseFinder::SharedHelpers::Cmd).to receive(:run).with(command).and_return(['', stderr, status])
+          expect(pip).to receive(:log_errors).with(expected_error_message)
+          expect(pip.current_packages).to eq([])
+        end
       end
     end
   end
