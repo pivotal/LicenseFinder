@@ -15,8 +15,12 @@ except ImportError:
 from pip._vendor import pkg_resources
 from pip._vendor.six import print_
 
-requirements = [pkg_resources.Requirement.parse(str(req.req)) for req
-                in parse_requirements(sys.argv[1], session=PipSession()) if req.req != None]
+reqs = []
+for req in parse_requirements(sys.argv[1], session=PipSession()):
+    if req.req == None or (req.markers != None and not req.markers.evaluate()): continue
+    reqs.append(req)
+
+requirements = [pkg_resources.Requirement.parse(str(req.req)) for req in reqs]
 
 transform = lambda dist: {
         'name': dist.project_name,

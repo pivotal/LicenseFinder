@@ -65,7 +65,7 @@ module LicenseFinder
         end
       else
         log_errors "LicenseFinder command '#{command}' failed:\n\t#{stderr}"
-        return []
+        []
       end
     end
   end
