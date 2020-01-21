@@ -112,6 +112,10 @@ module LicenseFinder
         add_to_file('requirements.txt', 'rsa==3.1.4')
       end
 
+      def add_dep_with_platform(platform)
+        add_to_file('requirements.txt', "colorama==0.3.9;platform_system==\"#{platform}\"")
+      end
+
       def install
         shell_out('pip install -r requirements.txt --user')
       end

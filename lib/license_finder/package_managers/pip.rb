@@ -56,9 +56,16 @@ module LicenseFinder
     private
 
     def pip_output
-      output = `python#{@python_version == '2' ? '' : '3'} #{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} #{detected_package_path}`
-      JSON(output).map do |package|
-        package.values_at('name', 'version', 'dependencies', 'location')
+      command = "python#{@python_version == '2' ? '' : '3'} #{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} #{detected_package_path}"
+      stdout, stderr, status = Cmd.run(command)
+
+      if status.success?
+        JSON(stdout).map do |package|
+          package.values_at('name', 'version', 'dependencies', 'location')
+        end
+      else
+        log_errors "LicenseFinder command '#{command}' failed:\n\t#{stderr}"
+        []
       end
     end
   end
