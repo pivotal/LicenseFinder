@@ -160,6 +160,7 @@ jobs:
   disable_manual_trigger: true
   plan:
   - get: lf-git
+    tags: ["private-worker"]
     passed: [<%= "#{ruby_versions.map{ |version| "ruby-#{version}"}.join(', ')}, rubocop" %>]
   - get: lf-git-version
     tags: ["private-worker"]
