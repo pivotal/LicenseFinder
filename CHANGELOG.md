@@ -2,8 +2,8 @@
 
 ### Added
 * License Finder now recognizes pip requirement markers - [99fbc184](https://github.com/pivotal/LicenseFinder/commit/99fbc18463ef45f920ad506a72dc0b3a93d0f5bf) - Jason Smith
-* Add ruby 2.7.0 and update to latest patch levels - mokhan
-* Add support for Pipfile.lock - mokhan
+* Add ruby 2.7.0 and update to latest patch levels - [65efe96](https://github.com/pivotal/LicenseFinder/commit/65efe96aeef600a398f1465c01ed28b51bda456a) - mokhan
+* Add support for Pipfile.lock - [566fb39c](https://github.com/pivotal/LicenseFinder/commit/566fb39c4077fb5271707a94894998a585cde8dd) - mokhan
 
 ### Fixed
 * Bundler ignored groups failure - [bf2c03e3](https://github.com/pivotal/LicenseFinder/commit/bf2c03e375e91e8418967a593362313487f2f0d0) 
@@ -18,9 +18,9 @@
 * Bump to openjdk 12 - [09c781a7](https://github.com/pivotal/LicenseFinder/commit/09c781a70787d9461722d5d03d1bc624b644311a) - Debbie Chen
 * Bundler prepare commands with now exclude dependencies in the ignored groups [#169611326] - [e58b2870](https://github.com/pivotal/LicenseFinder/commit/e58b2870b64d2c88be7027b152a423fdb921baca) 
 * Change version to be required for dependency add and updated cli options [#168705017] - [b10383d3](https://github.com/pivotal/LicenseFinder/commit/b10383d3d1990b6ad0d608044511352f13924be3) - Debbie Chen
-* Ensure composer always installs the packages - kaystrobach 
+* Ensure composer always installs the packages - [70b5e7a](https://github.com/pivotal/LicenseFinder/commit/70b5e7a42943c85bbd1d2825b2ffe94eec89020f) - kaystrobach 
 
-* **BREAKING** Replaced whitelist/blacklist terminology with permitted_licenses/restricted_licenses - grantbdev  
+* **BREAKING:** Replaced whitelist/blacklist terminology with permitted_licenses/restricted_licenses - [a40b22f](https://github.com/pivotal/LicenseFinder/commit/a40b22fda11b3a0efbb3c0a021381534bc998dd9) - grantbdev  
 
 ### Deprecated
 * Remove support for jruby 9.1* [#169590215] - [81e75f8c](https://github.com/pivotal/LicenseFinder/commit/81e75f8cd61ca35e30562352dee2579b1b6c991e) 
