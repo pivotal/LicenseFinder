@@ -17,7 +17,7 @@ resources:
     uri: git@github.com:pivotal/LicenseFinder.git
     private_key: ((CfOslBot.private_key))
     branch: master
-    ignore_paths: [VERSION]
+    ignore_paths: [VERSION, CHANGELOG.md]
 
 - name: lf-git-version
   type: git
@@ -108,6 +108,7 @@ jobs:
     file: LicenseFinder/ci/tasks/run-tests.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
+
 <% if setup_slack %>
   on_failure:
     put: slack-alert
@@ -139,39 +140,32 @@ jobs:
 
 - name: bump-major
   plan:
-    - get: lf-git
-      tags: ["private-worker"]
-      passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
     - put: semver-version
       tags: ["private-worker"]
       params: {bump: major}
 
 - name: bump-minor
   plan:
-    - get: lf-git
-      tags: ["private-worker"]
-      passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
     - put: semver-version
       tags: ["private-worker"]
       params: {bump: minor}
 
 - name: bump-patch
   plan:
-    - get: lf-git
-      tags: ["private-worker"]
-      passed: [<%= ruby_versions.map{ |version| "ruby-#{version}"}.join(', ') %>]
     - put: semver-version
       tags: ["private-worker"]
       params: {bump: patch}
 
 - name: release
+  disable_manual_trigger: true
   plan:
+  - get: lf-git
+    passed: [<%= "#{ruby_versions.map{ |version| "ruby-#{version}"}.join(', ')}, rubocop" %>]
   - get: lf-git-version
     tags: ["private-worker"]
   - get: semver-version
     tags: ["private-worker"]
     trigger: true
-    passed: [bump-major, bump-minor, bump-patch]
   - get: dockerhub
     tags: ["private-worker"]
     params:
