@@ -2,11 +2,12 @@
 
 ### Added
 * License Finder now recognizes pip requirement markers - [99fbc184](https://github.com/pivotal/LicenseFinder/commit/99fbc18463ef45f920ad506a72dc0b3a93d0f5bf) - Jason Smith
+* Add ruby 2.7.0 and update to latest patch levels - mokhan
+* Add support for Pipfile.lock - mokhan
 
 ### Fixed
 * Bundler ignored groups failure - [bf2c03e3](https://github.com/pivotal/LicenseFinder/commit/bf2c03e375e91e8418967a593362313487f2f0d0) 
 * No longer crashes when python package requirement is missing - [80e4b360](https://github.com/pivotal/LicenseFinder/commit/80e4b360b95de126e7dc139c25de56c948a01f1e) - Jason Smith
-
 * Longest common paths returning incorrect single directory [#169276334] - [f1d5423b](https://github.com/pivotal/LicenseFinder/commit/f1d5423b04f892d1d1e0595993c9bebb0a7c1b6d) 
 * python 2 projects using incorrect CLI command - [5655f60e](https://github.com/pivotal/LicenseFinder/commit/5655f60e671dc4c247bb05138ed35b05cda9cdc7) 
 
@@ -16,8 +17,10 @@
 * Bump to openjdk 11 - [499f8ab3](https://github.com/pivotal/LicenseFinder/commit/499f8ab3af7cd8ca37e429f2ed78323ad796d123) - Debbie Chen
 * Bump to openjdk 12 - [09c781a7](https://github.com/pivotal/LicenseFinder/commit/09c781a70787d9461722d5d03d1bc624b644311a) - Debbie Chen
 * Bundler prepare commands with now exclude dependencies in the ignored groups [#169611326] - [e58b2870](https://github.com/pivotal/LicenseFinder/commit/e58b2870b64d2c88be7027b152a423fdb921baca) 
-
 * Change version to be required for dependency add and updated cli options [#168705017] - [b10383d3](https://github.com/pivotal/LicenseFinder/commit/b10383d3d1990b6ad0d608044511352f13924be3) - Debbie Chen
+* Ensure composer always installs the packages - kaystrobach 
+
+* **BREAKING** Replaced whitelist/blacklist terminology with permitted_licenses/restricted_licenses - grantbdev  
 
 ### Deprecated
 * Remove support for jruby 9.1* [#169590215] - [81e75f8c](https://github.com/pivotal/LicenseFinder/commit/81e75f8cd61ca35e30562352dee2579b1b6c991e) 
