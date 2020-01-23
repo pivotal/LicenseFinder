@@ -74,7 +74,7 @@ module LicenseFinder
     require 'forwardable'
     class Project
       extend Forwardable
-      def_delegators :project_dir, :shell_out, :add_to_file, :install_fixture
+      def_delegators :project_dir, :shell_out, :add_to_file, :remove_lines_with_value, :install_fixture
 
       attr_reader :name
 
@@ -499,7 +499,12 @@ module LicenseFinder
       private
 
       def add_gem_to_gemfile(gem_name, options)
+        remove_older_gem_from_gemfile(gem_name)
         add_to_gemfile("gem #{gem_name.inspect}, #{options.inspect}")
+      end
+
+      def remove_older_gem_from_gemfile(gem_name)
+        remove_lines_with_value('Gemfile', gem_name)
       end
 
       def add_to_gemfile(content)
@@ -533,7 +538,7 @@ module LicenseFinder
     # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
     class GemProject
       def self.create(name, options)
-        result = new(name)
+        result = new(name, options[:version])
         result.define(options)
         result
       end
@@ -544,23 +549,24 @@ module LicenseFinder
         result
       end
 
-      def initialize(name, path = nil)
+      def initialize(name, version = nil, path = nil)
         @name = name
         @path = path
+        @file_name = version.nil? ? name : "#{name}-#{version}"
         project_dir.make
       end
 
       def define(options)
-        project_dir.write_file("#{name}.gemspec", gemspec_string(options))
+        project_dir.write_file("#{file_name}.gemspec", gemspec_string(options))
       end
 
-      attr_reader :name, :path
+      attr_reader :name, :path, :file_name
 
       def project_dir
         if path
-          Paths.project(path + '/' + name)
+          Paths.project(path + '/' + file_name)
         else
-          Paths.project(name)
+          Paths.project(file_name)
         end
       end
 
@@ -632,6 +638,11 @@ module LicenseFinder
 
       def write_file(filename, content)
         join(filename).open('w') { |file| file.write content }
+      end
+
+      def remove_lines_with_value(filename, value)
+        updated_content = join(filename).open('r').readlines.reject { |line| line.include?(value) }.join
+        write_file(filename, updated_content)
       end
 
       def install_fixture(fixture_name)
