@@ -26,14 +26,6 @@ resources:
     private_key: ((CfOslBot.private_key))
     branch: master
 
-- name: git-master-dockerfile
-  type: git
-  source:
-    uri: git@github.com:pivotal/LicenseFinder.git
-    private_key: ((CfOslBot.private_key))
-    branch: master
-    paths: [Dockerfile, Gemfile, license_finder.gemspec]
-
 - name: semver-version
   type: semver
   source:
@@ -80,13 +72,13 @@ jobs:
 - name: build-docker-image
   public: true
   plan:
-    - get: git-master-dockerfile
+    - get: lf-git
       tags: ["private-worker"]
       trigger: true
     - put: dockerhub-edge
       tags: ["private-worker"]
       params:
-        build: git-master-dockerfile
+        build: lf-git
 
 <% ruby_versions.each do |ruby_version| %>
 - name: ruby-<%= ruby_version %>
