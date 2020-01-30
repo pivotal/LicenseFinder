@@ -26,7 +26,8 @@ Gem::Specification.new do |s|
     'David Dening',
     'Geoff Pleiss',
     'Mike Chinigo',
-    'Mike Dalessio'
+    'Mike Dalessio',
+    'Jeff Jun'
   ]
 
   s.email       = ['labs-commoncode@pivotal.io']
@@ -42,28 +43,28 @@ Gem::Specification.new do |s|
 
   s.license = 'MIT'
 
-  s.add_dependency 'bundler'
+  s.add_dependency 'bundler', '~> 2.1.4'
   s.add_dependency 'rubyzip', '>=1', '<3'
-  s.add_dependency 'thor'
+  s.add_dependency 'thor', '~> 1.0.1'
   s.add_dependency 'toml', '0.2.0'
   s.add_dependency 'with_env', '1.1.0'
-  s.add_dependency 'xml-simple'
+  s.add_dependency 'xml-simple', '~> 1.1.5'
 
   s.add_development_dependency 'addressable', '2.7.0'
   s.add_development_dependency 'capybara', '~> 3.15.0'
   s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM =~ /darwin/
   s.add_development_dependency 'fakefs', '~> 1.0.0'
   s.add_development_dependency 'mime-types', '3.3.1'
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'rake'
+  s.add_development_dependency 'pry', '~> 0.12.2'
+  s.add_development_dependency 'rake', '~> 13.0.1'
   s.add_development_dependency 'rspec', '~> 3'
-  s.add_development_dependency 'rspec-its'
+  s.add_development_dependency 'rspec-its', '~> 1.3.0'
   s.add_development_dependency 'rubocop', '~> 0.79.0'
   s.add_development_dependency 'rubocop-performance', '~> 1.5.0'
   s.add_development_dependency 'webmock', '~> 3.5'
 
-  s.add_development_dependency 'rack', '> 1.6'
-  s.add_development_dependency 'rack-test', '> 0.7'
+  s.add_development_dependency 'rack', '~> 2.0.7', '> 1.6'
+  s.add_development_dependency 'rack-test', '~> 1.1.0', '> 0.7'
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.start_with?('spec', 'features') }
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
