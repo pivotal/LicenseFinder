@@ -2,6 +2,7 @@
 
 cd LicenseFinder
 
+gem update --system
 bundle install --without runtime default
 
 rubocop_version=`cat Gemfile.lock | grep '    rubocop' | awk -F'[\(*\)]' '{print $2;exit}'`
