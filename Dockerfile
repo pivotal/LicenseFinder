@@ -51,7 +51,7 @@ RUN apt-get install -y python rebar
 
 # install and update python-pip
 RUN apt-get install -y python-pip python3-pip && \
-    python2 -m pip install --upgrade pip==$PIP_INSTALL_VERSION
+    python2 -m pip install --upgrade pip==$PIP_INSTALL_VERSION  && \
     python3 -m pip install --upgrade pip==$PIP3_INSTALL_VERSION
 
 # install maven
