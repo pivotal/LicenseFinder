@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
 
   s.license = 'MIT'
 
-  s.add_dependency 'bundler', '~> 2.1.4'
+  s.add_dependency 'bundler', '~> 2.1.0'
   s.add_dependency 'rubyzip', '>=1', '<3'
   s.add_dependency 'thor', '~> 1.0.1'
   s.add_dependency 'toml', '0.2.0'
