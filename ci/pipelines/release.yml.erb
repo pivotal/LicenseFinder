@@ -127,7 +127,6 @@ jobs:
   - task: run-rubocop
     tags: ["private-worker"]
     privileged: true
-    image: dockerhub-edge
     file: LicenseFinder/ci/tasks/rubocop.yml
     input_mapping: { LicenseFinder: LicenseFinder }
 
