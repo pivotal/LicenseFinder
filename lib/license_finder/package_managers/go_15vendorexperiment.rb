@@ -42,7 +42,7 @@ module LicenseFinder
       end
     end
 
-    def self.package_management_command
+    def package_management_command
       'go'
     end
 

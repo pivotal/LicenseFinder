@@ -47,7 +47,7 @@ task :check_dependencies do
   require './lib/license_finder'
   satisfied = true
   LicenseFinder::Scanner::PACKAGE_MANAGERS.each do |package_manager|
-    satisfied = false unless package_manager.installed?(LicenseFinder::Logger.new(LicenseFinder::Logger::MODE_INFO))
+    satisfied = false unless package_manager.new(project_path: Pathname.new('')).installed?(LicenseFinder::Logger.new(LicenseFinder::Logger::MODE_INFO))
   end
   STDOUT.flush
   exit 1 unless satisfied

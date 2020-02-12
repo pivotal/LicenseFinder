@@ -4,10 +4,12 @@ require 'json'
 
 module LicenseFinder
   class Pip < PackageManager
+    DEFAULT_VERSION = '2'
+
     def initialize(options = {})
       super
       @requirements_path = options[:pip_requirements_path] || Pathname('requirements.txt')
-      @python_version = options[:python_version] || '2'
+      @python_version = options[:python_version] || DEFAULT_VERSION
       raise "Invalid python version \'#{@python_version}\'. Valid versions are '2' or '3'." unless %w[2 3].include?(@python_version)
     end
 
@@ -24,12 +26,8 @@ module LicenseFinder
       end
     end
 
-    # Used to detect if installed, but this is a static method and the options aren't passed
-    # so we don't know which python version was specified. Will fail later if the expected version
-    # isn't installed. The Dockerfile now installs both versions so using the image is safe.
-    # TODO: Refactor PackageManager.installed?() to pass in the options?
-    def self.package_management_command
-      'pip2'
+    def package_management_command
+      "pip#{@python_version}"
     end
 
     def prepare_command

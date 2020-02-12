@@ -24,7 +24,7 @@ module LicenseFinder
       raise "Prepare command '#{Composer.prepare_command}' failed" unless @prepare_no_fail
     end
 
-    def self.package_management_command
+    def package_management_command
       'composer'
     end
 

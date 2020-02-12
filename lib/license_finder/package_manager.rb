@@ -22,24 +22,24 @@ module LicenseFinder
       def takes_priority_over
         nil
       end
+    end
 
-      def installed?(logger = Core.default_logger)
-        if package_management_command.nil?
-          logger.debug self, 'no command defined' # TODO: comment me out
-          true
-        elsif command_exists?(package_management_command)
-          logger.debug self, 'is installed', color: :green
-          true
-        else
-          logger.info self, 'is not installed', color: :red
-          false
-        end
+    def installed?(logger = Core.default_logger)
+      if package_management_command.nil?
+        logger.debug self.class, 'no command defined' # TODO: comment me out
+        true
+      elsif command_exists?(package_management_command)
+        logger.debug self.class, 'is installed', color: :green
+        true
+      else
+        logger.info self.class, 'is not installed', color: :red
+        false
       end
+    end
 
-      # see class description
-      def package_management_command
-        nil
-      end
+    # see class description
+    def package_management_command
+      nil
     end
 
     # see class description
@@ -47,7 +47,7 @@ module LicenseFinder
       nil
     end
 
-    def self.command_exists?(command)
+    def command_exists?(command)
       _stdout, _stderr, status =
         if LicenseFinder::Platform.windows?
           Cmd.run("where #{command}")
@@ -128,7 +128,7 @@ module LicenseFinder
       FileUtils.mkdir_p @log_directory
 
       # replace whitespace with underscores and remove slashes
-      log_file_name = self.class.package_management_command&.gsub(/\s/, '_')&.gsub(%r{/}, '')
+      log_file_name = package_management_command&.gsub(/\s/, '_')&.gsub(%r{/}, '')
       log_file = File.join(@log_directory, "prepare_#{log_file_name || 'errors'}.log")
 
       File.open(log_file, 'w') do |f|

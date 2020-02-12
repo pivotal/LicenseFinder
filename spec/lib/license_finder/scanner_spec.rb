@@ -8,16 +8,18 @@ module LicenseFinder
     let(:subject) { described_class.new(logger: logger, project_path: Pathname.new('')) }
 
     describe '#active_packages' do
+      let(:bundler) { Bundler.new(ignored_groups: Set.new, definition: double(:definition, groups: [])) }
+
       before do
-        bundler = double(:bundler, active?: true, class: Bundler)
         allow(Bundler).to receive(:new).and_return bundler
         allow(bundler).to receive(:current_packages_with_relations)
-        allow(Bundler).to receive(:package_management_command).and_return 'command'
+        allow(bundler).to receive(:active?).and_return true
+        allow(bundler).to receive(:package_management_command).and_return 'command'
       end
 
       context 'when package manager is installed' do
         it 'should log all active packages' do
-          allow(Bundler).to receive(:command_exists?).and_return true
+          allow(bundler).to receive(:command_exists?).and_return true
           expect(logger).to receive(:debug).with(Bundler, 'is installed', color: :green)
           expect(subject.active_packages).to_not be_nil
         end
@@ -25,7 +27,7 @@ module LicenseFinder
 
       context 'when package manager is NOT installed' do
         it 'should log all active packages' do
-          allow(Bundler).to receive(:command_exists?).and_return false
+          allow(bundler).to receive(:command_exists?).and_return false
           expect(logger).to receive(:info).with(Bundler, 'is active', color: :green)
           expect(logger).to receive(:info).with(Bundler, 'is not installed', color: :red)
           expect(subject.active_packages).to_not be_nil

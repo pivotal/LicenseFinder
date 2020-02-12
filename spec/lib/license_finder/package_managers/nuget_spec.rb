@@ -190,19 +190,22 @@ module LicenseFinder
 
       describe '.package_management_command' do
         it 'returns the correct package management command' do
-          expect(described_class.package_management_command).to eq(nuget_cmd)
+          nuget = Nuget.new project_path: Pathname.new('app')
+          expect(nuget.package_management_command).to eq(nuget_cmd)
         end
       end
 
       describe '.installed?' do
         it 'returns true if nuget installed' do
+          nuget = Nuget.new project_path: Pathname.new('app')
           expect(SharedHelpers::Cmd).to receive(:run).with(nuget_check).and_return([nuget_location, '', cmd_success])
-          expect(Nuget.installed?).to eq(true)
+          expect(nuget.installed?).to eq(true)
         end
 
         it 'returns false if no nuget' do
+          nuget = Nuget.new project_path: Pathname.new('app')
           expect(SharedHelpers::Cmd).to receive(:run).with(nuget_check).and_return(['', '', cmd_failure])
-          expect(Nuget.installed?).to eq(false)
+          expect(nuget.installed?).to eq(false)
         end
       end
 

@@ -30,7 +30,7 @@ module LicenseFinder
       Go15VendorExperiment
     end
 
-    def self.package_management_command
+    def package_management_command
       'glide'
     end
 

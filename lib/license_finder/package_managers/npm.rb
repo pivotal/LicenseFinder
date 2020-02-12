@@ -9,7 +9,7 @@ module LicenseFinder
       NpmPackage.packages_from_json(npm_json, detected_package_path)
     end
 
-    def self.package_management_command
+    def package_management_command
       'npm'
     end
 
@@ -34,7 +34,7 @@ module LicenseFinder
     private
 
     def npm_json
-      command = "#{NPM.package_management_command} list --json --long#{production_flag}"
+      command = "#{package_management_command} list --json --long#{production_flag}"
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
       # we can try and continue if we got an exit status 1 - unmet peer dependency
       raise "Command '#{command}' failed to execute: #{stderr}" if !status.success? && status.exitstatus != 1

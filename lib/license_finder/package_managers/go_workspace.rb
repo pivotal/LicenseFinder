@@ -15,7 +15,7 @@ module LicenseFinder
       @strict_matching = options[:strict_matching]
     end
 
-    def self.package_management_command
+    def package_management_command
       'go'
     end
 

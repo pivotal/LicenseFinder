@@ -15,13 +15,13 @@ module LicenseFinder
       end
 
       it 'installed? should be true if go exists on the path' do
-        allow(PackageManager).to receive(:command_exists?).with('go').and_return true
-        expect(described_class.installed?).to eq(true)
+        allow(subject).to receive(:command_exists?).with('go').and_return true
+        expect(subject.installed?).to eq(true)
       end
 
       it 'installed? should be false if go does not exists on the path' do
-        allow(PackageManager).to receive(:command_exists?).with('go').and_return false
-        expect(described_class.installed?(logger)).to eq(false)
+        allow(subject).to receive(:command_exists?).with('go').and_return false
+        expect(subject.installed?(logger)).to eq(false)
       end
     end
 

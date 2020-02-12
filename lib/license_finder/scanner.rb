@@ -32,7 +32,7 @@ module LicenseFinder
 
     def active_packages
       package_managers = active_package_managers
-      installed_package_managers = package_managers.select { |pm| pm.class.installed?(@logger) }
+      installed_package_managers = package_managers.select { |pm| pm.installed?(@logger) }
       installed_package_managers.flat_map(&:current_packages_with_relations)
     end
 

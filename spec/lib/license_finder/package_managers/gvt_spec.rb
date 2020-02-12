@@ -120,7 +120,7 @@ OUTPUT
 
     describe '.package_management_command' do
       it 'returns the correct package management command' do
-        expect(described_class.package_management_command).to eq('gvt')
+        expect(subject.package_management_command).to eq('gvt')
       end
     end
   end
