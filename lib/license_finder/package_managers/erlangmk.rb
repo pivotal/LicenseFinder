@@ -2,18 +2,12 @@
 
 module LicenseFinder
   class Erlangmk < PackageManager
-    def current_packages
-      deps.map do |path|
-        ErlangmkPackage.new_from_path(path)
-      end
-    end
-
-    def self.package_management_command
-      "make"
+    def package_management_command
+      "make --directory=#{project_path} --no-print-directory"
     end
 
     def prepare_command
-      "#{run} deps"
+      "#{package_management_command} deps"
     end
 
     def possible_package_paths
@@ -23,20 +17,21 @@ module LicenseFinder
       ]
     end
 
-    private
-
-    def run
-      self.class.package_management_command
+    def current_packages
+      show_deps.map do |dep|
+        ErlangmkPackage.new_from_show_dep(dep)
+      end
     end
 
-    def deps
-      command = "#{run} show-deps"
-      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+
+    private
+
+    def show_deps
+      command = "#{package_management_command} show-deps"
+      stdout, stderr, status = Cmd.run(command)
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
-      stdout
-        .each_line
-        .map { |line| line.split(' ') }
+      stdout.each_line.map(&:strip)
     end
   end
 end
