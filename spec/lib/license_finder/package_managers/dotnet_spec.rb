@@ -9,8 +9,9 @@ module LicenseFinder
     it_behaves_like 'a PackageManager'
 
     describe '.package_management_command' do
+      subject { Dotnet.new project_path: Pathname.new('app') }
       it 'returns the correct package management command' do
-        expect(described_class.package_management_command).to eq('dotnet')
+        expect(subject.package_management_command).to eq('dotnet')
       end
     end
 

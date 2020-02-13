@@ -71,27 +71,27 @@ module LicenseFinder
       assemblies.flat_map(&:dependencies)
     end
 
-    def self.package_management_command
+    def package_management_command
       return 'nuget' if LicenseFinder::Platform.windows?
 
       'mono /usr/local/bin/nuget.exe'
     end
 
     def prepare_command
-      "#{Nuget.package_management_command} restore"
+      "#{package_management_command} restore"
     end
 
-    def self.installed?(logger = Core.default_logger)
+    def installed?(logger = Core.default_logger)
       _stdout, _stderr, status = Cmd.run(nuget_check)
       if status.success?
-        logger.debug self, 'is installed', color: :green
+        logger.debug self.class, 'is installed', color: :green
       else
-        logger.info self, 'is not installed', color: :red
+        logger.info self.class, 'is not installed', color: :red
       end
       status.success?
     end
 
-    def self.nuget_check
+    def nuget_check
       return 'where nuget' if LicenseFinder::Platform.windows?
 
       'which mono && ls /usr/local/bin/nuget.exe'

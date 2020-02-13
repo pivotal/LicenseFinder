@@ -21,7 +21,7 @@ module LicenseFinder
       end
     end
 
-    def self.package_management_command
+    def package_management_command
       LicenseFinder::Platform.darwin? ? 'pod' : nil
     end
 

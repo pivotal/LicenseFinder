@@ -71,12 +71,12 @@ module LicenseFinder
       Dir[project_path.join('**/project.assets.json')]
     end
 
-    def self.package_management_command
+    def package_management_command
       'dotnet'
     end
 
     def prepare_command
-      "#{Dotnet.package_management_command} restore"
+      "#{package_management_command} restore"
     end
   end
 end

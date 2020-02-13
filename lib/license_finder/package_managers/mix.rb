@@ -4,7 +4,7 @@ module LicenseFinder
   class Mix < PackageManager
     def initialize(options = {})
       super
-      @command = options[:mix_command] || Mix.package_management_command
+      @command = options[:mix_command] || package_management_command
       @elixir_command = options[:elixir_command] || 'elixir'
       @deps_path = Pathname(options[:mix_deps_dir] || 'deps')
     end
@@ -26,7 +26,7 @@ module LicenseFinder
       licenses_by_package.fetch(name, ['license is not in deps'])
     end
 
-    def self.package_management_command
+    def package_management_command
       'mix'
     end
 
@@ -42,15 +42,15 @@ module LicenseFinder
       [project_path.join('mix.exs')]
     end
 
-    def self.installed?(logger = Core.default_logger)
+    def installed?(logger = Core.default_logger)
       if package_management_command.nil?
-        logger.debug self, 'no command defined'
+        logger.debug self.class, 'no command defined'
         true
       elsif command_exists?('elixir') && command_exists?('mix')
-        logger.debug self, 'is installed', color: :green
+        logger.debug self.class, 'is installed', color: :green
         true
       else
-        logger.info self, '(elixir) is not installed', color: :red
+        logger.info self.class, '(elixir) is not installed', color: :red
         false
       end
     end

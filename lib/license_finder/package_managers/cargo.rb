@@ -10,7 +10,7 @@ module LicenseFinder
       end
     end
 
-    def self.package_management_command
+    def package_management_command
       'cargo'
     end
 
@@ -25,7 +25,7 @@ module LicenseFinder
     private
 
     def cargo_output
-      command = "#{Cargo.package_management_command} metadata --format-version=1"
+      command = "#{package_management_command} metadata --format-version=1"
 
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?

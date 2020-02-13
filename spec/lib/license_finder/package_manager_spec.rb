@@ -35,40 +35,40 @@ module LicenseFinder
 
     describe '.package_management_command' do
       it 'defaults to nil' do
-        expect(LicenseFinder::PackageManager.package_management_command).to be_nil
+        expect(subject.package_management_command).to be_nil
       end
     end
 
     describe '.installed?' do
       context 'package_management_command is nil' do
         before do
-          allow(LicenseFinder::PackageManager).to receive(:package_management_command).and_return(nil)
+          allow(subject).to receive(:package_management_command).and_return(nil)
         end
 
         it 'returns true' do
-          expect(LicenseFinder::PackageManager.installed?).to be_truthy
+          expect(subject.installed?).to be_truthy
         end
       end
 
       context 'package_management_command exists' do
         before do
-          allow(LicenseFinder::PackageManager).to receive(:package_management_command).and_return('foobar')
-          allow(LicenseFinder::PackageManager).to receive(:command_exists?).with('foobar').and_return(true)
+          allow(subject).to receive(:package_management_command).and_return('foobar')
+          allow(subject).to receive(:command_exists?).with('foobar').and_return(true)
         end
 
         it 'returns true' do
-          expect(LicenseFinder::PackageManager.installed?).to be_truthy
+          expect(subject.installed?).to be_truthy
         end
       end
 
       context 'package_management_command does not exist' do
         before do
-          allow(LicenseFinder::PackageManager).to receive(:package_management_command).and_return('foobar')
-          allow(LicenseFinder::PackageManager).to receive(:command_exists?).with('foobar').and_return(false)
+          allow(subject).to receive(:package_management_command).and_return('foobar')
+          allow(subject).to receive(:command_exists?).with('foobar').and_return(false)
         end
 
         it 'returns false' do
-          expect(LicenseFinder::PackageManager.installed?(logger)).to be_falsey
+          expect(subject.installed?(logger)).to be_falsey
         end
       end
     end
@@ -133,14 +133,14 @@ module LicenseFinder
           end
 
           it 'uses defined package_management_command as the file name' do
-            allow(LicenseFinder::PackageManager).to receive(:package_management_command).and_return('foobar')
+            allow(subject).to receive(:package_management_command).and_return('foobar')
             expect { subject.prepare }.to raise_error(prepare_error)
             expect(File.exist?(File.join(log_directory, 'prepare_foobar.log'))).to be_truthy
           end
 
           context 'when prepare command has whitespaces and slashes in it' do
             before do
-              allow(described_class).to receive(:package_management_command)
+              allow(subject).to receive(:package_management_command)
                                           .and_return('mono /usr/local/bin/nuget.exe')
             end
 

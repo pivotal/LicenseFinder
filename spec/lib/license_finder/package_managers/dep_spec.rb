@@ -51,7 +51,7 @@ module LicenseFinder
 
     describe '.package_management_command' do
       it 'returns the correct package management command' do
-        expect(described_class.package_management_command).to eq('dep')
+        expect(subject.package_management_command).to eq('dep')
       end
     end
   end

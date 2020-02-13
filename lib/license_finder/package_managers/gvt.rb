@@ -9,7 +9,7 @@ module LicenseFinder
       [Pathname(potential_path)]
     end
 
-    def self.package_management_command
+    def package_management_command
       'gvt'
     end
 
