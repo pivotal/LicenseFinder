@@ -17,9 +17,19 @@ STDOUT
     it_behaves_like 'a PackageManager'
 
     describe '#package_management_command' do
-      it 'is make with directory and no print' do
+      it 'is make' do
         expect(
           erlangmk.package_management_command
+        ).to eql(
+          'make'
+        )
+      end
+    end
+
+    describe '#package_management_command_with_path' do
+      it 'is make with directory and no print' do
+        expect(
+          erlangmk.package_management_command_with_path
         ).to eql(
           'make --directory=/erlangmk/project --no-print-directory'
         )

@@ -3,11 +3,15 @@
 module LicenseFinder
   class Erlangmk < PackageManager
     def package_management_command
-      "make --directory=#{project_path} --no-print-directory"
+      'make'
+    end
+
+    def package_management_command_with_path
+      "#{package_management_command} --directory=#{project_path} --no-print-directory"
     end
 
     def prepare_command
-      "#{package_management_command} deps"
+      "#{package_management_command_with_path} deps"
     end
 
     def possible_package_paths
@@ -26,7 +30,7 @@ module LicenseFinder
     private
 
     def show_deps
-      command = "#{package_management_command} show-deps"
+      command = "#{package_management_command_with_path} show-deps"
       stdout, stderr, status = Cmd.run(command)
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
