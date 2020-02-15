@@ -12,8 +12,8 @@ module LicenseFinder
 
     def possible_package_paths
       [
-        project_path.join("Erlang.mk"),
-        project_path.join("erlang.mk")
+        project_path.join('Erlang.mk'),
+        project_path.join('erlang.mk')
       ]
     end
 
@@ -22,7 +22,6 @@ module LicenseFinder
         ErlangmkPackage.new_from_show_dep(dep)
       end
     end
-
 
     private
 
