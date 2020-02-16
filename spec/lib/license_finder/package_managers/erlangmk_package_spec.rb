@@ -20,27 +20,7 @@ module LicenseFinder
     its(:install_path) { should eq '/erlangmk/project/path/deps/prometheus' }
     its(:package_manager) { should eq 'Erlangmk' }
 
-    context 'when hex package https://hex.pm/packages/ra' do
-      let(:dep) { '/erlangmk/project/path/deps/ra 1.0.7 https://hex.pm/packages/ra' }
-
-      describe '.dep_name' do
-        it { expect(described_class.dep_name(dep)).to eql('ra') }
-      end
-
-      describe '.dep_version' do
-        it { expect(described_class.dep_version(dep)).to eql('1.0.7') }
-      end
-
-      describe '.dep_url' do
-        it { expect(described_class.dep_url(dep)).to eql('https://hex.pm/packages/ra') }
-      end
-
-      describe '.dep_path' do
-        it { expect(described_class.dep_path(dep)).to eql('/erlangmk/project/path/deps/ra') }
-      end
-    end
-
-    context 'when public github package https://github.com/rabbitmq/rabbitmq-cli.git.git' do
+    context 'when public github package https://github.com/rabbitmq/rabbitmq-cli.git' do
       let(:dep) { '/erlangmk/project/path/deps/rabbitmq_cli v3.8.3-rc.1 https://github.com/rabbitmq/rabbitmq-cli.git' }
 
       describe '.dep_name' do

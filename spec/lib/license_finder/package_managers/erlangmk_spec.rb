@@ -7,8 +7,8 @@ module LicenseFinder
     let(:erlangmk_show_deps) do
       <<STDOUT
 /erlangmk/project/path/deps/ra 1.0.7 https://hex.pm/packages/ra
-/erlangmk/project/path/deps/rabbitmq-cli v3.8.3-rc.1 https://github.com/rabbitmq/rabbitmq-cli
-/erlangmk/project/path/deps/rabbitmq-common v3.8.x https://github.com/rabbitmq/rabbitmq-common
+/erlangmk/project/path/deps/rabbitmq_cli v3.8.3-rc.1 https://github.com/rabbitmq/rabbitmq-cli.git
+/erlangmk/project/path/deps/rabbitmq-common master https://github.com/rabbitmq/rabbitmq-common
 STDOUT
     end
 
