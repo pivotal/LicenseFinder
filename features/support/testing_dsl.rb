@@ -470,6 +470,16 @@ module LicenseFinder
       end
     end
 
+    class ErlangmkProject < Project
+      def add_dep
+        FileUtils.copy_entry(Paths.fixtures.join('erlangmk'), Paths.project)
+      end
+
+      def install
+        shell_out('make fetch-deps')
+      end
+    end
+
     class MixProject < Project
       def add_dep
         install_fixture('mix.exs')
