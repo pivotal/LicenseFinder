@@ -11,7 +11,7 @@ module LicenseFinder
     end
 
     def prepare_command
-      "#{package_management_command_with_path} deps"
+      "#{package_management_command_with_path} fetch-deps"
     end
 
     def possible_package_paths

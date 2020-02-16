@@ -41,7 +41,7 @@ STDOUT
         expect(
           erlangmk.prepare_command
         ).to eql(
-          'make --directory=/erlangmk/project --no-print-directory deps'
+          'make --directory=/erlangmk/project --no-print-directory fetch-deps'
         )
       end
     end
