@@ -4347,9 +4347,27 @@ $(foreach p,$(DEP_EARLY_PLUGINS),\
 		$(call core_dep_plugin,$p/early-plugins.mk,$p))))
 
 dep_name = $(if $(dep_$(1)),$(1),$(if $(pkg_$(1)_name),$(pkg_$(1)_name),$(1)))
-dep_repo = $(patsubst git://github.com/%,https://github.com/%, \
-	$(if $(dep_$(1)),$(word 2,$(dep_$(1))),$(pkg_$(1)_repo)))
-dep_commit = $(if $(dep_$(1)_commit),$(dep_$(1)_commit),$(if $(dep_$(1)),$(if $(filter hex,$(word 1,$(dep_$(1)))),$(word 2,$(dep_$(1))),$(word 3,$(dep_$(1)))),$(pkg_$(1)_commit)))
+dep_repo = $(strip \
+	      $(patsubst git://github.com/%,https://github.com/%, \
+		$(if $(dep_$(1)), \
+		  $(if $(filter hex,$(word 1,$(dep_$(1)))), \
+		    https://hex.pm/packages/$(1), \
+		    $(word 2,$(dep_$(1))) \
+		  ), \
+		$(pkg_$(1)_repo)) \
+	      ) \
+	    )
+dep_commit = $(strip \
+		$(if $(dep_$(1)_commit), \
+		  $(dep_$(1)_commit), \
+		  $(if $(dep_$(1)), \
+		    $(if $(filter hex,$(word 1,$(dep_$(1)))), \
+		      $(word 2,$(dep_$(1))), \
+		      $(word 3,$(dep_$(1))) \
+		    ), \
+		  $(pkg_$(1)_commit)) \
+		) \
+	    )
 
 LOCAL_DEPS_DIRS = $(foreach a,$(LOCAL_DEPS),$(if $(wildcard $(APPS_DIR)/$(a)),$(APPS_DIR)/$(a)))
 ALL_DEPS_DIRS = $(addprefix $(DEPS_DIR)/,$(foreach dep,$(filter-out $(IGNORE_DEPS),$(BUILD_DEPS) $(DEPS)),$(call dep_name,$(dep))))
@@ -7620,6 +7638,16 @@ list-shell-deps: $(ERLANG_MK_RECURSIVE_SHELL_DEPS_LIST)
 list-deps list-doc-deps list-rel-deps list-test-deps list-shell-deps:
 	$(verbose) cat $^
 
-# Show all deps recursively: path, version & homepage
-show-deps: $(ERLANG_MK_RECURSIVE_DEPS_LIST)
-	$(verbose) echo $(foreach d,$(notdir $(shell cat $^)),"\n$(DEPS_DIR)/$d $(call dep_commit,$d) $(call dep_repo,$d)")
+# List 'PATH VERSION HOMEPAGE' for all deps, recursively
+.PHONY: list-deps-info
+list-deps-info: $(ALL_DEPS_DIRS:%=%-list-deps-info)
+
+%-list-deps-info: $(ERLANG_MK_RECURSIVE_DEPS_LIST)
+	$(verbose) echo "$* $(call dep_commit,$(notdir $*)) $(call dep_repo,$(notdir $*))"
+	$(verbose) $(MAKE) --no-print-directory --directory $* list-deps-info IS_DEP=1 \
+	|| echo "$* is missing list-deps-info target, skipping..."
+
+# TODO:
+# - Remove duplicates from list-deps-info
+# - Add list-deps-info targets to https://github.com/rabbitmq/rabbitmq-common/mk/rabbitmq-tools.mk
+# - Overwrite dep_repo in rabbitmq-tools.mk so that it handles git_rmq
