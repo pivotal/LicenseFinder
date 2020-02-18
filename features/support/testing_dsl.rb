@@ -470,7 +470,7 @@ module LicenseFinder
       end
     end
 
-    class ErlangmkProject < Project
+    class ErlangMkProject < Project
       def add_dep
         FileUtils.copy_entry(Paths.fixtures.join('erlangmk'), Paths.project)
       end

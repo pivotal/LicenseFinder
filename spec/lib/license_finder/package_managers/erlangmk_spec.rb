@@ -6,9 +6,73 @@ module LicenseFinder
   describe Erlangmk do
     let(:erlangmk_show_deps) do
       <<STDOUT
-/erlangmk/project/path/deps/ra 1.0.7 https://hex.pm/packages/ra
-/erlangmk/project/path/deps/rabbitmq_cli v3.8.3-rc.1 https://github.com/rabbitmq/rabbitmq-cli.git
-/erlangmk/project/path/deps/rabbitmq-common master https://github.com/rabbitmq/rabbitmq-common
+ GEN    coverdata-clean
+ GEN    distclean-tmp
+ GEN    distclean-kerl
+ GEN    distclean-deps
+ GEN    distclean-ct
+ GEN    distclean-plt
+ GEN    distclean-edoc
+ GEN    distclean-escript
+ GEN    distclean-relx-rel
+ GEN    distclean-xref
+ GEN    cover-report-clean
+ DEP    rabbitmq_management (v3.8.2)
+make[1]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_management'
+ DEP    rabbit_common (v3.8.2)
+ DEP    ranch (1.7.1)
+ DEP    rabbit (v3.8.2)
+ DEP    amqp_client (v3.8.2)
+ DEP    cowboy (2.6.1)
+ DEP    cowlib (2.7.0)
+ DEP    rabbitmq_web_dispatch (v3.8.2)
+ DEP    rabbitmq_management_agent (v3.8.2)
+make[2]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/ranch'
+make[2]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/ranch'
+make[2]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbit_common'
+ DEP    rabbitmq_codegen (v3.8.2)
+ DEP    lager (3.8.0)
+/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbit_common
+ DEP    jsx (2.9.0)
+ DEP    recon (2.5.0)
+ DEP    credentials_obfuscation (1.1.0)
+make[2]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbit_common'
+make[2]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbit'
+ DEP    rabbitmq_cli (v3.8.2)
+ DEP    syslog (3.4.5)
+ DEP    ra (1.0.5)
+ DEP    sysmon_handler (1.2.0)
+ DEP    stdout_formatter (0.2.2)
+ DEP    observer_cli (1.5.2)
+make[3]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_cli'
+make[3]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_cli'
+make[2]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbit'
+make[2]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/amqp_client'
+make[2]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/amqp_client'
+make[2]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/cowboy'
+make[3]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/cowlib'
+make[3]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/cowlib'
+make[2]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/cowboy'
+make[2]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_web_dispatch'
+make[2]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_web_dispatch'
+make[2]: Entering directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_management_agent'
+make[2]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_management_agent'
+make[1]: Leaving directory '/Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_management'
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_management v3.8.2 https://github.com/rabbitmq/rabbitmq-management
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/ranch 1.7.1 https://hex.pm/packages/ranch
+make[2]: Nothing to be done for 'list-deps-info'.
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbit_common v3.8.2 rabbitmq-common
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbit v3.8.2 rabbitmq-server
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/amqp_client v3.8.2 rabbitmq-erlang-client
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/cowboy 2.6.1 https://hex.pm/packages/cowboy
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/cowlib 2.7.0 https://github.com/ninenines/cowlib
+make[3]: Nothing to be done for 'list-deps-info'.
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/ranch 1.7.1 https://github.com/ninenines/ranch
+make[3]: Nothing to be done for 'list-deps-info'.
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/cowlib 2.7.0 https://hex.pm/packages/cowlib
+make[2]: Nothing to be done for 'list-deps-info'.
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_web_dispatch v3.8.2 rabbitmq-web-dispatch
+ DEPI   /Users/gerhard/github.com/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_management_agent v3.8.2 rabbitmq-management-agent
 STDOUT
     end
 
@@ -51,7 +115,7 @@ STDOUT
         before do
           expect(SharedHelpers::Cmd).to(
             receive(:run)
-              .with('make --directory=/erlangmk/project --no-print-directory show-deps')
+              .with('make --directory=/erlangmk/project --no-print-directory list-deps-info')
               .and_return(
                 [erlangmk_show_deps, '', cmd_success]
               )
@@ -68,7 +132,7 @@ STDOUT
           expect(
             erlangmk.current_packages.size
           ).to eql(
-            3
+            11
           )
         end
       end
@@ -77,7 +141,7 @@ STDOUT
         before do
           expect(SharedHelpers::Cmd).to(
             receive(:run)
-              .with('make --directory=/erlangmk/project --no-print-directory show-deps')
+              .with('make --directory=/erlangmk/project --no-print-directory list-deps-info')
               .and_return(
                 ['Some error', '', cmd_failure]
               )
@@ -86,7 +150,7 @@ STDOUT
 
         it 'raises command error' do
           expect { erlangmk.current_packages }.to raise_error(
-            RuntimeError, %r{Command 'make --directory=\/erlangmk\/project --no-print-directory show-deps' failed to execute}
+            RuntimeError, %r{Command 'make --directory=\/erlangmk\/project --no-print-directory list-deps-info' failed to execute}
           )
         end
       end

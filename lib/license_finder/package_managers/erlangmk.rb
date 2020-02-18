@@ -22,19 +22,22 @@ module LicenseFinder
     end
 
     def current_packages
-      show_deps.map do |dep|
+      deps.map do |dep|
         ErlangmkPackage.new_from_show_dep(dep)
       end
     end
 
     private
 
-    def show_deps
-      command = "#{package_management_command_with_path} show-deps"
+    def deps
+      command = "#{package_management_command_with_path} list-deps-info"
       stdout, stderr, status = Cmd.run(command)
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
-      stdout.each_line.map(&:strip)
+      stdout
+        .each_line
+        .map(&:strip)
+        .select { |line| line.start_with?('DEPI') }
     end
   end
 end

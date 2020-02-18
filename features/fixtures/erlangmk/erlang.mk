@@ -7643,11 +7643,5 @@ list-deps list-doc-deps list-rel-deps list-test-deps list-shell-deps:
 list-deps-info: $(ALL_DEPS_DIRS:%=%-list-deps-info)
 
 %-list-deps-info: $(ERLANG_MK_RECURSIVE_DEPS_LIST)
-	$(verbose) echo "$* $(call dep_commit,$(notdir $*)) $(call dep_repo,$(notdir $*))"
-	$(verbose) $(MAKE) --no-print-directory --directory $* list-deps-info IS_DEP=1 \
-	|| echo "$* is missing list-deps-info target, skipping..."
-
-# TODO:
-# - Remove duplicates from list-deps-info
-# - Add list-deps-info targets to https://github.com/rabbitmq/rabbitmq-common/mk/rabbitmq-tools.mk
-# - Overwrite dep_repo in rabbitmq-tools.mk so that it handles git_rmq
+	$(verbose) echo " DEPI   $* $(call dep_commit,$(notdir $*)) $(call dep_repo,$(notdir $*))"
+	$(verbose) $(MAKE) --no-print-directory --directory $* list-deps-info IS_DEP=1 || true
