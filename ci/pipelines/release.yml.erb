@@ -91,7 +91,7 @@ jobs:
   - get: LicenseFinder
     tags: ["private-worker"]
     resource: lf-git
-    trigger: true
+    passed: [build-docker-image]
     version: every
   - task: ruby-<%= ruby_version %>
     tags: ["private-worker"]
@@ -122,8 +122,8 @@ jobs:
   - get: LicenseFinder
     tags: ["private-worker"]
     resource: lf-git
-    trigger: true
     version: every
+    passed: [build-docker-image]
   - task: run-rubocop
     tags: ["private-worker"]
     privileged: true
