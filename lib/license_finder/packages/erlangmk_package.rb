@@ -23,25 +23,25 @@ module LicenseFinder
 
       def dep_version(dep)
         dep
-          .split(' ')[2]
+          .split(' ')[3]
           .sub(/^v/, '')
       end
 
       def dep_url(dep)
         dep
-          .split(' ')[-1]
+          .split(' ')[-2]
           .split('.git')[0]
           .sub('git@github.com:', 'https://github.com/')
       end
 
       def dep_path(dep)
         dep
-          .split(' ')[1]
+          .split(' ')[-1]
       end
 
       def raise_if_not_valid(dep)
         invalid_dep = "'#{dep}' does not look like a valid Erlank.mk dependency"
-        valid_dep_example = "A valid dependency example: 'DEPI /erlangmk/project/path/deps/ra 1.0.7 https://hex.pm/packages/ra'"
+	valid_dep_example = "A valid dependency example: 'DEPI	  ra	WIP_fetch_method	1.0.7	https://hex.pm/packages/ra	/erlangmk/project/path/deps/ra'"
         raise(InvalidErlangmkPackageError, "#{invalid_dep}. #{valid_dep_example}") unless valid?(dep)
       end
 

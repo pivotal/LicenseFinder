@@ -6,7 +6,7 @@ module LicenseFinder
   describe ErlangmkPackage do
     subject do
       described_class.new_from_show_dep(
-        'DEPI   /erlangmk/project/path/deps/prometheus 4.5.0 https://hex.pm/packages/prometheus'
+        'DEPI	prometheus	WIP_fetch_method	4.5.0	https://hex.pm/packages/prometheus	/erlangmk/project/path/deps/prometheus'
       )
     end
 
@@ -21,7 +21,7 @@ module LicenseFinder
     its(:package_manager) { should eq 'Erlangmk' }
 
     context 'when public github package https://github.com/rabbitmq/rabbitmq-cli.git' do
-      let(:dep) { 'DEPI   /erlangmk/project/path/deps/rabbitmq_cli v3.8.3-rc.1 https://github.com/rabbitmq/rabbitmq-cli.git' }
+      let(:dep) { 'DEPI	  rabbitmq_cli	WIP_fetch_method	  v3.8.3-rc.1	https://github.com/rabbitmq/rabbitmq-cli.git	/erlangmk/project/path/deps/rabbitmq_cli' }
 
       describe '.dep_name' do
         it { expect(described_class.dep_name(dep)).to eql('rabbitmq_cli') }
@@ -41,7 +41,7 @@ module LicenseFinder
     end
 
     context 'when private github package' do
-      let(:dep) { 'DEPI   /erlangmk/project/path/deps/zstd master git@github.com:rabbitmq/zstd-erlang' }
+      let(:dep) { 'DEPI	  zstd	WIP_fetch_method	master	git@github.com:rabbitmq/zstd-erlang	/erlangmk/project/path/deps/zstd' }
 
       describe '.dep_name' do
         it { expect(described_class.dep_name(dep)).to eql('zstd') }
