@@ -1,3 +1,12 @@
+# [6.1.0] / 2020-02-21
+
+### Fixed
+* Testing dsl now correctly creates gem project - [6158d767](https://github.com/pivotal/LicenseFinder/commit/6158d76758f4232f3efd652729a83aa632a67dee) - Jeff Jun
+
+### Changed
+* Upgrade golang version to 1.13.3 - [51ecbcbc](https://github.com/pivotal/LicenseFinder/commit/51ecbcbc7992366c1baed2e8b805a7f820f70160) 
+* Uses correct package management command for pip based on options that are passed in - [3f4034ab](https://github.com/pivotal/LicenseFinder/commit/3f4034ab3479da23088174ad8cf56828b3cda9ad) 
+
 # [6.0.0] / 2020-01-22
 
 ### Added
@@ -800,3 +809,4 @@ Bugfixes:
 [5.11.0]: https://github.com/pivotal/LicenseFinder/compare/v5.10.2...v5.11.0
 [5.11.1]: https://github.com/pivotal/LicenseFinder/compare/v5.11.0...v5.11.1
 [6.0.0]: https://github.com/pivotal/LicenseFinder/compare/v5.11.1...v6.0.0
+[6.1.0]: https://github.com/pivotal/LicenseFinder/compare/v6.0.0...v6.1.0
