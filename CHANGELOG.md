@@ -1,3 +1,8 @@
+# Unreleased
+
+### Added
+* Install `license-gradle-plugin` via a `gradle` init script.- [ef275df](https://github.com/pivotal/LicenseFinder/pull/681/commits/ef275df186be31f7c2adef2408c0ccc72bff234a) - mokhan
+
 # [6.1.0] / 2020-02-21
 
 ### Fixed
