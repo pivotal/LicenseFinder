@@ -77,6 +77,7 @@ RUN curl -L -o gradle.zip https://services.gradle.org/distributions/gradle-$GRAD
     unzip -q gradle.zip && \
     rm gradle.zip && \
     mv gradle-$GRADLE_VERSION /root/gradle
+COPY config/.gradle /root/.gradle
 ENV PATH=/root/gradle/bin:$PATH
 
 #install go

@@ -1,0 +1,14 @@
+initscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.15.0"
+  }
+}
+allprojects {
+  project.apply plugin: com.hierynomus.gradle.license.LicenseBasePlugin
+  project.apply plugin: com.hierynomus.gradle.license.LicenseReportingPlugin
+}
