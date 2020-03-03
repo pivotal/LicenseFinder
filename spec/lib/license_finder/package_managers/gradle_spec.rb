@@ -5,6 +5,10 @@ require 'fakefs/spec_helpers'
 
 module LicenseFinder
   describe Gradle do
+    SETTINGS_DOT_GRADLE = <<-GRADLE
+    rootProject.buildFileName = 'build-alt.gradle'
+    GRADLE
+
     let(:options) { {} }
 
     subject { Gradle.new(options.merge(project_path: Pathname('/fake/path'))) }
@@ -179,10 +183,6 @@ BUILD SUCCESSFUL in 0s
 
         context "when there's a settings.gradle" do
           it 'uses the build.gradle referenced inside' do
-            SETTINGS_DOT_GRADLE = <<-GRADLE
-    rootProject.buildFileName = 'build-alt.gradle'
-            GRADLE
-
             FakeFS do
               FileUtils.mkdir_p '/fake/path'
               File.open('/fake/path/settings.gradle', 'w') do |file|
@@ -239,10 +239,6 @@ BUILD SUCCESSFUL in 0s
 
         context "when there's a settings.gradle" do
           it 'uses the build.gradle referenced inside' do
-            SETTINGS_DOT_GRADLE = <<-GRADLE
-  rootProject.buildFileName = 'build-alt.gradle'
-            GRADLE
-
             FakeFS do
               FileUtils.mkdir_p '/fake/path'
               File.open('/fake/path/settings.gradle', 'w') do |file|
