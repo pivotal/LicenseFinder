@@ -126,7 +126,7 @@ RUN bash -lc "gem update --system && gem install bundler"
 
 # install conan
 RUN apt-get install -y python-dev && \
-	pip install --no-cache --ignore-installed six --ignore-installed colorama \
+	pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
 	    --ignore-installed requests --ignore-installed chardet \
 	    --ignore-installed urllib3 \
 	    --upgrade setuptools && \
