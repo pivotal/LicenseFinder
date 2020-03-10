@@ -130,7 +130,7 @@ RUN apt-get install -y python-dev && \
 	    --ignore-installed requests --ignore-installed chardet \
 	    --ignore-installed urllib3 \
 	    --upgrade setuptools && \
-    pip install --no-cache -Iv conan==1.11.2
+    pip install --no-cache-dir -Iv conan==1.11.2
 
 # install Cargo
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --profile minimal
