@@ -275,7 +275,7 @@ BUILD SUCCESSFUL in 0s
 
             expect(SharedHelpers::Cmd).to receive(:run).with("gradle -Dorg.gradle.jvmargs=-Xmx6144m properties | grep 'parent: '").and_return([nil, 'error', cmd_failure])
 
-            expect { subject.project_root? }.to raise_error(/Command 'gradle -Dorg.gradle.jvmargs=-Xmx6144m properties \| grep 'parent: '' failed to execute: error/)
+            expect { subject.project_root? }.to raise_error(/Command 'gradle -Dorg.gradle.jvmargs=-Xmx6144m properties \| grep 'parent: '' failed to execute in \/fake\/path: error/)
           end
         end
       end
