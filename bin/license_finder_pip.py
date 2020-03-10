@@ -7,9 +7,15 @@ try:
         from pip._internal.req import parse_requirements
 except ImportError:
         from pip.req import parse_requirements
+
 try:
-        from pip._internal.download import PipSession
+    # since pip 19.3
+    from pip._internal.network.session import PipSession
 except ImportError:
+    try:
+        # since pip 10
+        from pip._internal.download import PipSession
+    except ImportError:
         from pip.download import PipSession
 
 from pip._vendor import pkg_resources
