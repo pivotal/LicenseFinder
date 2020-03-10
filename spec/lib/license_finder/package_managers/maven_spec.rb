@@ -156,10 +156,10 @@ module LicenseFinder
 
             expect(SharedHelpers::Cmd).to receive(:run)
               .with('mvn help:evaluate -Dexpression=project.parent -q -DforceStdout')
-              .and_return([nil, 'error', cmd_failure])
+              .and_return(['error', '', cmd_failure])
 
             expect { subject.project_root? }
-              .to raise_error(/Command 'mvn help:evaluate -Dexpression=project.parent -q -DforceStdout' failed to execute: error/)
+              .to raise_error(%r{Command 'mvn help:evaluate -Dexpression=project.parent -q -DforceStdout' failed to execute in /fake/path: error})
           end
         end
       end

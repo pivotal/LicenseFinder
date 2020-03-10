@@ -62,7 +62,7 @@ module LicenseFinder
         end
       end
 
-      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+      raise "Command '#{command}' failed to execute in #{project_path}: #{stderr}" unless status.success?
 
       root_project_name = stdout.gsub(/\s|parent:|\n/, '')
       root_project_name == 'null'
