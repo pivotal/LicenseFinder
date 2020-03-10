@@ -159,7 +159,7 @@ module LicenseFinder
               .and_return(['error', '', cmd_failure])
 
             expect { subject.project_root? }
-              .to raise_error(/Command 'mvn help:evaluate -Dexpression=project.parent -q -DforceStdout' failed to execute in \/fake\/path: error/)
+              .to raise_error(%r{Command 'mvn help:evaluate -Dexpression=project.parent -q -DforceStdout' failed to execute in /fake/path: error})
           end
         end
       end
