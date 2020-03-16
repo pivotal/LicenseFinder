@@ -1,3 +1,5 @@
+# [6.1.2] / 2020-03-16
+
 # [6.1.0] / 2020-02-21
 
 ### Fixed
@@ -810,3 +812,4 @@ Bugfixes:
 [5.11.1]: https://github.com/pivotal/LicenseFinder/compare/v5.11.0...v5.11.1
 [6.0.0]: https://github.com/pivotal/LicenseFinder/compare/v5.11.1...v6.0.0
 [6.1.0]: https://github.com/pivotal/LicenseFinder/compare/v6.0.0...v6.1.0
+[6.1.2]: https://github.com/pivotal/LicenseFinder/compare/v6.1.0...v6.1.2
