@@ -1,5 +1,9 @@
 # [6.1.2] / 2020-03-16
 
+### Changed
+
+* **Breaking change**: Terminology change from `whitelist`/`whitelisted` to `permit`/`permitted` and `blacklist`/`blacklisted` to `restrict`/`restricted` for subcommands and config file keys. [a40b22fda](https://github.com/pivotal/LicenseFinder/commit/a40b22fda11b3a0efbb3c0a021381534bc998dd9) [#650](https://github.com/pivotal/LicenseFinder/pull/650)
+
 # [6.1.0] / 2020-02-21
 
 ### Fixed
