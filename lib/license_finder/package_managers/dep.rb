@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'toml'
+require 'tomlrb'
 
 module LicenseFinder
   class Dep < PackageManager
@@ -9,7 +9,7 @@ module LicenseFinder
     end
 
     def current_packages
-      toml = TOML.load_file(detected_package_path)
+      toml = Tomlrb.load_file(detected_package_path)
       projects = toml['projects']
 
       return [] if projects.nil?

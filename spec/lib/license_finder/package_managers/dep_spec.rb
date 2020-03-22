@@ -33,7 +33,7 @@ module LicenseFinder
 
       context 'the package does not have any projects in its toml' do
         before do
-          allow(TOML).to receive(:load_file).and_return({})
+          allow(Tomlrb).to receive(:load_file).and_return({})
         end
 
         it 'should return an empty array' do
