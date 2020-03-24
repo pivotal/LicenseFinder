@@ -55,7 +55,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM =~ /darwin/
   s.add_development_dependency 'fakefs', '~> 1.0.0'
   s.add_development_dependency 'mime-types', '3.3.1'
-  s.add_development_dependency 'pry', '~> 0.12.2'
+  s.add_development_dependency 'pry', '~> 0.13.0'
   s.add_development_dependency 'rake', '~> 13.0.1'
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its', '~> 1.3.0'
