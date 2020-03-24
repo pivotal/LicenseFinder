@@ -51,9 +51,10 @@ module LicenseFinder
       return false if @strict_matching
 
       godep = LicenseFinder::GoDep.new(project_path: Pathname(project_path))
+      dep = LicenseFinder::Dep.new(project_path: Pathname(project_path))
       # go workspace is only active if GoDep wasn't. There are some projects
       # that will use the .envrc and have a Godep folder as well.
-      !!(!godep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
+      !!(!godep.active? && !dep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
     end
 
     private
@@ -81,6 +82,8 @@ module LicenseFinder
         orig_gopath = ENV['GOPATH']
         ENV['GOPATH'] = nil
         val, stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...')
+        ENV['GOPATH'] = project_path.to_s
+        val, stderr, status = Cmd.run('go list -f "{{join .Deps \"\n\"}}" ./...') unless status.success?
         ENV['GOPATH'] = orig_gopath
         raise GoWorkspacePackageManagerError, "go list failed:\n#{stderr}" unless status.success?
 
