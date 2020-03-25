@@ -258,6 +258,20 @@ HERE
         end
       end
 
+      context 'when dep is present' do
+        let(:godep) { instance_double(LicenseFinder::GoDep, active?: false)}
+        let(:dep) { instance_double(LicenseFinder::Dep, active?: true)}
+
+        it 'should prefer deps over go_workspace' do
+          allow(LicenseFinder::GoDep).to receive(:new).and_return(godep)
+          allow(LicenseFinder::Dep).to receive(:new).and_return(dep)
+          allow(subject).to receive(:envrc_path).and_return('some-path')
+          allow(IO).to receive(:read).with('some-path').and_return('GO15VENDOREXPERIMENT')
+
+          expect(subject.active?).to eq(false)
+        end
+      end
+
       context 'when .envrc is present in a parent directory' do
         subject do
           GoWorkspace.new(options.merge(project_path: Pathname('/Users/pivotal/workspace/loggregator/src/github.com/foo/bar'),

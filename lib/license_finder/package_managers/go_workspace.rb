@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
+
 module LicenseFinder
   class GoWorkspacePackageManagerError < ::StandardError
   end
