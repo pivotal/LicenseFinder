@@ -259,8 +259,8 @@ HERE
       end
 
       context 'when dep is present' do
-        let(:godep) { instance_double(LicenseFinder::GoDep, active?: false)}
-        let(:dep) { instance_double(LicenseFinder::Dep, active?: true)}
+        let(:godep) { instance_double(LicenseFinder::GoDep, active?: false) }
+        let(:dep) { instance_double(LicenseFinder::Dep, active?: true) }
 
         it 'should prefer deps over go_workspace' do
           allow(LicenseFinder::GoDep).to receive(:new).and_return(godep)
