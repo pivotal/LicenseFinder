@@ -482,7 +482,7 @@ module LicenseFinder
     class BundlerProject < Project
       def add_dep
         add_to_gemfile("source 'https://rubygems.org'")
-        add_to_gemfile("gem 'license_finder'")
+        add_to_gemfile("gem 'license_finder', path: #{Paths.root.to_s.inspect}")
       end
 
       def install
