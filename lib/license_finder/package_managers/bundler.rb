@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'bundler'
+require 'securerandom'
 
 module LicenseFinder
   class Bundler < PackageManager
@@ -26,7 +27,10 @@ module LicenseFinder
     def prepare_command
       ignored_groups_argument = !ignored_groups.empty? ? "--without #{ignored_groups.to_a.join(' ')}" : ''
 
-      "bundle install #{ignored_groups_argument}".strip
+      gem_path = SecureRandom.uuid
+      logger.info self.class, "Running bundle install for #{Dir.pwd} with path #{gem_path}", color: :blue
+
+      "bundle install #{ignored_groups_argument} --path #{gem_path}".strip
     end
 
     def possible_package_paths
