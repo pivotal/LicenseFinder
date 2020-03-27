@@ -27,17 +27,21 @@ module LicenseFinder
     end
 
     describe '.prepare_command' do
+      before do
+        allow(SecureRandom).to receive(:uuid).and_return('some-path')
+      end
+
       context 'with ignored groups' do
         subject { Bundler.new(ignored_groups: Set.new(%w[dev test]), project_path: Pathname.new('.'), definition: definition) }
         it 'returns the correct prepare method' do
-          expect(subject.prepare_command).to eq('bundle install --without dev test')
+          expect(subject.prepare_command).to eq('bundle install --without dev test --path some-path')
         end
       end
 
       context 'without ignored groups' do
         subject { Bundler.new(ignored_groups: Set.new, project_path: Pathname.new('.'), definition: definition) }
         it 'returns the correct prepare method' do
-          expect(subject.prepare_command).to eq('bundle install')
+          expect(subject.prepare_command).to eq('bundle install  --path some-path')
         end
       end
     end
