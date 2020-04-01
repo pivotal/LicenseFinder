@@ -23,7 +23,7 @@ module LicenseFinder
       it 'should return inactive' do
         FakeFS.with_fresh do
           FileUtils.mkdir_p '/app'
-          File.write(Pathname('/app/glide.lock').to_s, '')
+
           expect(subject.active?).to be_falsey
         end
       end
