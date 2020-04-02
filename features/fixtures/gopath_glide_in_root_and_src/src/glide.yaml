@@ -1,0 +1,5 @@
+package: github.com/Masterminds/glide
+import:
+  - package: github.com/googollee/go-socket.io
+  - package: github.com/gorilla/mux
+    version: ^1.4.0
