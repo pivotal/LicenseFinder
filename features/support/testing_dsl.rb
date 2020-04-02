@@ -98,9 +98,10 @@ module LicenseFinder
         Paths.project(name)
       end
 
-      def cloneGoProject(fixture_name)
+      def clone_go_project(fixture_name)
         FileUtils.mkpath(Paths.project.join('src', fixture_name))
-        FileUtils.cp_r(Paths.fixtures.join(fixture_name), Paths.project.join('src')) end
+        FileUtils.cp_r(Paths.fixtures.join(fixture_name), Paths.project.join('src'))
+      end
 
       def clone(fixture_name)
         FileUtils.mkpath(Paths.project.join(fixture_name))
@@ -285,12 +286,12 @@ module LicenseFinder
 
     class GlideProject < Project
       def add_dep
-        cloneGoProject('gopath_glide')
+        clone_go_project('gopath_glide')
       end
 
       def install
         orig_gopath = ENV['GOPATH']
-        ENV['GOPATH'] = "#{project_dir}"
+        ENV['GOPATH'] = project_dir.to_s
         shell_out('glide install')
         ENV['GOPATH'] = orig_gopath
       end
@@ -302,12 +303,12 @@ module LicenseFinder
 
     class GlideProjectWithoutSrc < Project
       def add_dep
-        cloneGoProject('gopath_glide_without_src')
+        clone_go_project('gopath_glide_without_src')
       end
 
       def install
         orig_gopath = ENV['GOPATH']
-        ENV['GOPATH'] = "#{project_dir}"
+        ENV['GOPATH'] = project_dir.to_s
         shell_out('glide install')
         ENV['GOPATH'] = orig_gopath
       end
@@ -317,15 +318,14 @@ module LicenseFinder
       end
     end
 
-
     class GlideProjectWithRootAndSrc < Project
       def add_dep
-        cloneGoProject('gopath_glide_in_root_and_src')
+        clone_go_project('gopath_glide_in_root_and_src')
       end
 
       def install
         orig_gopath = ENV['GOPATH']
-        ENV['GOPATH'] = "#{project_dir}"
+        ENV['GOPATH'] = project_dir.to_s
         shell_out_root('glide install')
         shell_out_src('glide install')
         ENV['GOPATH'] = orig_gopath
