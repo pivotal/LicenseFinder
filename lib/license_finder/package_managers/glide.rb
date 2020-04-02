@@ -3,7 +3,7 @@
 module LicenseFinder
   class Glide < PackageManager
     def possible_package_paths
-      [project_path.join('src', 'glide.lock'), project_path.join('glide.lock')]
+      [project_path.join('glide.lock')]
     end
 
     def current_packages
@@ -11,12 +11,7 @@ module LicenseFinder
 
       YAML.load_file(detected_path).fetch('imports').map do |package_hash|
         import_path = package_hash.fetch('name')
-        license_path =
-          if detected_path == possible_package_paths.first
-            project_path.join('src', 'vendor', import_path)
-          else
-            project_path.join('vendor', import_path)
-          end
+        license_path = project_path.join('vendor', import_path)
 
         GoPackage.from_dependency({
                                     'ImportPath' => import_path,

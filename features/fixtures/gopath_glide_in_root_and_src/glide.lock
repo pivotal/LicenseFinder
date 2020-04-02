@@ -1,0 +1,9 @@
+hash: 4765849129e9fbb9f7ebc620df51f27b6999f1a06bba4ecf92193ffffcf1d684
+updated: 2017-09-27T22:42:02.817609367Z
+imports:
+- name: github.com/Masterminds/cookoo
+  version: 78aa11ce75e257c51be7ea945edb84cf19c4a6de
+  repo: https://github.com/Masterminds/cookoo.git
+- name: github.com/Masterminds/semver
+  version: 517734cc7d6470c0d07130e40fd40bdeb9bcd3fd
+testImports: []

@@ -98,6 +98,11 @@ module LicenseFinder
         Paths.project(name)
       end
 
+      def clone_go_project(fixture_name)
+        FileUtils.mkpath(Paths.project.join('src', fixture_name))
+        FileUtils.cp_r(Paths.fixtures.join(fixture_name), Paths.project.join('src'))
+      end
+
       def clone(fixture_name)
         FileUtils.mkpath(Paths.project.join(fixture_name))
         FileUtils.cp_r(Paths.fixtures.join(fixture_name), Paths.project)
@@ -281,40 +286,57 @@ module LicenseFinder
 
     class GlideProject < Project
       def add_dep
-        clone('gopath_glide')
+        clone_go_project('gopath_glide')
       end
 
       def install
         orig_gopath = ENV['GOPATH']
-        ENV['GOPATH'] = "#{project_dir}/gopath_glide"
+        ENV['GOPATH'] = project_dir.to_s
         shell_out('glide install')
         ENV['GOPATH'] = orig_gopath
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.project.join('gopath_glide', 'src')).shell_out(command)
+        ProjectDir.new(Paths.project.join('src', 'gopath_glide', 'src')).shell_out(command)
       end
     end
 
     class GlideProjectWithoutSrc < Project
       def add_dep
-        clone('gopath_glide_without_src')
+        clone_go_project('gopath_glide_without_src')
       end
 
       def install
-        src_path = File.join(project_dir, 'gopath_glide_without_src', 'src')
-        FileUtils.mkdir_p(src_path)
-
         orig_gopath = ENV['GOPATH']
-        ENV['GOPATH'] = "#{project_dir}/gopath_glide_without_src"
+        ENV['GOPATH'] = project_dir.to_s
         shell_out('glide install')
         ENV['GOPATH'] = orig_gopath
-
-        FileUtils.rmdir(src_path)
       end
 
       def shell_out(command)
-        ProjectDir.new(Paths.project.join('gopath_glide_without_src')).shell_out(command)
+        ProjectDir.new(Paths.project.join('src', 'gopath_glide_without_src')).shell_out(command)
+      end
+    end
+
+    class GlideProjectWithRootAndSrc < Project
+      def add_dep
+        clone_go_project('gopath_glide_in_root_and_src')
+      end
+
+      def install
+        orig_gopath = ENV['GOPATH']
+        ENV['GOPATH'] = project_dir.to_s
+        shell_out_root('glide install')
+        shell_out_src('glide install')
+        ENV['GOPATH'] = orig_gopath
+      end
+
+      def shell_out_root(command)
+        ProjectDir.new(Paths.project.join('src', 'gopath_glide_in_root_and_src')).shell_out(command)
+      end
+
+      def shell_out_src(command)
+        ProjectDir.new(Paths.project.join('src', 'gopath_glide_in_root_and_src', 'src')).shell_out(command)
       end
     end
 
