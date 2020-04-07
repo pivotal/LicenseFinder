@@ -53,7 +53,7 @@ echo -e "$LOG\n$(cat $CHANGELOG_FILE)" > $CHANGELOG_FILE
 echo -e "[$VERSION]: https://github.com/pivotal/LicenseFinder/compare/$OLD...$VERSION_TAG" >> $CHANGELOG_FILE
 
 # Update version file in git
-echo $VERSION > VERSION_FILE
+echo $VERSION > $VERSION_FILE
 
 git config --global user.email $GIT_EMAIL
 git config --global user.name $GIT_USERNAME
