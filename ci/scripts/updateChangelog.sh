@@ -2,7 +2,7 @@
 
 set -e
 
-git clone lf-git-version lf-git-changed
+git clone lf-git lf-git-changed
 
 CHANGELOG_FILE="CHANGELOG.md"
 VERSION_FILE="VERSION"

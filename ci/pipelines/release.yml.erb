@@ -19,13 +19,6 @@ resources:
     branch: master
     ignore_paths: [VERSION, CHANGELOG.md]
 
-- name: lf-git-version
-  type: git
-  source:
-    uri: git@github.com:pivotal/LicenseFinder.git
-    private_key: ((CfOslBot.private_key))
-    branch: master
-
 - name: semver-version
   type: semver
   source:
@@ -152,8 +145,6 @@ jobs:
   - get: lf-git
     tags: ["private-worker"]
     passed: [<%= "#{ruby_versions.map{ |version| "ruby-#{version}"}.join(', ')}, rubocop" %>]
-  - get: lf-git-version
-    tags: ["private-worker"]
   - get: semver-version
     tags: ["private-worker"]
     trigger: true
@@ -169,14 +160,14 @@ jobs:
     params:
       GIT_USERNAME: ((GithubApiUser))
       GIT_EMAIL: ((GithubApiEmail))
-    file: lf-git-version/ci/tasks/update-changelog.yml
+    file: lf-git/ci/tasks/update-changelog.yml
   - put: dockerhub
     tags: ["private-worker"]
     params:
-      build: lf-git-version
+      build: lf-git
       tag: version/version.txt
       tag_as_latest: true
-  - put: lf-git-version
+  - put: lf-git
     tags: ["private-worker"]
     params:
       repository: lf-git-changed
@@ -188,7 +179,7 @@ jobs:
       GIT_EMAIL: ((GithubApiEmail))
       GIT_PRIVATE_KEY: ((CfOslBot.private_key))
       GEM_API_KEY: ((LicenseFinderGemApiKey))
-    file: lf-git-version/ci/tasks/build-and-push-gem.yml
+    file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-release
     tags: ["private-worker"]
     params:
