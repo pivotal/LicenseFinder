@@ -32,7 +32,7 @@ resources:
     driver: gcs
     bucket: lf-semver-version
     key: VERSION
-    json_key: ((GCPNorskStorageBucketCredentials))
+    json_key: ((GCPQueuedReportsBucketCredentials))
 
 - name: dockerhub-edge
   type: docker-image
