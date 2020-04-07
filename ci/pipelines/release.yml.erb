@@ -29,12 +29,10 @@ resources:
 - name: semver-version
   type: semver
   source:
-    driver: git
-    uri: git@github.com:pivotal/LicenseFinder.git
-    branch: master
-    file: VERSION
-    private_key: ((CfOslBot.private_key))
-    commit_message: "Updates version to: %version%"
+    driver: gcs
+    bucket: lf-semver-version
+    key: VERSION
+    json_key: ((GCPNorskStorageBucketCredentials))
 
 - name: dockerhub-edge
   type: docker-image
