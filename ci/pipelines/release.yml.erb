@@ -164,7 +164,7 @@ jobs:
   - put: dockerhub
     tags: ["private-worker"]
     params:
-      build: lf-git
+      build: lf-git-changed
       tag: version/version.txt
       tag_as_latest: true
   - put: lf-git
