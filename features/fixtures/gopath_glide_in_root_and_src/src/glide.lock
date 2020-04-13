@@ -1,0 +1,8 @@
+hash: 4765849129e9fbb9f7ebc620df51f27b6999f1a06bba4ecf92193ffffcf1d684
+updated: 2017-09-27T22:42:02.817609367Z
+imports:
+- name: github.com/googollee/go-socket.io
+  version: 5447e71f36d394766bf855d5714a487596809f0d
+- name: github.com/gorilla/mux
+  version: bcd8bc72b08df0f70df986b97f95590779502d31
+testImports: []

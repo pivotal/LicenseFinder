@@ -1,3 +1,15 @@
+# [6.2.0] / 2020-04-07
+
+### Fixed
+* Break dependency of specs on released license_finder gem - [ef69fa00](https://github.com/pivotal/LicenseFinder/commit/ef69fa00deb7a8f8ebd74312afa9f130be2d9fda) - Matijs van Zuijlen
+* Replace toml parser with tomlrb - [8b9b34b4](https://github.com/pivotal/LicenseFinder/commit/8b9b34b48d5bdadc679c0d072117b092d080fb81) - Matijs van Zuijlen
+
+### Changed
+* Run glide install in folder containing glide.lock - [cec3ff47](https://github.com/pivotal/LicenseFinder/commit/cec3ff4759f1c06df2cd0c39ac8004fcd156a6e6) - Jeff Jun
+* specify path for bundle install [#168042947] - [431355dc](https://github.com/pivotal/LicenseFinder/commit/431355dc1d0172c65444d2f4bcb5b4416fc52af7) 
+
+# [6.1.2] / 2020-03-16
+
 # [6.1.0] / 2020-02-21
 
 ### Fixed
@@ -810,3 +822,5 @@ Bugfixes:
 [5.11.1]: https://github.com/pivotal/LicenseFinder/compare/v5.11.0...v5.11.1
 [6.0.0]: https://github.com/pivotal/LicenseFinder/compare/v5.11.1...v6.0.0
 [6.1.0]: https://github.com/pivotal/LicenseFinder/compare/v6.0.0...v6.1.0
+[6.1.2]: https://github.com/pivotal/LicenseFinder/compare/v6.1.0...v6.1.2
+[6.2.0]: https://github.com/pivotal/LicenseFinder/compare/v6.1.2...v6.2.0

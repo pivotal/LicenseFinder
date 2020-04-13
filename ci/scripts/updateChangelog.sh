@@ -2,9 +2,11 @@
 
 set -e
 
-git clone lf-git-version lf-git-changed
+git clone lf-git lf-git-changed
 
 CHANGELOG_FILE="CHANGELOG.md"
+VERSION_FILE="VERSION"
+
 COMMIT_URL="https://github.com/pivotal/LicenseFinder/commit/"
 
 TAGS=( "Added" "ADDED" "Fixed" "FIXED" "Changed" "CHANGED" "Deprecated" "DEPRECATED" "Removed" "REMOVED" "Security" "SECURITY" )
@@ -50,10 +52,15 @@ echo -e "$LOG\n$(cat $CHANGELOG_FILE)" > $CHANGELOG_FILE
 # Append version hyperlink to the end of the file
 echo -e "[$VERSION]: https://github.com/pivotal/LicenseFinder/compare/$OLD...$VERSION_TAG" >> $CHANGELOG_FILE
 
+# Update version file in git
+echo $VERSION > $VERSION_FILE
+
 git config --global user.email $GIT_EMAIL
 git config --global user.name $GIT_USERNAME
 
 git add $CHANGELOG_FILE
+git add $VERSION_FILE
+
 git commit -m "Update changelog for version: $VERSION"
 
 echo "New version: $VERSION"
