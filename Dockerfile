@@ -38,10 +38,12 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
 RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
-# install jdk 11
+# install jdk 12
 RUN curl -L -o openjdk12.tar.gz https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz && \
     tar xvf openjdk12.tar.gz && \
-    sudo mv jdk-12.0.2 /opt/
+    rm openjdk12.tar.gz && \
+    sudo mv jdk-12.0.2 /opt/ && \
+    sudo rm /opt/jdk-12.0.2/lib/src.zip
 ENV JAVA_HOME=/opt/jdk-12.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 RUN java -version
@@ -51,8 +53,8 @@ RUN apt-get install -y python rebar
 
 # install and update python-pip
 RUN apt-get install -y python-pip python3-pip && \
-    pip2 install --upgrade pip==$PIP_INSTALL_VERSION  && \
-    pip3 install --upgrade pip==$PIP3_INSTALL_VERSION
+    pip2 install --no-cache-dir --upgrade pip==$PIP_INSTALL_VERSION  && \
+    pip3 install --no-cache-dir --upgrade pip==$PIP3_INSTALL_VERSION
 
 # install maven
 RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
@@ -95,7 +97,8 @@ RUN mkdir /gopath && \
   go get github.com/Masterminds/glide && \
   go get github.com/kardianos/govendor && \
   go get github.com/golang/dep/cmd/dep && \
-  go get -u github.com/rancher/trash
+  go get -u github.com/rancher/trash && \
+  go clean -cache
 
 # Fix the locale
 RUN apt-get install -y locales
@@ -123,11 +126,14 @@ RUN bash -lc "gem update --system && gem install bundler"
 
 # install conan
 RUN apt-get install -y python-dev && \
-	pip install --ignore-installed six --ignore-installed colorama --ignore-installed requests --ignore-installed chardet --ignore-installed urllib3 --upgrade setuptools && \
-    pip install -Iv conan==1.11.2
+	pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
+	    --ignore-installed requests --ignore-installed chardet \
+	    --ignore-installed urllib3 \
+	    --upgrade setuptools && \
+    pip install --no-cache-dir -Iv conan==1.11.2
 
 # install Cargo
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --profile minimal
 
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
@@ -139,8 +145,10 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
   echo "alias nuget=\"mono /usr/local/bin/nuget.exe\"" >> ~/.bash_aliases
 
 # install dotnet core
+WORKDIR /tmp
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
   sudo dpkg -i packages-microsoft-prod.deb &&\
+  rm packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
   sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0
 
@@ -156,7 +164,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5
 
 # install license_finder
 COPY . /LicenseFinder
-RUN bash -lc "cd /LicenseFinder && bundle install -j4 && rake install"
+RUN bash -lc "cd /LicenseFinder && bundle config set no-cache 'true' && bundle install -j4 && rake install"
 
 WORKDIR /
 
