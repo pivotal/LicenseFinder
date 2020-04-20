@@ -557,6 +557,29 @@ module LicenseFinder
       end
     end
 
+    class GitBundlerProject < Project
+      def add_dep
+        add_to_gemfile("source 'https://rubygems.org'")
+        add_to_gemfile("gem 'license_finder', git: #{Paths.root.to_s.inspect}")
+      end
+
+      def install
+        ::Bundler.with_original_env do
+          shell_out('bundle install')
+        end
+      end
+
+      private
+
+      def add_gem_to_gemfile(gem_name, options)
+        add_to_gemfile("gem #{gem_name.inspect}, #{options.inspect}")
+      end
+
+      def add_to_gemfile(content)
+        add_to_file('Gemfile', content)
+      end
+    end
+
     # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
     class GemProject
       def self.create(name, options)
