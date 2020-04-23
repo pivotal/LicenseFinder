@@ -154,6 +154,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   end
 end
 
+describe LicenseFinder::License, 'OFL' do
+  it 'should be recognized' do
+    expect(described_class.find_by_name('OFL').url).to be
+  end
+end
+
 describe LicenseFinder::License, 'Python' do
   it 'should be recognized' do
     expect(described_class.find_by_name('Python').url).to be

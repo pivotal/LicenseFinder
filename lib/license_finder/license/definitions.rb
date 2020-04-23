@@ -21,6 +21,7 @@ module LicenseFinder
           mit,
           mpl2,
           newbsd,
+          ofl,
           python,
           ruby,
           simplifiedbsd
@@ -231,6 +232,17 @@ module LicenseFinder
           ],
           url: 'http://opensource.org/licenses/BSD-3-Clause',
           matcher: matcher
+        )
+      end
+
+      def ofl
+        License.new(
+          short_name: 'OFL',
+          pretty_name: 'SIL OPEN FONT LICENSE Version 1.1',
+          other_names: [
+            'OPEN FONT LICENSE Version 1.1'
+          ],
+          url: 'https://opensource.org/licenses/OFL-1.1'
         )
       end
 
