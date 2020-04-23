@@ -35,8 +35,8 @@ module LicenseFinder
     context 'when the version includes +incompatible string' do
       let(:options) do
         {
-            'ImportPath' => 'github.com/pivotal/spec_name',
-            'Rev' => '4326c3435332d06b410a2672d28d1343c4059fae+incompatible'
+          'ImportPath' => 'github.com/pivotal/spec_name',
+          'Rev' => '4326c3435332d06b410a2672d28d1343c4059fae+incompatible'
         }
       end
 
