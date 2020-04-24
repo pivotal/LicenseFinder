@@ -24,7 +24,8 @@ module LicenseFinder
           ofl,
           python,
           ruby,
-          simplifiedbsd
+          simplifiedbsd,
+          wtfpl
         ]
       end
 
@@ -287,6 +288,17 @@ module LicenseFinder
             'The BSD 2-Clause License'
           ],
           url: 'http://opensource.org/licenses/bsd-license'
+        )
+      end
+
+      def wtfpl
+        License.new(
+          short_name: 'WTFPL',
+          pretty_name: 'Do What The Fuck You Want To Public License',
+          other_names: [
+            'WTFPL V2'
+          ],
+          url: 'http://www.wtfpl.net/'
         )
       end
     end
