@@ -30,7 +30,9 @@ module LicenseFinder
             'version' => version,
             'licenses' => [{ 'name' => row['License'] }]
           }
-          SbtPackage.new(spec, logger: logger, include_groups: @include_groups)
+
+          path = File.join("#{Dir.home}/.ivy2/cache", "#{spec['groupId']}/#{spec['artifactId']}")
+          SbtPackage.new(spec, logger: logger, include_groups: @include_groups, install_path: path)
         end
       end
 
