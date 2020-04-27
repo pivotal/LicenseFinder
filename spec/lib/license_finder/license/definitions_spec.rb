@@ -189,3 +189,11 @@ describe LicenseFinder::License, 'SimplifiedBSD' do
     expect(described_class.find_by_name('SimplifiedBSD').url).to be
   end
 end
+
+describe LicenseFinder::License, 'WTFPL' do
+  it 'should be recognized' do
+    expect(described_class.find_by_name('WTFPL').url).to be
+    expect(described_class.find_by_name('WTFPL V2').url).to be
+    expect(described_class.find_by_name('Do What The Fuck You Want To Public License').url).to be
+  end
+end
