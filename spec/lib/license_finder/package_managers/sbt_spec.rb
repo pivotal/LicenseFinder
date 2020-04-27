@@ -6,7 +6,7 @@ module LicenseFinder
   describe Sbt do
     let(:options) { {} }
 
-    subject { Sbt.new(options.merge(project_path: Pathname('/fake/path'))) }
+    let(:sbt) { Sbt.new(options.merge(project_path: Pathname.new('/fake/path'))) }
 
     it_behaves_like 'a PackageManager'
 
@@ -29,12 +29,29 @@ Category,License,Dependency,Notes
       end
 
       it 'lists all the current packages' do
-        stub_license_report("BSD,BSD 3-Clause (http://www.scala-lang.org/license.html),org.scala-lang # scala-library # 2.11.7
-Apache,\"Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0.txt)\",commons-io # commons-io # 2.5,")
-        expect(subject.current_packages.map { |p| [p.name, p.version] }).to eq [
-          ['scala-library', '2.11.7'],
-          ['commons-io', '2.5']
+        allow(Dir).to receive(:home).and_return('~')
+        stub_license_report("BSD,BSD 3-Clause (http://www.scala-lang.org/license.html),org.scala # scala-library # 2.11.7
+Apache,\"Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0.txt)\", org.scala-lang # commons-io # 2.5,")
+
+        expect(sbt.current_packages.map { |p| [p.name, p.version, p.install_path] }).to eq [
+          ['scala-library', '2.11.7', '~/.ivy2/cache/org.scala/scala-library'],
+          ['commons-io', '2.5', '~/.ivy2/cache/org.scala-lang/commons-io']
         ]
+      end
+
+      context 'when include groups is set' do
+        let(:sbt) { Sbt.new(options.merge(project_path: Pathname.new('/fake/path'), sbt_include_groups: true)) }
+
+        it 'lists all the current packages with the group name' do
+          allow(Dir).to receive(:home).and_return('~')
+          stub_license_report("BSD,BSD 3-Clause (http://www.scala-lang.org/license.html),org.scala # scala-library # 2.11.7
+Apache,\"Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0.txt)\", org.scala-lang # commons-io # 2.5,")
+
+          expect(sbt.current_packages.map { |p| [p.name, p.version, p.install_path] }).to eq [
+            ['org.scala:scala-library', '2.11.7', '~/.ivy2/cache/org.scala/scala-library'],
+            ['org.scala-lang:commons-io', '2.5', '~/.ivy2/cache/org.scala-lang/commons-io']
+          ]
+        end
       end
     end
   end

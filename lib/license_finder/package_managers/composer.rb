@@ -12,7 +12,11 @@ module LicenseFinder
 
     def current_packages
       dependency_list.map do |name, dependency|
-        ComposerPackage.new(name, dependency['version'], spec_licenses: dependency['license'])
+        path_command = "composer show #{name} -P"
+        stdout, _stderr, status = Dir.chdir(project_path) { Cmd.run(path_command) }
+
+        path = status.success? ? stdout.split(' ').last : ''
+        ComposerPackage.new(name, dependency['version'], spec_licenses: dependency['license'], install_path: path)
       end
     end
 
