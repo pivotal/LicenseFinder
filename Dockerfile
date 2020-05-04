@@ -147,7 +147,7 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsof
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
     echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
     apt-get update &&\
-    apt-get install -y php7.1-cli &&\
+    apt-get install -y php7.3-cli &&\
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
     php -r "if (hash_file('sha384', 'composer-setup.php') === 'e0012edf3e80b6978849f5eff0d4b4e4c79ff1609dd1e613307e16318854d24ae64f26d17af3ef0bf7cfb710ca74755a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" &&\
     php composer-setup.php &&\
