@@ -54,6 +54,25 @@ module LicenseFinder
 
         expect(packages.first.package_manager).to eq 'Go'
       end
+
+      context 'when compute is not allowed on vendor' do
+        before do
+          allow(SharedHelpers::Cmd).to receive(:run).with("GO111MODULE=on go list -m -mod=vendor -f '{{.Path}},{{.Version}},{{.Dir}}' all").and_return(["", "go list -m: can't compute 'all' using the vendor directory\n\t(Use -mod=mod or -mod=readonly to bypass.)\n", 1])
+          allow(SharedHelpers::Cmd).to receive(:run).with("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all").and_return(go_list_string)
+        end
+
+        it 'finds all the packages all go.sum files' do
+          packages = subject.current_packages
+
+          expect(packages.length).to eq 2
+
+          expect(packages.first.name).to eq 'gopkg.in/check.v1'
+          expect(packages.first.version).to eq 'v0.0.0-20161208181325-20d25e280405'
+
+          expect(packages.last.name).to eq 'gopkg.in/yaml.v2'
+          expect(packages.last.version).to eq 'v2.2.1'
+        end
+      end
     end
 
     describe '.prepare_command' do
