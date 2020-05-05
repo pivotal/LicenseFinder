@@ -23,7 +23,7 @@ module LicenseFinder
     def current_packages
       packages = packages_info.map do |package|
         name, version, install_path = package.split(',')
-        read_package(install_path, name, version) if install_path.to_s != ""
+        read_package(install_path, name, version) if install_path.to_s != ''
       end.compact
       packages.reject do |package|
         Pathname(package.install_path).cleanpath == Pathname(project_path).cleanpath
@@ -34,9 +34,7 @@ module LicenseFinder
 
     def packages_info
       info_output, stderr, _status = Cmd.run("GO111MODULE=on go list -m -mod=vendor -f '{{.Path}},{{.Version}},{{.Dir}}' all")
-      if stderr =~ Regexp.compile("can't compute 'all' using the vendor directory")
-        info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all")
-      end
+      info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all") if stderr =~ Regexp.compile("can't compute 'all' using the vendor directory")
 
       info_output.split("\n")
     end
