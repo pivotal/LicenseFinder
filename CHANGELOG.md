@@ -1,3 +1,15 @@
+# [6.3.0] / 2020-05-06
+
+### Added
+* OFL License - [d475bbb1](https://github.com/pivotal/LicenseFinder/commit/d475bbb1380e217f154f262caaa73c12f5b9792b) - Sven Dunemann
+* WTFPL License - [ec629170](https://github.com/pivotal/LicenseFinder/commit/ec6291702c28789a33478041dbf6524d603c12ff) - Sven Dunemann
+
+* Find the install path for sbt, cargo and composer [#171649609] - [0d525cbf](https://github.com/pivotal/LicenseFinder/commit/0d525cbf5208db5a977f2f3d922d07b5ea6a8b16) 
+
+### Changed
+* Bump PHP version to 7.3 - [1c3c3271](https://github.com/pivotal/LicenseFinder/commit/1c3c3271b977a6c8d24e4159a6b8098a51086522) 
+* Remove +compatible in Go package versions [#171754392] - [5cba5801](https://github.com/pivotal/LicenseFinder/commit/5cba5801f4f276482f01bfeea46fde0dbbcce7b1) 
+
 # [6.2.0] / 2020-04-07
 
 ### Fixed
@@ -824,3 +836,4 @@ Bugfixes:
 [6.1.0]: https://github.com/pivotal/LicenseFinder/compare/v6.0.0...v6.1.0
 [6.1.2]: https://github.com/pivotal/LicenseFinder/compare/v6.1.0...v6.1.2
 [6.2.0]: https://github.com/pivotal/LicenseFinder/compare/v6.1.2...v6.2.0
+[6.3.0]: https://github.com/pivotal/LicenseFinder/compare/v6.2.0...v6.3.0
