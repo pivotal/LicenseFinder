@@ -10,7 +10,8 @@ module LicenseFinder
         name,
         spec['version'],
         options.merge(
-          spec_licenses: Array(spec['licenses']).map { |l| l['name'] }
+          spec_licenses: Array(spec['licenses']).map { |l| l['name'] },
+          groups: Array(spec['groupId'])
         )
       )
     end
