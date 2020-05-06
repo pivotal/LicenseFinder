@@ -21,18 +21,23 @@ module LicenseFinder
     end
 
     def current_packages
-      info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -m -mod=vendor -f '{{.Path}},{{.Version}},{{.Dir}}' all")
-      packages_info = info_output.split("\n")
       packages = packages_info.map do |package|
         name, version, install_path = package.split(',')
-        read_package(install_path, name, version)
-      end
+        read_package(install_path, name, version) if install_path.to_s != ''
+      end.compact
       packages.reject do |package|
         Pathname(package.install_path).cleanpath == Pathname(project_path).cleanpath
       end
     end
 
     private
+
+    def packages_info
+      info_output, stderr, _status = Cmd.run("GO111MODULE=on go list -m -mod=vendor -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+      info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all") if stderr =~ Regexp.compile("can't compute 'all' using the vendor directory")
+
+      info_output.split("\n")
+    end
 
     def sum_files?
       sum_file_paths.any?
