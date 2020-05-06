@@ -22,7 +22,7 @@ module LicenseFinder
     its(:summary) { should == '' }
     its(:description) { should == '' }
     its(:homepage) { should == '' }
-    its(:groups) { should == ["org.hamcrest"] } # no way to get groups from maven?
+    its(:groups) { should == ['org.hamcrest'] } # no way to get groups from maven?
     its(:children) { should == [] } # no way to get children from maven?
     its(:install_path) { should be_nil }
     its(:package_manager) { should eq 'Maven' }
