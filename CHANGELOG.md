@@ -10,6 +10,11 @@
 * Bump PHP version to 7.3 - [1c3c3271](https://github.com/pivotal/LicenseFinder/commit/1c3c3271b977a6c8d24e4159a6b8098a51086522) 
 * Remove +compatible in Go package versions [#171754392] - [5cba5801](https://github.com/pivotal/LicenseFinder/commit/5cba5801f4f276482f01bfeea46fde0dbbcce7b1) 
 
+### Fixed
+* Fixed Maven Package manager Groups check - [5058d90](https://github.com/pivotal/LicenseFinder/commit/5058d90246a25ca15c72e0eed8e19ebbf7e39998) - Ravi Soni 
+* GoModules: fix compute with vendor mod - [067eb19](https://github.com/pivotal/LicenseFinder/commit/067eb1916ce024039631bdbd4114ababa6c02c3a) - forelabs
+* Do not set Bundle path. Bundler will figure it out. - [6319a7a](https://github.com/pivotal/LicenseFinder/commit/6319a7a281bd9cc997c08c903674ab51fcc6545e) - mvz
+
 # [6.2.0] / 2020-04-07
 
 ### Fixed
