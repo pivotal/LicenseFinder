@@ -37,6 +37,7 @@ module LicenseFinder
         FileUtils.mkdir_p(Dir.tmpdir)
         FileUtils.mkdir_p(root)
         File.write(File.join(root, 'package.json'), package_json)
+        FileUtils.touch(File.join(root, 'package-lock.json'))
         allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
                                                   .and_return([dependency_json, '', cmd_success])
       end
@@ -64,6 +65,7 @@ module LicenseFinder
         FileUtils.mkdir_p(Dir.tmpdir)
         FileUtils.mkdir_p(root)
         File.write(File.join(root, 'package.json'), package_json)
+        FileUtils.touch(File.join(root, 'package-lock.json'))
         allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
                                                   .and_return([dependency_json, '', cmd_success])
       end
