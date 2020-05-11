@@ -109,6 +109,10 @@ module LicenseFinder
       get(:prepare_no_fail)
     end
 
+    def write_headers
+      get(:write_headers)
+    end
+
     def save_file
       get(:save)
     end
