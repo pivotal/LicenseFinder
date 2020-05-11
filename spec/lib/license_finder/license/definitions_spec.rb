@@ -192,6 +192,7 @@ end
 
 describe LicenseFinder::License, 'WTFPL' do
   it 'should be recognized' do
+    expect(described_class.find_by_name('WTFPL').name).to eq('WTFPL')
     expect(described_class.find_by_name('WTFPL').url).to be
     expect(described_class.find_by_name('WTFPL V2').url).to be
     expect(described_class.find_by_name('Do What The Fuck You Want To Public License').url).to be
