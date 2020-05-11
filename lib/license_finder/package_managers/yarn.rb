@@ -72,9 +72,23 @@ module LicenseFinder
       valid_packages = filter_yarn_internal_package(packages)
 
       valid_packages.map do |package_hash|
-        YarnPackage.new(package_hash['Name'], package_hash['Version'], spec_licenses: [package_hash['License']],
-                                                                       homepage: package_hash['VendorUrl'])
+        YarnPackage.new(
+          package_hash['Name'],
+          package_hash['Version'],
+          spec_licenses: [package_hash['License']],
+          homepage: package_hash['VendorUrl'],
+          authors: package_hash['VendorName'],
+          install_path: project_path.join(modules_folder, package_hash['Name'])
+        )
       end
+    end
+
+    def modules_folder
+      return @modules_folder if @modules_folder
+
+      stdout, _stderr, status = Cmd.run('yarn config get modules-folder')
+      @modules_folder = 'node_modules' if !status.success? || stdout == 'undefined'
+      @modules_folder ||= stdout.strip
     end
 
     # remove fake package created by yarn [Yarn Bug]
