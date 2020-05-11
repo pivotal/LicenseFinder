@@ -148,6 +148,7 @@ module LicenseFinder
 
     class NpmProject < Project
       def add_dep
+        add_to_file('package-lock.json', '')
         add_to_file('package.json', '{"dependencies" : {"http-server": "0.11.1"}}')
       end
 
@@ -158,6 +159,7 @@ module LicenseFinder
 
     class NpmProjectWithInvalidDependency < Project
       def add_dep
+        add_to_file('package-lock.json', '')
         add_to_file('package.json', '{"dependencies" : {"gertie-watch": "0.11.1"}}')
       end
 
