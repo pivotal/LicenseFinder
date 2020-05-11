@@ -37,6 +37,7 @@ module LicenseFinder
         FileUtils.touch File.join(project_path, 'main.go')
         FileUtils.mkdir_p File.join(project_path, 'vendor', 'github.com', 'foo', 'bar')
         FileUtils.mkdir_p File.join(project_path, 'vendor', 'golang.org', 'bar', 'baz')
+        FileUtils.touch File.join(project_path, 'vendor', 'github.com', 'foo', 'bar', 'utils.go')
       end
 
       it 'detects the project as go vendor project' do

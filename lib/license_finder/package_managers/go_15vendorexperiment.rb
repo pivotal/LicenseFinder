@@ -14,7 +14,7 @@ module LicenseFinder
     end
 
     def go_files_exist?
-      !Dir[project_path.join('**/*.go')].empty?
+      !Dir[project_path.join('**/*.go')].empty? && !Dir[project_path.join('vendor/**/*.go')].empty?
     end
 
     def possible_package_paths
