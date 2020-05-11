@@ -294,9 +294,10 @@ module LicenseFinder
       def wtfpl
         License.new(
           short_name: 'WTFPL',
-          pretty_name: 'Do What The Fuck You Want To Public License',
+          pretty_name: 'WTFPL',
           other_names: [
-            'WTFPL V2'
+            'WTFPL V2',
+            'Do What The Fuck You Want To Public License'
           ],
           url: 'http://www.wtfpl.net/'
         )
