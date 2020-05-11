@@ -47,6 +47,9 @@ module LicenseFinder
       subject { Yarn.new(project_path: Pathname(root), logger: double(:logger, active: nil)) }
 
       it 'displays packages as returned from "yarn list"' do
+        allow(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder') do
+          ['yarn_modules', '', cmd_success]
+        end
         allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}") do
           [yarn_shell_command_output, '', cmd_success]
         end
@@ -56,6 +59,8 @@ module LicenseFinder
         expect(subject.current_packages.first.version).to eq '2.0.0'
         expect(subject.current_packages.first.license_names_from_spec).to eq ['MIT']
         expect(subject.current_packages.first.homepage).to eq 'sindresorhus.com'
+        expect(subject.current_packages.first.authors).to eq 'Sindre Sorhus'
+        expect(subject.current_packages.first.install_path).to eq Pathname(root).join('yarn_modules', 'yn')
       end
 
       it 'displays incompatible packages with license type unknown' do
@@ -71,6 +76,9 @@ module LicenseFinder
       end
 
       it 'handles json with non-ascii characters' do
+        allow(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder') do
+          ['yarn_modules', '', cmd_success]
+        end
         allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}") do
           [{
             'type' => 'table',
@@ -91,6 +99,8 @@ module LicenseFinder
       context 'ignored_groups contains devDependencies' do
         subject { Yarn.new(project_path: Pathname(root), ignored_groups: 'devDependencies') }
         it 'should include a production flag' do
+          expect(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder')
+                                                     .and_return(['yarn_modules', '', cmd_success])
           expect(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + ' --production' + " --cwd #{Pathname(root)}")
                                                      .and_return([yarn_shell_command_output, '', cmd_success])
           subject.current_packages
@@ -99,6 +109,9 @@ module LicenseFinder
 
       context 'packages contain workspace-aggregator' do
         it 'should remove the package' do
+          allow(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder') do
+            ['yarn_modules', '', cmd_success]
+          end
           allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}") do
             [{
               'type' => 'table',
