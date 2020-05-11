@@ -140,6 +140,7 @@ module LicenseFinder
       desc 'report', "Print a report of the project's dependencies to stdout"
       shared_options
       format_option
+      method_option :write_headers, type: :boolean, desc: 'Write exported columns as header row (csv).', default: false, required: false
       method_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
 
       def report
@@ -203,7 +204,7 @@ module LicenseFinder
       def report_of(content)
         report = FORMATS[config.format] || FORMATS['text']
         report = MergedReport if report == CsvReport && config.aggregate_paths
-        report.of(content, columns: config.columns, project_name: decisions.project_name || config.project_path.basename.to_s)
+        report.of(content, columns: config.columns, project_name: decisions.project_name || config.project_path.basename.to_s, write_headers: config.write_headers)
       end
 
       def save?

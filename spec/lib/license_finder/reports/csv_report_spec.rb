@@ -10,6 +10,12 @@ module LicenseFinder
       expect(subject.to_s).to eq("gem_a,1.0\n")
     end
 
+    it 'accepts write headers option' do
+      dep = Package.new('gem_a', '1.0')
+      subject = described_class.new([dep], columns: %w[name version], write_headers: true)
+      expect(subject.to_s).to eq("name,version\ngem_a,1.0\n")
+    end
+
     it 'understands many columns' do
       dep = Package.new('gem_a', '1.0', authors: 'the authors', description: 'A description', summary: 'A summary', homepage: 'http://homepage.example.com')
       dep.decide_on_license(License.find_by_name('MIT'))

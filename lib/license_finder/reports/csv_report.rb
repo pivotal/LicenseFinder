@@ -10,10 +10,11 @@ module LicenseFinder
       super
       options[:columns] ||= %w[name version licenses]
       @columns = Array(options[:columns]) & self.class::AVAILABLE_COLUMNS
+      @write_headers = options[:write_headers] || false
     end
 
     def to_s
-      CSV.generate(col_sep: self.class::COMMA_SEP) do |csv|
+      CSV.generate(col_sep: self.class::COMMA_SEP, headers: @columns, write_headers: @write_headers) do |csv|
         sorted_dependencies.each do |s|
           csv << format_dependency(s)
         end

@@ -44,6 +44,7 @@ module LicenseFinder
           :elixir_command,
           :mix_command,
           :mix_deps_dir,
+          :write_headers,
           :save,
           :prepare,
           :prepare_no_fail,
