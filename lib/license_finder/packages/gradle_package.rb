@@ -24,7 +24,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://plugins.gradle.org/plugin/#{name}/#{version}"
+      "https://plugins.gradle.org/plugin/#{URI.escape(name)}/#{URI.escape(version)}"
     end
   end
 end

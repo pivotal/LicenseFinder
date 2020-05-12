@@ -7,7 +7,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://hex.pm/packages/#{name}/#{version}"
+      "https://hex.pm/packages/#{URI.escape(name)}/#{URI.escape(version)}"
     end
   end
 end

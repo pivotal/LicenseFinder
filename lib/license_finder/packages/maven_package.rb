@@ -21,7 +21,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://search.maven.org/artifact/#{groups.first}/#{name.split(':').last}/#{version}/jar"
+      "https://search.maven.org/artifact/#{URI.escape(groups.first)}/#{URI.escape(name.split(':').last)}/#{URI.escape(version)}/jar"
     end
   end
 end

@@ -22,7 +22,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://crates.io/crates/#{name}/#{version}"
+      "https://crates.io/crates/#{URI.escape(name)}/#{URI.escape(version)}"
     end
   end
 end

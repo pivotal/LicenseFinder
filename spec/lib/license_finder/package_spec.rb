@@ -13,6 +13,7 @@ module LicenseFinder
         summary: 'a summary',
         description: 'a description',
         homepage: 'a homepage',
+        package_url: 'a package_url',
         groups: %w[dev test],
         children: %w[child-1 child2],
         install_path: 'some/package/path',
@@ -27,6 +28,7 @@ module LicenseFinder
     its(:summary) { should == 'a summary' }
     its(:description) { should == 'a description' }
     its(:homepage) { should == 'a homepage' }
+    its(:package_url) { should == 'a package_url' }
     its(:groups) { should == %w[dev test] }
     its(:children) { should == %w[child-1 child2] }
     its(:install_path) { should eq 'some/package/path' }
@@ -39,6 +41,7 @@ module LicenseFinder
       expect(subject.summary).to eq ''
       expect(subject.description).to eq ''
       expect(subject.homepage).to eq ''
+      expect(subject.package_url).to eq ''
       expect(subject.groups).to eq []
       expect(subject.children).to eq []
       expect(subject.install_path).to be_nil

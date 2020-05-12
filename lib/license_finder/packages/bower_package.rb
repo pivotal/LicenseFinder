@@ -33,7 +33,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://bower.io/search/?q=#{name}"
+      "https://bower.io/search/?q=#{URI.escape(name)}"
     end
   end
 end

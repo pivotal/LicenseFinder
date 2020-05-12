@@ -17,7 +17,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://conan.io/center/#{name}/#{version}"
+      "https://conan.io/center/#{URI.escape(name)}/#{URI.escape(version)}"
     end
   end
 end
