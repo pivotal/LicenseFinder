@@ -15,6 +15,15 @@ module LicenseFinder
     describe '#acknowledged' do
       it 'combines manual and system packages' do
         decision_applier = described_class.new(
+          decisions: Decisions.new.add_package('system', nil).license('system', 'MIT'),
+          packages: [Package.new('system', '1.0.0')]
+        )
+        package = decision_applier.acknowledged.first
+        expect([package.name, package.version, package.licenses.first.name]).to match_array %w[system 1.0.0 MIT]
+      end
+
+      it 'merges manual packages with system packages' do
+        decision_applier = described_class.new(
           decisions: Decisions.new.add_package('manual', nil),
           packages: [Package.new('system')]
         )

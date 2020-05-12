@@ -4,7 +4,7 @@ module LicenseFinder
   class DecisionApplier
     def initialize(options)
       @decisions = options.fetch(:decisions)
-      @all_packages = decisions.packages + options.fetch(:packages)
+      @all_packages = options.fetch(:packages).to_set + @decisions.packages.to_set
       @acknowledged = apply_decisions
     end
 
@@ -28,10 +28,14 @@ module LicenseFinder
 
     def apply_decisions
       all_packages
-        .map { |package| with_decided_licenses(package) }
-        .map { |package| with_approval(package) }
-        .map { |package| with_homepage(package) }
         .reject { |package| ignored?(package) }
+        .map do |package|
+          with_homepage(
+            with_approval(
+              with_decided_licenses(package)
+            )
+          )
+        end
     end
 
     def ignored?(package)
