@@ -31,5 +31,9 @@ module LicenseFinder
     def package_manager
       'Bower'
     end
+
+    def package_url
+      "https://bower.io/search/?q=#{name}"
+    end
   end
 end

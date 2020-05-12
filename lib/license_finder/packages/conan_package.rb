@@ -15,5 +15,9 @@ module LicenseFinder
     def package_manager
       'Conan'
     end
+
+    def package_url
+      "https://conan.io/center/#{name}/#{version}"
+    end
   end
 end

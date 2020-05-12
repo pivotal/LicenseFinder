@@ -35,5 +35,9 @@ module LicenseFinder
     def package_manager
       'Pip'
     end
+
+    def package_url
+      "https://pypi.org/project/#{name}/#{version}/"
+    end
   end
 end

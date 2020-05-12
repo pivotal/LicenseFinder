@@ -89,6 +89,10 @@ module LicenseFinder
       'Npm'
     end
 
+    def package_url
+      "https://www.npmjs.com/package/#{name}/v/#{version}"
+    end
+
     private
 
     def deps_from_json

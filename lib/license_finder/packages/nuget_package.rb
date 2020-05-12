@@ -5,5 +5,9 @@ module LicenseFinder
     def package_manager
       'Nuget'
     end
+
+    def package_url
+      "https://www.nuget.org/packages/#{name}/#{version}"
+    end
   end
 end

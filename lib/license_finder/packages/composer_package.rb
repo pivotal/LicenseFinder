@@ -5,5 +5,9 @@ module LicenseFinder
     def package_manager
       'Composer'
     end
+
+    def package_url
+      "https://packagist.org/packages/#{name}##{version}"
+    end
   end
 end

@@ -19,5 +19,9 @@ module LicenseFinder
     def package_manager
       'Maven'
     end
+
+    def package_url
+      "https://search.maven.org/artifact/#{groups.first}/#{name.split(':').last}/#{version}/jar"
+    end
   end
 end

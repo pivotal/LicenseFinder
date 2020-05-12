@@ -5,5 +5,9 @@ module LicenseFinder
     def package_manager
       'Rebar'
     end
+
+    def package_url
+      "https://hex.pm/packages/#{name}/#{version}"
+    end
   end
 end

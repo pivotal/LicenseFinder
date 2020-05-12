@@ -25,5 +25,9 @@ module LicenseFinder
     def package_manager
       'Bundler'
     end
+
+    def package_url
+      "https://rubygems.org/gems/#{name}/versions/#{version}"
+    end
   end
 end
