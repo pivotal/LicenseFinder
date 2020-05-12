@@ -7,7 +7,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://yarn.pm/#{URI.escape(name)}"
+      "https://yarn.pm/#{CGI.escape(name)}"
     end
   end
 end

@@ -7,7 +7,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://www.nuget.org/packages/#{URI.escape(name)}/#{URI.escape(version)}"
+      "https://www.nuget.org/packages/#{CGI.escape(name)}/#{CGI.escape(version)}"
     end
   end
 end

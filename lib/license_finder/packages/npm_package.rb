@@ -90,7 +90,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://www.npmjs.com/package/#{URI.escape(name)}/v/#{URI.escape(version)}"
+      "https://www.npmjs.com/package/#{CGI.escape(name)}/v/#{CGI.escape(version)}"
     end
 
     private

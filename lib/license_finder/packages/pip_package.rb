@@ -37,7 +37,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://pypi.org/project/#{URI.escape(name)}/#{URI.escape(version)}/"
+      "https://pypi.org/project/#{CGI.escape(name)}/#{CGI.escape(version)}/"
     end
   end
 end

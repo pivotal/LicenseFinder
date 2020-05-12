@@ -7,7 +7,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://packagist.org/packages/#{URI.escape(name)}##{URI.escape(version)}"
+      "https://packagist.org/packages/#{CGI.escape(name)}##{CGI.escape(version)}"
     end
   end
 end

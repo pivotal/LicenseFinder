@@ -27,7 +27,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://rubygems.org/gems/#{URI.escape(name)}/versions/#{URI.escape(version)}"
+      "https://rubygems.org/gems/#{CGI.escape(name)}/versions/#{CGI.escape(version)}"
     end
   end
 end

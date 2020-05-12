@@ -9,7 +9,7 @@ module LicenseFinder
     end
 
     def package_url
-      "https://pkg.go.dev/#{URI.escape(name)}@#{URI.escape(version)}"
+      "https://pkg.go.dev/#{CGI.escape(name)}@#{CGI.escape(version)}"
     end
 
     class << self
