@@ -48,6 +48,12 @@ Style/MissingRespondToMissing:
   Enabled: false
 Style/FormatStringToken:
   EnforcedStyle: unannotated
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 Layout/MultilineMethodCallIndentation:
     Enabled: false
 DoubleNegation:
