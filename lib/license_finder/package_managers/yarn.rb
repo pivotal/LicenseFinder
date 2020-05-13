@@ -87,7 +87,7 @@ module LicenseFinder
       return @modules_folder if @modules_folder
 
       stdout, _stderr, status = Cmd.run('yarn config get modules-folder')
-      @modules_folder = 'node_modules' if !status.success? || stdout == 'undefined'
+      @modules_folder = 'node_modules' if !status.success? || stdout.strip == 'undefined'
       @modules_folder ||= stdout.strip
     end
 

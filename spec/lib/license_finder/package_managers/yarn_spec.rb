@@ -48,7 +48,7 @@ module LicenseFinder
 
       it 'displays packages as returned from "yarn list"' do
         allow(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder') do
-          ['yarn_modules', '', cmd_success]
+          ["yarn_modules\n", '', cmd_success]
         end
         allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}") do
           [yarn_shell_command_output, '', cmd_success]
@@ -61,6 +61,17 @@ module LicenseFinder
         expect(subject.current_packages.first.homepage).to eq 'sindresorhus.com'
         expect(subject.current_packages.first.authors).to eq 'Sindre Sorhus'
         expect(subject.current_packages.first.install_path).to eq Pathname(root).join('yarn_modules', 'yn')
+      end
+
+      it 'uses node_modules as fallback for install path' do
+        allow(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder') do
+          ["undefined\n", '', cmd_success]
+        end
+        allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}") do
+          [yarn_shell_command_output, '', cmd_success]
+        end
+
+        expect(subject.current_packages.first.install_path).to eq Pathname(root).join('node_modules', 'yn')
       end
 
       it 'displays incompatible packages with license type unknown' do
