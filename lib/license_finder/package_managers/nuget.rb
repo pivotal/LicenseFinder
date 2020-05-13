@@ -51,7 +51,9 @@ module LicenseFinder
     def current_packages
       dependencies.each_with_object({}) do |dep, memo|
         licenses = license_urls(dep)
-        memo[dep.name] ||= NugetPackage.new(dep.name, dep.version, spec_licenses: licenses)
+        path = Dir.glob("#{Dir.home}/.nuget/packages/#{dep.name.downcase}/#{dep.version}").first
+
+        memo[dep.name] ||= NugetPackage.new(dep.name, dep.version, spec_licenses: licenses, install_path: path)
         memo[dep.name].groups << dep.assembly unless memo[dep.name].groups.include? dep.assembly
       end.values
     end
