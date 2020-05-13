@@ -99,6 +99,9 @@ module LicenseFinder
         FileUtils.mkdir_p 'app/Assembly1/'
         FileUtils.mkdir_p 'app/Assembly1.Tests/'
         FileUtils.mkdir_p 'app/Assembly2/'
+        FileUtils.mkdir_p '.nuget/packages/gotodependency/4.84.4790.14417'
+        FileUtils.mkdir_p '.nuget/packages/obscuredependency/1.3.15'
+
         FileUtils.touch 'app/Assembly1/packages.config'
         FileUtils.touch 'app/Assembly1.Tests/packages.config'
         FileUtils.touch 'app/Assembly2/packages.config'
@@ -139,16 +142,25 @@ module LicenseFinder
         File.write('app/Assembly1/packages.config', assembly_1_packages)
         File.write('app/Assembly1.Tests/packages.config', assembly_1_tests_packages)
         File.write('app/Assembly2/packages.config', assembly_2_packages)
+
+        allow(Dir).to receive(:home).and_return('.')
       end
 
-      it 'lists all the packages used in an assembly' do
+      it 'lists all the packages used in an assembly with install paths' do
         nuget = Nuget.new project_path: Pathname.new('app')
         deps = %w[GoToDependency
                   ObscureDependency
                   OtherObscureDependency
                   TestFramework
                   CoolNewDependency]
+        install_paths = [
+          '/.nuget/packages/gotodependency/4.84.4790.14417',
+          '/.nuget/packages/obscuredependency/1.3.15',
+          nil
+        ]
+
         expect(nuget.current_packages.map(&:name).uniq).to match_array(deps)
+        expect(nuget.current_packages.map(&:install_path).uniq).to match_array(install_paths)
       end
 
       # cannot run on JRuby due to https://github.com/fakefs/fakefs/issues/303
