@@ -2,6 +2,7 @@
 
 require 'license_finder/package_utils/licensing'
 require 'license_finder/package_utils/license_files'
+require 'license_finder/package_utils/copyright_files'
 require 'license_finder/package_utils/notice_files'
 
 module LicenseFinder
@@ -129,6 +130,10 @@ module LicenseFinder
       @licenses ||= activations.map(&:license).sort_by(&:name).to_set
     end
 
+    def copyrights
+      @copyrights ||= copyright_files.map(&:copyright).to_set
+    end
+
     def activations
       licensing.activations.tap do |activations|
         activations.each { |activation| log_activation activation }
@@ -151,6 +156,10 @@ module LicenseFinder
 
     def license_files
       LicenseFiles.find(install_path, logger: logger)
+    end
+
+    def copyright_files
+      CopyrightFiles.find(install_path, logger: logger)
     end
 
     def notice_files
