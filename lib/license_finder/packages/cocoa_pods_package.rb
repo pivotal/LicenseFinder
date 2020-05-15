@@ -14,5 +14,9 @@ module LicenseFinder
     def package_manager
       'CocoaPods'
     end
+
+    def package_url
+      "https://cocoapods.org/pods/#{CGI.escape(name)}"
+    end
   end
 end

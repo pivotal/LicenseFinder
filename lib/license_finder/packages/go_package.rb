@@ -8,6 +8,10 @@ module LicenseFinder
       'Go'
     end
 
+    def package_url
+      "https://pkg.go.dev/#{CGI.escape(name)}@#{CGI.escape(version)}"
+    end
+
     class << self
       def from_dependency(hash, prefix, full_version)
         name = hash['ImportPath']

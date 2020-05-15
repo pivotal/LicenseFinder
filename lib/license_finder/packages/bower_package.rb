@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'open-uri'
+
 module LicenseFinder
   class BowerPackage < Package
     def initialize(bower_module, options = {})
@@ -30,6 +32,11 @@ module LicenseFinder
 
     def package_manager
       'Bower'
+    end
+
+    def package_url
+      meta = JSON.parse(open("https://registry.bower.io/packages/#{CGI.escape(name)}").read)
+      meta['url']
     end
   end
 end

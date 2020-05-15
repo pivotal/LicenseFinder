@@ -20,5 +20,9 @@ module LicenseFinder
     def package_manager
       'Cargo'
     end
+
+    def package_url
+      "https://crates.io/crates/#{CGI.escape(name)}/#{CGI.escape(version)}"
+    end
   end
 end

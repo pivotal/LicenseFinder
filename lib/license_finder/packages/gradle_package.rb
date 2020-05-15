@@ -22,5 +22,9 @@ module LicenseFinder
     def package_manager
       'Gradle'
     end
+
+    def package_url
+      "https://plugins.gradle.org/plugin/#{CGI.escape(name)}/#{CGI.escape(version)}"
+    end
   end
 end

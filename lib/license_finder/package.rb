@@ -43,6 +43,7 @@ module LicenseFinder
       @summary = options[:summary] || ''
       @description = options[:description] || ''
       @homepage = options[:homepage] || ''
+      @package_url = options[:package_url].to_s
       @children = options[:children] || []
       @parents = Set.new # will be figured out later by package manager
       @groups = options[:groups] || []
@@ -61,7 +62,7 @@ module LicenseFinder
 
     ## DESCRIPTION
 
-    attr_accessor :homepage
+    attr_accessor :homepage, :package_url
 
     attr_reader :name, :version, :authors,
                 :summary, :description,

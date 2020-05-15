@@ -11,7 +11,7 @@ module LicenseFinder
       super(package.name, package.version)
     end
 
-    def_delegators :@dependency, :name, :version, :authors, :summary, :description, :homepage, :children, :parents,
+    def_delegators :@dependency, :name, :version, :authors, :summary, :description, :homepage, :package_url, :children, :parents,
                    :groups, :permitted, :restricted, :manual_approval, :install_path, :licenses, :approved_manually?,
                    :approved_manually!, :approved?, :permitted!, :permitted?, :restricted!, :restricted?, :hash,
                    :activations, :missing, :license_names_from_spec, :decided_licenses, :licensing, :decide_on_license,
