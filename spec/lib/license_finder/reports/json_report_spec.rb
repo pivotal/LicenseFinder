@@ -25,5 +25,21 @@ module LicenseFinder
 
       expect(subject.to_s).to eq(expected)
     end
+
+    it 'supports multiple license texts and joins lines with line feed' do
+      install_path = fixture_path('license_directory')
+      dep = Package.new('gem_a', '1.0', install_path: install_path)
+      subject = described_class.new([dep], columns: %w[name version texts])
+      expected = {
+        dependencies:
+          [
+            {
+              name: 'gem_a', version: '1.0', texts: "The MIT License\nThe MIT License"
+            }
+          ]
+      }.to_json
+
+      expect(subject.to_s).to eq(expected)
+    end
   end
 end

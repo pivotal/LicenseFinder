@@ -2,6 +2,8 @@ require 'csv'
 
 module LicenseFinder
   class JsonReport < CsvReport
+    NEWLINE_SEP = "\n".freeze
+
     def initialize(dependencies, options)
       super(dependencies, options)
     end
