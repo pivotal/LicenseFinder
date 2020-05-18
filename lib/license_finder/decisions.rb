@@ -8,7 +8,7 @@ module LicenseFinder
     # READ
     ######
 
-    attr_reader :packages, :permitted, :restricted, :ignored, :ignored_groups, :project_name
+    attr_reader :packages, :permitted, :restricted, :ignored, :ignored_groups, :project_name, :inherited_decisions
 
     def licenses_of(name)
       @licenses[name]
@@ -74,6 +74,7 @@ module LicenseFinder
       @restricted = Set.new
       @ignored = Set.new
       @ignored_groups = Set.new
+      @inherited_decisions = Set.new
     end
 
     def add_package(name, version, txn = {})
@@ -191,7 +192,13 @@ module LicenseFinder
         end
 
       add_decision [:inherit_from, filepath]
+      @inherited_decisions << filepath
       restore_inheritance(decisions)
+    end
+
+    def remove_inheritance(filepath)
+      @decisions = @decisions - [[:inherit_from, filepath]]
+      self
     end
 
     def add_decision(decision)
