@@ -186,7 +186,7 @@ module LicenseFinder
     def inherit_from(filepath)
       decisions =
         if filepath =~ %r{^https?://}
-          open(filepath).read
+          URI.open(filepath).read
         else
           Pathname(filepath).read
         end
@@ -197,7 +197,8 @@ module LicenseFinder
     end
 
     def remove_inheritance(filepath)
-      @decisions = @decisions - [[:inherit_from, filepath]]
+      @decisions -= [[:inherit_from, filepath]]
+      @inherited_decisions.delete(filepath)
       self
     end
 

@@ -296,6 +296,17 @@ module LicenseFinder
       end
     end
 
+    describe '.remove_inheritance' do
+      it 'reports inheritanced decisions' do
+        allow_any_instance_of(Pathname).to receive(:read).and_return('---')
+        decisions = subject.inherit_from('./config/inherit.yml')
+        expect(decisions.inherited_decisions).to include('./config/inherit.yml')
+
+        decisions = subject.remove_inheritance('./config/inherit.yml')
+        expect(decisions.inherited_decisions).to be_empty
+      end
+    end
+
     describe 'persistence' do
       def roundtrip(decisions)
         described_class.restore(decisions.persist)
@@ -460,6 +471,15 @@ module LicenseFinder
             .unname_project
         )
         expect(decisions.project_name).to be_nil
+      end
+
+      it 'can restore inherited decisions' do
+        allow_any_instance_of(Pathname).to receive(:read).and_return(YAML.dump([[:permit, 'MIT']]))
+        decisions = roundtrip(
+          subject
+            .inherit_from('./config/inherit.yml')
+        )
+        expect(decisions.inherited_decisions).to include('./config/inherit.yml')
       end
 
       it 'does not store decisions from inheritance' do
