@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
+require 'open-uri'
+
 module LicenseFinder
   class Decisions
     ######
     # READ
     ######
 
-    attr_reader :packages, :permitted, :restricted, :ignored, :ignored_groups, :project_name
+    attr_reader :packages, :permitted, :restricted, :ignored, :ignored_groups, :project_name, :inherited_decisions
 
     def licenses_of(name)
       @licenses[name]
@@ -72,40 +74,41 @@ module LicenseFinder
       @restricted = Set.new
       @ignored = Set.new
       @ignored_groups = Set.new
+      @inherited_decisions = Set.new
     end
 
     def add_package(name, version, txn = {})
-      @decisions << [:add_package, name, version, txn]
+      add_decision [:add_package, name, version, txn]
       @packages << ManualPackage.new(name, version)
       self
     end
 
     def remove_package(name, txn = {})
-      @decisions << [:remove_package, name, txn]
+      add_decision [:remove_package, name, txn]
       @packages.delete(ManualPackage.new(name))
       self
     end
 
     def license(name, lic, txn = {})
-      @decisions << [:license, name, lic, txn]
+      add_decision [:license, name, lic, txn]
       @licenses[name] << License.find_by_name(lic)
       self
     end
 
     def unlicense(name, lic, txn = {})
-      @decisions << [:unlicense, name, lic, txn]
+      add_decision [:unlicense, name, lic, txn]
       @licenses[name].delete(License.find_by_name(lic))
       self
     end
 
     def homepage(name, homepage, txn = {})
-      @decisions << [:homepage, name, homepage, txn]
+      add_decision [:homepage, name, homepage, txn]
       @homepages[name] = homepage
       self
     end
 
     def approve(name, txn = {})
-      @decisions << [:approve, name, txn]
+      add_decision [:approve, name, txn]
 
       versions = []
       versions = @approvals[name][:safe_versions] if @approvals.key?(name)
@@ -115,69 +118,110 @@ module LicenseFinder
     end
 
     def unapprove(name, txn = {})
-      @decisions << [:unapprove, name, txn]
+      add_decision [:unapprove, name, txn]
       @approvals.delete(name)
       self
     end
 
     def permit(lic, txn = {})
-      @decisions << [:permit, lic, txn]
+      add_decision [:permit, lic, txn]
       @permitted << License.find_by_name(lic)
       self
     end
 
     def unpermit(lic, txn = {})
-      @decisions << [:unpermit, lic, txn]
+      add_decision [:unpermit, lic, txn]
       @permitted.delete(License.find_by_name(lic))
       self
     end
 
     def restrict(lic, txn = {})
-      @decisions << [:restrict, lic, txn]
+      add_decision [:restrict, lic, txn]
       @restricted << License.find_by_name(lic)
       self
     end
 
     def unrestrict(lic, txn = {})
-      @decisions << [:unrestrict, lic, txn]
+      add_decision [:unrestrict, lic, txn]
       @restricted.delete(License.find_by_name(lic))
       self
     end
 
     def ignore(name, txn = {})
-      @decisions << [:ignore, name, txn]
+      add_decision [:ignore, name, txn]
       @ignored << name
       self
     end
 
     def heed(name, txn = {})
-      @decisions << [:heed, name, txn]
+      add_decision [:heed, name, txn]
       @ignored.delete(name)
       self
     end
 
     def ignore_group(name, txn = {})
-      @decisions << [:ignore_group, name, txn]
+      add_decision [:ignore_group, name, txn]
       @ignored_groups << name
       self
     end
 
     def heed_group(name, txn = {})
-      @decisions << [:heed_group, name, txn]
+      add_decision [:heed_group, name, txn]
       @ignored_groups.delete(name)
       self
     end
 
     def name_project(name, txn = {})
-      @decisions << [:name_project, name, txn]
+      add_decision [:name_project, name, txn]
       @project_name = name
       self
     end
 
     def unname_project(txn = {})
-      @decisions << [:unname_project, txn]
+      add_decision [:unname_project, txn]
       @project_name = nil
       self
+    end
+
+    def inherit_from(filepath)
+      decisions =
+        if filepath =~ %r{^https?://}
+          open_uri(filepath).read
+        else
+          Pathname(filepath).read
+        end
+
+      add_decision [:inherit_from, filepath]
+      @inherited_decisions << filepath
+      restore_inheritance(decisions)
+    end
+
+    def remove_inheritance(filepath)
+      @decisions -= [[:inherit_from, filepath]]
+      @inherited_decisions.delete(filepath)
+      self
+    end
+
+    def add_decision(decision)
+      @decisions << decision unless @inherited
+    end
+
+    def restore_inheritance(decisions)
+      @inherited = true
+      self.class.restore(decisions, self)
+      @inherited = false
+      self
+    end
+
+    def open_uri(uri)
+      # ruby < 2.5.0 URI.open is private
+      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.5.0')
+        # rubocop:disable Security/Open
+        open(uri)
+        # rubocop:enable Security/Open
+      else
+        URI.open(uri)
+      end
     end
 
     #########
@@ -192,8 +236,7 @@ module LicenseFinder
       write!(persist, file)
     end
 
-    def self.restore(persisted)
-      result = new
+    def self.restore(persisted, result = new)
       return result unless persisted
 
       actions = YAML.load(persisted)

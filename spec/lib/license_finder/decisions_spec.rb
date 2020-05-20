@@ -280,6 +280,33 @@ module LicenseFinder
       end
     end
 
+    describe '.inherit_from' do
+      let(:yml) { YAML.dump([[:permit, 'MIT']]) }
+
+      it 'inheritates rules from local decision file' do
+        allow_any_instance_of(Pathname).to receive(:read).and_return(yml)
+        decisions = subject.inherit_from('./config/inherit.yml')
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
+      end
+
+      it 'inheritates rules from remote decision file' do
+        stub_request(:get, 'https://example.com/config/inherit.yml').to_return(status: 200, body: yml, headers: {})
+        decisions = subject.inherit_from('https://example.com/config/inherit.yml')
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
+      end
+    end
+
+    describe '.remove_inheritance' do
+      it 'reports inheritanced decisions' do
+        allow_any_instance_of(Pathname).to receive(:read).and_return('---')
+        decisions = subject.inherit_from('./config/inherit.yml')
+        expect(decisions.inherited_decisions).to include('./config/inherit.yml')
+
+        decisions = subject.remove_inheritance('./config/inherit.yml')
+        expect(decisions.inherited_decisions).to be_empty
+      end
+    end
+
     describe 'persistence' do
       def roundtrip(decisions)
         described_class.restore(decisions.persist)
@@ -444,6 +471,21 @@ module LicenseFinder
             .unname_project
         )
         expect(decisions.project_name).to be_nil
+      end
+
+      it 'can restore inherited decisions' do
+        allow_any_instance_of(Pathname).to receive(:read).and_return(YAML.dump([[:permit, 'MIT']]))
+        decisions = roundtrip(
+          subject
+            .inherit_from('./config/inherit.yml')
+        )
+        expect(decisions.inherited_decisions).to include('./config/inherit.yml')
+      end
+
+      it 'does not store decisions from inheritance' do
+        allow_any_instance_of(Pathname).to receive(:read).and_return(YAML.dump([[:permit, 'MIT']]))
+        decisions = subject.inherit_from('./config/inherit.yml')
+        expect(decisions.persist).to eql(YAML.dump([[:inherit_from, './config/inherit.yml']]))
       end
 
       it 'ignores empty or missing persisted decisions' do

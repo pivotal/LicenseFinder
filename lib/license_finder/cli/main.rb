@@ -172,6 +172,7 @@ module LicenseFinder
       subcommand 'permitted_licenses', PermittedLicenses, 'Automatically approve any dependency that has a permitted license'
       subcommand 'restricted_licenses', RestrictedLicenses, 'Forbid approval of any dependency whose licenses are all restricted'
       subcommand 'project_name', ProjectName, 'Set the project name, for display in reports'
+      subcommand 'inherited_decisions', InheritedDecisions, 'Add or remove decision files you want to inherit from'
 
       private
 

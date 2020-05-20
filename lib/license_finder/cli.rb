@@ -8,6 +8,7 @@ end
 require 'license_finder/cli/patched_thor'
 require 'license_finder/cli/base'
 require 'license_finder/cli/makes_decisions'
+require 'license_finder/cli/inherited_decisions'
 require 'license_finder/cli/permitted_licenses'
 require 'license_finder/cli/restricted_licenses'
 require 'license_finder/cli/dependencies'
