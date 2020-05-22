@@ -1,3 +1,17 @@
+# [6.4.0] / 2020-05-22
+
+### Added
+* install path for nuget dependencies [#172251374] - [ad73c946](https://github.com/pivotal/LicenseFinder/commit/ad73c946113846f8f548adfc73542aebb3763175) - Jeff Jun
+* new Rubocop cops - [c4cc6b8b](https://github.com/pivotal/LicenseFinder/commit/c4cc6b8b13273db17b65cecaf24c9053e4989ea1) - Jeff Jun
+
+### Fixed
+* Separate lines in license text with LF when exported to JSON - [baddb976](https://github.com/pivotal/LicenseFinder/commit/baddb976e7a8683c5cc320eddc8c2712dfb16c15) - Robert Huitl
+
+### Changed
+* updated Simplifed BSD license made license detection from templates more flexible [#171961625] - [acf57057](https://github.com/pivotal/LicenseFinder/commit/acf570573b4a2414d9c43212dea5d4ecb157319e) - Jeff Jun
+
+* Update Ruby version to 2.7.1 [#172295831] - [475e2948](https://github.com/pivotal/LicenseFinder/commit/475e2948ec1ad859aee59e77aa9ce2a51e1a5029) 
+
 # [6.3.0] / 2020-05-06
 
 ### Added
@@ -842,3 +856,4 @@ Bugfixes:
 [6.1.2]: https://github.com/pivotal/LicenseFinder/compare/v6.1.0...v6.1.2
 [6.2.0]: https://github.com/pivotal/LicenseFinder/compare/v6.1.2...v6.2.0
 [6.3.0]: https://github.com/pivotal/LicenseFinder/compare/v6.2.0...v6.3.0
+[6.4.0]: https://github.com/pivotal/LicenseFinder/compare/v6.3.0...v6.4.0
