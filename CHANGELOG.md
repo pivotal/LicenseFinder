@@ -1,6 +1,13 @@
 # [6.4.0] / 2020-05-22
 
+Big shout out to @forelabs for introducing many new features and improvements for this release. Thanks again!!
+
 ### Added
+* Introducing new inherited_decisions command - [3453feb](https://github.com/pivotal/LicenseFinder/commit/3453feb659a6c3c6e5aa444e3755ddd5d32f3664) - Sven Dunemann
+* Decision Applier: Merge manual and system packages - [c690532](https://github.com/pivotal/LicenseFinder/commit/c690532ec8addab16bef4edd390f05ceb353435f) - Sven Dunemann
+* Introduce package_url to packages - [18972f7](https://github.com/pivotal/LicenseFinder/commit/18972f7b3a04340e1b7bb560780130b68696b8a2) - Sven Dunemann
+* Add --write-headers option for csv exports - [18e01f8](https://github.com/pivotal/LicenseFinder/commit/18e01f8728a9dc525d7567292cc1e2f390ec854d) - Sven Dunemann
+* Yarn: Add authors & install_path - [08a0f67](https://github.com/pivotal/LicenseFinder/commit/08a0f67837a218231217767561f2282c1b3a890a) - Sven Dunemann
 * install path for nuget dependencies [#172251374] - [ad73c946](https://github.com/pivotal/LicenseFinder/commit/ad73c946113846f8f548adfc73542aebb3763175) - Jeff Jun
 * new Rubocop cops - [c4cc6b8b](https://github.com/pivotal/LicenseFinder/commit/c4cc6b8b13273db17b65cecaf24c9053e4989ea1) - Jeff Jun
 
@@ -8,8 +15,9 @@
 * Separate lines in license text with LF when exported to JSON - [baddb976](https://github.com/pivotal/LicenseFinder/commit/baddb976e7a8683c5cc320eddc8c2712dfb16c15) - Robert Huitl
 
 ### Changed
-* updated Simplifed BSD license made license detection from templates more flexible [#171961625] - [acf57057](https://github.com/pivotal/LicenseFinder/commit/acf570573b4a2414d9c43212dea5d4ecb157319e) - Jeff Jun
-
+* Go15VendorExperiment: Detect go only if vendor includes go files - [0f8e609](https://github.com/pivotal/LicenseFinder/commit/0f8e609f0921937c6187deccd80e4bc4b7d67ee4) - Sven Dunemann
+* Bump PHP version to 7.4 - [cbe45c5](https://github.com/pivotal/LicenseFinder/commit/cbe45c5cdb3ec200ea215086a3b3eb879e83222a) - Yivan
+* Significantly improve the license text matching file to be more dynamic - [acf5705](https://github.com/pivotal/LicenseFinder/commit/acf570573b4a2414d9c43212dea5d4ecb157319e)
 * Update Ruby version to 2.7.1 [#172295831] - [475e2948](https://github.com/pivotal/LicenseFinder/commit/475e2948ec1ad859aee59e77aa9ce2a51e1a5029) 
 
 # [6.3.0] / 2020-05-06
