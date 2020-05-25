@@ -17,7 +17,7 @@ module LicenseFinder
     }ix.freeze
 
     def self.find_by_text(text)
-      cleaned_text = text.force_encoding('UTF-8')
+      cleaned_text = text.dup.force_encoding('UTF-8')
       cleaned_text = text.encode('UTF-8', invalid: :replace, undef: :replace) unless cleaned_text.valid_encoding?
 
       match = cleaned_text.match COPYRIGHT_EXPRESSION
