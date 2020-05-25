@@ -37,5 +37,9 @@ module LicenseFinder
     def to_s
       @copyright
     end
+
+    def ==(other)
+      copyright == other.copyright
+    end
   end
 end
