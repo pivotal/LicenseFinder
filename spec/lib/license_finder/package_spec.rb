@@ -125,6 +125,25 @@ module LicenseFinder
       end
     end
 
+    describe '#copyrights' do
+      def stub_copyright_files(*copyrights)
+        copyright_files = copyrights.map do |copyright|
+          double(:file, copyright: Copyright.find_by_text(copyright), path: 'some/path')
+        end
+        allow(CopyrightFiles).to receive(:find).with('some/package/path', logger: logger)
+                                             .and_return(copyright_files)
+      end
+
+      describe 'from the install path' do
+        it 'uses the copyright reported by files in the install path' do
+          stub_copyright_files 'Copyright 2020 Sven', '(c) 2020-present by Sven'
+          subject = described_class.new(nil, nil, install_path: 'some/package/path', logger: logger)
+          expect(subject.copyrights.map(&:owners)).to eq %w[Sven Sven]
+          expect(subject.copyrights.map(&:copyright)).to contain_exactly('Copyright 2020 Sven', '(c) 2020-present by Sven')
+        end
+      end
+    end
+
     describe '#restricted?' do
       it 'defaults to false' do
         expect(subject.restricted?).to eq(false)
