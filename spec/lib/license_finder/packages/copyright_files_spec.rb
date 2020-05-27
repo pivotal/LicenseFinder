@@ -44,7 +44,7 @@ module LicenseFinder
 
       it 'includes files with names like LICENSE, README or COPYING' do
         expect(files_in('copyrights')).to match_array(
-          %w[COPYING.txt LICENSE LICENCE.md Mit-License README.rdoc Licence.rdoc]
+          %w[COPYING.txt LICENSE LICENCE.md Mit-License README.rdoc Licence.rdoc licence]
         )
       end
 

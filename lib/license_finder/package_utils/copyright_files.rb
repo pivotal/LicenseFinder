@@ -6,7 +6,7 @@ module LicenseFinder
   class CopyrightFiles
     include SharedHelpers
 
-    CANDIDATE_FILE_NAMES = %w[LICENSE License LICENCE Licence COPYING README Readme ReadMe NOTICE COPYRIGHT].freeze
+    CANDIDATE_FILE_NAMES = %w[License Licence COPYING README NOTICE COPYRIGHT].freeze
     CANDIDATE_PATH_WILDCARD = "*{#{CANDIDATE_FILE_NAMES.join(',')}}*"
 
     def self.find(install_path, options = {})
@@ -37,7 +37,7 @@ module LicenseFinder
     def candidate_files_and_dirs
       return [] if install_path.nil?
 
-      candidates = Pathname.glob(install_path.join('**', CANDIDATE_PATH_WILDCARD))
+      candidates = Pathname.glob(install_path.join('**', CANDIDATE_PATH_WILDCARD), File::FNM_CASEFOLD)
       candidates |= detect_in_path_files unless candidates.any?
       candidates
     end
