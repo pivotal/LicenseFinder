@@ -24,7 +24,7 @@ module LicenseFinder
         FileUtils.mkdir_p(vendor_path)
         File.write(sum_path, content)
 
-        allow(SharedHelpers::Cmd).to receive(:run).with("GO111MODULE=on go list -m -mod=vendor -f '{{.Path}},{{.Version}},{{.Dir}}' all").and_return(go_list_string)
+        allow(SharedHelpers::Cmd).to receive(:run).with("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all").and_return(go_list_string)
       end
 
       after do
@@ -58,10 +58,10 @@ module LicenseFinder
       context 'when compute is not allowed on vendor' do
         before do
           allow(SharedHelpers::Cmd).to receive(:run)
-            .with("GO111MODULE=on go list -m -mod=vendor -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+            .with("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all")
             .and_return(['', "go list -m: can't compute 'all' using the vendor directory\n\t(Use -mod=mod or -mod=readonly to bypass.)\n", 1])
           allow(SharedHelpers::Cmd).to receive(:run)
-            .with("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+            .with("GO111MODULE=on go list -m -mod=mod -f '{{.Path}},{{.Version}},{{.Dir}}' all")
             .and_return(go_list_string)
         end
 
