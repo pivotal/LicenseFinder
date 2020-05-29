@@ -33,8 +33,10 @@ module LicenseFinder
     private
 
     def packages_info
-      info_output, stderr, _status = Cmd.run("GO111MODULE=on go list -m -mod=vendor -f '{{.Path}},{{.Version}},{{.Dir}}' all")
-      info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all") if stderr =~ Regexp.compile("can't compute 'all' using the vendor directory")
+      info_output, stderr, _status = Cmd.run("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+      if stderr =~ Regexp.compile("can't compute 'all' using the vendor directory")
+        info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -m -mod=mod -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+      end
 
       info_output.split("\n")
     end

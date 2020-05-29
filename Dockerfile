@@ -3,7 +3,7 @@ FROM ubuntu:xenial
 # Versioning
 ENV PIP_INSTALL_VERSION 19.0.2
 ENV PIP3_INSTALL_VERSION 8.1.1
-ENV GO_LANG_VERSION 1.13.3
+ENV GO_LANG_VERSION 1.14.3
 ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
@@ -150,7 +150,7 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsof
   sudo dpkg -i packages-microsoft-prod.deb &&\
   rm packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
-  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0
+  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
     echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
