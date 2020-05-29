@@ -88,5 +88,12 @@ module LicenseFinder
         expect(subject.to_s).to eq("gem_a,1.0,\"development,production\"\n")
       end
     end
+
+    it 'supports copyrights' do
+      install_path = fixture_path('copyrights')
+      dep = Package.new('gem_a', '1.0', install_path: install_path)
+      subject = described_class.new([dep], columns: %w[name version copyrights])
+      expect(subject.to_s).to eq("gem_a,1.0,Copyright 2020 by Sven\n")
+    end
   end
 end
