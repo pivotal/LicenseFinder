@@ -73,10 +73,20 @@ module LicenseFinder
       assemblies.flat_map(&:dependencies)
     end
 
+    def nuget_binary
+      legacy_vcproj = Dir['**/*.vcproj'].any?
+
+      if legacy_vcproj
+        '/usr/local/bin/nugetv3.5.0.exe'
+      else
+        '/usr/local/bin/nuget.exe'
+      end
+    end
+
     def package_management_command
       return 'nuget' if LicenseFinder::Platform.windows?
 
-      'mono /usr/local/bin/nuget.exe'
+      "mono #{nuget_binary}"
     end
 
     def prepare_command
@@ -96,7 +106,7 @@ module LicenseFinder
     def nuget_check
       return 'where nuget' if LicenseFinder::Platform.windows?
 
-      'which mono && ls /usr/local/bin/nuget.exe'
+      "which mono && ls #{nuget_binary}"
     end
 
     def self.nuspec_license_urls(specfile_content)
