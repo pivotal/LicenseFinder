@@ -201,9 +201,22 @@ module LicenseFinder
       end
 
       describe '.package_management_command' do
-        it 'returns the correct package management command' do
-          nuget = Nuget.new project_path: Pathname.new('app')
-          expect(nuget.package_management_command).to eq(nuget_cmd)
+        context 'no .vcproj file found' do
+          it 'returns the correct package management command' do
+            nuget = Nuget.new project_path: Pathname.new('app')
+            expect(nuget.package_management_command).to eq(nuget_cmd)
+          end
+        end
+
+        context '.vcproj file found' do
+          include FakeFS::SpecHelpers
+
+          it 'returns the correct package management command' do
+            FileUtils.mkdir_p 'app'
+            FileUtils.touch 'app/legacy-project.vcproj'
+            nuget = Nuget.new project_path: Pathname.new('app')
+            expect(nuget.package_management_command).to eq(nuget_legacy_cmd)
+          end
         end
       end
 
@@ -267,6 +280,7 @@ Restoring NuGet package CoolNewDependency.2.4.2.
       end
 
       let(:nuget_cmd) { 'mono /usr/local/bin/nuget.exe' }
+      let(:nuget_legacy_cmd) { 'mono /usr/local/bin/nugetv3.5.0.exe' }
       let(:nuget_check) { 'which mono && ls /usr/local/bin/nuget.exe' }
       let(:nuget_location) { "/usr/local/mono\n/usr/local/bin/nuget.exe" }
 
@@ -279,6 +293,7 @@ Restoring NuGet package CoolNewDependency.2.4.2.
       end
 
       let(:nuget_cmd) { 'nuget' }
+      let(:nuget_legacy_cmd) { 'nuget' }
       let(:nuget_check) { 'where nuget' }
       let(:nuget_location) { 'C:\\ProgramData\\chocolatey\\bin\\NuGet.exe' }
 
