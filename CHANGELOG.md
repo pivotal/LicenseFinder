@@ -1,3 +1,11 @@
+# [6.5.0] / 2020-06-01
+
+### Added
+* Support legacy nuget projects [#172950097] - [0cccbcf9](https://github.com/pivotal/LicenseFinder/commit/0cccbcf9aa92f4297ef0174242bdb19da1babc65) 
+
+### Changed
+* Upgrade to golang 1.14.3. Update dotnet-sdk to 3.1 - [0969e98f](https://github.com/pivotal/LicenseFinder/commit/0969e98fde4a82f8931601baa4dd96dc01300a14) 
+
 # [6.4.0] / 2020-05-22
 
 Big shout out to @forelabs for introducing many new features and improvements for this release. Thanks again!!
@@ -865,3 +873,4 @@ Bugfixes:
 [6.2.0]: https://github.com/pivotal/LicenseFinder/compare/v6.1.2...v6.2.0
 [6.3.0]: https://github.com/pivotal/LicenseFinder/compare/v6.2.0...v6.3.0
 [6.4.0]: https://github.com/pivotal/LicenseFinder/compare/v6.3.0...v6.4.0
+[6.5.0]: https://github.com/pivotal/LicenseFinder/compare/v6.4.0...v6.5.0
