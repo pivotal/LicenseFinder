@@ -15,7 +15,7 @@ module LicenseFinder
         begin
           packages = {}
           each_dependency(groups: allowed_groups) do |name, data, group|
-            version = canonicalize(data['version'])
+            version = canonicalize(data['version'] || 'unknown')
             package = packages.fetch(key_for(name, version)) do |key|
               packages[key] = build_package_for(name, version)
             end
