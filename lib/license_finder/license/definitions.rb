@@ -25,7 +25,8 @@ module LicenseFinder
           python,
           ruby,
           simplifiedbsd,
-          wtfpl
+          wtfpl,
+          zerobsd
         ]
       end
 
@@ -300,6 +301,27 @@ module LicenseFinder
             'Do What The Fuck You Want To Public License'
           ],
           url: 'http://www.wtfpl.net/'
+        )
+      end
+
+      def zerobsd
+        matcher = AnyMatcher.new(
+          Matcher.from_template(Template.named('0BSD'))
+        )
+
+        License.new(
+          short_name: '0BSD',
+          pretty_name: 'BSD Zero Clause License',
+          other_names: [
+            '0-Clause BSD',
+            'Zero-Clause BSD',
+            'BSD-0-Clause',
+            'BSD-Zero-Clause',
+            'BSD 0-Clause',
+            'BSD Zero-Clause'
+          ],
+          url: 'https://opensource.org/licenses/0BSD',
+          matcher: matcher
         )
       end
     end

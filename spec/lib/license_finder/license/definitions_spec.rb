@@ -198,3 +198,10 @@ describe LicenseFinder::License, 'WTFPL' do
     expect(described_class.find_by_name('Do What The Fuck You Want To Public License').url).to be
   end
 end
+
+describe LicenseFinder::License, '0BSD' do
+  it 'should be recognized' do
+    expect(described_class.find_by_name('0BSD').url).to be
+    expect(described_class.find_by_name('Zero-Clause BSD').url).to be
+  end
+end
