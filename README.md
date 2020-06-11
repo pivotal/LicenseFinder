@@ -467,7 +467,7 @@ licenseConfigurations := Set("compile", "provided")
 
 ## Upgrading
 
-To upgrade to `license_finder` version >= 6.0, you have to replace the terminology `whitelist` with `permit` in your `dependency_decisions.yml`. See [Changelog](https://github.com/pivotal/LicenseFinder/blob/master/CHANGELOG.md#600--2020-01-22) for more details.
+To upgrade to `license_finder` version >= 6.0, you have to replace the terminology `whitelist` with `permit` and  `blacklist` with `restrict` in your `dependency_decisions.yml`. See [Changelog](https://github.com/pivotal/LicenseFinder/blob/master/CHANGELOG.md#600--2020-01-22) for more details.
 
 To upgrade from `license_finder` version 1.2 to 2.0, see
 [`license_finder_upgrade`](https://github.com/mainej/license_finder_upgrade).
