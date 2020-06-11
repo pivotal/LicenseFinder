@@ -379,6 +379,26 @@ items, even if someone attempts to manually approve or permit it.  However,
 if a dependency has even one license that is not restricted, it can still be
 manually approved or permitted.
 
+## Decision inheritance
+
+Add or remove decision files you want to inherit from - see `license_finder inherited_decisions help` for more information.
+
+This allows you to have a centralized decision file for approved/restricted licenses. If you have multiple projects it's way easier to have one single place where you approved or restricted licenses defined.
+
+Add one or more decision files to the inherited decisions
+```bash
+license_finder inherited_decisions add DECISION_FILE
+```
+
+Remove one or more decision files from the inherited decisions
+```bash
+license_finder inherited_decisions remove DECISION_FILE
+```
+
+List all the inherited decision files
+```bash
+license_finder inherited_decisions list
+```
 
 ## Configuration
 
