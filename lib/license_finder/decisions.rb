@@ -185,7 +185,7 @@ module LicenseFinder
 
     def inherit_from(filepath)
       decisions =
-        if filepath =~ %r{^https?://}
+        if filepath.is_a?(Hash)
           open_uri(filepath).read
         else
           Pathname(filepath).read
@@ -213,15 +213,31 @@ module LicenseFinder
       self
     end
 
-    def open_uri(uri)
+    def open_uri(uri_info)
+      header = {}
+      token = resolve_token(uri_info['token'])
+      header['Authorization'] = "Bearer #{token}" if token
+
       # ruby < 2.5.0 URI.open is private
       if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.5.0')
         # rubocop:disable Security/Open
-        open(uri)
+        open(uri_info['url'], header)
         # rubocop:enable Security/Open
       else
-        URI.open(uri)
+        URI.open(uri_info['url'], header)
       end
+    end
+
+    def resolve_token(token)
+      return unless token
+
+      env_var_match = token.match(/^\$(\S.*)/)
+      if env_var_match
+        env_name = env_var_match[1]
+        return ENV.fetch(env_name, nil)
+      end
+
+      token
     end
 
     #########
