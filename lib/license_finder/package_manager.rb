@@ -119,8 +119,12 @@ module LicenseFinder
     attr_reader :logger, :project_path
 
     def log_errors(stderr)
-      logger.info prepare_command, 'did not succeed.', color: :red
-      logger.info prepare_command, stderr, color: :red
+      log_errors_with_cmd(prepare_command, stderr)
+    end
+
+    def log_errors_with_cmd(prep_cmd, stderr)
+      logger.info prep_cmd, 'did not succeed.', color: :red
+      logger.info prep_cmd, stderr, color: :red
       log_to_file stderr
     end
 

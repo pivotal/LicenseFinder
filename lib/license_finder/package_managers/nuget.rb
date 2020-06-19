@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 require 'rexml/document'
 require 'zip'
@@ -87,6 +87,23 @@ module LicenseFinder
       return 'nuget' if LicenseFinder::Platform.windows?
 
       "mono #{nuget_binary}"
+    end
+
+    def prepare
+      _, stderr, status = Dir.chdir(project_path) { Cmd.run(prepare_command) }
+      return if status.success?
+      log_errors stderr
+      logger.info prepare_command, 'trying fallback prepare command', color: :magenta
+
+      cmd = "#{prepare_command} -PackagesDirectory ."
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(cmd) }
+      return if status.success?
+      log_errors_with_cmd(cmd,stderr)
+
+      error_message = "Prepare command '#{cmd}' failed\n#{stderr}"
+      error_message = error_message.concat("\n#{stdout}\n") if !stdout.nil? && !stdout.empty?
+
+      raise error_message unless @prepare_no_fail
     end
 
     def prepare_command
