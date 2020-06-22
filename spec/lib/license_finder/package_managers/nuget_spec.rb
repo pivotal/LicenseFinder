@@ -249,7 +249,7 @@ Cannot determine the packages folder to restore NuGet packages. Please specify e
         include FakeFS::SpecHelpers
         let(:log_directory) { '/path/to/project/logs/project' }
         let(:quiet_logger) { double(:logger) }
-        let(:nuget) {Nuget.new project_path: Pathname.new('app'), log_directory: log_directory, logger: quiet_logger }
+        let(:nuget) { Nuget.new project_path: Pathname.new('app'), log_directory: log_directory, logger: quiet_logger }
 
         before do
           allow(quiet_logger).to receive(:info)
@@ -265,48 +265,40 @@ Cannot determine the packages folder to restore NuGet packages. Please specify e
             expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
                                                        .and_return([nuget_restore_output, '', cmd_success])
             expect(SharedHelpers::Cmd).to_not receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
-            expect{nuget.prepare}.to_not raise_error
+            expect { nuget.prepare }.to_not raise_error
           end
 
-          context 'if all nuget calls fails' do
-            it 'should raise an error' do
-              # For this scenario, assume bad .sln file, so no matter what, nuget spits out the same error
-              # regardless of parameters being passed
-              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
-                                                .and_return(['', 'nuget called failed', cmd_failure])
-              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
-                                                  .and_return(['', 'nuget called failed', cmd_failure])
-
-              expected_err_msg = "Prepare command '#{nuget_cmd} restore -PackagesDirectory .' failed\nnuget called failed"
-              expect{nuget.prepare}.to raise_error(/#{expected_err_msg}/)
-            end
-          end
-        end
-
-        context 'for project with a packages.config file' do
-          before do
-            FileUtils.mkdir_p 'app'
-            FileUtils.touch 'app/packages.config'
-          end
-
-          it 'should call nuget restore -PackagesDirectory .' do
-            expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
-                                              .and_return(['', nuget_restore_error, cmd_failure])
-            expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
-                                               .and_return([nuget_restore_output, '', cmd_success])
-            expect{nuget.prepare}.to_not raise_error
-          end
-
-          context 'if all nuget calls fails' do
-            it 'should raise an error' do
+          context 'if nuget complains about missing package directory' do
+            it 'should call the fallback restore command with package directory set' do
               expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
                                                 .and_return(['', nuget_restore_error, cmd_failure])
               expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
-                                                .and_return(['some output', 'nuget called failed', cmd_failure])
+                                                .and_return([nuget_restore_output, '', cmd_success])
 
-              expected_err_msg = "Prepare command '#{nuget_cmd} restore -PackagesDirectory .' failed\nnuget called failed\nsome output\n"
-              expect{nuget.prepare}.to raise_error(/#{expected_err_msg}/)
+              expect { nuget.prepare }.to_not raise_error
+            end
+          end
 
+          context 'if solution file is malformed' do
+            it 'should raise an error' do
+              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
+                                                .and_return(['some bad output', 'nuget called failed - bad sln file', cmd_failure])
+              expect(SharedHelpers::Cmd).to_not receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
+
+              expected_err_msg = "Prepare command '#{nuget_cmd} restore' failed\nnuget called failed - bad sln file\nsome bad output"
+              expect { nuget.prepare }.to raise_error(/#{expected_err_msg}/)
+            end
+          end
+
+          context 'if nuget complains about missing directory, but that also fails' do
+            it 'should raise and error' do
+              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
+                                                .and_return(['', nuget_restore_error, cmd_failure])
+              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
+                                                .and_return(['', 'nuget called failed - bad package error', cmd_failure])
+
+              expected_err_msg = "Prepare command '#{nuget_cmd} restore -PackagesDirectory .' failed\nnuget called failed - bad package error"
+              expect { nuget.prepare }.to raise_error(/#{expected_err_msg}/)
             end
           end
         end

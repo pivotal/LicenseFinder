@@ -1,4 +1,4 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
 require 'rexml/document'
 require 'zip'
@@ -90,19 +90,24 @@ module LicenseFinder
     end
 
     def prepare
-      _, stderr, status = Dir.chdir(project_path) { Cmd.run(prepare_command) }
-      return if status.success?
-      log_errors stderr
-      logger.info prepare_command, 'trying fallback prepare command', color: :magenta
-
-      cmd = "#{prepare_command} -PackagesDirectory ."
+      cmd = prepare_command
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(cmd) }
       return if status.success?
-      log_errors_with_cmd(cmd,stderr)
+
+      log_errors stderr
+
+      if stderr.include?('-PackagesDirectory')
+        logger.info cmd, 'trying fallback prepare command', color: :magenta
+
+        cmd = "#{cmd} -PackagesDirectory ."
+        stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(cmd) }
+        return if status.success?
+
+        log_errors_with_cmd(cmd, stderr)
+      end
 
       error_message = "Prepare command '#{cmd}' failed\n#{stderr}"
-      error_message = error_message.concat("\n#{stdout}\n") if !stdout.nil? && !stdout.empty?
-
+      error_message += "\n#{stdout}\n" if !stdout.nil? && !stdout.empty?
       raise error_message unless @prepare_no_fail
     end
 
