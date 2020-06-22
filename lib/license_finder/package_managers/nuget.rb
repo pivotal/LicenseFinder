@@ -89,6 +89,28 @@ module LicenseFinder
       "mono #{nuget_binary}"
     end
 
+    def prepare
+      cmd = prepare_command
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(cmd) }
+      return if status.success?
+
+      log_errors stderr
+
+      if stderr.include?('-PackagesDirectory')
+        logger.info cmd, 'trying fallback prepare command', color: :magenta
+
+        cmd = "#{cmd} -PackagesDirectory ."
+        stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(cmd) }
+        return if status.success?
+
+        log_errors_with_cmd(cmd, stderr)
+      end
+
+      error_message = "Prepare command '#{cmd}' failed\n#{stderr}"
+      error_message += "\n#{stdout}\n" if !stdout.nil? && !stdout.empty?
+      raise error_message unless @prepare_no_fail
+    end
+
     def prepare_command
       "#{package_management_command} restore"
     end
