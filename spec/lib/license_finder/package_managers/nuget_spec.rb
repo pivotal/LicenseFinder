@@ -255,7 +255,7 @@ Cannot determine the packages folder to restore NuGet packages. Please specify e
           allow(quiet_logger).to receive(:info)
         end
 
-        context 'for project with a .sln file' do
+        context 'for a nuget project' do
           before do
             FileUtils.mkdir_p 'app'
             FileUtils.touch 'app/MyApp.sln'
@@ -264,7 +264,7 @@ Cannot determine the packages folder to restore NuGet packages. Please specify e
           it 'should call nuget restore' do
             expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
                                                        .and_return([nuget_restore_output, '', cmd_success])
-            expect(SharedHelpers::Cmd).to_not receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
+            expect(SharedHelpers::Cmd).to_not receive(:run).with("#{nuget_cmd} restore -PackagesDirectory /#{Dir.home}/.nuget/packages")
             expect { nuget.prepare }.to_not raise_error
           end
 
@@ -272,18 +272,18 @@ Cannot determine the packages folder to restore NuGet packages. Please specify e
             it 'should call the fallback restore command with package directory set' do
               expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
                                                 .and_return(['', nuget_restore_error, cmd_failure])
-              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
+              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore -PackagesDirectory /#{Dir.home}/.nuget/packages")
                                                 .and_return([nuget_restore_output, '', cmd_success])
 
               expect { nuget.prepare }.to_not raise_error
             end
           end
 
-          context 'if solution file is malformed' do
+          context 'if nuget packages file is malformed' do
             it 'should raise an error' do
               expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
                                                 .and_return(['some bad output', 'nuget called failed - bad sln file', cmd_failure])
-              expect(SharedHelpers::Cmd).to_not receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
+              expect(SharedHelpers::Cmd).to_not receive(:run).with("#{nuget_cmd} restore -PackagesDirectory /#{Dir.home}/.nuget/packages")
 
               expected_err_msg = "Prepare command '#{nuget_cmd} restore' failed\nnuget called failed - bad sln file\nsome bad output"
               expect { nuget.prepare }.to raise_error(/#{expected_err_msg}/)
@@ -294,10 +294,10 @@ Cannot determine the packages folder to restore NuGet packages. Please specify e
             it 'should raise and error' do
               expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore")
                                                 .and_return(['', nuget_restore_error, cmd_failure])
-              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore -PackagesDirectory .")
+              expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore -PackagesDirectory /#{Dir.home}/.nuget/packages")
                                                 .and_return(['', 'nuget called failed - bad package error', cmd_failure])
 
-              expected_err_msg = "Prepare command '#{nuget_cmd} restore -PackagesDirectory .' failed\nnuget called failed - bad package error"
+              expected_err_msg = "Prepare command '#{nuget_cmd} restore -PackagesDirectory /#{Dir.home}/.nuget/packages' failed\nnuget called failed - bad package error"
               expect { nuget.prepare }.to raise_error(/#{expected_err_msg}/)
             end
           end

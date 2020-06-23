@@ -99,7 +99,7 @@ module LicenseFinder
       if stderr.include?('-PackagesDirectory')
         logger.info cmd, 'trying fallback prepare command', color: :magenta
 
-        cmd = "#{cmd} -PackagesDirectory ."
+        cmd = "#{cmd} -PackagesDirectory /#{Dir.home}/.nuget/packages"
         stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(cmd) }
         return if status.success?
 
