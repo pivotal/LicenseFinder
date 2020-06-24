@@ -26,6 +26,7 @@ module LicenseFinder
         url, auth_type, token_or_env = params
         auth_info =  {"url" => url, "authorization" => "#{auth_type} #{token_or_env}"}
         modifying { decisions.add_decision [:inherit_from, auth_info] }
+        say "Added #{url} to the inherited decisions"
       end
 
       auditable
@@ -34,6 +35,15 @@ module LicenseFinder
         assert_some decision_files
         modifying { decision_files.each { |filepath| decisions.remove_inheritance(filepath) } }
         say "Removed #{decision_files.join(', ')} from the inherited decisions"
+      end
+
+      auditable
+      desc 'remove_with_auth URL AUTH_TYPE TOKEN_OR_ENV', 'Add a remote decision file that needs authentication'
+      def remove_with_auth(*params)
+        url, auth_type, token_or_env = params
+        auth_info =  {"url" => url, "authorization" => "#{auth_type} #{token_or_env}"}
+        modifying { decisions.remove_inheritance(auth_info) }
+        say "Removed #{url} from the inherited decisions"
       end
     end
   end
