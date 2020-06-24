@@ -42,6 +42,20 @@ module LicenseFinder
         ]
       end
 
+      let(:expected_dependencies) do
+        [
+          { name: 'attrs', version: '19.3.0', licenses: ['MIT'], groups: ['develop'] },
+          { name: 'more-itertools', version: '8.0.2', licenses: ['MIT'], groups: ['develop'] },
+          { name: 'packaging', version: '20.0', licenses: ['Apache 2.0', 'BSD'], groups: ['develop'] },
+          { name: 'pluggy', version: '0.13.1', licenses: ['MIT'], groups: ['develop'] },
+          { name: 'py', version: '1.8.1', licenses: ['MIT'], groups: ['develop'] },
+          { name: 'pyparsing', version: '2.4.6', licenses: ['MIT'], groups: ['develop'] },
+          { name: 'pytest', version: '5.3.2', licenses: ['MIT'], groups: ['develop'] },
+          { name: 'six', version: '1.13.0', licenses: ['MIT'], groups: %w[default develop] },
+          { name: 'wcwidth', version: '0.1.8', licenses: ['MIT'], groups: ['develop'] }
+        ]
+      end
+
       before do
         dependencies.each do |item|
           url = url_for(item[:name], item[:version])
@@ -54,8 +68,8 @@ module LicenseFinder
         actual = subject.current_packages.map do |package|
           [package.name, package.version, package.licenses.map(&:name), package.groups]
         end
-        expected = dependencies.map do |package|
-          [package[:name], package[:version], [package[:license]], package[:groups]]
+        expected = expected_dependencies.map do |package|
+          [package[:name], package[:version], package[:licenses], package[:groups]]
         end
         expect(actual).to match_array(expected)
       end
