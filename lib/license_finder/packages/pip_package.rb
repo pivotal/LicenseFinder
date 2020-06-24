@@ -9,13 +9,15 @@ module LicenseFinder
 
     def self.license_names_from_spec(spec)
       license_names = spec['license'].to_s.strip.split(' or ')
+      has_unrecognized_license = false
 
-      license_name_validity = license_names.map do |license_name|
+      license_names.each do |license_name|
         license = License.find_by_name(license_name.strip)
-        license.unrecognized_matcher?
+
+        has_unrecognized_license = has_unrecognized_license || license.unrecognized_matcher?
       end
 
-      return license_names if !license_name_validity.empty? && license_name_validity.include?(false)
+      return license_names if !license_names.empty? && !has_unrecognized_license
 
       spec
         .fetch('classifiers', [])
