@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open-uri'
+require 'license_finder/license'
 
 module LicenseFinder
   class Decisions
@@ -39,6 +40,12 @@ module LicenseFinder
     end
 
     def permitted?(lic)
+      if lic.is_a?AndLicense
+        return lic.sub_licenses.all? {|lic| @permitted.include?(lic) }
+      end
+      if lic.is_a?OrLicense
+        return lic.sub_licenses.any? {|lic| @permitted.include?(lic) }
+      end
       @permitted.include?(lic)
     end
 
