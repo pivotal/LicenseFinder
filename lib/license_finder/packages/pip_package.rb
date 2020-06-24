@@ -14,7 +14,7 @@ module LicenseFinder
       license_names.each do |license_name|
         license = License.find_by_name(license_name.strip)
 
-        has_unrecognized_license = has_unrecognized_license || license.unrecognized_matcher?
+        has_unrecognized_license ||= license.unrecognized_matcher?
       end
 
       return license_names if !license_names.empty? && !has_unrecognized_license
