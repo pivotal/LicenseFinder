@@ -112,7 +112,18 @@ module LicenseFinder
     end
 
     def prepare_command
-      "#{package_management_command} restore"
+      cmd = package_management_command
+      sln_files = Dir['*.sln']
+      cmds = []
+      if sln_files.count > 1
+        sln_files.each do |sln|
+          cmds << "#{cmd} restore #{sln}"
+        end
+      else
+        cmds << "#{cmd} restore"
+      end
+
+      cmds.join('&&')
     end
 
     def installed?(logger = Core.default_logger)
