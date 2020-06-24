@@ -305,18 +305,19 @@ module LicenseFinder
         stub_request(:get, 'https://example.com/config/inherit.yml')
           .with(headers: { 'Authorization' => 'Bearer Token' })
           .to_return(status: 200, body: yml, headers: {})
-        decisions = subject.inherit_from({ 'url' => 'https://example.com/config/inherit.yml', 'token' => 'Token' })
+        decisions = subject.inherit_from({ 'url' => 'https://example.com/config/inherit.yml', 'authorization' => 'Bearer Token' })
         expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
 
       it 'inheritates rules from a private remote decision file with token in an env variable' do
-        allow(ENV).to receive(:fetch).with('TOKEN_ENV', nil).and_return('Token')
+        allow(ENV).to receive(:[])
+        allow(ENV).to receive(:[]).with('TOKEN_ENV').and_return('Token')
 
         stub_request(:get, 'https://example.com/config/inherit.yml')
           .with(headers: { 'Authorization' => 'Bearer Token' })
           .to_return(status: 200, body: yml, headers: {})
 
-        decisions = subject.inherit_from({ 'url' => 'https://example.com/config/inherit.yml', 'token' => '$TOKEN_ENV' })
+        decisions = subject.inherit_from({ 'url' => 'https://example.com/config/inherit.yml', 'authorization' => 'Bearer $TOKEN_ENV' })
         expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
     end

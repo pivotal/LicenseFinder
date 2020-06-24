@@ -186,7 +186,7 @@ module LicenseFinder
     def inherit_from(filepath_info)
       decisions =
         if filepath_info.is_a?(Hash)
-          open_uri(filepath_info['url'], filepath_info['token']).read
+          open_uri(filepath_info['url'], filepath_info['authorization']).read
         elsif filepath_info =~ %r{^https?://}
           open_uri(filepath_info).read
         else
@@ -215,10 +215,10 @@ module LicenseFinder
       self
     end
 
-    def open_uri(uri, token = nil)
+    def open_uri(uri, auth = nil)
       header = {}
-      token = resolve_token(token)
-      header['Authorization'] = "Bearer #{token}" if token
+      auth_header = resolve_authorization(auth)
+      header['Authorization'] = auth_header if auth_header
 
       # ruby < 2.5.0 URI.open is private
       if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.5.0')
@@ -230,16 +230,14 @@ module LicenseFinder
       end
     end
 
-    def resolve_token(token)
-      return unless token
+    def resolve_authorization(auth)
+      return unless auth
 
-      env_var_match = token.match(/^\$(\S.*)/)
-      if env_var_match
-        env_name = env_var_match[1]
-        return ENV.fetch(env_name, nil)
-      end
+      token_env = auth.match(/\$(\S.*)/)
+      return auth unless token_env
 
-      token
+      token = ENV[token_env[1]]
+      auth.sub(token_env[0], token)
     end
 
     #########
