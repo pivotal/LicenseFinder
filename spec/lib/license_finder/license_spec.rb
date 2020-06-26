@@ -134,4 +134,22 @@ module LicenseFinder
       expect(make_license.name).to eq('Default Short Name')
     end
   end
+
+  describe '.unrecognized_matcher?' do
+    context 'when the license has unrecognized matcher' do
+      let(:license) { License::Definitions.build_unrecognized('unknown') }
+
+      it 'should return true' do
+        expect(license.unrecognized_matcher?).to be_truthy
+      end
+    end
+
+    context 'when the license does not have unrecognized matcher' do
+      let(:license) { License.find_by_name('The MIT License') }
+
+      it 'should return false' do
+        expect(license.unrecognized_matcher?).to be_falsy
+      end
+    end
+  end
 end

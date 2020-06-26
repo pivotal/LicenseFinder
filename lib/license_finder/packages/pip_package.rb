@@ -8,9 +8,16 @@ module LicenseFinder
     INVALID_LICENSES = ['', 'UNKNOWN'].to_set
 
     def self.license_names_from_spec(spec)
-      license = spec['license'].to_s.strip
+      license_names = spec['license'].to_s.strip.split(' or ')
+      has_unrecognized_license = false
 
-      return [license] unless INVALID_LICENSES.include?(license)
+      license_names.each do |license_name|
+        license = License.find_by_name(license_name.strip)
+
+        has_unrecognized_license ||= license.unrecognized_matcher?
+      end
+
+      return license_names if !license_names.empty? && !has_unrecognized_license
 
       spec
         .fetch('classifiers', [])

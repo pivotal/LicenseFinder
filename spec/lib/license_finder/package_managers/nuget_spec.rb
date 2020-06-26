@@ -255,6 +255,22 @@ Cannot determine the packages folder to restore NuGet packages. Please specify e
           allow(quiet_logger).to receive(:info)
         end
 
+        context 'for projects with multiple solution files' do
+          before do
+            FileUtils.mkdir_p 'app'
+            FileUtils.touch 'app/MyApp1.sln'
+            FileUtils.touch 'app/MyApp2.sln'
+          end
+
+          it 'should call nuget restore on all solution files' do
+            nuget2 = Nuget.new project_path: Pathname.new('app'), log_directory: log_directory, logger: quiet_logger
+            expect(SharedHelpers::Cmd).to receive(:run).with("#{nuget_cmd} restore MyApp1.sln && #{nuget_cmd} restore MyApp2.sln")
+                                              .and_return([nuget_restore_output, '', cmd_success])
+            expect(SharedHelpers::Cmd).to_not receive(:run).with("#{nuget_cmd} restore MyApp1.sln && #{nuget_cmd} restore MyApp2.sln -PackagesDirectory /#{Dir.home}/.nuget/packages")
+            expect { nuget2.prepare }.to_not raise_error
+          end
+        end
+
         context 'for a nuget project' do
           before do
             FileUtils.mkdir_p 'app'
