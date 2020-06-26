@@ -61,6 +61,10 @@ module LicenseFinder
       name.hash
     end
 
+    def unrecognized_matcher?
+      matcher.is_a?(NoneMatcher)
+    end
+
     private
 
     attr_reader :short_name, :pretty_name, :other_names
