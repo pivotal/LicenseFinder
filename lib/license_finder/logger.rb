@@ -36,6 +36,8 @@ module LicenseFinder
         "\e[31m#{string}\e[0m"
       when :green
         "\e[32m#{string}\e[0m"
+      when :magenta
+        "\e[35m#{string}\e[0m"
       else
         string
       end
