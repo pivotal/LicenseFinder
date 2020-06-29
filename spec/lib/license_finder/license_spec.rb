@@ -8,7 +8,7 @@ module LicenseFinder
       it 'should create a compound OR license' do
         license = License.find_by_name('(MIT AND CC0-1.0)')
         expect(license.name).to eq '(MIT AND CC0-1.0)'
-        expect(license.is_a?AndLicense).to eq true
+        expect(license.is_a?(AndLicense)).to eq true
       end
       it 'should create populate sub licenses for compound AND' do
         license = License.find_by_name('(MIT AND CC0-1.0)')
@@ -23,7 +23,7 @@ module LicenseFinder
       it 'should create a compound OR license' do
         license = License.find_by_name('MIT OR CC0-1.0')
         expect(license.name).to eq 'MIT OR CC0-1.0'
-        expect(license.is_a?OrLicense).to eq true
+        expect(license.is_a?(OrLicense)).to eq true
       end
     end
   end

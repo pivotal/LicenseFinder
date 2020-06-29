@@ -243,6 +243,7 @@ module LicenseFinder
                              .license('manual', 'GPLv3')
                              .permit('GPLv3')
         decision_applier = described_class.new(decisions: decisions, packages: [dep])
+        dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_permitted
       end
@@ -253,6 +254,7 @@ module LicenseFinder
                              .license('manual', 'GPLv3')
                              .permit('GPLv3')
         decision_applier = described_class.new(decisions: decisions, packages: [dep])
+        dep = decision_applier.acknowledged.last
         expect(dep).not_to be_approved
         expect(dep).not_to be_permitted
       end
@@ -265,6 +267,7 @@ module LicenseFinder
                              .license('manual', 'GPLv3')
                              .permit('GPLv3')
         decision_applier = described_class.new(decisions: decisions, packages: [dep])
+        dep = decision_applier.acknowledged.last
         expect(dep).to be_approved
         expect(dep).to be_permitted
       end
@@ -273,6 +276,7 @@ module LicenseFinder
         decisions = Decisions.new
                              .add_package('manual', nil)
         decision_applier = described_class.new(decisions: decisions, packages: [dep])
+        dep = decision_applier.acknowledged.last
         expect(dep).not_to be_approved
         expect(dep).not_to be_permitted
       end
