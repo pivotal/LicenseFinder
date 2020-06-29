@@ -123,21 +123,31 @@ jobs:
 
 - name: bump-major
   plan:
-    - put: semver-version
+    - get: semver-version
       tags: ["private-worker"]
       params: {bump: major}
+    - put: semver-version
+      tags: ["private-worker"]
+      params: {file: semver-version/version}
+
 
 - name: bump-minor
   plan:
-    - put: semver-version
+    - get: semver-version
       tags: ["private-worker"]
       params: {bump: minor}
+    - put: semver-version
+      tags: ["private-worker"]
+      params: {file: semver-version/version}
 
 - name: bump-patch
   plan:
-    - put: semver-version
+    - get: semver-version
       tags: ["private-worker"]
       params: {bump: patch}
+    - put: semver-version
+      tags: ["private-worker"]
+      params: {file: semver-version/version}
 
 - name: release
   disable_manual_trigger: true
