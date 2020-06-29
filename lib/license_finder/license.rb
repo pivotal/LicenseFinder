@@ -78,12 +78,11 @@ module LicenseFinder
     end
   end
   class AndLicense < License
-
     def self.operator
       ' AND '
     end
 
-    def initialize(name,operator = AndLicense.operator)
+    def initialize(name, operator = AndLicense.operator)
       @short_name = name
       @pretty_name = name
       @url = nil
@@ -96,16 +95,14 @@ module LicenseFinder
     end
 
     attr_reader :sub_licenses
-
   end
 
   class OrLicense < AndLicense
-
     def self.operator
       ' OR '
     end
 
-    def initialize(name,operator = AndLicense.operator)
+    def initialize(name)
       super(name, OrLicense.operator)
     end
   end
