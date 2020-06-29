@@ -233,5 +233,49 @@ module LicenseFinder
         expect(decision_applier.restricted).to be_empty
       end
     end
+    describe 'AND compound licenses' do
+      it 'checks all AND condition: success case' do
+        dep = Package.new('dep', nil, spec_licenses: ['(GPLv3 AND MIT)'])
+        decisions = Decisions.new
+                             .add_package('manual', nil)
+                             .license('manual', 'MIT')
+                             .permit('MIT')
+                             .license('manual', 'GPLv3')
+                             .permit('GPLv3')
+        described_class.new(decisions: decisions, packages: [dep])
+        expect(dep).to be_approved
+        expect(dep).to be_permitted
+      end
+      it 'checks all AND condition: fail case' do
+        dep = Package.new('dep', nil, spec_licenses: ['(GPLv3 AND MIT)'])
+        decisions = Decisions.new
+                             .add_package('manual', nil)
+                             .license('manual', 'GPLv3')
+                             .permit('GPLv3')
+        described_class.new(decisions: decisions, packages: [dep])
+        expect(dep).not_to be_approved
+        expect(dep).not_to be_permitted
+      end
+    end
+    describe 'OR compound licenses' do
+      it 'checks at least one OR condition: success case' do
+        dep = Package.new('dep', nil, spec_licenses: ['(GPLv3 OR MIT)'])
+        decisions = Decisions.new
+                             .add_package('manual', nil)
+                             .license('manual', 'GPLv3')
+                             .permit('GPLv3')
+        described_class.new(decisions: decisions, packages: [dep])
+        expect(dep).to be_approved
+        expect(dep).to be_permitted
+      end
+      it 'checks failure when no OR condition' do
+        dep = Package.new('dep', nil, spec_licenses: ['(GPLv3 OR MIT)'])
+        decisions = Decisions.new
+                             .add_package('manual', nil)
+        described_class.new(decisions: decisions, packages: [dep])
+        expect(dep).not_to be_approved
+        expect(dep).not_to be_permitted
+      end
+    end
   end
 end
