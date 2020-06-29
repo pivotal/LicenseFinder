@@ -242,8 +242,7 @@ module LicenseFinder
                              .permit('MIT')
                              .license('manual', 'GPLv3')
                              .permit('GPLv3')
-        decision_applier = described_class.new(decisions: decisions, packages: [dep])
-        dep = decision_applier.acknowledged.last
+        described_class.new(decisions: decisions, packages: [dep])
         expect(dep).to be_approved
         expect(dep).to be_permitted
       end
@@ -253,8 +252,7 @@ module LicenseFinder
                              .add_package('manual', nil)
                              .license('manual', 'GPLv3')
                              .permit('GPLv3')
-        decision_applier = described_class.new(decisions: decisions, packages: [dep])
-        dep = decision_applier.acknowledged.last
+        described_class.new(decisions: decisions, packages: [dep])
         expect(dep).not_to be_approved
         expect(dep).not_to be_permitted
       end
@@ -266,8 +264,7 @@ module LicenseFinder
                              .add_package('manual', nil)
                              .license('manual', 'GPLv3')
                              .permit('GPLv3')
-        decision_applier = described_class.new(decisions: decisions, packages: [dep])
-        dep = decision_applier.acknowledged.last
+        described_class.new(decisions: decisions, packages: [dep])
         expect(dep).to be_approved
         expect(dep).to be_permitted
       end
@@ -275,8 +272,7 @@ module LicenseFinder
         dep = Package.new('dep', nil, spec_licenses: ['(GPLv3 OR MIT)'])
         decisions = Decisions.new
                              .add_package('manual', nil)
-        decision_applier = described_class.new(decisions: decisions, packages: [dep])
-        dep = decision_applier.acknowledged.last
+        described_class.new(decisions: decisions, packages: [dep])
         expect(dep).not_to be_approved
         expect(dep).not_to be_permitted
       end
