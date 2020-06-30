@@ -1,3 +1,10 @@
+# [6.6.1] / 2020-06-30
+
+### Changed
+* Handle multiple solution files for nuget [#173021333] - [040d9559](https://github.com/pivotal/LicenseFinder/commit/040d9559a4bda07490255cc34c1a7891081bc511) 
+* matches license names from pypi api call with known licenses to avoid returning misformatted licenses [#173421573] - [6b96d746](https://github.com/pivotal/LicenseFinder/commit/6b96d74600034abcacee6ed2b322aa3abfaa0992) - Jeff Jun
+* Update Nuget Package Manager prepare command - [6ac07066](https://github.com/pivotal/LicenseFinder/commit/6ac070668955bc034da1647658440ce5bb0d9bd2) - Jason Smith
+
 # [6.6.0] / 2020-06-22
 
 # [6.5.0] / 2020-06-01
@@ -877,3 +884,4 @@ Bugfixes:
 [6.4.0]: https://github.com/pivotal/LicenseFinder/compare/v6.3.0...v6.4.0
 [6.5.0]: https://github.com/pivotal/LicenseFinder/compare/v6.4.0...v6.5.0
 [6.6.0]: https://github.com/pivotal/LicenseFinder/compare/v6.5.0...v6.6.0
+[6.6.1]: https://github.com/pivotal/LicenseFinder/compare/v6.6.0...v6.6.1
