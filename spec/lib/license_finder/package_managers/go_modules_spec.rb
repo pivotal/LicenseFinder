@@ -8,7 +8,7 @@ module LicenseFinder
     it_behaves_like 'a PackageManager'
 
     let(:src_path) { '/workspace/code' }
-    let(:sum_path) { "#{src_path}/go.sum" }
+    let(:mod_path) { "#{src_path}/go.mod" }
     let(:vendor_path) { "#{src_path}/vendor" }
     let(:go_list_string) do
       "foo,,/workspace/code/\ngopkg.in/check.v1,v0.0.0-20161208181325-20d25e280405,"\
@@ -22,7 +22,7 @@ module LicenseFinder
         FakeFS.activate!
 
         FileUtils.mkdir_p(vendor_path)
-        File.write(sum_path, content)
+        File.write(mod_path, content)
 
         allow(SharedHelpers::Cmd).to receive(:run).with("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all").and_return(go_list_string)
       end
@@ -33,11 +33,11 @@ module LicenseFinder
 
       let(:content) do
         FakeFS.without do
-          fixture_from('go.sum')
+          fixture_from('go.mod')
         end
       end
 
-      it 'finds all the packages all go.sum files' do
+      it 'finds all the packages all go.mod files' do
         packages = subject.current_packages
 
         expect(packages.length).to eq 2
@@ -65,7 +65,7 @@ module LicenseFinder
             .and_return(go_list_string)
         end
 
-        it 'finds all the packages all go.sum files' do
+        it 'finds all the packages all go.mod files' do
           packages = subject.current_packages
 
           expect(packages.length).to eq 2

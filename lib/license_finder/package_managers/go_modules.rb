@@ -4,7 +4,7 @@ require 'license_finder/packages/go_package'
 
 module LicenseFinder
   class GoModules < PackageManager
-    PACKAGES_FILE = 'go.sum'
+    PACKAGES_FILE = 'go.mod'
 
     class << self
       def takes_priority_over
@@ -17,7 +17,7 @@ module LicenseFinder
     end
 
     def active?
-      sum_files?
+      mod_files?
     end
 
     def current_packages
@@ -41,11 +41,11 @@ module LicenseFinder
       info_output.split("\n")
     end
 
-    def sum_files?
-      sum_file_paths.any?
+    def mod_files?
+      mod_file_paths.any?
     end
 
-    def sum_file_paths
+    def mod_file_paths
       Dir[project_path.join(PACKAGES_FILE)]
     end
 

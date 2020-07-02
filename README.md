@@ -183,7 +183,7 @@ languages, as long as that language has a package definition in the project dire
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
 * `Gopkg.lock` file (for `dep`)
-* `go.sum` file (for `go mod`)
+* `go.mod` file (for `go mod`)
 * `vendor.conf` file (for `trash`)
 * `yarn.lock` file (for `yarn`)
 * `conanfile.txt` file (for `conan`)
