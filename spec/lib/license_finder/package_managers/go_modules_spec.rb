@@ -10,9 +10,11 @@ module LicenseFinder
     let(:src_path) { '/workspace/code' }
     let(:mod_path) { "#{src_path}/go.mod" }
     let(:vendor_path) { "#{src_path}/vendor" }
+    let(:go_list_format) { '{{ if not .Standard }}{{ $mod := (or .Module.Replace .Module) }}{{ $mod.Path }},{{ $mod.Version }},{{ or $mod.Dir .Dir }}{{ end }}' }
     let(:go_list_string) do
       "foo,,/workspace/code/\ngopkg.in/check.v1,v0.0.0-20161208181325-20d25e280405,"\
 "/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/check.v1\n"\
+"gopkg.in/yaml.v2,v2.2.1,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2\n"\
 'gopkg.in/yaml.v2,v2.2.1,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2'
     end
     subject { GoModules.new(project_path: Pathname(src_path), logger: double(:logger, active: nil)) }
@@ -24,7 +26,7 @@ module LicenseFinder
         FileUtils.mkdir_p(vendor_path)
         File.write(mod_path, content)
 
-        allow(SharedHelpers::Cmd).to receive(:run).with("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all").and_return(go_list_string)
+        allow(SharedHelpers::Cmd).to receive(:run).with("GO111MODULE=on go list -f '#{go_list_format}' all").and_return(go_list_string)
       end
 
       after do
@@ -58,10 +60,10 @@ module LicenseFinder
       context 'when compute is not allowed on vendor' do
         before do
           allow(SharedHelpers::Cmd).to receive(:run)
-            .with("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+            .with("GO111MODULE=on go list -f '#{go_list_format}' all")
             .and_return(['', "go list -m: can't compute 'all' using the vendor directory\n\t(Use -mod=mod or -mod=readonly to bypass.)\n", 1])
           allow(SharedHelpers::Cmd).to receive(:run)
-            .with("GO111MODULE=on go list -m -mod=mod -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+            .with("GO111MODULE=on go list -mod=mod -f '#{go_list_format}' all")
             .and_return(go_list_string)
         end
 
