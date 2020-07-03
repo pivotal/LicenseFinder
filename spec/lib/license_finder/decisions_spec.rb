@@ -301,6 +301,15 @@ module LicenseFinder
         expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
 
+      it 'inheritates rules from gem decision file' do
+        gem_spec = OpenStruct.new(gem_dir: 'gem-name')
+        allow(Gem::Specification).to receive(:find_by_name).with('gem-name').and_return(gem_spec)
+        allow_any_instance_of(Pathname).to receive(:read).and_return(yml)
+
+        decisions = subject.inherit_from({ 'gem' => 'gem-name', 'path' => 'doc/decisions.yml' })
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
+      end
+
       it 'inheritates rules from a private remote decision file' do
         stub_request(:get, 'https://example.com/config/inherit.yml')
           .with(headers: { 'Authorization' => 'Bearer Token' })
