@@ -190,7 +190,7 @@ module LicenseFinder
     def inherit_from(filepath_info)
       decisions =
         if filepath_info.is_a?(Hash)
-          open_uri(filepath_info['url'], filepath_info['authorization']).read
+          resolve_inheritance(filepath_info)
         elsif filepath_info =~ %r{^https?://}
           open_uri(filepath_info).read
         else
@@ -200,6 +200,22 @@ module LicenseFinder
       add_decision [:inherit_from, filepath_info]
       @inherited_decisions << filepath_info
       restore_inheritance(decisions)
+    end
+
+    def resolve_inheritance(filepath_info)
+      if (gem_name = filepath_info['gem'])
+        Pathname(gem_config_path(gem_name, filepath_info['path'])).read
+      else
+        open_uri(filepath_info['url'], filepath_info['authorization']).read
+      end
+    end
+
+    def gem_config_path(gem_name, relative_config_path)
+      spec = Gem::Specification.find_by_name(gem_name)
+      File.join(spec.gem_dir, relative_config_path)
+    rescue Gem::LoadError => e
+      raise Gem::LoadError,
+            "Unable to find gem #{gem_name}; is the gem installed? #{e}"
     end
 
     def remove_inheritance(filepath)
