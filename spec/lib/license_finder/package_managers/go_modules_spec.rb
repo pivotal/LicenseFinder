@@ -79,12 +79,6 @@ module LicenseFinder
       end
     end
 
-    describe '.prepare_command' do
-      it 'returns the correct package management command' do
-        expect(subject.prepare_command).to eq('GO111MODULE=on go mod tidy && GO111MODULE=on go mod vendor')
-      end
-    end
-
     describe '.takes_priority_over' do
       it 'returns the package manager it takes priority over' do
         expect(described_class.takes_priority_over).to eq(Go15VendorExperiment)

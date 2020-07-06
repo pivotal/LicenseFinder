@@ -12,10 +12,6 @@ module LicenseFinder
       end
     end
 
-    def prepare_command
-      'GO111MODULE=on go mod tidy && GO111MODULE=on go mod vendor'
-    end
-
     def active?
       mod_files?
     end
