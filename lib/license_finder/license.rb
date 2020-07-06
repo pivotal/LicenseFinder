@@ -88,7 +88,8 @@ module LicenseFinder
       @url = nil
       @matcher = NoneMatcher.new
       # removes heading and trailing parentesis and splits
-      names = name[1..-2].split(operator)
+      name = name[1..-2] if name.start_with?('(')
+      names = name.split(operator)
       @sub_licenses = names.map do |sub_name|
         License.find_by_name(sub_name)
       end

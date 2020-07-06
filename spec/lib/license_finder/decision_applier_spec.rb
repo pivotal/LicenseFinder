@@ -246,6 +246,18 @@ module LicenseFinder
         expect(dep).to be_approved
         expect(dep).to be_permitted
       end
+      it 'checks all AND condition: success case without brackets' do
+        dep = Package.new('dep', nil, spec_licenses: ['BSD-3-Clause OR MIT'])
+        decisions = Decisions.new
+                             .add_package('manual', nil)
+                             .license('manual', 'BSD-3-Clause')
+                             .permit('MIT')
+                             .license('manual', 'MIT')
+                             .permit('GPLv3')
+        described_class.new(decisions: decisions, packages: [dep])
+        expect(dep).to be_approved
+        expect(dep).to be_permitted
+      end
       it 'checks all AND condition: fail case' do
         dep = Package.new('dep', nil, spec_licenses: ['(GPLv3 AND MIT)'])
         decisions = Decisions.new
