@@ -466,7 +466,7 @@ module LicenseFinder
       end
 
       def install
-        shell_out('rebar get-deps')
+        shell_out('rebar3 get-deps')
       end
     end
 

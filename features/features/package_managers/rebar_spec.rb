@@ -11,6 +11,12 @@ describe 'Rebar Dependencies' do
   specify 'are shown in reports' do
     LicenseFinder::TestingDSL::RebarProject.create
     erlang_developer.run_license_finder
-    expect(erlang_developer).to be_seeing_line 'envy, "BRANCH: master", "Apache 2.0"'
+    expect(erlang_developer).to be_seeing_line 'envy, 0.5.0, MIT'
+    expect(erlang_developer).to be_seeing_line 'hackney, 1.6.0, "Apache 2.0"'
+    expect(erlang_developer).to be_seeing_line 'certifi, 0.4.0, BSD'
+    expect(erlang_developer).to be_seeing_line 'idna, 1.2.0, MIT'
+    expect(erlang_developer).to be_seeing_line 'metrics, 1.0.1, BSD'
+    expect(erlang_developer).to be_seeing_line 'mimerl, 1.0.2, MIT'
+    expect(erlang_developer).to be_seeing_line 'ssl_verify_fun, 1.1.0, MIT'
   end
 end

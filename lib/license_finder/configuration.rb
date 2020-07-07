@@ -35,7 +35,7 @@ module LicenseFinder
     end
 
     def rebar_deps_dir
-      path = get(:rebar_deps_dir) || 'deps'
+      path = get(:rebar_deps_dir) || '_build/default/lib'
       project_path.join(path).expand_path
     end
 
