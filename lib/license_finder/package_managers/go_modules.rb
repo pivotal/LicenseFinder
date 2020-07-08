@@ -31,6 +31,8 @@ module LicenseFinder
     def packages_info
       Dir.chdir(project_path) do
         # Explanations:
+        # * Only list dependencies (packages not listed in the project directory)
+        #   (.DepOnly)
         # * Ignore standard library packages
         #   (not .Standard)
         # * Replacement modules are respected
@@ -38,7 +40,7 @@ module LicenseFinder
         # * Module cache directory or (vendored) package directory
         #   (or $mod.Dir .Dir)
         format_str = \
-          '{{ if not .Standard }}'\
+          '{{ if and (.DepOnly) (not .Standard) }}'\
             '{{ $mod := (or .Module.Replace .Module) }}'\
             '{{ $mod.Path }},{{ $mod.Version }},{{ or $mod.Dir .Dir }}'\
           '{{ end }}'
@@ -49,8 +51,11 @@ module LicenseFinder
         #
         # Instead, the owning module is listed for each imported package. This better
         # matches the implementation of other Go package managers.
-        info_output, stderr, _status = Cmd.run("GO111MODULE=on go list -f '#{format_str}' all")
-        info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -mod=mod -f '#{format_str}' all") if stderr =~ Regexp.compile("can't compute 'all' using the vendor directory")
+        #
+        # TODO: Figure out a way to make the vendor directory work (i.e. remove the
+        # -mod=readonly flag). Each of the imported packages gets listed separatly,
+        # confusing the issue as to which package is the root of the module.
+        info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -mod=readonly -deps -f '#{format_str}' ./...")
 
         # Since many packages may belong to a single module, #uniq is used to deduplicate
         info_output.split("\n").uniq
