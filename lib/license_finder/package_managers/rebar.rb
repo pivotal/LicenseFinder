@@ -10,7 +10,7 @@ module LicenseFinder
 
     def current_packages
       rebar_deps.map do |name, version|
-        licenses, homepage = rebar_pkgs(name)
+        licenses, homepage = dep_info(name)
         RebarPackage.new(
           name,
           version,
@@ -46,7 +46,7 @@ module LicenseFinder
         end.compact
     end
 
-    def rebar_pkgs(name)
+    def dep_info(name)
       command = "#{@command} pkgs #{name}"
       stdout, _, status = Cmd.run(command)
       return [nil, nil] unless status.success?
