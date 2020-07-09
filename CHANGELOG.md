@@ -1,7 +1,7 @@
 # [6.6.2] / 2020-07-09
 
 ### Added
-* support for rebar3 [Removed] support for rebar2 [#173637980] - [b20e7444](https://github.com/pivotal/LicenseFinder/commit/b20e7444c147d8dbfa46eb4e8e549e03be751e02) - Jeff Jun
+* support for rebar3 - [b20e7444](https://github.com/pivotal/LicenseFinder/commit/b20e7444c147d8dbfa46eb4e8e549e03be751e02) - Jeff Jun
 * Support for Go modules projects outside of the current working directory - [56b3bec6](https://github.com/pivotal/LicenseFinder/commit/56b3bec632b3884ce4cad538742b4a13c55fd7c5)
 
 ### Changed
@@ -12,7 +12,7 @@
 * handle empty case for mix dependencies [#173637843] - [fc34b281](https://github.com/pivotal/LicenseFinder/commit/fc34b2813925a709addde675849e199b05fc4a23) - Jeff Jun
 
 ### Removed
-[Added] support for rebar3 * support for rebar2 [#173637980] - [b20e7444](https://github.com/pivotal/LicenseFinder/commit/b20e7444c147d8dbfa46eb4e8e549e03be751e02) - Jeff Jun
+* support for rebar2 [#173637980] - [b20e7444](https://github.com/pivotal/LicenseFinder/commit/b20e7444c147d8dbfa46eb4e8e549e03be751e02) - Jeff Jun
 * Removed the unnecessary prepare command for Go modules - [284cc5c8](https://github.com/pivotal/LicenseFinder/commit/284cc5c821270a6e56275e32bac836a3e451f46b)
 
 # [6.6.1] / 2020-06-30
