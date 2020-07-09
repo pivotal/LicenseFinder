@@ -43,7 +43,7 @@ and give you an actionable exception report.
 
 ### Experimental project types
 
-* Erlang (via `rebar`)
+* Erlang (via `rebar3`)
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
@@ -175,7 +175,7 @@ languages, as long as that language has a package definition in the project dire
 * `bower.json` (for `bower`)
 * `Podfile` (for `pod`)
 * `Cartfile` (for `carthage`)
-* `rebar.config` (for `rebar`)
+* `rebar.config` (for `rebar3`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `nuget`)
 * `*.csproj` (for `dotnet`)
@@ -412,7 +412,7 @@ If you have a gradle project, you can invoke gradle with a custom script by
 passing (for example) `--gradle_command gradlew` to `license_finder` or
 `license_finder report`.
 
-Similarly you can invoke a custom rebar script with `--rebar_command rebar2`.
+Similarly you can invoke a custom rebar script with `--rebar_command rebar`.
 If you store rebar dependencies in a custom directory (by setting `deps_dir` in
 `rebar.config`), set `--rebar_deps_dir`.
 

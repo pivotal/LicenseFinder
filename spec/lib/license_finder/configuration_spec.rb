@@ -158,12 +158,12 @@ module LicenseFinder
           { rebar_deps_dir: nil },
           'rebar_deps_dir' => nil
         )
-        expect(subject.rebar_deps_dir.to_s).to end_with 'deps'
+        expect(subject.rebar_deps_dir.to_s).to end_with '_build/default/lib'
       end
 
       it 'prepends project path to default path if project_path option is set' do
         subject = described_class.new({ project_path: 'magic_path' }, {})
-        expect(subject.rebar_deps_dir.to_s).to end_with 'magic_path/deps'
+        expect(subject.rebar_deps_dir.to_s).to end_with 'magic_path/_build/default/lib'
       end
 
       it 'prepends project path to provided value' do

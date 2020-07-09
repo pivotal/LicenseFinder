@@ -48,11 +48,13 @@ ENV JAVA_HOME=/opt/jdk-12.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 RUN java -version
 
-# install python and rebar
-RUN apt-get install -y python rebar
+# install rebar3
+RUN curl -o rebar3 https://s3.amazonaws.com/rebar3/rebar3 && \
+    sudo chmod +x rebar3 && \
+    sudo mv rebar3 /usr/local/bin/rebar3
 
-# install and update python-pip
-RUN apt-get install -y python-pip python3-pip && \
+# install and update python and python-pip
+RUN apt-get install -y python python-pip python3-pip && \
     pip2 install --no-cache-dir --upgrade pip==$PIP_INSTALL_VERSION  && \
     pip3 install --no-cache-dir --upgrade pip==$PIP3_INSTALL_VERSION
 
