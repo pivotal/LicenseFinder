@@ -1,3 +1,14 @@
+# [6.6.2] / 2020-07-09
+
+### Added
+* support for rebar3 [Removed] support for rebar2 [#173637980] - [b20e7444](https://github.com/pivotal/LicenseFinder/commit/b20e7444c147d8dbfa46eb4e8e549e03be751e02) - Jeff Jun
+
+### Fixed
+* handle empty case for mix dependencies [#173637843] - [fc34b281](https://github.com/pivotal/LicenseFinder/commit/fc34b2813925a709addde675849e199b05fc4a23) - Jeff Jun
+
+### Removed
+[Added] support for rebar3 * support for rebar2 [#173637980] - [b20e7444](https://github.com/pivotal/LicenseFinder/commit/b20e7444c147d8dbfa46eb4e8e549e03be751e02) - Jeff Jun
+
 # [6.6.1] / 2020-06-30
 
 ### Changed
@@ -885,3 +896,4 @@ Bugfixes:
 [6.5.0]: https://github.com/pivotal/LicenseFinder/compare/v6.4.0...v6.5.0
 [6.6.0]: https://github.com/pivotal/LicenseFinder/compare/v6.5.0...v6.6.0
 [6.6.1]: https://github.com/pivotal/LicenseFinder/compare/v6.6.0...v6.6.1
+[6.6.2]: https://github.com/pivotal/LicenseFinder/compare/v6.6.1...v6.6.2
