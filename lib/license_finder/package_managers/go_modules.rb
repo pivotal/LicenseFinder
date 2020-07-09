@@ -4,7 +4,7 @@ require 'license_finder/packages/go_package'
 
 module LicenseFinder
   class GoModules < PackageManager
-    PACKAGES_FILE = 'go.sum'
+    PACKAGES_FILE = 'go.mod'
 
     class << self
       def takes_priority_over
@@ -12,12 +12,8 @@ module LicenseFinder
       end
     end
 
-    def prepare_command
-      'GO111MODULE=on go mod tidy && GO111MODULE=on go mod vendor'
-    end
-
     def active?
-      sum_files?
+      mod_files?
     end
 
     def current_packages
@@ -33,19 +29,44 @@ module LicenseFinder
     private
 
     def packages_info
-      info_output, stderr, _status = Cmd.run("GO111MODULE=on go list -m -f '{{.Path}},{{.Version}},{{.Dir}}' all")
-      if stderr =~ Regexp.compile("can't compute 'all' using the vendor directory")
-        info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -m -mod=mod -f '{{.Path}},{{.Version}},{{.Dir}}' all")
+      Dir.chdir(project_path) do
+        # Explanations:
+        # * Only list dependencies (packages not listed in the project directory)
+        #   (.DepOnly)
+        # * Ignore standard library packages
+        #   (not .Standard)
+        # * Replacement modules are respected
+        #   (or .Module.Replace .Module)
+        # * Module cache directory or (vendored) package directory
+        #   (or $mod.Dir .Dir)
+        format_str = \
+          '{{ if and (.DepOnly) (not .Standard) }}'\
+            '{{ $mod := (or .Module.Replace .Module) }}'\
+            '{{ $mod.Path }},{{ $mod.Version }},{{ or $mod.Dir .Dir }}'\
+          '{{ end }}'
+
+        # The module list flag (`-m`) is intentionally not used here. If the module
+        # dependency tree were followed, transitive dependencies that are never imported
+        # may be included.
+        #
+        # Instead, the owning module is listed for each imported package. This better
+        # matches the implementation of other Go package managers.
+        #
+        # TODO: Figure out a way to make the vendor directory work (i.e. remove the
+        # -mod=readonly flag). Each of the imported packages gets listed separatly,
+        # confusing the issue as to which package is the root of the module.
+        info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -mod=readonly -deps -f '#{format_str}' ./...")
+
+        # Since many packages may belong to a single module, #uniq is used to deduplicate
+        info_output.split("\n").uniq
       end
-
-      info_output.split("\n")
     end
 
-    def sum_files?
-      sum_file_paths.any?
+    def mod_files?
+      mod_file_paths.any?
     end
 
-    def sum_file_paths
+    def mod_file_paths
       Dir[project_path.join(PACKAGES_FILE)]
     end
 
