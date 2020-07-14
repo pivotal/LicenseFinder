@@ -327,7 +327,7 @@ you should manually research what the actual license is.  When you
 have established the real license, you can record it with:
 
 ```sh
-$ license_finder dependencies add my_unknown_dependency MIT --homepage="www.unknown-code.org"
+$ license_finder licenses add my_unknown_dependency MIT --homepage="www.unknown-code.org"
 ```
 
 This command would assign the MIT license to the dependency
