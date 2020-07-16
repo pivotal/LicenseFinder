@@ -30,7 +30,7 @@ module LicenseFinder
     private
 
     def deps
-      command = "#{package_management_command_with_path} query-deps"
+      command = "#{package_management_command_with_path} QUERY='name fetch_method repo version absolute_path' query-deps"
       stdout, stderr, status = Cmd.run(command)
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
       stdout.each_line.map(&:strip).select { |line| not line.start_with?('make') }

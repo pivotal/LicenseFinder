@@ -2,26 +2,28 @@
 
 require 'spec_helper'
 
+# /usr/lib/ruby/2.7.0/open3.rb:101:in
+
 module LicenseFinder
   describe ErlangmkPackage do
     subject do
       described_class.new_from_show_dep(
-        'DEPI	prometheus	WIP_fetch_method	4.5.0	https://hex.pm/packages/prometheus	/erlangmk/project/path/deps/prometheus'
+        'rabbit_common: credentials_obfuscation hex https://hex.pm/packages/credentials_obfuscation 2.0.0 /home/lbakken/development/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/credentials_obfuscation'
       )
     end
 
-    its(:name) { should == 'prometheus' }
-    its(:version) { should == '4.5.0' }
-    its(:summary) { should eq '' }
+    its(:name) { should == 'credentials_obfuscation' }
+    its(:version) { should == '2.0.0' }
+    its(:summary) { should == '' }
     its(:description) { should == '' }
-    its(:homepage) { should == 'https://hex.pm/packages/prometheus' }
+    its(:homepage) { should == 'https://hex.pm/packages/credentials_obfuscation' }
     its(:groups) { should == [] }
     its(:children) { should == [] }
-    its(:install_path) { should eq '/erlangmk/project/path/deps/prometheus' }
+    its(:install_path) { should eq '/home/lbakken/development/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/credentials_obfuscation' }
     its(:package_manager) { should eq 'Erlangmk' }
 
     context 'when public github package https://github.com/rabbitmq/rabbitmq-cli.git' do
-      let(:dep) { 'DEPI	  rabbitmq_cli	WIP_fetch_method	  v3.8.3-rc.1	https://github.com/rabbitmq/rabbitmq-cli.git	/erlangmk/project/path/deps/rabbitmq_cli' }
+      let(:dep) { 'parent: rabbitmq_cli git https://github.com/rabbitmq/rabbitmq-cli.git v3.8.3-rc.1 /erlangmk/project/path/deps/rabbitmq_cli' }
 
       describe '.dep_name' do
         it { expect(described_class.dep_name(dep)).to eql('rabbitmq_cli') }
@@ -31,8 +33,8 @@ module LicenseFinder
         it { expect(described_class.dep_version(dep)).to eql('3.8.3-rc.1') }
       end
 
-      describe '.dep_url' do
-        it { expect(described_class.dep_url(dep)).to eql('https://github.com/rabbitmq/rabbitmq-cli') }
+      describe '.dep_repo' do
+        it { expect(described_class.dep_repo(dep)).to eql('https://github.com/rabbitmq/rabbitmq-cli') }
       end
 
       describe '.dep_path' do
@@ -41,7 +43,7 @@ module LicenseFinder
     end
 
     context 'when private github package' do
-      let(:dep) { 'DEPI	  zstd	WIP_fetch_method	master	git@github.com:rabbitmq/zstd-erlang	/erlangmk/project/path/deps/zstd' }
+      let(:dep) { 'parent: zstd git+ssh git@github.com:rabbitmq/zstd-erlang master /erlangmk/project/path/deps/zstd' }
 
       describe '.dep_name' do
         it { expect(described_class.dep_name(dep)).to eql('zstd') }
@@ -51,8 +53,8 @@ module LicenseFinder
         it { expect(described_class.dep_version(dep)).to eql('master') }
       end
 
-      describe '.dep_url' do
-        it { expect(described_class.dep_url(dep)).to eql('https://github.com/rabbitmq/zstd-erlang') }
+      describe '.dep_repo' do
+        it { expect(described_class.dep_repo(dep)).to eql('https://github.com/rabbitmq/zstd-erlang') }
       end
 
       describe '.dep_path' do
