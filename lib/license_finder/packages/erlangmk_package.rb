@@ -19,6 +19,7 @@ module LicenseFinder
   class ErlangmkPackage < Package
 
     @@word_re = Regexp.new('^\w+$')
+    @@version_re = Regexp.new('\d+\.\d+\.\d+')
 
     class << self
       def new_from_show_dep(dep)
@@ -83,7 +84,11 @@ module LicenseFinder
 
       def dep_version_valid?(dep_version_str)
         dvs = dep_version_str.delete_prefix('v')
-        Gem::Version.correct?(dvs)
+        if @@version_re.match?(dvs)
+          Gem::Version.correct?(dvs)
+        else
+          @@word_re.match?(dep_version_str)
+        end
       end
     end
 

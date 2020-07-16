@@ -15,6 +15,12 @@ module LicenseFinder
     # cd features/fixtures/erlangmk
     # make fetch-deps
     # make query-deps
+    #
+    # Also NOTE:
+    #
+    # This line was added manually to test the case where a git branch is the "version":
+    #
+    # erlangmk_spec_fake_lib: another_fake_lib git https://github.com/rabbitmq/rabbitmq-fake-lib master
 
     query_deps_output = <<-QUERYDEPSOUTPUT
 make[1]: Entering directory '/home/lbakken/development/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_management'
@@ -370,6 +376,7 @@ rabbitmq_web_dispatch: rabbit git_rmq https://github.com/rabbitmq/rabbitmq-serve
 rabbitmq_web_dispatch: cowboy hex https://hex.pm/packages/cowboy 2.6.1
 rabbitmq_management_agent: rabbit_common git_rmq https://github.com/rabbitmq/rabbitmq-common v3.8.5
 rabbitmq_management_agent: rabbit git_rmq https://github.com/rabbitmq/rabbitmq-server v3.8.5
+erlangmk_spec_fake_lib: another_fake_lib git https://github.com/rabbitmq/rabbitmq-fake-lib master
     QUERYDEPSOUTPUT
 
     describe '#package_management_command' do
@@ -424,7 +431,7 @@ rabbitmq_management_agent: rabbit git_rmq https://github.com/rabbitmq/rabbitmq-s
           expect(
             erlangmk.current_packages.size
           ).to eql(
-            41
+            42
           )
         end
       end
