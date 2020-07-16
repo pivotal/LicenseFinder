@@ -8,6 +8,14 @@ module LicenseFinder
 
     it_behaves_like 'a PackageManager'
 
+    # NOTE:
+    # To generate the following output ensure Erlang and Elixir are in your PATH
+    # and run the following commands:
+    #
+    # cd features/fixtures/erlangmk
+    # make fetch-deps
+    # make query-deps
+
     query_deps_output = <<-QUERYDEPSOUTPUT
 make[1]: Entering directory '/home/lbakken/development/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/rabbitmq_management'
 make[2]: Entering directory '/home/lbakken/development/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/ranch'
@@ -416,7 +424,7 @@ rabbitmq_management_agent: rabbit git_rmq https://github.com/rabbitmq/rabbitmq-s
           expect(
             erlangmk.current_packages.size
           ).to eql(
-            11
+            41
           )
         end
       end
