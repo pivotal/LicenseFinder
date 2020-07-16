@@ -30,14 +30,10 @@ module LicenseFinder
     private
 
     def deps
-      command = "#{package_management_command_with_path} list-deps-info"
+      command = "#{package_management_command_with_path} query-deps"
       stdout, stderr, status = Cmd.run(command)
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
-
-      stdout
-        .each_line
-        .map(&:strip)
-        .select { |line| line.start_with?('DEPI') }
+      stdout.each_line.map(&:strip).select { |line| not line.start_with?('make') }
     end
   end
 end

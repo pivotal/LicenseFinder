@@ -41,7 +41,7 @@ module LicenseFinder
 
       def raise_if_not_valid(dep)
         invalid_dep = "'#{dep}' does not look like a valid Erlank.mk dependency"
-	valid_dep_example = "A valid dependency example: 'DEPI	  ra	WIP_fetch_method	1.0.7	https://hex.pm/packages/ra	/erlangmk/project/path/deps/ra'"
+        valid_dep_example = "A valid dependency example: 'DEPI	  ra	WIP_fetch_method	1.0.7	https://hex.pm/packages/ra	/erlangmk/project/path/deps/ra'"
         raise(InvalidErlangmkPackageError, "#{invalid_dep}. #{valid_dep_example}") unless valid?(dep)
       end
 
