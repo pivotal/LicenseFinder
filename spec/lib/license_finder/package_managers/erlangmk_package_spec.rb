@@ -8,7 +8,8 @@ module LicenseFinder
   describe ErlangmkPackage do
     subject do
       described_class.new_from_show_dep(
-        'rabbit_common: credentials_obfuscation hex https://hex.pm/packages/credentials_obfuscation 2.0.0 /home/lbakken/development/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/credentials_obfuscation'
+        'rabbit_common: credentials_obfuscation hex https://hex.pm/packages/credentials_obfuscation 2.0.0' \
+        ' /home/lbakken/development/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/credentials_obfuscation'
       )
     end
 

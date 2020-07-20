@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 
 class InvalidErlangmkPackageError < ArgumentError
@@ -17,12 +19,10 @@ end
 # rabbit_common: credentials_obfuscation hex https://hex.pm/packages/credentials_obfuscation 2.0.0 /home/lbakken/development/rabbitmq/umbrella/deps/credentials_obfuscation
 # lager: goldrush git https://github.com/DeadZen/goldrush.git 0.1.9 /home/lbakken/development/rabbitmq/umbrella/deps/goldrush
 
-
 module LicenseFinder
   class ErlangmkPackage < Package
-
-    @@word_re = Regexp.new('^\w+$')
-    @@version_re = Regexp.new('\d+\.\d+\.\d+')
+    @word_re = Regexp.new('^\w+$')
+    @version_re = Regexp.new('\d+\.\d+\.\d+')
 
     class << self
       def new_from_show_dep(dep)
@@ -63,7 +63,7 @@ module LicenseFinder
 
       def valid?(dep)
         dep_parent, dep_name, dep_fetch_method, dep_repo, dep_version_str, _dep_absolute_path = dep.split
-        dep_valid?(dep_parent) and dep_valid?(dep_name) and dep_valid?(dep_fetch_method) and dep_repo_valid?(dep_repo) and dep_version_valid?(dep_version_str)
+        dep_valid?(dep_parent) && dep_valid?(dep_name) && dep_valid?(dep_fetch_method) && dep_repo_valid?(dep_repo) && dep_version_valid?(dep_version_str)
       end
 
       private
@@ -77,14 +77,14 @@ module LicenseFinder
       end
 
       def dep_valid?(arg_dep)
-        return false if arg_dep.nil? or arg_dep.empty?
+        return false if arg_dep.nil? || arg_dep.empty?
 
         dep = arg_dep.chomp(':')
-        @@word_re.match?(dep)
+        @word_re.match?(dep)
       end
 
       def dep_repo_valid?(arg_dep_repo)
-        return false if arg_dep_repo.nil? or arg_dep_repo.empty?
+        return false if arg_dep_repo.nil? || arg_dep_repo.empty?
 
         dep_repo = fixup_dep_repo(arg_dep_repo)
         _dep_repo = URI.parse(dep_repo)
@@ -92,13 +92,13 @@ module LicenseFinder
       end
 
       def dep_version_valid?(arg_dep_version_str)
-        return false if arg_dep_version_str.nil? or arg_dep_version_str.empty?
+        return false if arg_dep_version_str.nil? || arg_dep_version_str.empty?
 
         dep_version_str = fixup_dep_version(arg_dep_version_str)
-        if @@version_re.match?(dep_version_str)
+        if @version_re.match?(dep_version_str)
           Gem::Version.correct?(dep_version_str)
         else
-          @@word_re.match?(arg_dep_version_str)
+          @word_re.match?(arg_dep_version_str)
         end
       end
     end
@@ -106,6 +106,5 @@ module LicenseFinder
     def package_manager
       'Erlangmk'
     end
-
   end
 end
