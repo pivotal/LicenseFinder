@@ -23,6 +23,7 @@ module LicenseFinder
   class ErlangmkPackage < Package
     @word_re = Regexp.new('^\w+$')
     @version_re = Regexp.new('\d+\.\d+\.\d+')
+    @version_prefix_re = Regexp.new('^v')
 
     class << self
       def new_from_show_dep(dep)
@@ -69,11 +70,11 @@ module LicenseFinder
       private
 
       def fixup_dep_repo(dep_repo)
-        dep_repo.delete_suffix('.git').sub('git@github.com:', 'https://github.com/')
+        dep_repo.chomp('.git').sub('git@github.com:', 'https://github.com/')
       end
 
       def fixup_dep_version(dep_version_str)
-        dep_version_str.delete_prefix('v')
+        dep_version_str.sub(@version_prefix_re, '')
       end
 
       def dep_valid?(arg_dep)
