@@ -81,7 +81,7 @@ module LicenseFinder
         return false if arg_dep.nil? || arg_dep.empty?
 
         dep = arg_dep.chomp(':')
-        return dep =~ @word_re
+        dep =~ @word_re
       end
 
       def dep_repo_valid?(arg_dep_repo)
