@@ -81,7 +81,7 @@ module LicenseFinder
         return false if arg_dep.nil? || arg_dep.empty?
 
         dep = arg_dep.chomp(':')
-        @word_re.match?(dep)
+        return dep =~ @word_re
       end
 
       def dep_repo_valid?(arg_dep_repo)
@@ -96,10 +96,10 @@ module LicenseFinder
         return false if arg_dep_version_str.nil? || arg_dep_version_str.empty?
 
         dep_version_str = fixup_dep_version(arg_dep_version_str)
-        if @version_re.match?(dep_version_str)
+        if dep_version_str =~ @version_re
           Gem::Version.correct?(dep_version_str)
         else
-          @word_re.match?(arg_dep_version_str)
+          arg_dep_version_str =~ @word_re
         end
       end
     end
