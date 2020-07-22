@@ -57,26 +57,26 @@ module LicenseFinder
 
     def all_parts_valid?
       dep_part_valid?(dep_parent) &&
-      dep_part_valid?(dep_name) &&
-      is_defined?(dep_fetch_method) &&
-      dep_repo_valid? &&
-      dep_version_valid? &&
-      is_defined?(dep_absolute_path)
+        dep_part_valid?(dep_name) &&
+        set?(dep_fetch_method) &&
+        dep_repo_valid? &&
+        dep_version_valid? &&
+        set?(dep_absolute_path)
     end
 
     private
 
     def dep_part_valid?(dep_part)
-      is_defined?(dep_part) &&
-      is_word?(dep_part)
+      set?(dep_part) &&
+        word?(dep_part)
     end
 
-    def is_defined?(dep_part)
+    def set?(dep_part)
       !dep_part.nil? &&
-      !dep_part.empty?
+        !dep_part.empty?
     end
 
-    def is_word?(dep_part)
+    def word?(dep_part)
       dep = dep_part.chomp(':')
       dep =~ word_re
     end
@@ -86,12 +86,12 @@ module LicenseFinder
     end
 
     def dep_repo_valid?
-      is_defined?(dep_repo_unformatted) &&
-      URI.parse(dep_repo)
+      set?(dep_repo_unformatted) &&
+        URI.parse(dep_repo)
     end
 
     def dep_version_valid?
-      is_defined?(dep_version_unformatted)
+      return false unless set?(dep_version_unformatted)
 
       if dep_version =~ version_re
         Gem::Version.correct?(dep_version)
