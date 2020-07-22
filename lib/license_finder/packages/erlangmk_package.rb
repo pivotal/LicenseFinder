@@ -43,9 +43,10 @@ module LicenseFinder
       end
 
       def raise_if_not_valid(dep)
-        invalid_dep = "'#{dep}' does not look like a valid Erlank.mk dependency"
-        valid_dep_example = "A valid dependency example: 'lager: goldrush git https://github.com/DeadZen/goldrush.git 0.1.9'"
-        raise(InvalidErlangmkPackageError, "#{invalid_dep}. #{valid_dep_example}") unless valid?(dep)
+        invalid_dep_message = "'#{dep}' does not look like a valid Erlank.mk dependency"
+        valid_dep_example = "A valid dependency example: 'lager: goldrush git https://github.com/DeadZen/goldrush.git 0.1.9 /absolute/path/to/dep'"
+
+        raise(InvalidErlangmkPackageError, "#{invalid_dep_message}. #{valid_dep_example}") unless valid?(dep)
       end
 
       def valid?(dep)
