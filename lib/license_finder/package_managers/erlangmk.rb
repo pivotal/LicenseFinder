@@ -23,7 +23,7 @@ module LicenseFinder
 
     def current_packages
       deps.map do |dep|
-        ErlangmkPackage.new_from_query_deps(dep)
+        ErlangmkPackage.new(dep)
       end
     end
 
