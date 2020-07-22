@@ -26,7 +26,7 @@ module LicenseFinder
     @version_prefix_re = Regexp.new('^v')
 
     class << self
-      def new_from_show_dep(dep)
+      def new_from_query_deps(dep)
         raise_if_not_valid(dep)
         new(
           dep_name(dep),

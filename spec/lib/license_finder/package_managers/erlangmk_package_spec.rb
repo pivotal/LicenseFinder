@@ -2,12 +2,10 @@
 
 require 'spec_helper'
 
-# /usr/lib/ruby/2.7.0/open3.rb:101:in
-
 module LicenseFinder
   describe ErlangmkPackage do
     subject do
-      described_class.new_from_show_dep(
+      described_class.new_from_query_deps(
         'rabbit_common: credentials_obfuscation hex https://hex.pm/packages/credentials_obfuscation 2.0.0' \
         ' /home/lbakken/development/rabbitmq/LicenseFinder/features/fixtures/erlangmk/deps/credentials_obfuscation'
       )
@@ -66,7 +64,7 @@ module LicenseFinder
     describe 'guards against invalid packages' do
       context 'when empty string' do
         it do
-          expect { described_class.new_from_show_dep('') }.to raise_error(InvalidErlangmkPackageError)
+          expect { described_class.new_from_query_deps('') }.to raise_error(InvalidErlangmkPackageError)
         end
       end
     end
