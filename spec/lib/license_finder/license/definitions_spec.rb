@@ -82,6 +82,24 @@ describe LicenseFinder::License, 'MIT' do
   end
 end
 
+describe LicenseFinder::License, 'MPL1_1' do
+  subject { described_class.find_by_name 'MPL1_1' }
+
+  it 'should be recognized' do
+    expect(subject).to be
+  end
+
+  describe '#matches_text?' do
+    fit "should return true if the text begins with 'Mozilla Public License Version 1.1'" do
+      expect(subject).to be_matches_text 'Mozilla Public License Version 1.1'
+    end
+
+    it "should return false if the text beings with 'Mozilla Public License, version 2.0'" do
+      expect(subject).not_to be_matches_text 'Mozilla Public License, version 2.0'
+    end
+  end
+end
+
 describe LicenseFinder::License, 'MPL2' do
   subject { described_class.find_by_name 'MPL2' }
 
