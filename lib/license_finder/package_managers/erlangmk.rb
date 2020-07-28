@@ -34,7 +34,10 @@ module LicenseFinder
       stdout, stderr, status = Cmd.run(command)
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
-      stdout.each_line.map(&:strip).reject { |line| line.start_with?('make') }
+      dep_re = Regexp.new('^\s*DEP')
+      line_re = Regexp.new('^[_a-z0-9]+:')
+
+      stdout.each_line.map(&:strip).select { |line| !(line.start_with?('make') || line =~ dep_re) && line =~ line_re }
     end
   end
 end
