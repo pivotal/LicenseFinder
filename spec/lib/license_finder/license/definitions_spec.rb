@@ -90,7 +90,7 @@ describe LicenseFinder::License, 'MPL1_1' do
   end
 
   describe '#matches_text?' do
-    fit "should return true if the text begins with 'Mozilla Public License Version 1.1'" do
+    it "should return true if the text begins with 'Mozilla Public License Version 1.1'" do
       expect(subject).to be_matches_text 'Mozilla Public License Version 1.1'
     end
 
