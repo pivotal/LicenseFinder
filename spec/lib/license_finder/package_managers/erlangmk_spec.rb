@@ -2250,7 +2250,7 @@ erlangmk_spec_fake_lib: another_fake_lib git https://github.com/rabbitmq/rabbitm
         expect(
           erlangmk.prepare_command
         ).to eql(
-          'make --directory=/erlangmk/project --no-print-directory fetch-deps'
+          'make --directory=/erlangmk/project --no-print-directory IS_DEP=1 fetch-deps'
         )
       end
     end
