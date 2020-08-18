@@ -54,6 +54,7 @@ and give you an actionable exception report.
 * Rust (via `cargo`)
 * Go Modules (via `go mod`)
 * PHP (via `composer`)
+* Python (via Conda [Conda 4.8.3, Python 3.7, Bash; requires an `environment.yml` or `environment.yaml`])
 
 ## Installation
 
@@ -121,9 +122,9 @@ be useful when you need to track down an unexpected package or
 license.
 
 If you do not want to manually run an individual package manager's prepare
-command (ex: `bundle install`, `npm install`, etc) to ensure your project 
+command (ex: `bundle install`, `npm install`, etc) to ensure your project
 is fully prepared to be scanned, use the `--prepare` or `-p` option which will run
-each active package manager's prepare command for you. If you would like to continue 
+each active package manager's prepare command for you. If you would like to continue
 running `license_finder` even if there is an issue with a prepare step, use the
 `--prepare-no-fail` option which prepares but carries on despite any potential failures.
 
@@ -156,10 +157,10 @@ You can better understand the way this script works by looking at its source, bu
 reference it will mount your current directory at the path `/scan` and run any commands
 passed to it from that directory.
 
-Note that the docker image will run the gem which is installed within it. 
+Note that the docker image will run the gem which is installed within it.
 So the docker image tagged `4.0.2` will run *License Finder Version 4.0.2*
 
-See the [contibuting guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
+See the [contibuting guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development.
 
 ### Activation
 
@@ -310,7 +311,7 @@ be approved. The project name at the top of the report can be set with
 `license_finder project_name add`.
 
 ### Note:
-When using the yarn package manager, when a node_module's package.json doesn't 
+When using the yarn package manager, when a node_module's package.json doesn't
 explicitly declare a license, yarn indicates that it has inferred the license based
 on some keywords in other files by appending an asterisk to the license name. If you
 see a * at the end of the license name, this is intended.
@@ -461,9 +462,9 @@ downloadLicenses {
 ### Conan Projects
 
 `license_finder` supports Conan. You need to have the following lines in your conanfile.txt for `license_finder` to retrieve dependencies' licenses.
-Ensure that `conan install` does not generate an error. 
+Ensure that `conan install` does not generate an error.
 
-``` 
+```
 [imports]
 ., license* -> ./licenses @ folder=True, ignore_case=True
 ```
@@ -517,9 +518,9 @@ And save a `LICENSE` file which contains your license text in your repo.
 
 * Bundler
    * When using `--project-path`, Bundler cannot find the Gemfile.
-   
+
 * Yarn
-   * A module that is incompatible with the platform on which 
+   * A module that is incompatible with the platform on which
      license_finder is run will always be reported to have a license type
      of "unknown". ([#456](https://github.com/pivotal/LicenseFinder/issues/456))
 

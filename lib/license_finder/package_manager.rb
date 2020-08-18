@@ -125,10 +125,10 @@ module LicenseFinder
     def log_errors_with_cmd(prep_cmd, stderr)
       logger.info prep_cmd, 'did not succeed.', color: :red
       logger.info prep_cmd, stderr, color: :red
-      log_to_file stderr
+      log_to_file prep_cmd, stderr
     end
 
-    def log_to_file(contents)
+    def log_to_file(prep_cmd, contents)
       FileUtils.mkdir_p @log_directory
 
       # replace whitespace with underscores and remove slashes
@@ -136,7 +136,7 @@ module LicenseFinder
       log_file = File.join(@log_directory, "prepare_#{log_file_name || 'errors'}.log")
 
       File.open(log_file, 'w') do |f|
-        f.write("Prepare command \"#{prepare_command}\" failed with:\n")
+        f.write("Prepare command \"#{prep_cmd}\" failed with:\n")
         f.write("#{contents}\n\n")
       end
     end
@@ -171,5 +171,6 @@ require 'license_finder/package_managers/conan'
 require 'license_finder/package_managers/sbt'
 require 'license_finder/package_managers/cargo'
 require 'license_finder/package_managers/composer'
+require 'license_finder/package_managers/conda'
 
 require 'license_finder/package'
