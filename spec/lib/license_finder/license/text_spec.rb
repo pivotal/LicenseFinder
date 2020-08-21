@@ -118,14 +118,16 @@ describe LicenseFinder::License::Text do
         text = <<~TEXT
           1. for an apple
           * for a loaf of bread
+          - for a hat
         TEXT
 
-        expected_regex = Regexp.new('(\d{1,2}.|\*)?\s*for\ an\ apple\ (\d{1,2}.|\*)?\s*for\ a\ loaf\ of\ bread')
+        expected_regex = Regexp.new('(\d{1,2}.|\*|\-)?\s*for\ an\ apple\ (\d{1,2}.|\*|\-)?\s*for\ a\ loaf\ of\ bread\ (\d{1,2}.|\*|\-)?\s*for\ a\ hat')
 
         expect(described_class.compile_to_regex(text)).to eq(expected_regex)
-        expect(described_class.compile_to_regex(text)).to match('1. for an apple * for a loaf of bread')
-        expect(described_class.compile_to_regex(text)).to match('* for an apple 1. for a loaf of bread')
-        expect(described_class.compile_to_regex(text)).to match('for an apple for a loaf of bread')
+        expect(described_class.compile_to_regex(text)).to match('1. for an apple 1. for a loaf of bread 1. for a hat')
+        expect(described_class.compile_to_regex(text)).to match('* for an apple * for a loaf of bread * for a hat')
+        expect(described_class.compile_to_regex(text)).to match('- for an apple - for a loaf of bread - for a hat')
+        expect(described_class.compile_to_regex(text)).to match('for an apple for a loaf of bread for a hat')
       end
 
       context 'when the text contains brackets near the unordered bullets' do
@@ -136,7 +138,7 @@ describe LicenseFinder::License::Text do
             **
           TEXT
 
-          expected_regex = Regexp.new('\*(\d{1,2}.|\*)?\s*(\d{1,2}.|\*)?\s*\(banana\ bread\)\ \*\*')
+          expected_regex = Regexp.new('\*(\d{1,2}.|\*|\-)?\s*(\d{1,2}.|\*|\-)?\s*\(banana\ bread\)\ \*\*')
 
           expect(described_class.compile_to_regex(text)).to eq(expected_regex)
           expect(described_class.compile_to_regex(text)).to match('** (banana bread) **')

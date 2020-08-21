@@ -10,8 +10,8 @@ module LicenseFinder
       SPECIAL_DOUBLE_QUOTES = /[“”„«»]/.freeze
       ALPHABET_ORDERED_LIST = /\\\([a-z]\\\)\\\s/.freeze
       ALPHABET_ORDERED_LIST_OPTIONAL = '(\([a-z]\)\s)?'
-      LIST_BULLETS = /(\d{1,2}\\\.|\\\*)\\\s/.freeze
-      LIST_BULLETS_OPTIONAL = '(\d{1,2}.|\*)?\s*'
+      LIST_BULLETS = /(\d{1,2}\\\.|\\\*|\\\-)\\\s/.freeze
+      LIST_BULLETS_OPTIONAL = '(\d{1,2}.|\*|\-)?\s*'
       NEWLINE_CHARACTER = /\n+/.freeze
       QUOTE_COMMENT_CHARACTER = /^\s*\>+/.freeze
       ESCAPED_QUOTES = /\\\"/.freeze
