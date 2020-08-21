@@ -31,8 +31,8 @@ module LicenseFinder
     its(:summary) { should == '' }
     its(:description) { should == '' }
     its(:homepage) { should == '' }
-    its(:children) { should == ['libgcc-ng', 'python', 'yaml'] }
-    its(:install_path) { should be nil}
+    its(:children) { should == %w[libgcc-ng python yaml] }
+    its(:install_path) { should be nil }
     its(:package_manager) { should eq 'Conda' }
 
     describe '#license_names_from_spec' do

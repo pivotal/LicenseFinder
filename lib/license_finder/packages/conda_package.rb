@@ -30,10 +30,8 @@ module LicenseFinder
     end
 
     def children
-      @json.fetch('depends',[]).map { |constraint| constraint.split.first }
+      @json.fetch('depends', []).map { |constraint| constraint.split.first }
     end
-
-    private
 
     class Identifier
       attr_accessor :name, :version

@@ -113,7 +113,7 @@ module LicenseFinder
     end
 
     class CondaProject < Project
-      CONDA_ROOT='/root/miniconda3'
+      CONDA_ROOT = '/root/miniconda3'
       attr_reader :env
 
       def initialize(name = 'my_app')
@@ -121,22 +121,21 @@ module LicenseFinder
         super
         add_to_file('environment.yml', "name: #{@env}")
         add_channels
-        add_to_file('environment.yml', "dependencies:")
+        add_to_file('environment.yml', 'dependencies:')
       end
 
       def add_channels(*list_of_channels)
-        list_of_channels = %w(defaults conda-forge) if list_of_channels.empty?
+        list_of_channels = %w[defaults conda-forge] if list_of_channels.empty?
         add_to_file('environment.yml', 'channels: [' + list_of_channels.join(',') + ']')
       end
 
       def add_dep
-        add_to_file('environment.yml','- zlib=1.2.11')
+        add_to_file('environment.yml', '- zlib=1.2.11')
       end
 
       def install
-        unless Dir.exists?("#{CONDA_ROOT}/envs/#{env}")
-          shell_out("bash -c 'source #{CONDA_ROOT}/etc/profile.d/conda.sh && conda env create -f environment.yml'")
-        end
+        shell_out("bash -c 'source #{CONDA_ROOT}/etc/profile.d/conda.sh && conda env create -f environment.yml'") unless
+          Dir.exist?("#{CONDA_ROOT}/envs/#{env}")
       end
     end
 

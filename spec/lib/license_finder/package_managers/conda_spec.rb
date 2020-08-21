@@ -73,7 +73,7 @@ INPUT
       end
 
       def stub_pip_definition(info)
-        allow(LicenseFinder::PyPI).to receive(:definition).and_return( info )
+        allow(LicenseFinder::PyPI).to receive(:definition).and_return(info)
       end
 
       before do
@@ -104,16 +104,16 @@ INPUT
           LIST_OUTPUT
 
           stub_conda_info(
-            "chardet" => [
+            'chardet' => [
               {
-                "depends" => [
-                  "python >=3.5,<3.6.0a0"
+                'depends' => [
+                  'python >=3.5,<3.6.0a0'
                 ],
-                "license" => "LGPL2",
-                "license_family" => "GPL",
-                "name" => "chardet",
-                "url" => "https://repo.anaconda.com/pkgs/main/linux-64/chardet-3.0.4-py35hb6e9ddf_1.conda",
-                "version" => "3.0.4"
+                'license' => 'LGPL2',
+                'license_family' => 'GPL',
+                'name' => 'chardet',
+                'url' => 'https://repo.anaconda.com/pkgs/main/linux-64/chardet-3.0.4-py35hb6e9ddf_1.conda',
+                'version' => '3.0.4'
               }
             ]
           )
@@ -128,7 +128,7 @@ INPUT
         before do
           allow(status).to receive(:success?).and_return(false)
           allow(conda).to receive(:detected_package_path).and_return('some-file.txt')
-          allow(conda).to receive(:activated_conda).and_return(['{"some": "json"}',stderr, status])
+          allow(conda).to receive(:activated_conda).and_return(['{"some": "json"}', stderr, status])
         end
         let(:stderr) { 'some error' }
 
@@ -145,7 +145,7 @@ INPUT
           allow(conda).to receive(:conda_list).and_return([{ 'name' => 'wackamole', 'version' => '1.0', 'channel' => nil }])
 
           allow(status).to receive(:success?).and_return(false)
-          allow(conda).to receive(:activated_conda).and_return(['{"some": "json error stuff"}','some error', status])
+          allow(conda).to receive(:activated_conda).and_return(['{"some": "json error stuff"}', 'some error', status])
         end
 
         it 'logs the error conda put on stdout and still lists the module' do

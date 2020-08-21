@@ -8,7 +8,7 @@ module LicenseFinder
     attr_reader :conda_bash_setup_script
 
     def initialize(options = {})
-      @conda_bash_setup_script = options[:conda_bash_setup_script] || Pathname("/root/miniconda3/etc/profile.d/conda.sh")
+      @conda_bash_setup_script = options[:conda_bash_setup_script] || Pathname('/root/miniconda3/etc/profile.d/conda.sh')
       super
     end
 
@@ -31,7 +31,7 @@ module LicenseFinder
     def current_packages
       conda_list.map do |entry|
         case entry['channel']
-        when 'pypi' then
+        when 'pypi'
           # PyPI is much faster than `conda search`, use it when we can.
           PipPackage.new(entry['name'], entry['version'], PyPI.definition(entry['name'], entry['version']))
         else
@@ -51,12 +51,12 @@ module LicenseFinder
     end
 
     def environments
-      command = "conda env list"
+      command = 'conda env list'
       stdout, stderr, status = conda command
 
       environments = []
       if status.success?
-        environments = stdout.split("\n").grep_v(/^#/).map {|line| line.split.first}
+        environments = stdout.split("\n").grep_v(/^#/).map { |line| line.split.first }
       else
         log_errors_with_cmd command, stderr
       end
@@ -72,11 +72,11 @@ module LicenseFinder
     end
 
     def conda(command)
-      Open3.capture3("bash","-c","source #{conda_bash_setup_script} && #{command}")
+      Open3.capture3('bash', '-c', "source #{conda_bash_setup_script} && #{command}")
     end
 
     def activated_conda(command)
-      Open3.capture3("bash","-c","source #{conda_bash_setup_script} && conda activate #{environment_name} && #{command}")
+      Open3.capture3('bash', '-c', "source #{conda_bash_setup_script} && conda activate #{environment_name} && #{command}")
     end
 
     # Algorithm is based on
@@ -86,12 +86,11 @@ module LicenseFinder
     # various architectures, versions of python, etc) have the same license.
     def conda_list
       command = 'conda list'
-      stdout, stderr, status = activated_conda("#{command}")
+      stdout, stderr, status = activated_conda(command)
 
       if status.success?
         conda_list = []
         stdout.each_line do |line|
-
           next if line =~ /^\s*#/
 
           name, version, build, channel = line.split
@@ -110,7 +109,7 @@ module LicenseFinder
     end
 
     def conda_search_info(list_entry)
-      command = "conda search --info --json "
+      command = 'conda search --info --json '
       command += "--channel #{list_entry['channel']} " if list_entry['channel'] && !list_entry['channel'].empty?
       command += "'#{list_entry['name']} #{list_entry['version']}'"
 
