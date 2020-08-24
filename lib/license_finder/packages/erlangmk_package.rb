@@ -38,7 +38,6 @@ module LicenseFinder
 
     def dep_version
       @dep_version ||= begin
-        version_prefix_re = Regexp.new('^v')
         dep_version_unformatted.sub(version_prefix_re, '')
       end
     end
@@ -96,12 +95,20 @@ module LicenseFinder
       if dep_version =~ version_re
         Gem::Version.correct?(dep_version)
       else
-        dep_version =~ word_re
+        dep_version =~ word_dot_re
       end
     end
 
     def version_re
       @version_re ||= Regexp.new('\d+\.\d+\.\d+')
+    end
+
+    def word_dot_re
+      @word_dot_re ||= Regexp.new('^[.\w]+$')
+    end
+
+    def version_prefix_re
+      @version_prefix_re ||= Regexp.new('^v')
     end
   end
 end

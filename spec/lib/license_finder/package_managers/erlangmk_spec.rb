@@ -2280,7 +2280,7 @@ erlangmk_spec_fake_lib: another_fake_lib_two git https://github.com/rabbitmq/rab
           expect(
             erlangmk.current_packages.size
           ).to eql(
-            193
+            194
           )
         end
       end
