@@ -80,10 +80,6 @@ module LicenseFinder
       dep =~ word_re
     end
 
-    def word_re
-      @word_re ||= Regexp.new('^\w+$')
-    end
-
     def dep_repo_valid?
       set?(dep_repo_unformatted) &&
         URI.parse(dep_repo)
@@ -103,12 +99,16 @@ module LicenseFinder
       @version_re ||= Regexp.new('\d+\.\d+\.\d+')
     end
 
-    def word_dot_re
-      @word_dot_re ||= Regexp.new('^[.\w]+$')
-    end
-
     def version_prefix_re
       @version_prefix_re ||= Regexp.new('^v')
+    end
+
+    def word_re
+      @word_re ||= Regexp.new('^\w+$')
+    end
+
+    def word_dot_re
+      @word_dot_re ||= Regexp.new('^[.\w]+$')
     end
   end
 end
