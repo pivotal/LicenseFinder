@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'pry'
 
 module LicenseFinder
   class Conda < PackageManager
