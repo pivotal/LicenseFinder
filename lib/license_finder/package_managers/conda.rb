@@ -7,7 +7,7 @@ module LicenseFinder
     attr_reader :conda_bash_setup_script
 
     def initialize(options = {})
-      @conda_bash_setup_script = options[:conda_bash_setup_script] || Pathname('/root/miniconda3/etc/profile.d/conda.sh')
+      @conda_bash_setup_script = options[:conda_bash_setup_script] || Pathname("#{ENV['HOME']}/miniconda3/etc/profile.d/conda.sh")
       super
     end
 
