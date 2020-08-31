@@ -2,8 +2,7 @@
 
 module LicenseFinder
   class GitSubmodulePackage < Package
-
-    def initialize(name, version, path, url = "")
+    def initialize(name, version, path, url = '')
       super(
         name,
         version,
