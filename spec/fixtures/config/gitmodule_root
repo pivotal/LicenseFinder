@@ -1,0 +1,6 @@
+[submodule "submodules/dependency_1"]
+	path = submodules/dependency_1
+	url = git@github.com:some-test-company/a-project.git
+[submodule "submodules/dependency_2"]
+	path = submodules/dependency_2
+	url = git@github.com:some-other-test-company/another-project.git

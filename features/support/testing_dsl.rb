@@ -590,6 +590,14 @@ module LicenseFinder
       end
     end
 
+    class GitSubmoduleProject < Project
+      def install
+        shell_out('git init .')
+        shell_out('git submodule add https://github.com/pivotal/LicenseFinder.git subs/licensefinder')
+        shell_out('cd subs/licensefinder && git checkout a6d56c7aa65b221a008b450510ef62c688205299')
+      end
+    end
+
     # lives adjacent to a BundlerProject, so has a different lifecycle from other Projects and doesn't inherit
     class GemProject
       def self.create(name, options)

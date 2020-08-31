@@ -54,6 +54,7 @@ and give you an actionable exception report.
 * Rust (via `cargo`)
 * Go Modules (via `go mod`)
 * PHP (via `composer`)
+* Git Submodules (via `git submodule status`)
 
 ## Installation
 
@@ -191,6 +192,7 @@ languages, as long as that language has a package definition in the project dire
 * `build.sbt` file (for `sbt`)
 * `Cargo.lock` file (for `cargo`)
 * `composer.lock` file (for `composer`)
+* `.gitmodules` file (for `git submodule`)
 
 
 ### Continuous Integration

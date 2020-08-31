@@ -91,6 +91,7 @@ To successfully run the test suite, you will need the following installed:
 - Conan
 - NuGet
 - dotnet
+- git
 
 The [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) already contains these dependencies.
 
