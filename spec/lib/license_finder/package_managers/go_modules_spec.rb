@@ -17,44 +17,68 @@ module LicenseFinder
 "gopkg.in/yaml.v2,v2.2.1,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2\n"\
 'gopkg.in/yaml.v2,v2.2.1,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2'
     end
-    subject { GoModules.new(project_path: Pathname(src_path), logger: double(:logger, active: nil)) }
+    let(:logger) { double(:logger, active:nil, info:nil) }
+
+    subject { GoModules.new(project_path: Pathname(src_path), logger: logger, log_directory: 'some-directory') }
 
     describe '#current_packages' do
+      let(:go_list_cmd) { "GO111MODULE=on go list -mod=readonly -deps -f '#{go_list_format}' ./..." }
+
       before do
         FakeFS.activate!
-
         FileUtils.mkdir_p(vendor_path)
-        File.write(mod_path, content)
-
-        allow(SharedHelpers::Cmd).to receive(:run).with("GO111MODULE=on go list -mod=readonly -deps -f '#{go_list_format}' ./...").and_return(go_list_string)
       end
 
       after do
         FakeFS.deactivate!
       end
 
-      let(:content) do
-        FakeFS.without do
-          fixture_from('go.mod')
+      context 'go list is successful' do
+        let(:success_status) { double(Process::Status, success?: true) }
+
+        before do
+          File.write(mod_path, content)
+          allow(SharedHelpers::Cmd).to receive(:run).with(go_list_cmd).and_return([go_list_string, nil, success_status])
+        end
+
+        let(:content) do
+          FakeFS.without do
+            fixture_from('go.mod')
+          end
+        end
+
+        it 'finds all the packages all go.mod files' do
+          packages = subject.current_packages
+
+          expect(packages.length).to eq 2
+
+          expect(packages.first.name).to eq 'gopkg.in/check.v1'
+          expect(packages.first.version).to eq 'v0.0.0-20161208181325-20d25e280405'
+
+          expect(packages.last.name).to eq 'gopkg.in/yaml.v2'
+          expect(packages.last.version).to eq 'v2.2.1'
+        end
+
+        it 'list packages as Go packages' do
+          packages = subject.current_packages
+
+          expect(packages.first.package_manager).to eq 'Go'
         end
       end
 
-      it 'finds all the packages all go.mod files' do
-        packages = subject.current_packages
+      context 'go list failed' do
+        let(:failure_status) { double(Process::Status, success?: false) }
 
-        expect(packages.length).to eq 2
+        before do
+          allow(SharedHelpers::Cmd).to receive(:run).with(go_list_cmd).and_return(["", "some-error-message", failure_status])
+        end
 
-        expect(packages.first.name).to eq 'gopkg.in/check.v1'
-        expect(packages.first.version).to eq 'v0.0.0-20161208181325-20d25e280405'
+        it 'should print out the error from calling go list' do
+          expect(logger).to receive(:info).with(go_list_cmd, 'did not succeed.', color: :red)
+          expect(logger).to receive(:info).with(go_list_cmd, "Getting the dependencies from go list failed \n\tsome-error-message", color: :red).ordered
 
-        expect(packages.last.name).to eq 'gopkg.in/yaml.v2'
-        expect(packages.last.version).to eq 'v2.2.1'
-      end
-
-      it 'list packages as Go packages' do
-        packages = subject.current_packages
-
-        expect(packages.first.package_manager).to eq 'Go'
+          subject.current_packages
+        end
       end
     end
 

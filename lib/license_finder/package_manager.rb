@@ -123,8 +123,8 @@ module LicenseFinder
     end
 
     def log_errors_with_cmd(prep_cmd, stderr)
-      logger.info prep_cmd, 'did not succeed.', color: :red
-      logger.info prep_cmd, stderr, color: :red
+      logger.info(prep_cmd, 'did not succeed.', color: :red)
+      logger.info(prep_cmd, stderr, color: :red)
       log_to_file stderr
     end
 
