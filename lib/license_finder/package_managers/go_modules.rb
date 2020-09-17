@@ -57,9 +57,7 @@ module LicenseFinder
         # confusing the issue as to which package is the root of the module.
         go_list_cmd = "GO111MODULE=on go list -mod=readonly -deps -f '#{format_str}' ./..."
         info_output, stderr, status = Cmd.run(go_list_cmd)
-        if !status.success?
-          log_errors_with_cmd(go_list_cmd, "Getting the dependencies from go list failed \n\t#{stderr}")
-        end
+        log_errors_with_cmd(go_list_cmd, "Getting the dependencies from go list failed \n\t#{stderr}") unless status.success?
 
         # Since many packages may belong to a single module, #uniq is used to deduplicate
         info_output.split("\n").uniq
