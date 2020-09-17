@@ -17,7 +17,7 @@ module LicenseFinder
 "gopkg.in/yaml.v2,v2.2.1,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2\n"\
 'gopkg.in/yaml.v2,v2.2.1,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2'
     end
-    let(:logger) { double(:logger, active:nil, info:nil) }
+    let(:logger) { double(:logger, active: nil, info: nil) }
 
     subject { GoModules.new(project_path: Pathname(src_path), logger: logger, log_directory: 'some-directory') }
 
@@ -70,7 +70,7 @@ module LicenseFinder
         let(:failure_status) { double(Process::Status, success?: false) }
 
         before do
-          allow(SharedHelpers::Cmd).to receive(:run).with(go_list_cmd).and_return(["", "some-error-message", failure_status])
+          allow(SharedHelpers::Cmd).to receive(:run).with(go_list_cmd).and_return(['', 'some-error-message', failure_status])
         end
 
         it 'should print out the error from calling go list' do
