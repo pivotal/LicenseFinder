@@ -55,7 +55,11 @@ module LicenseFinder
         # TODO: Figure out a way to make the vendor directory work (i.e. remove the
         # -mod=readonly flag). Each of the imported packages gets listed separatly,
         # confusing the issue as to which package is the root of the module.
-        info_output, _stderr, _status = Cmd.run("GO111MODULE=on go list -mod=readonly -deps -f '#{format_str}' ./...")
+        go_list_cmd = "GO111MODULE=on go list -mod=readonly -deps -f '#{format_str}' ./..."
+        info_output, stderr, status = Cmd.run(go_list_cmd)
+        if !status.success?
+          log_errors_with_cmd(go_list_cmd, "Getting the dependencies from go list failed \n\t#{stderr}")
+        end
 
         # Since many packages may belong to a single module, #uniq is used to deduplicate
         info_output.split("\n").uniq
