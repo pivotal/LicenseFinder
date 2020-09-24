@@ -18,8 +18,10 @@ module LicenseFinder
     # Also NOTE:
     #
     # This line was added manually to test the case where a git branch is the "version":
-    #
     # erlangmk_spec_fake_lib: another_fake_lib git https://github.com/rabbitmq/rabbitmq-fake-lib master /fake/path
+    #
+    # This line was added manually to test v3.8.x as the version:
+    # erlangmk_spec_fake_lib: another_fake_lib_two git https://github.com/rabbitmq/rabbitmq-fake-lib-two v3.8.x /fake/path-two
 
     query_deps_output = <<-QUERYDEPSOUTPUT
  DEP    rabbit_common (v3.8.6-rc.2)
@@ -2223,6 +2225,7 @@ rabbitmq_web_stomp_examples: rabbit git_rmq https://github.com/rabbitmq/rabbitmq
 rabbitmq_web_stomp_examples: rabbitmq_web_dispatch git_rmq https://github.com/rabbitmq/rabbitmq-web-dispatch v3.8.6-rc.2 /home/lbakken/workspace/rabbitmq-server-release/deps/rabbitmq_web_dispatch
 rabbitmq_web_stomp_examples: rabbitmq_web_stomp git_rmq https://github.com/rabbitmq/rabbitmq-web-stomp v3.8.6-rc.2 /home/lbakken/workspace/rabbitmq-server-release/deps/rabbitmq_web_stomp
 erlangmk_spec_fake_lib: another_fake_lib git https://github.com/rabbitmq/rabbitmq-fake-lib master /fake/path
+erlangmk_spec_fake_lib: another_fake_lib_two git https://github.com/rabbitmq/rabbitmq-fake-lib-two v3.8.x /fake/path-two
     QUERYDEPSOUTPUT
 
     describe '#package_management_command' do
@@ -2250,7 +2253,7 @@ erlangmk_spec_fake_lib: another_fake_lib git https://github.com/rabbitmq/rabbitm
         expect(
           erlangmk.prepare_command
         ).to eql(
-          'make --directory=/erlangmk/project --no-print-directory fetch-deps'
+          'make --directory=/erlangmk/project --no-print-directory IS_DEP=1 fetch-deps'
         )
       end
     end
@@ -2277,7 +2280,7 @@ erlangmk_spec_fake_lib: another_fake_lib git https://github.com/rabbitmq/rabbitm
           expect(
             erlangmk.current_packages.size
           ).to eql(
-            193
+            194
           )
         end
       end

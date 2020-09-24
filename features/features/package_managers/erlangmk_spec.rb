@@ -19,7 +19,7 @@ describe 'Erlangmk Dependencies' do
     expect(erlang_developer).to be_seeing_line 'credentials_obfuscation, 2.0.0, "Apache 2.0, Mozilla Public License 1.1"'
     expect(erlang_developer).to be_seeing_line 'cuttlefish, 2.2.0, unknown'
     expect(erlang_developer).to be_seeing_line 'gen_batch_server, 0.8.2, "Apache 2.0, Mozilla Public License 1.1"'
-    expect(erlang_developer).to be_seeing_line 'getopt, 1.0.1, unknown'
+    expect(erlang_developer).to be_seeing_line 'getopt, 1.0.1, "New BSD"'
     expect(erlang_developer).to be_seeing_line 'goldrush, 0.1.9, ISC'
     expect(erlang_developer).to be_seeing_line 'jsx, 2.9.0, MIT'
     expect(erlang_developer).to be_seeing_line 'lager, 3.7.0, "Apache 2.0"'
