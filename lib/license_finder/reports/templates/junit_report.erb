@@ -2,7 +2,7 @@
 <testsuites failures="<%= unapproved_dependencies.size %>" name="<%= project_name %>" tests="<%= dependencies.size %>">
 <% sorted_dependencies.each_with_index do |dependency, i| -%>
   <testsuite failures="<%= dependency.approved? ? "0" : "1" -%>" id="<%= i %>" name="<%= dependency.name %>" package="Gemfile.lock" skipped="0" tests="1" timestamp="<%= Time.now.strftime("%Y-%m-%dT%H:%M:%S:%6N") %>">
-    <testcase classname="<%= project_name %>" name="<%= dependency.name %>"<%= dependency.approved? ? " /" : "" %>>
+    <testcase classname="<%= license_names(dependency) %>" name="<%= dependency.name %>"<%= dependency.approved? ? " /" : "" %>>
     <%- unless dependency.approved? -%>
       <failure message="Unapproved license in '<%= dependency.name %>' <%= dependency.version %>">
 Name: <%= dependency.name %>

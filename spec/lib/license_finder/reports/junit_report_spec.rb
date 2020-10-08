@@ -36,7 +36,7 @@ module LicenseFinder
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites failures="2" name="" tests="3">
   <testsuite failures="1" id="0" name="dep_1" package="Gemfile.lock" skipped="0" tests="1" timestamp="2020-10-07T23:08:58:874569">
-    <testcase classname="" name="dep_1">
+    <testcase classname="MIT" name="dep_1">
       <failure message="Unapproved license in 'dep_1' 1.0">
 Name: dep_1
 Version: 1.0
@@ -59,7 +59,7 @@ stderr
     </testcase>
   </testsuite>
   <testsuite failures="1" id="1" name="dep_2" package="Gemfile.lock" skipped="0" tests="1" timestamp="2020-10-07T23:08:58:874569">
-    <testcase classname="" name="dep_2">
+    <testcase classname="BSD" name="dep_2">
       <failure message="Unapproved license in 'dep_2' 2.0">
 Name: dep_2
 Version: 2.0
@@ -79,7 +79,7 @@ stderr
     </testcase>
   </testsuite>
   <testsuite failures="0" id="2" name="dep_3" package="Gemfile.lock" skipped="0" tests="1" timestamp="2020-10-07T23:08:58:874569">
-    <testcase classname="" name="dep_3" />
+    <testcase classname="GPL" name="dep_3" />
   </testsuite>
 </testsuites>
       XML
