@@ -11,14 +11,14 @@ describe 'Maven Dependencies' do
   specify 'are shown in reports' do
     LicenseFinder::TestingDSL::MavenProject.create
     java_developer.run_license_finder
-    expect(java_developer).to be_seeing_line 'junit, 4.11, "Common Public License Version 1.0"'
+    expect(java_developer).to be_seeing_line 'junit, 4.13.1, "Common Public License Version 1.0"'
   end
 
   context 'when using --maven_include_groups flag' do
     it 'shows the groupid' do
       LicenseFinder::TestingDSL::MavenProject.create
       java_developer.run_license_finder nil, '--maven_include_groups'
-      expect(java_developer).to be_seeing_line 'junit:junit, 4.11, "Common Public License Version 1.0"'
+      expect(java_developer).to be_seeing_line 'junit:junit, 4.13.1, "Common Public License Version 1.0"'
     end
   end
 end
