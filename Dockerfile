@@ -154,12 +154,15 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsof
   sudo apt-get update &&\
   sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1
 
+# install Composer
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
     echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
     apt-get update &&\
     apt-get install -y php7.4-cli &&\
+    EXPECTED_COMPOSER_INSTALLER_CHECKSUM="$(curl --silent https://composer.github.io/installer.sig)" &&\
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
-    php -r "if (hash_file('sha384', 'composer-setup.php') === '795f976fe0ebd8b75f26a6dd68f78fd3453ce79f32ecb33e7fd087d39bfeb978342fb73ac986cd4f54edd0dc902601dc') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" &&\
+    ACTUAL_COMPOSER_INSTALLER_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")" &&\
+    test "${ACTUAL_COMPOSER_INSTALLER_CHECKSUM}" = "${EXPECTED_COMPOSER_INSTALLER_CHECKSUM}" || (echo "ERROR: Invalid installer checksum" >&2; false) &&\
     php composer-setup.php &&\
     php -r "unlink('composer-setup.php');" &&\
     mv composer.phar /usr/bin/composer
