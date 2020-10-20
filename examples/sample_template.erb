@@ -1,0 +1,7 @@
+Licenses
+
+<%= dependencies.size %> total
+
+<% grouped_dependencies.each do |license_name, group| -%>
+* <%= group.size %> <%= license_name %>
+<% end %>
