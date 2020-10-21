@@ -466,7 +466,17 @@ module LicenseFinder
       end
 
       def install
-        shell_out('rebar get-deps')
+        shell_out('rebar3 get-deps')
+      end
+    end
+
+    class ErlangMkProject < Project
+      def add_dep
+        FileUtils.copy_entry(Paths.fixtures.join('erlangmk'), Paths.project)
+      end
+
+      def install
+        shell_out('make fetch-deps')
       end
     end
 

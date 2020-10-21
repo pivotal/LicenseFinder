@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open-uri'
+require 'license_finder/license'
 
 module LicenseFinder
   class Decisions
@@ -39,7 +40,15 @@ module LicenseFinder
     end
 
     def permitted?(lic)
-      @permitted.include?(lic)
+      if @permitted.include?(lic)
+        true
+      elsif lic.is_a?(OrLicense)
+        lic.sub_licenses.any? { |sub_lic| @permitted.include?(sub_lic) }
+      elsif lic.is_a?(AndLicense)
+        lic.sub_licenses.all? { |sub_lic| @permitted.include?(sub_lic) }
+      else
+        false
+      end
     end
 
     def restricted?(lic)
@@ -183,17 +192,35 @@ module LicenseFinder
       self
     end
 
-    def inherit_from(filepath)
+    def inherit_from(filepath_info)
       decisions =
-        if filepath =~ %r{^https?://}
-          open_uri(filepath).read
+        if filepath_info.is_a?(Hash)
+          resolve_inheritance(filepath_info)
+        elsif filepath_info =~ %r{^https?://}
+          open_uri(filepath_info).read
         else
-          Pathname(filepath).read
+          Pathname(filepath_info).read
         end
 
-      add_decision [:inherit_from, filepath]
-      @inherited_decisions << filepath
+      add_decision [:inherit_from, filepath_info]
+      @inherited_decisions << filepath_info
       restore_inheritance(decisions)
+    end
+
+    def resolve_inheritance(filepath_info)
+      if (gem_name = filepath_info['gem'])
+        Pathname(gem_config_path(gem_name, filepath_info['path'])).read
+      else
+        open_uri(filepath_info['url'], filepath_info['authorization']).read
+      end
+    end
+
+    def gem_config_path(gem_name, relative_config_path)
+      spec = Gem::Specification.find_by_name(gem_name)
+      File.join(spec.gem_dir, relative_config_path)
+    rescue Gem::LoadError => e
+      raise Gem::LoadError,
+            "Unable to find gem #{gem_name}; is the gem installed? #{e}"
     end
 
     def remove_inheritance(filepath)
@@ -213,15 +240,29 @@ module LicenseFinder
       self
     end
 
-    def open_uri(uri)
+    def open_uri(uri, auth = nil)
+      header = {}
+      auth_header = resolve_authorization(auth)
+      header['Authorization'] = auth_header if auth_header
+
       # ruby < 2.5.0 URI.open is private
       if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.5.0')
         # rubocop:disable Security/Open
-        open(uri)
+        open(uri, header)
         # rubocop:enable Security/Open
       else
-        URI.open(uri)
+        URI.open(uri, header)
       end
+    end
+
+    def resolve_authorization(auth)
+      return unless auth
+
+      token_env = auth.match(/\$(\S.*)/)
+      return auth unless token_env
+
+      token = ENV[token_env[1]]
+      auth.sub(token_env[0], token)
     end
 
     #########

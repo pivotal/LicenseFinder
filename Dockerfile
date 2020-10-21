@@ -3,7 +3,7 @@ FROM ubuntu:xenial
 # Versioning
 ENV PIP_INSTALL_VERSION 19.0.2
 ENV PIP3_INSTALL_VERSION 8.1.1
-ENV GO_LANG_VERSION 1.13.3
+ENV GO_LANG_VERSION 1.14.3
 ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
@@ -48,11 +48,13 @@ ENV JAVA_HOME=/opt/jdk-12.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 RUN java -version
 
-# install python and rebar
-RUN apt-get install -y python rebar
+# install rebar3
+RUN curl -o rebar3 https://s3.amazonaws.com/rebar3/rebar3 && \
+    sudo chmod +x rebar3 && \
+    sudo mv rebar3 /usr/local/bin/rebar3
 
-# install and update python-pip
-RUN apt-get install -y python-pip python3-pip && \
+# install and update python and python-pip
+RUN apt-get install -y python python-pip python3-pip && \
     pip2 install --no-cache-dir --upgrade pip==$PIP_INSTALL_VERSION  && \
     pip3 install --no-cache-dir --upgrade pip==$PIP3_INSTALL_VERSION
 
@@ -141,8 +143,8 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
   echo "deb https://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
   apt-get update &&\
   apt-get install -y mono-complete &&\
-  curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe &&\
-  echo "alias nuget=\"mono /usr/local/bin/nuget.exe\"" >> ~/.bash_aliases
+  curl -o "/usr/local/bin/nuget.exe" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" &&\
+  curl -o "/usr/local/bin/nugetv3.5.0.exe" "https://dist.nuget.org/win-x86-commandline/v3.5.0/nuget.exe"
 
 # install dotnet core
 WORKDIR /tmp
@@ -150,14 +152,17 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsof
   sudo dpkg -i packages-microsoft-prod.deb &&\
   rm packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
-  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0
+  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1
 
+# install Composer
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
     echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
     apt-get update &&\
     apt-get install -y php7.4-cli &&\
+    EXPECTED_COMPOSER_INSTALLER_CHECKSUM="$(curl --silent https://composer.github.io/installer.sig)" &&\
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
-    php -r "if (hash_file('sha384', 'composer-setup.php') === 'e0012edf3e80b6978849f5eff0d4b4e4c79ff1609dd1e613307e16318854d24ae64f26d17af3ef0bf7cfb710ca74755a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" &&\
+    ACTUAL_COMPOSER_INSTALLER_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")" &&\
+    test "${ACTUAL_COMPOSER_INSTALLER_CHECKSUM}" = "${EXPECTED_COMPOSER_INSTALLER_CHECKSUM}" || (echo "ERROR: Invalid installer checksum" >&2; false) &&\
     php composer-setup.php &&\
     php -r "unlink('composer-setup.php');" &&\
     mv composer.phar /usr/bin/composer

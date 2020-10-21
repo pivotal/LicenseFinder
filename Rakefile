@@ -6,15 +6,6 @@ Bundler::GemHelper.install_tasks
 require './lib/license_finder/platform'
 require 'rspec/core/rake_task'
 
-namespace :spec do
-  desc 'Run test tagged \'focus\''
-  RSpec::Core::RakeTask.new(:focus) do |t|
-    t.fail_on_error = true
-    t.pattern = './spec/**/*_spec.rb'
-    t.rspec_opts = %w[--color --tag focus]
-  end
-end
-
 desc 'Run all specs in spec/'
 RSpec::Core::RakeTask.new(:spec) do |t|
   t.fail_on_error = true

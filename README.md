@@ -43,7 +43,7 @@ and give you an actionable exception report.
 
 ### Experimental project types
 
-* Erlang (via `rebar`)
+* Erlang (via `rebar` and `Erlang.mk`)
 * Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
@@ -176,6 +176,7 @@ languages, as long as that language has a package definition in the project dire
 * `Podfile` (for `pod`)
 * `Cartfile` (for `carthage`)
 * `rebar.config` (for `rebar`)
+* `Erlang.mk` or `erlang.mk` file (for `Erlang.mk`)
 * `mix.exs` (for `mix`)
 * `packages/` directory (for `nuget`)
 * `*.csproj` (for `dotnet`)
@@ -183,7 +184,7 @@ languages, as long as that language has a package definition in the project dire
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
 * `Gopkg.lock` file (for `dep`)
-* `go.sum` file (for `go mod`)
+* `go.mod` file (for `go mod`)
 * `vendor.conf` file (for `trash`)
 * `yarn.lock` file (for `yarn`)
 * `conanfile.txt` file (for `conan`)
@@ -327,7 +328,7 @@ you should manually research what the actual license is.  When you
 have established the real license, you can record it with:
 
 ```sh
-$ license_finder dependencies add my_unknown_dependency MIT --homepage="www.unknown-code.org"
+$ license_finder licenses add my_unknown_dependency MIT --homepage="www.unknown-code.org"
 ```
 
 This command would assign the MIT license to the dependency
@@ -379,6 +380,26 @@ items, even if someone attempts to manually approve or permit it.  However,
 if a dependency has even one license that is not restricted, it can still be
 manually approved or permitted.
 
+## Decision inheritance
+
+Add or remove decision files you want to inherit from - see `license_finder inherited_decisions help` for more information.
+
+This allows you to have a centralized decision file for approved/restricted licenses. If you have multiple projects it's way easier to have one single place where you approved or restricted licenses defined.
+
+Add one or more decision files to the inherited decisions
+```bash
+license_finder inherited_decisions add DECISION_FILE
+```
+
+Remove one or more decision files from the inherited decisions
+```bash
+license_finder inherited_decisions remove DECISION_FILE
+```
+
+List all the inherited decision files
+```bash
+license_finder inherited_decisions list
+```
 
 ## Configuration
 
@@ -392,7 +413,7 @@ If you have a gradle project, you can invoke gradle with a custom script by
 passing (for example) `--gradle_command gradlew` to `license_finder` or
 `license_finder report`.
 
-Similarly you can invoke a custom rebar script with `--rebar_command rebar2`.
+Similarly you can invoke a custom rebar script with `--rebar_command rebar`.
 If you store rebar dependencies in a custom directory (by setting `deps_dir` in
 `rebar.config`), set `--rebar_deps_dir`.
 
@@ -466,6 +487,8 @@ licenseConfigurations := Set("compile", "provided")
 
 
 ## Upgrading
+
+To upgrade to `license_finder` version >= 6.0, you have to replace the terminology `whitelist` with `permit` and  `blacklist` with `restrict` in your `dependency_decisions.yml`. See [Changelog](https://github.com/pivotal/LicenseFinder/blob/master/CHANGELOG.md#600--2020-01-22) for more details.
 
 To upgrade from `license_finder` version 1.2 to 2.0, see
 [`license_finder_upgrade`](https://github.com/mainej/license_finder_upgrade).

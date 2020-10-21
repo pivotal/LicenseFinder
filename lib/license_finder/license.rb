@@ -19,7 +19,17 @@ module LicenseFinder
 
       def find_by_name(name)
         name ||= 'unknown'
-        all.detect { |l| l.matches_name? l.stripped_name(name) } || Definitions.build_unrecognized(name)
+        license = all.detect { |l| l.matches_name? l.stripped_name(name) }
+
+        if license
+          license
+        elsif name.include?(OrLicense.operator)
+          OrLicense.new(name)
+        elsif name.include?(AndLicense.operator)
+          AndLicense.new(name)
+        else
+          Definitions.build_unrecognized(name)
+        end
       end
 
       def find_by_text(text)
@@ -61,6 +71,10 @@ module LicenseFinder
       name.hash
     end
 
+    def unrecognized_matcher?
+      matcher.is_a?(NoneMatcher)
+    end
+
     private
 
     attr_reader :short_name, :pretty_name, :other_names
@@ -68,6 +82,36 @@ module LicenseFinder
 
     def names
       ([short_name, pretty_name] + other_names).uniq
+    end
+  end
+  class AndLicense < License
+    def self.operator
+      ' AND '
+    end
+
+    def initialize(name, operator = AndLicense.operator)
+      @short_name = name
+      @pretty_name = name
+      @url = nil
+      @matcher = NoneMatcher.new
+      # removes heading and trailing parentesis and splits
+      name = name[1..-2] if name.start_with?('(')
+      names = name.split(operator)
+      @sub_licenses = names.map do |sub_name|
+        License.find_by_name(sub_name)
+      end
+    end
+
+    attr_reader :sub_licenses
+  end
+
+  class OrLicense < AndLicense
+    def self.operator
+      ' OR '
+    end
+
+    def initialize(name)
+      super(name, OrLicense.operator)
     end
   end
 end

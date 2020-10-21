@@ -19,13 +19,15 @@ module LicenseFinder
           lgpl,
           lgpl2_1,
           mit,
+          mpl1_1,
           mpl2,
           newbsd,
           ofl,
           python,
           ruby,
           simplifiedbsd,
-          wtfpl
+          wtfpl,
+          zerobsd
         ]
       end
 
@@ -181,8 +183,32 @@ module LicenseFinder
         )
       end
 
+      def mpl1_1
+        header_regexp = /Mozilla Public Licen[sc]e.*Version 1\.1/im
+
+        header_regexp_matcher = Matcher.from_regex(header_regexp)
+        mpl1_1_tmpl = Template.named('MPL1_1')
+
+        matcher = AnyMatcher.new(
+          HeaderMatcher.new(header_regexp_matcher, 2),
+          Matcher.from_template(mpl1_1_tmpl)
+        )
+
+        License.new(
+          short_name: 'MPL1_1',
+          pretty_name: 'Mozilla Public License 1.1',
+          other_names: [
+            'MPL-1.1',
+            'Mozilla Public License, Version 1.1',
+            'Mozilla Public License version 1.1'
+          ],
+          url: 'https://www.mozilla.org/media/MPL/1.1/index.0c5913925d40.txt',
+          matcher: matcher
+        )
+      end
+
       def mpl2
-        header_regexp = /Mozilla Public Licen[sc]e, version 2.0/
+        header_regexp = /Mozilla Public Licen[sc]e, version 2\.0/
 
         matcher = AnyMatcher.new(
           Matcher.from_template(Template.named('MPL2')),
@@ -300,6 +326,27 @@ module LicenseFinder
             'Do What The Fuck You Want To Public License'
           ],
           url: 'http://www.wtfpl.net/'
+        )
+      end
+
+      def zerobsd
+        matcher = AnyMatcher.new(
+          Matcher.from_template(Template.named('0BSD'))
+        )
+
+        License.new(
+          short_name: '0BSD',
+          pretty_name: 'BSD Zero Clause License',
+          other_names: [
+            '0-Clause BSD',
+            'Zero-Clause BSD',
+            'BSD-0-Clause',
+            'BSD-Zero-Clause',
+            'BSD 0-Clause',
+            'BSD Zero-Clause'
+          ],
+          url: 'https://opensource.org/licenses/0BSD',
+          matcher: matcher
         )
       end
     end

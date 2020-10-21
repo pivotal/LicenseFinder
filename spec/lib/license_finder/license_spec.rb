@@ -3,6 +3,30 @@
 require 'spec_helper'
 
 module LicenseFinder
+  describe AndLicense do
+    describe '.find_by_name' do
+      it 'should create a compound OR license' do
+        license = License.find_by_name('(MIT AND CC0-1.0)')
+        expect(license.name).to eq '(MIT AND CC0-1.0)'
+        expect(license.is_a?(AndLicense)).to eq true
+      end
+      it 'should create populate sub licenses for compound AND' do
+        license = License.find_by_name('(MIT AND CC0-1.0)')
+        expect(license.sub_licenses[0].name).to eq 'MIT'
+        expect(license.sub_licenses[1].name).to eq 'CC0-1.0'
+      end
+    end
+  end
+  describe AndLicense do
+    describe '.find_by_name' do
+      # sub licenses case already tested on and, since this is subclass
+      it 'should create a compound OR license' do
+        license = License.find_by_name('MIT OR CC0-1.0')
+        expect(license.name).to eq 'MIT OR CC0-1.0'
+        expect(license.is_a?(OrLicense)).to eq true
+      end
+    end
+  end
   describe License do
     describe '.find_by_name' do
       it 'should find a registered license' do
@@ -108,6 +132,24 @@ module LicenseFinder
 
     it 'should default pretty_name to short_name' do
       expect(make_license.name).to eq('Default Short Name')
+    end
+  end
+
+  describe '.unrecognized_matcher?' do
+    context 'when the license has unrecognized matcher' do
+      let(:license) { License::Definitions.build_unrecognized('unknown') }
+
+      it 'should return true' do
+        expect(license.unrecognized_matcher?).to be_truthy
+      end
+    end
+
+    context 'when the license does not have unrecognized matcher' do
+      let(:license) { License.find_by_name('The MIT License') }
+
+      it 'should return false' do
+        expect(license.unrecognized_matcher?).to be_falsy
+      end
     end
   end
 end

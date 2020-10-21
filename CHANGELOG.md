@@ -1,3 +1,50 @@
+# [6.9.0] / 2020-10-05
+
+### Changed
+* to recognize permitted licenses with AND in the name [#173997648] - [eab14250](https://github.com/pivotal/LicenseFinder/commit/eab14250d188153f8c2b0b5c0191fec19bcddf55) - Raymond Lee
+
+# [6.8.2] / 2020-09-08
+
+# [6.8.1] / 2020-08-13
+
+# [6.8.0] / 2020-08-06
+
+# [6.7.0] / 2020-07-23
+
+# [6.6.2] / 2020-07-09
+
+### Added
+* support for rebar3 - [b20e7444](https://github.com/pivotal/LicenseFinder/commit/b20e7444c147d8dbfa46eb4e8e549e03be751e02) - Jeff Jun
+* Support for Go modules projects outside of the current working directory - [56b3bec6](https://github.com/pivotal/LicenseFinder/commit/56b3bec632b3884ce4cad538742b4a13c55fd7c5)
+
+### Changed
+* Change Go modules to only report imported packages (as with other Go package managers) - [34361fda](https://github.com/pivotal/LicenseFinder/commit/34361fdab2dc3f197f7aec6408175018dee3b453) and [dffae4ab](https://github.com/pivotal/LicenseFinder/commit/dffae4ab95e34115b6a54bf681fc0966a8611f01)
+* Detect Go modules based on `go.mod` (instead of `go.sum`) - [667f6be7](https://github.com/pivotal/LicenseFinder/commit/667f6be716504a53ccc2824daae08af085566546)
+
+### Fixed
+* handle empty case for mix dependencies [#173637843] - [fc34b281](https://github.com/pivotal/LicenseFinder/commit/fc34b2813925a709addde675849e199b05fc4a23) - Jeff Jun
+
+### Removed
+* support for rebar2 [#173637980] - [b20e7444](https://github.com/pivotal/LicenseFinder/commit/b20e7444c147d8dbfa46eb4e8e549e03be751e02) - Jeff Jun
+* Removed the unnecessary prepare command for Go modules - [284cc5c8](https://github.com/pivotal/LicenseFinder/commit/284cc5c821270a6e56275e32bac836a3e451f46b)
+
+# [6.6.1] / 2020-06-30
+
+### Changed
+* Handle multiple solution files for nuget [#173021333] - [040d9559](https://github.com/pivotal/LicenseFinder/commit/040d9559a4bda07490255cc34c1a7891081bc511) 
+* matches license names from pypi api call with known licenses to avoid returning misformatted licenses [#173421573] - [6b96d746](https://github.com/pivotal/LicenseFinder/commit/6b96d74600034abcacee6ed2b322aa3abfaa0992) - Jeff Jun
+* Update Nuget Package Manager prepare command - [6ac07066](https://github.com/pivotal/LicenseFinder/commit/6ac070668955bc034da1647658440ce5bb0d9bd2) - Jason Smith
+
+# [6.6.0] / 2020-06-22
+
+# [6.5.0] / 2020-06-01
+
+### Added
+* Support legacy nuget projects [#172950097] - [0cccbcf9](https://github.com/pivotal/LicenseFinder/commit/0cccbcf9aa92f4297ef0174242bdb19da1babc65) 
+
+### Changed
+* Upgrade to golang 1.14.3. Update dotnet-sdk to 3.1 - [0969e98f](https://github.com/pivotal/LicenseFinder/commit/0969e98fde4a82f8931601baa4dd96dc01300a14) 
+
 # [6.4.0] / 2020-05-22
 
 Big shout out to @forelabs for introducing many new features and improvements for this release. Thanks again!!
@@ -865,3 +912,12 @@ Bugfixes:
 [6.2.0]: https://github.com/pivotal/LicenseFinder/compare/v6.1.2...v6.2.0
 [6.3.0]: https://github.com/pivotal/LicenseFinder/compare/v6.2.0...v6.3.0
 [6.4.0]: https://github.com/pivotal/LicenseFinder/compare/v6.3.0...v6.4.0
+[6.5.0]: https://github.com/pivotal/LicenseFinder/compare/v6.4.0...v6.5.0
+[6.6.0]: https://github.com/pivotal/LicenseFinder/compare/v6.5.0...v6.6.0
+[6.6.1]: https://github.com/pivotal/LicenseFinder/compare/v6.6.0...v6.6.1
+[6.6.2]: https://github.com/pivotal/LicenseFinder/compare/v6.6.1...v6.6.2
+[6.7.0]: https://github.com/pivotal/LicenseFinder/compare/v6.6.2...v6.7.0
+[6.8.0]: https://github.com/pivotal/LicenseFinder/compare/v6.7.0...v6.8.0
+[6.8.1]: https://github.com/pivotal/LicenseFinder/compare/v6.8.0...v6.8.1
+[6.8.2]: https://github.com/pivotal/LicenseFinder/compare/v6.8.1...v6.8.2
+[6.9.0]: https://github.com/pivotal/LicenseFinder/compare/v6.8.2...v6.9.0

@@ -96,7 +96,7 @@ module LicenseFinder
       raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
       packages_lines(stdout)
-        .reject { |package_lines| package_lines.length == 1 } # in_umbrella: true dependencies
+        .reject { |package_lines| package_lines.length == 1 || package_lines.empty? } # in_umbrella: true dependencies
         .map { |package_lines| [package_lines[0].split(' ')[1], resolve_version(package_lines[1])] }
     end
 

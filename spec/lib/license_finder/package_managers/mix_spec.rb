@@ -75,6 +75,15 @@ module LicenseFinder
         current_packages = mix.current_packages
         expect(current_packages.map(&:install_path)).to eq([Pathname('foo/fs'), Pathname('foo/gettext'), Pathname('foo/uuid-refknown'), Pathname('foo/uuid')])
       end
+
+      context 'when there are no packages' do
+        it 'should return empty array of packages' do
+          allow(SharedHelpers::Cmd).to receive(:run).with('mix deps').and_return(['', '', cmd_success])
+
+          current_packages = subject.current_packages
+          expect(current_packages).to eq([])
+        end
+      end
     end
 
     describe '.prepare_command' do

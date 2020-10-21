@@ -294,6 +294,41 @@ module LicenseFinder
         decisions = subject.inherit_from('https://example.com/config/inherit.yml')
         expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
+
+      it 'inheritates rules from remote decision file with new config format' do
+        stub_request(:get, 'https://example.com/config/inherit.yml').to_return(status: 200, body: yml, headers: {})
+        decisions = subject.inherit_from({ 'url' => 'https://example.com/config/inherit.yml' })
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
+      end
+
+      it 'inheritates rules from gem decision file' do
+        gem_spec = OpenStruct.new(gem_dir: 'gem-name')
+        allow(Gem::Specification).to receive(:find_by_name).with('gem-name').and_return(gem_spec)
+        allow_any_instance_of(Pathname).to receive(:read).and_return(yml)
+
+        decisions = subject.inherit_from({ 'gem' => 'gem-name', 'path' => 'doc/decisions.yml' })
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
+      end
+
+      it 'inheritates rules from a private remote decision file' do
+        stub_request(:get, 'https://example.com/config/inherit.yml')
+          .with(headers: { 'Authorization' => 'Bearer Token' })
+          .to_return(status: 200, body: yml, headers: {})
+        decisions = subject.inherit_from({ 'url' => 'https://example.com/config/inherit.yml', 'authorization' => 'Bearer Token' })
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
+      end
+
+      it 'inheritates rules from a private remote decision file with token in an env variable' do
+        allow(ENV).to receive(:[])
+        allow(ENV).to receive(:[]).with('TOKEN_ENV').and_return('Token')
+
+        stub_request(:get, 'https://example.com/config/inherit.yml')
+          .with(headers: { 'Authorization' => 'Bearer Token' })
+          .to_return(status: 200, body: yml, headers: {})
+
+        decisions = subject.inherit_from({ 'url' => 'https://example.com/config/inherit.yml', 'authorization' => 'Bearer $TOKEN_ENV' })
+        expect(decisions).to be_permitted(License.find_by_name('MIT'))
+      end
     end
 
     describe '.remove_inheritance' do

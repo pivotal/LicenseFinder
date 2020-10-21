@@ -63,7 +63,8 @@ module LicenseFinder
                           .uniq { |d| [d.name, d.version] }
 
       package_metadatas.map do |d|
-        NugetPackage.new(d.name, d.version, spec_licenses: d.read_license_urls)
+        path = Dir.glob("#{Dir.home}/.nuget/packages/#{d.name.downcase}/#{d.version}").first
+        NugetPackage.new(d.name, d.version, spec_licenses: d.read_license_urls, install_path: path)
       end
     end
 

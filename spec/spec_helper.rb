@@ -8,15 +8,16 @@ require 'rspec'
 require 'webmock/rspec'
 require 'rspec/its'
 
+require 'pry'
+
 Dir[File.join(File.dirname(__FILE__), 'support', '**', '*.rb')].sort.each do |file|
   require file
 end
 
 RSpec.configure do |config|
   config.mock_with :rspec
-end
+  config.filter_run_when_matching :focus
 
-RSpec.configure do |config|
   config.include SharedDefinitions
 
   config.after(:suite) do

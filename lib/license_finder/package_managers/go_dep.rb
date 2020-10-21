@@ -4,6 +4,9 @@ require 'json'
 
 module LicenseFinder
   class GoDep < PackageManager
+    OLD_GODEP_VENDOR_PATH = 'Godeps/_workspace/src'
+    GODEP_VENDOR_PATH = 'vendor'
+
     def initialize(options = {})
       super
       @full_version = options[:go_full_version]
@@ -29,16 +32,20 @@ module LicenseFinder
     private
 
     def install_prefix
-      go_path = if workspace_dir.directory?
-                  workspace_dir
-                else
-                  Pathname(ENV['GOPATH'] || ENV['HOME'] + '/go')
-                end
-      go_path.join('src')
+      @install_prefix ||= if project_path.join(OLD_GODEP_VENDOR_PATH).directory?
+                            project_path.join(OLD_GODEP_VENDOR_PATH)
+                          elsif project_path.join(GODEP_VENDOR_PATH).directory?
+                            project_path.join(GODEP_VENDOR_PATH)
+                          else
+                            download_dependencies
+                            Pathname(ENV['GOPATH'] ? ENV['GOPATH'] + '/src' : ENV['HOME'] + '/go/src')
+                          end
     end
 
-    def workspace_dir
-      project_path.join('Godeps/_workspace')
+    def download_dependencies
+      command = "#{package_management_command} restore"
+      _, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" if !status.success? && status.exitstatus != 1
     end
 
     def packages_from_json(json_string)

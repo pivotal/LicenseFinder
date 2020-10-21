@@ -119,8 +119,12 @@ module LicenseFinder
     attr_reader :logger, :project_path
 
     def log_errors(stderr)
-      logger.info prepare_command, 'did not succeed.', color: :red
-      logger.info prepare_command, stderr, color: :red
+      log_errors_with_cmd(prepare_command, stderr)
+    end
+
+    def log_errors_with_cmd(prep_cmd, stderr)
+      logger.info(prep_cmd, 'did not succeed.', color: :red)
+      logger.info(prep_cmd, stderr, color: :red)
       log_to_file stderr
     end
 
@@ -159,6 +163,7 @@ require 'license_finder/package_managers/cocoa_pods'
 require 'license_finder/package_managers/carthage'
 require 'license_finder/package_managers/gradle'
 require 'license_finder/package_managers/rebar'
+require 'license_finder/package_managers/erlangmk'
 require 'license_finder/package_managers/nuget'
 require 'license_finder/package_managers/dotnet'
 require 'license_finder/package_managers/dep'
