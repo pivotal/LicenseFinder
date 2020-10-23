@@ -14,7 +14,7 @@ module LicenseFinder
     end
 
     def prepare_command
-      'npm install --no-save'
+      'npm install --no-save --ignore-scripts'
     end
 
     def possible_package_paths
