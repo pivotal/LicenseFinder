@@ -24,7 +24,7 @@ module LicenseFinder
     # Default +options+:
     # {
     #   project_path: Pathname.pwd
-    #   logger: {},   # can include quiet: true or debug: true
+    #   logger: nil,   # can be :quiet or :debug
     #   decisions_file: "doc/dependency_decisions.yml",
     #   gradle_command: "gradle",
     #   rebar_command: "rebar",
