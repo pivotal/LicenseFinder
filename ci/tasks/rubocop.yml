@@ -5,6 +5,8 @@ image_resource:
   source:
     repository: ruby
     tag: 2.7.1
+    username: ((LicenseFinderDocker.username))
+    password: ((LicenseFinderDocker.password))
 
 inputs:
 - name: LicenseFinder

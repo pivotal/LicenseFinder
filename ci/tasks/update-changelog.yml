@@ -4,6 +4,8 @@ image_resource:
   source:
     repository: brenix/alpine-bash-git-ssh
     tag: latest
+    username: ((LicenseFinderDocker.username))
+    password: ((LicenseFinderDocker.password))
 platform: linux
 inputs:
 - name: lf-git
