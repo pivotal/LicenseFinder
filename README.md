@@ -420,6 +420,15 @@ If you store rebar dependencies in a custom directory (by setting `deps_dir` in
 You can also invoke a custom Mix script `remix` with `--mix_command remix` and
 set `--mix_deps_dir` to fetch Mix dependencies from a custom directory.
 
+### Narrow down Package Manager
+
+By default, license_finder will check for all supported package managers,
+but you can narrow it down to use only those you pass to `--enabled-package-manager`.
+For example,
+
+```
+$ license_finder --enabled-package-manager bundler npm
+```
 
 ### Saving Configuration
 
@@ -437,6 +446,11 @@ rebar_command: './rebarw'
 rebar_deps_dir: './rebar_deps'
 mix_command: './mixw'
 mix_deps_dir: './mix_deps'
+enabled_package_managers:
+  - bundler
+  - gradle
+  - rebar
+  - mix
 ```
 
 ### Gradle Projects
