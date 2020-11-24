@@ -22,6 +22,10 @@ module LicenseFinder
       def takes_priority_over
         nil
       end
+
+      def id
+        name.split('::').last.downcase
+      end
     end
 
     def installed?(logger = Core.default_logger)

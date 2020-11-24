@@ -11,6 +11,10 @@ module LicenseFinder
                    desc: 'Where decisions are saved. Defaults to doc/dependency_decisions.yml.'
       class_option :log_directory,
                    desc: 'Where logs are saved. Defaults to ./lf_logs/$PROJECT/prepare_$PACKAGE_MANAGER.log'
+      class_option :enabled_package_managers,
+                   desc: 'List of package managers to be enabled. Defaults to all supported package managers.',
+                   type: :array,
+                   enum: LicenseFinder::Scanner.supported_package_manager_ids
 
       no_commands do
         def decisions
@@ -32,6 +36,7 @@ module LicenseFinder
         extract_options(
           :project_path,
           :decisions_file,
+          :enabled_package_managers,
           :go_full_version,
           :gradle_command,
           :gradle_include_groups,

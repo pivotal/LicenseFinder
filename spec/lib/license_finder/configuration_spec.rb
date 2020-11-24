@@ -33,6 +33,24 @@ module LicenseFinder
       end
     end
 
+    describe 'enabled_package_managers' do
+      it 'prefers primary values' do
+        subject = described_class.new(
+          { enabled_package_managers: ['primary'] },
+          'enabled_package_managers' => ['secondary']
+        )
+        expect(subject.enabled_package_manager_ids).to contain_exactly('primary')
+      end
+
+      it 'accepts saved value' do
+        subject = described_class.new(
+          { enabled_package_managers: nil },
+          'enabled_package_managers' => ['secondary']
+        )
+        expect(subject.enabled_package_manager_ids).to contain_exactly('secondary')
+      end
+    end
+
     describe 'gradle_command' do
       it 'prefers primary value' do
         subject = described_class.new(
