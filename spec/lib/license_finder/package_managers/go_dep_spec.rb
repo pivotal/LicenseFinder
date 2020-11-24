@@ -49,7 +49,7 @@ module LicenseFinder
         end
       end
 
-      context ' when there is a populated godep json' do
+      context 'when there is a populated godep json' do
         before do
           FakeFS.activate!
           FileUtils.mkdir_p '/fake/path/Godeps'
@@ -110,9 +110,9 @@ module LicenseFinder
           end
         end
 
-        context 'when dependencies are vendored' do
+        context 'when dependencies are vendored in _workspace' do
           before do
-            allow(FileTest).to receive(:directory?).with('/fake/path/Godeps/_workspace').and_return(true)
+            allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::OLD_GODEP_VENDOR_PATH}").and_return(true)
           end
 
           it 'should return an array of packages' do
@@ -123,8 +123,39 @@ module LicenseFinder
 
           it 'should set the install_path to the vendored directory' do
             packages = subject.current_packages
-            expect(packages[0].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/foo')
-            expect(packages[1].install_path).to eq('/fake/path/Godeps/_workspace/src/github.com/pivotal/bar')
+            expect(packages[0].install_path).to eq("/fake/path/#{GoDep::OLD_GODEP_VENDOR_PATH}/github.com/pivotal/foo")
+            expect(packages[1].install_path).to eq("/fake/path/#{GoDep::OLD_GODEP_VENDOR_PATH}/github.com/pivotal/bar")
+          end
+
+          context 'when requesting the full version' do
+            let(:options) { { go_full_version: true } }
+
+            it 'list the dependencies with full version' do
+              expect(subject.current_packages.map(&:version)).to eq %w[
+                61164e49940b423ba1f12ddbdf01632ac793e5e9
+                3245708abcdef234589450649872346783298736
+                3245708abcdef234589450649872346783298735
+              ]
+            end
+          end
+        end
+
+        context 'when dependencies are vendored in the vendor directory' do
+          before do
+            allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::OLD_GODEP_VENDOR_PATH}").and_return(false)
+            allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::GODEP_VENDOR_PATH}").and_return(true)
+          end
+
+          it 'should return an array of packages' do
+            packages = subject.current_packages
+            expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
+            expect(packages.map(&:version)).to include('61164e4', '3245708')
+          end
+
+          it 'should set the install_path to the vendored directory' do
+            packages = subject.current_packages
+            expect(packages[0].install_path).to eq("/fake/path/#{GoDep::GODEP_VENDOR_PATH}/github.com/pivotal/foo")
+            expect(packages[1].install_path).to eq("/fake/path/#{GoDep::GODEP_VENDOR_PATH}/github.com/pivotal/bar")
           end
 
           context 'when requesting the full version' do
@@ -141,25 +172,85 @@ module LicenseFinder
         end
 
         context 'when dependencies are not vendored' do
-          before do
-            @orig_gopath = ENV['GOPATH']
-            ENV['GOPATH'] = '/fake/go/path'
+          context 'when GOPATH is set' do
+            before do
+              @orig_gopath = ENV['GOPATH']
+              ENV['GOPATH'] = '/fake/go/path'
+
+              allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::OLD_GODEP_VENDOR_PATH}").and_return(false)
+              allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::GODEP_VENDOR_PATH}").and_return(false)
+
+              expect(SharedHelpers::Cmd).to receive(:run).with('godep restore').and_return(['output', nil, cmd_success])
+            end
+
+            after do
+              ENV['GOPATH'] = @orig_gopath
+            end
+
+            it 'should return an array of packages' do
+              packages = subject.current_packages
+              expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
+              expect(packages.map(&:version)).to include('61164e4', '3245708')
+            end
+
+            it 'should set the install_path to the GOPATH' do
+              packages = subject.current_packages
+              expect(packages[0].install_path).to eq('/fake/go/path/src/github.com/pivotal/foo')
+              expect(packages[1].install_path).to eq('/fake/go/path/src/github.com/pivotal/bar')
+            end
           end
 
-          after do
-            ENV['GOPATH'] = @orig_gopath
+          context 'when GOPATH is not set' do
+            before do
+              @orig_gopath = ENV['GOPATH']
+              @orig_home = ENV['HOME']
+              ENV.delete('GOPATH')
+              ENV['HOME'] = '/some-home'
+
+              allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::OLD_GODEP_VENDOR_PATH}").and_return(false)
+              allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::GODEP_VENDOR_PATH}").and_return(false)
+
+              expect(SharedHelpers::Cmd).to receive(:run).with('godep restore').and_return(['output', nil, cmd_success])
+            end
+
+            after do
+              ENV['GOPATH'] = @orig_gopath
+              ENV['HOME'] = @orig_home
+            end
+
+            it 'should return an array of packages' do
+              packages = subject.current_packages
+              expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
+              expect(packages.map(&:version)).to include('61164e4', '3245708')
+            end
+
+            it 'should set the install_path to the GOPATH' do
+              packages = subject.current_packages
+              expect(packages[0].install_path).to eq('/some-home/go/src/github.com/pivotal/foo')
+              expect(packages[1].install_path).to eq('/some-home/go/src/github.com/pivotal/bar')
+            end
           end
 
-          it 'should return an array of packages' do
-            packages = subject.current_packages
-            expect(packages.map(&:name)).to include('github.com/pivotal/foo', 'github.com/pivotal/bar')
-            expect(packages.map(&:version)).to include('61164e4', '3245708')
-          end
+          context 'when godep restore fails' do
+            let(:failed_status) { double(Process::Status, success?: false, exitstatus: 0) }
 
-          it 'should set the install_path to the GOPATH' do
-            packages = subject.current_packages
-            expect(packages[0].install_path).to eq('/fake/go/path/src/github.com/pivotal/foo')
-            expect(packages[1].install_path).to eq('/fake/go/path/src/github.com/pivotal/bar')
+            before do
+              @orig_gopath = ENV['GOPATH']
+              ENV['GOPATH'] = '/fake/go/path'
+
+              allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::OLD_GODEP_VENDOR_PATH}").and_return(false)
+              allow(FileTest).to receive(:directory?).with("/fake/path/#{GoDep::GODEP_VENDOR_PATH}").and_return(false)
+
+              expect(SharedHelpers::Cmd).to receive(:run).with('godep restore').and_return([nil, 'some-error-message', failed_status])
+            end
+
+            after do
+              ENV['GOPATH'] = @orig_gopath
+            end
+
+            it 'should raise error' do
+              expect { subject.current_packages }.to raise_error("Command 'godep restore' failed to execute: some-error-message")
+            end
           end
         end
       end

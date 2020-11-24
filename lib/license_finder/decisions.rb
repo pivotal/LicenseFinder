@@ -40,10 +40,15 @@ module LicenseFinder
     end
 
     def permitted?(lic)
-      return lic.sub_licenses.any? { |sub_lic| @permitted.include?(sub_lic) } if lic.is_a?(OrLicense)
-      return lic.sub_licenses.all? { |sub_lic| @permitted.include?(sub_lic) } if lic.is_a?(AndLicense)
-
-      @permitted.include?(lic)
+      if @permitted.include?(lic)
+        true
+      elsif lic.is_a?(OrLicense)
+        lic.sub_licenses.any? { |sub_lic| @permitted.include?(sub_lic) }
+      elsif lic.is_a?(AndLicense)
+        lic.sub_licenses.all? { |sub_lic| @permitted.include?(sub_lic) }
+      else
+        false
+      end
     end
 
     def restricted?(lic)

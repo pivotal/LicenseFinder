@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites failures="<%= unapproved_dependencies.size %>" name="<%= project_name %>" tests="<%= dependencies.size %>">
+<% sorted_dependencies.each_with_index do |dependency, i| -%>
+  <testsuite failures="<%= dependency.approved? ? "0" : "1" -%>" id="<%= i %>" name="<%= dependency.name %>" package="Gemfile.lock" skipped="0" tests="1" timestamp="<%= Time.now.strftime("%Y-%m-%dT%H:%M:%S:%6N") %>">
+    <testcase classname="<%= license_names(dependency) %>" name="<%= dependency.name %>"<%= dependency.approved? ? " /" : "" %>>
+    <%- unless dependency.approved? -%>
+      <failure message="Unapproved license in '<%= dependency.name %>' <%= dependency.version %>">
+Name: <%= dependency.name %>
+Version: <%= dependency.version %>
+Licence:
+<%- if dependency.licenses.any? -%>
+<%- dependency.licenses.each do |license| -%>- <%=license.name %>: <%=license.url %><% end %>
+<%- end -%>
+URL: <%= dependency.package_url %>
+Homepage: <%= dependency.homepage %>
+Summary: <%= REXML::Text.new(dependency.summary, false, nil, false) %>
+Description: <%= REXML::Text.new(dependency.description, false, nil, false) %>
+<% if dependency.parents.any? %>
+Dependencies:
+<% dependency.parents.to_a.each do |dep| -%>
+- <%= dep %>
+<% end -%>
+<% end -%>
+<%- if dependency.children.any? -%>
+Requirements:
+<%- dependency.children.each do |req| -%>
+- <%= req %>
+<% end -%>
+<% end -%>
+      </failure>
+      <system-out>
+stdout
+      </system-out>
+      <system-err>
+stderr
+      </system-err>
+    </testcase>
+  <%- end -%>
+  </testsuite>
+<% end -%>
+</testsuites>

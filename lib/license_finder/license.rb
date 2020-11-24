@@ -19,10 +19,17 @@ module LicenseFinder
 
       def find_by_name(name)
         name ||= 'unknown'
-        return OrLicense.new(name) if name.include?(OrLicense.operator)
-        return AndLicense.new(name) if name.include?(AndLicense.operator)
+        license = all.detect { |l| l.matches_name? l.stripped_name(name) }
 
-        all.detect { |l| l.matches_name? l.stripped_name(name) } || Definitions.build_unrecognized(name)
+        if license
+          license
+        elsif name.include?(OrLicense.operator)
+          OrLicense.new(name)
+        elsif name.include?(AndLicense.operator)
+          AndLicense.new(name)
+        else
+          Definitions.build_unrecognized(name)
+        end
       end
 
       def find_by_text(text)

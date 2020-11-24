@@ -65,6 +65,10 @@ module LicenseFinder
       Pathname(path_prefix).expand_path
     end
 
+    def enabled_package_manager_ids
+      get(:enabled_package_managers)
+    end
+
     def logger_mode
       get(:logger)
     end
