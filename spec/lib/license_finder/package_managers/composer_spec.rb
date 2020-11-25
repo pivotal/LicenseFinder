@@ -31,8 +31,8 @@ module LicenseFinder
         FileUtils.mkdir_p(root)
       end
 
-      it 'should call composer install --no-plugins --ignore-platform-reqs --no-interaction' do
-        expect(SharedHelpers::Cmd).to receive(:run).with('composer install --no-plugins --ignore-platform-reqs --no-interaction')
+      it 'should call composer install --no-plugins --no-scripts --ignore-platform-reqs --no-interaction' do
+        expect(SharedHelpers::Cmd).to receive(:run).with('composer install --no-plugins --no-scripts --ignore-platform-reqs --no-interaction')
                                                    .and_return([composer_shell_command_output, '', cmd_success])
         subject.prepare
       end

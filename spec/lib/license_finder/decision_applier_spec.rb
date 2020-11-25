@@ -268,6 +268,16 @@ module LicenseFinder
         expect(dep).not_to be_approved
         expect(dep).not_to be_permitted
       end
+      it 'does not mix up with non-compound license with AND' do
+        dep = Package.new('dep', nil, spec_licenses: ['Common Development and Distribution License 1.0'])
+        decisions = Decisions.new
+                             .add_package('manual', nil)
+                             .license('manual', 'Common Development and Distribution License 1.0')
+                             .permit('Common Development and Distribution License 1.0')
+        described_class.new(decisions: decisions, packages: [dep])
+        expect(dep).to be_approved
+        expect(dep).to be_permitted
+      end
     end
     describe 'OR compound licenses' do
       it 'checks at least one OR condition: success case' do

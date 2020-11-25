@@ -136,7 +136,7 @@ command.
 
 If you have docker installed, try using the included `dlf` script (potentially
 symlinked to be in your path via `ln -s LicenseFinder/dlf /usr/local/bin` or
-whatever method you prefer). This will run any commmands passed to it inside a
+whatever method you prefer). This will run any commands passed to it inside a
 pre-provisioned Docker container to maintain consistent versions of all the
 package managers. For example,
 
@@ -160,7 +160,7 @@ passed to it from that directory.
 Note that the docker image will run the gem which is installed within it.
 So the docker image tagged `4.0.2` will run *License Finder Version 4.0.2*
 
-See the [contibuting guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development.
+See the [contributing guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
 
 ### Activation
 
@@ -333,7 +333,7 @@ $ license_finder licenses add my_unknown_dependency MIT --homepage="www.unknown-
 ```
 
 This command would assign the MIT license to the dependency
-`my_unknown_dependency`. It will also set its homepage to `wwww.unknown-code.org`.
+`my_unknown_dependency`. It will also set its homepage to `www.unknown-code.org`.
 
 
 ### Adding Hidden Dependencies
@@ -421,6 +421,15 @@ If you store rebar dependencies in a custom directory (by setting `deps_dir` in
 You can also invoke a custom Mix script `remix` with `--mix_command remix` and
 set `--mix_deps_dir` to fetch Mix dependencies from a custom directory.
 
+### Narrow down Package Manager
+
+By default, license_finder will check for all supported package managers,
+but you can narrow it down to use only those you pass to `--enabled-package-manager`.
+For example,
+
+```
+$ license_finder --enabled-package-manager bundler npm
+```
 
 ### Saving Configuration
 
@@ -438,6 +447,11 @@ rebar_command: './rebarw'
 rebar_deps_dir: './rebar_deps'
 mix_command: './mixw'
 mix_deps_dir: './mix_deps'
+enabled_package_managers:
+  - bundler
+  - gradle
+  - rebar
+  - mix
 ```
 
 ### Gradle Projects

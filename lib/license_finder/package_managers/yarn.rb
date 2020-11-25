@@ -56,7 +56,7 @@ module LicenseFinder
     end
 
     def prepare_command
-      'yarn install --ignore-engines'
+      'yarn install --ignore-engines --ignore-scripts'
     end
 
     private
