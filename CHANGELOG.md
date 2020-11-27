@@ -1,3 +1,5 @@
+# [6.10.0] / 2020-11-27
+
 # [6.9.0] / 2020-10-05
 
 ### Changed
@@ -921,3 +923,4 @@ Bugfixes:
 [6.8.1]: https://github.com/pivotal/LicenseFinder/compare/v6.8.0...v6.8.1
 [6.8.2]: https://github.com/pivotal/LicenseFinder/compare/v6.8.1...v6.8.2
 [6.9.0]: https://github.com/pivotal/LicenseFinder/compare/v6.8.2...v6.9.0
+[6.10.0]: https://github.com/pivotal/LicenseFinder/compare/v6.9.0...v6.10.0
