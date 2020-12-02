@@ -108,7 +108,8 @@ module LicenseFinder
         mix_deps_dir: config.mix_deps_dir,
         prepare: config.prepare,
         prepare_no_fail: config.prepare_no_fail,
-        sbt_include_groups: config.sbt_include_groups
+        sbt_include_groups: config.sbt_include_groups,
+        conda_bash_setup_script: config.conda_bash_setup_script
       }
     end
   end

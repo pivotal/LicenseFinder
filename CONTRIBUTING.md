@@ -24,8 +24,8 @@ will use the gem version installed inside the docker image.
 
 ## Useful Tips
 
-To build the docker image simply call `docker build .` or explicitly pass the `Dockerfile`. Prebuilt versions of the 
-dockerfile can also be found on [Dockerhub](https://hub.docker.com/r/licensefinder/license_finder/tags/).  
+To build the docker image simply call `docker build .` or explicitly pass the `Dockerfile`. Prebuilt versions of the
+dockerfile can also be found on [Dockerhub](https://hub.docker.com/r/licensefinder/license_finder/tags/).
 
 To launch the docker image and interact with it via bash:
 ```
@@ -91,6 +91,7 @@ To successfully run the test suite, you will need the following installed:
 - Conan
 - NuGet
 - dotnet
+- Conda (requires python)
 
 The [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) already contains these dependencies.
 

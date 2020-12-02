@@ -167,6 +167,18 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5
     php -r "unlink('composer-setup.php');" &&\
     mv composer.phar /usr/bin/composer
 
+# install miniconda
+# See https://docs.conda.io/en/latest/miniconda_hashes.html
+# for latest versions and SHAs.
+WORKDIR /tmp
+RUN  \
+  conda_installer=Miniconda3-py38_4.9.2-Linux-x86_64.sh &&\
+  ref='1314b90489f154602fd794accfc90446111514a5a72fe1f71ab83e07de9504a7' &&\
+  wget -q https://repo.anaconda.com/miniconda/${conda_installer} &&\
+  sha=`openssl sha256 "${conda_installer}" | cut -d' ' -f2` &&\
+  ([ "$sha" = "${ref}" ] || (echo "Verification failed: ${sha} != ${ref}"; false)) &&\
+  (echo; echo "yes") | sh "${conda_installer}"
+
 # install license_finder
 COPY . /LicenseFinder
 RUN bash -lc "cd /LicenseFinder && bundle config set no-cache 'true' && bundle install -j4 && rake install"

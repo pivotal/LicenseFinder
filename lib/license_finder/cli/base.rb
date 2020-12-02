@@ -58,7 +58,8 @@ module LicenseFinder
           :columns,
           :aggregate_paths,
           :recursive,
-          :sbt_include_groups
+          :sbt_include_groups,
+          :conda_bash_setup_script
         ).merge(
           logger: logger_mode
         )
