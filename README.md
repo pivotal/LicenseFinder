@@ -424,11 +424,11 @@ set `--mix_deps_dir` to fetch Mix dependencies from a custom directory.
 ### Narrow down Package Manager
 
 By default, license_finder will check for all supported package managers,
-but you can narrow it down to use only those you pass to `--enabled-package-manager`.
+but you can narrow it down to use only those you pass to `--enabled-package-managers`.
 For example,
 
 ```
-$ license_finder --enabled-package-manager bundler npm
+$ license_finder --enabled-package-managers bundler npm
 ```
 
 ### Saving Configuration
