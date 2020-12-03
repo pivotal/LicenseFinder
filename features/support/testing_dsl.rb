@@ -480,6 +480,16 @@ module LicenseFinder
       end
     end
 
+    class SpmProject < Project
+      def add_dep
+        install_fixture('Package.swift')
+      end
+
+      def install
+        shell_out('swift package resolve')
+      end
+    end
+
     class ConanProject < Project
       def add_dep
         install_fixture('conanfile.txt')
