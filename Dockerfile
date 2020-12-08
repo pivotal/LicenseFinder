@@ -1,4 +1,5 @@
-FROM swift:5.3.1-xenial # Ubuntu Xenial(16.04) with Swift 5.3.1 installed
+# Ubuntu Xenial(16.04) with Swift 5.3.1 installed
+FROM swift:5.3.1-xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 19.0.2
