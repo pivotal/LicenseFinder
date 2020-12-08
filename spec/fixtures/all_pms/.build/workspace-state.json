@@ -35,6 +35,23 @@
         "name": "checkout"
       },
       "subpath": "Nimble"
+    }, {
+      "basedOn": null,
+      "packageRef": {
+        "identity": "swift-snapshot-testing",
+        "kind": "remote",
+        "name": "SnapshotTesting",
+        "path": "https://github.com/pointfreeco/swift-snapshot-testing"
+      },
+      "state": {
+        "checkoutState": {
+          "branch": null,
+          "revision": "c466812aa2e22898f27557e2e780d3aad7a27203",
+          "version": "1.8.2"
+        },
+        "name": "checkout"
+      },
+      "subpath": "swift-snapshot-testing"
     }]
   },
   "version": 4

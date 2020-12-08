@@ -17,6 +17,7 @@ module LicenseFinder
         package_ref = dependency['packageRef']
         checkout_state = dependency['state']['checkoutState']
 
+        subpath = dependency['subpath']
         package_name = package_ref['name']
         package_version = checkout_state['version'] || checkout_state['revision']
         homepage = package_ref['path']
@@ -24,9 +25,9 @@ module LicenseFinder
         SpmPackage.new(
           package_name,
           package_version,
-          license_text(package_name),
+          license_text(subpath),
           logger: logger,
-          install_path: project_checkout(package_name),
+          install_path: project_checkout(subpath),
           homepage: homepage
         )
       end
@@ -71,17 +72,17 @@ module LicenseFinder
       resolved_path.join('workspace-state.json')
     end
 
-    def license_text(name)
-      license_path = license_pattern(name).find { |f| File.exist?(f) }
+    def license_text(subpath)
+      license_path = license_pattern(subpath).find { |f| File.exist?(f) }
       license_path.nil? ? nil : IO.read(license_path)
     end
 
-    def project_checkout(name)
-      resolved_path.join('checkouts', name)
+    def project_checkout(subpath)
+      resolved_path.join('checkouts', subpath)
     end
 
-    def license_pattern(name)
-      checkout_path = project_checkout(name)
+    def license_pattern(subpath)
+      checkout_path = project_checkout(subpath)
       Dir.glob(checkout_path.join('LICENSE*'), File::FNM_CASEFOLD)
     end
 

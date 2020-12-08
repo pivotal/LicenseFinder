@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -55,15 +56,22 @@ module LicenseFinder
 
         it 'lists all the current packages' do
           expect(spm.current_packages.map { |p| [p.name, p.version] }).to eq [
-                                                                                    ['URLSessionDecodable', '0.1.0'],
-                                                                                    ['Nimble', '6956ffbde4ea6aab94fd2e823c5ede95072feef2']
-                                                                                  ]
+            %w[URLSessionDecodable 0.1.0],
+            %w[Nimble 6956ffbde4ea6aab94fd2e823c5ede95072feef2],
+            %w[SnapshotTesting 1.8.2]
+          ]
         end
 
         it 'passes the license text to the package' do
           stub_license_md('URLSessionDecodable' => 'The MIT License')
 
           expect(spm.current_packages.first.licenses.map(&:name)).to eq ['MIT']
+        end
+
+        it 'handles packages with different id and name' do
+          stub_license_md('swift-snapshot-testing' => 'The MIT License')
+
+          expect(spm.current_packages.last.licenses.map(&:name)).to eq ['MIT']
         end
 
         it 'handles no licenses' do
