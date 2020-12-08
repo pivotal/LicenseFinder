@@ -44,7 +44,7 @@ and give you an actionable exception report.
 ### Experimental project types
 
 * Erlang (via `rebar` and `Erlang.mk`)
-* Objective-C, Swift (via Carthage or CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\])
+* Objective-C, Swift (via Carthage, CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\]) and Swift Package Manager)
 * Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
 * Elixir (via `mix`)
 * Golang (via `gvt`, `glide`,`dep`, `trash` and `govendor`)
@@ -176,6 +176,7 @@ languages, as long as that language has a package definition in the project dire
 * `bower.json` (for `bower`)
 * `Podfile` (for `pod`)
 * `Cartfile` (for `carthage`)
+* `workspace-state.json` under build directory (provided as enviroment variable `SPM_DERIVED_DATA` for Xcode, or default `.build` for non-Xcode projects), (for `spm`)
 * `rebar.config` (for `rebar`)
 * `Erlang.mk` or `erlang.mk` file (for `Erlang.mk`)
 * `mix.exs` (for `mix`)
