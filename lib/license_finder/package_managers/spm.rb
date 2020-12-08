@@ -7,13 +7,18 @@ module LicenseFinder
     class SpmError < RuntimeError; end
 
     def current_packages
-      workspace_state = JSON.parse(File.read(workspace_state_path))
+      unless File.exist?(workspace_state_path)
+        raise SpmError, 'No checked-out SPM packages found.
+          Please install your dependencies first.'
+      end
+
+      workspace_state = JSON.parse(IO.read(workspace_state_path))
       workspace_state['object']['dependencies'].map do |dependency|
         package_ref = dependency['packageRef']
         checkout_state = dependency['state']['checkoutState']
 
         package_name = package_ref['name']
-        package_version = checkout_state['version'] || checkoutState['revision']
+        package_version = checkout_state['version'] || checkout_state['revision']
         homepage = package_ref['path']
 
         SpmPackage.new(
