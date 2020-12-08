@@ -37,6 +37,16 @@ module LicenseFinder
       allow(Dir).to receive(:glob).and_return([])
     end
 
+    describe 'xcode packages' do
+      context 'when SPM_DERIVED_DATA is provided as a relative path' do
+        before do
+          allow(ENV).to receive(:[]).with('SPM_DERIVED_DATA').and_return('./.build/')
+        end
+
+        it_behaves_like 'a PackageManager'
+      end
+    end
+
     describe 'current_packages' do
       context 'when SPM already ran and workspace-state.json exists' do
         before do

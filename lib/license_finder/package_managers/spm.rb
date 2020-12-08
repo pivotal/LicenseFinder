@@ -58,7 +58,13 @@ module LicenseFinder
 
     def resolved_path
       # Xcode projects have SPM packages info under project's derived data location
-      ENV['SPM_DERIVED_DATA'] ? File.basename(ENV['SPM_DERIVED_DATA']) : project_path.join('.build')
+      derived_data_folder = ENV['SPM_DERIVED_DATA']
+      if derived_data_folder
+        pathname = Pathname.new(derived_data_folder)
+        pathname.absolute? ? pathname : project_path.join(derived_data_folder)
+      else
+        project_path.join('.build')
+      end
     end
 
     def workspace_state_path
