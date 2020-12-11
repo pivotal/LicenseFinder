@@ -239,7 +239,11 @@ module LicenseFinder
       end
 
       def install
-        shell_out('sbt update')
+        begin
+          shell_out('sbt update')
+        rescue RuntimeError
+          shell_out('sbt update')
+        end
       end
 
       def shell_out(command)
