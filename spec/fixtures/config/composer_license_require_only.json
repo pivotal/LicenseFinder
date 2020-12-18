@@ -1,0 +1,25 @@
+{
+    "name": "__root__",
+    "version": "No version set (parsed as 1.0.0)",
+    "license": [],
+    "dependencies": {
+        "phpoption/phpoption": {
+            "version": "1.5.0",
+            "license": [
+                "Apache2"
+            ]
+        },
+        "symfony/polyfill-ctype": {
+            "version": "v1.11.0",
+            "license": [
+                "MIT"
+            ]
+        },
+        "vlucas/phpdotenv": {
+            "version": "v3.3.3",
+            "license": [
+                "BSD-3-Clause"
+            ]
+        }
+    }
+}

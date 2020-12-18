@@ -4,7 +4,10 @@ require 'json'
 
 module LicenseFinder
   class Composer < PackageManager
-    SHELL_COMMAND = 'composer licenses --format=json'
+    def initialize(options = {})
+      super
+      @check_require_only = !!options[:composer_check_require_only]
+    end
 
     def possible_package_paths
       [project_path.join('composer.lock'), project_path.join('composer.json')]
@@ -50,8 +53,9 @@ module LicenseFinder
     end
 
     def composer_json
-      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(Composer::SHELL_COMMAND) }
-      raise "Command '#{Composer::SHELL_COMMAND}' failed to execute: #{stderr}" unless status.success?
+      command = "composer licenses --format=json#{@check_require_only ? ' --no-dev' : ''}"
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
 
       JSON(stdout)
     end

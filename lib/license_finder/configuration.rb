@@ -145,6 +145,10 @@ module LicenseFinder
       get(:sbt_include_groups)
     end
 
+    def composer_check_require_only
+      get(:composer_check_require_only)
+    end
+
     attr_writer :strict_matching
 
     attr_reader :strict_matching
