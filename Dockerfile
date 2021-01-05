@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 19.0.2
-ENV PIP3_INSTALL_VERSION 8.1.1
+ENV PIP3_INSTALL_VERSION 20.0.2
 ENV GO_LANG_VERSION 1.14.3
 ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
@@ -55,8 +55,8 @@ RUN curl -o rebar3 https://s3.amazonaws.com/rebar3/rebar3 && \
 
 # install and update python and python-pip
 RUN apt-get install -y python python-pip python3-pip && \
-    pip2 install --no-cache-dir --upgrade pip==$PIP_INSTALL_VERSION  && \
-    pip3 install --no-cache-dir --upgrade pip==$PIP3_INSTALL_VERSION
+    python3 -m pip install pip==$PIP3_INSTALL_VERSION --upgrade && \
+    python -m pip install pip==$PIP_INSTALL_VERSION --upgrade --force
 
 # install maven
 RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
