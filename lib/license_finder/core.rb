@@ -24,7 +24,7 @@ module LicenseFinder
     # Default +options+:
     # {
     #   project_path: Pathname.pwd
-    #   logger: {},   # can include quiet: true or debug: true
+    #   logger: nil,   # can be :quiet or :debug
     #   decisions_file: "doc/dependency_decisions.yml",
     #   gradle_command: "gradle",
     #   rebar_command: "rebar",
@@ -93,6 +93,7 @@ module LicenseFinder
         project_path: config.project_path,
         log_directory: File.join(config.log_directory, project_name),
         ignored_groups: decisions.ignored_groups,
+        enabled_package_manager_ids: config.enabled_package_manager_ids,
         go_full_version: config.go_full_version,
         gradle_command: config.gradle_command,
         gradle_include_groups: config.gradle_include_groups,
@@ -107,7 +108,8 @@ module LicenseFinder
         mix_deps_dir: config.mix_deps_dir,
         prepare: config.prepare,
         prepare_no_fail: config.prepare_no_fail,
-        sbt_include_groups: config.sbt_include_groups
+        sbt_include_groups: config.sbt_include_groups,
+        conda_bash_setup_script: config.conda_bash_setup_script
       }
     end
   end

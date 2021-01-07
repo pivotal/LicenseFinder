@@ -24,8 +24,8 @@ will use the gem version installed inside the docker image.
 
 ## Useful Tips
 
-To build the docker image simply call `docker build .` or explicitly pass the `Dockerfile`. Prebuilt versions of the 
-dockerfile can also be found on [Dockerhub](https://hub.docker.com/r/licensefinder/license_finder/tags/).  
+To build the docker image simply call `docker build .` or explicitly pass the `Dockerfile`. Prebuilt versions of the
+dockerfile can also be found on [Dockerhub](https://hub.docker.com/r/licensefinder/license_finder/tags/).
 
 To launch the docker image and interact with it via bash:
 ```
@@ -60,13 +60,13 @@ submitting a pull request which adds new columns to
 `lib/license_finder/reports/csv_report.rb`.
 
 It is also possible to generate a custom report from an ERB template.  Use this
-[example](https://gist.github.com/mainej/b190d2f138c2b9e2e20a) as a starting
+[example](https://github.com/pivotal/LicenseFinder/blob/master/examples/custom_erb_template.rb) as a starting
 point.  These reports will have access to the helpers in
 [`LicenseFinder::ErbReport`](https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/reports/erb_report.rb).
 
 If you need a report with more detailed data or in a different format, we
 recommend writing a custom ruby script.  This
-[example](https://gist.github.com/mainej/48ac616844505d50f510) will get you
+[example](https://github.com/pivotal/LicenseFinder/blob/master/examples/extract_license_data.rb) will get you
 started.
 
 If you come up with something useful, consider posting it to the Google Group
@@ -91,6 +91,7 @@ To successfully run the test suite, you will need the following installed:
 - Conan
 - NuGet
 - dotnet
+- Conda (requires python)
 
 The [LicenseFinder docker image](https://hub.docker.com/r/licensefinder/license_finder/) already contains these dependencies.
 
