@@ -57,6 +57,11 @@ module LicenseFinder
         fixture_from('composer_license.json')
       end
     end
+    let(:license_require_only_json) do
+      FakeFS.without do
+        fixture_from('composer_license_require_only.json')
+      end
+    end
 
     describe '.current_packages' do
       include FakeFS::SpecHelpers
@@ -71,6 +76,17 @@ module LicenseFinder
         current_packages = composer.current_packages
 
         expect(current_packages.map(&:name)).to eq(['phpoption/phpoption', 'psr/log', 'symfony/debug', 'symfony/polyfill-ctype', 'vlucas/phpdotenv'])
+      end
+
+      context 'check_require_only is set' do
+        let(:composer) { Composer.new(composer_check_require_only: true, project_path: Pathname.new(root)) }
+
+        it 'checks for require deps licenses only' do
+          allow(SharedHelpers::Cmd).to receive(:run).with('composer licenses -f json --no-dev').and_return([license_require_only_json, '', cmd_success])
+
+          current_packages = composer.current_packages
+          expect(current_packages.map(&:name)).to eq(['phpoption/phpoption', 'psr/log', 'symfony/debug', 'symfony/polyfill-ctype', 'vlucas/phpdotenv'])
+        end
       end
 
       it 'fails when command fails' do
