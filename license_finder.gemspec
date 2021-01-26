@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'bundler'
   s.add_dependency 'rubyzip', '>=1', '<3'
-  s.add_dependency 'thor', '~> 1.0.1'
+  s.add_dependency 'thor', '>= 1.0.1', '< 1.2.0'
   s.add_dependency 'tomlrb', '>= 1.3', '< 2.1'
   s.add_dependency 'with_env', '1.1.0'
   s.add_dependency 'xml-simple', '~> 1.1.5'
