@@ -8,7 +8,7 @@ module LicenseFinder
 
       desc 'list', 'List all the ignored dependencies'
       def list
-        say 'Ignored Dependencies:', :blue
+        say! 'Ignored Dependencies:', :blue
         say_each(decisions.ignored)
       end
 
@@ -17,7 +17,7 @@ module LicenseFinder
       def add(dep)
         modifying { decisions.ignore(dep, txn) }
 
-        say "Added #{dep} to the ignored dependencies"
+        say! "Added #{dep} to the ignored dependencies"
       end
 
       auditable
@@ -25,7 +25,7 @@ module LicenseFinder
       def remove(dep)
         modifying { decisions.heed(dep, txn) }
 
-        say "Removed #{dep} from the ignored dependencies"
+        say! "Removed #{dep} from the ignored dependencies"
       end
     end
   end

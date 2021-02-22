@@ -29,7 +29,7 @@ module LicenseFinder
       private
 
       def fail(message)
-        say(message) && exit(1)
+        say!(message) && exit(1)
       end
 
       def license_finder_config
@@ -81,13 +81,23 @@ module LicenseFinder
         end
       end
 
+      def say!(*args)
+        @loud = true
+        say(*args)
+        @loud = false
+      end
+
+      def quiet?
+        @loud ? false : super
+      end
+
       def say_each(coll)
         if coll.any?
           coll.each do |item|
-            say(block_given? ? yield(item) : item)
+            say!(block_given? ? yield(item) : item)
           end
         else
-          say '(none)'
+          say! '(none)'
         end
       end
 

@@ -8,7 +8,7 @@ module LicenseFinder
 
       desc 'list', 'List all the permitted licenses'
       def list
-        say 'Permitted Licenses:', :blue
+        say! 'Permitted Licenses:', :blue
         say_each(decisions.permitted, &:name)
       end
 
@@ -17,7 +17,7 @@ module LicenseFinder
       def add(*licenses)
         assert_some licenses
         modifying { licenses.each { |l| decisions.permit(l, txn) } }
-        say "Added #{licenses.join(', ')} to the permitted licenses"
+        say! "Added #{licenses.join(', ')} to the permitted licenses"
       end
 
       auditable
@@ -25,7 +25,7 @@ module LicenseFinder
       def remove(*licenses)
         assert_some licenses
         modifying { licenses.each { |l| decisions.unpermit(l, txn) } }
-        say "Removed #{licenses.join(', ')} from the license permitted licenses"
+        say! "Removed #{licenses.join(', ')} from the license permitted licenses"
       end
     end
   end

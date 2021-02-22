@@ -8,7 +8,7 @@ module LicenseFinder
 
       desc 'list', 'List all the ignored groups'
       def list
-        say 'Ignored Groups:', :blue
+        say! 'Ignored Groups:', :blue
         say_each(decisions.ignored_groups)
       end
 
@@ -17,7 +17,7 @@ module LicenseFinder
       def add(group)
         modifying { decisions.ignore_group(group, txn) }
 
-        say "Added #{group} to the ignored groups"
+        say! "Added #{group} to the ignored groups"
       end
 
       auditable
@@ -25,7 +25,7 @@ module LicenseFinder
       def remove(group)
         modifying { decisions.heed_group(group, txn) }
 
-        say "Removed #{group} from the ignored groups"
+        say! "Removed #{group} from the ignored groups"
       end
     end
   end
