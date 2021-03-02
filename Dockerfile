@@ -181,7 +181,7 @@ RUN  \
 
 # install license_finder
 COPY . /LicenseFinder
-RUN bash -lc "cd /LicenseFinder && bundle config set no-cache 'true' && bundle install -j4 && rake install"
+RUN bash -lc "cd /LicenseFinder && bundle config set no-cache 'true' && bundle install -j4 && bundle lock --add-platform x86_64-linux && rake install"
 
 WORKDIR /
 

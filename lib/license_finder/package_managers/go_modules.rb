@@ -77,7 +77,7 @@ module LicenseFinder
         'ImportPath' => name,
         'InstallPath' => install_path,
         'Rev' => version,
-	      'Homepage' => repo_name(name)
+        'Homepage' => repo_name(name)
       }
 
       GoPackage.from_dependency(info, nil, true)
