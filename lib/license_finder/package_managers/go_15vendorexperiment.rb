@@ -38,7 +38,7 @@ module LicenseFinder
                                     'ImportPath' => dep,
                                     'InstallPath' => detected_package_path.join(dep),
                                     'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep)),
-                                    'Homepage' => repo_name(dep['ImportPath'])
+                                    'Homepage' => repo_name(dep)
                                   }, nil, true)
       end
     end
