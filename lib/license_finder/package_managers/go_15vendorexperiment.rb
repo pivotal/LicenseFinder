@@ -37,9 +37,14 @@ module LicenseFinder
         GoPackage.from_dependency({
                                     'ImportPath' => dep,
                                     'InstallPath' => detected_package_path.join(dep),
-                                    'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep))
+                                    'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep)),
+                                    'Homepage' => repo_name(dep['ImportPath'])
                                   }, nil, true)
       end
+    end
+
+    def repo_name(name)
+      name.split('/')[0..2].join('/')
     end
 
     def package_management_command

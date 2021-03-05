@@ -18,9 +18,14 @@ module LicenseFinder
         GoPackage.from_dependency({
                                     'ImportPath' => project['name'],
                                     'InstallPath' => project_path.join('vendor', project['name']),
-                                    'Rev' => project['revision']
+                                    'Rev' => project['revision'],
+                                    'Homepage' => repo_name(project['name'])
                                   }, nil, true)
       end
+    end
+
+    def repo_name(name)
+      name.split('/')[0..2].join('/')
     end
 
     def self.takes_priority_over
