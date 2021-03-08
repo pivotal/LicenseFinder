@@ -104,7 +104,7 @@ module LicenseFinder
     end
 
     def lockfile
-      "#{gemfile}.lock"
+      gemfile == 'gems.rb' ? 'gems.locked' : "#{gemfile}.lock"
     end
   end
 end
