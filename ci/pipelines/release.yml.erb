@@ -8,6 +8,8 @@ resource_types:
   source:
     repository: cfcommunity/slack-notification-resource
     tag: latest
+    username: ((LicenseFinderDocker.username))
+    password: ((LicenseFinderDocker.password))
 <% end %>
 
 resources:
@@ -154,7 +156,7 @@ jobs:
   plan:
   - get: lf-git
     tags: ["private-worker"]
-    passed: [<%= "#{ruby_versions.map{ |version| "ruby-#{version}"}.join(', ')}, rubocop" %>]
+    passed: [<%= "#{ruby_versions.map{ |version| "ruby-#{version}" unless version == "jruby-9.2.14.0" }.compact.join(', ') }, rubocop" %>]
   - get: semver-version
     tags: ["private-worker"]
     trigger: true

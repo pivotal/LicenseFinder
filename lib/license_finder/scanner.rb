@@ -4,12 +4,17 @@ module LicenseFinder
   class Scanner
     PACKAGE_MANAGERS = [
       GoModules, GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Trash, Dep, Bundler, NPM, Pip,
-      Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Erlangmk, Nuget, Carthage, Mix, Conan, Sbt, Cargo, Dotnet, Composer, Pipenv
+      Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Erlangmk, Nuget, Carthage, Mix, Conan, Sbt, Cargo, Dotnet, Composer, Pipenv,
+      Conda
     ].freeze
 
     class << self
       def remove_subprojects(paths)
         paths.reject { |path| subproject?(Pathname(path)) }
+      end
+
+      def supported_package_manager_ids
+        PACKAGE_MANAGERS.map(&:id)
       end
 
       private
@@ -28,6 +33,7 @@ module LicenseFinder
       @config = config
       @project_path = @config[:project_path]
       @logger = @config[:logger]
+      @enabled_package_manager_ids = @config[:enabled_package_manager_ids]
     end
 
     def active_packages
@@ -40,7 +46,7 @@ module LicenseFinder
       return @package_managers if @package_managers
 
       active_pm_classes = []
-      PACKAGE_MANAGERS.each do |pm_class|
+      enabled_package_managers.each do |pm_class|
         active = pm_class.new(@config).active?
 
         if active
@@ -55,6 +61,23 @@ module LicenseFinder
 
       active_pm_classes -= active_pm_classes.map(&:takes_priority_over)
       @package_managers = active_pm_classes.map { |pm_class| pm_class.new(@config) }
+    end
+
+    private
+
+    def enabled_package_managers
+      enabled_pm_ids = @enabled_package_manager_ids
+
+      return PACKAGE_MANAGERS unless enabled_pm_ids
+
+      enabled_pm_classes = PACKAGE_MANAGERS.select { |pm_class| enabled_pm_ids.include?(pm_class.id) }
+
+      if enabled_pm_classes.length != enabled_pm_ids.length
+        unsupported_pm_ids = enabled_pm_ids - self.class.supported_package_manager_ids
+        raise "Unsupported package manager: #{unsupported_pm_ids.join(', ')}"
+      end
+
+      enabled_pm_classes
     end
   end
 end

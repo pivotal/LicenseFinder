@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 
 # Versioning
 ENV PIP_INSTALL_VERSION 19.0.2
-ENV PIP3_INSTALL_VERSION 8.1.1
+ENV PIP3_INSTALL_VERSION 20.0.2
 ENV GO_LANG_VERSION 1.14.3
 ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y \
 RUN add-apt-repository ppa:git-core/ppa && apt-get update && apt-get install -y git
 
 # nodejs seems to be required for the one of the gems
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get -y install nodejs
 
 # install yarn
@@ -55,8 +55,8 @@ RUN curl -o rebar3 https://s3.amazonaws.com/rebar3/rebar3 && \
 
 # install and update python and python-pip
 RUN apt-get install -y python python-pip python3-pip && \
-    pip2 install --no-cache-dir --upgrade pip==$PIP_INSTALL_VERSION  && \
-    pip3 install --no-cache-dir --upgrade pip==$PIP3_INSTALL_VERSION
+    python3 -m pip install pip==$PIP3_INSTALL_VERSION --upgrade && \
+    python -m pip install pip==$PIP_INSTALL_VERSION --upgrade --force
 
 # install maven
 RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
@@ -166,6 +166,18 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5
     php composer-setup.php &&\
     php -r "unlink('composer-setup.php');" &&\
     mv composer.phar /usr/bin/composer
+
+# install miniconda
+# See https://docs.conda.io/en/latest/miniconda_hashes.html
+# for latest versions and SHAs.
+WORKDIR /tmp
+RUN  \
+  conda_installer=Miniconda3-py38_4.9.2-Linux-x86_64.sh &&\
+  ref='1314b90489f154602fd794accfc90446111514a5a72fe1f71ab83e07de9504a7' &&\
+  wget -q https://repo.anaconda.com/miniconda/${conda_installer} &&\
+  sha=`openssl sha256 "${conda_installer}" | cut -d' ' -f2` &&\
+  ([ "$sha" = "${ref}" ] || (echo "Verification failed: ${sha} != ${ref}"; false)) &&\
+  (echo; echo "yes") | sh "${conda_installer}"
 
 # install license_finder
 COPY . /LicenseFinder

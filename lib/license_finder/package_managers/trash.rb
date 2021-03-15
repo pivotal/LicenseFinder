@@ -30,9 +30,14 @@ module LicenseFinder
         GoPackage.from_dependency({
                                     'ImportPath' => import_path,
                                     'InstallPath' => license_path,
-                                    'Rev' => package_hash.fetch('version')
+                                    'Rev' => package_hash.fetch('version'),
+                                    'Homepage' => repo_name(import_path)
                                   }, nil, true)
       end
+    end
+
+    def repo_name(name)
+      name.split('/')[0..2].join('/')
     end
   end
 end

@@ -5,7 +5,9 @@ require 'spec_helper'
 module LicenseFinder
   describe Scanner do
     let(:logger) { double(:logger, debug: true, info: true) }
-    let(:subject) { described_class.new(logger: logger, project_path: Pathname.new('')) }
+    let(:enabled_package_manager_ids) { nil }
+    let(:config) { { logger: logger, project_path: Pathname.new(''), enabled_package_manager_ids: enabled_package_manager_ids } }
+    let(:subject) { described_class.new(config) }
 
     describe '#active_packages' do
       let(:bundler) { Bundler.new(ignored_groups: Set.new, definition: double(:definition, groups: [])) }
@@ -77,6 +79,31 @@ module LicenseFinder
           end
           expect(logger).to receive(:info).with('License Finder', 'No active and installed package managers found for project.', color: :red)
           subject.active_package_managers
+        end
+      end
+
+      context 'when package managers to enable are specified' do
+        let(:enabled_package_manager_ids) { %w[gomodules bundler] }
+
+        it 'should returns active package managers among those specified' do
+          bundler = double(:bundler, active?: true)
+          allow(Bundler).to receive(:new).and_return bundler
+
+          npm = double(:npm, active?: true)
+          allow(NPM).to receive(:new).and_return npm
+
+          expect(subject.active_package_managers).to contain_exactly(bundler)
+        end
+      end
+
+      context 'when unsupported package managers to enable are specified' do
+        let(:enabled_package_manager_ids) { %w[bundler unsupported invalid] }
+
+        it 'should throws an exception' do
+          bundler = double(:bundler, active?: true)
+          allow(Bundler).to receive(:new).and_return bundler
+
+          expect { subject.active_package_managers }.to raise_error('Unsupported package manager: unsupported, invalid')
         end
       end
     end

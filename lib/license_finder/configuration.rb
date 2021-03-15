@@ -65,6 +65,10 @@ module LicenseFinder
       Pathname(path_prefix).expand_path
     end
 
+    def enabled_package_manager_ids
+      get(:enabled_package_managers)
+    end
+
     def logger_mode
       get(:logger)
     end
@@ -91,6 +95,10 @@ module LicenseFinder
 
     def pip_requirements_path
       get(:pip_requirements_path)
+    end
+
+    def conda_bash_setup_script
+      get(:conda_bash_setup_script)
     end
 
     def python_version
@@ -135,6 +143,10 @@ module LicenseFinder
 
     def sbt_include_groups
       get(:sbt_include_groups)
+    end
+
+    def composer_check_require_only
+      get(:composer_check_require_only)
     end
 
     attr_writer :strict_matching

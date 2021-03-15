@@ -48,7 +48,9 @@ module LicenseFinder
           mix_deps_dir: configuration.mix_deps_dir,
           prepare: configuration.prepare,
           prepare_no_fail: nil,
-          sbt_include_groups: nil
+          sbt_include_groups: nil,
+          conda_bash_setup_script: configuration.conda_bash_setup_script,
+          composer_check_require_only: nil
         }
       end
 

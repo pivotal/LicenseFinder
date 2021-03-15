@@ -7,6 +7,12 @@ module LicenseFinder
   describe PackageManager do
     let(:logger) { double(:logger, debug: true, info: true) }
 
+    describe '.id' do
+      it 'returns the lowercase class name' do
+        expect(described_class.id).to eq('packagemanager')
+      end
+    end
+
     describe '#current_packages_with_relations' do
       it "sets packages' parents" do
         grandparent = Package.new('grandparent', nil, children: ['parent'])
