@@ -1,3 +1,13 @@
+# [6.12.0] / 2021-03-05
+
+### Added
+* Provide homepage information for GoDep and Go15Vendor package managers - [bae1bda9](https://github.com/pivotal/LicenseFinder/commit/bae1bda9d76cb922405d7efca9c67e2583db70d4) - Jeff Jun
+
+# [6.11.0] / 2021-03-04
+
+### Added
+* Add homepage for go_modules package manager - [912394a8](https://github.com/pivotal/LicenseFinder/commit/912394a8a6ab4c31b6918a21da9f37d5b368ed6b) 
+
 # [6.10.1] / 2021-01-08
 
 # [6.10.0] / 2020-11-27
@@ -927,3 +937,5 @@ Bugfixes:
 [6.9.0]: https://github.com/pivotal/LicenseFinder/compare/v6.8.2...v6.9.0
 [6.10.0]: https://github.com/pivotal/LicenseFinder/compare/v6.9.0...v6.10.0
 [6.10.1]: https://github.com/pivotal/LicenseFinder/compare/v6.10.0...v6.10.1
+[6.11.0]: https://github.com/pivotal/LicenseFinder/compare/v6.10.1...v6.11.0
+[6.12.0]: https://github.com/pivotal/LicenseFinder/compare/v6.11.0...v6.12.0
