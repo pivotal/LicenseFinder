@@ -109,7 +109,8 @@ module LicenseFinder
         prepare: config.prepare,
         prepare_no_fail: config.prepare_no_fail,
         sbt_include_groups: config.sbt_include_groups,
-        conda_bash_setup_script: config.conda_bash_setup_script
+        conda_bash_setup_script: config.conda_bash_setup_script,
+        composer_check_require_only: config.composer_check_require_only
       }
     end
   end

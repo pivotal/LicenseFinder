@@ -64,6 +64,12 @@ module LicenseFinder
 
           expect(packages.first.package_manager).to eq 'Go'
         end
+
+        it 'sets homepage for the packages' do
+          packages = subject.current_packages
+
+          expect(packages[0].homepage).to eq('gopkg.in/check.v1')
+        end
       end
 
       context 'go list failed' do

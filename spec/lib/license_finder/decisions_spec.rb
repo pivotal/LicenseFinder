@@ -329,6 +329,28 @@ module LicenseFinder
         decisions = subject.inherit_from({ 'url' => 'https://example.com/config/inherit.yml', 'authorization' => 'Bearer $TOKEN_ENV' })
         expect(decisions).to be_permitted(License.find_by_name('MIT'))
       end
+
+      context 'when decision file contains whitelist' do
+        let(:yml) { YAML.dump([[:whitelist, 'MIT']]) }
+        it 'raises an error' do
+          allow_any_instance_of(Pathname).to receive(:read).and_return(yml)
+          expect { subject.inherit_from('./config/inherit.yml') }
+              .to raise_error('The decisions file seems to have whitelist/blacklist keys which are deprecated. '\
+                             'Please replace them with permit/restrict respectively and try again! More info - '\
+                             'https://github.com/pivotal/LicenseFinder/commit/a40b22fda11b3a0efbb3c0a021381534bc998dd9')
+        end
+      end
+
+      context 'when decision file contains blacklist' do
+        let(:yml) { YAML.dump([[:blacklist, 'MIT']]) }
+        it 'raises an error' do
+          allow_any_instance_of(Pathname).to receive(:read).and_return(yml)
+          expect { subject.inherit_from('./config/inherit.yml') }
+              .to raise_error('The decisions file seems to have whitelist/blacklist keys which are deprecated. '\
+                             'Please replace them with permit/restrict respectively and try again! More info - '\
+                             'https://github.com/pivotal/LicenseFinder/commit/a40b22fda11b3a0efbb3c0a021381534bc998dd9')
+        end
+      end
     end
 
     describe '.remove_inheritance' do
