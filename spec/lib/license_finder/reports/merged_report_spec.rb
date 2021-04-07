@@ -26,6 +26,19 @@ module LicenseFinder
         subject = described_class.new([dep], columns: %w[name licenses license_links])
         expect(subject.to_s).to eq("gem_a,MIT,#{mit.url}\n")
       end
+
+      it 'should not error if there are 2 packages with the same name and the version is nil' do
+
+        bar1 = Package.new('bar', nil, spec_licenses: ['MIT'])
+        bar2 = Package.new('bar', '2.0.0', spec_licenses: ['GPLv2'])
+
+        merged_bar1 = MergedPackage.new(bar1, ['path/to/bar1'])
+        merged_bar2 = MergedPackage.new(bar2, ['path/to/bar2'])
+
+        report = MergedReport.new([merged_bar1, merged_bar2])
+        expect{report.to_s}.not_to raise_error
+
+      end
     end
 
     context 'when no groups are specified' do
