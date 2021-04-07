@@ -27,9 +27,9 @@ BlockLength:
 ClassLength:
   Enabled: false
 CyclomaticComplexity:
-  Max: 10
+  Max: 15
 PerceivedComplexity:
-  Max: 10
+  Max: 15
 LineLength:
   Max: 200
 MethodLength:
