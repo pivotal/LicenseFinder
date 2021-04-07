@@ -28,7 +28,6 @@ module LicenseFinder
       end
 
       it 'should not error if there are 2 packages with the same name and the version is nil' do
-
         bar1 = Package.new('bar', nil, spec_licenses: ['MIT'])
         bar2 = Package.new('bar', '2.0.0', spec_licenses: ['GPLv2'])
 
@@ -36,8 +35,7 @@ module LicenseFinder
         merged_bar2 = MergedPackage.new(bar2, ['path/to/bar2'])
 
         report = MergedReport.new([merged_bar1, merged_bar2])
-        expect{report.to_s}.not_to raise_error
-
+        expect { report.to_s }.not_to raise_error
       end
     end
 
