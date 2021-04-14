@@ -79,11 +79,11 @@ module LicenseFinder
           allow(SharedHelpers::Cmd).to receive(:run).with(go_list_cmd).and_return(['', 'some-error-message', failure_status])
         end
 
-        it 'should print out the error from calling go list' do
+        it 'should print out the error from calling go list and raise' do
           expect(logger).to receive(:info).with(go_list_cmd, 'did not succeed.', color: :red)
           expect(logger).to receive(:info).with(go_list_cmd, "Getting the dependencies from go list failed \n\tsome-error-message", color: :red).ordered
 
-          subject.current_packages
+          expect { subject.current_packages }.to raise_error("Command '#{go_list_cmd}' failed to execute")
         end
       end
     end
