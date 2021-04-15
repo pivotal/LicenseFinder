@@ -1,0 +1,58 @@
+{
+  "object": {
+    "artifacts": [],
+    "dependencies": [{
+      "basedOn": null,
+      "packageRef": {
+        "identity": "urlsessiondecodable",
+        "kind": "remote",
+        "name": "URLSessionDecodable",
+        "path": "https://github.com/ViacomInc/URLSessionDecodable"
+      },
+      "state": {
+        "checkoutState": {
+          "branch": null,
+          "revision": "72c2776c737b580ffa4d0e7699c8429a1a6b5a36",
+          "version": "0.1.0"
+        },
+        "name": "checkout"
+      },
+      "subpath": "URLSessionDecodable"
+    }, {
+      "basedOn": null,
+      "packageRef": {
+        "identity": "nimble",
+        "kind": "remote",
+        "name": "Nimble",
+        "path": "https://github.com/Quick/Nimble"
+      },
+      "state": {
+        "checkoutState": {
+          "branch": null,
+          "revision": "6956ffbde4ea6aab94fd2e823c5ede95072feef2",
+          "version": null
+        },
+        "name": "checkout"
+      },
+      "subpath": "Nimble"
+    }, {
+      "basedOn": null,
+      "packageRef": {
+        "identity": "swift-snapshot-testing",
+        "kind": "remote",
+        "name": "SnapshotTesting",
+        "path": "https://github.com/pointfreeco/swift-snapshot-testing"
+      },
+      "state": {
+        "checkoutState": {
+          "branch": null,
+          "revision": "c466812aa2e22898f27557e2e780d3aad7a27203",
+          "version": "1.8.2"
+        },
+        "name": "checkout"
+      },
+      "subpath": "swift-snapshot-testing"
+    }]
+  },
+  "version": 4
+}
