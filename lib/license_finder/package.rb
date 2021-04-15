@@ -38,7 +38,7 @@ module LicenseFinder
 
       ## DESCRIPTION
       @name = name
-      @version = version
+      @version = version || ''
       @authors = options[:authors] || ''
       @summary = options[:summary] || ''
       @description = options[:description] || ''

@@ -1,3 +1,10 @@
+# [6.12.2] / 2021-04-14
+
+### Changed
+* exit when go mod list command fails - [fcf1f707](https://github.com/pivotal/LicenseFinder/commit/fcf1f7076dee2ff730e3c8b608381aca22de0e92) - Jeff Jun
+
+# [6.12.1] / 2021-04-12
+
 # [6.12.0] / 2021-03-05
 
 ### Added
@@ -939,3 +946,5 @@ Bugfixes:
 [6.10.1]: https://github.com/pivotal/LicenseFinder/compare/v6.10.0...v6.10.1
 [6.11.0]: https://github.com/pivotal/LicenseFinder/compare/v6.10.1...v6.11.0
 [6.12.0]: https://github.com/pivotal/LicenseFinder/compare/v6.11.0...v6.12.0
+[6.12.1]: https://github.com/pivotal/LicenseFinder/compare/v6.12.0...v6.12.1
+[6.12.2]: https://github.com/pivotal/LicenseFinder/compare/v6.12.1...v6.12.2

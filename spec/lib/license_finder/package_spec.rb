@@ -36,7 +36,7 @@ module LicenseFinder
     it 'has defaults' do
       subject = described_class.new(nil, nil)
       expect(subject.name).to be_nil
-      expect(subject.version).to be_nil
+      expect(subject.version).to eq ''
       expect(subject.authors).to eq ''
       expect(subject.summary).to eq ''
       expect(subject.description).to eq ''
