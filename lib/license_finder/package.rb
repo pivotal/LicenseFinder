@@ -38,7 +38,7 @@ module LicenseFinder
 
       ## DESCRIPTION
       @name = name
-      @version = version
+      @version = version || ''
       @authors = options[:authors] || ''
       @summary = options[:summary] || ''
       @description = options[:description] || ''
@@ -188,6 +188,7 @@ require 'license_finder/packages/maven_package'
 require 'license_finder/packages/gradle_package'
 require 'license_finder/packages/cocoa_pods_package'
 require 'license_finder/packages/carthage_package'
+require 'license_finder/packages/spm_package'
 require 'license_finder/packages/rebar_package'
 require 'license_finder/packages/erlangmk_package'
 require 'license_finder/packages/mix_package'
