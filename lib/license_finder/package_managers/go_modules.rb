@@ -34,7 +34,7 @@ module LicenseFinder
         # * Only list dependencies (packages not listed in the project directory)
         #   (.DepOnly)
         # * Ignore packages that have nil modules
-        #   (ne .Module nil)
+        #   (.Module)
         # * Ignore standard library packages
         #   (not .Standard)
         # * Replacement modules are respected
@@ -42,7 +42,7 @@ module LicenseFinder
         # * Module cache directory or (vendored) package directory
         #   (or $mod.Dir .Dir)
         format_str = \
-          '{{ if and (.DepOnly) (ne .Module nil) (not .Standard) }}'\
+          '{{ if and (.DepOnly) (.Module) (not .Standard) }}'\
             '{{ $mod := (or .Module.Replace .Module) }}'\
             '{{ $mod.Path }},{{ $mod.Version }},{{ or $mod.Dir .Dir }}'\
           '{{ end }}'
