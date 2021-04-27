@@ -1,3 +1,8 @@
+# [6.13.0] / 2021-04-27
+
+### Fixed
+* Ignore packages with nil modules - [4eca0ec1](https://github.com/pivotal/LicenseFinder/commit/4eca0ec15dc6266afa48b74b3742278351246eb8) 
+
 # [6.12.2] / 2021-04-14
 
 ### Changed
@@ -948,3 +953,4 @@ Bugfixes:
 [6.12.0]: https://github.com/pivotal/LicenseFinder/compare/v6.11.0...v6.12.0
 [6.12.1]: https://github.com/pivotal/LicenseFinder/compare/v6.12.0...v6.12.1
 [6.12.2]: https://github.com/pivotal/LicenseFinder/compare/v6.12.1...v6.12.2
+[6.13.0]: https://github.com/pivotal/LicenseFinder/compare/v6.12.2...v6.13.0
