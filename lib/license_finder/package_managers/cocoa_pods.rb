@@ -53,7 +53,7 @@ module LicenseFinder
     end
 
     def read_plist(pathname)
-      JSON.parse(`plutil -convert json -o - '#{pathname}'`)
+      JSON.parse(`plutil -convert json -o - '#{pathname.gsub!(/[^0-9A-Za-z.\-]/, '')}'`)
     end
   end
 end
