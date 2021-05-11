@@ -97,7 +97,6 @@ module LicenseFinder
       get(:npm_options)
     end
 
-
     def pip_requirements_path
       get(:pip_requirements_path)
     end

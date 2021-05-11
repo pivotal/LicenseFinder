@@ -10,7 +10,6 @@ module LicenseFinder
       @npm_options = options[:npm_options]
     end
 
-
     def current_packages
       NpmPackage.packages_from_json(npm_json, detected_package_path)
     end
