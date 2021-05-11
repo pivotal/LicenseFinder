@@ -93,6 +93,11 @@ module LicenseFinder
       get(:maven_options)
     end
 
+    def npm_options
+      get(:npm_options)
+    end
+
+
     def pip_requirements_path
       get(:pip_requirements_path)
     end

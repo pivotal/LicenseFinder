@@ -40,6 +40,7 @@ module LicenseFinder
           gradle_include_groups: nil,
           maven_include_groups: nil,
           maven_options: nil,
+          npm_options: nil,
           pip_requirements_path: nil,
           python_version: nil,
           rebar_command: configuration.rebar_command,
