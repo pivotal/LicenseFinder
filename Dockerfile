@@ -158,7 +158,7 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsof
 # install Composer
 # The ARG and ENV are for installing tzdata which is part of this installaion.
 # https://serverfault.com/questions/949991/how-to-install-tzdata-on-a-ubuntu-docker-image
-ENV TZ=America/Toronto
+ENV TZ=GMT
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
     echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" | sudo tee /etc/apt/sources.list.d/php.list &&\
     apt-get update &&\
