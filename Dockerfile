@@ -185,6 +185,8 @@ RUN  \
 
 # install Swift Package Manager
 # Based on https://github.com/apple/swift-docker/blob/main/5.3/ubuntu/18.04/Dockerfile
+# The GPG download steps has been modified. Keys are now on LF repo and copied instaad of downloaded.
+# Refer to https://swift.org/download/#using-downloads in the Linux section on how to download the keys
 RUN apt-get -q install -y \
     libatomic1 \
     libcurl4 \
@@ -217,6 +219,7 @@ ENV SWIFT_SIGNING_KEY=$SWIFT_SIGNING_KEY \
     SWIFT_VERSION=$SWIFT_VERSION \
     SWIFT_WEBROOT=$SWIFT_WEBROOT
 
+COPY swift-all-keys.asc .
 RUN set -e; \
     SWIFT_WEBDIR="$SWIFT_WEBROOT/$SWIFT_BRANCH/$(echo $SWIFT_PLATFORM | tr -d .)/" \
     && SWIFT_BIN_URL="$SWIFT_WEBDIR/$SWIFT_VERSION/$SWIFT_VERSION-$SWIFT_PLATFORM.tar.gz" \
@@ -227,7 +230,7 @@ RUN set -e; \
     # - Download the GPG keys, Swift toolchain, and toolchain signature, and verify.
     && export GNUPGHOME="$(mktemp -d)" \
     && curl -fsSL "$SWIFT_BIN_URL" -o swift.tar.gz "$SWIFT_SIG_URL" -o swift.tar.gz.sig \
-    && gpg --batch --quiet --keyserver ha.pool.sks-keyservers.net --recv-keys "$SWIFT_SIGNING_KEY" \
+    && gpg --import swift-all-keys.asc \
     && gpg --batch --verify swift.tar.gz.sig swift.tar.gz \
     # - Unpack the toolchain, set libs permissions, and clean up.
     && tar -xzf swift.tar.gz --directory / --strip-components=1 \
