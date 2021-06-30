@@ -2,7 +2,6 @@
 
 require 'pathname'
 require 'yaml'
-require 'byebug'
 
 module LicenseFinder
   ROOT_PATH = Pathname.new(__FILE__).dirname.join('license_finder')
