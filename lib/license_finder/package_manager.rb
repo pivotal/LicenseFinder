@@ -88,6 +88,10 @@ module LicenseFinder
         stdout, stderr, status = Dir.chdir(project_path) do
           logger.info self.class, "Running bundle install for #{Dir.pwd}", color: :blue
           logger.info self.class, "#{prepare_command}"
+          stdout1, _stderr1, _status1 = Cmd.run('bundle env')
+
+          puts stdout1
+
           Cmd.run(prepare_command)
         end
 
