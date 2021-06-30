@@ -85,7 +85,11 @@ module LicenseFinder
 
     def prepare
       if prepare_command
-        stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prepare_command) }
+        stdout, stderr, status = Dir.chdir(project_path) do
+          logger.info self.class, "Running bundle install for #{Dir.pwd} with path #{gem_path}", color: :blue
+          Cmd.run(prepare_command)
+        end
+
         unless status.success?
           log_errors stderr
 

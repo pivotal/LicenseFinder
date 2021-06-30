@@ -28,7 +28,7 @@ module LicenseFinder
       ignored_groups_argument = !ignored_groups.empty? ? "--without #{ignored_groups.to_a.join(' ')}" : ''
 
       gem_path = "lf-bundler-gems"
-      logger.info self.class, "Running bundle install for #{Dir.pwd} with path #{gem_path}", color: :blue
+      #logger.info self.class, "Running bundle install for #{Dir.pwd} with path #{gem_path}", color: :blue
 
       "bundle install #{ignored_groups_argument} --path #{gem_path}".strip
     end
