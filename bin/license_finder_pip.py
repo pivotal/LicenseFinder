@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import json
 import sys
 
@@ -21,12 +20,16 @@ except ImportError:
 from pip._vendor import pkg_resources
 from pip._vendor.six import print_
 
+
 reqs = []
 for req in parse_requirements(sys.argv[1], session=PipSession()):
-    if req.req == None or (req.markers != None and not req.markers.evaluate()): continue
-    reqs.append(req)
-
-requirements = [pkg_resources.Requirement.parse(str(req.req)) for req in reqs]
+    try:
+        if req.req is not None and (req.markers is None or req.markers.evaluate()):
+            reqs.append(pkg_resources.Requirement.parse(str(req.req)))
+    except AttributeError:
+        # Since pip 20.1 (pip now takes care of markers at the resolve step)
+        if req.requirement is not None:
+            reqs.append(pkg_resources.Requirement.parse(str(req.requirement)))
 
 transform = lambda dist: {
         'name': dist.project_name,
@@ -35,7 +38,6 @@ transform = lambda dist: {
         'dependencies': list(map(lambda dependency: dependency.project_name, dist.requires())),
         }
 
-packages = [transform(dist) for dist
-            in pkg_resources.working_set.resolve(requirements)]
 
+packages = [transform(dist) for dist in pkg_resources.working_set.resolve(reqs)]
 print_(json.dumps(packages))
