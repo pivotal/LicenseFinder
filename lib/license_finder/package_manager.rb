@@ -88,29 +88,6 @@ module LicenseFinder
         stdout, stderr, status = Dir.chdir(project_path) do
           logger.info self.class, "Running command for #{Dir.pwd}", color: :blue
 
-          if prepare_command.include?('bundle')
-            out, _st = Open3.capture2("cat Gemfile | grep '^ruby' | sed -E \"s/.*[\\\"'](.+)[\\\"']/\1/\"")
-
-            if out.empty?
-              ruby_version = '2.6.5'
-            else
-              ruby_version = out.strip
-            end
-
-            Open3.capture3("rvm install ruby-#{ruby_version}")
-            Open3.capture3("rvm use ruby-#{ruby_version}")
-
-            out, _st = Open3.capture2('tail -n1 Gemfile.lock')
-
-            if out.empty?
-              bundler_version = '1.17.3'
-            else
-              bundler_version = out.strip
-            end
-
-            Open3.capture3("gem install bundler -v #{bundler_version}")
-          end
-
           Cmd.run(prepare_command)
         end
 
