@@ -50,7 +50,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'with_env', '1.1.0'
   s.add_dependency 'xml-simple', '~> 1.1.5'
 
-  s.add_development_dependency 'addressable', '2.7.0'
+  s.add_development_dependency 'addressable', '2.8.0'
   s.add_development_dependency 'capybara', '~> 3.15.0'
   s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM =~ /darwin/
   s.add_development_dependency 'fakefs', '~> 1.2.0'
