@@ -1,7 +1,11 @@
 # [6.14.1] / 2021-06-25
 
+First two commit were supposed to show up in v6.14.0, but GPG bug prevented a correct build. Therefore, a follow up patch build was made to include the GPG fix.
+
 ###Changed
-* Upgrade Docker image to use Ubuntu Bionic [1c12588c](https://github.com/pivotal/LicenseFinder/commit/1c12588cceecb8b7350d090c85b519b24bcc6682)
+* Upgrade Docker image to use Ubuntu Bionic [#178471230] [1c12588c](https://github.com/pivotal/LicenseFinder/commit/1c12588cceecb8b7350d090c85b519b24bcc6682)
+* Update the default timezone to GMT [#178471230] - [9fcab84](https://github.com/pivotal/LicenseFinder/commit/9fcab84605cda81e7f276d3c567d14409e371333)
+* Use local copy of Swift puglic GPG keys [#178674224] - [4db4b3e](https://github.com/pivotal/LicenseFinder/commit/4db4b3e5980ca52019549d74da574a2342a7846e)
 
 ###Added 
 * Added --npm_options option to customize npm behavior. [b8457a62](https://github.com/pivotal/LicenseFinder/commit/b8457a62e7b531294934364d1e5f72cd78a7686a) - Alexander-Malott 
