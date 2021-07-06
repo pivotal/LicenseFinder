@@ -37,6 +37,10 @@ module LicenseFinder
       [project_path.join(gemfile)]
     end
 
+    def self.takes_priority_over
+      BundlerCLI
+    end
+
     private
 
     attr_reader :ignored_groups
