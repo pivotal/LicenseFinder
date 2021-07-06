@@ -1,5 +1,17 @@
 # [6.14.1] / 2021-06-25
 
+###Changed
+* Upgrade Docker image to use Ubuntu Bionic [1c12588c](https://github.com/pivotal/LicenseFinder/commit/1c12588cceecb8b7350d090c85b519b24bcc6682)
+
+###Added 
+* Added --npm_options option to customize npm behavior. [b8457a62](https://github.com/pivotal/LicenseFinder/commit/b8457a62e7b531294934364d1e5f72cd78a7686a) - Alexander-Malott 
+
+###Security
+* Fix issue where commands could be injected running on Cocoapods projects. [b0a61a2d](https://github.com/pivotal/LicenseFinder/commit/b0a61a2d833921c714cc39cdda8ba80af3f33d04)
+
+  Thanks to Joern SchneeweiszStaff Security Engineer, Security Research | GitLab for raising the issue
+
+
 # [6.13.0] / 2021-04-27
 
 ### Fixed
