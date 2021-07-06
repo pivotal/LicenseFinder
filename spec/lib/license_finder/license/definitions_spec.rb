@@ -223,3 +223,40 @@ describe LicenseFinder::License, '0BSD' do
     expect(described_class.find_by_name('Zero-Clause BSD').url).to be
   end
 end
+
+describe LicenseFinder::License, 'Zlib' do
+  it 'should be recognized' do
+    expect(described_class.find_by_name('Zlib').url).to be
+    expect(described_class.find_by_name('zlib/libpng license').url).to be
+    expect(described_class.find_by_name('zlib License').url).to be
+  end
+
+  it 'should match regardless of year or copyright holder names' do
+    license = <<-LICENSE
+SOFTWARE NAME - Copyright (c) 1995-2017 - COPYRIGHT HOLDER NAME
+
+This software is provided 'as-is', without any express or
+implied warranty. In no event will the authors be held
+liable for any damages arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute
+it freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented;
+   you must not claim that you wrote the original software.
+   If you use this software in a product, an acknowledgment
+   in the product documentation would be appreciated but
+   is not required.
+
+2. Altered source versions must be plainly marked as such,
+   and must not be misrepresented as being the original software.
+
+3. This notice may not be removed or altered from any
+   source distribution.
+    LICENSE
+
+    expect(described_class.find_by_name('Zlib')).to be_matches_text license
+    expect(described_class.find_by_name('Zlib')).not_to be_matches_text 'SOME OTHER LICENSE'
+  end
+end
