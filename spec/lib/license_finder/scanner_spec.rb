@@ -127,6 +127,13 @@ module LicenseFinder
       end
 
       context 'when a directory has multiple package managers and at least one of them is a project root' do
+        around do |example|
+          old_var = ENV['BUNDLE_GEMFILE']
+          ENV.delete('BUNDLE_GEMFILE')
+          example.run
+          ENV['BUNDLE_GEMFILE'] = old_var
+        end
+
         let!(:subproject_with_two_package_managers) { fixture_path('gradle-with-subprojects/submodule-2') }
 
         it 'returns a list of project roots including it' do

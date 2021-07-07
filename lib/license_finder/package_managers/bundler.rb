@@ -1,19 +1,24 @@
 # frozen_string_literal: true
 
-require 'bundler'
-require 'securerandom'
+require 'json'
+require 'pathname'
 
 module LicenseFinder
   class Bundler < PackageManager
+    GroupDefinition = Struct.new(:groups)
+
     def initialize(options = {})
       super
       @ignored_groups = options[:ignored_groups]
-      @definition = options[:definition] # dependency injection for tests
     end
 
     def current_packages
-      logger.debug self.class, "including groups #{included_groups.inspect}"
-      details.map do |gem_detail, bundle_detail|
+      bundle_detail, gem_details = bundle_specs
+
+      logger.debug self.class, "Bundler groups: #{bundle_detail.groups.inspect}", color: :green
+      logger.debug self.class, "Ignored groups: #{ignored_groups.to_a.inspect}", color: :green
+
+      gem_details.map do |gem_detail|
         BundlerPackage.new(gem_detail, bundle_detail, logger: logger).tap do |package|
           log_package_dependencies package
         end
@@ -25,66 +30,59 @@ module LicenseFinder
     end
 
     def prepare_command
-      ignored_groups_argument = !ignored_groups.empty? ? "--without #{ignored_groups.to_a.join(' ')}" : ''
-
-      gem_path = "lf-bundler-gems-#{SecureRandom.uuid}"
-      logger.info self.class, "Running bundle install for #{Dir.pwd} with path #{gem_path}", color: :blue
-
-      "bundle install #{ignored_groups_argument} --path #{gem_path}".strip
+      'bundle install'
     end
 
     def possible_package_paths
-      [project_path.join(gemfile)]
+      [gemfile_path]
     end
 
     private
 
     attr_reader :ignored_groups
 
-    def definition
-      ENV['BUNDLE_GEMFILE'] = "#{project_path}/#{gemfile}"
-
-      @definition ||= ::Bundler::Definition.build(detected_package_path, lockfile_path, nil)
+    def lf_bundler_exec
+      lfs = Gem::Specification.find_by_name('license_finder')
+      lfs.bin_file('license_finder_bundler')
     end
 
-    def details
-      gem_details.map do |gem_detail|
-        bundle_detail = bundler_details.detect { |bundler_detail| bundler_detail.name == gem_detail.name }
-        [gem_detail, bundle_detail]
+    def bundle_specs
+      gemfile = gemfile_path.to_s
+      result = ''
+
+      Dir.chdir(project_path) do
+        begin
+          pread, pwrite = IO.pipe
+          env = ENV.to_h
+          env['BUNDLE_GEMFILE'] = gemfile
+          pid = spawn(env, lf_bundler_exec.to_s, *ignored_groups, out: pwrite)
+
+          pwrite.close
+          result = pread.read
+          _pid, status = Process.wait2(pid)
+          exit_status = status.exitstatus
+
+          raise 'Unable to retrieve bundler gem specs' if exit_status != 0
+          raise 'Unable to read bundler gem specs' if result.empty?
+        ensure
+          pwrite.close unless pwrite.closed?
+          pread.close unless pread.closed?
+        end
       end
+
+      lf_bundler_def = JSON.parse(result)
+
+      bundle_detail = GroupDefinition.new(lf_bundler_def['groups'])
+      yaml_specs = lf_bundler_def['specs'].map { |gem_yaml| Gem::Specification.from_yaml(gem_yaml) }
+
+      [bundle_detail, yaml_specs]
     end
 
-    def gem_details
-      return @gem_details if @gem_details
+    def gemfile_path
+      return Pathname.new(project_path).join('Gemfile').expand_path unless ENV.key?('BUNDLE_GEMFILE')
 
-      # clear gem paths before running specs_for
-      Gem.clear_paths
-      if bundler_config_path_found
-        ::Bundler.reset!
-        ::Bundler.configure
-      end
-      @gem_details = definition.specs_for(included_groups)
-    end
-
-    def bundler_details
-      @bundler_details ||= definition.dependencies
-    end
-
-    def included_groups
-      definition.groups - ignored_groups.map(&:to_sym)
-    end
-
-    def lockfile_path
-      project_path.join(lockfile)
-    end
-
-    def bundler_config_path_found
-      config_file = project_path.join('.bundle/config')
-
-      return false unless File.exist?(config_file)
-
-      content = File.readlines(config_file)
-      content.grep(/BUNDLE_PATH/).count.positive?
+      gemfile_relative_path = ENV.fetch('BUNDLE_GEMFILE')
+      Pathname.new(gemfile_relative_path).expand_path
     end
 
     def log_package_dependencies(package)
@@ -97,14 +95,6 @@ module LicenseFinder
           logger.debug self.class, format('- %s', dep)
         end
       end
-    end
-
-    def gemfile
-      File.basename(ENV['BUNDLE_GEMFILE'] || 'Gemfile')
-    end
-
-    def lockfile
-      "#{gemfile}.lock"
     end
   end
 end

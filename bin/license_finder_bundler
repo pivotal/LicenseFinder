@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler'
+require 'json'
+
+def log_debug(msg)
+  warn(msg.to_s) if ENV['DEBUG'] == 'on'
+end
+
+raise 'BUNDLE_GEMFILE required' unless ENV.key?('BUNDLE_GEMFILE')
+
+ignored_groups = ARGV.dup
+
+log_debug "Gemfile: #{ENV['BUNDLE_GEMFILE']}"
+
+specs = []
+groups = []
+
+begin
+  Bundler.ui.silence do
+    definition = Bundler.definition
+    groups = definition.groups.reject { |group| ignored_groups.include?(group.to_s) }
+
+    specs = if groups.empty?
+              definition.specs
+            else
+              definition.specs_for(groups)
+            end
+
+    specs = specs.map(&:to_yaml)
+  end
+rescue Bundler::GemfileNotFound => e
+  log_debug "Gemfile not found: #{e.message}"
+  exit(1)
+rescue StandardError => e
+  log_debug "Unknown Error: #{e.message}"
+  exit(2)
+end
+
+output = {
+  'groups' => groups,
+  'specs' => specs
+}
+
+puts output.to_json
+
+exit(0)
