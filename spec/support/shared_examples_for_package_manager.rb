@@ -2,6 +2,13 @@
 
 module LicenseFinder
   shared_examples 'a PackageManager' do
+    around do |example|
+      old_var = ENV['BUNDLE_GEMFILE']
+      ENV.delete('BUNDLE_GEMFILE')
+      example.run
+      ENV['BUNDLE_GEMFILE'] = old_var
+    end
+
     let(:all_pms) { fixture_path('all_pms') }
 
     it { expect(described_class.ancestors).to include PackageManager }
