@@ -3,6 +3,7 @@
 require 'delegate'
 require 'English'
 require 'json'
+require 'open3'
 
 module LicenseFinder
   module TestingDSL
@@ -797,8 +798,11 @@ exit: %d
 ERRORFORMAT
 
       def self.run(command, allow_failures = false)
-        output = `#{command} 2>&1`
-        status = $CHILD_STATUS
+        env = ENV.to_h.dup
+        env['BUNDLE_GEMFILE'] = nil
+
+        output, status = Open3.capture2(env, "#{command} 2>&1")
+
         unless status.success? || allow_failures
           message = format ERROR_MESSAGE_FORMAT, command, output.chomp, status.exitstatus
           raise message

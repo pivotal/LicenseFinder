@@ -241,6 +241,7 @@ RUN set -e; \
 # install license_finder
 COPY . /LicenseFinder
 RUN bash -lc "cd /LicenseFinder && bundle config set no-cache 'true' && bundle install -j4 && rake install"
+RUN bash -lc "cd /LicenseFinder && gem uninstall -a -x license_finder && gem build ./license_finder.gemspec && gem install ./license_finder-*.gem && rm ./license_finder-*.gem"
 
 WORKDIR /
 
