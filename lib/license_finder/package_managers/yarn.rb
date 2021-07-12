@@ -35,7 +35,26 @@ module LicenseFinder
         end
       end
 
-      packages + incompatible_packages.uniq
+      toplevel_packages = []
+
+      Dir.chdir(project_path) do
+        (packages + incompatible_packages.uniq).each do |package|
+          version, _stderr, _status = filter_dependencies_of_toplevel(package.name)
+          version = version.strip
+
+          next if version.empty?
+          next if version != package.version
+
+          toplevel_packages << package
+        end
+      end
+
+      toplevel_packages
+    end
+
+    def filter_dependencies_of_toplevel(package)
+      cmd = "yarn list -s --depth=0 --pattern '#{package}' | tail -n 1 | sed 's/.*@//g'"
+      Cmd.run(cmd)
     end
 
     def prepare
