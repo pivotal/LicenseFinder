@@ -5,6 +5,13 @@ require 'spec_helper'
 module LicenseFinder
   describe ProjectFinder do
     describe '#find_projects' do
+      around do |example|
+        old_var = ENV['BUNDLE_GEMFILE']
+        ENV.delete('BUNDLE_GEMFILE')
+        example.run
+        ENV['BUNDLE_GEMFILE'] = old_var
+      end
+
       it 'returns absolute paths for projects with active package managers' do
         finder = ProjectFinder.new('spec/fixtures/composite')
 
