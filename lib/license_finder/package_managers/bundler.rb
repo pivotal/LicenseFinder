@@ -2,6 +2,7 @@
 
 require 'json'
 require 'pathname'
+require 'bundler'
 
 module LicenseFinder
   class Bundler < PackageManager
@@ -53,7 +54,8 @@ module LicenseFinder
       Dir.chdir(project_path) do
         begin
           pread, pwrite = IO.pipe
-          env = ENV.to_h
+          env = env_to_hash(ENV)
+          env = reset_bundle_env(env)
           env['BUNDLE_GEMFILE'] = gemfile
           pid = spawn(env, lf_bundler_exec.to_s, *ignored_groups, out: pwrite)
 
@@ -95,6 +97,28 @@ module LicenseFinder
           logger.debug self.class, format('- %s', dep)
         end
       end
+    end
+
+    def env_to_hash(env)
+      to_hash = env.to_hash
+      return to_hash unless Gem.win_platform?
+
+      to_hash.each_with_object({}) {|(k,v), a| a[k.upcase] = v }
+    end
+
+    def reset_bundle_env(env_hash)
+      env = env_hash.dup
+
+      env.each do |key, value|
+        if key.start_with?(::Bundler::EnvironmentPreserver::BUNDLER_PREFIX)
+          real_key = key[::Bundler::EnvironmentPreserver::BUNDLER_PREFIX.size..-1]
+          env[real_key] = env[key]
+          env[key] = nil
+          env[real_key] = nil if env[real_key] == ::Bundler::EnvironmentPreserver::INTENTIONALLY_NIL
+        end
+      end
+
+      env
     end
   end
 end
