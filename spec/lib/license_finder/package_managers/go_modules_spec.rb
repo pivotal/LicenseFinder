@@ -10,7 +10,7 @@ module LicenseFinder
     let(:src_path) { '/workspace/code' }
     let(:mod_path) { "#{src_path}/go.mod" }
     let(:vendor_path) { "#{src_path}/vendor" }
-    let(:go_list_format) { '{{ if and (.DepOnly) (.Module) (not .Standard) }}{{ $mod := (or .Module.Replace .Module) }}{{ $mod.Path }},{{ $mod.Version }},{{ or $mod.Dir .Dir }}{{ end }}' }
+    let(:go_list_format) { '{{ if and (.DepOnly) (.Module) (not .Standard) }}{{ $mod := .Module }}{{ $mod.Path }},{{ $mod.Version }},{{ or $mod.Dir .Dir }}{{ end }}' }
     let(:go_list_string) do
       "foo,,/workspace/code/\ngopkg.in/check.v1,v0.0.0-20161208181325-20d25e280405,"\
 "/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/check.v1\n"\

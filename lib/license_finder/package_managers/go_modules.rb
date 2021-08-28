@@ -37,13 +37,11 @@ module LicenseFinder
         #   (.Module)
         # * Ignore standard library packages
         #   (not .Standard)
-        # * Replacement modules are respected
-        #   (or .Module.Replace .Module)
         # * Module cache directory or (vendored) package directory
         #   (or $mod.Dir .Dir)
         format_str = \
           '{{ if and (.DepOnly) (.Module) (not .Standard) }}'\
-            '{{ $mod := (or .Module.Replace .Module) }}'\
+            '{{ $mod := .Module }}'\
             '{{ $mod.Path }},{{ $mod.Version }},{{ or $mod.Dir .Dir }}'\
           '{{ end }}'
 
