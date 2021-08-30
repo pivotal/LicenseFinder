@@ -11,11 +11,12 @@ module LicenseFinder
         pod = pod.keys.first if pod.is_a?(Hash)
 
         name, version = pod.scan(/(.*)\s\((.*)\)/).flatten
+        parent_name = name.split('/').first if name.include?('/')
 
         CocoaPodsPackage.new(
           name,
           version,
-          acknowledgements[name],
+          acknowledgements[name] || (parent_name && acknowledgements[parent_name]),
           logger: logger
         )
       end
