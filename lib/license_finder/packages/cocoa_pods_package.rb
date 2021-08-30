@@ -2,13 +2,20 @@
 
 module LicenseFinder
   class CocoaPodsPackage < Package
-    def initialize(name, version, license_text, options = {})
-      super(name, version, options)
-      @license = License.find_by_text(license_text.to_s)
+    def initialize(name, version, acknowledgement, options = {})
+      licenses = acknowledgement && acknowledgement['License']
+      license_text = acknowledgement && acknowledgement['FooterText']
+
+      spec_licenses = [licenses] if licenses && !licenses.empty?
+      @parsed_license = License.find_by_text(license_text.to_s) if spec_licenses.nil?
+
+      super(name, version, options.merge(spec_licenses: spec_licenses))
     end
 
     def licenses_from_spec
-      [@license].compact
+      return [@parsed_license].compact if @parsed_license
+
+      super
     end
 
     def package_manager

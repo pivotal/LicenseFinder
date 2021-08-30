@@ -15,7 +15,7 @@ module LicenseFinder
         CocoaPodsPackage.new(
           name,
           version,
-          license_texts[name],
+          acknowledgements[name],
           logger: logger
         )
       end
@@ -35,19 +35,21 @@ module LicenseFinder
       project_path.join('Podfile.lock')
     end
 
-    def license_texts
+    def acknowledgements
       # package name => license text
-      @license_texts ||= read_plist(acknowledgements_path)['PreferenceSpecifiers']
-                         .each_with_object({}) { |hash, memo| memo[hash['Title']] = hash['FooterText'] }
+      @acknowledgements ||= acknowledgements_paths
+                            .map { |acknowledgements_path| read_plist(acknowledgements_path)['PreferenceSpecifiers'] }
+                            .flatten
+                            .each_with_object({}) { |hash, memo| memo[hash['Title']] = hash }
     end
 
-    def acknowledgements_path
+    def acknowledgements_paths
       search_paths = ['Pods/Pods-acknowledgements.plist',
                       'Pods/Target Support Files/Pods/Pods-acknowledgements.plist',
                       'Pods/Target Support Files/Pods-*/Pods-*-acknowledgements.plist']
 
-      result = Dir[*search_paths.map { |path| File.join(project_path, path) }].first
-      raise "Found a Podfile but no Pods directory in #{project_path}. Try running pod install before running license_finder." if result.nil?
+      result = Dir[*search_paths.map { |path| File.join(project_path, path) }]
+      raise "Found a Podfile but no Pods directory in #{project_path}. Try running pod install before running license_finder." if result.empty?
 
       result
     end
