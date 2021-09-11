@@ -280,7 +280,11 @@ module LicenseFinder
     def self.restore(persisted, result = new)
       return result unless persisted
 
-      actions = YAML.load(persisted)
+      actions = if Psych::VERSION < '3.1.0'
+                  YAML.safe_load(persisted, %i[Symbol Time], [], true)
+                else
+                  YAML.safe_load(persisted, permitted_classes: %i[Symbol Time], aliases: true)
+                end
 
       list_of_actions = (actions || []).map(&:first)
 
