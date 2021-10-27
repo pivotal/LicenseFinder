@@ -1,3 +1,8 @@
+# [6.14.2] / 2021-10-27
+
+### Added
+* Zlib License - [0f004b52](https://github.com/pivotal/LicenseFinder/commit/0f004b528d436b4d53db8bd373ede0594c07d9e8) - blooper05
+
 # [6.14.1] / 2021-06-25
 
 First two commit were supposed to show up in v6.14.0, but GPG bug prevented a correct build. Therefore, a follow up patch build was made to include the GPG fix.
@@ -973,3 +978,4 @@ Bugfixes:
 [6.12.2]: https://github.com/pivotal/LicenseFinder/compare/v6.12.1...v6.12.2
 [6.13.0]: https://github.com/pivotal/LicenseFinder/compare/v6.12.2...v6.13.0
 [6.14.1]: https://github.com/pivotal/LicenseFinder/compare/v6.13.0...v6.14.1
+[6.14.2]: https://github.com/pivotal/LicenseFinder/compare/v6.14.1...v6.14.2
