@@ -5,6 +5,7 @@ module LicenseFinder
     module Text
       SPACES = /\s+/.freeze
       QUOTES = /['`"]{1,2}/.freeze
+      YEAR_PLACEHOLDERS = /<year>/.freeze
       PLACEHOLDERS = /<[^<>]+>/.freeze
       SPECIAL_SINGLE_QUOTES = /[‘’]/.freeze
       SPECIAL_DOUBLE_QUOTES = /[“”„«»]/.freeze
@@ -32,6 +33,7 @@ module LicenseFinder
 
       def self.compile_to_regex(text)
         Regexp.new(Regexp.escape(normalize_punctuation(text))
+                       .gsub(YEAR_PLACEHOLDERS, '(\S*)')
                        .gsub(PLACEHOLDERS, '(.*)')
                        .gsub(',', '(,)?')
                        .gsub('HOLDER', '(HOLDER|OWNER)')
