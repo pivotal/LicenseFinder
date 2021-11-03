@@ -137,7 +137,9 @@ RUN apt-get install -y python-dev && \
 	    --ignore-installed requests --ignore-installed chardet \
 	    --ignore-installed urllib3 \
 	    --upgrade setuptools && \
-    pip install --no-cache-dir -Iv conan==1.11.2
+    pip install --no-cache-dir -Iv conan==1.11.2 && \
+    conan config install https://github.com/conan-io/conanclientcert.git
+
 
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
@@ -211,7 +213,7 @@ ARG SWIFT_SIGNING_KEY=A62AE125BBBFBB96A6E042EC925CC1CCED3D1561
 ARG SWIFT_PLATFORM=ubuntu18.04
 ARG SWIFT_BRANCH=swift-5.3.3-release
 ARG SWIFT_VERSION=swift-5.3.3-RELEASE
-ARG SWIFT_WEBROOT=https://swift.org/builds/
+ARG SWIFT_WEBROOT=https://download.swift.org
 
 ENV SWIFT_SIGNING_KEY=$SWIFT_SIGNING_KEY \
     SWIFT_PLATFORM=$SWIFT_PLATFORM \
@@ -221,7 +223,7 @@ ENV SWIFT_SIGNING_KEY=$SWIFT_SIGNING_KEY \
 
 COPY swift-all-keys.asc .
 RUN set -e; \
-    SWIFT_WEBDIR="$SWIFT_WEBROOT/$SWIFT_BRANCH/$(echo $SWIFT_PLATFORM | tr -d .)/" \
+    SWIFT_WEBDIR="$SWIFT_WEBROOT/$SWIFT_BRANCH/$(echo $SWIFT_PLATFORM | tr -d .)" \
     && SWIFT_BIN_URL="$SWIFT_WEBDIR/$SWIFT_VERSION/$SWIFT_VERSION-$SWIFT_PLATFORM.tar.gz" \
     && SWIFT_SIG_URL="$SWIFT_BIN_URL.sig" \
     # - Grab curl here so we cache better up above
