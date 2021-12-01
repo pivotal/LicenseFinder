@@ -1,10 +1,14 @@
 #!/bin/bash
 if `which docker > /dev/null`; then
-	if [ $# -eq 0 ]; then
-  		docker run -v $PWD:/scan -it licensefinder/license_finder
-	else
-  		docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && `echo $@`"
-	fi
+  if [ $# -eq 0 ]; then
+    docker run -v $PWD:/scan -it licensefinder/license_finder
+  else
+    escaped_params=""
+    for p in "$@"; do
+      escaped_params="$escaped_params \"$p\""
+    done
+    docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && $escaped_params"
+  fi
 else
   echo "You do not have docker installed. Please install it:"
   echo "    https://docs.docker.com/engine/installation/"
