@@ -91,8 +91,8 @@
           <% end -%>
         </dl>
         <% end -%>
-        <h4><%= dependency.summary %></h4>
-        <p><%= dependency.description %></p>
+        <h4><%= sanitize dependency.summary %></h4>
+        <p><%= sanitize dependency.description %></p>
         <% if dependency.parents.any? -%>
           <dl>
             <dt><%=dependency.name%> is required by:</dt>

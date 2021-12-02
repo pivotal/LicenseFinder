@@ -24,6 +24,26 @@ module LicenseFinder
         is_expected.not_to have_text 'Paths'
       end
 
+      context 'when dependency details has HTML' do
+        let(:dependency) do
+          options = {
+            summary: "foo-summary <script id=\"foo\">window.alert('summary');</script>",
+            description: "bar-description <script id=\"bar\">window.alert('description');</script>"
+          }
+          Package.new('the-dep', nil, options)
+        end
+
+        it 'should remove HTML from summary' do
+          is_expected.not_to have_selector('script#foo', visible: false)
+          is_expected.to have_text "foo-summary"
+        end
+
+        it 'should remove HTML from description' do
+          is_expected.not_to have_selector('script#bar', visible: false) #have_text "<script>window.alert('description');</script>"
+          is_expected.to have_text "bar-description"
+        end
+      end
+
       context 'when the dependency is a merged package' do
         context 'when there is at least one aggregate path' do
           let(:merged_dependency) do
