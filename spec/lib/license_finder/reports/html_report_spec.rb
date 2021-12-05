@@ -39,7 +39,7 @@ module LicenseFinder
         end
 
         it 'should remove HTML from description' do
-          is_expected.not_to have_selector('script#bar', visible: false) #have_text "<script>window.alert('description');</script>"
+          is_expected.not_to have_selector('script#bar', visible: false)
           is_expected.to have_text "bar-description"
         end
       end
