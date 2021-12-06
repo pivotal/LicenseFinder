@@ -35,12 +35,12 @@ module LicenseFinder
 
         it 'should remove HTML from summary' do
           is_expected.not_to have_selector('script#foo', visible: false)
-          is_expected.to have_text "foo-summary"
+          is_expected.to have_text 'foo-summary'
         end
 
         it 'should remove HTML from description' do
           is_expected.not_to have_selector('script#bar', visible: false)
-          is_expected.to have_text "bar-description"
+          is_expected.to have_text 'bar-description'
         end
       end
 
