@@ -799,7 +799,7 @@ ERRORFORMAT
 
       def self.run(command, allow_failures = false)
         env = ENV.to_h.dup
-        env['BUNDLE_GEMFILE'] = nil
+        # env['BUNDLE_GEMFILE'] = nil
 
         output, status = Open3.capture2(env, "#{command} 2>&1")
 

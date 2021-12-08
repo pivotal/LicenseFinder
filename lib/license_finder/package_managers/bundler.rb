@@ -109,7 +109,7 @@ module LicenseFinder
     def reset_bundle_env(env_hash)
       env = env_hash.dup
 
-      env.each do |key, value|
+      env_hash.each do |key, value|
         if key.start_with?(::Bundler::EnvironmentPreserver::BUNDLER_PREFIX)
           real_key = key[::Bundler::EnvironmentPreserver::BUNDLER_PREFIX.size..-1]
           env[real_key] = env[key]
