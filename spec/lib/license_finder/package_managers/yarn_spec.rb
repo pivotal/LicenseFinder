@@ -69,7 +69,6 @@ module LicenseFinder
             subject.prepare
           end
         end
-
       end
     end
 
@@ -201,7 +200,6 @@ module LicenseFinder
           expect(subject.prepare_command).to eq('yarn install')
         end
       end
-
     end
 
     describe '.package_management_command' do

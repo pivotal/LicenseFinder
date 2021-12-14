@@ -39,7 +39,7 @@ module LicenseFinder
     end
 
     def prepare
-      prep_cmd = "#{prepare_command}"
+      prep_cmd = prepare_command.to_s
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
       return if status.success?
 
@@ -78,7 +78,7 @@ module LicenseFinder
         version_string, stderr_str, status = Cmd.run('yarn -v')
         raise "Command 'yarn -v' failed to execute: #{stderr_str}" unless status.success?
 
-        version = version_string.split('.').map { |v| v.to_i }
+        version = version_string.split('.').map(&:to_i)
         return version[0] >= 2
       end
     end
