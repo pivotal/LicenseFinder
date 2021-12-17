@@ -1,3 +1,8 @@
+# [6.15.0] / 2021-12-17
+
+### Fixed
+* Fix docker Conan and swift - [66031df9](https://github.com/pivotal/LicenseFinder/commit/66031df912c2e1e21aa794a4b897fc61c9ec6b02) 
+
 # [6.14.2] / 2021-10-27
 
 ### Added
@@ -979,3 +984,4 @@ Bugfixes:
 [6.13.0]: https://github.com/pivotal/LicenseFinder/compare/v6.12.2...v6.13.0
 [6.14.1]: https://github.com/pivotal/LicenseFinder/compare/v6.13.0...v6.14.1
 [6.14.2]: https://github.com/pivotal/LicenseFinder/compare/v6.14.1...v6.14.2
+[6.15.0]: https://github.com/pivotal/LicenseFinder/compare/v6.14.2...v6.15.0
