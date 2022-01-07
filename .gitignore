@@ -1,6 +1,7 @@
 .bundle
 .gradle/
 .idea/
+*.iml
 .pairs
 .rvmrc
 Gemfile.lock
