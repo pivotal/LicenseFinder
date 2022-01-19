@@ -45,7 +45,7 @@ module LicenseFinder
 
       if !ENV['ACKNOWLEDGEMENTS_PATH'].nil?
         result = Dir[*ENV['ACKNOWLEDGEMENTS_PATH']].first
-      else  
+      else
         search_paths = ['Pods/Pods-acknowledgements.plist',
                         'Pods/Target Support Files/Pods/Pods-acknowledgements.plist',
                         'Pods/Target Support Files/Pods-*/Pods-*-acknowledgements.plist']
