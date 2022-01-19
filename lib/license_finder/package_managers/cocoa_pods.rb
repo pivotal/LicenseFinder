@@ -42,7 +42,6 @@ module LicenseFinder
     end
 
     def acknowledgements_path
-
       if !ENV['ACKNOWLEDGEMENTS_PATH'].nil?
         result = Dir[*ENV['ACKNOWLEDGEMENTS_PATH']].first
       else
