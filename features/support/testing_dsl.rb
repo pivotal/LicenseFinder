@@ -498,11 +498,10 @@ module LicenseFinder
       end
 
       def install
-        ENV['PUB_CACHE'] = "~/flutter/.pub-cache/"
+        ENV['PUB_CACHE'] = '~/flutter/.pub-cache/'
         shell_out('flutter pub get')
       end
     end
-
 
     class ConanProject < Project
       def add_dep

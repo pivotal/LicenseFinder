@@ -8,7 +8,8 @@ module LicenseFinder
     let(:root) { '/fake-pub-project' }
     let(:project_path) { fixture_path('all_pms') }
     let(:pub) { Pub.new(project_path: project_path) }
-    let(:new_bsd_common_text) { "Redistribution and use in source and binary forms, with or without
+    let(:new_bsd_common_text) do
+      "Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
     * Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
@@ -28,7 +29,8 @@ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." }
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+    end
 
     it_behaves_like 'a PackageManager'
 
@@ -56,12 +58,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." }
       end
     end
 
-     let(:dependency_json) do
+    let(:dependency_json) do
       FakeFS.without do
         fixture_from('pub_deps.json')
       end
     end
-    
+
     before do
       allow(IO).to receive(:read).and_call_original
       allow(File).to receive(:exist?).and_return(false)
@@ -73,19 +75,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." }
           allow(File).to receive(:exist?).and_return(true)
           allow(SharedHelpers::Cmd).to receive(:run).with('flutter pub deps --json')
                                                     .and_return([dependency_json, '', cmd_success])
-          allow(ENV).to receive(:[]).with('PUB_CACHE').and_return(project_path.join('.pub'))                                          
+          allow(ENV).to receive(:[]).with('PUB_CACHE').and_return(project_path.join('.pub'))
         end
 
         it 'lists all the current packages' do
           expect(pub.current_packages.map { |p| [p.name, p.version] }).to eq [
-            ["flutter", "0.0.0"],
-            ["device_info", "2.0.3"]
+            ['flutter', '0.0.0'],
+            ['device_info', '2.0.3']
           ]
         end
 
         it 'passes the license text to the package' do
-          stub_license_md("device_info-2.0.3" => new_bsd_common_text)
-          expect(pub.current_packages.last.licenses.map(&:name)).to eq ["New BSD"]
+          stub_license_md('device_info-2.0.3' => new_bsd_common_text)
+          expect(pub.current_packages.last.licenses.map(&:name)).to eq ['New BSD']
         end
 
         it 'handles no licenses' do
