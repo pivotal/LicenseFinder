@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'yaml'
 
 module LicenseFinder
   class Pub < PackageManager
@@ -21,10 +22,13 @@ module LicenseFinder
         package_name = dependency['name']
         subpath = "#{dependency['name']}-#{dependency['version']}"
         package_version = dependency['version']
-        homepage = nil
-
+      
         project_repo = dependency["source"] == "git" ? Pathname("#{ENV["PUB_CACHE"]}/git/#{dependency["name"]}-*/") : Pathname("#{ENV["PUB_CACHE"]}/hosted/pub.dartlang.org/#{subpath}")
 
+        homepage = read_repository_home(project_repo)
+        if homepage.nil? || homepage.empty?
+          homepage = "https://pub.dev/packages/#{package_name}"
+        end
         PubPackage.new(
           package_name,
           package_version,
@@ -75,5 +79,12 @@ module LicenseFinder
 
       @ignored_groups.include?('devDependencies') ? '' : 'no-'
     end
+
+    def read_repository_home(project_repo)
+      package_yaml = project_repo.join("pubspec.yaml")
+      if File.exist?(package_yaml)
+        YAML.load(IO.read(package_yaml))["repository"]
+      end
+    end  
   end
 end
