@@ -492,6 +492,18 @@ module LicenseFinder
       end
     end
 
+    class FlutterProject < Project
+      def add_dep
+        install_fixture('pubspec.yaml')
+      end
+
+      def install
+        ENV['PUB_CACHE'] = "~/flutter/.pub-cache/"
+        shell_out('flutter pub get')
+      end
+    end
+
+
     class ConanProject < Project
       def add_dep
         install_fixture('conanfile.txt')

@@ -200,3 +200,5 @@ require 'license_finder/packages/sbt_package'
 require 'license_finder/packages/cargo_package'
 require 'license_finder/packages/composer_package'
 require 'license_finder/packages/conda_package'
+require 'license_finder/packages/pubspec_package'
+

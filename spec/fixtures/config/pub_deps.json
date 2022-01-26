@@ -1,0 +1,40 @@
+{
+    "root": "test_app",
+    "packages": [
+        {
+            "name": "flutter",
+            "version": "0.0.0",
+            "kind": "direct",
+            "source": "sdk",
+            "dependencies": [
+                "characters",
+                "collection",
+                "meta",
+                "typed_data",
+                "vector_math",
+                "sky_engine"
+            ]
+        },
+        {
+            "name": "device_info",
+            "version": "2.0.3",
+            "kind": "direct",
+            "source": "hosted",
+            "dependencies": [
+                "flutter",
+                "device_info_platform_interface"
+            ]
+        }
+    ],
+    "sdks": [
+        {
+            "name": "Dart",
+            "version": "2.14.4"
+        },
+        {
+            "name": "Flutter",
+            "version": "2.5.3"
+        }
+    ],
+    "executables": []
+}

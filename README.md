@@ -55,6 +55,7 @@ and give you an actionable exception report.
 * Go Modules (via `go mod`)
 * PHP (via `composer`)
 * Python (via Conda [Conda 4.8.3, Python 3.7, Bash; requires an `environment.yml` or `environment.yaml`])
+* Flutter (via `flutter pub, requires pubspec.yaml & .pub cache locaton through ENV variable`)
 
 ## Installation
 
