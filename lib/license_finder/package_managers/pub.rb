@@ -80,7 +80,7 @@ module LicenseFinder
 
     def read_repository_home(project_repo)
       package_yaml = project_repo.join('pubspec.yaml')
-      YAML.load(IO.read(package_yaml))['repository'] if File.exist?(package_yaml)
+      YAML.load(IO.read(package_yaml))['repository'] if Dir.exist?(project_repo) && File.exist?(package_yaml)
     end
   end
 end
