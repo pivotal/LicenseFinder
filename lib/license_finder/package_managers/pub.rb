@@ -13,7 +13,7 @@ module LicenseFinder
           Please install your dependencies first."
       end
 
-      if ENV['PUB_CACHE'].nil? || ENV['PUB_CACHE'].empty?
+      if ENV['PUB_CACHE'].nil? || ENV['PUB_CACHE'].eql?('')
         raise PubError, 'While PUB_CACHE environment variable is empty, retrieving package licenses is impossible. Please set the PUB_CACHE env variable (default: ~/.pub)'
       end
 
