@@ -40,6 +40,7 @@ module LicenseFinder
     def initialize(settings)
       @short_name  = settings.fetch(:short_name)
       @pretty_name = settings.fetch(:pretty_name, short_name)
+      @spdx_id     = settings.fetch(:spdx_id, '')
       @other_names = settings.fetch(:other_names, [])
       @url         = settings.fetch(:url)
       @matcher     = settings.fetch(:matcher) { Matcher.from_template(Template.named(short_name)) }
@@ -49,6 +50,10 @@ module LicenseFinder
 
     def name
       pretty_name
+    end
+
+    def standard_id
+      spdx_id
     end
 
     def stripped_name(name)
@@ -77,7 +82,7 @@ module LicenseFinder
 
     private
 
-    attr_reader :short_name, :pretty_name, :other_names
+    attr_reader :short_name, :pretty_name, :other_names, :spdx_id
     attr_reader :matcher
 
     def names
@@ -93,6 +98,7 @@ module LicenseFinder
       @short_name = name
       @pretty_name = name
       @url = nil
+      @spdx_id = nil
       @matcher = NoneMatcher.new
       # removes heading and trailing parentesis and splits
       name = name[1..-2] if name.start_with?('(')

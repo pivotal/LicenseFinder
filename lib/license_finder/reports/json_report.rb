@@ -24,7 +24,8 @@ module LicenseFinder
     end
 
     def format_licenses(dep)
-      dep.missing? ? [] : dep.licenses.map(&:name)
+      dep.missing? ? [] :
+       dep.licenses.map(&(@use_spdx_id ? :standard_id : :name))
     end
   end
 end

@@ -90,6 +90,11 @@ module LicenseFinder
         method_option :columns,
                       desc: "For text or CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}",
                       type: :array
+
+        method_option :use_spdx_id,
+                      type: :boolean,
+                      desc: 'For reports, use the SPDX identifier instead of license name (useful to match license with other standard tools)',
+                      default: false
       end
 
       desc 'project_roots', 'List project directories to be scanned'
@@ -210,7 +215,7 @@ module LicenseFinder
       def report_of(content)
         report = FORMATS[config.format] || FORMATS['text']
         report = MergedReport if report == CsvReport && config.aggregate_paths
-        report.of(content, columns: config.columns, project_name: decisions.project_name || config.project_path.basename.to_s, write_headers: config.write_headers)
+        report.of(content, columns: config.columns, project_name: decisions.project_name || config.project_path.basename.to_s, write_headers: config.write_headers, use_spdx_id: config.use_spdx_id)
       end
 
       def save?

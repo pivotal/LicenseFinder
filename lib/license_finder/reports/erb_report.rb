@@ -22,7 +22,7 @@ module LicenseFinder
     end
 
     def link_to_license(license)
-      link_to_maybe license.name, license.url
+      link_to_maybe (@use_spdx_id ? license.standard_id : license.name), license.url
     end
 
     def link_to_dependency(dependency)
@@ -42,7 +42,7 @@ module LicenseFinder
     end
 
     def license_names(dependency)
-      dependency.licenses.map(&:name).sort.join ', '
+      dependency.licenses.map(&@use_spdx_id? :standard_id : :name).sort.join ', '
     end
 
     def license_links(dependency)

@@ -65,6 +65,14 @@ module LicenseFinder
       expect(subject.to_s).to eq("gem_a,MIT,#{mit.url}\n")
     end
 
+    it 'use license spdx identifier instead of name' do
+      dep = Package.new('gem_a', '1.0')
+      license = License.find_by_name('Apache 2.0')
+      dep.decide_on_license(license)
+      subject = described_class.new([dep], use_spdx_id: true)
+      expect(subject.to_s).to eq("gem_a,1.0,Apache-2.0\n")
+    end
+
     it 'does not include columns that should only be in merged reports' do
       dep = Package.new('gem_a', '1.0')
       subject = described_class.new([dep], columns: %w[aggregate_paths])
