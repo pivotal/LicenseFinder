@@ -46,7 +46,7 @@ module LicenseFinder
         License.new(
           short_name: 'Apache1_1',
           pretty_name: 'Apache 1.1',
-          spdx_id: 'Apache-1.0',
+          spdx_id: 'Apache-1.1',
           other_names: [
             'Apache-1.1',
             'The Apache Software License, Version 1.1'
