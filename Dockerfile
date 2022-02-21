@@ -208,11 +208,11 @@ RUN apt-get -q install -y \
 
 #install flutter
 ENV FLUTTER_HOME=/root/flutter
-RUN curl -o flutter_linux_2.8.1-stable.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.8.1-stable.tar.xz
-RUN tar xf flutter_linux_2.8.1-stable.tar.xz
-RUN mv flutter ${FLUTTER_HOME}
-RUN rm flutter_linux_2.8.1-stable.tar.xz
-
+RUN curl -o flutter_linux_2.8.1-stable.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.8.1-stable.tar.xz \
+    && tar xf flutter_linux_2.8.1-stable.tar.xz \
+    && mv flutter ${FLUTTER_HOME} \
+    && rm flutter_linux_2.8.1-stable.tar.xz
+        
 ENV PATH=$PATH:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
 RUN flutter doctor -v \
     && flutter update-packages \
