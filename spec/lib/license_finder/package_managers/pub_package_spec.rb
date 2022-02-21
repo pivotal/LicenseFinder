@@ -94,14 +94,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
           expect(pub.current_packages.first.licenses.map(&:name)).to eq ['unknown']
         end
       end
-
-      #   context "when spm did not run yet" do
-      #     it "raises an exception to explain the reason" do
-      #       expect do
-      #         spm.current_packages.first.licenses.map(&:name)
-      #       end.to raise_exception(Spm::SpmError)
-      #     end
-      #   end
     end
   end
 end
