@@ -12,6 +12,6 @@ describe 'Conda' do
   specify 'are shown in reports' do
     LicenseFinder::TestingDSL::CondaProject.create
     conda_developer.run_license_finder
-    expect(conda_developer).to be_seeing_line 'zlib, 1.2.11, zlib'
+    expect(conda_developer).to be_seeing_line 'zlib, 1.2.11, "zlib/libpng license"'
   end
 end

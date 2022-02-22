@@ -1,3 +1,31 @@
+# [6.15.0] / 2021-12-17
+
+### Fixed
+* Fix docker Conan and swift - [66031df9](https://github.com/pivotal/LicenseFinder/commit/66031df912c2e1e21aa794a4b897fc61c9ec6b02) 
+
+# [6.14.2] / 2021-10-27
+
+### Added
+* Zlib License - [0f004b52](https://github.com/pivotal/LicenseFinder/commit/0f004b528d436b4d53db8bd373ede0594c07d9e8) - blooper05
+
+# [6.14.1] / 2021-06-25
+
+First two commit were supposed to show up in v6.14.0, but GPG bug prevented a correct build. Therefore, a follow up patch build was made to include the GPG fix.
+
+### Changed
+* Upgrade Docker image to use Ubuntu Bionic [#178471230] [1c12588c](https://github.com/pivotal/LicenseFinder/commit/1c12588cceecb8b7350d090c85b519b24bcc6682)
+* Update the default timezone to GMT [#178471230] - [9fcab84](https://github.com/pivotal/LicenseFinder/commit/9fcab84605cda81e7f276d3c567d14409e371333)
+* Use local copy of Swift puglic GPG keys [#178674224] - [4db4b3e](https://github.com/pivotal/LicenseFinder/commit/4db4b3e5980ca52019549d74da574a2342a7846e)
+
+### Added 
+* Added --npm_options option to customize npm behavior. [b8457a62](https://github.com/pivotal/LicenseFinder/commit/b8457a62e7b531294934364d1e5f72cd78a7686a) - Alexander-Malott 
+
+### Security
+* Fix issue where commands could be injected running on Cocoapods projects. [b0a61a2d](https://github.com/pivotal/LicenseFinder/commit/b0a61a2d833921c714cc39cdda8ba80af3f33d04)
+
+  Thanks to Joern SchneeweiszStaff Security Engineer, Security Research | GitLab for raising the issue
+
+
 # [6.13.0] / 2021-04-27
 
 ### Fixed
@@ -954,3 +982,6 @@ Bugfixes:
 [6.12.1]: https://github.com/pivotal/LicenseFinder/compare/v6.12.0...v6.12.1
 [6.12.2]: https://github.com/pivotal/LicenseFinder/compare/v6.12.1...v6.12.2
 [6.13.0]: https://github.com/pivotal/LicenseFinder/compare/v6.12.2...v6.13.0
+[6.14.1]: https://github.com/pivotal/LicenseFinder/compare/v6.13.0...v6.14.1
+[6.14.2]: https://github.com/pivotal/LicenseFinder/compare/v6.14.1...v6.14.2
+[6.15.0]: https://github.com/pivotal/LicenseFinder/compare/v6.14.2...v6.15.0

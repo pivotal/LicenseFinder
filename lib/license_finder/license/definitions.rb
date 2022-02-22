@@ -27,7 +27,8 @@ module LicenseFinder
           ruby,
           simplifiedbsd,
           wtfpl,
-          zerobsd
+          zerobsd,
+          zlib
         ]
       end
 
@@ -347,6 +348,17 @@ module LicenseFinder
           ],
           url: 'https://opensource.org/licenses/0BSD',
           matcher: matcher
+        )
+      end
+
+      def zlib
+        License.new(
+          short_name: 'Zlib',
+          pretty_name: 'zlib/libpng license',
+          other_names: [
+            'zlib License'
+          ],
+          url: 'https://opensource.org/licenses/Zlib'
         )
       end
     end

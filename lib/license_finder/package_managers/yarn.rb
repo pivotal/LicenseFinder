@@ -9,7 +9,7 @@ module LicenseFinder
     end
 
     def current_packages
-      cmd = "#{Yarn::SHELL_COMMAND}#{production_flag}"
+      cmd = "#{Yarn::SHELL_COMMAND}#{yarn1_production_flag}"
       suffix = " --cwd #{project_path}" unless project_path.nil?
       cmd += suffix unless suffix.nil?
 
@@ -39,7 +39,7 @@ module LicenseFinder
     end
 
     def prepare
-      prep_cmd = "#{prepare_command}#{production_flag}"
+      prep_cmd = prepare_command.to_s
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
       return if status.success?
 
@@ -56,10 +56,32 @@ module LicenseFinder
     end
 
     def prepare_command
-      'yarn install --ignore-engines --ignore-scripts'
+      if yarn2_project?
+        yarn2_prepare_command
+      else
+        yarn1_prepare_command
+      end
     end
 
     private
+
+    def yarn2_prepare_command
+      "#{yarn2_production_flag}yarn install"
+    end
+
+    def yarn1_prepare_command
+      "yarn install --ignore-engines --ignore-scripts#{yarn1_production_flag}"
+    end
+
+    def yarn2_project?
+      Dir.chdir(project_path) do
+        version_string, stderr_str, status = Cmd.run('yarn -v')
+        raise "Command 'yarn -v' failed to execute: #{stderr_str}" unless status.success?
+
+        version = version_string.split('.').map(&:to_i)
+        return version[0] >= 2
+      end
+    end
 
     def packages_from_json(json_data)
       body = json_data['body']
@@ -98,10 +120,16 @@ module LicenseFinder
       all_packages - [yarn_internal_package]
     end
 
-    def production_flag
+    def yarn1_production_flag
       return '' if @ignored_groups.nil?
 
       @ignored_groups.include?('devDependencies') ? ' --production' : ''
+    end
+
+    def yarn2_production_flag
+      return '' if @ignored_groups.nil?
+
+      @ignored_groups.include?('devDependencies') ? 'yarn plugin import workspace-tools && yarn workspaces focus --all --production && ' : ''
     end
   end
 end

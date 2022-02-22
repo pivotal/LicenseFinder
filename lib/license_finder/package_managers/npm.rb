@@ -5,6 +5,11 @@ require 'tempfile'
 
 module LicenseFinder
   class NPM < PackageManager
+    def initialize(options = {})
+      super
+      @npm_options = options[:npm_options]
+    end
+
     def current_packages
       NpmPackage.packages_from_json(npm_json, detected_package_path)
     end
@@ -35,6 +40,7 @@ module LicenseFinder
 
     def npm_json
       command = "#{package_management_command} list --json --long#{production_flag}"
+      command += " #{@npm_options}" unless @npm_options.nil?
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
       # we can try and continue if we got an exit status 1 - unmet peer dependency
       raise "Command '#{command}' failed to execute: #{stderr}" if !status.success? && status.exitstatus != 1
