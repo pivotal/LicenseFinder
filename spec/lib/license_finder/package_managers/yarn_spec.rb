@@ -28,17 +28,46 @@ module LicenseFinder
         FileUtils.mkdir_p(root)
       end
 
-      it 'should call yarn install' do
-        expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --ignore-engines --ignore-scripts')
-                                                   .and_return([yarn_shell_command_output, '', cmd_success])
-        subject.prepare
-      end
-      context 'ignored_groups contains devDependencies' do
-        subject { Yarn.new(project_path: Pathname(root), ignored_groups: 'devDependencies') }
-        it 'should include a production flag' do
-          expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --ignore-engines --ignore-scripts --production')
+      context 'when using Yarn 1.x projects' do
+        before do
+          allow(SharedHelpers::Cmd).to receive(:run).with('yarn -v').and_return(['1.9.4', '', cmd_success])
+        end
+
+        it 'should call yarn install with expected cli parameters' do
+          expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --ignore-engines --ignore-scripts')
                                                      .and_return([yarn_shell_command_output, '', cmd_success])
           subject.prepare
+        end
+
+        context 'ignored_groups contains devDependencies' do
+          subject { Yarn.new(project_path: Pathname(root), ignored_groups: 'devDependencies') }
+          it 'should include a production flag' do
+            expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --ignore-engines --ignore-scripts --production')
+                                                       .and_return([yarn_shell_command_output, '', cmd_success])
+            subject.prepare
+          end
+        end
+      end
+
+      context 'when using Yarn 2.x+ projects' do
+        before do
+          allow(SharedHelpers::Cmd).to receive(:run).with('yarn -v').and_return(['3.0.1', '', cmd_success])
+        end
+
+        it 'should call yarn install with no cli parameters' do
+          expect(SharedHelpers::Cmd).to receive(:run).with('yarn install')
+                                                     .and_return([yarn_shell_command_output, '', cmd_success])
+          subject.prepare
+        end
+
+        context 'ignored_groups contains devDependencies' do
+          subject { Yarn.new(project_path: Pathname(root), ignored_groups: 'devDependencies') }
+
+          it 'should include a production flag' do
+            expect(SharedHelpers::Cmd).to receive(:run).with('yarn plugin import workspace-tools && yarn workspaces focus --all --production && yarn install')
+                                                       .and_return([yarn_shell_command_output, '', cmd_success])
+            subject.prepare
+          end
         end
       end
     end
@@ -144,9 +173,32 @@ module LicenseFinder
     end
 
     describe '.prepare_command' do
-      subject { Yarn.new(project_path: Pathname(root), logger: double(:logger, active: nil)) }
-      it 'returns the correct prepare method' do
-        expect(subject.prepare_command).to eq('yarn install --ignore-engines --ignore-scripts')
+      include FakeFS::SpecHelpers
+      before do
+        FileUtils.mkdir_p(Dir.tmpdir)
+        FileUtils.mkdir_p(root)
+      end
+
+      context 'when in a Yarn 1.x project' do
+        before do
+          allow(SharedHelpers::Cmd).to receive(:run).with('yarn -v').and_return(['1.9.1', '', cmd_success])
+        end
+
+        subject { Yarn.new(project_path: Pathname(root), logger: double(:logger, active: nil)) }
+        it 'returns the correct prepare method' do
+          expect(subject.prepare_command).to eq('yarn install --ignore-engines --ignore-scripts')
+        end
+      end
+
+      context 'when in a Yarn 2.x project' do
+        before do
+          allow(SharedHelpers::Cmd).to receive(:run).with('yarn -v').and_return(['3.5.9', '', cmd_success])
+        end
+
+        subject { Yarn.new(project_path: Pathname(root), logger: double(:logger, active: nil)) }
+        it 'returns the correct prepare method' do
+          expect(subject.prepare_command).to eq('yarn install')
+        end
       end
     end
 

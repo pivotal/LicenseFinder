@@ -280,7 +280,12 @@ module LicenseFinder
     def self.restore(persisted, result = new)
       return result unless persisted
 
-      actions = YAML.load(persisted)
+      # From https://makandracards.com/makandra/465149-ruby-the-yaml-safe_load-method-hides-some-pitfalls
+      actions = if Gem::Version.new(Psych::VERSION) >= Gem::Version.new('3.1.0.pre1')
+                  YAML.safe_load(persisted, permitted_classes: [Symbol, Time], aliases: true)
+                else
+                  YAML.safe_load(persisted, [Symbol, Time], [], true)
+                end
 
       list_of_actions = (actions || []).map(&:first)
 
