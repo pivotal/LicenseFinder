@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'open3'
 
 module LicenseFinder
   class CocoaPods < PackageManager
@@ -56,9 +57,10 @@ module LicenseFinder
     end
 
     def read_plist(pathname)
-      transformed_pathname = pathname.gsub!(%r{[^0-9A-Za-z. \-'/]}, '')
-      transformed_pathname = pathname if transformed_pathname.nil?
-      JSON.parse(`plutil -convert json -o - '#{transformed_pathname}'`)
+      out, err, status = Open3.capture3('plutil', '-convert', 'json', '-o', '-', pathname)
+      raise "#{out}\n\n#{err}" unless status.success?
+
+      JSON.parse(out)
     end
   end
 end
