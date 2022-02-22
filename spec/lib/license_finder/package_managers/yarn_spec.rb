@@ -171,11 +171,11 @@ module LicenseFinder
         end
       end
 
-      context "when the shell command raises an error" do
-        it "raises" do
+      context 'when the shell command fails' do
+        it 'an error is raised' do
           allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}").and_return([nil, 'error', cmd_failure])
 
-          expect { subject.current_packages }.to raise_error(%r{Command 'yarn licenses list --no-progress --json --cwd #{Pathname(root)}' failed to execute: error})
+          expect { subject.current_packages }.to raise_error(/Command 'yarn licenses list --no-progress --json --cwd #{Pathname(root)}' failed to execute: error/)
         end
       end
     end
