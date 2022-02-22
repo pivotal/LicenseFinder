@@ -174,7 +174,7 @@ languages, as long as that language has a package definition in the project dire
 * `build.gradle` (for `gradle`)
 * `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
-* `Podfile` (for `pod`)
+* `Podfile` (for `pod`) (set `ACKNOWLEDGEMENTS_PATH` variable if you want to target a particular `Pods-acknowledgements-<TARGET>.plist`. Can be useful in multi-target pods projects.)
 * `Cartfile` (for `carthage`)
 * `workspace-state.json` under build directory (provided as enviroment variable `SPM_DERIVED_DATA` for Xcode, or default `.build` for non-Xcode projects), (for `spm`)
 * `rebar.config` (for `rebar`)
