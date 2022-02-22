@@ -18,10 +18,10 @@ module LicenseFinder
 
       deps = info_parser.parse(info_output)
       deps.map do |dep|
-        name, version = dep['name'].split('@').first.split('/')
+        name, version = dep['name'].split('/')
         url = dep['URL']
         license_file_path = Dir.glob("#{project_path}/licenses/#{name}/**/LICENSE*").first
-        ConanPackage.new(name, version, File.open(license_file_path).read, url) unless name == 'PROJECT'
+        ConanPackage.new(name, version, File.open(license_file_path).read, url) unless name == 'conanfile.txt'
       end.compact
     end
   end

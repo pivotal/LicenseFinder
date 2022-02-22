@@ -1,5 +1,5 @@
 [requires]
-range-v3/0.3.0@ericniebler/stable
+range-v3/0.10.0
 
 [generators]
 txt

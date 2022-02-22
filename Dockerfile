@@ -1,4 +1,6 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
+
+WORKDIR /tmp
 
 # Versioning
 ENV PIP_INSTALL_VERSION 19.0.2
@@ -18,7 +20,8 @@ RUN apt-get update && apt-get install -y \
   sudo \
   unzip \
   wget \
-  gnupg2 \ 
+  gnupg2 \
+  apt-utils \
   software-properties-common \
   bzr
 
@@ -76,7 +79,6 @@ RUN mkdir -p /usr/local/share/sbt-launcher-packaging && \
     rm -f "/tmp/sbt-${SBT_VERSION}.tgz"
 
 # install gradle
-WORKDIR /tmp
 RUN curl -L -o gradle.zip https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
     unzip -q gradle.zip && \
     rm gradle.zip && \
@@ -102,6 +104,7 @@ RUN mkdir /gopath && \
   go get -u github.com/rancher/trash && \
   go clean -cache
 
+WORKDIR /tmp
 # Fix the locale
 RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
@@ -109,11 +112,16 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
+# install Cargo
+RUN curl https://sh.rustup.rs -sSf | bash -ls -- -y --profile minimal
+
 #install rvm
 RUN apt-add-repository -y ppa:rael-gc/rvm && \
     apt update && apt install -y rvm && \
     /usr/share/rvm/bin/rvm install --default $RUBY_VERSION
-ENV PATH=/usr/share/rvm/bin:$PATH
+
+# install bundler
+RUN bash -lc "gem update --system && gem install bundler"
 
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
@@ -123,41 +131,40 @@ RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_a
     sudo apt-get install -y esl-erlang && \
     sudo apt-get install -y elixir
 
-# install bundler
-RUN bash -lc "gem update --system && gem install bundler"
-
 # install conan
 RUN apt-get install -y python-dev && \
 	pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
 	    --ignore-installed requests --ignore-installed chardet \
 	    --ignore-installed urllib3 \
 	    --upgrade setuptools && \
-    pip install --no-cache-dir -Iv conan==1.11.2
+    pip install --no-cache-dir -Iv conan==1.43.0 && \
+    conan config install https://github.com/conan-io/conanclientcert.git
 
-# install Cargo
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y --profile minimal
 
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &&\
-  echo "deb https://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
+  echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
   apt-get update &&\
   apt-get install -y mono-complete &&\
   curl -o "/usr/local/bin/nuget.exe" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" &&\
   curl -o "/usr/local/bin/nugetv3.5.0.exe" "https://dist.nuget.org/win-x86-commandline/v3.5.0/nuget.exe"
 
 # install dotnet core
-WORKDIR /tmp
-RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb &&\
+RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb &&\
   sudo dpkg -i packages-microsoft-prod.deb &&\
   rm packages-microsoft-prod.deb &&\
   sudo apt-get update &&\
   sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1
 
 # install Composer
+# The ARG and ENV are for installing tzdata which is part of this installaion.
+# https://serverfault.com/questions/949991/how-to-install-tzdata-on-a-ubuntu-docker-image
+ENV TZ=GMT
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
-    echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/php.list &&\
+    echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" | sudo tee /etc/apt/sources.list.d/php.list &&\
     apt-get update &&\
+    export DEBIAN_FRONTEND=noninteractive &&\
     apt-get install -y php7.4-cli &&\
     EXPECTED_COMPOSER_INSTALLER_CHECKSUM="$(curl --silent https://composer.github.io/installer.sig)" &&\
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
@@ -170,7 +177,6 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5
 # install miniconda
 # See https://docs.conda.io/en/latest/miniconda_hashes.html
 # for latest versions and SHAs.
-WORKDIR /tmp
 RUN  \
   conda_installer=Miniconda3-py38_4.9.2-Linux-x86_64.sh &&\
   ref='1314b90489f154602fd794accfc90446111514a5a72fe1f71ab83e07de9504a7' &&\
@@ -180,10 +186,12 @@ RUN  \
   (echo; echo "yes") | sh "${conda_installer}"
 
 # install Swift Package Manager
-# Based on https://github.com/apple/swift-docker/blob/main/5.3/ubuntu/16.04/Dockerfile
+# Based on https://github.com/apple/swift-docker/blob/main/5.3/ubuntu/18.04/Dockerfile
+# The GPG download steps has been modified. Keys are now on LF repo and copied instaad of downloaded.
+# Refer to https://swift.org/download/#using-downloads in the Linux section on how to download the keys
 RUN apt-get -q install -y \
     libatomic1 \
-    libcurl3 \
+    libcurl4 \
     libxml2 \
     libedit2 \
     libsqlite3-0 \
@@ -194,17 +202,18 @@ RUN apt-get -q install -y \
     zlib1g-dev \
     libpython2.7 \
     tzdata \
+    git \
     pkg-config \
     && rm -r /var/lib/apt/lists/*
 
-# pub   4096R/ED3D1561 2019-03-22 [expires: 2021-03-21]
+# pub   4096R/ED3D1561 2019-03-22 [SC] [expires: 2023-03-23]
 #       Key fingerprint = A62A E125 BBBF BB96 A6E0  42EC 925C C1CC ED3D 1561
 # uid                  Swift 5.x Release Signing Key <swift-infrastructure@swift.org
 ARG SWIFT_SIGNING_KEY=A62AE125BBBFBB96A6E042EC925CC1CCED3D1561
-ARG SWIFT_PLATFORM=ubuntu16.04
+ARG SWIFT_PLATFORM=ubuntu18.04
 ARG SWIFT_BRANCH=swift-5.3.3-release
 ARG SWIFT_VERSION=swift-5.3.3-RELEASE
-ARG SWIFT_WEBROOT=https://swift.org/builds/
+ARG SWIFT_WEBROOT=https://download.swift.org
 
 ENV SWIFT_SIGNING_KEY=$SWIFT_SIGNING_KEY \
     SWIFT_PLATFORM=$SWIFT_PLATFORM \
@@ -212,14 +221,18 @@ ENV SWIFT_SIGNING_KEY=$SWIFT_SIGNING_KEY \
     SWIFT_VERSION=$SWIFT_VERSION \
     SWIFT_WEBROOT=$SWIFT_WEBROOT
 
+COPY swift-all-keys.asc .
 RUN set -e; \
-    SWIFT_WEBDIR="$SWIFT_WEBROOT/$SWIFT_BRANCH/$(echo $SWIFT_PLATFORM | tr -d .)/" \
+    SWIFT_WEBDIR="$SWIFT_WEBROOT/$SWIFT_BRANCH/$(echo $SWIFT_PLATFORM | tr -d .)" \
     && SWIFT_BIN_URL="$SWIFT_WEBDIR/$SWIFT_VERSION/$SWIFT_VERSION-$SWIFT_PLATFORM.tar.gz" \
     && SWIFT_SIG_URL="$SWIFT_BIN_URL.sig" \
+    # - Grab curl here so we cache better up above
+    && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -q update && apt-get -q install -y curl && rm -rf /var/lib/apt/lists/* \
     # - Download the GPG keys, Swift toolchain, and toolchain signature, and verify.
     && export GNUPGHOME="$(mktemp -d)" \
     && curl -fsSL "$SWIFT_BIN_URL" -o swift.tar.gz "$SWIFT_SIG_URL" -o swift.tar.gz.sig \
-    && gpg --batch --quiet --keyserver ha.pool.sks-keyservers.net --recv-keys "$SWIFT_SIGNING_KEY" \
+    && gpg --import swift-all-keys.asc \
     && gpg --batch --verify swift.tar.gz.sig swift.tar.gz \
     # - Unpack the toolchain, set libs permissions, and clean up.
     && tar -xzf swift.tar.gz --directory / --strip-components=1 \
