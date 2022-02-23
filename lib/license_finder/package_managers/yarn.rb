@@ -13,8 +13,8 @@ module LicenseFinder
       suffix = " --cwd #{project_path}" unless project_path.nil?
       cmd += suffix unless suffix.nil?
 
-      stdout, _stderr, status = Cmd.run(cmd)
-      return [] unless status.success?
+      stdout, stderr, status = Cmd.run(cmd)
+      raise "Command '#{cmd}' failed to execute: #{stderr}" unless status.success?
 
       packages = []
       incompatible_packages = []

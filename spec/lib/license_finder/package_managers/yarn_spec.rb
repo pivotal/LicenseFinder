@@ -170,6 +170,14 @@ module LicenseFinder
           expect(subject.current_packages.first.homepage).to eq 'https://github.com/felixg?/node-stack-trace'
         end
       end
+
+      context 'when the shell command fails' do
+        it 'an error is raised' do
+          allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}").and_return([nil, 'error', cmd_failure])
+
+          expect { subject.current_packages }.to raise_error(/Command 'yarn licenses list --no-progress --json --cwd #{Pathname(root)}' failed to execute: error/)
+        end
+      end
     end
 
     describe '.prepare_command' do

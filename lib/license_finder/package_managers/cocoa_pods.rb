@@ -43,13 +43,16 @@ module LicenseFinder
     end
 
     def acknowledgements_path
-      search_paths = ['Pods/Pods-acknowledgements.plist',
-                      'Pods/Target Support Files/Pods/Pods-acknowledgements.plist',
-                      'Pods/Target Support Files/Pods-*/Pods-*-acknowledgements.plist']
+      if !ENV['ACKNOWLEDGEMENTS_PATH'].nil?
+        result = Dir[*ENV['ACKNOWLEDGEMENTS_PATH']].first
+      else
+        search_paths = ['Pods/Pods-acknowledgements.plist',
+                        'Pods/Target Support Files/Pods/Pods-acknowledgements.plist',
+                        'Pods/Target Support Files/Pods-*/Pods-*-acknowledgements.plist']
 
-      result = Dir[*search_paths.map { |path| File.join(project_path, path) }].first
-      raise "Found a Podfile but no Pods directory in #{project_path}. Try running pod install before running license_finder." if result.nil?
-
+        result = Dir[*search_paths.map { |path| File.join(project_path, path) }].first
+        raise "Found a Podfile but no Pods directory in #{project_path}. Try running pod install before running license_finder." if result.nil?
+      end
       result
     end
 
