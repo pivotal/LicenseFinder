@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.3.3 
+  TargetRubyVersion: 2.4.0
   Exclude:
     - 'lib/license_finder/reports/**/*'
     - 'features/fixtures/**/*'

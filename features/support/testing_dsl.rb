@@ -754,7 +754,7 @@ module LicenseFinder
       end
 
       def install_fixture(fixture_name)
-        if RUBY_PLATFORM =~ /mswin|cygwin|mingw/
+        if RUBY_PLATFORM.match?(/mswin|cygwin|mingw/)
           FileUtils.cp(Paths.fixtures.join(fixture_name), join(fixture_name))
         else
           join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)

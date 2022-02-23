@@ -90,7 +90,7 @@ module LicenseFinder
       if status.success?
         conda_list = []
         stdout.each_line do |line|
-          next if line =~ /^\s*#/
+          next if /^\s*#/.match?(line)
 
           name, version, build, channel = line.split
           conda_list << {
