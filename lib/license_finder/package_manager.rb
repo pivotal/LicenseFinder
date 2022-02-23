@@ -177,5 +177,6 @@ require 'license_finder/package_managers/sbt'
 require 'license_finder/package_managers/cargo'
 require 'license_finder/package_managers/composer'
 require 'license_finder/package_managers/conda'
+require 'license_finder/package_managers/pub'
 
 require 'license_finder/package'
