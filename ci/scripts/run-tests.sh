@@ -15,6 +15,7 @@ pushd "$PROJECT_ROOT"
 
   gem update --system
   gem install bundler
+  bundle install
   bundle pristine
 
   rake install
