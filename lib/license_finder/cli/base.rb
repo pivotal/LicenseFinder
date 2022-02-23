@@ -61,7 +61,8 @@ module LicenseFinder
           :recursive,
           :sbt_include_groups,
           :conda_bash_setup_script,
-          :composer_check_require_only
+          :composer_check_require_only,
+          :use_spdx_id
         ).merge(
           logger: logger_mode
         )

@@ -145,6 +145,10 @@ module LicenseFinder
       get(:columns)
     end
 
+    def use_spdx_id
+      get(:use_spdx_id)
+    end
+
     def sbt_include_groups
       get(:sbt_include_groups)
     end

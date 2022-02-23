@@ -60,7 +60,7 @@ module LicenseFinder
       if dep.missing?
         MISSING_DEPENDENCY_TEXT
       else
-        dep.licenses.map(&:name).join(self.class::COMMA_SEP)
+        dep.licenses.map(&@use_spdx_id ? :standard_id : :name).join(self.class::COMMA_SEP)
       end
     end
 
