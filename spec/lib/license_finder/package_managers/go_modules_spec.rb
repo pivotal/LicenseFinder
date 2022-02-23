@@ -14,8 +14,8 @@ module LicenseFinder
     let(:go_list_string) do
       "foo,,/workspace/code/\ngopkg.in/check.v1,v0.0.0-20161208181325-20d25e280405,"\
 "/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/check.v1\n"\
-"gopkg.in/yaml.v2,v2.2.1,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2\n"\
-'gopkg.in/yaml.v2,v2.2.1,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2'
+"gopkg.in/yaml.v2,v2.2.8,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2\n"\
+'gopkg.in/yaml.v2,v2.2.8,/workspace/LicenseFinder/features/fixtures/go_modules/vendor/gopkg.in/yaml.v2'
     end
     let(:logger) { double(:logger, active: nil, info: nil) }
 
@@ -56,7 +56,7 @@ module LicenseFinder
           expect(packages.first.version).to eq 'v0.0.0-20161208181325-20d25e280405'
 
           expect(packages.last.name).to eq 'gopkg.in/yaml.v2'
-          expect(packages.last.version).to eq 'v2.2.1'
+          expect(packages.last.version).to eq 'v2.2.8'
         end
 
         it 'list packages as Go packages' do
