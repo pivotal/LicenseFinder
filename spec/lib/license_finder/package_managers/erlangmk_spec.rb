@@ -8,7 +8,7 @@ module LicenseFinder
 
     it_behaves_like 'a PackageManager'
 
-    # NOTE:
+    # NOTE: THIS:
     # To generate the following output ensure Erlang and Elixir are in your PATH
     # and run the following commands:
     #
@@ -2298,7 +2298,7 @@ erlangmk_spec_fake_lib: another_fake_lib_two git https://github.com/rabbitmq/rab
 
         it 'raises command error' do
           expect { erlangmk.current_packages }.to raise_error(
-            RuntimeError, %r{Command 'make --directory=\/erlangmk\/project --no-print-directory QUERY='name fetch_method repo version absolute_path' query-deps' failed to execute}
+            RuntimeError, %r{Command 'make --directory=/erlangmk/project --no-print-directory QUERY='name fetch_method repo version absolute_path' query-deps' failed to execute}
           )
         end
       end

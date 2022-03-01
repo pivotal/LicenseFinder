@@ -113,11 +113,11 @@ describe 'License Finder command line executable' do
         it 'returns all project paths excluding subprojects' do
           developer.execute_command(license_finder_command)
 
-          expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle\"}
-          expect(developer).to_not be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1\"}
-          expect(developer).to_not be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module2\"}
-          expect(developer).to_not be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module3\"}
-          expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1/module4/src/github.com/pivotal/foo\"}
+          expect(developer).to be_seeing_something_like %r{"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle"}
+          expect(developer).to_not be_seeing_something_like %r{"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1"}
+          expect(developer).to_not be_seeing_something_like %r{"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module2"}
+          expect(developer).to_not be_seeing_something_like %r{"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module3"}
+          expect(developer).to be_seeing_something_like %r{"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1/module4/src/github.com/pivotal/foo"}
         end
       end
 
@@ -131,9 +131,9 @@ describe 'License Finder command line executable' do
         it 'returns all project paths excluding subprojects including current directory' do
           developer.execute_command(license_finder_command)
 
-          expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1\"}
-          expect(developer).to_not be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module3\"}
-          expect(developer).to be_seeing_something_like %r{\"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1/module4/src/github.com/pivotal/foo\"}
+          expect(developer).to be_seeing_something_like %r{"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1"}
+          expect(developer).to_not be_seeing_something_like %r{"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module3"}
+          expect(developer).to be_seeing_something_like %r{"#{Regexp.escape(@project.project_dir.to_s)}/multi-module-gradle/module1/module4/src/github.com/pivotal/foo"}
         end
       end
     end

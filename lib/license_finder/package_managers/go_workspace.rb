@@ -94,7 +94,7 @@ module LicenseFinder
         deps = val.split("\n")
         Cmd.run('go list std').first.split("\n").each do |std|
           deps.delete_if do |dep|
-            dep =~ %r{(\/|^)#{std}(\/|$)}
+            dep =~ %r{(/|^)#{std}(/|$)}
           end
         end
         deps

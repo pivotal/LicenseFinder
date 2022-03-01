@@ -64,7 +64,7 @@ module LicenseFinder
 
       file = files.first
       Zip::File.open file do |zipfile|
-        content = zipfile.read(dep.name + '.nuspec')
+        content = zipfile.read("#{dep.name}.nuspec")
         Nuget.nuspec_license_urls(content)
       end
     end

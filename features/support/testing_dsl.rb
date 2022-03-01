@@ -129,7 +129,7 @@ module LicenseFinder
 
       def add_channels(*list_of_channels)
         list_of_channels = %w[defaults conda-forge] if list_of_channels.empty?
-        add_to_file('environment.yml', 'channels: [' + list_of_channels.join(',') + ']')
+        add_to_file('environment.yml', "channels: [#{list_of_channels.join(',')}]")
       end
 
       def add_dep
@@ -672,7 +672,7 @@ module LicenseFinder
 
       def project_dir
         if path
-          Paths.project(path + '/' + file_name)
+          Paths.project("#{path}/#{file_name}")
         else
           Paths.project(file_name)
         end

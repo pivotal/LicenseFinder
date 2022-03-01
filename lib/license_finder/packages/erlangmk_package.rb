@@ -37,9 +37,7 @@ module LicenseFinder
     end
 
     def dep_version
-      @dep_version ||= begin
-        dep_version_unformatted.sub(version_prefix_re, '')
-      end
+      @dep_version ||= dep_version_unformatted.sub(version_prefix_re, '')
     end
 
     def dep_repo

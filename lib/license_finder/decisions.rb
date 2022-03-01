@@ -194,9 +194,10 @@ module LicenseFinder
 
     def inherit_from(filepath_info)
       decisions =
-        if filepath_info.is_a?(Hash)
+        case filepath_info
+        when Hash
           resolve_inheritance(filepath_info)
-        elsif %r{^https?://}.match?(filepath_info)
+        when %r{^https?://}
           open_uri(filepath_info).read
         else
           Pathname(filepath_info).read
@@ -247,9 +248,7 @@ module LicenseFinder
 
       # ruby < 2.5.0 URI.open is private
       if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.5.0')
-        # rubocop:disable Security/Open
         open(uri, header)
-        # rubocop:enable Security/Open
       else
         URI.open(uri, header)
       end
