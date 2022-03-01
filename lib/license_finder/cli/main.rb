@@ -7,6 +7,7 @@ require 'license_finder/package_delta'
 require 'license_finder/license_aggregator'
 require 'license_finder/project_finder'
 require 'license_finder/logger'
+require 'license_finder/printer'
 
 module LicenseFinder
   module CLI
@@ -90,6 +91,11 @@ module LicenseFinder
         method_option :columns,
                       desc: "For text or CSV reports, which columns to print. Pick from: #{CsvReport::AVAILABLE_COLUMNS}",
                       type: :array
+
+        method_option :use_spdx_id,
+                      type: :boolean,
+                      desc: 'For reports, use the SPDX identifier instead of license name (useful to match license with other standard tools)',
+                      default: false
       end
 
       desc 'project_roots', 'List project directories to be scanned'
@@ -102,7 +108,7 @@ module LicenseFinder
 
         filtered_project_roots << project_path if aggregate_paths.include?(project_path) && !filtered_project_roots.include?(project_path)
 
-        say(filtered_project_roots)
+        printer.say(filtered_project_roots)
       end
 
       desc 'action_items', 'List unapproved dependencies (the default action for `license_finder`)'
@@ -115,25 +121,25 @@ module LicenseFinder
         restricted = finder.restricted
 
         # Ensure to start output on a new line even with dot progress indicators.
-        say "\n"
+        printer.say "\n"
 
         unless any_packages
-          say 'No dependencies recognized!', :red
+          printer.say 'No dependencies recognized!', :red
           exit 0
         end
 
         if unapproved.empty?
-          say 'All dependencies are approved for use', :green
+          printer.say 'All dependencies are approved for use', :green
         else
           unless restricted.empty?
-            say 'Restricted dependencies:', :red
-            say report_of(restricted)
+            printer.say 'Restricted dependencies:', :red
+            printer.say report_of(restricted)
           end
 
           other_unapproved = unapproved - restricted
           unless other_unapproved.empty?
-            say 'Dependencies that need approval:', :yellow
-            say report_of(other_unapproved)
+            printer.say 'Dependencies that need approval:', :yellow
+            printer.say report_of(other_unapproved)
           end
 
           exit 1
@@ -151,7 +157,7 @@ module LicenseFinder
       def report
         finder = LicenseAggregator.new(config, aggregate_paths)
         report = report_of(finder.dependencies)
-        save? ? save_report(report, config.save_file) : say(report)
+        save? ? save_report(report, config.save_file) : printer.say(report)
       end
 
       desc 'version', 'Print the version of LicenseFinder'
@@ -166,7 +172,7 @@ module LicenseFinder
         f1 = IO.read(file1)
         f2 = IO.read(file2)
         report = DiffReport.new(Diff.compare(f1, f2))
-        save? ? save_report(report, config.save_file) : say(report)
+        save? ? save_report(report, config.save_file) : printer.say(report)
       end
 
       subcommand 'dependencies', Dependencies, 'Add or remove dependencies that your package managers are not aware of'
@@ -210,7 +216,7 @@ module LicenseFinder
       def report_of(content)
         report = FORMATS[config.format] || FORMATS['text']
         report = MergedReport if report == CsvReport && config.aggregate_paths
-        report.of(content, columns: config.columns, project_name: decisions.project_name || config.project_path.basename.to_s, write_headers: config.write_headers)
+        report.of(content, columns: config.columns, project_name: decisions.project_name || config.project_path.basename.to_s, write_headers: config.write_headers, use_spdx_id: config.use_spdx_id)
       end
 
       def save?

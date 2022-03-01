@@ -20,9 +20,9 @@ module LicenseFinder
           decisions.approve(name, txn) if options[:approve]
         end
         if options[:approve]
-          say "The #{name} dependency has been added and approved!", :green
+          printer.say "The #{name} dependency has been added and approved!", :green
         else
-          say "The #{name} dependency has been added!", :green
+          printer.say "The #{name} dependency has been added!", :green
         end
       end
 
@@ -31,12 +31,12 @@ module LicenseFinder
       def remove(name)
         modifying { decisions.remove_package(name, txn) }
 
-        say "The #{name} dependency has been removed.", :green
+        printer.say "The #{name} dependency has been removed.", :green
       end
 
       desc 'list', 'List manually added dependencies'
       def list
-        say 'Manually Added Dependencies:', :blue
+        printer.say 'Manually Added Dependencies:', :blue
         say_each(decisions.packages, &:name)
       end
     end

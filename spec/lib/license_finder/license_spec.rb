@@ -17,7 +17,7 @@ module LicenseFinder
       end
     end
   end
-  describe AndLicense do
+  describe OrLicense do
     describe '.find_by_name' do
       # sub licenses case already tested on and, since this is subclass
       it 'should create a compound OR license' do

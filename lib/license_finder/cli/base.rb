@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'thor'
-
 module LicenseFinder
   module CLI
     class Base < Thor
@@ -24,12 +23,16 @@ module LicenseFinder
         def config
           @config ||= Configuration.with_optional_saved_config(license_finder_config)
         end
+
+        def printer
+          @printer || Printer.new
+        end
       end
 
       private
 
       def fail(message)
-        say(message) && exit(1)
+        printer.say(message) && exit(1)
       end
 
       def license_finder_config
@@ -61,7 +64,8 @@ module LicenseFinder
           :recursive,
           :sbt_include_groups,
           :conda_bash_setup_script,
-          :composer_check_require_only
+          :composer_check_require_only,
+          :use_spdx_id
         ).merge(
           logger: logger_mode
         )
@@ -84,10 +88,10 @@ module LicenseFinder
       def say_each(coll)
         if coll.any?
           coll.each do |item|
-            say(block_given? ? yield(item) : item)
+            printer.say(block_given? ? yield(item) : item)
           end
         else
-          say '(none)'
+          printer.say '(none)'
         end
       end
 

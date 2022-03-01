@@ -9,7 +9,7 @@ ENV GO_LANG_VERSION 1.14.3
 ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
-ENV RUBY_VERSION 2.7.1
+ENV RUBY_VERSION 3.1.1
 ENV MIX_VERSION 1.0
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
@@ -206,6 +206,25 @@ RUN apt-get -q install -y \
     pkg-config \
     && rm -r /var/lib/apt/lists/*
 
+#install flutter
+ENV FLUTTER_HOME=/root/flutter
+RUN curl -o flutter_linux_2.8.1-stable.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.8.1-stable.tar.xz \
+    && tar xf flutter_linux_2.8.1-stable.tar.xz \
+    && mv flutter ${FLUTTER_HOME} \
+    && rm flutter_linux_2.8.1-stable.tar.xz
+        
+ENV PATH=$PATH:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
+RUN flutter doctor -v \
+    && flutter update-packages \
+    && flutter precache
+# Accepting all licences
+RUN yes | flutter doctor --android-licenses -v
+# Creating Flutter sample projects to put binaries in cache fore each template type
+RUN flutter create --template=app ${TEMP}/app_sample \
+    && flutter create --template=package ${TEMP}/package_sample \
+    && flutter create --template=plugin ${TEMP}/plugin_sample
+
+
 # pub   4096R/ED3D1561 2019-03-22 [SC] [expires: 2023-03-23]
 #       Key fingerprint = A62A E125 BBBF BB96 A6E0  42EC 925C C1CC ED3D 1561
 # uid                  Swift 5.x Release Signing Key <swift-infrastructure@swift.org
@@ -242,7 +261,7 @@ RUN set -e; \
 
 # install license_finder
 COPY . /LicenseFinder
-RUN bash -lc "cd /LicenseFinder && bundle config set no-cache 'true' && bundle install -j4 && rake install"
+RUN bash -lc "cd /LicenseFinder && bundle config set no-cache 'true' && bundle install -j4 && bundle pristine && rake install"
 
 WORKDIR /
 

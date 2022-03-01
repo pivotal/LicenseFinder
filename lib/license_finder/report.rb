@@ -9,11 +9,12 @@ module LicenseFinder
     def initialize(dependencies, options)
       @dependencies = dependencies
       @project_name = options[:project_name]
+      @use_spdx_id = options[:use_spdx_id]
     end
 
     private
 
-    attr_reader :dependencies, :project_name
+    attr_reader :dependencies, :project_name, :use_spdx_id
 
     def sorted_dependencies
       dependencies.sort

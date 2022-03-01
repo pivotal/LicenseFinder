@@ -37,9 +37,7 @@ module LicenseFinder
     end
 
     def dep_version
-      @dep_version ||= begin
-        dep_version_unformatted.sub(version_prefix_re, '')
-      end
+      @dep_version ||= dep_version_unformatted.sub(version_prefix_re, '')
     end
 
     def dep_repo
@@ -88,7 +86,7 @@ module LicenseFinder
     def dep_version_valid?
       return false unless set?(dep_version_unformatted)
 
-      if dep_version =~ version_re
+      if dep_version&.match?(version_re)
         Gem::Version.correct?(dep_version)
       else
         dep_version =~ word_dot_re

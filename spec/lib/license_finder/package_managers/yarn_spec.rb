@@ -141,7 +141,7 @@ module LicenseFinder
         it 'should include a production flag' do
           expect(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder')
                                                      .and_return(['yarn_modules', '', cmd_success])
-          expect(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + ' --production' + " --cwd #{Pathname(root)}")
+          expect(SharedHelpers::Cmd).to receive(:run).with("#{Yarn::SHELL_COMMAND} --production --cwd #{Pathname(root)}")
                                                      .and_return([yarn_shell_command_output, '', cmd_success])
           subject.current_packages
         end
@@ -168,6 +168,14 @@ module LicenseFinder
           expect(subject.current_packages.first.version).to eq '0.0.10'
           expect(subject.current_packages.first.license_names_from_spec).to eq ['MIT']
           expect(subject.current_packages.first.homepage).to eq 'https://github.com/felixg?/node-stack-trace'
+        end
+      end
+
+      context 'when the shell command fails' do
+        it 'an error is raised' do
+          allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --cwd #{Pathname(root)}").and_return([nil, 'error', cmd_failure])
+
+          expect { subject.current_packages }.to raise_error(/Command 'yarn licenses list --no-progress --json --cwd #{Pathname(root)}' failed to execute: error/)
         end
       end
     end

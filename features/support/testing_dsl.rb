@@ -129,7 +129,7 @@ module LicenseFinder
 
       def add_channels(*list_of_channels)
         list_of_channels = %w[defaults conda-forge] if list_of_channels.empty?
-        add_to_file('environment.yml', 'channels: [' + list_of_channels.join(',') + ']')
+        add_to_file('environment.yml', "channels: [#{list_of_channels.join(',')}]")
       end
 
       def add_dep
@@ -492,6 +492,17 @@ module LicenseFinder
       end
     end
 
+    class FlutterProject < Project
+      def add_dep
+        install_fixture('pubspec.yaml')
+      end
+
+      def install
+        ENV['PUB_CACHE'] = '~/flutter/.pub-cache/'
+        shell_out('flutter pub get')
+      end
+    end
+
     class ConanProject < Project
       def add_dep
         install_fixture('conanfile.txt')
@@ -661,7 +672,7 @@ module LicenseFinder
 
       def project_dir
         if path
-          Paths.project(path + '/' + file_name)
+          Paths.project("#{path}/#{file_name}")
         else
           Paths.project(file_name)
         end
@@ -743,7 +754,7 @@ module LicenseFinder
       end
 
       def install_fixture(fixture_name)
-        if RUBY_PLATFORM =~ /mswin|cygwin|mingw/
+        if RUBY_PLATFORM.match?(/mswin|cygwin|mingw/)
           FileUtils.cp(Paths.fixtures.join(fixture_name), join(fixture_name))
         else
           join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)

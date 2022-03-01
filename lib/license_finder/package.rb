@@ -18,7 +18,7 @@ module LicenseFinder
   #   the constructor options
   # - otherwise, override #licenses_from_spec or #license_files
   class Package
-    attr_reader :logger
+    attr_reader :logger, :name, :version, :authors, :summary, :description, :children, :parents, :groups, :manual_approval, :license_names_from_spec, :install_path
 
     def self.license_names_from_standard_spec(spec)
       licenses = spec['licenses'] || [spec['license']].compact
@@ -64,10 +64,6 @@ module LicenseFinder
 
     attr_accessor :homepage, :package_url
 
-    attr_reader :name, :version, :authors,
-                :summary, :description,
-                :children, :parents, :groups
-
     ## APPROVAL
 
     def approved_manually!(approval)
@@ -101,8 +97,6 @@ module LicenseFinder
       @restricted
     end
 
-    attr_reader :manual_approval
-
     ## EQUALITY
 
     def <=>(other)
@@ -120,10 +114,7 @@ module LicenseFinder
       [name, version].hash
     end
 
-    ## LICENSING
-
-    attr_reader :license_names_from_spec # stubbed in tests, otherwise private
-    attr_reader :install_path # checked in tests, otherwise private
+    ## LICENSING # stubbed in tests, otherwise private # checked in tests, otherwise private
 
     def licenses
       @licenses ||= activations.map(&:license).sort_by(&:name).to_set
@@ -200,3 +191,4 @@ require 'license_finder/packages/sbt_package'
 require 'license_finder/packages/cargo_package'
 require 'license_finder/packages/composer_package'
 require 'license_finder/packages/conda_package'
+require 'license_finder/packages/pubspec_package'

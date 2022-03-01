@@ -29,7 +29,7 @@ module LicenseFinder
     end
 
     def merged_package?
-      pick_package.class == MergedPackage
+      pick_package.instance_of?(MergedPackage)
     end
 
     def method_missing(_method_name)

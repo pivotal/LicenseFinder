@@ -37,7 +37,7 @@ module LicenseFinder
         GoPackage.from_dependency({
                                     'ImportPath' => dep,
                                     'InstallPath' => detected_package_path.join(dep),
-                                    'Rev' => 'vendored-' + project_sha(detected_package_path.join(dep)),
+                                    'Rev' => "vendored-#{project_sha(detected_package_path.join(dep))}",
                                     'Homepage' => repo_name(dep)
                                   }, nil, true)
       end
@@ -70,7 +70,7 @@ module LicenseFinder
         deps = val.split("\n")
         Cmd.run('go list std').first.split("\n").each do |std|
           deps.delete_if do |dep|
-            dep =~ %r{(\/|^)#{std}(\/|$)}
+            dep =~ %r{(/|^)#{std}(/|$)}
           end
         end
         deps.map do |d|

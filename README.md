@@ -3,12 +3,11 @@
 [![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
 
 Build status
-* Ruby 2.3.8 [![Ruby 2.3.8 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.3.8/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.4.9 [![Ruby 2.4.9 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.9/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.5.7 [![Ruby 2.5.7 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.7/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.6.9 [![Ruby 2.6.9 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.9/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.7.5 [![Ruby 2.7.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.7.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* JRuby 9.3.1.0 [![JRuby 9.3.1.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-jruby-9.3.1.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 3.1.1 [![Ruby 3.1.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.1.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
@@ -55,10 +54,11 @@ and give you an actionable exception report.
 * Go Modules (via `go mod`)
 * PHP (via `composer`)
 * Python (via Conda [Conda 4.8.3, Python 3.7, Bash; requires an `environment.yml` or `environment.yaml`])
+* Flutter (via `flutter pub, requires pubspec.yaml & .pub cache locaton through ENV variable`)
 
 ## Installation
 
-License Finder requires Ruby 2.3.3 or greater to run. If you have an older
+License Finder requires Ruby 2.4.0 or greater to run. If you have an older
 version of Ruby installed, you can update via Homebrew:
 
 ```sh
@@ -174,7 +174,7 @@ languages, as long as that language has a package definition in the project dire
 * `build.gradle` (for `gradle`)
 * `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
-* `Podfile` (for `pod`)
+* `Podfile` (for `pod`) (set `ACKNOWLEDGEMENTS_PATH` variable if you want to target a particular `Pods-acknowledgements-<TARGET>.plist`. Can be useful in multi-target pods projects.)
 * `Cartfile` (for `carthage`)
 * `workspace-state.json` under build directory (provided as enviroment variable `SPM_DERIVED_DATA` for Xcode, or default `.build` for non-Xcode projects), (for `spm`)
 * `rebar.config` (for `rebar`)

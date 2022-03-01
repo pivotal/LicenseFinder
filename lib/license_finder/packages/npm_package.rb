@@ -156,6 +156,7 @@ module LicenseFinder
 
     class PackageJson
       attr_reader :groups
+
       DEPENDENCY_GROUPS = %w[dependencies devDependencies].freeze
 
       def initialize(path)

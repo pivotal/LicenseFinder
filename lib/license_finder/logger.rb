@@ -11,7 +11,7 @@ module LicenseFinder
     attr_reader :mode
 
     def initialize(mode = nil)
-      @system_logger = ::Logger.new(STDOUT)
+      @system_logger = ::Logger.new($stdout)
       @system_logger.formatter = proc do |_, _, _, msg|
         "#{msg}\n"
       end

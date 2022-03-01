@@ -40,7 +40,7 @@ task :check_dependencies do
   LicenseFinder::Scanner::PACKAGE_MANAGERS.each do |package_manager|
     satisfied = false unless package_manager.new(project_path: Pathname.new('')).installed?(LicenseFinder::Logger.new(LicenseFinder::Logger::MODE_INFO))
   end
-  STDOUT.flush
+  $stdout.flush
   exit 1 unless satisfied
 end
 
@@ -54,7 +54,7 @@ task :update_pipeline, [:slack_url, :slack_channel] do |_, args|
     puts 'Warning: You should provide slack channel and url to receive slack notifications on build failures'
   end
 
-  ruby_versions = %w[2.7.5 2.6.9 2.5.7 2.4.9 2.3.8 jruby-9.3.1.0]
+  ruby_versions = %w[3.1.1 2.7.5 2.6.9 2.5.7 2.4.9]
 
   params = []
   params << "ruby_versions=#{ruby_versions.join(',')}"
