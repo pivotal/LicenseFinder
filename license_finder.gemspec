@@ -62,7 +62,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its', '~> 1.3.0'
   s.add_development_dependency 'rubocop', '~> 1.12.1'
-  s.add_development_dependency 'rubocop-performance', '~> 1.13.2'
+  s.add_development_dependency 'rubocop-performance', '~> 1.10.2'
   s.add_development_dependency 'webmock', '~> 3.14'
 
   s.add_development_dependency 'nokogiri', '~>1.10'
