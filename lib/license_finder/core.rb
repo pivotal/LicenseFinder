@@ -21,10 +21,6 @@ module LicenseFinder
       Logger.new
     end
 
-    # def self.default_printer
-    #   Printer.new
-    # end
-
     # Default +options+:
     # {
     #   project_path: Pathname.pwd
