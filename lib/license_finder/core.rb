@@ -31,6 +31,7 @@ module LicenseFinder
     #   rebar_deps_dir: "deps",
     # }
     def initialize(configuration)
+      @printer = Printer.new
       @logger = Logger.new(configuration.logger_mode)
       @config = configuration
       @scanner = Scanner.new(options)
@@ -68,7 +69,7 @@ module LicenseFinder
 
     private
 
-    attr_reader :logger
+    attr_reader :logger, :printer
 
     # The core of the system. The saved decisions are applied to the current
     # packages.

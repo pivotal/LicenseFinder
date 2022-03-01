@@ -4,11 +4,10 @@ require 'spec_helper'
 require 'fakefs/spec_helpers'
 
 module LicenseFinder
-  describe Gradle do
-    SETTINGS_DOT_GRADLE = <<-GRADLE
+  SETTINGS_DOT_GRADLE = <<-GRADLE
     rootProject.buildFileName = 'build-alt.gradle'
-    GRADLE
-
+  GRADLE
+  describe Gradle do
     let(:options) { {} }
 
     subject { Gradle.new(options.merge(project_path: Pathname('/fake/path'))) }

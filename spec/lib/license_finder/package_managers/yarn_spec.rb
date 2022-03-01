@@ -141,7 +141,7 @@ module LicenseFinder
         it 'should include a production flag' do
           expect(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder')
                                                      .and_return(['yarn_modules', '', cmd_success])
-          expect(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + ' --production' + " --cwd #{Pathname(root)}")
+          expect(SharedHelpers::Cmd).to receive(:run).with("#{Yarn::SHELL_COMMAND} --production --cwd #{Pathname(root)}")
                                                      .and_return([yarn_shell_command_output, '', cmd_success])
           subject.current_packages
         end

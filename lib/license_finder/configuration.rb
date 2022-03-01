@@ -157,13 +157,12 @@ module LicenseFinder
       get(:composer_check_require_only)
     end
 
-    attr_writer :strict_matching
-
-    attr_reader :strict_matching
+    attr_accessor :strict_matching
 
     protected
 
     attr_accessor :primary_config
+
     def dup_with(other_hash)
       dup.tap do |dup|
         dup.primary_config.merge!(other_hash)

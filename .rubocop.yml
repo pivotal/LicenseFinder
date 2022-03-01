@@ -40,9 +40,17 @@ ModuleLength:
 # Security Cops
 YAMLLoad:
   Enabled: false
+Security/Open:
+  Enabled: false
 
 #Style Cops
-Style/MethodMissingSuper:
+Naming/VariableNumber:
+  Enabled: false
+Lint/MixedRegexpCaptureTypes:
+  Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+Style/OptionalBooleanParameter:
   Enabled: false
 Style/MissingRespondToMissing:
   Enabled: false
@@ -56,6 +64,8 @@ Style/HashTransformValues:
   Enabled: true
 Layout/MultilineMethodCallIndentation:
     Enabled: false
+Lint/EmptyFile:
+  Enabled: false
 DoubleNegation:
   Enabled: false
 Documentation:

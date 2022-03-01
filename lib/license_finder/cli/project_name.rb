@@ -8,8 +8,8 @@ module LicenseFinder
 
       desc 'show', 'Show the project name'
       def show
-        say 'Project Name:', :blue
-        say decisions.project_name
+        printer.say 'Project Name:', :blue
+        printer.say decisions.project_name
       end
 
       auditable
@@ -17,7 +17,7 @@ module LicenseFinder
       def add(name)
         modifying { decisions.name_project(name, txn) }
 
-        say "Set the project name to #{name}", :green
+        printer.say "Set the project name to #{name}", :green
       end
 
       auditable
@@ -25,7 +25,7 @@ module LicenseFinder
       def remove
         modifying { decisions.unname_project(txn) }
 
-        say 'Removed the project name'
+        printer.say 'Removed the project name'
       end
     end
   end

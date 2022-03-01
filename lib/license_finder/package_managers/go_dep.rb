@@ -38,7 +38,7 @@ module LicenseFinder
                             project_path.join(GODEP_VENDOR_PATH)
                           else
                             download_dependencies
-                            Pathname(ENV['GOPATH'] ? ENV['GOPATH'] + '/src' : ENV['HOME'] + '/go/src')
+                            Pathname(ENV['GOPATH'] ? "#{ENV['GOPATH']}/src" : "#{ENV['HOME']}/go/src")
                           end
     end
 

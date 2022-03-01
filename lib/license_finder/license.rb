@@ -82,13 +82,13 @@ module LicenseFinder
 
     private
 
-    attr_reader :short_name, :pretty_name, :other_names, :spdx_id
-    attr_reader :matcher
+    attr_reader :short_name, :pretty_name, :other_names, :spdx_id, :matcher
 
     def names
       ([short_name, pretty_name] + other_names).uniq
     end
   end
+
   class AndLicense < License
     def self.operator
       ' AND '
