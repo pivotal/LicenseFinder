@@ -196,7 +196,7 @@ module LicenseFinder
       decisions =
         if filepath_info.is_a?(Hash)
           resolve_inheritance(filepath_info)
-        elsif filepath_info =~ %r{^https?://}
+        elsif %r{^https?://}.match?(filepath_info)
           open_uri(filepath_info).read
         else
           Pathname(filepath_info).read

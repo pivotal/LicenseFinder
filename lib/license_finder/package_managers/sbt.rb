@@ -17,11 +17,7 @@ module LicenseFinder
 
       dependencies = SbtDependencyFinder.new(project_path).dependencies
       packages = dependencies.flat_map do |text|
-        options = {
-          headers: true
-        }
-
-        contents = CSV.parse(text, options)
+        contents = CSV.parse(text, headers: true)
         contents.map do |row|
           group_id, name, version = row['Dependency'].split('#').map(&:strip)
           spec = {

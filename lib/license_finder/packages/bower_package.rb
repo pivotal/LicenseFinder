@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'open-uri'
-
 module LicenseFinder
   class BowerPackage < Package
     def initialize(bower_module, options = {})
@@ -35,7 +34,11 @@ module LicenseFinder
     end
 
     def package_url
-      meta = JSON.parse(open("https://registry.bower.io/packages/#{CGI.escape(name)}").read)
+      meta = if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.5.0')
+               JSON.parse(open("https://registry.bower.io/packages/#{CGI.escape(name)}").read)
+             else
+               JSON.parse(URI.open("https://registry.bower.io/packages/#{CGI.escape(name)}").read)
+             end
       meta['url']
     end
   end
