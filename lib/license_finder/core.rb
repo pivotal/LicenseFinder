@@ -21,6 +21,10 @@ module LicenseFinder
       Logger.new
     end
 
+    # def self.default_printer
+    #   Printer.new
+    # end
+
     # Default +options+:
     # {
     #   project_path: Pathname.pwd
@@ -31,6 +35,7 @@ module LicenseFinder
     #   rebar_deps_dir: "deps",
     # }
     def initialize(configuration)
+      @printer = Printer.new
       @logger = Logger.new(configuration.logger_mode)
       @config = configuration
       @scanner = Scanner.new(options)
@@ -68,7 +73,7 @@ module LicenseFinder
 
     private
 
-    attr_reader :logger
+    attr_reader :logger, :printer
 
     # The core of the system. The saved decisions are applied to the current
     # packages.

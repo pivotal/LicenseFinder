@@ -11,7 +11,7 @@ module LicenseFinder
       def add(name, license)
         modifying { decisions.license(name, license, txn) }
 
-        say "The #{name} dependency has been marked as using #{license} license!", :green
+        printer.say "The #{name} dependency has been marked as using #{license} license!", :green
       end
 
       auditable
@@ -19,7 +19,7 @@ module LicenseFinder
       def remove(dep, lic)
         modifying { decisions.unlicense(dep, lic, txn) }
 
-        say "The dependency #{dep} no longer has a manual license"
+        printer.say "The dependency #{dep} no longer has a manual license"
       end
     end
   end

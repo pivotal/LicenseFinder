@@ -8,7 +8,7 @@ module LicenseFinder
 
       desc 'list', 'List all the restricted licenses'
       def list
-        say 'Restricted Licenses:', :blue
+        printer.say 'Restricted Licenses:', :blue
         say_each(decisions.restricted, &:name)
       end
 
@@ -17,7 +17,7 @@ module LicenseFinder
       def add(*licenses)
         assert_some licenses
         modifying { licenses.each { |l| decisions.restrict(l, txn) } }
-        say "Added #{licenses.join(', ')} to the restricted licenses"
+        printer.say "Added #{licenses.join(', ')} to the restricted licenses"
       end
 
       auditable
@@ -25,7 +25,7 @@ module LicenseFinder
       def remove(*licenses)
         assert_some licenses
         modifying { licenses.each { |l| decisions.unrestrict(l, txn) } }
-        say "Removed #{licenses.join(', ')} from the restricted licenses"
+        printer.say "Removed #{licenses.join(', ')} from the restricted licenses"
       end
     end
   end
