@@ -1,3 +1,12 @@
+# [7.0.0] / 2022-03-03
+
+### Added
+* Ruby 3.x Support - [02497dfb](https://github.com/pivotal/LicenseFinder/commit/02497dfb60d458e51a43ef26568389b5fcf302af) 
+
+### Changed
+* Raise an error if the yarn licenses list command fails - [8f9ab6bd](https://github.com/pivotal/LicenseFinder/commit/8f9ab6bd681866aee888410672f3babab7aab383) - AJ Esler
+* Updated code to support newest Thor gem - [b118772c](https://github.com/pivotal/LicenseFinder/commit/b118772c3f634dacc56795eebb7c3ba4c89ef639) 
+
 # [6.15.0] / 2021-12-17
 
 ### Fixed
@@ -985,3 +994,4 @@ Bugfixes:
 [6.14.1]: https://github.com/pivotal/LicenseFinder/compare/v6.13.0...v6.14.1
 [6.14.2]: https://github.com/pivotal/LicenseFinder/compare/v6.14.1...v6.14.2
 [6.15.0]: https://github.com/pivotal/LicenseFinder/compare/v6.14.2...v6.15.0
+[7.0.0]: https://github.com/pivotal/LicenseFinder/compare/v6.15.0...v7.0.0
