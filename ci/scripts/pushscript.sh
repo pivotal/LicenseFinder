@@ -1,7 +1,6 @@
 #!/bin/bash
-mkdir -p ~/.gem
-echo -e "---\n:rubygems_api_key: $GEM_API_KEY" > ~/.gem/credentials
-chmod 0600 ~/.gem/credentials
+echo -e "---\n:rubygems_api_key: $GEM_API_KEY" > ~/.local/share/gem/credentials
+chmod 0600 ~/.local/share/gem/credentials
 
 build_version="$(cat semver-version/version)"
 cd lf-git
