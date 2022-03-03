@@ -1,13 +1,10 @@
-# [7.0.0] / 2022-03-03
+# [6.15.0] / 2021-12-17
 
 ### Added
-* Ruby 3.x Support - [02497dfb](https://github.com/pivotal/LicenseFinder/commit/02497dfb60d458e51a43ef26568389b5fcf302af) 
+* Add Yarn2 support [7f08790](https://github.com/pivotal/LicenseFinder/commit/7f08790ce1d7cd12ccd0aa9de114ca3366ab408c)
 
-### Changed
-* Raise an error if the yarn licenses list command fails - [8f9ab6bd](https://github.com/pivotal/LicenseFinder/commit/8f9ab6bd681866aee888410672f3babab7aab383) - AJ Esler
-* Updated code to support newest Thor gem - [b118772c](https://github.com/pivotal/LicenseFinder/commit/b118772c3f634dacc56795eebb7c3ba4c89ef639) 
-
-# [6.15.0] / 2021-12-17
+###Changed
+* Upgrade conan and use https://center.conan.io instead of conan.bintray.com [eea1292](https://github.com/pivotal/LicenseFinder/commit/eea1292bf2613f603a8a0ae42747857acf77e361)
 
 ### Fixed
 * Fix docker Conan and swift - [66031df9](https://github.com/pivotal/LicenseFinder/commit/66031df912c2e1e21aa794a4b897fc61c9ec6b02) 
@@ -32,7 +29,7 @@ First two commit were supposed to show up in v6.14.0, but GPG bug prevented a co
 ### Security
 * Fix issue where commands could be injected running on Cocoapods projects. [b0a61a2d](https://github.com/pivotal/LicenseFinder/commit/b0a61a2d833921c714cc39cdda8ba80af3f33d04)
 
-  Thanks to Joern SchneeweiszStaff Security Engineer, Security Research | GitLab for raising the issue
+  Thanks to Joern Schneeweisz Staff Security Engineer, Security Research | GitLab for raising the issue
 
 
 # [6.13.0] / 2021-04-27
