@@ -1,19 +1,25 @@
 # [7.0.0] / 2022-03-04
 
 ### Added
-* Ruby 3.x Support - [02497dfb](https://github.com/pivotal/LicenseFinder/commit/02497dfb60d458e51a43ef26568389b5fcf302af) 
+* Ruby 3.x Support - [02497dfb](https://github.com/pivotal/LicenseFinder/commit/02497dfb60d458e51a43ef26568389b5fcf302af)
+* Provide Flutter project scanning support - [e739f281](https://github.com/pivotal/LicenseFinder/commit/e739f2180c88504152c0e19477489177012f5631) - etiennecadicidean
+* Add a new option to use spdx identifier in reports - [a71763bb](https://github.com/pivotal/LicenseFinder/commit/a71763bb132ed39e57f8071e72cb2450733bf8db) - etiennecadicidean
+* Allow to specify cocoadpods acknowledgment through ENV - [67bd3fb5](https://github.com/pivotal/LicenseFinder/commit/67bd3fb5569afa54abc16035fd7804bc2d65b7c0) - etiennecadicidean
 
 ### Changed
-* Raise an error if the yarn licenses list command fails - [8f9ab6bd](https://github.com/pivotal/LicenseFinder/commit/8f9ab6bd681866aee888410672f3babab7aab383) - AJ Esler
-* Updated code to support newest Thor gem - [b118772c](https://github.com/pivotal/LicenseFinder/commit/b118772c3f634dacc56795eebb7c3ba4c89ef639) 
+* Updated code to support newest Thor gem - [b118772c](https://github.com/pivotal/LicenseFinder/commit/b118772c3f634dacc56795eebb7c3ba4c89ef639)
+* Raise an error if the yarn licenses list command fails - [8f9ab6bd](https://github.com/pivotal/LicenseFinder/commit/8f9ab6bd681866aee888410672f3babab7aab383) - ajesler
+
+### Deprecated
+* Remove support for Ruby 2.3 - [02497dfb](https://github.com/pivotal/LicenseFinder/commit/02497dfb60d458e51a43ef26568389b5fcf302af)
 
 # [6.15.0] / 2021-12-17
 
 ### Added
-* Add Yarn2 support [7f08790](https://github.com/pivotal/LicenseFinder/commit/7f08790ce1d7cd12ccd0aa9de114ca3366ab408c)
+* Add Yarn2 support - [7f08790c](https://github.com/pivotal/LicenseFinder/commit/7f08790ce1d7cd12ccd0aa9de114ca3366ab408c)
 
 ###Changed
-* Upgrade conan and use https://center.conan.io instead of conan.bintray.com [eea1292](https://github.com/pivotal/LicenseFinder/commit/eea1292bf2613f603a8a0ae42747857acf77e361)
+* Upgrade conan and use https://center.conan.io instead of conan.bintray.com - [eea1292b](https://github.com/pivotal/LicenseFinder/commit/eea1292bf2613f603a8a0ae42747857acf77e361)
 
 ### Fixed
 * Fix docker Conan and swift - [66031df9](https://github.com/pivotal/LicenseFinder/commit/66031df912c2e1e21aa794a4b897fc61c9ec6b02) 
@@ -28,15 +34,15 @@
 First two commit were supposed to show up in v6.14.0, but GPG bug prevented a correct build. Therefore, a follow up patch build was made to include the GPG fix.
 
 ### Changed
-* Upgrade Docker image to use Ubuntu Bionic [#178471230] [1c12588c](https://github.com/pivotal/LicenseFinder/commit/1c12588cceecb8b7350d090c85b519b24bcc6682)
+* Upgrade Docker image to use Ubuntu Bionic [#178471230] - [1c12588c](https://github.com/pivotal/LicenseFinder/commit/1c12588cceecb8b7350d090c85b519b24bcc6682)
 * Update the default timezone to GMT [#178471230] - [9fcab84](https://github.com/pivotal/LicenseFinder/commit/9fcab84605cda81e7f276d3c567d14409e371333)
 * Use local copy of Swift puglic GPG keys [#178674224] - [4db4b3e](https://github.com/pivotal/LicenseFinder/commit/4db4b3e5980ca52019549d74da574a2342a7846e)
 
 ### Added 
-* Added --npm_options option to customize npm behavior. [b8457a62](https://github.com/pivotal/LicenseFinder/commit/b8457a62e7b531294934364d1e5f72cd78a7686a) - Alexander-Malott 
+* Added --npm_options option to customize npm behavior - [b8457a62](https://github.com/pivotal/LicenseFinder/commit/b8457a62e7b531294934364d1e5f72cd78a7686a) - Alexander-Malott 
 
 ### Security
-* Fix issue where commands could be injected running on Cocoapods projects. [b0a61a2d](https://github.com/pivotal/LicenseFinder/commit/b0a61a2d833921c714cc39cdda8ba80af3f33d04)
+* Fix issue where commands could be injected running on Cocoapods projects - [b0a61a2d](https://github.com/pivotal/LicenseFinder/commit/b0a61a2d833921c714cc39cdda8ba80af3f33d04)
 
   Thanks to Joern Schneeweisz Staff Security Engineer, Security Research | GitLab for raising the issue
 
@@ -1000,5 +1006,4 @@ Bugfixes:
 [6.14.1]: https://github.com/pivotal/LicenseFinder/compare/v6.13.0...v6.14.1
 [6.14.2]: https://github.com/pivotal/LicenseFinder/compare/v6.14.1...v6.14.2
 [6.15.0]: https://github.com/pivotal/LicenseFinder/compare/v6.14.2...v6.15.0
-[7.0.0]: https://github.com/pivotal/LicenseFinder/compare/v6.15.0...v7.0.0
 [7.0.0]: https://github.com/pivotal/LicenseFinder/compare/v6.15.0...v7.0.0
