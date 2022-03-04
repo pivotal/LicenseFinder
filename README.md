@@ -20,41 +20,40 @@ and give you an actionable exception report.
 * docker: [licensefinder/license_finder](https://hub.docker.com/r/licensefinder/license_finder/)
   * the docker image contains all the package managers needed to run `license_finder`
 * support:
+  * The primary form of communication for support is through github issues. The google groups are not actively
+    monitored
   * license-finder@googlegroups.com
   * https://groups.google.com/forum/#!forum/license-finder
-* backlog: https://www.pivotaltracker.com/n/projects/234851
 
 ### Supported project types
 
 | Project Type | Package Manager | Tested on Version |
-| ------------ | --------------- | -------:|
-| Ruby Gems    | bundler         | 1.16.6  |
-| Python 2.7 Eggs  | pip2             | 19.0.2  |
-| Python 3.5 Eggs  | pip3             | 19.0.2  |
-| Node.js      | npm             | 6.4.1   |
-| Bower        | bower           | 1.8.4   |
-| Nuget (without license discovery) | nuget | 4.7.1.5393 |
-| Godep        | Godep           | 80      |
-| Go workspace (via a `.envrc` file) | Go lang | 1.11.5 |
-| Go modules   | Go lang         | 1.11.5  |
-| Java         | maven           | 3.6.0   |
-| Java         | gradle          | 4.10.3  |
+| ------------ |-----------------|------------------:|
+| Ruby Gems    | bundler         | 2.3.7 |
+| Python 2.7 Eggs  | pip2            | 19.0.2 |
+| Python 3.5 Eggs  | pip3            | 20.0.2 |
+| Node.js      | npm             | 6.4.1 |
+| Bower        | bower           | 1.8.4 |
+| Nuget (without license discovery) | nuget           | 4.7.1.5393 |
+| Godep        | Godep           | 80 |
+| Go workspace | Go lang         | 1.11.5 |
+| Go modules   | Go lang         | 1.14.3 |
+| Java         | maven           | 3.6.0 |
+| Java         | gradle          | 5.6.4 |
 
 ### Experimental project types
 
 * Erlang (via `rebar` and `Erlang.mk`)
-* Objective-C, Swift (via Carthage, CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\]) and Swift Package Manager)
-* Objective-C (+ CocoaPods 0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/))
+* Objective-C, Swift (via Carthage, CocoaPods \[0.39 and below. See [CocoaPods Specs Repo Sharding](http://blog.cocoapods.org/Sharding/)\]) and Swift Package Manager(SPM)
 * Elixir (via `mix`)
 * Golang (via `gvt`, `glide`,`dep`, `trash` and `govendor`)
 * JavaScript (via `yarn`)
 * C++/C (via `conan`)
 * Scala (via `sbt`)
 * Rust (via `cargo`)
-* Go Modules (via `go mod`)
 * PHP (via `composer`)
-* Python (via Conda [Conda 4.8.3, Python 3.7, Bash; requires an `environment.yml` or `environment.yaml`])
-* Flutter (via `flutter pub, requires pubspec.yaml & .pub cache locaton through ENV variable`)
+* Python (via `Conda`, `pipenv`)
+* Flutter (via `flutter pub`)
 
 ## Installation
 
@@ -158,7 +157,7 @@ reference it will mount your current directory at the path `/scan` and run any c
 passed to it from that directory.
 
 Note that the docker image will run the gem which is installed within it.
-So the docker image tagged `4.0.2` will run *License Finder Version 4.0.2*
+So the docker image tagged `7.0.0` will run *License Finder Version 7.0.0*
 
 See the [contributing guide](https://github.com/pivotal/LicenseFinder/blob/master/CONTRIBUTING.md) for information on development. 
 
@@ -169,9 +168,10 @@ languages, as long as that language has a package definition in the project dire
 
 * `Gemfile` (for `bundler`)
 * `requirements.txt` (for `pip`)
+* `Pipfile.lock` (for `pipenv`)
 * `package.json` (for `npm`)
 * `pom.xml` (for `maven`)
-* `build.gradle` (for `gradle`)
+* `build.gradle` or `build.gradle.kts` (for `gradle`)
 * `settings.gradle` that specifies `rootProject.buildFileName` (for `gradle`)
 * `bower.json` (for `bower`)
 * `Podfile` (for `pod`) (set `ACKNOWLEDGEMENTS_PATH` variable if you want to target a particular `Pods-acknowledgements-<TARGET>.plist`. Can be useful in multi-target pods projects.)
@@ -186,6 +186,8 @@ languages, as long as that language has a package definition in the project dire
 * `glide.lock` file (for `glide`)
 * `vendor/vendor.json` file (for `govendor`)
 * `Gopkg.lock` file (for `dep`)
+* `Godeps/Godeps.json` (for `godep`)
+* `*.envrc` file (for `go`) 
 * `go.mod` file (for `go mod`)
 * `vendor.conf` file (for `trash`)
 * `yarn.lock` file (for `yarn`)
@@ -193,7 +195,8 @@ languages, as long as that language has a package definition in the project dire
 * `build.sbt` file (for `sbt`)
 * `Cargo.lock` file (for `cargo`)
 * `composer.lock` file (for `composer`)
-
+* `environment,yml` file (for `conda`)
+* `pubspec.yaml & .pub cache locaton through ENV variable` (for `flutter`)
 
 ### Continuous Integration
 
@@ -499,7 +502,7 @@ licenseConfigurations := Set("compile", "provided")
 
 ## Requirements
 
-`license_finder` requires ruby >= 1.9.3, or jruby.
+`license_finder` requires ruby >= 2.4.0. We will be dropping 2.4.x support soon.
 
 
 ## Upgrading
