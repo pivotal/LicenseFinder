@@ -34,14 +34,10 @@ module LicenseFinder
     end
 
     def package_management_command
-      wrapper = if Platform.windows?
-                  'mvnw.cmd'
-                else
-                  './mvnw'
-                end
+      wrapper = File.join(project_path, Platform.windows? ? 'mvnw.cmd' : 'mvnw')
       maven = 'mvn'
 
-      File.exist?(File.join(project_path, wrapper)) ? wrapper : maven
+      File.exist?(wrapper) ? wrapper : maven
     end
 
     def possible_package_paths
