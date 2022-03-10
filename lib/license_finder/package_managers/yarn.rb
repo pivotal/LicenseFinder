@@ -2,16 +2,20 @@
 
 module LicenseFinder
   class Yarn < PackageManager
-    SHELL_COMMAND = 'yarn licenses list --no-progress --json'
+    SHELL_COMMAND = 'yarn licenses list --json'
 
     def possible_package_paths
       [project_path.join('yarn.lock')]
     end
 
     def current_packages
+      #keeping the use of yarn1_production_flag here because the license plugin supports same commands as licenses in yarn v1
       cmd = "#{Yarn::SHELL_COMMAND}#{yarn1_production_flag}"
-      suffix = " --cwd #{project_path}" unless project_path.nil?
-      cmd += suffix unless suffix.nil?
+      unless yarn2_project?
+        cmd += " --no-progress"
+        suffix = " --cwd #{project_path}" unless project_path.nil?
+        cmd += suffix unless suffix.nil?
+      end
 
       stdout, stderr, status = Cmd.run(cmd)
       raise "Command '#{cmd}' failed to execute: #{stderr}" unless status.success?
@@ -66,7 +70,12 @@ module LicenseFinder
     private
 
     def yarn2_prepare_command
-      "#{yarn2_production_flag}yarn install"
+      # yarn v2 needs to use plugin version v0.6.0 or earlier
+      license_plugin = "https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.6.0/bundles/@yarnpkg/plugin-licenses.js"
+      if yarn3_project?
+        license_plugin = "https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.7.2/bundles/@yarnpkg/plugin-licenses.js"
+      end
+      "#{yarn2_production_flag}yarn install && yarn plugin import #{license_plugin}"
     end
 
     def yarn1_prepare_command
@@ -80,6 +89,16 @@ module LicenseFinder
 
         version = version_string.split('.').map(&:to_i)
         return version[0] >= 2
+      end
+    end
+
+    def yarn3_project?
+      Dir.chdir(project_path) do
+        version_string, stderr_str, status = Cmd.run('yarn -v')
+        raise "Command 'yarn -v' failed to execute: #{stderr_str}" unless status.success?
+
+        version = version_string.split('.').map(&:to_i)
+        return version[0] >= 3
       end
     end
 
