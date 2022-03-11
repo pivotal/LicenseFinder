@@ -9,12 +9,11 @@ module LicenseFinder
     end
 
     def current_packages
-      #keeping the use of yarn1_production_flag here because the license plugin supports same commands as licenses in yarn v1
-      cmd = "#{Yarn::SHELL_COMMAND}#{yarn1_production_flag}"
-      unless yarn2_project?
+      # the licenses plugin supports the classic production flag
+      cmd = "#{Yarn::SHELL_COMMAND}#{classic_yarn_production_flag}"
+      if yarn_version == 1
         cmd += " --no-progress"
-        suffix = " --cwd #{project_path}" unless project_path.nil?
-        cmd += suffix unless suffix.nil?
+        cmd += " --cwd #{project_path}" unless project_path.nil?
       end
 
       stdout, stderr, status = Cmd.run(cmd)
@@ -60,45 +59,38 @@ module LicenseFinder
     end
 
     def prepare_command
-      if yarn2_project?
-        yarn2_prepare_command
+      if yarn_version == 1
+        classic_yarn_prepare_command
       else
-        yarn1_prepare_command
+        yarn_prepare_command
       end
     end
 
     private
 
-    def yarn2_prepare_command
-      # yarn v2 needs to use plugin version v0.6.0 or earlier
-      license_plugin = "https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.6.0/bundles/@yarnpkg/plugin-licenses.js"
-      if yarn3_project?
-        license_plugin = "https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.7.2/bundles/@yarnpkg/plugin-licenses.js"
+    def yarn_prepare_command
+      "#{yarn_plugin_production_command}yarn install && yarn plugin import https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/#{yarn_licenses_plugin_version}/bundles/@yarnpkg/plugin-licenses.js"
+    end
+
+    def classic_yarn_prepare_command
+      "yarn install --ignore-engines --ignore-scripts#{classic_yarn_production_flag}"
+    end
+
+    def yarn_licenses_plugin_version
+      if yarn_version == 2
+        "v0.6.0"
+      else
+        "v0.7.2"
       end
-      "#{yarn2_production_flag}yarn install && yarn plugin import #{license_plugin}"
     end
 
-    def yarn1_prepare_command
-      "yarn install --ignore-engines --ignore-scripts#{yarn1_production_flag}"
-    end
-
-    def yarn2_project?
+    def yarn_version
       Dir.chdir(project_path) do
         version_string, stderr_str, status = Cmd.run('yarn -v')
         raise "Command 'yarn -v' failed to execute: #{stderr_str}" unless status.success?
 
         version = version_string.split('.').map(&:to_i)
-        return version[0] >= 2
-      end
-    end
-
-    def yarn3_project?
-      Dir.chdir(project_path) do
-        version_string, stderr_str, status = Cmd.run('yarn -v')
-        raise "Command 'yarn -v' failed to execute: #{stderr_str}" unless status.success?
-
-        version = version_string.split('.').map(&:to_i)
-        return version[0] >= 3
+        return version[0]
       end
     end
 
@@ -139,13 +131,13 @@ module LicenseFinder
       all_packages - [yarn_internal_package]
     end
 
-    def yarn1_production_flag
+    def classic_yarn_production_flag
       return '' if @ignored_groups.nil?
 
       @ignored_groups.include?('devDependencies') ? ' --production' : ''
     end
 
-    def yarn2_production_flag
+    def yarn_plugin_production_command
       return '' if @ignored_groups.nil?
 
       @ignored_groups.include?('devDependencies') ? 'yarn plugin import workspace-tools && yarn workspaces focus --all --production && ' : ''
