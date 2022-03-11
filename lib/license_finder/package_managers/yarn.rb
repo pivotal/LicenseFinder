@@ -12,7 +12,7 @@ module LicenseFinder
       # the licenses plugin supports the classic production flag
       cmd = "#{Yarn::SHELL_COMMAND}#{classic_yarn_production_flag}"
       if yarn_version == 1
-        cmd += " --no-progress"
+        cmd += ' --no-progress'
         cmd += " --cwd #{project_path}" unless project_path.nil?
       end
 
@@ -78,9 +78,9 @@ module LicenseFinder
 
     def yarn_licenses_plugin_version
       if yarn_version == 2
-        "v0.6.0"
+        'v0.6.0'
       else
-        "v0.7.2"
+        'v0.7.2'
       end
     end
 
