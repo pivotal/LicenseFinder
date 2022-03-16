@@ -2,16 +2,19 @@
 
 module LicenseFinder
   class Yarn < PackageManager
-    SHELL_COMMAND = 'yarn licenses list --no-progress --json'
+    SHELL_COMMAND = 'yarn licenses list --json'
 
     def possible_package_paths
       [project_path.join('yarn.lock')]
     end
 
     def current_packages
-      cmd = "#{Yarn::SHELL_COMMAND}#{yarn1_production_flag}"
-      suffix = " --cwd #{project_path}" unless project_path.nil?
-      cmd += suffix unless suffix.nil?
+      # the licenses plugin supports the classic production flag
+      cmd = "#{Yarn::SHELL_COMMAND}#{classic_yarn_production_flag}"
+      if yarn_version == 1
+        cmd += ' --no-progress'
+        cmd += " --cwd #{project_path}" unless project_path.nil?
+      end
 
       stdout, stderr, status = Cmd.run(cmd)
       raise "Command '#{cmd}' failed to execute: #{stderr}" unless status.success?
@@ -56,30 +59,38 @@ module LicenseFinder
     end
 
     def prepare_command
-      if yarn2_project?
-        yarn2_prepare_command
+      if yarn_version == 1
+        classic_yarn_prepare_command
       else
-        yarn1_prepare_command
+        yarn_prepare_command
       end
     end
 
     private
 
-    def yarn2_prepare_command
-      "#{yarn2_production_flag}yarn install"
+    def yarn_prepare_command
+      "#{yarn_plugin_production_command}yarn install && yarn plugin import https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/#{yarn_licenses_plugin_version}/bundles/@yarnpkg/plugin-licenses.js"
     end
 
-    def yarn1_prepare_command
-      "yarn install --ignore-engines --ignore-scripts#{yarn1_production_flag}"
+    def classic_yarn_prepare_command
+      "yarn install --ignore-engines --ignore-scripts#{classic_yarn_production_flag}"
     end
 
-    def yarn2_project?
+    def yarn_licenses_plugin_version
+      if yarn_version == 2
+        'v0.6.0'
+      else
+        'v0.7.2'
+      end
+    end
+
+    def yarn_version
       Dir.chdir(project_path) do
         version_string, stderr_str, status = Cmd.run('yarn -v')
         raise "Command 'yarn -v' failed to execute: #{stderr_str}" unless status.success?
 
         version = version_string.split('.').map(&:to_i)
-        return version[0] >= 2
+        return version[0]
       end
     end
 
@@ -120,13 +131,13 @@ module LicenseFinder
       all_packages - [yarn_internal_package]
     end
 
-    def yarn1_production_flag
+    def classic_yarn_production_flag
       return '' if @ignored_groups.nil?
 
       @ignored_groups.include?('devDependencies') ? ' --production' : ''
     end
 
-    def yarn2_production_flag
+    def yarn_plugin_production_command
       return '' if @ignored_groups.nil?
 
       @ignored_groups.include?('devDependencies') ? 'yarn plugin import workspace-tools && yarn workspaces focus --all --production && ' : ''
