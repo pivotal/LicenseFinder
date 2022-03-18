@@ -1,6 +1,6 @@
 # [7.0.1] / 2022-03-18
 ### Fixed
-* Maven Wrapper command path must be relative to working directory - [298a733a](https://github.com/pivotal/LicenseFinder/commit/298a733a67f34341ffabc7dfbf2ee5c27574b979)
+* Maven Wrapper command path must be relative to working directory - [298a733a](https://github.com/pivotal/LicenseFinder/commit/298a733a67f34341ffabc7dfbf2ee5c27574b979) - jbmgrtn 
 * Support yarn license command for yarn v2+ - [ed3b319b](https://github.com/pivotal/LicenseFinder/commit/ed3b319b64bf9c72c12fd5a365952137cf7f33b6)
 
 
