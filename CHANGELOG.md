@@ -1,3 +1,5 @@
+# [7.0.1] / 2022-03-18
+
 # [7.0.0] / 2022-03-04
 
 ### Added
@@ -1007,3 +1009,4 @@ Bugfixes:
 [6.14.2]: https://github.com/pivotal/LicenseFinder/compare/v6.14.1...v6.14.2
 [6.15.0]: https://github.com/pivotal/LicenseFinder/compare/v6.14.2...v6.15.0
 [7.0.0]: https://github.com/pivotal/LicenseFinder/compare/v6.15.0...v7.0.0
+[7.0.1]: https://github.com/pivotal/LicenseFinder/compare/v7.0.0...v7.0.1
