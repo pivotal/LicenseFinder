@@ -57,6 +57,13 @@ module LicenseFinder
       expect(subject.to_s).to eq("gem_a,1.0,Nuget\n")
     end
 
+    it 'supports why and who column' do
+      dep = Package.new('gem_a', '1.0')
+      dep.approved_manually!(Decisions::TXN.new('the-approver', 'the-approval-note', Time.now.utc))
+      subject = described_class.new([dep], columns: %w[name version approved_reason approved_by])
+      expect(subject.to_s).to eq("gem_a,1.0,the-approval-note,the-approver\n")
+    end
+
     it 'supports license_links column' do
       dep = Package.new('gem_a', '1.0')
       mit = License.find_by_name('MIT')
