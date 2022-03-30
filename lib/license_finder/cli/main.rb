@@ -152,7 +152,7 @@ module LicenseFinder
       shared_options
       format_option
       method_option :write_headers, type: :boolean, desc: 'Write exported columns as header row (csv).', default: false, required: false
-      method_option :save, desc: "Save report to a file. Default: 'license_report.csv' in project root.", lazy_default: 'license_report'
+      method_option :save, desc: "Save report to a file. Default: 'license_report' in project root.", lazy_default: 'license_report'
 
       def report
         finder = LicenseAggregator.new(config, aggregate_paths)
