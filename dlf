@@ -7,7 +7,12 @@ if `which docker > /dev/null`; then
     for p in "$@"; do
       escaped_params="$escaped_params \"$p\""
     done
-    docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && $escaped_params"
+    if [[ $escaped_params =~ "&&" ]]; then
+      command=${escaped_params:2:${#escaped_params}-3}
+    else
+      command=$escaped_params
+    fi
+    docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && $command"
   fi
 else
   echo "You do not have docker installed. Please install it:"

@@ -154,7 +154,8 @@ $ dlf "bundle install && license_finder"
 
 You can better understand the way this script works by looking at its source, but for
 reference it will mount your current directory at the path `/scan` and run any commands
-passed to it from that directory.
+passed to it from that directory. If your command has `&&`, ensure you quote the command. 
+If it does not, ensure the command is not quoted.
 
 Note that the docker image will run the gem which is installed within it.
 So the docker image tagged `7.0.0` will run *License Finder Version 7.0.0*
