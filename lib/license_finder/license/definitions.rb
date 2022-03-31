@@ -265,6 +265,7 @@ module LicenseFinder
             'BSD 3',
             'BSD-3',
             '3-clause BSD',
+            '3-Clause BSD License',
             'BSD-3-Clause',
             'BSD 3-Clause License',
             'The 3-Clause BSD License',
