@@ -196,7 +196,7 @@ languages, as long as that language has a package definition in the project dire
 * `build.sbt` file (for `sbt`)
 * `Cargo.lock` file (for `cargo`)
 * `composer.lock` file (for `composer`)
-* `environment,yml` file (for `conda`)
+* `environment.yml` file (for `conda`)
 * `pubspec.yaml & .pub cache locaton through ENV variable` (for `flutter`)
 
 ### Continuous Integration
