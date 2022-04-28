@@ -7,3 +7,10 @@ updates:
     time: "20:00"
     timezone: America/Los_Angeles
   open-pull-requests-limit: 10
+- package-ecosystem: docker 
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "20:00"
+    timezone: America/Los_Angeles
+  open-pull-requests-limit: 10
