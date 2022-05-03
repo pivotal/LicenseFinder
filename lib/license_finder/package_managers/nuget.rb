@@ -51,6 +51,10 @@ module LicenseFinder
     def current_packages
       dependencies.each_with_object({}) do |dep, memo|
         licenses = license_urls(dep)
+        licenses&.map! do |license|
+          license.gsub('https://licenses.nuget.org/', '')
+        end
+
         path = Dir.glob("#{Dir.home}/.nuget/packages/#{dep.name.downcase}/#{dep.version}").first
 
         memo[dep.name] ||= NugetPackage.new(dep.name, dep.version, spec_licenses: licenses, install_path: path)
@@ -60,6 +64,7 @@ module LicenseFinder
 
     def license_urls(dep)
       files = Dir["**/#{dep.name}.#{dep.version}.nupkg"]
+
       return nil if files.empty?
 
       file = files.first

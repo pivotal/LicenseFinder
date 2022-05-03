@@ -42,9 +42,13 @@ module LicenseFinder
       end
 
       def read_license_urls
-        possible_spec_paths.flat_map do |path|
+        raw_licenses = possible_spec_paths.flat_map do |path|
           Nuget.nuspec_license_urls(File.read(path)) if File.exist? path
         end.compact
+
+        raw_licenses&.map! do |license|
+          license.gsub('https://licenses.nuget.org/', '')
+        end
       end
 
       def ==(other)
@@ -61,7 +65,6 @@ module LicenseFinder
       package_metadatas = asset_files
                           .flat_map { |path| AssetFile.new(path).dependencies }
                           .uniq { |d| [d.name, d.version] }
-
       package_metadatas.map do |d|
         path = Dir.glob("#{Dir.home}/.nuget/packages/#{d.name.downcase}/#{d.version}").first
         NugetPackage.new(d.name, d.version, spec_licenses: d.read_license_urls, install_path: path)
