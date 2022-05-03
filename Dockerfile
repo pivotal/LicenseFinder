@@ -208,6 +208,7 @@ RUN apt-get -q install -y \
 
 #install flutter
 ENV FLUTTER_HOME=/root/flutter
+RUN git config --global --add safe.directory /root/flutter
 RUN curl -o flutter_linux_2.8.1-stable.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.8.1-stable.tar.xz \
     && tar xf flutter_linux_2.8.1-stable.tar.xz \
     && mv flutter ${FLUTTER_HOME} \
