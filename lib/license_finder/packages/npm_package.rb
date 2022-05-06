@@ -72,9 +72,30 @@ module LicenseFinder
             @identifier.version,
             description: npm_json['description'],
             homepage: npm_json['homepage'],
+            authors: author_names,
             spec_licenses: Package.license_names_from_standard_spec(npm_json),
             install_path: npm_json['path'],
             children: @dependencies.map(&:name))
+    end
+
+    def author_names
+      names = []
+      names.push(author_name(@json['author'])) unless @json['author'].nil?
+      names += @json['contributors'].map { |c| author_name(c) } if @json['contributors'].is_a?(Array)
+      names.join(', ')
+    end
+
+    def author_name(author)
+      if author.instance_of?(String)
+        author_name_from_combined(author)
+      else
+        author['name']
+      end
+    end
+
+    def author_name_from_combined(author)
+      matches = author.match /^(.*?)\s*(<.*?>)?\s*(\(.*?\))?\s*$/
+      matches[1]
     end
 
     def ==(other)
