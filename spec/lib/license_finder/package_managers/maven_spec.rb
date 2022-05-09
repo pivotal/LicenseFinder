@@ -21,21 +21,31 @@ module LicenseFinder
       RESP
     end
 
+    def license_xml_parsed(xml)
+      options = {
+        'GroupTags' => { 'licenses' => 'license', 'dependencies' => 'dependency' },
+        'ForceArray' => %w[license dependency]
+      }
+      XmlSimple.xml_in(license_xml(xml), options)['dependencies']
+    end
+
     describe '.current_packages' do
       before do
         allow(Dir).to receive(:chdir).with(Pathname('/fake/path')) { |&block| block.call }
         allow(SharedHelpers::Cmd).to receive(:run).with('mvn org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run).with('mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout').and_return(['', '', cmd_success])
       end
 
       def stub_license_report(deps)
-        dependencies = double(:subject_dependency_file, dependencies: [license_xml(deps)])
+        dependencies = double(:subject_dependency_file, dependencies: license_xml_parsed(deps))
         expect(MavenDependencyFinder).to receive(:new).and_return(dependencies)
       end
 
       it 'uses the maven wrapper, if present' do
         subject = Maven.new(project_path: Pathname('features/fixtures/maven-wrapper'))
         allow(SharedHelpers::Cmd).to receive(:run).with('features/fixtures/maven-wrapper/mvnw org.codehaus.mojo:license-maven-plugin:download-licenses').and_return(['', '', cmd_success])
-        expect(Dir).to receive(:chdir).with(Pathname('features/fixtures/maven-wrapper')).and_call_original
+        allow(SharedHelpers::Cmd).to receive(:run).with('features/fixtures/maven-wrapper/mvnw help:evaluate -Dexpression=settings.localRepository -q -DforceStdout').and_return(['', '', cmd_success])
+        expect(Dir).to receive(:chdir).twice.with(Pathname('features/fixtures/maven-wrapper')).and_call_original
         expect(subject.package_management_command).to eq('features/fixtures/maven-wrapper/mvnw').or eq('features/fixtures/maven-wrapper/mvnw.cmd')
         subject.current_packages
       end
