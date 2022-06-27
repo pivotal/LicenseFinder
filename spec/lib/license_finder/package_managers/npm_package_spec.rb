@@ -17,7 +17,20 @@ module LicenseFinder
             'name' => 'coffee-script',
             'version' => '1.2.3'
           }
-        }
+        },
+        'author' => {
+          'name' => 'The Author',
+          'email' => 'author@example.org',
+          'url' => 'https://www.example.org'
+        },
+        'contributors' => [
+          {
+            'name' => 'Contributor 1',
+            'email' => 'contrib1@example.org',
+            'url' => 'https://www.example.org'
+          },
+          'Contributor 2 <contrib3@example.org> (https://www.example.org)'
+        ]
       )
     end
 
@@ -30,6 +43,7 @@ module LicenseFinder
     its(:children) { should == ['coffee-script'] }
     its(:install_path) { should eq 'some/node/package/path' }
     its(:package_manager) { should eq 'Npm' }
+    its(:authors) { should eq 'The Author, Contributor 1, Contributor 2' }
 
     describe '#license_names_from_spec' do
       let(:node_module1) { { 'name' => 'node_module1', 'version' => '1', 'license' => 'MIT' } }
