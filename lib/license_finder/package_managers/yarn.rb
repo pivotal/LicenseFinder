@@ -2,6 +2,11 @@
 
 module LicenseFinder
   class Yarn < PackageManager
+    def initialize(options = {})
+      super
+      @yarn_options = options[:yarn_options]
+    end
+
     SHELL_COMMAND = 'yarn licenses list --json'
 
     def possible_package_paths
@@ -14,6 +19,7 @@ module LicenseFinder
       if yarn_version == 1
         cmd += ' --no-progress'
         cmd += " --cwd #{project_path}" unless project_path.nil?
+        cmd += " #{@yarn_options}" unless @yarn_options.nil?
       end
 
       stdout, stderr, status = Cmd.run(cmd)
