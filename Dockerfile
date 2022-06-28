@@ -10,7 +10,7 @@ ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
 ENV RUBY_VERSION 3.1.1
-ENV MIX_VERSION 1.0
+ENV MIX_VERSION 2.0
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # programs needed for building
@@ -128,8 +128,13 @@ RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_a
     sudo dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
     sudo rm -f erlang-solutions_${MIX_VERSION}_all.deb && \
     sudo apt-get update && \
-    sudo apt-get install -y esl-erlang && \
-    sudo apt-get install -y elixir
+    sudo apt-get install -y esl-erlang
+# Install Elixir
+WORKDIR /tmp/elixir-build
+RUN git clone https://github.com/elixir-lang/elixir.git
+WORKDIR elixir
+RUN make && make install
+WORKDIR /
 
 # install conan
 RUN apt-get install -y python-dev && \
