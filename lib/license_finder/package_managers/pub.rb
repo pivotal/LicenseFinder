@@ -23,7 +23,11 @@ module LicenseFinder
         package_name = dependency['name']
         subpath = "#{dependency['name']}-#{dependency['version']}"
         package_version = dependency['version']
-        project_repo = dependency['source'] == 'git' ? Pathname(Dir.glob(Pathname("#{ENV['PUB_CACHE']}/git/*/#{dependency['name']}/"))[0]) : Pathname("#{ENV['PUB_CACHE']}/hosted/pub.dartlang.org/#{subpath}")
+        project_repo = if dependency['source'] == 'git'
+                         Pathname(Dir.glob(Pathname("#{ENV['PUB_CACHE']}/git/*/#{dependency['name']}/"))[0])
+                       else
+                         Pathname("#{ENV['PUB_CACHE']}/hosted/pub.dartlang.org/#{subpath}")
+                       end
 
         homepage = read_repository_home(project_repo)
         homepage = "https://pub.dev/packages/#{package_name}" if homepage.nil? || homepage.empty?
