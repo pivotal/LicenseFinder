@@ -67,7 +67,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'nokogiri', '~>1.10'
   s.add_development_dependency 'rack', '~> 2.2.3'
-  s.add_development_dependency 'rack-test', '~> 1.1.0', '> 0.7'
+  s.add_development_dependency 'rack-test', '> 0.7', '~> 2.0.1'
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.start_with?('spec', 'features') }
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
