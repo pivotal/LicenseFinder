@@ -2,6 +2,7 @@
 
 require 'json'
 require 'yaml'
+require 'uri'
 
 module LicenseFinder
   class Pub < PackageManager
@@ -17,15 +18,27 @@ module LicenseFinder
         raise PubError, 'While PUB_CACHE environment variable is empty, retrieving package licenses is impossible. Please set the PUB_CACHE env variable (default: ~/.pub)'
       end
 
+      parsed_package_yaml = YAML.load(IO.read('pubspec.lock'))
       stdout, _stderr, _status = Cmd.run('flutter pub deps --json')
       yaml_deps = JSON.parse(stdout)
       yaml_deps['packages'].map do |dependency|
         package_name = dependency['name']
         subpath = "#{dependency['name']}-#{dependency['version']}"
         package_version = dependency['version']
-
-        project_repo = dependency['source'] == 'git' ? Pathname("#{ENV['PUB_CACHE']}/git/#{dependency['name']}-*/") : Pathname("#{ENV['PUB_CACHE']}/hosted/pub.dartlang.org/#{subpath}")
-
+        if dependency['source'] == 'git'
+          if parsed_package_yaml['packages'][package_name]['description']['path'] != "."
+            git_path = parsed_package_yaml['packages'][package_name]['description']['url']
+            github_path = URI(git_path).path.split('/').last
+            github_sub_path = parsed_package_yaml['packages'][package_name]['description']['path']
+            project_repo = Pathname("#{ENV['PUB_CACHE']}/git/#{github_path}-*/#{github_sub_path}/")
+            print project_repo
+            print "\n"
+          else
+            project_repo = Pathname("#{ENV['PUB_CACHE']}/git/#{dependency['name']}-*/")
+          end
+        else
+          project_repo = Pathname("#{ENV['PUB_CACHE']}/hosted/pub.dartlang.org/#{subpath}")
+        end
         homepage = read_repository_home(project_repo)
         homepage = "https://pub.dev/packages/#{package_name}" if homepage.nil? || homepage.empty?
         PubPackage.new(
