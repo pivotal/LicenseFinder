@@ -54,7 +54,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara', '~> 3.32.2'
   s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM.match?(/darwin/)
   s.add_development_dependency 'e2mmap', '~> 0.1.0'
-  s.add_development_dependency 'fakefs', '~> 1.4.1'
+  s.add_development_dependency 'fakefs', '~> 1.8.0'
   s.add_development_dependency 'matrix', '~> 0.1.0'
   s.add_development_dependency 'mime-types', '3.4.1'
   s.add_development_dependency 'pry', '~> 0.14.1'
