@@ -25,26 +25,14 @@ module LicenseFinder
       stdout, stderr, status = Cmd.run(cmd)
       raise "Command '#{cmd}' failed to execute: #{stderr}" unless status.success?
 
-      packages = []
-      incompatible_packages = []
-
       json_strings = stdout.encode('ASCII', invalid: :replace, undef: :replace, replace: '?').split("\n")
       json_objects = json_strings.map { |json_object| JSON.parse(json_object) }
 
-      if json_objects.last['type'] == 'table'
-        license_json = json_objects.pop['data']
-        packages = packages_from_json(license_json)
+      if yarn_version == 1
+        get_yarn1_packages(json_objects)
+      else
+        get_yarn_packages(json_objects)
       end
-
-      json_objects.each do |json_object|
-        match = /(?<name>[\w,\-]+)@(?<version>(\d+\.?)+)/ =~ json_object['data'].to_s
-        if match
-          package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
-          incompatible_packages.push(package)
-        end
-      end
-
-      packages + incompatible_packages.uniq
     end
 
     def prepare
@@ -98,6 +86,58 @@ module LicenseFinder
         version = version_string.split('.').map(&:to_i)
         return version[0]
       end
+    end
+
+    def get_yarn_packages(json_objects)
+      packages = []
+      incompatible_packages = []
+      json_objects.each do |json_object|
+        license = json_object['value']
+        body = json_object['children']
+
+        valid_match = /(?<name>[\w,\-]+)@(?<manager>\D*):\D*(?<version>(\d+\.?)+)/ =~ body.to_s
+
+        if valid_match
+          homepage = body["#{name}@#{manager}:#{version}"]['children']['vendorUrl']
+          author = body["#{name}@#{manager}:#{version}"]['children']['vendorName']
+          package = YarnPackage.new(
+            name,
+            version,
+            spec_licenses: [license],
+            homepage: homepage,
+            authors: author,
+            install_path: project_path.join(modules_folder, name)
+          )
+          packages << package
+        end
+        incompatible_match = /(?<name>[\w,\-]+)@[a-z]*:(?<version>(\.))/ =~ body.to_s
+
+        if incompatible_match
+          package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
+          incompatible_packages.push(package)
+        end
+      end
+
+      packages + incompatible_packages.uniq
+    end
+
+    def get_yarn1_packages(json_objects)
+      packages = []
+      incompatible_packages = []
+      if json_objects.last['type'] == 'table'
+        license_json = json_objects.pop['data']
+        packages = packages_from_json(license_json)
+      end
+
+      json_objects.each do |json_object|
+        match = /(?<name>[\w,\-]+)@(?<version>(\d+\.?)+)/ =~ json_object['data'].to_s
+        if match
+          package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
+          incompatible_packages.push(package)
+        end
+      end
+
+      packages + incompatible_packages.uniq
     end
 
     def packages_from_json(json_data)

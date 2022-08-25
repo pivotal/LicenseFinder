@@ -9,12 +9,30 @@ module LicenseFinder
     let(:root) { '/fake-node-project' }
     it_behaves_like 'a PackageManager'
 
-    let(:yarn_shell_command_output) do
+    let(:yarn1_shell_command_output) do
       {
         'type' => 'table',
         'data' => {
           'body' => [['yn', '2.0.0', 'MIT', 'https://github.com/sindresorhus/yn.git', 'sindresorhus.com', 'Sindre Sorhus']],
           'head' => %w[Name Version License URL VendorUrl VendorName]
+        }
+      }.to_json
+    end
+
+    let(:yarn_shell_command_output) do
+      {
+        'value' => 'MIT',
+        'children' => {
+          'yn@npm:2.0.0' => {
+            'value' => {
+              'locator' => 'yn@npm:2.0.0',
+              'descriptor' => 'yn@npm:2.0.0'
+            },
+            'children' => {
+              'vendorUrl' => 'sindresorhus.com',
+              'vendorName' => 'Sindre Sorhus'
+            }
+          }
         }
       }.to_json
     end
@@ -35,7 +53,7 @@ module LicenseFinder
 
         it 'should call yarn install with expected cli parameters' do
           expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --ignore-engines --ignore-scripts')
-                                                     .and_return([yarn_shell_command_output, '', cmd_success])
+                                                     .and_return([yarn1_shell_command_output, '', cmd_success])
           subject.prepare
         end
 
@@ -43,7 +61,7 @@ module LicenseFinder
           subject { Yarn.new(project_path: Pathname(root), ignored_groups: 'devDependencies') }
           it 'should include a production flag' do
             expect(SharedHelpers::Cmd).to receive(:run).with('yarn install --ignore-engines --ignore-scripts --production')
-                                                       .and_return([yarn_shell_command_output, '', cmd_success])
+                                                       .and_return([yarn1_shell_command_output, '', cmd_success])
             subject.prepare
           end
         end
@@ -56,7 +74,7 @@ module LicenseFinder
 
         it 'should call yarn install with no cli parameters' do
           expect(SharedHelpers::Cmd).to receive(:run).with('yarn install && yarn plugin import https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.7.2/bundles/@yarnpkg/plugin-licenses.js')
-                                                     .and_return([yarn_shell_command_output, '', cmd_success])
+                                                     .and_return([yarn1_shell_command_output, '', cmd_success])
           subject.prepare
         end
 
@@ -65,7 +83,7 @@ module LicenseFinder
 
           it 'should include a production flag' do
             expect(SharedHelpers::Cmd).to receive(:run).with('yarn plugin import workspace-tools && yarn workspaces focus --all --production && yarn install && yarn plugin import https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.7.2/bundles/@yarnpkg/plugin-licenses.js')
-                                                       .and_return([yarn_shell_command_output, '', cmd_success])
+                                                       .and_return([yarn1_shell_command_output, '', cmd_success])
             subject.prepare
           end
         end
@@ -78,7 +96,7 @@ module LicenseFinder
 
         it 'should call yarn install with no cli parameters' do
           expect(SharedHelpers::Cmd).to receive(:run).with('yarn install && yarn plugin import https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.6.0/bundles/@yarnpkg/plugin-licenses.js')
-                                            .and_return([yarn_shell_command_output, '', cmd_success])
+                                            .and_return([yarn1_shell_command_output, '', cmd_success])
           subject.prepare
         end
 
@@ -87,7 +105,7 @@ module LicenseFinder
 
           it 'should include a production flag' do
             expect(SharedHelpers::Cmd).to receive(:run).with('yarn plugin import workspace-tools && yarn workspaces focus --all --production && yarn install && yarn plugin import https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.6.0/bundles/@yarnpkg/plugin-licenses.js')
-                                              .and_return([yarn_shell_command_output, '', cmd_success])
+                                              .and_return([yarn1_shell_command_output, '', cmd_success])
             subject.prepare
           end
         end
@@ -132,7 +150,7 @@ module LicenseFinder
           ["yarn_modules\n", '', cmd_success]
         end
         allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --no-progress --cwd #{Pathname(root)}") do
-          [yarn_shell_command_output, '', cmd_success]
+          [yarn1_shell_command_output, '', cmd_success]
         end
 
         expect(subject.current_packages.length).to eq 1
@@ -149,7 +167,7 @@ module LicenseFinder
           ["undefined\n", '', cmd_success]
         end
         allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND + " --no-progress --cwd #{Pathname(root)}") do
-          [yarn_shell_command_output, '', cmd_success]
+          [yarn1_shell_command_output, '', cmd_success]
         end
 
         expect(subject.current_packages.first.install_path).to eq Pathname(root).join('node_modules', 'yn')
@@ -194,7 +212,7 @@ module LicenseFinder
           expect(SharedHelpers::Cmd).to receive(:run).with('yarn config get modules-folder')
                                                      .and_return(['yarn_modules', '', cmd_success])
           expect(SharedHelpers::Cmd).to receive(:run).with("#{Yarn::SHELL_COMMAND} --production --no-progress --cwd #{Pathname(root)}")
-                                                     .and_return([yarn_shell_command_output, '', cmd_success])
+                                                     .and_return([yarn1_shell_command_output, '', cmd_success])
           subject.current_packages
         end
       end
