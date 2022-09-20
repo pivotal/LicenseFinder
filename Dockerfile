@@ -5,7 +5,7 @@ WORKDIR /tmp
 # Versioning
 ENV PIP_INSTALL_VERSION 19.0.2
 ENV PIP3_INSTALL_VERSION 20.0.2
-ENV GO_LANG_VERSION 1.14.3
+ENV GO_LANG_VERSION 1.17.13
 ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
@@ -95,14 +95,29 @@ ENV PATH=$PATH:/go/bin
 ENV GOROOT=/go
 ENV GOPATH=/gopath
 ENV PATH=$PATH:$GOPATH/bin
+
 RUN mkdir /gopath && \
-  go get github.com/tools/godep && \
-  go get github.com/FiloSottile/gvt && \
-  go get github.com/Masterminds/glide && \
-  go get github.com/kardianos/govendor && \
-  go get github.com/golang/dep/cmd/dep && \
-  go get -u github.com/rancher/trash && \
+  go install github.com/tools/godep@latest && \
+  go install github.com/FiloSottile/gvt@latest && \
+  go install github.com/kardianos/govendor@latest && \
   go clean -cache
+
+#install rvm and glide and godep
+RUN apt-add-repository -y ppa:rael-gc/rvm && \
+    add-apt-repository -y ppa:masterminds/glide  && \
+    apt update && apt install -y rvm && \
+    /usr/share/rvm/bin/rvm install --default $RUBY_VERSION &&\
+    apt-get install -y glide && \
+    apt-get install -y go-dep
+
+# install trash
+RUN curl -Lo trash.tar.gz https://github.com/rancher/trash/releases/download/v0.2.7/trash-linux_amd64.tar.gz && \
+    tar xvf trash.tar.gz && \
+    rm trash.tar.gz && \
+    sudo mv trash /usr/local/bin/
+
+# install bundler
+RUN bash -lc "gem update --system && gem install bundler"
 
 WORKDIR /tmp
 # Fix the locale
@@ -114,14 +129,6 @@ ENV LC_ALL=en_US.UTF-8
 
 # install Cargo
 RUN curl https://sh.rustup.rs -sSf | bash -ls -- -y --profile minimal
-
-#install rvm
-RUN apt-add-repository -y ppa:rael-gc/rvm && \
-    apt update && apt install -y rvm && \
-    /usr/share/rvm/bin/rvm install --default $RUBY_VERSION
-
-# install bundler
-RUN bash -lc "gem update --system && gem install bundler"
 
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
