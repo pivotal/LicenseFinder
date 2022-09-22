@@ -23,14 +23,25 @@ module LicenseFinder
       {
         'value' => 'MIT',
         'children' => {
-          'yn@npm:2.0.0' => {
+          '@babel/preset-typescript@virtual:47c2c5b90818fd89a72#npm:7.18.6' => {
             'value' => {
-              'locator' => 'yn@npm:2.0.0',
-              'descriptor' => 'yn@npm:2.0.0'
+              'locator' => '@babel/preset-typescript@virtual:47c2c5b90818fd89a72#npm:7.18.6',
+              'descriptor' => '@babel/preset-typescript@virtual:47c2c5b90818fd89a72#npm:^7.13.0'
             },
             'children' => {
-              'vendorUrl' => 'sindresorhus.com',
-              'vendorName' => 'Sindre Sorhus'
+              'url' => 'https://github.com/babel/babel.git',
+              'vendorName' => 'The Babel Team',
+              'vendorUrl' => 'https://babel.dev/docs/en/next/babel-preset-typescript'
+            }
+          },
+          '@types/jest@npm:26.0.24' => {
+            'value' => {
+              'locator' => '@types/jest@npm:26.0.24',
+              'descriptor' => '@types/jest@npm:^26.0.23'
+            },
+            'children' => {
+              'url' => 'https://github.com/DefinitelyTyped/DefinitelyTyped.git',
+              'vendorUrl' => 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jest'
             }
           }
         }
@@ -135,13 +146,20 @@ module LicenseFinder
             [yarn_shell_command_output, '', cmd_success]
           end
 
-          expect(subject.current_packages.length).to eq 1
-          expect(subject.current_packages.first.name).to eq 'yn'
-          expect(subject.current_packages.first.version).to eq '2.0.0'
+          expect(subject.current_packages.length).to eq 2
+          expect(subject.current_packages.first.name).to eq '@babel/preset-typescript'
+          expect(subject.current_packages.first.version).to eq '7.18.6'
           expect(subject.current_packages.first.license_names_from_spec).to eq ['MIT']
-          expect(subject.current_packages.first.homepage).to eq 'sindresorhus.com'
-          expect(subject.current_packages.first.authors).to eq 'Sindre Sorhus'
-          expect(subject.current_packages.first.install_path).to eq Pathname(root).join('yarn_modules', 'yn')
+          expect(subject.current_packages.first.homepage).to eq 'https://babel.dev/docs/en/next/babel-preset-typescript'
+          expect(subject.current_packages.first.authors).to eq 'The Babel Team'
+          expect(subject.current_packages.first.install_path).to eq Pathname(root).join('yarn_modules', '@babel/preset-typescript')
+
+          expect(subject.current_packages.last.name).to eq '@types/jest'
+          expect(subject.current_packages.last.version).to eq '26.0.24'
+          expect(subject.current_packages.last.license_names_from_spec).to eq ['MIT']
+          expect(subject.current_packages.last.homepage).to eq 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jest'
+          expect(subject.current_packages.last.authors).to eq ''
+          expect(subject.current_packages.last.install_path).to eq Pathname(root).join('yarn_modules', '@types/jest')
         end
       end
 

@@ -95,26 +95,29 @@ module LicenseFinder
         license = json_object['value']
         body = json_object['children']
 
-        valid_match = /(?<name>[\w,\-]+)@(?<manager>\D*):\D*(?<version>(\d+\.?)+)/ =~ body.to_s
+        body.each do |package_name, vendor_info|
+          valid_match = %r{(?<name>[@,\w,\-,/,.]+)@(?<manager>\D*):\D*(?<version>(\d+\.?)+)} =~ package_name.to_s
+          valid_match = %r{(?<name>[@,\w,\-,/,.]+)@virtual:.+#(\D*):\D*(?<version>(\d+\.?)+)} =~ package_name.to_s if manager.eql?('virtual')
 
-        if valid_match
-          homepage = body["#{name}@#{manager}:#{version}"]['children']['vendorUrl']
-          author = body["#{name}@#{manager}:#{version}"]['children']['vendorName']
-          package = YarnPackage.new(
-            name,
-            version,
-            spec_licenses: [license],
-            homepage: homepage,
-            authors: author,
-            install_path: project_path.join(modules_folder, name)
-          )
-          packages << package
-        end
-        incompatible_match = /(?<name>[\w,\-]+)@[a-z]*:(?<version>(\.))/ =~ body.to_s
+          if valid_match
+            homepage = vendor_info['children']['vendorUrl']
+            author = vendor_info['children']['vendorName']
+            package = YarnPackage.new(
+              name,
+              version,
+              spec_licenses: [license],
+              homepage: homepage,
+              authors: author,
+              install_path: project_path.join(modules_folder, name)
+            )
+            packages << package
+          end
+          incompatible_match = /(?<name>[\w,\-]+)@[a-z]*:(?<version>(\.))/ =~ package_name.to_s
 
-        if incompatible_match
-          package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
-          incompatible_packages.push(package)
+          if incompatible_match
+            package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
+            incompatible_packages.push(package)
+          end
         end
       end
 
