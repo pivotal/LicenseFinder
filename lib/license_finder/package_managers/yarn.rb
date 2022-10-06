@@ -7,7 +7,7 @@ module LicenseFinder
       @yarn_options = options[:yarn_options]
     end
 
-    SHELL_COMMAND = 'yarn licenses list --json'
+    SHELL_COMMAND = 'yarn licenses list --recursive --json'
 
     def possible_package_paths
       [project_path.join('yarn.lock')]
