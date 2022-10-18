@@ -2,6 +2,7 @@
 
 require 'net/http'
 require 'openssl'
+require 'license_finder/logger'
 
 module LicenseFinder
   class PyPI
@@ -25,8 +26,12 @@ module LicenseFinder
       def definition(name, version)
         response = request("https://pypi.org/pypi/#{name}/#{version}/json")
         response.is_a?(Net::HTTPSuccess) ? JSON.parse(response.body).fetch('info', {}) : {}
-      rescue *CONNECTION_ERRORS
-        {}
+      rescue *CONNECTION_ERRORS => e
+        if @prepare_no_fail
+          {}
+        else
+          raise e, "Unable to read package from pypi.org #{name} #{version}: #{e}"
+        end
       end
 
       def request(location, limit = 10)
