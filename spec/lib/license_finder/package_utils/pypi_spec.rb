@@ -70,7 +70,6 @@ RSpec.describe LicenseFinder::PyPI do
     end
 
     context 'when the source is not reachable and --prepare_no_fail is not set' do
-
       before do
         stub_request(:get, "https://#{source}/pypi/#{package}/#{version}/json")
           .to_timeout
@@ -92,6 +91,5 @@ RSpec.describe LicenseFinder::PyPI do
         expect(subject.definition(package, version)).to be_empty
       end
     end
-
   end
 end
