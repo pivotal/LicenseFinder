@@ -1,7 +1,7 @@
 #!/bin/bash
 if `which docker > /dev/null`; then
   if [ $# -eq 0 ]; then
-    docker run --platform linux/amd64 -v $PWD:/scan -it licensefinder/license_finder
+    docker run -v $PWD:/scan -it licensefinder/license_finder
   else
     escaped_params=""
     for p in "$@"; do
@@ -12,7 +12,7 @@ if `which docker > /dev/null`; then
     else
       command=$escaped_params
     fi
-    docker run --platform linux/amd64 -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && $command"
+    docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan && $command"
   fi
 else
   echo "You do not have docker installed. Please install it:"
