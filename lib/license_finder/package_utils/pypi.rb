@@ -2,7 +2,6 @@
 
 require 'net/http'
 require 'openssl'
-require 'license_finder/logger'
 
 module LicenseFinder
   class PyPI
