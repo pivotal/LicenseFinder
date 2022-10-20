@@ -38,6 +38,16 @@ module LicenseFinder
         expect(decision_applier.acknowledged.last.licenses).to eq Set.new([License.find_by_name('MIT')])
       end
 
+      it 'applies decided licenses for specific versions' do
+        decisions = Decisions.new
+                             .add_package('manual', '2.0.0')
+                             .license('manual', 'MIT', { versions: ['1.0.0'] })
+                             .license('manual', 'GPL', { versions: ['2.0.0'] })
+                             .license('manual', 'Apache-2.0', { versions: ['3.0.0'] })
+        decision_applier = described_class.new(decisions: decisions, packages: [])
+        expect(decision_applier.acknowledged.last.licenses).to eq Set.new([License.find_by_name('GPL')])
+      end
+
       it 'applies decided homepage' do
         decisions = Decisions.new
                       .add_package('manual', nil)
