@@ -34,4 +34,30 @@ describe 'Manually Assigned Licenses' do
     developer.run_license_finder
     expect(developer).to be_seeing_something_like /mislicensed_dep.*Default/
   end
+
+  specify 'can be assigned and removed by package version' do
+    project = developer.create_ruby_app
+    dep_a_gem = developer.create_gem 'dep_a', version: '2.0.0', license: 'Unknown'
+    dep_b_gem = developer.create_gem 'dep_b', version: '3.0.0', license: 'Unknown'
+    project.depend_on dep_a_gem
+    project.depend_on dep_b_gem
+
+    developer.execute_command 'license_finder licenses add dep_a GPL --version=1.0.0'
+    developer.execute_command 'license_finder licenses add dep_a MIT --version=2.0.0'
+    developer.execute_command 'license_finder licenses add dep_a GPL --version=3.0.0'
+
+    developer.execute_command 'license_finder licenses add dep_b GPL --version=1.0.0'
+    developer.execute_command 'license_finder licenses add dep_b GPL --version=2.0.0'
+    developer.execute_command 'license_finder licenses add dep_b Apache-2.0 --version=3.0.0'
+
+    developer.run_license_finder
+    expect(developer).to be_seeing_line 'dep_a, 2.0.0, MIT'
+    expect(developer).to be_seeing_line 'dep_b, 3.0.0, "Apache 2.0"'
+
+    developer.execute_command 'license_finder licenses remove dep_a MIT --version=2.0.0'
+
+    developer.run_license_finder
+    expect(developer).to be_seeing_line 'dep_a, 2.0.0, Unknown'
+    expect(developer).to be_seeing_line 'dep_b, 3.0.0, "Apache 2.0"'
+  end
 end

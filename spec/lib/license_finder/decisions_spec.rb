@@ -42,6 +42,14 @@ module LicenseFinder
         expect(license).to eq License.find_by_name('MIT')
       end
 
+      it 'will report license for a dependency of any version' do
+        license = subject
+                  .license('dep', 'MIT')
+                  .licenses_of('dep', '1.0.0')
+                  .first
+        expect(license).to eq License.find_by_name('MIT')
+      end
+
       it 'will report multiple licenses' do
         licenses = subject
                    .license('dep', 'MIT')
@@ -59,6 +67,41 @@ module LicenseFinder
                   .licenses_of('dep')
                   .first
         expect(license).to eq License.find_by_name('MIT')
+      end
+
+      it 'supports specifying a package version' do
+        subject.license('dep', 'MIT', { versions: ['1.0.0'] })
+
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('MIT')].to_set
+        expect(subject.licenses_of('dep', '2.0.0')).to be_empty
+        expect(subject.licenses_of('dep', nil)).to be_empty
+        expect(subject.licenses_of('dep')).to be_empty
+      end
+
+      it 'supports different licenses for different package versions' do
+        subject.license('dep', 'MIT', { versions: ['1.0.0'] })
+        subject.license('dep', 'GPL', { versions: ['1.0.0'] })
+        subject.license('dep', 'Apache-2.0', { versions: ['2.0.0'] })
+
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [
+          License.find_by_name('MIT'),
+          License.find_by_name('GPL')
+        ].to_set
+        expect(subject.licenses_of('dep', '2.0.0')).to eq [License.find_by_name('Apache-2.0')].to_set
+      end
+
+      it 'ignores a license applied to all versions if any version-specific licenses are also defined' do
+        subject.license('dep', 'MIT', { versions: [] })
+
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('MIT')].to_set
+        expect(subject.licenses_of('dep', '2.0.0')).to eq [License.find_by_name('MIT')].to_set
+        expect(subject.licenses_of('dep', nil)).to eq [License.find_by_name('MIT')].to_set
+
+        subject.license('dep', 'GPL', { versions: ['1.0.0'] })
+
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('GPL')].to_set
+        expect(subject.licenses_of('dep', '2.0.0')).to be_empty
+        expect(subject.licenses_of('dep', nil)).to be_empty
       end
     end
 
@@ -88,6 +131,34 @@ module LicenseFinder
                   .licenses_of('dep')
                   .first
         expect(license).to eq License.find_by_name('MIT')
+      end
+
+      it 'removes the license for the correct version' do
+        subject.license('dep', 'MIT', { versions: ['1.0.0'] })
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('MIT')].to_set
+
+        subject.unlicense('dep', 'MIT', { versions: [] })
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('MIT')].to_set
+
+        subject.unlicense('dep', 'MIT', { versions: ['2.0.0'] })
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('MIT')].to_set
+
+        subject.unlicense('dep', 'MIT', { versions: ['1.0.0'] })
+        expect(subject.licenses_of('dep', '1.0.0')).to be_empty
+      end
+
+      it 'reverts to the previous license for all versions after unlicensing all specific versions' do
+        subject.license('dep', 'MIT', { versions: [] })
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('MIT')].to_set
+
+        subject.license('dep', 'GPL', { versions: ['1.0.0'] })
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('GPL')].to_set
+
+        subject.unlicense('dep', 'GPL', { versions: ['1.0.0'] })
+        expect(subject.licenses_of('dep', '1.0.0')).to eq [License.find_by_name('MIT')].to_set
+
+        subject.unlicense('dep', 'MIT', { versions: [] })
+        expect(subject.licenses_of('dep', '1.0.0')).to be_empty
       end
     end
 

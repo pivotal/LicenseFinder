@@ -11,8 +11,20 @@ module LicenseFinder
 
     attr_reader :packages, :permitted, :restricted, :ignored, :ignored_groups, :project_name, :inherited_decisions
 
-    def licenses_of(name)
-      @licenses[name]
+    ALL_VERSIONS = :all
+    private_constant :ALL_VERSIONS
+
+    def licenses_of(name, version = nil)
+      return Set.new unless @licenses.key?(name)
+
+      has_licenses_for_all_versions = @licenses[name].key?(ALL_VERSIONS) && @licenses[name].size == 1
+      licenses_for_all_versions = has_licenses_for_all_versions ? @licenses[name][ALL_VERSIONS] : Set.new
+
+      if version.nil?
+        licenses_for_all_versions
+      else
+        @licenses[name][version] || licenses_for_all_versions
+      end
     end
 
     def homepage_of(name)
@@ -76,7 +88,7 @@ module LicenseFinder
     def initialize
       @decisions = []
       @packages = Set.new
-      @licenses = Hash.new { |h, k| h[k] = Set.new }
+      @licenses = {}
       @homepages = {}
       @approvals = {}
       @permitted = Set.new
@@ -100,13 +112,34 @@ module LicenseFinder
 
     def license(name, lic, txn = {})
       add_decision [:license, name, lic, txn]
-      @licenses[name] << License.find_by_name(lic)
+
+      versions = txn[:versions]
+      versions = [ALL_VERSIONS] if versions.nil? || versions.empty?
+
+      versions.each do |version|
+        @licenses[name] ||= {}
+        @licenses[name][version] ||= Set.new
+        @licenses[name][version] << License.find_by_name(lic)
+      end
+
       self
     end
 
     def unlicense(name, lic, txn = {})
       add_decision [:unlicense, name, lic, txn]
-      @licenses[name].delete(License.find_by_name(lic))
+
+      if @licenses[name]
+        versions = txn[:versions]
+        versions = [ALL_VERSIONS] if versions.nil? || versions.empty?
+
+        versions.each do |version|
+          if @licenses[name][version]
+            @licenses[name][version].delete(License.find_by_name(lic))
+            @licenses[name].delete(version) if @licenses[name][version].empty?
+          end
+        end
+      end
+
       self
     end
 
