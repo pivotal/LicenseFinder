@@ -304,9 +304,9 @@ module LicenseFinder
       it 'inherits rules from nested remote decisions files with new config format' do
         grandparent_yml = YAML.dump([[:permit, 'GPL']])
         parent_yml = YAML.dump([
-          [:inherit_from, { 'url' => 'https://example.com/config/grandparent.yml' }],
-          [:permit, 'MIT']
-        ])
+                                 [:inherit_from, { 'url' => 'https://example.com/config/grandparent.yml' }],
+                                 [:permit, 'MIT']
+                               ])
 
         stub_request(:get, 'https://example.com/config/grandparent.yml').to_return(status: 200, body: grandparent_yml, headers: {})
         stub_request(:get, 'https://example.com/config/parent.yml').to_return(status: 200, body: parent_yml, headers: {})
@@ -563,9 +563,9 @@ module LicenseFinder
       it 'does not store decisions from inheritance when there is nested inheritance' do
         grandparent_yml = YAML.dump([[:permit, 'GPL']])
         parent_yml = YAML.dump([
-          [:inherit_from, { 'url' => 'https://example.com/config/grandparent.yml' }],
-          [:permit, 'MIT']
-        ])
+                                 [:inherit_from, { 'url' => 'https://example.com/config/grandparent.yml' }],
+                                 [:permit, 'MIT']
+                               ])
 
         stub_request(:get, 'https://example.com/config/grandparent.yml').to_return(status: 200, body: grandparent_yml, headers: {})
         stub_request(:get, 'https://example.com/config/parent.yml').to_return(status: 200, body: parent_yml, headers: {})
