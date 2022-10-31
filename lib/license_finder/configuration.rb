@@ -101,6 +101,10 @@ module LicenseFinder
       get(:yarn_options)
     end
 
+    def pnpm_options
+      get(:pnpm_options)
+    end
+
     def pip_requirements_path
       get(:pip_requirements_path)
     end

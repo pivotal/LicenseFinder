@@ -47,6 +47,7 @@ module LicenseFinder
           :maven_options,
           :npm_options,
           :yarn_options,
+          :pnpm_options,
           :pip_requirements_path,
           :python_version,
           :rebar_command,
