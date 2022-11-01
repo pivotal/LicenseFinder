@@ -57,8 +57,19 @@ and give you an actionable exception report.
 
 ## Installation
 
-License Finder requires Ruby 2.4.0 or greater to run. If you have an older
-version of Ruby installed, you can update via Homebrew:
+License Finder may be run as a [pre-commit](https://pre-commit.com) hook by
+adding the following to your `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/pivotal/LicenseFinder
+    rev: v7.1.0 # You probably want the latest tag.
+    hooks:
+      - id: license-finder
+```
+
+Running License Finder directly requires Ruby 2.4.0 or greater. If you have an
+older version of Ruby installed, you can update via Homebrew:
 
 ```sh
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -70,7 +81,7 @@ then:
 $ brew install ruby
 ```
 
-The easiest way to use `license_finder` is to install it as a command
+The easiest way to use `license_finder` directly is to install it as a command
 line tool, like brew, awk, gem or bundler:
 
 ```sh

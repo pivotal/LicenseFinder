@@ -1,0 +1,10 @@
+- id: license-finder
+  name: Audit licenses of dependencies
+  entry: license_finder
+  language: ruby
+  pass_filenames: false
+  description: >
+    LicenseFinder works with your package managers to find dependencies, detect
+    the licenses of the packages in them, compare those licenses against a
+    user-defined list of permitted licenses, and give you an actionable
+    exception report.
