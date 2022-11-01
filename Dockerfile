@@ -15,15 +15,15 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # programs needed for building
 RUN apt-get update && apt-get install -y \
-  build-essential \
-  curl \
-  sudo \
-  unzip \
-  wget \
-  gnupg2 \
-  apt-utils \
-  software-properties-common \
-  bzr
+    build-essential \
+    curl \
+    sudo \
+    unzip \
+    wget \
+    gnupg2 \
+    apt-utils \
+    software-properties-common \
+    bzr
 
 RUN add-apt-repository ppa:git-core/ppa && apt-get update && apt-get install -y git
 
@@ -33,13 +33,16 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
 
 # install yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
-  apt-get update && \
-  apt-get install yarn
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && \
+    apt-get install yarn
 
 # install bower
 RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
+
+# install pnpm
+RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /usr/local/bin/pnpm;
 
 # install jdk 12
 RUN curl -L -o openjdk12.tar.gz https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz && \
@@ -97,10 +100,10 @@ ENV GOPATH=/gopath
 ENV PATH=$PATH:$GOPATH/bin
 
 RUN mkdir /gopath && \
-  go install github.com/tools/godep@latest && \
-  go install github.com/FiloSottile/gvt@latest && \
-  go install github.com/kardianos/govendor@latest && \
-  go clean -cache
+    go install github.com/tools/godep@latest && \
+    go install github.com/FiloSottile/gvt@latest && \
+    go install github.com/kardianos/govendor@latest && \
+    go clean -cache
 
 #install rvm and glide and godep
 RUN apt-add-repository -y ppa:rael-gc/rvm && \
@@ -145,10 +148,10 @@ WORKDIR /
 
 # install conan
 RUN apt-get install -y python-dev && \
-	pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
-	    --ignore-installed requests --ignore-installed chardet \
-	    --ignore-installed urllib3 \
-	    --upgrade setuptools && \
+    pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
+    --ignore-installed requests --ignore-installed chardet \
+    --ignore-installed urllib3 \
+    --upgrade setuptools && \
     pip install --no-cache-dir -Iv conan==1.43.0 && \
     conan config install https://github.com/conan-io/conanclientcert.git
 
@@ -156,18 +159,18 @@ RUN apt-get install -y python-dev && \
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &&\
-  echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
-  apt-get update &&\
-  apt-get install -y mono-complete &&\
-  curl -o "/usr/local/bin/nuget.exe" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" &&\
-  curl -o "/usr/local/bin/nugetv3.5.0.exe" "https://dist.nuget.org/win-x86-commandline/v3.5.0/nuget.exe"
+    echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
+    apt-get update &&\
+    apt-get install -y mono-complete &&\
+    curl -o "/usr/local/bin/nuget.exe" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" &&\
+    curl -o "/usr/local/bin/nugetv3.5.0.exe" "https://dist.nuget.org/win-x86-commandline/v3.5.0/nuget.exe"
 
 # install dotnet core
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb &&\
-  sudo dpkg -i packages-microsoft-prod.deb &&\
-  rm packages-microsoft-prod.deb &&\
-  sudo apt-get update &&\
-  sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1
+    sudo dpkg -i packages-microsoft-prod.deb &&\
+    rm packages-microsoft-prod.deb &&\
+    sudo apt-get update &&\
+    sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1
 
 # install Composer
 # The ARG and ENV are for installing tzdata which is part of this installaion.
@@ -190,12 +193,12 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5
 # See https://docs.conda.io/en/latest/miniconda_hashes.html
 # for latest versions and SHAs.
 RUN  \
-  conda_installer=Miniconda3-py38_4.9.2-Linux-x86_64.sh &&\
-  ref='1314b90489f154602fd794accfc90446111514a5a72fe1f71ab83e07de9504a7' &&\
-  wget -q https://repo.anaconda.com/miniconda/${conda_installer} &&\
-  sha=`openssl sha256 "${conda_installer}" | cut -d' ' -f2` &&\
-  ([ "$sha" = "${ref}" ] || (echo "Verification failed: ${sha} != ${ref}"; false)) &&\
-  (echo; echo "yes") | sh "${conda_installer}"
+    conda_installer=Miniconda3-py38_4.9.2-Linux-x86_64.sh &&\
+    ref='1314b90489f154602fd794accfc90446111514a5a72fe1f71ab83e07de9504a7' &&\
+    wget -q https://repo.anaconda.com/miniconda/${conda_installer} &&\
+    sha=`openssl sha256 "${conda_installer}" | cut -d' ' -f2` &&\
+    ([ "$sha" = "${ref}" ] || (echo "Verification failed: ${sha} != ${ref}"; false)) &&\
+    (echo; echo "yes") | sh "${conda_installer}"
 
 # install Swift Package Manager
 # Based on https://github.com/apple/swift-docker/blob/main/5.3/ubuntu/18.04/Dockerfile
@@ -225,7 +228,7 @@ RUN curl -o flutter_linux_2.8.1-stable.tar.xz https://storage.googleapis.com/flu
     && tar xf flutter_linux_2.8.1-stable.tar.xz \
     && mv flutter ${FLUTTER_HOME} \
     && rm flutter_linux_2.8.1-stable.tar.xz
-        
+
 ENV PATH=$PATH:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
 RUN flutter doctor -v \
     && flutter update-packages \
