@@ -268,9 +268,10 @@ module LicenseFinder
     end
 
     def restore_inheritance(decisions)
+      previous_value = @inherited
       @inherited = true
       self.class.restore(decisions, self)
-      @inherited = false
+      @inherited = previous_value
       self
     end
 
