@@ -25,7 +25,9 @@ module LicenseFinder
       def definition(name, version)
         response = request("https://pypi.org/pypi/#{name}/#{version}/json")
         response.is_a?(Net::HTTPSuccess) ? JSON.parse(response.body).fetch('info', {}) : {}
-      rescue *CONNECTION_ERRORS
+      rescue *CONNECTION_ERRORS => e
+        raise e, "Unable to read package from pypi.org #{name} #{version}: #{e}" unless @prepare_no_fail
+
         {}
       end
 

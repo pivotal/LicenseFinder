@@ -13,7 +13,7 @@ describe 'Rebar Dependencies' do
     erlang_developer.run_license_finder
     expect(erlang_developer).to be_seeing_line 'envy, 0.5.0, MIT'
     expect(erlang_developer).to be_seeing_line 'hackney, 1.6.0, "Apache 2.0"'
-    expect(erlang_developer).to be_seeing_line 'certifi, 0.4.0, BSD'
+    expect(erlang_developer).to be_seeing_line 'certifi, 0.4.0, "New BSD"'
     expect(erlang_developer).to be_seeing_line 'idna, 1.2.0, MIT'
     expect(erlang_developer).to be_seeing_line 'metrics, 1.0.1, BSD'
     expect(erlang_developer).to be_seeing_line 'mimerl, 1.0.2, MIT'

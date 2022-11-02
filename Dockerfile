@@ -148,11 +148,11 @@ WORKDIR /
 
 # install conan
 RUN apt-get install -y python-dev && \
-    pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
-    --ignore-installed requests --ignore-installed chardet \
-    --ignore-installed urllib3 \
-    --upgrade setuptools && \
-    pip install --no-cache-dir -Iv conan==1.43.0 && \
+	pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
+	    --ignore-installed requests --ignore-installed chardet \
+	    --ignore-installed urllib3 \
+	    --upgrade setuptools && \
+    pip3 install --no-cache-dir -Iv conan==1.51.3 && \
     conan config install https://github.com/conan-io/conanclientcert.git
 
 
