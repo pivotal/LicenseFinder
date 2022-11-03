@@ -22,12 +22,12 @@ module LicenseFinder
 
     def current_packages
       # check if the minimum version of PNPM is met
-      raise "The minimum PNPM version is not met, requires 7.14.1 or later" unless is_supported_pnpm
+      raise 'The minimum PNPM version is not met, requires 7.14.1 or later' unless is_supported_pnpm
 
       # check if the project directory has workspace file
-      cmd = "#{PNPM::SHELL_COMMAND}"
+      cmd = PNPM::SHELL_COMMAND.to_s
       cmd += ' --no-color'
-      cmd += " --recursive" unless project_has_workspaces == false
+      cmd += ' --recursive' unless project_has_workspaces == false
       cmd += " --dir #{project_path}" unless project_path.nil?
       cmd += " #{@pnpm_options}" unless @pnpm_options.nil?
 
@@ -42,14 +42,14 @@ module LicenseFinder
       packages = []
       incompatible_packages = []
 
-      json_objects.map do |k, value|
+      json_objects.map do |_, value|
         value.each do |pkg|
           name = pkg['name']
           version = pkg['version']
           license = pkg['license']
           homepage = pkg['vendorUrl']
           author = pkg['vendorName']
-          modulePath = pkg['path']
+          module_path = pkg['path']
 
           package = PNPMPackage.new(
             name,
@@ -57,7 +57,7 @@ module LicenseFinder
             spec_licenses: [license],
             homepage: homepage,
             authors: author,
-            install_path: modulePath
+            install_path: module_path
           )
           packages << package
         end
@@ -97,7 +97,7 @@ module LicenseFinder
     end
 
     # PNPM introduced the licenses command in 7.14.1
-    def is_supported_pnpm
+    def supported_pnpm?
       Dir.chdir(project_path) do
         version_string, stderr_str, status = Cmd.run('pnpm -v')
         raise "Command 'pnpm -v' failed to execute: #{stderr_str}" unless status.success?
@@ -106,15 +106,11 @@ module LicenseFinder
         major = version[0]
         minor = version[1]
         patch = version[1]
-        if (major > 7)
-          return true
-        elsif (major == 7 && minor > 14)
-          return true
-        elsif (major == 7 && minor == 14 && patch >= 1)
-          return true
-        else
-          return false
-        end
+
+        return true if major > 7
+        return true if major == 7 && minor > 14
+        return true if major == 7 && minor == 14 && patch >= 1
+        return false
       end
     end
 
