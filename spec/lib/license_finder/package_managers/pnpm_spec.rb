@@ -32,7 +32,7 @@ module LicenseFinder
             'version': '1.1.1',
             'path': Pathname(root).join('node_modules', 'fsevents'),
             'license': 'Unknown',
-            'vendorUrl': 'github.com/fsevents/fsevents',
+            'vendorUrl': 'github.com/fsevents/fsevents'
           }
         ]
       }.to_json

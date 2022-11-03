@@ -74,10 +74,6 @@ module LicenseFinder
       'pnpm install --no-lockfile --ignore-scripts'
     end
 
-    def possible_package_paths
-      [project_path.join('package.json')]
-    end
-
     def prepare
       prep_cmd = "#{prepare_command}#{production_flag}"
       _stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(prep_cmd) }
@@ -110,6 +106,7 @@ module LicenseFinder
         return true if major > 7
         return true if major == 7 && minor > 14
         return true if major == 7 && minor == 14 && patch >= 1
+
         return false
       end
     end
