@@ -42,7 +42,8 @@ RUN npm install -g bower && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
 # install pnpm
-RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /usr/local/bin/pnpm;
+RUN npm install -g pnpm && \
+    pnpm version
 
 # install jdk 12
 RUN curl -L -o openjdk12.tar.gz https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz && \
@@ -148,10 +149,10 @@ WORKDIR /
 
 # install conan
 RUN apt-get install -y python-dev && \
-	pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
-	    --ignore-installed requests --ignore-installed chardet \
-	    --ignore-installed urllib3 \
-	    --upgrade setuptools && \
+    pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
+    --ignore-installed requests --ignore-installed chardet \
+    --ignore-installed urllib3 \
+    --upgrade setuptools && \
     pip3 install --no-cache-dir -Iv conan==1.51.3 && \
     conan config install https://github.com/conan-io/conanclientcert.git
 
