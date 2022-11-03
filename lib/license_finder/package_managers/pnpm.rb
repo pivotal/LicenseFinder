@@ -42,7 +42,7 @@ module LicenseFinder
       packages = []
       incompatible_packages = []
 
-      json_objects.map do |k,value|
+      json_objects.map do |k, value|
         value.each do |pkg|
           name = pkg['name']
           version = pkg['version']
@@ -117,7 +117,6 @@ module LicenseFinder
         end
       end
     end
-
 
     def production_flag
       return '' if @ignored_groups.nil?

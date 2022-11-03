@@ -12,14 +12,14 @@ module LicenseFinder
     let(:pnpm_shell_command_output) do
       {
         "MIT": [
-           {
-             "name": "yn",
-             "version": "2.0.0",
-             "path": Pathname(root).join('node_modules', 'yn'),
-             "license": "MIT",
-             "vendorUrl": "sindresorhus.com",
-             "vendorName": "Sindre Sorhus"
-           }
+          {
+            "name": "yn",
+            "version": "2.0.0",
+            "path": Pathname(root).join('node_modules', 'yn'),
+            "license": "MIT",
+            "vendorUrl": "sindresorhus.com",
+            "vendorName": "Sindre Sorhus"
+          }
         ]
       }.to_json
     end
@@ -27,13 +27,13 @@ module LicenseFinder
     let(:pnpm_incompatible_packages_shell_output) do
       {
         "MIT": [
-           {
-             "name": "fsevents",
-             "version": "1.1.1",
-             "path": Pathname(root).join('node_modules', 'fsevents'),
-             "license": "Unknown",
-             "vendorUrl": "github.com/fsevents/fsevents",
-           }
+          {
+            "name": "fsevents",
+            "version": "1.1.1",
+            "path": Pathname(root).join('node_modules', 'fsevents'),
+            "license": "Unknown",
+            "vendorUrl": "github.com/fsevents/fsevents",
+          }
         ]
       }.to_json
     end
