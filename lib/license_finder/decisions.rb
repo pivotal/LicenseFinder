@@ -2,6 +2,7 @@
 
 require 'open-uri'
 require 'license_finder/license'
+require 'license_finder/manual_licenses'
 
 module LicenseFinder
   class Decisions
@@ -11,20 +12,8 @@ module LicenseFinder
 
     attr_reader :packages, :permitted, :restricted, :ignored, :ignored_groups, :project_name, :inherited_decisions
 
-    ALL_VERSIONS = :all
-    private_constant :ALL_VERSIONS
-
     def licenses_of(name, version = nil)
-      return Set.new unless @licenses.key?(name)
-
-      has_licenses_for_all_versions = @licenses[name].key?(ALL_VERSIONS) && @licenses[name].size == 1
-      licenses_for_all_versions = has_licenses_for_all_versions ? @licenses[name][ALL_VERSIONS] : Set.new
-
-      if version.nil?
-        licenses_for_all_versions
-      else
-        @licenses[name][version] || licenses_for_all_versions
-      end
+      @manual_licenses.licenses_of(name, version)
     end
 
     def homepage_of(name)
@@ -88,7 +77,7 @@ module LicenseFinder
     def initialize
       @decisions = []
       @packages = Set.new
-      @licenses = {}
+      @manual_licenses = ManualLicenses.new
       @homepages = {}
       @approvals = {}
       @permitted = Set.new
@@ -114,12 +103,11 @@ module LicenseFinder
       add_decision [:license, name, lic, txn]
 
       versions = txn[:versions]
-      versions = [ALL_VERSIONS] if versions.nil? || versions.empty?
 
-      versions.each do |version|
-        @licenses[name] ||= {}
-        @licenses[name][version] ||= Set.new
-        @licenses[name][version] << License.find_by_name(lic)
+      if versions.nil? || versions.empty?
+        @manual_licenses.assign_to_all_versions(name, lic)
+      else
+        @manual_licenses.assign_to_specific_versions(name, lic, versions)
       end
 
       self
@@ -128,16 +116,12 @@ module LicenseFinder
     def unlicense(name, lic, txn = {})
       add_decision [:unlicense, name, lic, txn]
 
-      if @licenses[name]
-        versions = txn[:versions]
-        versions = [ALL_VERSIONS] if versions.nil? || versions.empty?
+      versions = txn[:versions]
 
-        versions.each do |version|
-          if @licenses[name][version]
-            @licenses[name][version].delete(License.find_by_name(lic))
-            @licenses[name].delete(version) if @licenses[name][version].empty?
-          end
-        end
+      if versions.nil? || versions.empty?
+        @manual_licenses.unassign_from_all_versions(name, lic)
+      else
+        @manual_licenses.unassign_from_specific_versions(name, lic, versions)
       end
 
       self
