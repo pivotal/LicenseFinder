@@ -155,7 +155,7 @@ module LicenseFinder
         it 'an error is raised' do
           allow(SharedHelpers::Cmd).to receive(:run).with(PNPM::SHELL_COMMAND + " --no-color --dir #{Pathname(root)}").and_return([nil, 'error', cmd_failure])
 
-          expect { subject.current_packages }.to raise_error(/Command 'pnpm licenses --json --long --no-color --dir #{Pathname(root)}' failed to execute: error/)
+          expect { subject.current_packages }.to raise_error(/Command 'pnpm licenses list --json --long --no-color --dir #{Pathname(root)}' failed to execute: error/)
         end
       end
     end

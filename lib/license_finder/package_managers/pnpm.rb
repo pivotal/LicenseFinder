@@ -10,7 +10,7 @@ module LicenseFinder
       @pnpm_options = options[:pnpm_options]
     end
 
-    SHELL_COMMAND = 'pnpm licenses --json --long'
+    SHELL_COMMAND = 'pnpm licenses list --json --long'
 
     def possible_package_paths
       [project_path.join('pnpm-lock.yaml')]
