@@ -56,7 +56,7 @@ module LicenseFinder
           it 'an error is raised' do
             allow(SharedHelpers::Cmd).to receive(:run).with(PNPM::SHELL_COMMAND + " #{Pathname(root)}").and_return([nil, 'error', cmd_failure])
 
-            expect { subject.current_packages }.to raise_error(/The minimum PNPM version is not met, requires 7.14.1 or later/)
+            expect { subject.current_packages }.to raise_error(/The minimum PNPM version is not met, requires 7.17.0 or later/)
           end
         end
       end
