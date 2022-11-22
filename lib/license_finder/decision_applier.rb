@@ -44,7 +44,7 @@ module LicenseFinder
     end
 
     def with_decided_licenses(package)
-      decisions.licenses_of(package.name).each do |license|
+      decisions.licenses_of(package.name, package.version).each do |license|
         package.decide_on_license license
       end
       package

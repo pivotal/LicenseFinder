@@ -2,6 +2,7 @@
 
 require 'open-uri'
 require 'license_finder/license'
+require 'license_finder/manual_licenses'
 
 module LicenseFinder
   class Decisions
@@ -11,8 +12,8 @@ module LicenseFinder
 
     attr_reader :packages, :permitted, :restricted, :ignored, :ignored_groups, :project_name, :inherited_decisions
 
-    def licenses_of(name)
-      @licenses[name]
+    def licenses_of(name, version = nil)
+      @manual_licenses.licenses_of(name, version)
     end
 
     def homepage_of(name)
@@ -76,7 +77,7 @@ module LicenseFinder
     def initialize
       @decisions = []
       @packages = Set.new
-      @licenses = Hash.new { |h, k| h[k] = Set.new }
+      @manual_licenses = ManualLicenses.new
       @homepages = {}
       @approvals = {}
       @permitted = Set.new
@@ -100,13 +101,29 @@ module LicenseFinder
 
     def license(name, lic, txn = {})
       add_decision [:license, name, lic, txn]
-      @licenses[name] << License.find_by_name(lic)
+
+      versions = txn[:versions]
+
+      if versions.nil? || versions.empty?
+        @manual_licenses.assign_to_all_versions(name, lic)
+      else
+        @manual_licenses.assign_to_specific_versions(name, lic, versions)
+      end
+
       self
     end
 
     def unlicense(name, lic, txn = {})
       add_decision [:unlicense, name, lic, txn]
-      @licenses[name].delete(License.find_by_name(lic))
+
+      versions = txn[:versions]
+
+      if versions.nil? || versions.empty?
+        @manual_licenses.unassign_from_all_versions(name, lic)
+      else
+        @manual_licenses.unassign_from_specific_versions(name, lic, versions)
+      end
+
       self
     end
 

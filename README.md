@@ -345,12 +345,40 @@ you should manually research what the actual license is.  When you
 have established the real license, you can record it with:
 
 ```sh
-$ license_finder licenses add my_unknown_dependency MIT --homepage="www.unknown-code.org"
+$ license_finder licenses add my_unknown_dependency MIT
 ```
 
-This command would assign the MIT license to the dependency
-`my_unknown_dependency`. It will also set its homepage to `www.unknown-code.org`.
+This command would assign the MIT license to all versions of the dependency
+`my_unknown_dependency`. If you prefer, you could instead assign the license
+to only a specific version of the dependency:
 
+```sh
+$ license_finder licenses add my_unknown_dependency MIT --version=1.0.0
+```
+
+Please note that adding a license to a specific version of a dependency will 
+cause any licenses previously added to all versions of that dependency to be 
+forgotten. Similarly, adding a license to all versions of a dependency will 
+override any licenses previously added to specific versions of that dependency.
+
+There are several ways in which you can remove licenses that were previously
+added through the `licenses add` command:
+
+```sh
+# Removes all licenses from any version of the dependency
+$ license_finder licenses remove my_unknown_dependency
+
+# Removes just the MIT license from any version of the dependency
+$ license_finder licenses remove my_unknown_dependency MIT
+
+# Removes all licenses from only version 1.0.0 of the dependency
+# This has no effect if you had last added a license to all versions of the dependency
+$ license_finder licenses remove my_unknown_dependency --version=1.0.0
+
+# Removes just the MIT license from only version 1.0.0 of the dependency
+# This has no effect if you had last added a license to all versions of the dependency
+$ license_finder licenses remove my_unknown_dependency MIT --version=1.0.0
+```
 
 ### Adding Hidden Dependencies
 
