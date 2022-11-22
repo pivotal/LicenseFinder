@@ -22,7 +22,7 @@ module LicenseFinder
 
     def current_packages
       # check if the minimum version of PNPM is met
-      raise 'The minimum PNPM version is not met, requires 7.14.1 or later' unless supported_pnpm?
+      raise 'The minimum PNPM version is not met, requires 7.17.0 or later' unless supported_pnpm?
 
       # check if the project directory has workspace file
       cmd = PNPM::SHELL_COMMAND.to_s
@@ -92,7 +92,7 @@ module LicenseFinder
       end
     end
 
-    # PNPM introduced the licenses command in 7.14.1
+    # PNPM introduced the licenses command in 7.17.0
     def supported_pnpm?
       Dir.chdir(project_path) do
         version_string, stderr_str, status = Cmd.run('pnpm -v')
@@ -104,8 +104,8 @@ module LicenseFinder
         patch = version[1]
 
         return true if major > 7
-        return true if major == 7 && minor > 14
-        return true if major == 7 && minor == 14 && patch >= 1
+        return true if major == 7 && minor > 17
+        return true if major == 7 && minor == 17 && patch >= 0
 
         return false
       end
