@@ -95,7 +95,7 @@ module LicenseFinder
     # PNPM introduced the licenses command in 7.17.0
     def supported_pnpm?
       Dir.chdir(project_path) do
-        version_string, stderr_str, status = Cmd.run('pnpm -v')
+        version_string, stderr_str, status = Cmd.run('pnpm --version')
         raise "Command 'pnpm -v' failed to execute: #{stderr_str}" unless status.success?
 
         version = version_string.split('.').map(&:to_i)

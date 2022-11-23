@@ -49,7 +49,7 @@ module LicenseFinder
 
       context 'when using PNPM 6 throws error' do
         before do
-          allow(SharedHelpers::Cmd).to receive(:run).with('pnpm -v').and_return(['6.1.4', '', cmd_success])
+          allow(SharedHelpers::Cmd).to receive(:run).with('pnpm --version').and_return(['6.1.4', '', cmd_success])
         end
 
         context 'when the shell command fails' do
@@ -63,7 +63,7 @@ module LicenseFinder
 
       context 'when using PNPM projects' do
         before do
-          allow(SharedHelpers::Cmd).to receive(:run).with('pnpm -v').and_return(['2.0.1', '', cmd_success])
+          allow(SharedHelpers::Cmd).to receive(:run).with('pnpm --version').and_return(['7.17.0', '', cmd_success])
         end
 
         it 'should call pnpm install with no cli parameters' do
@@ -91,7 +91,7 @@ module LicenseFinder
 
       context 'when in a PNPM project' do
         before do
-          allow(SharedHelpers::Cmd).to receive(:run).with('pnpm -v').and_return(['7.14.1', '', cmd_success])
+          allow(SharedHelpers::Cmd).to receive(:run).with('pnpm --version').and_return(['7.17.0', '', cmd_success])
         end
 
         subject { PNPM.new(project_path: Pathname(root), logger: double(:logger, active: nil)) }
@@ -108,16 +108,16 @@ module LicenseFinder
       before do
         FileUtils.mkdir_p(Dir.tmpdir)
         FileUtils.mkdir_p(root)
-        allow(SharedHelpers::Cmd).to receive(:run).with('pnpm -v').and_return(['7.14.1', '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run).with('pnpm --version').and_return(['7.17.0', '', cmd_success])
       end
 
-      context 'when using PNPM 7.14.1+' do
+      context 'when using PNPM 7.17.0+' do
         before do
-          allow(SharedHelpers::Cmd).to receive(:run).with('pnpm -v').and_return(['7.14.1', '', cmd_success])
+          allow(SharedHelpers::Cmd).to receive(:run).with('pnpm --version').and_return(['7.17.0', '', cmd_success])
         end
       end
 
-      it 'displays packages as returned from "pmpm list"' do
+      it 'displays packages as returned from "pnpm licenses list"' do
         allow(SharedHelpers::Cmd).to receive(:run).with(PNPM::SHELL_COMMAND + " --no-color --dir #{Pathname(root)}") do
           [pnpm_shell_command_output, '', cmd_success]
         end
