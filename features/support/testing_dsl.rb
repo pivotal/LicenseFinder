@@ -223,6 +223,16 @@ module LicenseFinder
       end
     end
 
+    class PNPMProject < Project
+      def add_dep
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.11.1"}}')
+      end
+
+      def install
+        shell_out('pnpm install 2>/dev/null')
+      end
+    end
+
     class MavenProject < Project
       def add_dep
         install_fixture('pom.xml')

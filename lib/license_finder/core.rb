@@ -102,6 +102,7 @@ module LicenseFinder
         maven_options: config.maven_options,
         npm_options: config.npm_options,
         yarn_options: config.yarn_options,
+        pnpm_options: config.pnpm_options,
         pip_requirements_path: config.pip_requirements_path,
         python_version: config.python_version,
         rebar_command: config.rebar_command,

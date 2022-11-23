@@ -3,7 +3,7 @@
 module LicenseFinder
   class Scanner
     PACKAGE_MANAGERS = [
-      GoModules, GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Trash, Dep, Bundler, NPM, Pip,
+      GoModules, GoDep, GoWorkspace, Go15VendorExperiment, Glide, Gvt, Govendor, Trash, Dep, Bundler, NPM, PNPM, Pip,
       Yarn, Bower, Maven, Gradle, CocoaPods, Rebar, Erlangmk, Nuget, Carthage, Mix, Conan, Sbt, Cargo, Dotnet, Composer, Pipenv,
       Conda, Spm, Pub
     ].freeze
