@@ -1,3 +1,22 @@
+# [7.1.0] / 2022-11-28
+
+### Added
+* Missing New BSD alternative name - [64d425d9](https://github.com/pivotal/LicenseFinder/commit/64d425d9210794c6b45c60bf730931e459a1e959) 
+* pre-commit hook - [2fd5ac85](https://github.com/pivotal/LicenseFinder/commit/2fd5ac85fbd4ea03b6f274f2c977448a8a517c2c) - Kurt von Laven
+
+### Fixed
+* - Apache 2 license being too restrictive on matching - [c7fd0399](https://github.com/pivotal/LicenseFinder/commit/c7fd03994592ca97408f5134dd9eac6566e51c48) 
+* - Erlang not installing properly with mix - [74af3885](https://github.com/pivotal/LicenseFinder/commit/74af388579dd2f26b1814ece39c869d684218cd9) 
+* Scan transitive Yarn v2+ dependencies - [0115445e](https://github.com/pivotal/LicenseFinder/commit/0115445eb26de3185518adfb257b0e1911cf2fbd) - Kurt von Laven
+
+* Issue with chaining commands with dlf - [a6af8c3e](https://github.com/pivotal/LicenseFinder/commit/a6af8c3e0abb932ed8d3c0215175f23cf75b5fb2) 
+* Nuget and dotnet not returning proper licenses - [e3452336](https://github.com/pivotal/LicenseFinder/commit/e3452336aa980f26de9a7d44d725bddb0ddd67a0) 
+* Save help documentation for the default file name - [09a93762](https://github.com/pivotal/LicenseFinder/commit/09a93762dc3bd714fdcdebb4aa84af4c7dbefa04) 
+* - Yarn2 output parsing - [395a7f02](https://github.com/pivotal/LicenseFinder/commit/395a7f02b7729243aaf730b6ede71cae8f21cfeb) 
+
+### Changed
+* - Bump docker image golang version to 1.17.13 - [4f3df246](https://github.com/pivotal/LicenseFinder/commit/4f3df246d2f5245681a943a6fb6dee49e3ed3ed1) 
+
 # [7.0.1] / 2022-03-18
 ### Fixed
 * Maven Wrapper command path must be relative to working directory - [298a733a](https://github.com/pivotal/LicenseFinder/commit/298a733a67f34341ffabc7dfbf2ee5c27574b979) - jbmgrtn 
@@ -1014,3 +1033,4 @@ Bugfixes:
 [6.15.0]: https://github.com/pivotal/LicenseFinder/compare/v6.14.2...v6.15.0
 [7.0.0]: https://github.com/pivotal/LicenseFinder/compare/v6.15.0...v7.0.0
 [7.0.1]: https://github.com/pivotal/LicenseFinder/compare/v7.0.0...v7.0.1
+[7.1.0]: https://github.com/pivotal/LicenseFinder/compare/v7.0.1...v7.1.0
