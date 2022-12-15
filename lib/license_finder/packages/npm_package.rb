@@ -88,6 +88,8 @@ module LicenseFinder
     def author_name(author)
       if author.instance_of?(String)
         author_name_from_combined(author)
+      elsif author.instance_of?(Array)
+        author.join(', ')
       else
         author['name']
       end
