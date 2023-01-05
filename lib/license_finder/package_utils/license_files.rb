@@ -27,7 +27,7 @@ module LicenseFinder
 
     def paths_of_candidate_files
       candidate_files_and_dirs
-        .flat_map { |path| path.directory? ? path.children : path }
+        .flat_map { |path| !path.is_a?(Zip::Entry) && path.directory? ? path.children : path }
         .reject(&:directory?)
         .uniq
     end
@@ -35,7 +35,17 @@ module LicenseFinder
     def candidate_files_and_dirs
       return [] if install_path.nil?
 
-      Pathname.glob(install_path.join('**', CANDIDATE_PATH_WILDCARD))
+      if !install_path.extname.casecmp('.jar').zero?
+        Pathname.glob(install_path.join('**', CANDIDATE_PATH_WILDCARD))
+      else
+        candidates_from_zip
+      end
+    end
+
+    def candidates_from_zip
+      Zip::File.open(install_path.to_s) do |zip_file|
+        zip_file.glob(CANDIDATE_PATH_WILDCARD, File::FNM_EXTGLOB)
+      end
     end
   end
 end

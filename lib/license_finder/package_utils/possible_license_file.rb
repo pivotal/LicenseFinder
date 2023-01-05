@@ -3,7 +3,11 @@
 module LicenseFinder
   class PossibleLicenseFile
     def initialize(path, options = {})
-      @path = Pathname(path)
+      if !path.is_a?(Zip::Entry)
+        @path = Pathname(path)
+      else
+        @zip_entry = path
+      end
       @logger = options[:logger]
     end
 
@@ -16,7 +20,9 @@ module LicenseFinder
     end
 
     def text
-      if @path.exist?
+      if @zip_entry
+        @zip_entry.get_input_stream.read
+      elsif @path.exist?
         @text ||= (@path.respond_to?(:binread) ? @path.binread : @path.read)
       else
         @logger.info('ERROR', "#{@path} does not exists", color: :red)
