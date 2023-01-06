@@ -80,9 +80,17 @@ module LicenseFinder
 
     def author_names
       names = []
-      names.push(author_name(@json['author'])) unless @json['author'].nil?
+      if @json['author'].is_a?(Array)
+        # "author":["foo","bar"] isn't valid according to the NPM package.json schema, but can be found in the wild.
+        names += @json['author'].map { |a| author_name(a) }
+      else
+        names << author_name(@json['author']) unless @json['author'].nil?
+      end
       names += @json['contributors'].map { |c| author_name(c) } if @json['contributors'].is_a?(Array)
-      names.join(', ')
+      names.compact.join(', ')
+    rescue TypeError
+      puts "Warning: Invalid author and/or contributors metadata found in package.json for #{@identifier}"
+      nil
     end
 
     def author_name(author)
