@@ -17,6 +17,7 @@ module LicenseFinder
         .glob(@project_path.join('**', 'target', 'generated-resources', 'licenses.xml'))
         .map(&:read)
         .flat_map { |xml| XmlSimple.xml_in(xml, options)['dependencies'] }
+        .reject(&:empty?)
         .each { |dep| add_info_from_m2(dep) }
     end
 
