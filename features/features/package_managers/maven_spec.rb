@@ -38,4 +38,10 @@ describe 'Maven Dependencies' do
     expect(java_developer).to be_seeing_once 'Version 2.0, January 2004' # LICENSE
     expect(java_developer).to be_seeing_once 'This product includes software developed at' # NOTICE
   end
+
+  it 'handles an empty dependencies section gracefully' do
+    LicenseFinder::TestingDSL::MavenProjectNoDeps.create
+    java_developer.run_license_finder
+    expect(java_developer).to be_seeing_line 'No dependencies recognized!'
+  end
 end

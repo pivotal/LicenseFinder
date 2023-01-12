@@ -243,6 +243,12 @@ module LicenseFinder
       end
     end
 
+    class MavenProjectNoDeps < MavenProject
+      def add_dep
+        install_fixture('pom_no_deps.xml', 'pom.xml')
+      end
+    end
+
     class SbtProject < Project
       def add_dep
         install_fixture('sbt')
@@ -763,11 +769,11 @@ module LicenseFinder
         write_file(filename, updated_content)
       end
 
-      def install_fixture(fixture_name)
+      def install_fixture(fixture_name, fixture_name_source = fixture_name)
         if RUBY_PLATFORM.match?(/mswin|cygwin|mingw/)
-          FileUtils.cp(Paths.fixtures.join(fixture_name), join(fixture_name))
+          FileUtils.cp(Paths.fixtures.join(fixture_name_source), join(fixture_name))
         else
-          join(fixture_name).make_symlink Paths.fixtures.join(fixture_name)
+          join(fixture_name_source).make_symlink Paths.fixtures.join(fixture_name)
         end
       end
 
