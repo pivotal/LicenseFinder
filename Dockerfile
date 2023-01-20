@@ -28,8 +28,8 @@ RUN apt -q update && apt install -y \
 RUN add-apt-repository ppa:git-core/ppa && \
     apt -q update && apt install -y git && rm -rf /var/lib/apt/lists/*
 
-# nodejs seems to be required for the one of the gems
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+# install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_17.x | bash - && \
     apt -q update && apt install -y nodejs && rm -rf /var/lib/apt/lists/*
 
 # install yarn

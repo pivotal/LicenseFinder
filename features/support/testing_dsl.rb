@@ -178,7 +178,7 @@ module LicenseFinder
 
     class NpmProject < Project
       def add_dep
-        add_to_file('package.json', '{"dependencies" : {"http-server": "0.11.1"}}')
+        add_to_file('package.json', '{"dependencies" : {"http-server": "0.11.1", "entities": "4.4.0"}}')
       end
 
       def install
