@@ -8,8 +8,8 @@ resource_types:
   source:
     repository: cfcommunity/slack-notification-resource
     tag: latest
-    username: ((LicenseFinderDocker.username))
-    password: ((LicenseFinderDocker.password))
+    username: ((license-finder-docker-username))
+    password: ((license-finder-docker-password))
 <% end %>
 
 resources:
@@ -17,7 +17,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal/LicenseFinder.git
-    private_key: ((CfOslBot.private_key))
+    private_key: ((github-cf-osl-bot-private-key))
     branch: master
     ignore_paths: [VERSION, CHANGELOG.md]
 
@@ -27,24 +27,24 @@ resources:
     driver: gcs
     bucket: lf-semver-version
     key: version
-    json_key: ((GCPQueuedReportsBucketCredentials))
+    json_key: ((gcp-queued-reports-bucket-credentials))
 
 - name: dockerhub-edge
   type: docker-image
   source:
     tag: edge
     repository: licensefinder/license_finder
-    email: ((LicenseFinderDockerEmail))
-    username: ((LicenseFinderDocker.username))
-    password: ((LicenseFinderDocker.password))
+    email: ((license-finder-docker-email))
+    username: ((license-finder-docker-username))
+    password: ((license-finder-docker-password))
 
 - name: dockerhub
   type: docker-image
   source:
     repository: licensefinder/license_finder
-    email: ((LicenseFinderDockerEmail))
-    username: ((LicenseFinderDocker.username))
-    password: ((LicenseFinderDocker.password))
+    email: ((license-finder-docker-email))
+    username: ((license-finder-docker-username))
+    password: ((license-finder-docker-password))
 
 - name: lf-release
   type: github-release
@@ -52,7 +52,7 @@ resources:
   source:
     owner: pivotal
     repository: LicenseFinder
-    access_token: ((GithubApiRootToken))
+    access_token: ((github-api-root-token))
 
 <% if setup_slack %>
 - name: slack-alert
@@ -170,8 +170,8 @@ jobs:
     tags: ["private-worker"]
     image: dockerhub
     params:
-      GIT_USERNAME: ((GithubApiUser))
-      GIT_EMAIL: ((GithubApiEmail))
+      GIT_USERNAME: ((github-api-user))
+      GIT_EMAIL: ((github-api-email))
     file: lf-git/ci/tasks/update-changelog.yml
   - put: dockerhub
     tags: ["private-worker"]
@@ -187,10 +187,10 @@ jobs:
     tags: ["private-worker"]
     image: dockerhub
     params:
-      GIT_USERNAME: ((GithubApiUser))
-      GIT_EMAIL: ((GithubApiEmail))
-      GIT_PRIVATE_KEY: ((CfOslBot.private_key))
-      GEM_API_KEY: ((LicenseFinderGemApiKey))
+      GIT_USERNAME: ((github-api-user))
+      GIT_EMAIL: ((github-api-email))
+      GIT_PRIVATE_KEY: ((github-cf-osl-bot-private-key))
+      GEM_API_KEY: ((license-finder-gem-api-key))
     file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-release
     tags: ["private-worker"]

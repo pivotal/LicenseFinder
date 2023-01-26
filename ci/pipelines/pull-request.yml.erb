@@ -13,27 +13,27 @@ resource_types:
   source:
     repository: cfcommunity/slack-notification-resource
     tag: latest
-    username: ((LicenseFinderDocker.username))
-    password: ((LicenseFinderDocker.password))
+    username: ((license-finder-docker-username))
+    password: ((license-finder-docker-password))
 <% end %>
 
 resources:
 - name: github-pull-request
   type: pull-request
   check_every: 24h
-  webhook_token: ((GithubPullRequestWebhookToken))
+  webhook_token: ((github-pull-request-webhook-token))
   source:
     repository: pivotal/LicenseFinder
-    access_token: ((GithubApiPullRequestToken))
+    access_token: ((github-api-pull-request-token))
 
 - name: dockerhub-pr
   type: docker-image
   source:
     tag: edge-pr
     repository: licensefinder/license_finder
-    email: ((LicenseFinderDockerEmail))
-    username: ((LicenseFinderDocker.username))
-    password: ((LicenseFinderDocker.password))
+    email: ((license-finder-docker-email))
+    username: ((license-finder-docker-username))
+    password: ((license-finder-docker-password))
 
 <% if setup_slack %>
 - name: slack-alert
