@@ -66,10 +66,8 @@ jobs:
   public: true
   plan:
     - get: lf-git
-      tags: ["private-worker"]
       trigger: true
     - put: dockerhub-edge
-      tags: ["private-worker"]
       params:
         build: lf-git
 
@@ -78,16 +76,13 @@ jobs:
   public: true
   plan:
   - get: dockerhub-edge
-    tags: ["private-worker"]
     passed: [build-docker-image]
     trigger: true
   - get: LicenseFinder
-    tags: ["private-worker"]
     resource: lf-git
     passed: [build-docker-image]
     version: every
   - task: ruby-<%= ruby_version %>
-    tags: ["private-worker"]
     privileged: true
     image: dockerhub-edge
     file: LicenseFinder/ci/tasks/run-tests.yml
@@ -97,7 +92,6 @@ jobs:
 <% if setup_slack %>
   on_failure:
     put: slack-alert
-    tags: ["private-worker"]
     params:
       channel: '<%= slack_channel %>'
       icon_emoji: ':crying_cat_face:'
@@ -109,16 +103,13 @@ jobs:
   public: true
   plan:
   - get: dockerhub-edge
-    tags: ["private-worker"]
     passed: [build-docker-image]
     trigger: true
   - get: LicenseFinder
-    tags: ["private-worker"]
     resource: lf-git
     version: every
     passed: [build-docker-image]
   - task: run-rubocop
-    tags: ["private-worker"]
     privileged: true
     file: LicenseFinder/ci/tasks/rubocop.yml
     input_mapping: { LicenseFinder: LicenseFinder }
@@ -126,65 +117,51 @@ jobs:
 - name: bump-major
   plan:
     - get: semver-version
-      tags: ["private-worker"]
       params: {bump: major}
     - put: semver-version
-      tags: ["private-worker"]
       params: {file: semver-version/version}
 
 
 - name: bump-minor
   plan:
     - get: semver-version
-      tags: ["private-worker"]
       params: {bump: minor}
     - put: semver-version
-      tags: ["private-worker"]
       params: {file: semver-version/version}
 
 - name: bump-patch
   plan:
     - get: semver-version
-      tags: ["private-worker"]
       params: {bump: patch}
     - put: semver-version
-      tags: ["private-worker"]
       params: {file: semver-version/version}
 
 - name: release
   disable_manual_trigger: true
   plan:
   - get: lf-git
-    tags: ["private-worker"]
     passed: [<%= "#{ruby_versions.map{ |version| "ruby-#{version}" unless version == "jruby-9.3.1.0" }.compact.join(', ') }, rubocop" %>]
   - get: semver-version
-    tags: ["private-worker"]
     trigger: true
   - get: dockerhub
-    tags: ["private-worker"]
     params:
       save: true
   - get: lf-release
-    tags: ["private-worker"]
   - task: update-changelog
-    tags: ["private-worker"]
     image: dockerhub
     params:
       GIT_USERNAME: ((github-api-user))
       GIT_EMAIL: ((github-api-email))
     file: lf-git/ci/tasks/update-changelog.yml
   - put: dockerhub
-    tags: ["private-worker"]
     params:
       build: lf-git-changed
       tag: version/version.txt
       tag_as_latest: true
   - put: lf-git
-    tags: ["private-worker"]
     params:
       repository: lf-git-changed
   - task: build-and-push-gem
-    tags: ["private-worker"]
     image: dockerhub
     params:
       GIT_USERNAME: ((github-api-user))
@@ -193,7 +170,6 @@ jobs:
       GEM_API_KEY: ((license-finder-gem-api-key))
     file: lf-git/ci/tasks/build-and-push-gem.yml
   - put: lf-release
-    tags: ["private-worker"]
     params:
       name: version/tag.txt
       tag: version/tag.txt

@@ -47,23 +47,19 @@ jobs:
   public: true
   plan:
   - get: github-pull-request
-    tags: ["private-worker"]
     version: every
     trigger: true
   - put: dockerhub-pr
-    tags: ["private-worker"]
     params:
       build: github-pull-request
   on_success:
     put: github-pull-request
-    tags: ["private-worker"]
     params:
       path: github-pull-request
       status: success
       context: build-docker-image
   on_failure:
     put: github-pull-request
-    tags: ["private-worker"]
     params:
       path: github-pull-request
       status: failure
@@ -73,15 +69,12 @@ jobs:
   public: true
   plan:
   - get: github-pull-request
-    tags: ["private-worker"]
     passed: [build-docker-image]
     version: every
   - get: dockerhub-pr
-    tags: ["private-worker"]
     passed: [build-docker-image]
     trigger: true
   - task: ruby-<%= ruby_version %>
-    tags: ["private-worker"]
     privileged: true
     image: dockerhub-pr
     file: github-pull-request/ci/tasks/run-tests.yml
@@ -90,14 +83,12 @@ jobs:
     input_mapping: { LicenseFinder: github-pull-request }
     on_success:
       put: github-pull-request
-      tags: ["private-worker"]
       params:
         path: github-pull-request
         status: success
         context: ruby-<%= ruby_version %>
     on_failure:
       put: github-pull-request
-      tags: ["private-worker"]
       params:
         path: github-pull-request
         status: failure
@@ -105,7 +96,6 @@ jobs:
 <% if setup_slack %>
   on_failure:
     put: slack-alert
-    tags: ["private-worker"]
     params:
       channel: '<%= slack_channel %>'
       icon_emoji: ':crying_cat_face:'
@@ -117,24 +107,20 @@ jobs:
   public: true
   plan:
   - get: github-pull-request
-    tags: ["private-worker"]
     trigger: true
     version: every
   - task: run-rubocop
-    tags: ["private-worker"]
     privileged: true
     file: github-pull-request/ci/tasks/rubocop.yml
     input_mapping: { LicenseFinder: github-pull-request }
     on_success:
       put: github-pull-request
-      tags: ["private-worker"]
       params:
         path: github-pull-request
         status: success
         context: run-rubocop
     on_failure:
       put: github-pull-request
-      tags: ["private-worker"]
       params:
         path: github-pull-request
         status: failure
