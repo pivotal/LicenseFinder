@@ -18,6 +18,13 @@ resource_types:
 <% end %>
 
 resources:
+- name: lf-git
+  type: git
+  source:
+    uri: git@github.com:pivotal/LicenseFinder.git
+    private_key: ((github-cf-osl-bot-private-key))
+    branch: master
+
 - name: github-pull-request
   type: pull-request
   check_every: 24h
@@ -68,16 +75,18 @@ jobs:
 - name: PR-ruby-<%= ruby_version %>-linux
   public: true
   plan:
-  - get: github-pull-request
-    passed: [build-docker-image]
-    version: every
-  - get: dockerhub-pr
-    passed: [build-docker-image]
-    trigger: true
+  - in_parallel:
+    - get: github-pull-request
+      passed: [build-docker-image]
+      version: every
+    - get: dockerhub-pr
+      passed: [build-docker-image]
+      trigger: true
+    - get: lf-git
   - task: ruby-<%= ruby_version %>
     privileged: true
     image: dockerhub-pr
-    file: github-pull-request/ci/tasks/run-tests.yml
+    file: lf-git/ci/tasks/run-tests.yml
     params:
       RUBY_VERSION_UNDER_TEST: <%= ruby_version %>
     input_mapping: { LicenseFinder: github-pull-request }
@@ -106,12 +115,14 @@ jobs:
 - name: PR-rubocop
   public: true
   plan:
-  - get: github-pull-request
-    trigger: true
-    version: every
+  - in_parallel:
+    - get: github-pull-request
+      trigger: true
+      version: every
+    - get: lf-git
   - task: run-rubocop
     privileged: true
-    file: github-pull-request/ci/tasks/rubocop.yml
+    file: lf-git/ci/tasks/rubocop.yml
     input_mapping: { LicenseFinder: github-pull-request }
     on_success:
       put: github-pull-request
