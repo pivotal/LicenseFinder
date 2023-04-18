@@ -17,6 +17,15 @@ module LicenseFinder
         raise PubError, 'While PUB_CACHE environment variable is empty, retrieving package licenses is impossible. Please set the PUB_CACHE env variable (default: ~/.pub)'
       end
 
+      sdk_path = Pathname(".")
+      sdk_packages = []
+      if ENV['FLUTTER_ROOT'].nil? || ENV['FLUTTER_ROOT'].eql?('')
+        puts 'Warning: While FLUTTER_ROOT environment variable is empty, retrieving Flutter package licenses is impossible'
+      else
+        sdk_path = Pathname(ENV['FLUTTER_ROOT'])
+        sdk_packages = flutter_packages(sdk_path)
+      end
+
       stdout, _stderr, _status = Cmd.run('flutter pub deps --json')
       yaml_deps = JSON.parse(stdout)
       sdks = {}
@@ -32,14 +41,25 @@ module LicenseFinder
         project_repo = dependency['source'] == 'git' ? Pathname("#{ENV['PUB_CACHE']}/git/#{dependency['name']}-*/") : Pathname("#{ENV['PUB_CACHE']}/hosted/#{pub_src}/#{subpath}")
         homepage = read_repository_home(project_repo)
         homepage = "https://pub.dev/packages/#{package_name}" if homepage.nil? || homepage.empty?
-        PubPackage.new(
-          package_name,
-          package_version,
-          license_text(project_repo),
-          logger: logger,
-          install_path: project_repo,
-          homepage: homepage
-        )
+        if sdk_packages.include? package_name
+          PubPackage.new(
+            package_name,
+            package_version,
+            license_text(sdk_path),
+            logger: logger,
+            install_path: sdk_path.join('packages', package_name),
+            homepage: 'https://github.com/flutter/flutter'
+          )
+          else
+            PubPackage.new(
+            package_name,
+            package_version,
+            license_text(project_repo),
+            logger: logger,
+            install_path: project_repo,
+            homepage: homepage
+          )
+        end
       end
     end
 
@@ -66,6 +86,12 @@ module LicenseFinder
     end
 
     private
+
+    def flutter_packages(sdk_path)
+      Dir.chdir(sdk_path.join("packages")) do
+        Dir.glob('*').select { |f| File.directory? f }
+      end
+    end
 
     def license_text(subpath)
       license_path = license_pattern(subpath).find { |f| File.exist?(f) }
