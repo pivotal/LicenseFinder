@@ -19,13 +19,17 @@ module LicenseFinder
 
       stdout, _stderr, _status = Cmd.run('flutter pub deps --json')
       yaml_deps = JSON.parse(stdout)
+      sdks = {}
+      yaml_deps['sdks'].map { |sdk| sdks[sdk['name']] = sdk['version'] }
+      pub_src = "pub.dev"
+      if sdks.key?("Dart") && Gem::Version.new(sdks["Dart"]) < Gem::Version.new('2.19.0')
+        pub_src =  "pub.dartlang.org"
+      end
       yaml_deps['packages'].map do |dependency|
         package_name = dependency['name']
         subpath = "#{dependency['name']}-#{dependency['version']}"
         package_version = dependency['version']
-
-        project_repo = dependency['source'] == 'git' ? Pathname("#{ENV['PUB_CACHE']}/git/#{dependency['name']}-*/") : Pathname("#{ENV['PUB_CACHE']}/hosted/pub.dartlang.org/#{subpath}")
-
+        project_repo = dependency['source'] == 'git' ? Pathname("#{ENV['PUB_CACHE']}/git/#{dependency['name']}-*/") : Pathname("#{ENV['PUB_CACHE']}/hosted/#{pub_src}/#{subpath}")
         homepage = read_repository_home(project_repo)
         homepage = "https://pub.dev/packages/#{package_name}" if homepage.nil? || homepage.empty?
         PubPackage.new(
