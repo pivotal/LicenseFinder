@@ -3,11 +3,10 @@
 [![Code Climate](https://codeclimate.com/github/pivotal/LicenseFinder.png)](https://codeclimate.com/github/pivotal/LicenseFinder)
 
 Build status
-* Ruby 2.4.9 [![Ruby 2.4.9 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.4.9/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.5.7 [![Ruby 2.5.7 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.5.7/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.6.9 [![Ruby 2.6.9 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.9/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 2.7.5 [![Ruby 2.7.5 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.7.5/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 3.1.1 [![Ruby 3.1.1 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.1.1/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.6.10 [![Ruby 2.6.10 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.10/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 2.7.8 [![Ruby 2.7.8 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.7.8/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 3.1.4 [![Ruby 3.1.4 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.1.4/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 3.2.2 [![Ruby 3.2.2 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.2.2/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
@@ -68,7 +67,7 @@ repos:
       - id: license-finder
 ```
 
-Running License Finder directly requires Ruby 2.4.0 or greater. If you have an
+Running License Finder directly requires Ruby 2.6.0 or greater. If you have an
 older version of Ruby installed, you can update via Homebrew:
 
 ```sh
@@ -542,7 +541,7 @@ licenseConfigurations := Set("compile", "provided")
 
 ## Requirements
 
-`license_finder` requires ruby >= 2.4.0. We will be dropping 2.4.x support soon.
+`license_finder` requires ruby >= 2.6.0.
 
 
 ## Upgrading

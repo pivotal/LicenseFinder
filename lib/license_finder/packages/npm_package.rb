@@ -23,12 +23,12 @@ module LicenseFinder
       def flattened_dependencies(npm_json, existing_packages = {})
         identifier = Identifier.from_hash npm_json
         if existing_packages[identifier].nil?
-          existing_packages[identifier] = NpmPackage.new(npm_json) if identifier
+          existing_packages[identifier] = package_for_dependency(npm_json) if identifier
           npm_json.fetch('dependencies', {}).values.map do |d|
             flattened_dependencies(d, existing_packages)
           end
         else
-          duplicate_package = NpmPackage.new(npm_json)
+          duplicate_package = package_for_dependency(npm_json)
           unless existing_packages[identifier].dependencies.include?(duplicate_package.dependencies)
             existing_packages[identifier].dependencies |= duplicate_package.dependencies
             npm_json.fetch('dependencies', {}).values.map do |d|
@@ -37,6 +37,23 @@ module LicenseFinder
           end
         end
         existing_packages
+      end
+
+      # Read the dependency's package.json file in order to get details like the license, authors,
+      # and so on. In NPM versions < 7, this information was included in the output of `npm list`.
+      # In later versions, it no longer is, and has to be read from the package.json file instead.
+      def package_for_dependency(npm_json)
+        package_path = npm_json['path']
+        package_json_path = Pathname.new(package_path).join('package.json') unless package_path.nil?
+
+        if package_json_path.nil? || !package_json_path.exist?
+          # Ancient NPM versions did not have the "path" field. Resort to the old way of gathering
+          # the details, expecting them to be contained in the output of `npm list`.
+          NpmPackage.new(npm_json)
+        else
+          package_json = JSON.parse(package_json_path.read, max_nesting: false)
+          NpmPackage.new(npm_json, package_json)
+        end
       end
 
       def populate_groups(package_json)
@@ -64,16 +81,17 @@ module LicenseFinder
       end
     end
 
-    def initialize(npm_json)
-      @json = npm_json
+    def initialize(npm_json, package_json = npm_json)
+      @npm_json = npm_json
+      @json = package_json
       @identifier = Identifier.from_hash(npm_json)
       @dependencies = deps_from_json
       super(@identifier.name,
             @identifier.version,
-            description: npm_json['description'],
-            homepage: npm_json['homepage'],
+            description: package_json['description'],
+            homepage: package_json['homepage'],
             authors: author_names,
-            spec_licenses: Package.license_names_from_standard_spec(npm_json),
+            spec_licenses: Package.license_names_from_standard_spec(package_json),
             install_path: npm_json['path'],
             children: @dependencies.map(&:name))
     end
@@ -125,7 +143,7 @@ module LicenseFinder
     private
 
     def deps_from_json
-      @json.fetch('dependencies', {}).values.map { |dep| Identifier.from_hash(dep) }.compact
+      @npm_json.fetch('dependencies', {}).values.map { |dep| Identifier.from_hash(dep) }.compact
     end
 
     class Identifier
@@ -139,7 +157,7 @@ module LicenseFinder
       def self.from_hash(hash)
         name = hash['name']
         version = hash['version']
-        return nil if name.nil? || version.nil?
+        return nil if name.nil? || name.empty? || version.nil? || version.empty?
 
         Identifier.new(name, version)
       end

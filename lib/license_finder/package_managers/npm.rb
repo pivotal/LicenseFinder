@@ -39,7 +39,7 @@ module LicenseFinder
     private
 
     def npm_json
-      command = "#{package_management_command} list --json --long#{production_flag}"
+      command = "#{package_management_command} list --json --long#{all_flag}#{production_flag}"
       command += " #{@npm_options}" unless @npm_options.nil?
       stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
       # we can try and continue if we got an exit status 1 - unmet peer dependency
@@ -52,6 +52,19 @@ module LicenseFinder
       return '' if @ignored_groups.nil?
 
       @ignored_groups.include?('devDependencies') ? ' --production' : ''
+    end
+
+    def all_flag
+      npm_version >= 7 ? ' --all' : ''
+    end
+
+    def npm_version
+      command = "#{package_management_command} -v"
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(command) }
+      raise "Command '#{command}' failed to execute: #{stderr}" unless status.success?
+
+      version = stdout.split('.').map(&:to_i)
+      version[0]
     end
   end
 end
