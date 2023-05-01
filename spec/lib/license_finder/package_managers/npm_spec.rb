@@ -30,14 +30,20 @@ module LicenseFinder
       end
     end
 
+    def common_before
+      NPM.instance_variable_set(:@modules, nil)
+      FileUtils.mkdir_p(Dir.tmpdir)
+      FileUtils.mkdir_p(root)
+      File.write(File.join(root, 'package.json'), package_json)
+    end
+
     describe '.prepare' do
       include FakeFS::SpecHelpers
       before do
-        NPM.instance_variable_set(:@modules, nil)
-        FileUtils.mkdir_p(Dir.tmpdir)
-        FileUtils.mkdir_p(root)
-        File.write(File.join(root, 'package.json'), package_json)
-        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
+        common_before
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm -v')
+                                                  .and_return(['7.0.0', '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --all')
                                                   .and_return([dependency_json, '', cmd_success])
       end
 
@@ -60,11 +66,10 @@ module LicenseFinder
     describe '.current_packages' do
       include FakeFS::SpecHelpers
       before do
-        NPM.instance_variable_set(:@modules, nil)
-        FileUtils.mkdir_p(Dir.tmpdir)
-        FileUtils.mkdir_p(root)
-        File.write(File.join(root, 'package.json'), package_json)
-        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
+        common_before
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm -v')
+                                                  .and_return(['7.0.0', '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --all')
                                                   .and_return([dependency_json, '', cmd_success])
       end
 
@@ -101,12 +106,12 @@ module LicenseFinder
       end
 
       it 'fails when command fails' do
-        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long').and_return ['', 'error', cmd_fail_random_status]
-        expect { npm.current_packages }.to raise_error("Command 'npm list --json --long' failed to execute: error")
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --all').and_return ['', 'error', cmd_fail_random_status]
+        expect { npm.current_packages }.to raise_error("Command 'npm list --json --long --all' failed to execute: error")
       end
 
       it 'continues when command fails with exitstatus 1' do
-        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long').and_return ['{}', 'error', cmd_fail_unmet_status]
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --all').and_return ['{}', 'error', cmd_fail_unmet_status]
         expect { npm.current_packages }.not_to raise_error
       end
 
@@ -118,7 +123,7 @@ module LicenseFinder
       context 'ignored_groups contains devDependencies' do
         let(:npm) { NPM.new project_path: Pathname.new(root), ignored_groups: 'devDependencies' }
         it 'should include a production flag' do
-          expect(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --production')
+          expect(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --all --production')
                                                      .and_return([dependency_json, '', cmd_success])
           npm.current_packages
         end
@@ -232,6 +237,38 @@ module LicenseFinder
             expect(packages.find { |p| p.name == 'd' }.dependencies.count).to be > 0
           end
         end
+      end
+    end
+
+    describe '.call_to_old_npm_version' do
+      include FakeFS::SpecHelpers
+      before do
+        common_before
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm -v')
+                                                  .and_return(['6.0.0', '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
+                                                  .and_return([dependency_json, '', cmd_success])
+      end
+
+      it 'does not include --all' do
+        expect(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long')
+        npm.current_packages
+      end
+    end
+
+    describe '.call_to_new_npm_version' do
+      include FakeFS::SpecHelpers
+      before do
+        common_before
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm -v')
+                                                  .and_return(['7.0.0', '', cmd_success])
+        allow(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --all')
+                                                  .and_return([dependency_json, '', cmd_success])
+      end
+
+      it 'includes --all' do
+        expect(SharedHelpers::Cmd).to receive(:run).with('npm list --json --long --all')
+        npm.current_packages
       end
     end
   end

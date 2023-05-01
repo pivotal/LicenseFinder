@@ -208,6 +208,13 @@ describe LicenseFinder::License, 'SimplifiedBSD' do
   end
 end
 
+describe LicenseFinder::License, 'Unlicense' do
+  it 'should be recognized' do
+    expect(described_class.find_by_name('Unlicense').name).to eq('The Unlicense')
+    expect(described_class.find_by_name('Unlicense').url).to be
+  end
+end
+
 describe LicenseFinder::License, 'WTFPL' do
   it 'should be recognized' do
     expect(described_class.find_by_name('WTFPL').name).to eq('WTFPL')

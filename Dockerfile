@@ -9,33 +9,33 @@ ENV GO_LANG_VERSION 1.17.13
 ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
-ENV RUBY_VERSION 3.1.1
+ENV RUBY_VERSION 3.2.2
 ENV MIX_VERSION 2.0
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # programs needed for building
-RUN apt-get update && apt-get install -y \
+RUN apt -q update && apt install -y \
     build-essential \
     curl \
-    sudo \
     unzip \
     wget \
     gnupg2 \
     apt-utils \
     software-properties-common \
-    bzr
+    bzr && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN add-apt-repository ppa:git-core/ppa && apt-get update && apt-get install -y git
+RUN add-apt-repository ppa:git-core/ppa && \
+    apt -q update && apt install -y git && rm -rf /var/lib/apt/lists/*
 
-# nodejs seems to be required for the one of the gems
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get -y install nodejs
+# install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_17.x | bash - && \
+    apt -q update && apt install -y nodejs && rm -rf /var/lib/apt/lists/*
 
 # install yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && \
-    apt-get install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt -q update && apt install -y yarn && rm -rf /var/lib/apt/lists/*
 
 # install bower
 RUN npm install -g bower && \
@@ -49,19 +49,20 @@ RUN npm install -g pnpm && \
 RUN curl -L -o openjdk12.tar.gz https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz && \
     tar xvf openjdk12.tar.gz && \
     rm openjdk12.tar.gz && \
-    sudo mv jdk-12.0.2 /opt/ && \
-    sudo rm /opt/jdk-12.0.2/lib/src.zip
+    mv jdk-12.0.2 /opt/ && \
+    rm /opt/jdk-12.0.2/lib/src.zip
 ENV JAVA_HOME=/opt/jdk-12.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 RUN java -version
 
 # install rebar3
 RUN curl -o rebar3 https://s3.amazonaws.com/rebar3/rebar3 && \
-    sudo chmod +x rebar3 && \
-    sudo mv rebar3 /usr/local/bin/rebar3
+    chmod +x rebar3 && \
+    mv rebar3 /usr/local/bin/rebar3
 
 # install and update python and python-pip
-RUN apt-get install -y python python-pip python3-pip && \
+RUN apt -q update && apt install -y python python-pip python3-pip && \
+    rm -rf /var/lib/apt/lists/* && \
     python3 -m pip install pip==$PIP3_INSTALL_VERSION --upgrade && \
     python -m pip install pip==$PIP_INSTALL_VERSION --upgrade --force
 
@@ -109,23 +110,24 @@ RUN mkdir /gopath && \
 #install rvm and glide and godep
 RUN apt-add-repository -y ppa:rael-gc/rvm && \
     add-apt-repository -y ppa:masterminds/glide  && \
-    apt update && apt install -y rvm && \
+    apt -q update && apt install -y rvm && \
     /usr/share/rvm/bin/rvm install --default $RUBY_VERSION &&\
-    apt-get install -y glide && \
-    apt-get install -y go-dep
+    apt install -y glide && \
+    apt install -y go-dep && \
+    rm -rf /var/lib/apt/lists/*
 
 # install trash
 RUN curl -Lo trash.tar.gz https://github.com/rancher/trash/releases/download/v0.2.7/trash-linux_amd64.tar.gz && \
     tar xvf trash.tar.gz && \
     rm trash.tar.gz && \
-    sudo mv trash /usr/local/bin/
+    mv trash /usr/local/bin/
 
 # install bundler
 RUN bash -lc "gem update --system && gem install bundler"
 
 WORKDIR /tmp
 # Fix the locale
-RUN apt-get install -y locales
+RUN apt -q update && apt install -y locales && rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -136,10 +138,9 @@ RUN curl https://sh.rustup.rs -sSf | bash -ls -- -y --profile minimal
 
 #install mix
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
-    sudo dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
-    sudo rm -f erlang-solutions_${MIX_VERSION}_all.deb && \
-    sudo apt-get update && \
-    sudo apt-get install -y esl-erlang
+    dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
+    rm -f erlang-solutions_${MIX_VERSION}_all.deb && \
+    apt -q update && apt install -y esl-erlang && rm -rf /var/lib/apt/lists/*
 # Install Elixir
 WORKDIR /tmp/elixir-build
 RUN git clone https://github.com/elixir-lang/elixir.git
@@ -148,7 +149,7 @@ RUN make && make install
 WORKDIR /
 
 # install conan
-RUN apt-get install -y python-dev && \
+RUN apt -q update && apt install -y python-dev && rm -rf /var/lib/apt/lists/* && \
     pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
     --ignore-installed requests --ignore-installed chardet \
     --ignore-installed urllib3 \
@@ -156,32 +157,30 @@ RUN apt-get install -y python-dev && \
     pip3 install --no-cache-dir -Iv conan==1.51.3 && \
     conan config install https://github.com/conan-io/conanclientcert.git
 
-
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &&\
-    echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list &&\
-    apt-get update &&\
-    apt-get install -y mono-complete &&\
+    echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list &&\
+    apt -q update && apt install -y mono-complete && rm -rf /var/lib/apt/lists/* &&\
     curl -o "/usr/local/bin/nuget.exe" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" &&\
     curl -o "/usr/local/bin/nugetv3.5.0.exe" "https://dist.nuget.org/win-x86-commandline/v3.5.0/nuget.exe"
 
 # install dotnet core
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb &&\
-    sudo dpkg -i packages-microsoft-prod.deb &&\
+    dpkg -i packages-microsoft-prod.deb &&\
     rm packages-microsoft-prod.deb &&\
-    sudo apt-get update &&\
-    sudo apt-get install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1
+    apt -q update &&\
+    apt install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1 &&\
+    rm -rf /var/lib/apt/lists/*
 
 # install Composer
 # The ARG and ENV are for installing tzdata which is part of this installaion.
 # https://serverfault.com/questions/949991/how-to-install-tzdata-on-a-ubuntu-docker-image
 ENV TZ=GMT
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
-    echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" | sudo tee /etc/apt/sources.list.d/php.list &&\
-    apt-get update &&\
+    echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" | tee /etc/apt/sources.list.d/php.list &&\
     export DEBIAN_FRONTEND=noninteractive &&\
-    apt-get install -y php7.4-cli &&\
+    apt -q update && apt install -y php7.4-cli && rm -rf /var/lib/apt/lists/* &&\
     EXPECTED_COMPOSER_INSTALLER_CHECKSUM="$(curl --silent https://composer.github.io/installer.sig)" &&\
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
     ACTUAL_COMPOSER_INSTALLER_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")" &&\
@@ -205,7 +204,7 @@ RUN  \
 # Based on https://github.com/apple/swift-docker/blob/main/5.3/ubuntu/18.04/Dockerfile
 # The GPG download steps has been modified. Keys are now on LF repo and copied instaad of downloaded.
 # Refer to https://swift.org/download/#using-downloads in the Linux section on how to download the keys
-RUN apt-get -q install -y \
+RUN apt -q update && apt -q install -y \
     libatomic1 \
     libcurl4 \
     libxml2 \
@@ -264,7 +263,7 @@ RUN set -e; \
     && SWIFT_SIG_URL="$SWIFT_BIN_URL.sig" \
     # - Grab curl here so we cache better up above
     && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -q update && apt-get -q install -y curl && rm -rf /var/lib/apt/lists/* \
+    && apt -q update && apt -q install -y curl && rm -rf /var/lib/apt/lists/* \
     # - Download the GPG keys, Swift toolchain, and toolchain signature, and verify.
     && export GNUPGHOME="$(mktemp -d)" \
     && curl -fsSL "$SWIFT_BIN_URL" -o swift.tar.gz "$SWIFT_SIG_URL" -o swift.tar.gz.sig \
