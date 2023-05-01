@@ -2,7 +2,7 @@
 
 require_relative '../../support/feature_helper'
 
-describe 'Dep Dependencies' do
+xdescribe 'Dep Dependencies' do
   let(:go_developer) { LicenseFinder::TestingDSL::User.new }
 
   specify 'are shown in reports for a project' do

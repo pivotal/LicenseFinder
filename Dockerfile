@@ -1,16 +1,14 @@
-FROM ubuntu:bionic
+FROM ubuntu:jammy
 
 WORKDIR /tmp
 
 # Versioning
-ENV PIP_INSTALL_VERSION 19.0.2
 ENV PIP3_INSTALL_VERSION 20.0.2
 ENV GO_LANG_VERSION 1.17.13
 ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
 ENV RUBY_VERSION 3.2.2
-ENV MIX_VERSION 2.0
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # programs needed for building
@@ -29,7 +27,7 @@ RUN add-apt-repository ppa:git-core/ppa && \
     apt -q update && apt install -y git && rm -rf /var/lib/apt/lists/*
 
 # install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_17.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt -q update && apt install -y nodejs && rm -rf /var/lib/apt/lists/*
 
 # install yarn
@@ -61,10 +59,9 @@ RUN curl -o rebar3 https://s3.amazonaws.com/rebar3/rebar3 && \
     mv rebar3 /usr/local/bin/rebar3
 
 # install and update python and python-pip
-RUN apt -q update && apt install -y python python-pip python3-pip && \
+RUN apt -q update && apt install -y python3-pip && \
     rm -rf /var/lib/apt/lists/* && \
-    python3 -m pip install pip==$PIP3_INSTALL_VERSION --upgrade && \
-    python -m pip install pip==$PIP_INSTALL_VERSION --upgrade --force
+    python3 -m pip install pip==$PIP3_INSTALL_VERSION --upgrade
 
 # install maven
 RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
@@ -74,7 +71,7 @@ RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binarie
 
 # install sbt
 RUN mkdir -p /usr/local/share/sbt-launcher-packaging && \
-    curl --progress \
+    curl \
     --retry 3 \
     --retry-delay 15 \
     --location "https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz" \
@@ -107,13 +104,11 @@ RUN mkdir /gopath && \
     go install github.com/kardianos/govendor@latest && \
     go clean -cache
 
-#install rvm and glide and godep
+#install rvm and glide
 RUN apt-add-repository -y ppa:rael-gc/rvm && \
-    add-apt-repository -y ppa:masterminds/glide  && \
     apt -q update && apt install -y rvm && \
     /usr/share/rvm/bin/rvm install --default $RUBY_VERSION &&\
-    apt install -y glide && \
-    apt install -y go-dep && \
+    apt install -y golang-glide && \
     rm -rf /var/lib/apt/lists/*
 
 # install trash
@@ -137,10 +132,7 @@ ENV LC_ALL=en_US.UTF-8
 RUN curl https://sh.rustup.rs -sSf | bash -ls -- -y --profile minimal
 
 #install mix
-RUN wget https://packages.erlang-solutions.com/erlang-solutions_${MIX_VERSION}_all.deb && \
-    dpkg -i erlang-solutions_${MIX_VERSION}_all.deb && \
-    rm -f erlang-solutions_${MIX_VERSION}_all.deb && \
-    apt -q update && apt install -y esl-erlang && rm -rf /var/lib/apt/lists/*
+RUN apt -q update && apt install -y erlang && rm -rf /var/lib/apt/lists/*
 # Install Elixir
 WORKDIR /tmp/elixir-build
 RUN git clone https://github.com/elixir-lang/elixir.git
@@ -149,7 +141,7 @@ RUN make && make install
 WORKDIR /
 
 # install conan
-RUN apt -q update && apt install -y python-dev && rm -rf /var/lib/apt/lists/* && \
+RUN apt -q update && apt install -y python3-dev && rm -rf /var/lib/apt/lists/* && \
     pip install --no-cache-dir --ignore-installed six --ignore-installed colorama \
     --ignore-installed requests --ignore-installed chardet \
     --ignore-installed urllib3 \
@@ -160,17 +152,17 @@ RUN apt -q update && apt install -y python-dev && rm -rf /var/lib/apt/lists/* &&
 # install NuGet (w. mono)
 # https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools#macoslinux
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &&\
-    echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list &&\
+    echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official-stable.list &&\
     apt -q update && apt install -y mono-complete && rm -rf /var/lib/apt/lists/* &&\
     curl -o "/usr/local/bin/nuget.exe" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" &&\
     curl -o "/usr/local/bin/nugetv3.5.0.exe" "https://dist.nuget.org/win-x86-commandline/v3.5.0/nuget.exe"
 
 # install dotnet core
-RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb &&\
+RUN wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb &&\
     dpkg -i packages-microsoft-prod.deb &&\
     rm packages-microsoft-prod.deb &&\
     apt -q update &&\
-    apt install -y dotnet-runtime-2.1 dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 dotnet-sdk-3.1 &&\
+    apt install -y dotnet-sdk-6.0 dotnet-sdk-7.0 &&\
     rm -rf /var/lib/apt/lists/*
 
 # install Composer
@@ -178,7 +170,7 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsof
 # https://serverfault.com/questions/949991/how-to-install-tzdata-on-a-ubuntu-docker-image
 ENV TZ=GMT
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4F4EA0AAE5267A6C &&\
-    echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" | tee /etc/apt/sources.list.d/php.list &&\
+    echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu jammy main" | tee /etc/apt/sources.list.d/php.list &&\
     export DEBIAN_FRONTEND=noninteractive &&\
     apt -q update && apt install -y php7.4-cli && rm -rf /var/lib/apt/lists/* &&\
     EXPECTED_COMPOSER_INSTALLER_CHECKSUM="$(curl --silent https://composer.github.io/installer.sig)" &&\
@@ -201,53 +193,36 @@ RUN  \
     (echo; echo "yes") | sh "${conda_installer}"
 
 # install Swift Package Manager
-# Based on https://github.com/apple/swift-docker/blob/main/5.3/ubuntu/18.04/Dockerfile
+# Based on https://github.com/apple/swift-docker/blob/main/5.8/ubuntu/22.04/Dockerfile
 # The GPG download steps has been modified. Keys are now on LF repo and copied instaad of downloaded.
 # Refer to https://swift.org/download/#using-downloads in the Linux section on how to download the keys
 RUN apt -q update && apt -q install -y \
-    libatomic1 \
-    libcurl4 \
-    libxml2 \
-    libedit2 \
-    libsqlite3-0 \
-    libc6-dev \
     binutils \
-    libgcc-5-dev \
-    libstdc++-5-dev \
-    zlib1g-dev \
-    libpython2.7 \
-    tzdata \
     git \
+    unzip \
+    gnupg2 \
+    libc6-dev \
+    libcurl4-openssl-dev \
+    libedit2 \
+    libgcc-9-dev \
+    libpython3-dev \
+    libsqlite3-0 \
+    libstdc++-9-dev \
+    libxml2-dev \
+    libz3-dev \
     pkg-config \
+    python3-lldb-13 \
+    tzdata \
+    zlib1g-dev \
     && rm -r /var/lib/apt/lists/*
-
-#install flutter
-ENV FLUTTER_HOME=/root/flutter
-RUN git config --global --add safe.directory /root/flutter
-RUN curl -o flutter_linux_2.8.1-stable.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.8.1-stable.tar.xz \
-    && tar xf flutter_linux_2.8.1-stable.tar.xz \
-    && mv flutter ${FLUTTER_HOME} \
-    && rm flutter_linux_2.8.1-stable.tar.xz
-
-ENV PATH=$PATH:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
-RUN flutter doctor -v \
-    && flutter update-packages \
-    && flutter precache
-# Accepting all licences
-RUN yes | flutter doctor --android-licenses -v
-# Creating Flutter sample projects to put binaries in cache fore each template type
-RUN flutter create --template=app ${TEMP}/app_sample \
-    && flutter create --template=package ${TEMP}/package_sample \
-    && flutter create --template=plugin ${TEMP}/plugin_sample
-
 
 # pub   4096R/ED3D1561 2019-03-22 [SC] [expires: 2023-03-23]
 #       Key fingerprint = A62A E125 BBBF BB96 A6E0  42EC 925C C1CC ED3D 1561
 # uid                  Swift 5.x Release Signing Key <swift-infrastructure@swift.org
 ARG SWIFT_SIGNING_KEY=A62AE125BBBFBB96A6E042EC925CC1CCED3D1561
-ARG SWIFT_PLATFORM=ubuntu18.04
-ARG SWIFT_BRANCH=swift-5.3.3-release
-ARG SWIFT_VERSION=swift-5.3.3-RELEASE
+ARG SWIFT_PLATFORM=ubuntu22.04
+ARG SWIFT_BRANCH=swift-5.8-release
+ARG SWIFT_VERSION=swift-5.8-RELEASE
 ARG SWIFT_WEBROOT=https://download.swift.org
 
 ENV SWIFT_SIGNING_KEY=$SWIFT_SIGNING_KEY \
@@ -274,6 +249,25 @@ RUN set -e; \
     && chmod -R o+r /usr/lib/swift \
     && rm -rf "$GNUPGHOME" swift.tar.gz.sig swift.tar.gz \
     set +e
+
+# install flutter
+ENV FLUTTER_HOME=/root/flutter
+RUN git config --global --add safe.directory /root/flutter
+RUN curl -o flutter_linux_2.8.1-stable.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.8.1-stable.tar.xz \
+    && tar xf flutter_linux_2.8.1-stable.tar.xz \
+    && mv flutter ${FLUTTER_HOME} \
+    && rm flutter_linux_2.8.1-stable.tar.xz
+
+ENV PATH=$PATH:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
+RUN flutter doctor -v \
+    && flutter update-packages \
+    && flutter precache
+# Accepting all licences
+RUN yes | flutter doctor --android-licenses -v
+# Creating Flutter sample projects to put binaries in cache fore each template type
+RUN flutter create --template=app ${TEMP}/app_sample \
+    && flutter create --template=package ${TEMP}/package_sample \
+    && flutter create --template=plugin ${TEMP}/plugin_sample
 
 # install license_finder
 COPY . /LicenseFinder
