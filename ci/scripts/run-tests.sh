@@ -6,8 +6,12 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$( dirname "$( dirname $DIR )" )"
 
 pushd "$PROJECT_ROOT"
+  DISABLE_BINARY=""
+  if [[ $RUBY_VERSION_UNDER_TEST == "2.6.10" ]]; then
+    DISABLE_BINARY="--disable-binary"
+  fi
 
-  rvm install --default $RUBY_VERSION_UNDER_TEST
+  rvm install --default $RUBY_VERSION_UNDER_TEST $DISABLE_BINARY
   ruby --version
 
   export GOPATH=$HOME/go
