@@ -26,6 +26,7 @@ module LicenseFinder
           python,
           ruby,
           simplifiedbsd,
+          unlicense,
           wtfpl,
           zerobsd,
           zlib
@@ -336,6 +337,15 @@ module LicenseFinder
             'The BSD 2-Clause License'
           ],
           url: 'http://opensource.org/licenses/bsd-license'
+        )
+      end
+
+      def unlicense
+        License.new(
+          short_name: 'Unlicense',
+          spdx_id: 'Unlicense',
+          pretty_name: 'The Unlicense',
+          url: 'https://unlicense.org/'
         )
       end
 
