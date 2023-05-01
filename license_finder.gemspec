@@ -3,7 +3,7 @@
 version = File.read(File.expand_path('VERSION', __dir__)).strip
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 2.4.0'
+  s.required_ruby_version = '>= 2.6.0'
   s.name        = 'license_finder'
   s.version     = version
 
