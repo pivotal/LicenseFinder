@@ -78,3 +78,7 @@ FileName:
 ModuleFunction:
   Enabled: false
   EnforcedStyle: extend_self
+# Custom ERB Template needs the to_s
+Lint/RedundantStringCoercion:
+  Exclude:
+    - 'examples/custom_erb_template.rb'
