@@ -112,7 +112,7 @@ module LicenseFinder
             )
             packages << package
           end
-          incompatible_match = /(?<name>[\w,\-]+)@[a-z]*:(?<version>(\.))/ =~ package_name.to_s
+          incompatible_match = /(?<name>[\w,-]+)@[a-z]*:(?<version>(\.))/ =~ package_name.to_s
 
           if incompatible_match
             package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
@@ -133,7 +133,7 @@ module LicenseFinder
       end
 
       json_objects.each do |json_object|
-        match = /(?<name>[\w,\-]+)@(?<version>(\d+\.?)+)/ =~ json_object['data'].to_s
+        match = /(?<name>[\w,-]+)@(?<version>(\d+\.?)+)/ =~ json_object['data'].to_s
         if match
           package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
           incompatible_packages.push(package)
