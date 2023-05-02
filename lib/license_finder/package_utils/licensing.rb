@@ -11,7 +11,8 @@ module LicenseFinder
       if activations_from_decisions.any? then activations_from_decisions
       elsif activations_from_spec.any?      then activations_from_spec
       elsif activations_from_files.any?     then activations_from_files
-      else [default_activation]
+      else
+        [default_activation]
       end
     end
 

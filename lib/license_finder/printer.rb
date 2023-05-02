@@ -4,7 +4,7 @@ module LicenseFinder
   class Printer
     attr_reader :padding
 
-    def initialize #:nodoc:
+    def initialize # :nodoc:
       @base = nil
       @mute = false
       @padding = 0
@@ -24,7 +24,7 @@ module LicenseFinder
       spaces + set_color(message.to_s, *color)
     end
 
-    def set_color(string, *) #:nodoc:
+    def set_color(string, *) # :nodoc:
       string
     end
 
