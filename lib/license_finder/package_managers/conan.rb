@@ -8,6 +8,20 @@ module LicenseFinder
       [project_path.join('conanfile.txt')]
     end
 
+    def license_file_is_good?(license_file_path)
+      license_file_path != nil && File.file?(license_file_path)
+    end
+
+    def license_file(project_path, name)
+      candidates = Dir.glob("#{project_path}/licenses/#{name}/**/LICENSE*")
+      candidates.each do |candidate|
+        if license_file_is_good?(candidate)
+          return candidate
+        end
+      end
+      nil
+    end
+
     def current_packages
       install_command = 'conan install .'
       info_command = 'conan info .'
@@ -19,9 +33,14 @@ module LicenseFinder
       deps = info_parser.parse(info_output)
       deps.map do |dep|
         name, version = dep['name'].split('/')
+        license_file_path = license_file(project_path, name)
+
+        unless license_file_is_good?(license_file_path)
+          next
+        end
+
         url = dep['URL']
-        license_file_path = Dir.glob("#{project_path}/licenses/#{name}/**/LICENSE*").first
-        ConanPackage.new(name, version, File.open(license_file_path).read, url) unless name == 'conanfile.txt'
+        ConanPackage.new(name, version, File.open(license_file_path).read, url)
       end.compact
     end
   end
