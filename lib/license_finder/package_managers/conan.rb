@@ -25,6 +25,7 @@ module LicenseFinder
       info_command = 'conan info .'
       info_output, _stderr, _status = Dir.chdir(project_path) { Cmd.run(info_command) }
       return nil if info_output.empty?
+
       info_parser = ConanInfoParser.new
       info_parser.parse(info_output)
     end
@@ -34,6 +35,7 @@ module LicenseFinder
       info_output, stderr, _status = Dir.chdir(project_path) { Cmd.run(info_command) }
       if info_output.empty?
         return if stderr.empty?
+
         info_output = stderr
       end
       info_parser = ConanInfoParserV2.new
@@ -42,9 +44,7 @@ module LicenseFinder
 
     def deps_list(project_path)
       deps = deps_list_conan_v1(project_path)
-      if deps.nil? || deps.empty?
-        deps = deps_list_conan_v2(project_path)
-      end
+      deps = deps_list_conan_v2(project_path) if deps.nil? || deps.empty?
       deps
     end
 
@@ -53,9 +53,7 @@ module LicenseFinder
       Dir.chdir(project_path) { Cmd.run(install_command) }
 
       deps = deps_list(project_path)
-      if deps.nil?
-        return []
-      end
+      return [] if deps.nil?
 
       deps.map do |dep|
         name, version = dep['name'].split('/')
