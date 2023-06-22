@@ -11,9 +11,7 @@ module LicenseFinder
       @current_key = nil # current key to be associated with the current val
 
       line = @lines.shift
-      while line != '======== Basic graph information ========'
-        line = @lines.shift
-      end
+      line = @lines.shift while line != '======== Basic graph information ========'
 
       while (line = @lines.shift)
         next if line == ''
@@ -21,7 +19,7 @@ module LicenseFinder
         case @state
         when :project_level
           @current_project = {}
-          name, _ = line.strip.split('#')
+          name, _id = line.strip.split('#')
           @current_project['name'] = name
           @state = :key_val
         when :key_val

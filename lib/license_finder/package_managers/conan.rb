@@ -10,15 +10,13 @@ module LicenseFinder
     end
 
     def license_file_is_good?(license_file_path)
-      license_file_path != nil && File.file?(license_file_path)
+      !license_file_path.nil? && File.file?(license_file_path)
     end
 
     def license_file(project_path, name)
       candidates = Dir.glob("#{project_path}/licenses/#{name}/**/LICENSE*")
       candidates.each do |candidate|
-        if license_file_is_good?(candidate)
-          return candidate
-        end
+        return candidate if license_file_is_good?(candidate)
       end
       nil
     end
@@ -26,21 +24,17 @@ module LicenseFinder
     def deps_list_conan_v1(project_path)
       info_command = 'conan info .'
       info_output, _stderr, _status = Dir.chdir(project_path) { Cmd.run(info_command) }
-      if info_output.empty?
-        return nil
-      end
+      return nil if info_output.empty?
       info_parser = ConanInfoParser.new
       info_parser.parse(info_output)
     end
 
     def deps_list_conan_v2(project_path)
       info_command = 'conan graph info .'
-      info_output, _stderr, _status = Dir.chdir(project_path) { Cmd.run(info_command) }
+      info_output, stderr, _status = Dir.chdir(project_path) { Cmd.run(info_command) }
       if info_output.empty?
-        if _stderr.empty?
-          return nil
-        end
-        info_output = _stderr
+        return if stderr.empty?
+        info_output = stderr
       end
       info_parser = ConanInfoParserV2.new
       info_parser.parse(info_output)
@@ -48,7 +42,7 @@ module LicenseFinder
 
     def deps_list(project_path)
       deps = deps_list_conan_v1(project_path)
-      if deps.nil? or deps.empty?
+      if deps.nil? || deps.empty?
         deps = deps_list_conan_v2(project_path)
       end
       deps
@@ -67,9 +61,7 @@ module LicenseFinder
         name, version = dep['name'].split('/')
         license_file_path = license_file(project_path, name)
 
-        unless license_file_is_good?(license_file_path)
-          next
-        end
+        next unless license_file_is_good?(license_file_path)
 
         url = dep['homepage']
         ConanPackage.new(name, version, File.open(license_file_path).read, url)
