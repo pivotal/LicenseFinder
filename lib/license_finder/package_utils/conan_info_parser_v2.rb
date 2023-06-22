@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module LicenseFinder
-  class ConanInfoParser
+  class ConanInfoParserV2
     def parse(info)
       @lines = info.lines.map(&:chomp)
       @state = :project_level # state of the state machine
@@ -9,13 +9,20 @@ module LicenseFinder
       @current_project = nil # current project being populated in the SM
       @current_vals = [] # current val list being populate in the SM
       @current_key = nil # current key to be associated with the current val
+
+      line = @lines.shift
+      while line != '======== Basic graph information ========'
+        line = @lines.shift
+      end
+
       while (line = @lines.shift)
         next if line == ''
 
         case @state
         when :project_level
           @current_project = {}
-          @current_project['name'] = line.strip
+          name, _ = line.strip.split('#')
+          @current_project['name'] = name
           @state = :key_val
         when :key_val
           parse_key_val(line)
@@ -61,7 +68,7 @@ module LicenseFinder
     end
 
     def val_list_level(line)
-      line.start_with?('        ')
+      line.start_with?('    ')
     end
 
     def change_to_new_project_state(line)
