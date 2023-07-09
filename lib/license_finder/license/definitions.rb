@@ -7,12 +7,17 @@ module LicenseFinder
 
       def all
         [
+          agpl3,
           apache1_1,
           apache2,
+          artistic,
           bsd,
           cc01,
           cddl1,
+          cddl1_1,
+          cpl1,
           eclipse1,
+          eclipse2,
           gplv2,
           gplv3,
           isc,
@@ -43,12 +48,40 @@ module LicenseFinder
 
       private
 
+      def agpl3
+        License.new(
+          short_name: 'AGPL3',
+          spdx_id: 'AGPL-3.0-only',
+          pretty_name: 'GNU Affero GPL',
+          other_names: [
+            'AGPL 3',
+            'AGPL-3.0',
+            'AGPL 3.0',
+            'GNU Affero General Public License v3.0',
+            'GNU Affero General Public License, Version 3'
+          ],
+          url: 'http://www.gnu.org/licenses/agpl-3.0.html'
+        )
+      end
+
       def apache1_1
         License.new(
           short_name: 'Apache1_1',
           spdx_id: 'Apache-1.1',
           pretty_name: 'Apache 1.1',
-          other_names: ['Apache Software License, Version 1.1'],
+          other_names: [
+            'Apache',
+            'Apache-1.1',
+            'APACHE 1.1',
+            'Apache License 1.1',
+            'Apache License Version 1.1',
+            'Apache Public License 1.1',
+            'Apache Software License, Version 1.1',
+            'Apache Software License - Version 1.1',
+            'Apache License, Version 1.1',
+            'ASL 1.1',
+            'ASF 1.1'
+          ],
           url: 'http://www.apache.org/licenses/LICENSE-1.1.txt'
         )
       end
@@ -75,12 +108,22 @@ module LicenseFinder
         )
       end
 
+      def artistic
+        License.new(
+          short_name: 'Artistic',
+          spdx_id: 'Artistic-1.0',
+          pretty_name: 'Artistic 1.0',
+          other_names: ['Artistic License'],
+          url: 'https://www.perlfoundation.org/artistic-license-20.html'
+        )
+      end
+
       def bsd
         License.new(
           short_name: 'BSD',
           spdx_id: 'BSD-4-Clause',
           other_names: ['BSD4', 'bsd-old', '4-clause BSD', 'BSD 4-Clause', 'BSD License'],
-          url: 'http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29'
+          url: 'https://directory.fsf.org/wiki/License:BSD-4-Clause'
         )
       end
 
@@ -90,6 +133,10 @@ module LicenseFinder
           spdx_id: 'CC0-1.0',
           pretty_name: 'CC0 1.0 Universal',
           other_names: ['CC0 1.0'],
+          matcher: AnyMatcher.new(
+            Matcher.from_template(Template.named('CC01')),
+            Matcher.from_template(Template.named('CC01_alt'))
+          ),
           url: 'http://creativecommons.org/publicdomain/zero/1.0'
         )
       end
@@ -108,6 +155,37 @@ module LicenseFinder
         )
       end
 
+      def cddl1_1
+        License.new(
+          short_name: 'CDDL1_1',
+          spdx_id: 'CDDL-1.1',
+          pretty_name: 'Common Development and Distribution License 1.1',
+          other_names: [
+            'CDDL-1.1',
+            'Common Development and Distribution License (CDDL) v1.1',
+            'COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.1'
+          ],
+          url: 'https://spdx.org/licenses/CDDL-1.1.html'
+        )
+      end
+
+      def cpl1
+        License.new(
+          short_name: 'CPL1',
+          spdx_id: 'CPL-1.0',
+          pretty_name: 'Common Public License 1.0',
+          other_names: [
+            'CPL-1',
+            'CPL 1',
+            'CPL-1.0',
+            'CPL 1.0',
+            'Common Public License, v1.0',
+            'COMMON PUBLIC LICENSE VERSION 1.0'
+          ],
+          url: 'https://opensource.org/licenses/cpl1.0.txt'
+        )
+      end
+
       def eclipse1
         License.new(
           short_name: 'EPL1',
@@ -115,9 +193,27 @@ module LicenseFinder
           pretty_name: 'Eclipse Public License 1.0',
           other_names: [
             'EPL 1.0',
+            'Eclipse 1.0',
+            'Eclipse Public License 1.0',
             'Eclipse Public License - v 1.0'
           ],
           url: 'https://www.eclipse.org/legal/epl-v10.html'
+        )
+      end
+
+      def eclipse2
+        License.new(
+          short_name: 'EPL2',
+          spdx_id: 'EPL-2.0',
+          pretty_name: 'Eclipse 2.0',
+          other_names: [
+            'EPL-2.0',
+            'EPL 2.0',
+            'Eclipse 2.0',
+            'Eclipse Public License 2.0',
+            'Eclipse Public License - v 2.0'
+          ],
+          url: 'https://www.eclipse.org/legal/epl-v20.html'
         )
       end
 
@@ -125,7 +221,8 @@ module LicenseFinder
         License.new(
           short_name: 'GPLv2',
           spdx_id: 'GPL-2.0-only',
-          other_names: ['GPL V2', 'gpl-v2', 'GNU GENERAL PUBLIC LICENSE Version 2'],
+          # pretty_name: 'GPL 2.0',
+          other_names: ['GPL V2', 'gpl-v2', 'GNU GENERAL PUBLIC LICENSE Version 2', 'GPL 2.0'],
           url: 'http://www.gnu.org/licenses/gpl-2.0.txt'
         )
       end
@@ -134,7 +231,8 @@ module LicenseFinder
         License.new(
           short_name: 'GPLv3',
           spdx_id: 'GPL-3.0-only',
-          other_names: ['GPL V3', 'gpl-v3', 'GNU GENERAL PUBLIC LICENSE Version 3'],
+          # pretty_name: 'GPL 3.0',
+          other_names: ['GPL V3', 'gpl-v3', 'GNU GENERAL PUBLIC LICENSE Version 3', 'GPL 3.0'],
           url: 'http://www.gnu.org/licenses/gpl-3.0.txt'
         )
       end
@@ -143,6 +241,7 @@ module LicenseFinder
         License.new(
           short_name: 'ISC',
           spdx_id: 'ISC',
+          other_names: ['ISC License'],
           url: 'http://en.wikipedia.org/wiki/ISC_license'
         )
       end
@@ -151,7 +250,8 @@ module LicenseFinder
         License.new(
           short_name: 'LGPL',
           spdx_id: 'LGPL-3.0-only',
-          other_names: ['LGPL-3', 'LGPLv3', 'LGPL-3.0'],
+          # pretty_name: 'LGPL 3.0',
+          other_names: ['LGPL-3', 'LGPLv3', 'LGPL-3.0', 'LGPL 3.0'],
           url: 'http://www.gnu.org/licenses/lgpl.txt'
         )
       end
@@ -166,7 +266,7 @@ module LicenseFinder
             'LGPL v2.1',
             'GNU Lesser General Public License 2.1'
           ],
-          url: 'https://opensource.org/licenses/LGPL-2.1'
+          url: 'https://www.gnu.org/licenses/lgpl-2.1.txt'
         )
       end
 
@@ -207,6 +307,8 @@ module LicenseFinder
           spdx_id: 'MPL-1.1',
           pretty_name: 'Mozilla Public License 1.1',
           other_names: [
+            'MPL-1.1',
+            'Mozilla 1.1',
             'Mozilla Public License, Version 1.1',
             'Mozilla Public License version 1.1'
           ],
@@ -216,7 +318,7 @@ module LicenseFinder
       end
 
       def mpl2
-        header_regexp = /Mozilla Public Licen[sc]e, version 2\.0/
+        header_regexp = /Mozilla Public Licen[sc]e.*version 2\.0/
 
         matcher = AnyMatcher.new(
           Matcher.from_template(Template.named('MPL2')),
@@ -228,6 +330,8 @@ module LicenseFinder
           spdx_id: 'MPL-2.0',
           pretty_name: 'Mozilla Public License 2.0',
           other_names: [
+            'MPL-2.0',
+            'Mozilla 2.0',
             'Mozilla Public License, Version 2.0',
             'Mozilla Public License version 2.0'
           ],
@@ -261,10 +365,10 @@ module LicenseFinder
             '3-Clause BSD License',
             'BSD 3-Clause',
             'BSD 3-Clause License',
-            'The 3-Clause BSD License',
             'BSD 3-clause New License',
             'New BSD License',
             'BSD New license',
+            'BSD License 3',
             'BSD Licence 3'
           ],
           url: 'http://opensource.org/licenses/BSD-3-Clause',
@@ -291,8 +395,11 @@ module LicenseFinder
           pretty_name: 'Python Software Foundation License',
           other_names: [
             'PSF',
+            'PSF 2.0',
             'PSFL',
-            'PSF License'
+            'Python 2.0',
+            'PSF License',
+            'PSF License 2.0'
           ],
           url: 'http://hg.python.org/cpython/raw-file/89ce323357db/LICENSE'
         )

@@ -37,7 +37,7 @@ module LicenseFinder
          <licenses>
            <license>
              <name>BSD</name>
-             <url>http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29</url>
+             <url>https://directory.fsf.org/wiki/License:BSD-4-Clause</url>
           </license>
        </licenses>
     </dependency>
