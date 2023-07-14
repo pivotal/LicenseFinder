@@ -258,7 +258,8 @@ HERE
         end
       end
 
-      context 'when dep is present' do
+      # Dep has been deprecated since 2020
+      xcontext 'when dep is present' do
         let(:godep) { instance_double(LicenseFinder::GoDep, active?: false) }
         let(:dep) { instance_double(LicenseFinder::Dep, active?: true) }
 

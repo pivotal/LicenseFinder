@@ -107,7 +107,7 @@ RUN mkdir /gopath && \
 #install rvm and glide
 RUN apt-add-repository -y ppa:rael-gc/rvm && \
     apt -q update && apt install -y rvm && \
-    /usr/share/rvm/bin/rvm install --default $RUBY_VERSION &&\
+    /usr/share/rvm/bin/rvm install --default $RUBY_VERSION && \
     apt install -y golang-glide && \
     rm -rf /var/lib/apt/lists/*
 
@@ -199,12 +199,11 @@ RUN  \
 RUN apt -q update && apt -q install -y \
     binutils \
     git \
-    unzip \
     gnupg2 \
     libc6-dev \
-    libcurl4-openssl-dev \
     libedit2 \
     libgcc-9-dev \
+    libcurl4-openssl-dev \
     libpython3-dev \
     libsqlite3-0 \
     libstdc++-9-dev \
