@@ -4,7 +4,7 @@ require 'json'
 
 module LicenseFinder
   class Pip < PackageManager
-    DEFAULT_VERSION = '2'
+    DEFAULT_VERSION = '3'
 
     def initialize(options = {})
       super

@@ -49,7 +49,8 @@ describe 'License Finder command line executable' do
     expect(developer).to be_receiving_exit_code(1)
   end
 
-  specify 'displays an error if symlink to potential license file is dangling' do
+  # Dep has been deprecated since 2020
+  xspecify 'displays an error if symlink to potential license file is dangling' do
     project = LicenseFinder::TestingDSL::BrokenSymLinkDepProject.create
     ENV['GOPATH'] = "#{project.project_dir}/gopath_dep"
     developer.run_license_finder('gopath_dep/src/foo-dep')
