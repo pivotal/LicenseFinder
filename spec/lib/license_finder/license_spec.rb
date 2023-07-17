@@ -13,7 +13,7 @@ module LicenseFinder
       it 'should create populate sub licenses for compound AND' do
         license = License.find_by_name('(MIT AND CC0-1.0)')
         expect(license.sub_licenses[0].name).to eq 'MIT'
-        expect(license.sub_licenses[1].name).to eq 'CC0-1.0'
+        expect(license.sub_licenses[1].name).to eq 'CC0 1.0 Universal'
       end
     end
   end

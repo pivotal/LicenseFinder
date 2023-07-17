@@ -85,7 +85,7 @@ module LicenseFinder
     attr_reader :short_name, :pretty_name, :other_names, :spdx_id, :matcher
 
     def names
-      ([short_name, pretty_name] + other_names).uniq
+      ([short_name, pretty_name, spdx_id] + other_names).uniq
     end
   end
 
