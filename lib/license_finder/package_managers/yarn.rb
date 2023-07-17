@@ -22,7 +22,7 @@ module LicenseFinder
         cmd += " #{@yarn_options}" unless @yarn_options.nil?
       end
 
-      stdout, stderr, status = Cmd.run(cmd)
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(cmd) }
       raise "Command '#{cmd}' failed to execute: #{stderr}" unless status.success?
 
       json_strings = stdout.encode('ASCII', invalid: :replace, undef: :replace, replace: '?').split("\n")
@@ -80,7 +80,7 @@ module LicenseFinder
 
     def yarn_version
       Dir.chdir(project_path) do
-        version_string, stderr_str, status = Cmd.run('yarn -v')
+        version_string, stderr_str, status = Dir.chdir(project_path) { Cmd.run('yarn -v') }
         raise "Command 'yarn -v' failed to execute: #{stderr_str}" unless status.success?
 
         version = version_string.split('.').map(&:to_i)
@@ -168,7 +168,7 @@ module LicenseFinder
     def modules_folder
       return @modules_folder if @modules_folder
 
-      stdout, _stderr, status = Cmd.run('yarn config get modules-folder')
+      stdout, _stderr, status = Dir.chdir(project_path) { Cmd.run('yarn config get modules-folder') }
       @modules_folder = 'node_modules' if !status.success? || stdout.strip == 'undefined'
       @modules_folder ||= stdout.strip
     end
