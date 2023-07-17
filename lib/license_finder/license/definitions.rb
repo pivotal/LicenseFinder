@@ -46,12 +46,9 @@ module LicenseFinder
       def apache1_1
         License.new(
           short_name: 'Apache1_1',
-          pretty_name: 'Apache 1.1',
           spdx_id: 'Apache-1.1',
-          other_names: [
-            'Apache-1.1',
-            'The Apache Software License, Version 1.1'
-          ],
+          pretty_name: 'Apache 1.1',
+          other_names: ['Apache Software License, Version 1.1'],
           url: 'http://www.apache.org/licenses/LICENSE-1.1.txt'
         )
       end
@@ -59,10 +56,9 @@ module LicenseFinder
       def apache2
         License.new(
           short_name: 'Apache2',
-          pretty_name: 'Apache 2.0',
           spdx_id: 'Apache-2.0',
+          pretty_name: 'Apache 2.0',
           other_names: [
-            'Apache-2.0',
             'Apache Software License',
             'Apache License 2.0',
             'Apache License Version 2.0',
@@ -83,7 +79,7 @@ module LicenseFinder
         License.new(
           short_name: 'BSD',
           spdx_id: 'BSD-4-Clause',
-          other_names: ['BSD4', 'bsd-old', '4-clause BSD', 'BSD-4-Clause', 'BSD 4-Clause', 'BSD License'],
+          other_names: ['BSD4', 'bsd-old', '4-clause BSD', 'BSD 4-Clause', 'BSD License'],
           url: 'http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29'
         )
       end
@@ -118,7 +114,6 @@ module LicenseFinder
           spdx_id: 'EPL-1.0',
           pretty_name: 'Eclipse Public License 1.0',
           other_names: [
-            'EPL-1.0',
             'EPL 1.0',
             'Eclipse Public License - v 1.0'
           ],
@@ -167,7 +162,6 @@ module LicenseFinder
           spdx_id: 'LGPL-2.1-only',
           pretty_name: 'GNU Lesser General Public License version 2.1',
           other_names: [
-            'LGPL-2.1-only',
             'LGPL 2.1',
             'LGPL v2.1',
             'GNU Lesser General Public License 2.1'
@@ -191,7 +185,7 @@ module LicenseFinder
         License.new(
           short_name: 'MIT',
           spdx_id: 'MIT',
-          other_names: ['Expat', 'MIT license', 'MIT License', 'The MIT License (MIT)'],
+          other_names: ['Expat', 'MIT license', 'MIT License (MIT)'],
           url: 'http://opensource.org/licenses/mit-license',
           matcher: matcher
         )
@@ -213,7 +207,6 @@ module LicenseFinder
           spdx_id: 'MPL-1.1',
           pretty_name: 'Mozilla Public License 1.1',
           other_names: [
-            'MPL-1.1',
             'Mozilla Public License, Version 1.1',
             'Mozilla Public License version 1.1'
           ],
@@ -235,7 +228,6 @@ module LicenseFinder
           spdx_id: 'MPL-2.0',
           pretty_name: 'Mozilla Public License 2.0',
           other_names: [
-            'MPL-2.0',
             'Mozilla Public License, Version 2.0',
             'Mozilla Public License version 2.0'
           ],
@@ -267,7 +259,6 @@ module LicenseFinder
             'BSD-3',
             '3-clause BSD',
             '3-Clause BSD License',
-            'BSD-3-Clause',
             'BSD 3-Clause',
             'BSD 3-Clause License',
             'The 3-Clause BSD License',
@@ -332,9 +323,8 @@ module LicenseFinder
           other_names: [
             'FreeBSD',
             '2-clause BSD',
-            'BSD-2-Clause',
             'BSD 2-Clause',
-            'The BSD 2-Clause License'
+            'BSD 2-Clause License'
           ],
           url: 'http://opensource.org/licenses/bsd-license'
         )
