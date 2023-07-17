@@ -48,7 +48,7 @@ INPUT
 
       context 'using default python version (python2)' do
         it 'should call pip install with the requirements file' do
-          expect(SharedHelpers::Cmd).to receive(:run).with('pip2 install -r requirements.txt')
+          expect(SharedHelpers::Cmd).to receive(:run).with('pip3 install -r requirements.txt')
                                                      .and_return([dependency_json, '', cmd_success])
           pip.prepare
         end
@@ -57,7 +57,7 @@ INPUT
           let(:pip) { Pip.new(project_path: Pathname(root), pip_requirements_path: @user_provided_requirements) }
 
           it 'should use the provided requirements file' do
-            expect(SharedHelpers::Cmd).to receive(:run).with("pip2 install -r #{@user_provided_requirements}")
+            expect(SharedHelpers::Cmd).to receive(:run).with("pip3 install -r #{@user_provided_requirements}")
                                                        .and_return([dependency_json, '', cmd_success])
             pip.prepare
           end
@@ -141,7 +141,7 @@ INPUT
 
         it 'fails to find a required distribution' do
           stderr = 'some-error'
-          command = "python #{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} some-file.txt"
+          command = "python3 #{LicenseFinder::BIN_PATH.join('license_finder_pip.py')} some-file.txt"
           expected_error_message = "LicenseFinder command '#{command}' failed:\n\t#{stderr}"
 
           allow(LicenseFinder::SharedHelpers::Cmd).to receive(:run).with(command).and_return(['', stderr, status])

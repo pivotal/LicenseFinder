@@ -51,11 +51,12 @@ module LicenseFinder
     def active?
       return false if @strict_matching
 
+      # Dep has been deprecated since 2020
       godep = LicenseFinder::GoDep.new(project_path: Pathname(project_path))
-      dep = LicenseFinder::Dep.new(project_path: Pathname(project_path))
       # go workspace is only active if GoDep wasn't. There are some projects
       # that will use the .envrc and have a Godep folder as well.
-      !!(!godep.active? && !dep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
+      # !!(!godep.active? && !dep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
+      !!(!godep.active? && envrc_path && ENVRC_REGEXP.match(IO.read(envrc_path)))
     end
 
     private
