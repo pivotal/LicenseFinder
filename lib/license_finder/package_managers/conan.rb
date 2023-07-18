@@ -62,6 +62,7 @@ module LicenseFinder
         next unless license_file_is_good?(license_file_path)
 
         url = dep['homepage']
+        url = dep['url'] if url.nil?
         ConanPackage.new(name, version, File.open(license_file_path).read, url)
       end.compact
     end
