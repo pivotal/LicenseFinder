@@ -173,14 +173,15 @@ module LicenseFinder
         License.new(
           short_name: 'CPL1',
           spdx_id: 'CPL-1.0',
-          pretty_name: 'Common Public License 1.0',
+          pretty_name: 'Common Public License Version 1.0',
           other_names: [
             'CPL-1',
             'CPL 1',
             'CPL-1.0',
             'CPL 1.0',
-            'Common Public License, v1.0',
-            'COMMON PUBLIC LICENSE VERSION 1.0'
+            'Common Public License 1.0',
+            'Common Public License v1.0',
+            'Common Public License, v1.0'
           ],
           url: 'https://opensource.org/licenses/cpl1.0.txt'
         )

@@ -191,6 +191,33 @@ describe LicenseFinder::License, 'CDDL1' do
   end
 end
 
+describe LicenseFinder::License, 'CPL1' do
+  subject { described_class.find_by_name 'CPL1' }
+
+  it 'should have correct license url' do
+    expect(subject.url).to be 'https://opensource.org/licenses/cpl1.0.txt'
+  end
+
+  it 'should be recognized by spdx_id' do
+    expect(described_class.find_by_name('CPL-1.0')).to be subject
+  end
+
+  it 'should be recognized by pretty name' do
+    expect(described_class.find_by_name('Common Public License Version 1.0')).to be subject
+  end
+
+  it 'should be recognised by other names' do
+    expect(described_class.find_by_name('CPL-1')).to be subject
+    expect(described_class.find_by_name('CPL 1')).to be subject
+    expect(described_class.find_by_name('CPL-1.0')).to be subject
+    expect(described_class.find_by_name('CPL 1.0')).to be subject
+    expect(described_class.find_by_name('Common Public License 1.0')).to be subject
+    expect(described_class.find_by_name('Common Public License v1.0')).to be subject
+    expect(described_class.find_by_name('Common Public License, v1.0')).to be subject
+    expect(described_class.find_by_name('COMMON PUBLIC LICENSE VERSION 1.0')).to be subject
+  end
+end
+
 describe LicenseFinder::License, 'EPL1' do
   subject { described_class.find_by_name 'EPL1' }
 
