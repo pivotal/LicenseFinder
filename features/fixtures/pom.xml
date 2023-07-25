@@ -20,5 +20,11 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.12.0</version>
     </dependency>
+	<dependency>
+      <groupId>com.querydsl</groupId>
+      <artifactId>querydsl-jpa</artifactId>
+      <version>5.0.0</version>
+      <classifier>jakarta</classifier>
+    </dependency>
   </dependencies>
 </project>
