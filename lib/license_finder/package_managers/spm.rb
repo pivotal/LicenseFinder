@@ -83,7 +83,7 @@ module LicenseFinder
 
     def license_pattern(subpath)
       checkout_path = project_checkout(subpath)
-      Dir.glob(checkout_path.join('LICENSE*'), File::FNM_CASEFOLD)
+      Dir.glob(checkout_path.join('LICENSE.*(?<!\.pdf)$'), File::FNM_CASEFOLD)
     end
 
     def name_version_from_line(cartfile_line)
