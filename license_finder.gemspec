@@ -56,7 +56,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'e2mmap', '~> 0.1.0'
   s.add_development_dependency 'fakefs', '~> 1.8.0'
   s.add_development_dependency 'matrix', '~> 0.4.2'
-  s.add_development_dependency 'mime-types', '3.4.1'
+  s.add_development_dependency 'mime-types', '3.5.1'
   s.add_development_dependency 'pry', '~> 0.14.1'
   s.add_development_dependency 'rake', '~> 13.0.6'
   s.add_development_dependency 'rspec', '~> 3'
