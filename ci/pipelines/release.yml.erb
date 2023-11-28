@@ -27,7 +27,7 @@ resources:
     driver: gcs
     bucket: lf-semver-version
     key: version
-    json_key: ((gcp-queued-reports-bucket-credentials))
+    json_key: ((lf-bucket-credentials))
 
 - name: dockerhub-edge
   type: docker-image
