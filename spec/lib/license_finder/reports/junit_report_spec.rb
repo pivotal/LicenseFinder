@@ -64,7 +64,7 @@ stderr
 Name: dep_2
 Version: 2.0
 Licence:
-- BSD: http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29
+- BSD: https://directory.fsf.org/wiki/License:BSD-4-Clause
 URL:
 Homepage:
 Summary:
