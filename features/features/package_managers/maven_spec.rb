@@ -39,6 +39,14 @@ describe 'Maven Dependencies' do
     expect(java_developer).to be_seeing_once 'This product includes software developed at' # NOTICE
   end
 
+  it 'extracts name for a package that is using the "jakarta" classifier' do
+    LicenseFinder::TestingDSL::MavenProject.create
+    java_developer.execute_command 'license_finder report --columns summary description homepage texts notice --format=csv'
+
+    # the JAR file is named like "querydsl-jpa-5.0.0-jakarta.jar"
+    expect(java_developer).to be_seeing_once 'Querydsl - JPA support'
+  end
+
   it 'handles an empty dependencies section gracefully' do
     LicenseFinder::TestingDSL::MavenProjectNoDeps.create
     java_developer.run_license_finder
