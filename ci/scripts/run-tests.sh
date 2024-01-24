@@ -23,10 +23,10 @@ pushd "$PROJECT_ROOT"
   export GOPATH=$HOME/go
   export RUBYOPT='-E utf-8'
 
-  gem update --system
-
   if [[ $RUBY_VERSION_UNDER_TEST == "2.6.10" || $RUBY_VERSION_UNDER_TEST == "2.7.8" ]]; then
-    gem install "rubygems-update:<3.0.0" --no-document
+    gem install "rubygems-update:<3.0.0" --no-document && update_rubygems
+  else
+      gem update --system
   fi
 
   gem install bundler
