@@ -30,7 +30,12 @@ module LicenseFinder
         .join(dep['version'])
       artifact_basename = "#{dep['artifactId']}-#{dep['version']}"
 
-      dep.store('jarFile', m2_artifact_dir.join("#{artifact_basename}.jar"))
+      # Basic support for Maven classifiers. So far, only "jakarta" is supported. Unfortunately,
+      # we do not have access to the "classifier" field here (licenses.xml does not have it).
+      jar_file = m2_artifact_dir.join("#{artifact_basename}.jar")
+      jar_file = m2_artifact_dir.join("#{artifact_basename}-jakarta.jar") unless File.exist?(jar_file)
+
+      dep.store('jarFile', jar_file)
 
       add_info_from_pom(m2_artifact_dir.join("#{artifact_basename}.pom"), dep)
     end

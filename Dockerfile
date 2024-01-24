@@ -5,7 +5,6 @@ WORKDIR /tmp
 # Versioning
 ENV PIP3_INSTALL_VERSION 20.0.2
 ENV GO_LANG_VERSION 1.17.13
-ENV MAVEN_VERSION 3.6.0
 ENV SBT_VERSION 1.3.3
 ENV GRADLE_VERSION 5.6.4
 ENV RUBY_VERSION 3.2.2
@@ -64,10 +63,8 @@ RUN apt -q update && apt install -y python3-pip && \
     python3 -m pip install pip==$PIP3_INSTALL_VERSION --upgrade
 
 # install maven
-RUN curl -O https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-    tar -xf apache-maven-$MAVEN_VERSION-bin.tar.gz; rm -rf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-    mv apache-maven-$MAVEN_VERSION /usr/local/lib/maven && \
-    ln -s /usr/local/lib/maven/bin/mvn /usr/local/bin/mvn
+RUN apt -q update && apt install -y maven && \
+    rm -rf /var/lib/apt/lists/*
 
 # install sbt
 RUN mkdir -p /usr/local/share/sbt-launcher-packaging && \
@@ -132,6 +129,7 @@ ENV LC_ALL=en_US.UTF-8
 RUN curl https://sh.rustup.rs -sSf | bash -ls -- -y --profile minimal
 
 #install mix
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/setup.deb.sh' | bash
 RUN apt -q update && apt install -y erlang && rm -rf /var/lib/apt/lists/*
 # Install Elixir
 WORKDIR /tmp/elixir-build
