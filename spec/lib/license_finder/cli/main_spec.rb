@@ -66,7 +66,7 @@ module LicenseFinder
             '--mix_deps_dir=mix_dir',
             '--prepare',
             '--log_directory=some_logs',
-            '--enabled_package_managers=package_manager'
+            '--enabled_package_managers=gomodules'
           ]
         end
 
@@ -89,7 +89,7 @@ module LicenseFinder
             prepare: true,
             log_directory: 'some_logs',
             logger: { mode: LicenseFinder::Logger::MODE_INFO },
-            enabled_package_managers: ['package_manager']
+            enabled_package_managers: ['gomodules']
           }
         end
 
