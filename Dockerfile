@@ -132,6 +132,7 @@ ENV LC_ALL=en_US.UTF-8
 RUN curl https://sh.rustup.rs -sSf | bash -ls -- -y --profile minimal
 
 #install mix
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/setup.deb.sh' | bash
 RUN apt -q update && apt install -y erlang && rm -rf /var/lib/apt/lists/*
 # Install Elixir
 WORKDIR /tmp/elixir-build
