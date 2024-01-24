@@ -24,6 +24,11 @@ pushd "$PROJECT_ROOT"
   export RUBYOPT='-E utf-8'
 
   gem update --system
+
+  if [[ $RUBY_VERSION_UNDER_TEST == "2.6.10" || $RUBY_VERSION_UNDER_TEST == "2.7.8" ]]; then
+    gem install "rubygems-update:<3.0.0" --no-document
+  fi
+
   gem install bundler
   bundle install
   bundle pristine
