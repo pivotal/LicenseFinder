@@ -51,7 +51,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'xml-simple', '~> 1.1.9'
 
   s.add_development_dependency 'addressable', '2.8.5'
-  s.add_development_dependency 'capybara', '~> 3.36.0'
+  s.add_development_dependency 'capybara', '~> 3.39.2'
   s.add_development_dependency 'cocoapods', '>= 1.0.0' if RUBY_PLATFORM.match?(/darwin/)
   s.add_development_dependency 'e2mmap', '~> 0.1.0'
   s.add_development_dependency 'fakefs', '~> 1.8.0'
