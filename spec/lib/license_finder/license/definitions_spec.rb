@@ -12,6 +12,31 @@ describe LicenseFinder::License::Definitions do
   end
 end
 
+describe LicenseFinder::License, 'AGPL3' do
+  subject { described_class.find_by_name 'AGPL3' }
+
+  it 'should have correct license url' do
+    expect(subject.url).to be 'http://www.gnu.org/licenses/agpl-3.0.html'
+  end
+
+  it 'should be recognized by spdx_id' do
+    expect(described_class.find_by_name('AGPL-3.0-Only')).to be subject
+  end
+
+  it 'should be recognized by pretty name' do
+    expect(described_class.find_by_name('GNU Affero GPL')).to be subject
+  end
+
+  it 'should be recognised by other names' do
+    expect(described_class.find_by_name('AGPL 3')).to be subject
+    expect(described_class.find_by_name('AGPL 3.0')).to be subject
+    expect(described_class.find_by_name('AGPL-3.0')).to be subject
+    expect(described_class.find_by_name('GNU Affero General Public License v3.0')).to be subject
+    expect(described_class.find_by_name('GNU Affero General Public License v3.0')).to be subject
+    expect(described_class.find_by_name('The GNU Affero General Public License, Version 3')).to be subject
+  end
+end
+
 describe LicenseFinder::License, 'Apache1.1' do
   subject { described_class.find_by_name 'Apache1_1' }
 
@@ -30,6 +55,10 @@ describe LicenseFinder::License, 'Apache1.1' do
   it 'should be recognised by other names' do
     expect(described_class.find_by_name('Apache Software License, Version 1.1')).to be subject
     expect(described_class.find_by_name('The Apache Software License, Version 1.1')).to be subject
+    expect(described_class.find_by_name('The Apache Public License 1.1')).to be subject
+    expect(described_class.find_by_name('Apache License, Version 1.1')).to be subject
+    expect(described_class.find_by_name('ASL 1.1')).to be subject
+    expect(described_class.find_by_name('ASF 1.1')).to be subject
   end
 end
 
@@ -59,11 +88,32 @@ describe LicenseFinder::License, 'Apache2' do
   end
 end
 
+describe LicenseFinder::License, 'Artistic' do
+  subject { described_class.find_by_name 'Artistic' }
+
+  it 'should have correct license url' do
+    expect(subject.url).to be 'https://www.perlfoundation.org/artistic-license-20.html'
+  end
+
+  it 'should be recognized by spdx_id' do
+    expect(described_class.find_by_name('Artistic-1.0')).to be subject
+  end
+
+  it 'should be recognized by pretty name' do
+    expect(described_class.find_by_name('Artistic 1.0')).to be subject
+  end
+
+  it 'should be recognised by other names' do
+    expect(described_class.find_by_name('Artistic License')).to be subject
+    expect(described_class.find_by_name('ARTISTIC LICENSE')).to be subject
+  end
+end
+
 describe LicenseFinder::License, 'BSD' do
   subject { described_class.find_by_name 'BSD' }
 
   it 'should have correct license url' do
-    expect(subject.url).to be 'http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29'
+    expect(subject.url).to be 'https://directory.fsf.org/wiki/License:BSD-4-Clause'
   end
 
   it 'should be recognized by spdx_id' do
@@ -120,6 +170,54 @@ describe LicenseFinder::License, 'CDDL1' do
   end
 end
 
+describe LicenseFinder::License, 'CDDL1' do
+  subject { described_class.find_by_name 'CDDL1_1' }
+
+  it 'should have correct license url' do
+    expect(subject.url).to be 'https://spdx.org/licenses/CDDL-1.1.html'
+  end
+
+  it 'should be recognized by spdx_id' do
+    expect(described_class.find_by_name('CDDL-1.1')).to be subject
+  end
+
+  it 'should be recognized by pretty name' do
+    expect(described_class.find_by_name('Common Development and Distribution License 1.1')).to be subject
+  end
+
+  it 'should be recognised by other names' do
+    expect(described_class.find_by_name('Common Development and Distribution License (CDDL) v1.1')).to be subject
+    expect(described_class.find_by_name('COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.1')).to be subject
+  end
+end
+
+describe LicenseFinder::License, 'CPL1' do
+  subject { described_class.find_by_name 'CPL1' }
+
+  it 'should have correct license url' do
+    expect(subject.url).to be 'https://opensource.org/licenses/cpl1.0.txt'
+  end
+
+  it 'should be recognized by spdx_id' do
+    expect(described_class.find_by_name('CPL-1.0')).to be subject
+  end
+
+  it 'should be recognized by pretty name' do
+    expect(described_class.find_by_name('Common Public License Version 1.0')).to be subject
+  end
+
+  it 'should be recognised by other names' do
+    expect(described_class.find_by_name('CPL-1')).to be subject
+    expect(described_class.find_by_name('CPL 1')).to be subject
+    expect(described_class.find_by_name('CPL-1.0')).to be subject
+    expect(described_class.find_by_name('CPL 1.0')).to be subject
+    expect(described_class.find_by_name('Common Public License 1.0')).to be subject
+    expect(described_class.find_by_name('Common Public License v1.0')).to be subject
+    expect(described_class.find_by_name('Common Public License, v1.0')).to be subject
+    expect(described_class.find_by_name('COMMON PUBLIC LICENSE VERSION 1.0')).to be subject
+  end
+end
+
 describe LicenseFinder::License, 'EPL1' do
   subject { described_class.find_by_name 'EPL1' }
 
@@ -137,7 +235,30 @@ describe LicenseFinder::License, 'EPL1' do
 
   it 'should be recognised by other names' do
     expect(described_class.find_by_name('EPL 1.0')).to be subject
+    expect(described_class.find_by_name('Eclipse 1.0')).to be subject
     expect(described_class.find_by_name('Eclipse Public License - v 1.0')).to be subject
+  end
+end
+
+describe LicenseFinder::License, 'EPL2' do
+  subject { described_class.find_by_name 'EPL2' }
+
+  it 'should have correct license url' do
+    expect(subject.url).to be 'https://www.eclipse.org/legal/epl-v20.html'
+  end
+
+  it 'should be recognized by spdx_id' do
+    expect(described_class.find_by_name('EPL-2.0')).to be subject
+  end
+
+  it 'should be recognized by pretty name' do
+    expect(described_class.find_by_name('Eclipse Public License 2.0')).to be subject
+  end
+
+  it 'should be recognised by other names' do
+    expect(described_class.find_by_name('EPL 2.0')).to be subject
+    expect(described_class.find_by_name('Eclipse 2.0')).to be subject
+    expect(described_class.find_by_name('Eclipse Public License - v 2.0')).to be subject
   end
 end
 
@@ -155,6 +276,7 @@ describe LicenseFinder::License, 'GPLv2' do
   it 'should be recognised by other names' do
     expect(described_class.find_by_name('GPL V2')).to be subject
     expect(described_class.find_by_name('gpl-v2')).to be subject
+    expect(described_class.find_by_name('GPL 2.0')).to be subject
     expect(described_class.find_by_name('GNU GENERAL PUBLIC LICENSE Version 2')).to be subject
   end
 end
@@ -173,6 +295,7 @@ describe LicenseFinder::License, 'GPLv3' do
   it 'should be recognised by other names' do
     expect(described_class.find_by_name('GPL V3')).to be subject
     expect(described_class.find_by_name('gpl-v3')).to be subject
+    expect(described_class.find_by_name('GPL 3.0')).to be subject
     expect(described_class.find_by_name('GNU GENERAL PUBLIC LICENSE Version 3')).to be subject
   end
 end
@@ -207,7 +330,7 @@ describe LicenseFinder::License, 'LGPL2.1' do
   subject { described_class.find_by_name 'LGPL2_1' }
 
   it 'should have correct license url' do
-    expect(subject.url).to be 'https://opensource.org/licenses/LGPL-2.1'
+    expect(subject.url).to be 'https://www.gnu.org/licenses/lgpl-2.1.txt'
   end
 
   it 'should be recognized by spdx_id' do
@@ -257,6 +380,30 @@ describe LicenseFinder::License, 'MIT' do
       expect(subject).to be_matches_text 'is released under the MIT license'
 
       expect(subject).to be_matches_text 'is released under the MIT licence'
+    end
+
+    it 'should match variations' do
+      license = <<-LICENSE
+Copyright (c) 2000-2020 The Legion of the Bouncy Castle Inc. (http://www.bouncycastle.org)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+and associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial
+portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+      LICENSE
+
+      expect(subject).to be_matches_text license
     end
   end
 end
@@ -318,9 +465,12 @@ describe LicenseFinder::License, 'MPL2' do
 
   describe '#matches_text?' do
     it "should return true if the text begins with 'The Mozilla Public License, version 2.0'" do
+      expect(subject).to be_matches_text 'Mozilla Public License version 2.0'
       expect(subject).to be_matches_text 'Mozilla Public License, version 2.0'
+      expect(subject).to be_matches_text 'Mozilla Public Licence version 2.0'
 
       expect(subject).not_to be_matches_text "Something else\nMozilla Public License, version 2.0"
+      expect(subject).not_to be_matches_text 'Mozilla Public License version 1.1'
     end
   end
 end

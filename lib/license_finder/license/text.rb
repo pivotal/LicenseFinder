@@ -16,6 +16,8 @@ module LicenseFinder
       NEWLINE_CHARACTER = /\n+/.freeze
       QUOTE_COMMENT_CHARACTER = /^\s*>+/.freeze
       ESCAPED_QUOTES = /\\"/.freeze
+      SPECIAL_CHARACTERS = /§/.freeze
+      SPECIAL_DASHES = /–/.freeze
 
       def self.normalize_punctuation(text)
         text.dup.force_encoding('UTF-8')
@@ -26,6 +28,8 @@ module LicenseFinder
             .gsub(NEWLINE_CHARACTER, ' ')
             .gsub(ESCAPED_QUOTES, '"')
             .gsub(QUOTES, '"')
+            .gsub(SPECIAL_CHARACTERS, '?')
+            .gsub(SPECIAL_DASHES, '-')
             .strip
       rescue ArgumentError => _e
         text
