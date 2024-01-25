@@ -30,7 +30,7 @@ module LicenseFinder
       context 'when package manager is NOT installed' do
         it 'should log all active packages' do
           allow(bundler).to receive(:command_exists?).and_return false
-          expect(logger).to receive(:info).with(Bundler, 'is active', color: :green)
+          expect(logger).to receive(:info).with(Bundler, 'is active for \'\'', color: :green)
           expect(logger).to receive(:info).with(Bundler, 'is not installed', color: :red)
           expect(subject.active_packages).to_not be_nil
         end
@@ -47,7 +47,7 @@ module LicenseFinder
       it 'should log active states of package managers' do
         bundler = double(:bundler, active?: true)
         allow(Bundler).to receive(:new).and_return bundler
-        expect(logger).to receive(:info).with(Bundler, 'is active', color: :green)
+        expect(logger).to receive(:info).with(Bundler, 'is active for \'\'', color: :green)
 
         subject.active_package_managers
       end
@@ -55,7 +55,7 @@ module LicenseFinder
       it 'should log inactive states of package managers' do
         bundler = double(:bundler, active?: false)
         allow(Bundler).to receive(:new).and_return bundler
-        expect(logger).to receive(:debug).with(Bundler, 'is not active', color: :red)
+        expect(logger).to receive(:debug).with(Bundler, 'is not active for \'\'', color: :red)
 
         subject.active_package_managers
       end

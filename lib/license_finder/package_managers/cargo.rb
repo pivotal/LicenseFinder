@@ -6,7 +6,7 @@ module LicenseFinder
   class Cargo < PackageManager
     def current_packages
       cargo_output.map do |package|
-        path = Dir.glob("#{Dir.home}/.cargo/registry/src/**/#{package['name']}-#{package['version']}").first
+        path = Dir.glob("#{Dir.home}/.cargo/registry/src/*/#{package['name']}-#{package['version']}").first
         CargoPackage.new(package, logger: logger, install_path: path)
       end
     end
