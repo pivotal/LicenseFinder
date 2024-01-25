@@ -21,9 +21,14 @@ pushd "$PROJECT_ROOT"
   ruby --version
 
   export GOPATH=$HOME/go
-  export RUBYOPT='-E utf-8'
+  if [[ $RUBY_VERSION_UNDER_TEST == "2.6.10" || $RUBY_VERSION_UNDER_TEST == "2.7.8" ]]; then
+    export RUBYOPT='-E utf-8 -W0'
+    gem update --system --conservative
+  else
+    export RUBYOPT='-E utf-8'
+    gem update --system
+  fi
 
-  gem update --system
   gem install bundler
   bundle install
   bundle pristine

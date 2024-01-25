@@ -4,7 +4,7 @@ image_resource:
   type: registry-image
   source:
     repository: ruby
-    tag: 3.2.2
+    tag: 3.2.3
     username: ((license-finder-docker-username))
     password: ((license-finder-docker-password))
 
