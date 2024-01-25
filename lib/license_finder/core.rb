@@ -61,9 +61,9 @@ module LicenseFinder
       clear_logs
       package_managers = @scanner.active_package_managers
       package_managers.each do |manager|
-        logger.debug manager.class, 'Running prepare on project'
+        logger.debug manager.class, "Running prepare on project '#{config.project_path}'"
         manager.prepare
-        logger.debug manager.class, 'Finished prepare on project', color: :green
+        logger.debug manager.class, "Finished prepare on project '#{config.project_path}'", color: :green
       end
     end
 
