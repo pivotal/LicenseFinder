@@ -44,6 +44,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   s.add_dependency 'bundler'
+  s.add_dependency 'csv', '~> 3.2'
   s.add_dependency 'rubyzip', '>=1', '<3'
   s.add_dependency 'thor', '~> 1.2'
   s.add_dependency 'tomlrb', '>= 1.3', '< 2.1'
