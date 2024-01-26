@@ -56,7 +56,7 @@ module LicenseFinder
       packages_grouped_by_revision = all_packages.group_by { |package| package['Rev'] }
       result = []
 
-      packages_grouped_by_revision.each do |_sha, packages_in_group|
+      packages_grouped_by_revision.each_value do |packages_in_group|
         all_paths_in_group = packages_in_group.map { |p| p['ImportPath'] }
         common_paths = CommonPathHelper.longest_common_paths(all_paths_in_group)
         package_info = packages_in_group.first
