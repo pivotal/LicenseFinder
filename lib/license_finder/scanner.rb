@@ -50,10 +50,10 @@ module LicenseFinder
         active = pm_class.new(@config).active?
 
         if active
-          @logger.info pm_class, 'is active', color: :green
+          @logger.info pm_class, "is active for '#{@project_path}'", color: :green
           active_pm_classes << pm_class
         else
-          @logger.debug pm_class, 'is not active', color: :red
+          @logger.debug pm_class, "is not active for '#{@project_path}'", color: :red
         end
       end
 
