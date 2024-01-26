@@ -136,7 +136,7 @@ module LicenseFinder
       FileUtils.mkdir_p @log_directory
 
       # replace whitespace with underscores and remove slashes
-      log_file_name = package_management_command&.delete(/\s/, '_')&.delete(%r{/}, '')
+      log_file_name = package_management_command&.gsub(/\s/, '_')&.gsub(%r{/}, '')
       log_file = File.join(@log_directory, "prepare_#{log_file_name || 'errors'}.log")
 
       File.open(log_file, 'w') do |f|
