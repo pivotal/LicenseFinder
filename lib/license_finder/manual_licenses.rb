@@ -43,7 +43,7 @@ module LicenseFinder
         # Ex: licenses remove foo_gem MIT => Removes MIT at all versions for this gem
         @all_versions[name]&.delete(to_license(lic))
 
-        @specific_versions[name]&.each do |_version, licenses|
+        @specific_versions[name]&.each_value do |licenses|
           licenses.delete(to_license(lic))
         end
       else
