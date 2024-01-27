@@ -22,7 +22,7 @@ module LicenseFinder
         cmd += " #{@yarn_options}" unless @yarn_options.nil?
       end
 
-      stdout, stderr, status = Cmd.run(cmd)
+      stdout, stderr, status = Dir.chdir(project_path) { Cmd.run(cmd) }
       raise "Command '#{cmd}' failed to execute: #{stderr}" unless status.success?
 
       json_strings = stdout.encode('ASCII', invalid: :replace, undef: :replace, replace: '?').split("\n")
@@ -80,7 +80,7 @@ module LicenseFinder
 
     def yarn_version
       Dir.chdir(project_path) do
-        version_string, stderr_str, status = Cmd.run('yarn -v')
+        version_string, stderr_str, status = Dir.chdir(project_path) { Cmd.run('yarn -v') }
         raise "Command 'yarn -v' failed to execute: #{stderr_str}" unless status.success?
 
         version = version_string.split('.').map(&:to_i)
@@ -96,8 +96,8 @@ module LicenseFinder
         body = json_object['children']
 
         body.each do |package_name, vendor_info|
-          valid_match = %r{(?<name>[@,\w,\-,/,.]+)@(?<manager>\D*):\D*(?<version>(\d+\.?)+)} =~ package_name.to_s
-          valid_match = %r{(?<name>[@,\w,\-,/,.]+)@virtual:.+#(\D*):\D*(?<version>(\d+\.?)+)} =~ package_name.to_s if manager.eql?('virtual')
+          valid_match = %r{(?<name>@?[\w/.-]+)@(?<manager>\D*):\D*(?<version>(\d+\.?)+)} =~ package_name.to_s
+          valid_match = %r{(?<name>@?[\w/.-]+)@virtual:.+#(\D*):\D*(?<version>(\d+\.?)+)} =~ package_name.to_s if manager.eql?('virtual')
 
           if valid_match
             homepage = vendor_info['children']['vendorUrl']
@@ -112,10 +112,10 @@ module LicenseFinder
             )
             packages << package
           end
-          incompatible_match = /(?<name>[\w,-]+)@[a-z]*:(?<version>(\.))/ =~ package_name.to_s
 
+          incompatible_match = %r{(?<name>@?[\w/.-]+)@[a-z]*:(?<version>(\.))} =~ package_name.to_s
           if incompatible_match
-            package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
+            package = YarnPackage.new(name, version, spec_licenses: [license])
             incompatible_packages.push(package)
           end
         end
@@ -126,14 +126,14 @@ module LicenseFinder
 
     def get_yarn1_packages(json_objects)
       packages = []
-      incompatible_packages = []
       if json_objects.last['type'] == 'table'
         license_json = json_objects.pop['data']
         packages = packages_from_json(license_json)
       end
 
+      incompatible_packages = []
       json_objects.each do |json_object|
-        match = /(?<name>[\w,-]+)@(?<version>(\d+\.?)+)/ =~ json_object['data'].to_s
+        match = %r{(?<name>@?[\w/.-]+)@(?<version>(\d+\.?)+)} =~ json_object['data'].to_s
         if match
           package = YarnPackage.new(name, version, spec_licenses: ['unknown'])
           incompatible_packages.push(package)
@@ -168,7 +168,7 @@ module LicenseFinder
     def modules_folder
       return @modules_folder if @modules_folder
 
-      stdout, _stderr, status = Cmd.run('yarn config get modules-folder')
+      stdout, _stderr, status = Dir.chdir(project_path) { Cmd.run('yarn config get modules-folder') }
       @modules_folder = 'node_modules' if !status.success? || stdout.strip == 'undefined'
       @modules_folder ||= stdout.strip
     end

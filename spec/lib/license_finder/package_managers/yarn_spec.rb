@@ -13,7 +13,10 @@ module LicenseFinder
       {
         'type' => 'table',
         'data' => {
-          'body' => [['yn', '2.0.0', 'MIT', 'https://github.com/sindresorhus/yn.git', 'sindresorhus.com', 'Sindre Sorhus']],
+          'body' => [
+            ['@sindresorhus/is', '0.7.0', 'MIT', 'https://github.com/sindresorhus/is.git', 'sindresorhus.com', 'Sindre Sorhus'],
+            ['yn', '2.0.0', 'MIT', 'https://github.com/sindresorhus/yn.git', 'sindresorhus.com', 'Sindre Sorhus']
+          ],
           'head' => %w[Name Version License URL VendorUrl VendorName]
         }
       }.to_json
@@ -161,6 +164,21 @@ module LicenseFinder
           expect(subject.current_packages.last.authors).to eq ''
           expect(subject.current_packages.last.install_path).to eq Pathname(root).join('yarn_modules', '@types/jest')
         end
+
+        it 'displays incompatible packages with correct license type' do
+          allow(SharedHelpers::Cmd).to receive(:run).with(Yarn::SHELL_COMMAND) do
+            [
+              '{"value":"Internal","children":{"@company/package@workspace:.":{"value":{"locator":"@company/package@workspace:.","descriptor":"@company/package@workspace:."},"children":{}}}}',
+              '',
+              cmd_success
+            ]
+          end
+
+          expect(subject.current_packages.length).to eq 1
+          expect(subject.current_packages.last.name).to eq '@company/package'
+          expect(subject.current_packages.last.version).to eq '.'
+          expect(subject.current_packages.last.license_names_from_spec).to eq ['Internal']
+        end
       end
 
       it 'displays packages as returned from "yarn list"' do
@@ -171,13 +189,19 @@ module LicenseFinder
           [yarn1_shell_command_output, '', cmd_success]
         end
 
-        expect(subject.current_packages.length).to eq 1
-        expect(subject.current_packages.first.name).to eq 'yn'
-        expect(subject.current_packages.first.version).to eq '2.0.0'
+        expect(subject.current_packages.length).to eq 2
+        expect(subject.current_packages.first.name).to eq '@sindresorhus/is'
+        expect(subject.current_packages.first.version).to eq '0.7.0'
         expect(subject.current_packages.first.license_names_from_spec).to eq ['MIT']
         expect(subject.current_packages.first.homepage).to eq 'sindresorhus.com'
         expect(subject.current_packages.first.authors).to eq 'Sindre Sorhus'
-        expect(subject.current_packages.first.install_path).to eq Pathname(root).join('yarn_modules', 'yn')
+        expect(subject.current_packages.first.install_path).to eq Pathname(root).join('yarn_modules', '@sindresorhus/is')
+        expect(subject.current_packages.last.name).to eq 'yn'
+        expect(subject.current_packages.last.version).to eq '2.0.0'
+        expect(subject.current_packages.last.license_names_from_spec).to eq ['MIT']
+        expect(subject.current_packages.last.homepage).to eq 'sindresorhus.com'
+        expect(subject.current_packages.last.authors).to eq 'Sindre Sorhus'
+        expect(subject.current_packages.last.install_path).to eq Pathname(root).join('yarn_modules', 'yn')
       end
 
       it 'uses node_modules as fallback for install path' do
@@ -188,7 +212,7 @@ module LicenseFinder
           [yarn1_shell_command_output, '', cmd_success]
         end
 
-        expect(subject.current_packages.first.install_path).to eq Pathname(root).join('node_modules', 'yn')
+        expect(subject.current_packages.last.install_path).to eq Pathname(root).join('node_modules', 'yn')
       end
 
       it 'displays incompatible packages with license type unknown' do
