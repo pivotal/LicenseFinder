@@ -6,8 +6,8 @@ Build status
 * Ruby 2.6.10 [![Ruby 2.6.10 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.6.10/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 2.7.8 [![Ruby 2.7.8 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-2.7.8/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 * Ruby 3.1.4 [![Ruby 3.1.4 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.1.4/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 3.2.3 [![Ruby 3.2.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.2.2/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
-* Ruby 3.3.0 [![Ruby 3.3.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.2.2/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 3.2.3 [![Ruby 3.2.3 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.2.3/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
+* Ruby 3.3.0 [![Ruby 3.3.0 build status](https://norsk.cf-app.com/api/v1/teams/main/pipelines/LicenseFinder/jobs/ruby-3.3.0/badge)](https://norsk.cf-app.com/teams/main/pipelines/LicenseFinder)
 
 
 LicenseFinder works with your package managers to find dependencies,
