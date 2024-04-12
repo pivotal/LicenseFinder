@@ -120,7 +120,7 @@ module LicenseFinder
     end
 
     def author_name_from_combined(author)
-      matches = author.match /^(.*?)\s*(<.*?>)?\s*(\(.*?\))?\s*$/
+      matches = author.match(/^(.*?)\s*(<.*?>)?\s*(\(.*?\))?\s*$/)
       matches[1]
     end
 
