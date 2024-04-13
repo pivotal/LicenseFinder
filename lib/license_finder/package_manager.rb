@@ -147,6 +147,8 @@ module LicenseFinder
   end
 end
 
+require 'license_finder/package'
+
 require 'license_finder/package_managers/bower'
 require 'license_finder/package_managers/go_workspace'
 require 'license_finder/package_managers/go_15vendorexperiment'
@@ -179,5 +181,3 @@ require 'license_finder/package_managers/cargo'
 require 'license_finder/package_managers/composer'
 require 'license_finder/package_managers/conda'
 require 'license_finder/package_managers/pub'
-
-require 'license_finder/package'
