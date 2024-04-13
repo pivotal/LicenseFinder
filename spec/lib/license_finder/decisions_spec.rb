@@ -418,7 +418,7 @@ module LicenseFinder
       end
 
       it 'inheritates rules from gem decision file' do
-        gem_spec = OpenStruct.new(gem_dir: 'gem-name')
+        gem_spec = Struct.new(:gem_dir).new('gem-name')
         allow(Gem::Specification).to receive(:find_by_name).with('gem-name').and_return(gem_spec)
         allow_any_instance_of(Pathname).to receive(:read).and_return(yml)
 
