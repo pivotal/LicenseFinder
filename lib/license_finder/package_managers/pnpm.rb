@@ -45,7 +45,13 @@ module LicenseFinder
       json_objects.map do |_, value|
         value.each do |pkg|
           name = pkg['name']
-          version = pkg['version']
+
+          if pkg['version']
+            version = pkg['version']
+          elsif pkg['versions']
+            version = pkg['versions'][0]
+          end
+
           license = pkg['license']
           homepage = pkg['vendorUrl']
           author = pkg['vendorName']
