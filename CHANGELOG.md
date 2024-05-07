@@ -1,6 +1,10 @@
 # [7.2.0] / 2024-05-07
 
 ### Added
+* Support for Ruby 3.3.x - [3bbe12f7](https://github.com/pivotal/LicenseFinder/commit/3bbe12f76d5305879df89d856d90f0b9eaf967d4)
+* Support of latest Conan v1.6 - [ef81af38](https://github.com/pivotal/LicenseFinder/commit/ef81af387fa8c6577d85387e354a491da93f5a47) - melter2m
+* Support NPM 7 and up and include NodeJS 17 in the Docker image (NPM 8) - [420c5444](https://github.com/pivotal/LicenseFinder/commit/420c5444223443277e4301badd58ee0ba0a82ec4) - rhuitl
+* Maven: extract LICENSE and NOTICE texts from JAR file and summary, description and URL from POM file - [0da6d30b](https://github.com/pivotal/LicenseFinder/commit/0da6d30b9a306cc8a7c88cc55f13acd0eb3f10b3) - rhuitl
 * Add more license detection - [b3dde46e](https://github.com/pivotal/LicenseFinder/commit/b3dde46e2018aef9b6436a04777ec33d40a134e4) - Simon Warren
 * Unlicense - [6fb571ca](https://github.com/pivotal/LicenseFinder/commit/6fb571cad9b5ee856c0984ca79aa7604afdd818b) - Jim Kane
 
@@ -11,8 +15,14 @@
 * Fix 'unknown' Yarn 2 licenses - [f57745be](https://github.com/pivotal/LicenseFinder/commit/f57745be34bb7774577ea577671ea7b5c3246576) - Simon Warren
 * Print subproject paths when logging - [add2f969](https://github.com/pivotal/LicenseFinder/commit/add2f9698a0f3c02d3148655a4b538e2f557d2be) - Simon Warren
 
+### Changed
+* Use Ubuntu 22.04 (Jammy) for Docker image - [da637b83](https://github.com/pivotal/LicenseFinder/commit/da637b83877b4ec3f054d787d68b90c8fa7a8b41) - rhuitl
+* Use Maven 3.6.3 instead of 3.6.0 which now throws an error. - [1d3326d3](https://github.com/pivotal/LicenseFinder/commit/1d3326d350bebdf575ef64af7436a9f043d88920) - rhuitl
+
+
 ### Deprecated
-* - Remove Dep package manager for jammy release - [42bed10d](https://github.com/pivotal/LicenseFinder/commit/42bed10d80e4b0e6fac1c62dd5eca2097ffc3517) 
+* Remove Ruby 2.6 tests- [c48ddb74](https://github.com/pivotal/LicenseFinder/commit/c48ddb745bb85971fc14e21d2c3c308c849ef2a3)
+* Remove Dep package manager for jammy release - [42bed10d](https://github.com/pivotal/LicenseFinder/commit/42bed10d80e4b0e6fac1c62dd5eca2097ffc3517) 
 
 # [7.1.0] / 2022-11-28
 
