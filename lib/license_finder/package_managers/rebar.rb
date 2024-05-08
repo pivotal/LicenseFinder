@@ -41,7 +41,7 @@ module LicenseFinder
         .each_line
         .reject { |line| line.start_with?('=') || line.include?('project app') }
         .map do |line|
-          matches = line.match(/(?<name>\w+)─(?<version>[\S.]+)\s*/)
+          matches = line.match(/(?<name>\w+)─(?<version>\S+)\s*/)
           [matches[:name], matches[:version]] if matches
         end.compact
     end

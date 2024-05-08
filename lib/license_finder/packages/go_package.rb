@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'license_finder/package'
-
 module LicenseFinder
   class GoPackage < Package
     def package_manager
