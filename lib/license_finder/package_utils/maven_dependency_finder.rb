@@ -33,7 +33,7 @@ module LicenseFinder
       # Basic support for Maven classifiers. So far, only "jakarta" is supported. Unfortunately,
       # we do not have access to the "classifier" field here (licenses.xml does not have it).
       jar_file = m2_artifact_dir.join("#{artifact_basename}.jar")
-      jar_file = m2_artifact_dir.join("#{artifact_basename}-jakarta.jar") unless File.exist?(jar_file)
+      jar_file = m2_artifact_dir.join("#{artifact_basename}-jakarta.jar") unless File.exist?(jar_file) || !File.exist?(m2_artifact_dir.join("#{artifact_basename}-jakarta.jar"))
 
       dep.store('jarFile', jar_file)
 
