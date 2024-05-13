@@ -100,7 +100,7 @@ module LicenseFinder
     end
 
     def gemfile
-      ENV.fetch('BUNDLE_GEMFILE') { "Gemfile" }
+      ENV.expand_path(ENV['BUNDLE_GEMFILE'] || "Gemfile", project_path)
     end
 
     def lockfile
