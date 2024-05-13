@@ -96,6 +96,20 @@ module LicenseFinder
           expect(subject.current_packages).to_not be_empty
         end
       end
+
+      context 'with the BUNDLE_GEMFILE environment variable set to a project nested directory' do
+        around do |example|
+          old_var = ENV['BUNDLE_GEMFILE']
+          ENV['BUNDLE_GEMFILE'] = 'gemfiles/nested.gemfile'
+          example.run
+          ENV['BUNDLE_GEMFILE'] = old_var
+        end
+
+        it 'uses the BUNDLE_GEMFILE variable to identify the gemfile' do
+          expect(::Bundler::Definition).to receive(:build).with(custom_gemfile.join('gemfiles/nested.gemfile'), custom_gemfile.join('gemfiles/nested.gemfile.lock'), nil).and_return(definition)
+          expect(subject.current_packages).to_not be_empty
+        end
+      end
     end
   end
 end

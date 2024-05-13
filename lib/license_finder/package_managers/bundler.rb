@@ -34,7 +34,7 @@ module LicenseFinder
     end
 
     def possible_package_paths
-      [project_path.join(gemfile)]
+      [gemfile]
     end
 
     private
@@ -42,7 +42,7 @@ module LicenseFinder
     attr_reader :ignored_groups
 
     def definition
-      ENV['BUNDLE_GEMFILE'] = "#{project_path}/#{gemfile}"
+      ENV['BUNDLE_GEMFILE'] = gemfile
 
       @definition ||= ::Bundler::Definition.build(detected_package_path, lockfile_path, nil)
     end
@@ -100,7 +100,7 @@ module LicenseFinder
     end
 
     def gemfile
-      File.basename(ENV['BUNDLE_GEMFILE'] || 'Gemfile')
+      ENV.fetch('BUNDLE_GEMFILE') { "Gemfile" }
     end
 
     def lockfile
