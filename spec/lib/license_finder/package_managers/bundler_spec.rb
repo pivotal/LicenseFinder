@@ -78,9 +78,18 @@ module LicenseFinder
         Bundler.new(project_path: custom_gemfile, ignored_groups: Set.new(%w[dev test]))
       end
 
-      it 'defaults to Gemfile/Gemfile.lock' do
-        expect(::Bundler::Definition).to receive(:build).with(custom_gemfile.join('Gemfile'), custom_gemfile.join('Gemfile.lock'), nil).and_return(definition)
-        expect(subject.current_packages).to_not be_empty
+      context 'when actually not specifying' do
+        around do |example|
+          old_var = ENV['BUNDLE_GEMFILE']
+          ENV.delete 'BUNDLE_GEMFILE'
+          example.run
+          ENV['BUNDLE_GEMFILE'] = old_var
+        end
+
+        it 'defaults to Gemfile/Gemfile.lock' do
+          expect(::Bundler::Definition).to receive(:build).with(custom_gemfile.join('Gemfile'), custom_gemfile.join('Gemfile.lock'), nil).and_return(definition)
+          expect(subject.current_packages).to_not be_empty
+        end
       end
 
       context 'with the BUNDLE_GEMFILE environment variable set' do
@@ -93,6 +102,20 @@ module LicenseFinder
 
         it 'uses the BUNDLE_GEMFILE variable to identify the gemfile' do
           expect(::Bundler::Definition).to receive(:build).with(custom_gemfile.join('Gemfile-other'), custom_gemfile.join('Gemfile-other.lock'), nil).and_return(definition)
+          expect(subject.current_packages).to_not be_empty
+        end
+      end
+
+      context 'with the BUNDLE_GEMFILE environment variable set to a project nested directory' do
+        around do |example|
+          old_var = ENV['BUNDLE_GEMFILE']
+          ENV['BUNDLE_GEMFILE'] = 'gemfiles/nested.gemfile'
+          example.run
+          ENV['BUNDLE_GEMFILE'] = old_var
+        end
+
+        it 'uses the BUNDLE_GEMFILE variable to identify the gemfile' do
+          expect(::Bundler::Definition).to receive(:build).with(custom_gemfile.join('gemfiles/nested.gemfile'), custom_gemfile.join('gemfiles/nested.gemfile.lock'), nil).and_return(definition)
           expect(subject.current_packages).to_not be_empty
         end
       end
