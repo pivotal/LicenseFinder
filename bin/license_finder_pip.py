@@ -18,7 +18,6 @@ except ImportError:
         from pip.download import PipSession
 
 from pip._vendor import pkg_resources
-from pip._vendor.six import print_
 
 
 reqs = []
@@ -40,4 +39,4 @@ transform = lambda dist: {
 
 
 packages = [transform(dist) for dist in pkg_resources.working_set.resolve(reqs)]
-print_(json.dumps(packages))
+print(json.dumps(packages))
