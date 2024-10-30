@@ -13,6 +13,7 @@ module LicenseFinder
           artistic,
           bsd,
           cc01,
+          ccby04,
           cddl1,
           cddl1_1,
           cpl1,
@@ -138,6 +139,16 @@ module LicenseFinder
             Matcher.from_template(Template.named('CC01_alt'))
           ),
           url: 'http://creativecommons.org/publicdomain/zero/1.0'
+        )
+      end
+
+      def ccby04
+        License.new(
+          short_name: 'CCBY40',
+          spdx_id: 'CC-BY-4.0',
+          pretty_name: 'Attribution 4.0 International',
+          other_names: ['CC BY 4.0'],
+          url: 'https://creativecommons.org/licenses/by/4.0'
         )
       end
 

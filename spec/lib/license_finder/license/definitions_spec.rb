@@ -148,6 +148,26 @@ describe LicenseFinder::License, 'cc01' do
   end
 end
 
+describe LicenseFinder::License, 'ccby40' do
+  subject { described_class.find_by_name 'CCBY40' }
+
+  it 'should have correct license url' do
+    expect(subject.url).to be 'https://creativecommons.org/licenses/by/4.0'
+  end
+
+  it 'should be recognized by spdx_id' do
+    expect(described_class.find_by_name('CC-BY-4.0')).to be subject
+  end
+
+  it 'should be recognized by pretty name' do
+    expect(described_class.find_by_name('Attribution 4.0 International')).to be subject
+  end
+
+  it 'should be recognised by other names' do
+    expect(described_class.find_by_name('CC BY 4.0')).to be subject
+  end
+end
+
 describe LicenseFinder::License, 'CDDL1' do
   subject { described_class.find_by_name 'CDDL1' }
 
