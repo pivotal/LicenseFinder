@@ -399,6 +399,7 @@ module LicenseFinder
             'PSF 2.0',
             'PSFL',
             'Python 2.0',
+            'Python-2.0',
             'PSF License',
             'PSF License 2.0'
           ],
