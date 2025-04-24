@@ -14,7 +14,13 @@ module LicenseFinder
     end
 
     def license_file(project_path, name)
-      candidates = Dir.glob("#{project_path}/licenses/#{name}/**/LICENSE*")
+      lic_file = license_file_by_mask(project_path, name, 'LICENSE*')
+      lic_file = license_file_by_mask(project_path, name, 'copy*') if lic_file.nil?
+      lic_file
+    end
+
+    def license_file_by_mask(project_path, name, file_mask)
+      candidates = Dir.glob("#{project_path}/licenses/#{name}/**/#{file_mask}")
       candidates.each do |candidate|
         return candidate if license_file_is_good?(candidate)
       end

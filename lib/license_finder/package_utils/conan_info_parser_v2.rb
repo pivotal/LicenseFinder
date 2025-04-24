@@ -3,15 +3,12 @@
 module LicenseFinder
   class ConanInfoParserV2
     def parse(info)
-      @lines = info.lines.map(&:chomp)
+      @lines = get_dependencies_lines(info)
       @state = :project_level # state of the state machine
       @projects = [] # list of projects
       @current_project = nil # current project being populated in the SM
       @current_vals = [] # current val list being populate in the SM
       @current_key = nil # current key to be associated with the current val
-
-      line = @lines.shift
-      line = @lines.shift while line != '======== Basic graph information ========'
 
       while (line = @lines.shift)
         next if line == ''
@@ -32,6 +29,20 @@ module LicenseFinder
     end
 
     private
+
+    def get_dependencies_lines(info)
+      lines = info.lines.map(&:chomp)
+      graph_info_start = 'basic graph information'
+      if info.downcase.include?(graph_info_start)
+        loop do
+          line = lines.shift
+          break if lines.empty?
+          next if line.nil?
+          break if line.downcase.include?(graph_info_start)
+        end
+      end
+      lines
+    end
 
     def parse_key_val(line)
       key, val = key_val(line)
