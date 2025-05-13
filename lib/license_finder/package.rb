@@ -127,7 +127,12 @@ module LicenseFinder
     end
 
     def licensing
-      Licensing.new(self, @decided_licenses, licenses_from_spec, license_files)
+      Licensing.new(
+        self,
+        @decided_licenses,
+        -> { licenses_from_spec },
+        -> { license_files }
+      )
     end
 
     def decide_on_license(license)
