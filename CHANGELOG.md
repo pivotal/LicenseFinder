@@ -1,3 +1,8 @@
+# [7.2.2] / 2025-07-31
+
+### Added
+* Require logger to prepare for ruby 3.5.0 - [325f55b](https://github.com/pivotal/LicenseFinder/commits/325f55bacee3d20453ba8eac9fd5efac1d7cb4a6)
+
 # [7.2.1] / 2024-05-08
 
 # [7.2.0] / 2024-05-07
