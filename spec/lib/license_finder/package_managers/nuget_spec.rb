@@ -178,7 +178,7 @@ module LicenseFinder
           XML
           File.write('app/packages/ObscureDependency.nuspec', obscure_dependency_nuspec)
           Dir.chdir 'app/packages' do
-            Zip::File.open('ObscureDependency.1.3.15.nupkg', Zip::File::CREATE) do |zipfile|
+            Zip::File.open('ObscureDependency.1.3.15.nupkg', create: true) do |zipfile|
               zipfile.add('ObscureDependency.nuspec', 'ObscureDependency.nuspec')
             end
           end
