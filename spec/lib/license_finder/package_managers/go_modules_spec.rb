@@ -22,7 +22,7 @@ module LicenseFinder
     subject { GoModules.new(project_path: Pathname(src_path), logger: logger, log_directory: 'some-directory') }
 
     describe '#current_packages' do
-      let(:go_list_cmd) { "GO111MODULE=on go list -mod=readonly -deps -f '#{go_list_format}' ./..." }
+      let(:go_list_cmd) { "GO111MODULE=on go list -mod=readonly -buildvcs=false -deps -f '#{go_list_format}' ./..." }
 
       before do
         FakeFS.activate!
