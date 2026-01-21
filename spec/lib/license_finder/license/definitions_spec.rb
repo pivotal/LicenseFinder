@@ -469,8 +469,20 @@ describe LicenseFinder::License, 'MPL2' do
       expect(subject).to be_matches_text 'Mozilla Public License, version 2.0'
       expect(subject).to be_matches_text 'Mozilla Public Licence version 2.0'
 
-      expect(subject).not_to be_matches_text "Something else\nMozilla Public License, version 2.0"
       expect(subject).not_to be_matches_text 'Mozilla Public License version 1.1'
+    end
+
+    it 'should return true if the text has a copyright header before the license' do
+      license_text_with_copyright = <<~TEXT
+        Copyright (c) 2026 My Company, Inc.
+
+        Mozilla Public License, version 2.0
+      TEXT
+      expect(subject).to be_matches_text license_text_with_copyright
+    end
+
+    it 'should return true if the license text appears within the first few lines' do
+      expect(subject).to be_matches_text "Something else\nMozilla Public License, version 2.0"
     end
   end
 end

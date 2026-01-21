@@ -323,7 +323,7 @@ module LicenseFinder
 
         matcher = AnyMatcher.new(
           Matcher.from_template(Template.named('MPL2')),
-          HeaderMatcher.new(Matcher.from_regex(header_regexp))
+          HeaderMatcher.new(Matcher.from_regex(header_regexp), 3)
         )
 
         License.new(
