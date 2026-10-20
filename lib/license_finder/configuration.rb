@@ -77,6 +77,10 @@ module LicenseFinder
       get(:gradle_command)
     end
 
+    def bundler_gemfiles
+      get(:bundler_gemfiles)
+    end
+
     def go_full_version
       get(:go_full_version)
     end

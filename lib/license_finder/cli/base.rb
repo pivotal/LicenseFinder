@@ -40,6 +40,7 @@ module LicenseFinder
           :project_path,
           :decisions_file,
           :enabled_package_managers,
+          :bundler_gemfiles,
           :go_full_version,
           :gradle_command,
           :gradle_include_groups,

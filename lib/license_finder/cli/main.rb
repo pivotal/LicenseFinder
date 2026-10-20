@@ -24,6 +24,10 @@ module LicenseFinder
         'junit' => JunitReport
       }.freeze
 
+      class_option :bundler_gemfiles,
+                   type: :array,
+                   desc: "Gemfiles to be scanned, relative to the project path. Accepts glob patterns (e.g. 'gemfiles/*.gemfile' for Appraisal).
+                          Only meaningful if used with a Ruby/bundler project. Defaults to BUNDLE_GEMFILE, or 'Gemfile'."
       class_option :go_full_version, desc: 'Whether dependency version should include full version. Only meaningful if used with a Go project. Defaults to false.'
       class_option :gradle_include_groups, desc: 'Whether dependency name should include group id. Only meaningful if used with a Java/gradle project. Defaults to false.'
       class_option :gradle_command,

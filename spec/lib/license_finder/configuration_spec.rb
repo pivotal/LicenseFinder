@@ -51,6 +51,29 @@ module LicenseFinder
       end
     end
 
+    describe 'bundler_gemfiles' do
+      it 'prefers primary values' do
+        subject = described_class.new(
+          { bundler_gemfiles: ['Gemfile'] },
+          'bundler_gemfiles' => ['gemfiles/*.gemfile']
+        )
+        expect(subject.bundler_gemfiles).to contain_exactly('Gemfile')
+      end
+
+      it 'accepts saved value' do
+        subject = described_class.new(
+          { bundler_gemfiles: nil },
+          'bundler_gemfiles' => ['Gemfile', 'gemfiles/*.gemfile']
+        )
+        expect(subject.bundler_gemfiles).to contain_exactly('Gemfile', 'gemfiles/*.gemfile')
+      end
+
+      it 'defaults to nil' do
+        subject = described_class.new({}, {})
+        expect(subject.bundler_gemfiles).to be_nil
+      end
+    end
+
     describe 'gradle_command' do
       it 'prefers primary value' do
         subject = described_class.new(

@@ -95,6 +95,7 @@ module LicenseFinder
         log_directory: File.join(config.log_directory, project_name),
         ignored_groups: decisions.ignored_groups,
         enabled_package_manager_ids: config.enabled_package_manager_ids,
+        bundler_gemfiles: config.bundler_gemfiles,
         go_full_version: config.go_full_version,
         gradle_command: config.gradle_command,
         gradle_include_groups: config.gradle_include_groups,

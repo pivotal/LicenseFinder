@@ -104,6 +104,19 @@ module LicenseFinder
             expect { described_class.start(config_options) }.to raise_error(SystemExit)
           end
         end
+
+        it 'accepts many bundler gemfiles' do
+          stubs = { valid_project_path?: true, project_path: Pathname('.'),
+                    decisions_file_path: Pathname('doc/dependency_decisions.yml'), aggregate_paths: nil, recursive: false,
+                    format: nil, columns: nil, strict_matching: false, write_headers: false, use_spdx_id: false }
+          configuration = double(:configuration, stubs)
+          expect(LicenseFinder::Configuration).to receive(:with_optional_saved_config)
+            .with(hash_including(bundler_gemfiles: ['Gemfile', 'gemfiles/*.gemfile'])).and_return(configuration)
+          allow(LicenseFinder::LicenseAggregator).to receive(:new).and_return(license_finder_instance)
+          silence_stdout do
+            expect { described_class.start(['--bundler_gemfiles', 'Gemfile', 'gemfiles/*.gemfile']) }.to raise_error(SystemExit)
+          end
+        end
       end
 
       describe '#report' do

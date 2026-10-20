@@ -464,6 +464,18 @@ If you store rebar dependencies in a custom directory (by setting `deps_dir` in
 You can also invoke a custom Mix script `remix` with `--mix_command remix` and
 set `--mix_deps_dir` to fetch Mix dependencies from a custom directory.
 
+By default, `bundler` dependencies are read from the gemfile in `BUNDLE_GEMFILE`,
+or from `Gemfile`. If your project locks dependencies in more than one gemfile
+(e.g. when using [Appraisal](https://github.com/thoughtbot/appraisal)), pass all
+of them to `--bundler_gemfiles`, relative to the project path. Glob patterns are
+accepted, as long as they are quoted:
+
+```
+$ license_finder --bundler_gemfiles Gemfile 'gemfiles/*.gemfile'
+```
+
+Every gem locked by any of the gemfiles will be reported, once per version.
+
 ### Narrow down Package Manager
 
 By default, license_finder will check for all supported package managers,
@@ -490,6 +502,9 @@ rebar_command: './rebarw'
 rebar_deps_dir: './rebar_deps'
 mix_command: './mixw'
 mix_deps_dir: './mix_deps'
+bundler_gemfiles:
+  - Gemfile
+  - gemfiles/*.gemfile
 enabled_package_managers:
   - bundler
   - gradle

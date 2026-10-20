@@ -35,6 +35,7 @@ module LicenseFinder
           logger: logger,
           project_path: configuration.project_path,
           ignored_groups: Set.new,
+          bundler_gemfiles: nil,
           go_full_version: nil,
           gradle_command: configuration.gradle_command,
           gradle_include_groups: nil,
